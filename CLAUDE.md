@@ -1,0 +1,86 @@
+# Founder OS — Claude Code Plugin
+
+> This is the generic Founder OS plugin. Install it to give Claude Code the context of who you are, how you work, what you are building, and what you need help with. It replaces 20+ productivity SaaS tools with a single structured Claude Code environment.
+
+## What This Is
+
+Founder OS is a Claude Code plugin that installs an operating system for one founder: your identity, your roles, your priorities, your cadence, your scars — so the AI you work with stops treating you like an anonymous user and starts working like a chief of staff who has been with you for five years.
+
+It is NOT a framework. It is NOT a multi-tenant AI platform. It is a product you install once and run every day.
+
+## Quick Start
+
+Run the setup wizard to personalize this for your situation:
+
+```
+/founder-os:setup
+```
+
+The wizard asks you questions about who you are, what you run, what tools you use, and what is slowing you down. From your answers it generates all the operating files in this repo — personalized to you. Takes 15-20 minutes the first time.
+
+## How It Works
+
+After setup, every Claude Code session starts with this CLAUDE.md loaded. Claude reads your context from five files:
+
+- `core/identity.md` — who you are, how you work, what you are building
+- `context/priorities.md` — what matters this week and this quarter
+- `context/decisions.md` — open decisions, parked items, resolved choices
+- `cadence/daily-anchors.md` — today's focus and commitments
+- `cadence/weekly-commitments.md` — current sprint and retro
+
+When Claude knows all of this, it can give you recommendations instead of asking you to explain context every time.
+
+## Roles
+
+Founder OS models the operating functions of a business as roles you can switch between:
+
+- **COO** (default) — daily operations, calendar, commitments, client delivery
+- **BD** — pipeline, outreach, deals
+- **CMO** — content, brand, marketing, social
+- **Chief of Staff** — weekly retro, stall detection, meta-layer
+- **CFO** — financials, pricing, engagement P&L (activate when revenue starts)
+- **CSO** — portfolio strategy (activate when you have 2+ revenue streams)
+- **CTO** — automation, workflows, technical infrastructure (activate when you have 5+ automations)
+
+## Tool Stack
+
+Founder OS adapts to your tools, not the other way around. During setup, you tell it which tools you use. It generates the right integration config.
+
+Supported adapters (configured during setup):
+- Knowledge base: Notion, Obsidian, Google Drive, or local-only
+- Email: Gmail, Outlook, Apple Mail
+- Calendar: Google Calendar, Outlook Calendar
+- Automation: n8n, Make, Zapier
+- CRM: Notion DB, HubSpot, Airtable, or none
+
+## Skills (14 included)
+
+| Skill | Purpose |
+|-------|---------|
+| founder-os-setup | Interactive setup wizard (start here) |
+| weekly-review | Structured weekly retro and sprint roll |
+| priority-triage | Cut the list to what actually matters |
+| brain-log | Session logging and pattern capture |
+| decision-framework | Structured decision-making for founders |
+| session-handoff | End-of-session state capture for continuity |
+| meeting-prep | Pre-meeting brief and post-meeting debrief |
+| knowledge-capture | Notes from books, podcasts, conversations |
+| email-drafter | Emails in your voice |
+| sop-writer | Processes turned into delegation-ready docs |
+| founder-coaching | Bias toolkit, bottleneck diagnostic, zones |
+| unit-economics | Business math, margins, break-even |
+| content-repurposer | One piece, multiple formats |
+| strategic-analysis | Market sizing, competitive analysis, opportunity assessment |
+
+## Philosophy
+
+- **Local-first.** Your data stays on your machine. Nothing is sent to a company server without your explicit consent.
+- **No lock-in.** All files are plain markdown. Obsidian can read them. So can any other markdown editor. The system does not depend on a proprietary platform.
+- **Boundary protection is a feature.** Saying no, parking scope, pushing back on unreasonable requests are designed in, not edge cases.
+- **People first. Systems second. AI where it earns the right.**
+
+## Getting Help
+
+If something is not working, open Claude Code and say: "Help me fix [specific thing] in my Founder OS."
+
+If you want to add a skill, role, or template: copy an existing one and modify it. The structure is self-documenting.
