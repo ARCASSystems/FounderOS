@@ -53,6 +53,25 @@ Supported adapters (configured during setup):
 - Automation: n8n, Make, Zapier
 - CRM: Notion DB, HubSpot, Airtable, or none
 
+## Fabric (hooks, commands, scheduled tasks)
+
+Founder OS ships with a thin fabric layer that makes the files behave like an operating system, not just documentation.
+
+**Slash commands** (`.claude/commands/`)
+- `/pre-meeting <name>` - gate before any meeting; requires a capture artifact and a specific ask
+- `/capture-meeting <name>` - routes a transcript or brain dump into brain/log.md + context/clients.md + commitments (M3)
+- `/today` - 20-line one-screen view of today (anchor, decisions, flags, last 3 log entries, next calendar) (M4)
+
+**Hooks** (`.claude/hooks/`)
+- SessionStart brief - fires on every session start, surfaces flags + stale cadence + open decisions
+- Session-close revenue-loop check (M2) - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update
+
+**Scheduled tasks** (examples; set yours up via the scheduled-tasks MCP)
+- Weekly LinkedIn draft generation - Monday morning, reads your story bank, writes 3 drafts to your content pipeline
+- Weekly insights brief - Monday morning synthesis of last-week patterns, stalls, skills fired, revenue-loop health
+
+All fabric pieces are optional. The slash commands ship active. Hooks register via `.claude/settings.local.json`. Scheduled tasks require the scheduled-tasks MCP to be installed in your Claude Code environment.
+
 ## Skills (14 included)
 
 | Skill | Purpose |
