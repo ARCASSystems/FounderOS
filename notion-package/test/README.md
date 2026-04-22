@@ -1,2 +1,2 @@
 # Test
-Sample transcript and expected routing output for first-run validation. Session 9 uses this for the Maimuna test dry-run.
+Sample transcript and expected routing output for first-run validation. Used for the first-run dry-run before any founder installs the package.

@@ -1,4 +1,4 @@
-# Founder OS Skills — Plan B Registry
+# Founder OS Skills - Plan B Registry
 
 14 skills included. The setup wizard (`founder-os-setup`) is the entry point.
 All others activate via `/skill-name` or are invoked implicitly by roles.
@@ -6,26 +6,30 @@ All others activate via `/skill-name` or are invoked implicitly by roles.
 | Skill | Status | Replaces |
 |-------|--------|---------|
 | [founder-os-setup](founder-os-setup/SKILL.md) | Ready | Onboarding flow |
-| weekly-review | Pending translation from Plan A | |
-| priority-triage | Pending translation from Plan A | Reclaim, Taskade |
-| brain-log | Pending translation from Plan A | |
-| decision-framework | Pending translation from Plan A | |
-| session-handoff | Pending translation from Plan A | |
-| meeting-prep | Pending translation from Plan A | |
-| knowledge-capture | Pending translation from Plan A | |
-| email-drafter | Pending translation from Plan A | Lavender, Grammarly |
-| sop-writer | Pending translation from Plan A | |
-| founder-coaching | Pending translation from Plan A | Culture Amp, Lattice |
-| unit-economics | Pending translation from Plan A | |
-| content-repurposer | Pending translation from Plan A | Jasper, Copy.ai |
-| strategic-analysis | Pending translation from Plan A | |
+| [weekly-review](weekly-review/SKILL.md) | Ready | |
+| [priority-triage](priority-triage/SKILL.md) | Ready | Reclaim, Taskade |
+| [brain-log](brain-log/SKILL.md) | Ready | |
+| [decision-framework](decision-framework/SKILL.md) | Ready | |
+| [session-handoff](session-handoff/SKILL.md) | Ready | |
+| [meeting-prep](meeting-prep/SKILL.md) | Ready | |
+| [knowledge-capture](knowledge-capture/SKILL.md) | Ready | |
+| [email-drafter](email-drafter/SKILL.md) | Ready | Lavender, Grammarly |
+| [sop-writer](sop-writer/SKILL.md) | Ready | |
+| [founder-coaching](founder-coaching/SKILL.md) | Ready | Culture Amp, Lattice |
+| [unit-economics](unit-economics/SKILL.md) | Ready | |
+| [content-repurposer](content-repurposer/SKILL.md) | Ready | Jasper, Copy.ai |
+| [strategic-analysis](strategic-analysis/SKILL.md) | Ready | |
 
-## How Translation Works
+## Commands
 
-Each "Pending translation from Plan A" skill already exists in `skills/<name>/SKILL.md` on main.
-Translation = copy the skill to `founder-os-product/skills/<name>/SKILL.md` and:
-- Strip brand-specific references (see banned tokens list in the parent repo's plan-a-plan-b.md)
-- Swap vendor names for `{placeholder}` per the Stack Abstraction table
-- Generalize specific company examples to generic founder examples
+In addition to skills, this plugin ships one slash command:
 
-Run translation using the `Update Founder-OS-Product` command described in `rules/plan-a-plan-b.md`.
+| Command | Purpose |
+|---------|---------|
+| [/pre-meeting](../.claude/commands/pre-meeting.md) | Hard gate before any meeting. Requires capture artifact + ask. Logs to brain/log.md. |
+
+## Status
+
+All 14 skills merged from the `founder-os-product` branch on 2026-04-22. Each skill is generic (no ARCAS-specific references, no personal names). Voice-neutral for adaptation by the setup wizard using the founder's identity and writing-style rules.
+
+Scrubbed for brand leakage as part of the 2026-04-22 launch-prep pass. Any new skill added to this registry must pass the banned-token guard in `rules/plan-a-plan-b.md` before commit.

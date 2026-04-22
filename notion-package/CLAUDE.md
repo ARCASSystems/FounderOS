@@ -7,7 +7,7 @@ Public-facing Notion Package that non-technical founders can duplicate and start
 Not a workflow engine. Not a webhook server. Not a cloud service. Not the terminal version (that lives at founder-os-product/ root, GitHub-waitlist gated).
 
 ## Who this is for
-A founder profile that matches the Maimuna Rashid / Martin Rajan type from plans/paperclip-agents/installer-ux-research.md. Non-developer. Uses Claude and voice input (Wispr Flow or similar). Already lives in Notion or willing to.
+A non-developer founder. Uses Claude and voice input (Wispr Flow or similar). Already lives in Notion or willing to. Runs the business alone or with one or two people. Day is chopped into thirty-minute pieces. Has tried productivity templates that quietly stopped getting used by week three.
 
 ## The two drivers (positioning)
 Claude thinks. Wispr Flow speaks. Founder OS is the markdown layer in between that evolves with the user.
