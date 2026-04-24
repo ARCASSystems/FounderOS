@@ -41,6 +41,14 @@ After setup, every Claude Code session starts with this CLAUDE.md loaded. Claude
 
 When Claude knows all of this, it can give you recommendations instead of asking you to explain context every time.
 
+## Empty-state behavior
+
+If any of the 5 context files above is missing on session start, the OS is not yet set up. Do not fabricate context, do not invent past decisions, do not pretend to know the founder. Reply with this exact message and stop:
+
+> Founder OS is installed but not personalized yet. Run /founder-os:setup to generate your identity, priorities, and cadence files (15 to 20 min). Or ask me to bootstrap minimal versions from the templates in templates/.
+
+This rule is non-negotiable. A wrong recommendation built on hallucinated context is worse than no recommendation at all.
+
 ## Roles
 
 Founder OS models the operating functions of a business as roles you can switch between:
@@ -96,14 +104,13 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/today` - 20-line one-screen view of today (anchor, decisions, flags, last 3 log entries, next calendar) (M4)
 
 **Hooks** (`.claude/hooks/`)
-- SessionStart brief - fires on every session start, surfaces flags + stale cadence + open decisions
-- Session-close revenue-loop check (M2) - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update
+- Session-close revenue-loop check (M2) - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update. Registered on the Stop event in `.claude/settings.json`.
 
 **Scheduled tasks** (examples; set yours up via the scheduled-tasks MCP)
 - Weekly LinkedIn draft generation - Monday morning, reads your story bank, writes 3 drafts to your content pipeline
 - Weekly insights brief - Monday morning synthesis of last-week patterns, stalls, skills fired, revenue-loop health
 
-All fabric pieces are optional. The slash commands ship active. Hooks register via `.claude/settings.local.json`. Scheduled tasks require the scheduled-tasks MCP to be installed in your Claude Code environment.
+All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks require the scheduled-tasks MCP to be installed in your Claude Code environment.
 
 ## Skills (14 included)
 
