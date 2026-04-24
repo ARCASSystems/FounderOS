@@ -31,19 +31,22 @@ Commands:
 
 ## How It Works
 
-After setup, every Claude Code session starts with this CLAUDE.md loaded. Claude reads your context from five files:
+After setup, every Claude Code session starts with this CLAUDE.md loaded. Claude reads your context from six files:
 
-- `core/identity.md` — who you are, how you work, what you are building
-- `context/priorities.md` — what matters this week and this quarter
-- `context/decisions.md` — open decisions, parked items, resolved choices
-- `cadence/daily-anchors.md` — today's focus and commitments
-- `cadence/weekly-commitments.md` — current sprint and retro
+- `core/identity.md` - who you are, how you work, what you are building
+- `context/priorities.md` - what matters this week and this quarter
+- `context/decisions.md` - open decisions, parked items, resolved choices
+- `context/clients.md` - prospects, active engagements, closed wins
+- `cadence/daily-anchors.md` - today's focus and commitments
+- `cadence/weekly-commitments.md` - current sprint and retro
+
+Two more files (`brain/log.md` and `brain/flags.md`) load on demand when you ask Claude to scan history or check what is being avoided.
 
 When Claude knows all of this, it can give you recommendations instead of asking you to explain context every time.
 
 ## Empty-state behavior
 
-If any of the 5 context files above is missing on session start, the OS is not yet set up. Do not fabricate context, do not invent past decisions, do not pretend to know the founder. Reply with this exact message and stop:
+If any of the 6 context files above is missing on session start, the OS is not yet set up. Do not fabricate context, do not invent past decisions, do not pretend to know the founder. Reply with this exact message and stop:
 
 > Founder OS is installed but not personalized yet. Run /founder-os:setup to generate your identity, priorities, and cadence files (15 to 20 min). Or ask me to bootstrap minimal versions from the templates in templates/.
 
@@ -99,6 +102,8 @@ No other config needed. Founder OS skills and commands work the same way. The fl
 Founder OS ships with a thin fabric layer that makes the files behave like an operating system, not just documentation.
 
 **Slash commands** (`.claude/commands/`)
+- `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files (15 to 20 min). Run on first install.
+- `/founder-os:update` - pull the latest System Layer files without touching your personal data. Tells you what changed before applying.
 - `/pre-meeting <name>` - gate before any meeting; requires a capture artifact and a specific ask
 - `/capture-meeting <name>` - routes a transcript or brain dump into brain/log.md + context/clients.md + commitments (M3)
 - `/today` - 20-line one-screen view of today (anchor, decisions, flags, last 3 log entries, next calendar) (M4)
@@ -106,13 +111,15 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 **Hooks** (`.claude/hooks/`)
 - Session-close revenue-loop check (M2) - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update. Registered on the Stop event in `.claude/settings.json`.
 
+**Windows note:** Hooks invoke bash. If you are on Windows, the install requires git-bash (which ships with Git for Windows). Without it, the session-close revenue check will silently no-op. PowerShell-only users should switch the hook command in `.claude/settings.json` to invoke the `.ps1` mirror in `.claude/hooks/` (a PowerShell version ships alongside the bash version).
+
 **Scheduled tasks** (examples; set yours up via the scheduled-tasks MCP)
 - Weekly LinkedIn draft generation - Monday morning, reads your story bank, writes 3 drafts to your content pipeline
 - Weekly insights brief - Monday morning synthesis of last-week patterns, stalls, skills fired, revenue-loop health
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks require the scheduled-tasks MCP to be installed in your Claude Code environment.
 
-## Skills (14 included)
+## Skills (15 included)
 
 | Skill | Purpose |
 |-------|---------|
@@ -130,6 +137,7 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 | unit-economics | Business math, margins, break-even |
 | content-repurposer | One piece, multiple formats |
 | strategic-analysis | Market sizing, competitive analysis, opportunity assessment |
+| pre-send-check | Hard gate before any client-facing deliverable leaves your machine |
 
 ## Philosophy
 

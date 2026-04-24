@@ -24,8 +24,10 @@ Six files run your company. You open the Notion template and you'll recognise th
 - **Priorities.** What matters this week and this quarter.
 - **Decisions.** Open, parked, or resolved. Nothing falls through again.
 - **Clients.** Prospects, active engagements, closed wins, the ones you said no to.
-- **Brain log.** Every session leaves a trace. You can always go back.
-- **Flags.** Things your own brain keeps dodging.
+- **Daily anchors.** Today's focus and commitments.
+- **Weekly commitments.** Current sprint and retro.
+
+> These six load at every session start so Claude has full context. Two more (Brain log, Flags) sit alongside and load on demand when you ask Claude to scan history or check what is being avoided. The setup wizard creates all of them.
 
 Around those six, a set of skills for the work founders actually do. Hiring. Sales. BD. Content. SOPs. Decision-making. Meeting prep. Legal defaults (UAE first; others add their own).
 

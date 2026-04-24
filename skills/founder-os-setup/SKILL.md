@@ -116,8 +116,21 @@ This file should:
 
 Show the draft. Get approval. Write it.
 
-### 1.3 Global Settings
-Review `~/.claude/settings.json`. Only GitHub should be global. Move everything else to per-project `.mcp.json` files. Show proposed changes. Get approval.
+### 1.3 Global Settings (opt-in)
+
+This phase is OPT-IN. Never silently modify the user's global settings file.
+
+First, ASK: "Founder OS works best when project-scoped MCPs are not duplicated globally. I can move duplicates from your global `~/.claude/settings.json` to project-scoped settings. This affects MCP behavior in OTHER Claude Code projects you have. Move them? (yes / no / skip)"
+
+- If the user says "no" or "skip", skip this phase entirely. Move to Phase 2. Log the skip in the backlog.
+- If the user says "yes", proceed with the next steps.
+
+Safety backup (required before any edit):
+1. Read `~/.claude/settings.json`.
+2. Copy it to `~/.claude/settings.json.backup-{timestamp}` where timestamp is `YYYYMMDD-HHMMSS`. Confirm the backup exists on disk before proceeding.
+3. Tell the user: "Backup saved to `~/.claude/settings.json.backup-{timestamp}`. You can restore manually if anything breaks."
+
+Then review `~/.claude/settings.json`. Only GitHub should stay global. Propose moving everything else to per-project `.mcp.json` files. Show the exact diff (what moves where). Get approval before writing.
 
 ---
 
@@ -170,7 +183,11 @@ Create the full folder structure. Read each template before generating the perso
 Show the full list of files that will be created. Get approval. Then create them all.
 
 ### 2.3 Initialize Git
-Run `git init` in the Founder OS root. Create an initial commit: "Founder OS initialized."
+
+Guard: check if a `.git/` directory already exists in the Founder OS root before running `git init`.
+
+- If `.git/` exists (the common case, because the install folder is already a git clone), SKIP `git init`. Log: "Folder is already a git repository. Skipping git init." Move on.
+- If `.git/` does not exist (rare case, user copied files manually instead of cloning), run `git init` and create an initial commit: "Founder OS initialized."
 
 ### 2.4 First Weekly Sprint
 Ask: "Let's set your first weekly sprint. You mentioned these priorities: [list from 0.4]. Which of these are MUST DO this week (max 3), which are SHOULD DO, and which can wait?"
@@ -236,6 +253,18 @@ Execute the task. Confirm:
 ---
 
 ## PHASE 5: REMAINING PROJECTS + CROSS-REFERENCES
+
+### 5.0 Write Tool Stack to stack.json
+
+Take the tool-stack answers captured in Phase 0.5 (knowledge base, email, calendar, automation, CRM, file storage, meeting notes, voice input, server, prospecting DB, video tool, booking) and write them to `stack.json` at the Founder OS root.
+
+Steps:
+1. Read the existing `stack.json`. Preserve the `_description`, `_wizard_version`, `_allowed_values`, and `_notes` fields.
+2. Set `_generated` to today's date in `YYYY-MM-DD` format.
+3. For each field the user answered in 0.5, set the value to the exact lowercase token from `_allowed_values` (e.g. `notion`, `gmail`, `google_calendar`, `n8n`). If the user named a tool not in `_allowed_values`, ask them to pick the closest match or set the value to `null` and log the actual tool name in the backlog.
+4. For fields the user did not answer, leave the value as `null`.
+5. Validate the file is parseable JSON before writing. If parse fails, stop and surface the error.
+6. Confirm to the user: "Wrote your tool stack to `stack.json`. Skills that adapt to your tools now read from here."
 
 ### 5.1 Skeleton Projects
 For each remaining workstream from 0.3 that wasn't built in Phase 4:
