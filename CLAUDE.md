@@ -18,6 +18,17 @@ Run the setup wizard to personalize this for your situation:
 
 The wizard asks you questions about who you are, what you run, what tools you use, and what is slowing you down. From your answers it generates all the operating files in this repo — personalized to you. Takes 15-20 minutes the first time.
 
+## Updates
+
+Founder OS ships with `/founder-os:update` to pull the latest System Layer files (skills, templates, commands, hooks) without touching your personal data. Run it whenever you want. The command tells you what is changing before applying.
+
+Your User Layer (identity, context, cadence, brain, network, clients) is never auto-updated. That is your data and stays exactly where you put it.
+
+Commands:
+- `/founder-os:update` - check for updates, show changelog, apply on confirmation
+- `/founder-os:update check` - dry-run, report local vs remote version only
+- `/founder-os:update rollback` - revert the last update
+
 ## How It Works
 
 After setup, every Claude Code session starts with this CLAUDE.md loaded. Claude reads your context from five files:
@@ -52,6 +63,28 @@ Supported adapters (configured during setup):
 - Calendar: Google Calendar, Outlook Calendar
 - Automation: n8n, Make, Zapier
 - CRM: Notion DB, HubSpot, Airtable, or none
+
+## Agent Teams (recommended)
+
+Claude Code has an experimental Agent Teams feature that turns sequential workflows into parallel specialist teams. For a solo founder running Founder OS, this is the difference between a meeting flow that runs prep, capture, log, and client-update one after another, and the same flow running as parallel specialists that finish in a fraction of the time.
+
+You do not need Agent Teams to run Founder OS. Subagents are the stable default and cover most real work. Agent Teams is an opt-in upgrade once you are comfortable with the system.
+
+**What it unlocks:**
+
+- Parallel execution for the weekly insights brief (state files read in parallel, not sequence)
+- Multi-step proposal flow (scope, terms, voice pass, deliverable format) run as specialist agents
+- Any chained skill invocation where the steps do not depend on each other
+
+**How to enable:**
+
+1. Set the environment variable: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
+2. Use Opus 4.6 as your model
+3. Restart Claude Code
+
+No other config needed. Founder OS skills and commands work the same way. The flag only changes how multi-agent workflows execute under the hood.
+
+**Source:** https://github.com/victordelrosal/agent-teams-claude-code is the field manual for this feature. Read it before you flip the flag on a real deliverable.
 
 ## Fabric (hooks, commands, scheduled tasks)
 

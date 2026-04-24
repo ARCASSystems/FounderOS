@@ -3,6 +3,10 @@ description: Gate before any meeting. Requires capture artifact + ask. Logs inte
 argument-hint: <person or meeting name>
 ---
 
+<HARD-GATE>
+Do NOT proceed with this meeting, do not draft talking points, do not summarize past context, do not produce ANY meeting-prep output until the founder has answered both gate questions (capture artifact + ask) with concrete, non-vague answers. This applies to EVERY meeting regardless of perceived informality. "Just a quick chat" meetings are exactly where the most value leaks. The gate fires no matter what.
+</HARD-GATE>
+
 # Pre-meeting gate
 
 You are enforcing a hard gate. Meetings leak value when no capture artifact and no ask are declared up front. This command blocks the meeting from starting until both are named.
