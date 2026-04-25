@@ -1,12 +1,13 @@
 {
   "name": "founder-os-marketplace",
   "owner": {
-    "name": "Alistair Aranha",
-    "email": "alistair@arcassystems.com"
+    "name": "ARCAS Systems",
+    "email": "alistair@arcassystems.com",
+    "url": "https://github.com/ARCASSystems"
   },
   "metadata": {
     "description": "Founder OS plugin and related operating-system tools for solo founders",
-    "version": "1.0.1"
+    "version": "1.1.0"
   },
   "plugins": [
     {
@@ -15,8 +16,8 @@
         "source": "url",
         "url": "https://github.com/ARCASSystems/FounderOS.git"
       },
-      "description": "Complete operating system for solo founders: 7 roles, 15 skills, brain log, stall detection, revenue loop enforcement",
-      "version": "1.0.1",
+      "description": "Complete operating system for solo founders: 4 role modes, 20 skills, voice and brand profiles, business-context loader, brain log, stall detection, revenue loop enforcement",
+      "version": "1.1.0",
       "strict": true
     }
   ]

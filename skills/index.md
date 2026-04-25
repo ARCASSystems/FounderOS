@@ -1,6 +1,6 @@
 # Founder OS Skills - Plan B Registry
 
-15 skills included. The setup wizard (`founder-os-setup`) is the entry point.
+20 skills included. The setup wizard (`founder-os-setup`) is the entry point.
 All others activate via `/skill-name` or are invoked implicitly by roles.
 
 | Skill | Status | Replaces |
@@ -20,6 +20,11 @@ All others activate via `/skill-name` or are invoked implicitly by roles.
 | [content-repurposer](content-repurposer/SKILL.md) | Ready | Jasper, Copy.ai |
 | [strategic-analysis](strategic-analysis/SKILL.md) | Ready | |
 | [pre-send-check](pre-send-check/SKILL.md) | Ready | Hard gate before shipping a client-facing deliverable |
+| [your-voice](your-voice/SKILL.md) | Ready | Generic AI tone for all written output |
+| [your-deliverable-template](your-deliverable-template/SKILL.md) | Ready | Canva templates, generic CV/deck builders |
+| [voice-interview](voice-interview/SKILL.md) | Ready | Captures user's writing voice into core/voice-profile.yml |
+| [brand-interview](brand-interview/SKILL.md) | Ready | Captures user's visual brand into core/brand-profile.yml |
+| [business-context-loader](business-context-loader/SKILL.md) | Ready | Per-company context file scanner and gap router |
 
 ## Commands
 
@@ -35,6 +40,6 @@ This plugin ships five slash commands:
 
 ## Status
 
-15 skills. Each skill is generic: no ARCAS-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity and writing-style rules.
+20 skills. Each skill is generic: no ARCAS-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile.
 
 Scrubbed for brand leakage as part of the 2026-04-22 launch-prep pass. Any new skill added to this registry must pass the banned-token guard in `rules/plan-a-plan-b.md` before commit.

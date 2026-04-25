@@ -13,7 +13,7 @@ Read this entire file before writing any document-producing code. Then read `cor
 
 If `core/brand-profile.yml` is missing or contains the template placeholders (the `[BRACKETED]` values), stop and tell the user:
 
-> Your brand profile is not set up. Run `/personal-os:setup` and complete the brand interview, or edit `core/brand-profile.yml` directly. I can produce the document with placeholder branding if you confirm, but the result will look generic.
+> Your brand profile is not set up. Run `/founder-os:setup` and complete the brand interview, or edit `core/brand-profile.yml` directly. I can produce the document with placeholder branding if you confirm, but the result will look generic.
 
 Do not silently default to generic styling. The whole point of this skill is the user's specific visual identity.
 

@@ -22,7 +22,7 @@ Two more files load on demand:
 - **Brain log.** Running thoughts, observations, patterns, flags.
 - **Flags.** Stalls, role feedback, friction. Used by Chief of Staff mode for stall detection.
 
-Around those: 15 skills covering meeting prep, knowledge capture, decisions, email drafting, content repurposing, founder coaching, weekly review, priority triage, SOPs, unit economics, strategic analysis, brain log, session handoff, pre-send check, and the setup wizard.
+Around those: 20 skills covering meeting prep, knowledge capture, decisions, email drafting, content repurposing, founder coaching, weekly review, priority triage, SOPs, unit economics, strategic analysis, brain log, session handoff, pre-send check, the voice and brand interviews that capture how you write and how your work looks, the your-voice and your-deliverable-template skills that apply that profile to every output, the business-context-loader for per-company context, and the setup wizard.
 
 Plus four roles as behavioural modes: COO (default), BD, CMO, Chief of Staff.
 
@@ -68,7 +68,7 @@ The setup wizard asks six or seven questions and generates your full operating s
 
 ## What ships in this repo
 
-### Skills (15)
+### Skills (20)
 
 | Skill | What it does |
 |---|---|
@@ -87,6 +87,11 @@ The setup wizard asks six or seven questions and generates your full operating s
 | content-repurposer | One piece of content adapted across channels in your voice. |
 | strategic-analysis | Competitive scan, market sizing, opportunity assessment. |
 | pre-send-check | Hard gate before any client-facing deliverable leaves your machine. |
+| voice-interview | Captures your writing voice into core/voice-profile.yml. |
+| brand-interview | Captures your visual brand into core/brand-profile.yml. |
+| your-voice | Writes everything as you, using your voice profile. |
+| your-deliverable-template | Produces all branded documents (CV, proposal, deck, one-pager) in your visual identity. |
+| business-context-loader | Loads, scans, and progressively fills a per-company context file. Routes you to the next highest-leverage move. |
 
 ### Slash commands (5)
 
@@ -171,7 +176,7 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.0.1. Public launch week 2026-04-27.
+Version 1.1.0. Public launch week 2026-04-27.
 
 Early and honest. Read [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md) for the current limits.
 

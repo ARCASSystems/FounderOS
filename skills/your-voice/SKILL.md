@@ -11,7 +11,7 @@ This skill writes as you. Not as Claude. Not as a generic professional. As the s
 
 Read this entire file before writing anything. Then read `core/voice-profile.yml` to load the user's specific patterns. If the profile file is missing or still contains the template placeholders (the `[BRACKETED]` values), stop and tell the user:
 
-> Your voice profile is not set up. Run `/personal-os:setup` and complete the voice interview, or edit `core/voice-profile.yml` directly.
+> Your voice profile is not set up. Run `/founder-os:setup` and complete the voice interview, or edit `core/voice-profile.yml` directly.
 
 Do not write content with the template defaults active. The whole point of this skill is the user's specific voice. Defaults defeat the point.
 
