@@ -12,12 +12,12 @@ Powered by Claude (thinking) and Wispr Flow (speaking). Founder OS is the markdo
 5. You approve each one. Your Notion updates. You own every byte.
 
 ## Honest limits
-- No webhooks, crons, or offline triggers. That is the terminal version (GitHub waitlist).
+- No webhooks, crons, or offline triggers. Use the Claude Code version in the repo root if you want local hooks and git history.
 - No cloud service. Everything runs in your Notion and your Claude subscription.
 - Not a workflow engine. A routing engine with an approval gate.
 
 ## Start here
 See pages/01-quickstart.md. 5 minutes. Zero install.
 
-## Power-user version (coming)
-A terminal version of Founder OS ships on GitHub with hooks, slash commands, automated capture, and paperclip-router as a Claude Code skill. Join the waitlist at announce/github-waitlist.md.
+## Power-user version
+The repo root ships the Claude Code version with local markdown, slash commands, hooks, and skills.

@@ -4,7 +4,7 @@
 Public-facing Notion Package that non-technical founders can duplicate and start using the same day. Zero terminal required. Runs on a Claude subscription plus a free Notion account.
 
 ## What this is NOT
-Not a workflow engine. Not a webhook server. Not a cloud service. Not the terminal version (that lives at founder-os-product/ root, GitHub-waitlist gated).
+Not a workflow engine. Not a webhook server. Not a cloud service. Not the local Claude Code plugin. The local plugin lives in the public FounderOS repo root.
 
 ## Who this is for
 A non-developer founder. Uses Claude and voice input (Wispr Flow or similar). Already lives in Notion or willing to. Runs the business alone or with one or two people. Day is chopped into thirty-minute pieces. Has tried productivity templates that quietly stopped getting used by week three.
@@ -19,17 +19,13 @@ notion-package/
   pages/                      <- Notion-page-ready markdown sources
     00-landing.md
     01-quickstart.md
-    02-your-first-route.md
-    03-the-two-drivers.md
-    04-github-and-waitlist.md
-    05-what-youll-not-find.md
+    05-current-limits.md
   system-prompts/
     paperclip-project-prompt.md  <- Claude Project system prompt running paperclip-router logic via Notion MCP
   databases/
     schema.md                 <- Notion DB schemas (Profiles, Decisions, Priorities, Clients, Brain Log, Flags)
   announce/
-    github-waitlist.md        <- GitHub README + waitlist copy
-    launch-post.md            <- LinkedIn launch copy
+    README.md                 <- launch and sharing notes
   test/
     sample-transcript.md      <- canned test transcript for first-run demo
     expected-routes.md        <- expected output for the sample

@@ -1,104 +1,178 @@
 # Founder OS
 
-Your operating system. Owned by you. Powered by Claude and Wispr Flow.
+The operating layer for a solo founder. Six files run your company. Claude reads them every session.
 
-Drop your voice notes in. Claude routes them to the right place. Your files stay yours.
-
----
-
-## The two drivers
-
-You already pay for Claude. You already talk more than you type.
-
-Claude thinks. Wispr Flow speaks. Founder OS is the layer in between that remembers what you said, sorts it, and keeps your business honest.
-
-No new app to learn. No subscription on top of your subscription.
+Owned by you. Powered by Claude. Voice-first via Wispr Flow or any dictation tool.
 
 ---
 
-## What's inside
+## What you actually get
 
-Six files run your company. You open the Notion template and you'll recognise them.
+Six files load at every session start so Claude has full context:
 
-- **Identity.** Who you are, how you work, what you're actually building.
+- **Identity.** Who you are, how you work, what you're building.
 - **Priorities.** What matters this week and this quarter.
-- **Decisions.** Open, parked, or resolved. Nothing falls through again.
-- **Clients.** Prospects, active engagements, closed wins, the ones you said no to.
-- **Daily anchors.** Today's focus and commitments.
+- **Decisions.** Open, parked, resolved. Nothing falls through.
+- **Clients.** Prospects, active, won, the ones you said no to.
+- **Daily anchors.** Today's focus and tasks.
 - **Weekly commitments.** Current sprint and retro.
 
-> These six load at every session start so Claude has full context. Two more (Brain log, Flags) sit alongside and load on demand when you ask Claude to scan history or check what is being avoided. The setup wizard creates all of them.
+Two more files load on demand:
 
-Around those six, a set of skills for the work founders actually do. Hiring. Sales. BD. Content. SOPs. Decision-making. Meeting prep. Legal defaults (UAE first; others add their own).
+- **Brain log.** Running thoughts, observations, patterns, flags.
+- **Flags.** Stalls, role feedback, friction. Used by Chief of Staff mode for stall detection.
+
+Around those: 15 skills covering meeting prep, knowledge capture, decisions, email drafting, content repurposing, founder coaching, weekly review, priority triage, SOPs, unit economics, strategic analysis, brain log, session handoff, pre-send check, and the setup wizard.
+
+Plus four roles as behavioural modes: COO (default), BD, CMO, Chief of Staff.
+
+---
+
+## Three ways to install
+
+### 1. Notion Starter Kit (fastest, no-Code path)
+
+Duplicate a Notion page. Paste one system prompt into a Claude Project. Five minutes.
+
+Read [`notion-package/pages/01-quickstart.md`](notion-package/pages/01-quickstart.md).
+
+### 2. Claude app with Notion MCP
+
+If you live in the Claude desktop or mobile app. Point the Notion connector at the duplicated workspace. Same logic.
+
+### 3. Claude Code terminal (recommended for power users)
+
+Local markdown files, git history, full control over hooks and slash commands.
+
+Mac, Linux, or git-bash on Windows:
+
+```bash
+git clone --depth 1 https://github.com/ARCASSystems/FounderOS.git ~/founder-os && cd ~/founder-os
+```
+
+PowerShell on Windows:
+
+```powershell
+git clone --depth 1 https://github.com/ARCASSystems/FounderOS.git "$HOME\founder-os"; cd "$HOME\founder-os"
+```
+
+Open Claude Code in that folder, then run:
+
+```
+/founder-os:setup
+```
+
+The setup wizard asks six or seven questions and generates your full operating system locally. 15 to 20 minutes the first time.
+
+---
+
+## What ships in this repo
+
+### Skills (15)
+
+| Skill | What it does |
+|---|---|
+| founder-os-setup | Setup wizard. Generates identity, priorities, decisions, cadence, brain files. |
+| weekly-review | Run the weekly retro. M/S/D bucket calculation, keep/kill/escalate on flags. |
+| priority-triage | Force a top-3 from a long list. Names what gets cut. |
+| brain-log | Route a thought to log, cross-reference, or act with same-session follow-through. |
+| decision-framework | Surface trade-offs. No false simplicity. |
+| session-handoff | Pack up context for the next session or a different operator. |
+| meeting-prep | Pre-meeting brief plus post-meeting debrief. |
+| knowledge-capture | Capture from books, podcasts, courses, conversations. |
+| email-drafter | Draft in your voice once setup runs the voice interview. |
+| sop-writer | Turn a process into a delegation-ready document. |
+| founder-coaching | Coaching loop for stuck moments. |
+| unit-economics | Run the math on a deal, hire, or pricing change. |
+| content-repurposer | One piece of content adapted across channels in your voice. |
+| strategic-analysis | Competitive scan, market sizing, opportunity assessment. |
+| pre-send-check | Hard gate before any client-facing deliverable leaves your machine. |
+
+### Slash commands (5)
+
+| Command | Purpose |
+|---|---|
+| `/founder-os:setup` | Run the setup wizard. |
+| `/founder-os:update` | Pull the latest System Layer files. Subcommands: `check`, `rollback`. |
+| `/today` | 20-line one-screen view of today. |
+| `/pre-meeting` | Hard gate before any meeting. |
+| `/capture-meeting` | Route a transcript or brain dump into log + clients + open commitments. |
+
+### Templates
+
+The setup wizard writes from `templates/`. After setup, you edit the generated files, not the templates.
+
+### Notion package
+
+Three drop-in artifacts for users who do not run Claude Code:
+- Notion duplication template (the six core files plus brain log and flags)
+- System prompt for a Claude Project
+- Quickstart page
 
 ---
 
 ## Who this is for
 
-You run the business alone or with one or two people. You're sharp but your day is chopped into thirty-minute pieces. You've tried productivity templates that promised the world and quietly stopped getting opened by week three.
+You run the business alone or with one or two people. You are sharp but your day is chopped into thirty-minute pieces. You have tried productivity templates that promised the world and quietly stopped getting opened by week three.
 
-You're not installing a template. You're installing an operating layer. It listens to your voice, routes what matters, and forgets nothing.
-
----
-
-## Three ways to run it
-
-### 1. Notion Starter Kit (start here)
-
-The fastest path. Duplicate a Notion page. Paste one system prompt into a Claude Project. Five minutes.
-
-Read `notion-package/pages/01-quickstart.md` to get started.
-
-### 2. Claude app with Notion MCP
-
-If you already live in the Claude desktop or mobile app. Point the Notion connector at the duplicated workspace. Same logic, slightly less polished routing UI.
-
-### 3. Claude Code terminal (power users)
-
-For the founders who want local markdown files, git history, and full control over every hook. Install this plugin into Claude Code:
-
-```bash
-# from Claude Code, load this plugin
-/founder-os:setup
-```
-
-The setup wizard asks you six or seven questions and generates your full operating system locally. Takes 15-20 minutes the first time.
+You are not installing a template. You are installing an operating layer. It listens, routes, forgets nothing, and pushes back when you are about to ship something half-baked.
 
 ---
 
-## What it's not
+## What it is not
 
 Not a workflow engine. Not a webhook server. Not a cloud tool that stores your data on someone else's servers.
 
 Your Notion. Your Claude. Your files on your disk if you want them there. If you want to delete it, you delete the folder. Nothing to unsubscribe from.
 
-If you need crons, webhooks, offline triggers, or anything that fires while you're asleep, that's a different tool (n8n, Make, whatever you use). Founder OS holds the thinking layer. You stay in charge of the plumbing.
+If you need crons, webhooks, offline triggers, or anything that fires while you sleep, that is a different tool (n8n, Make, whatever you use). Founder OS holds the thinking layer. You stay in charge of the rest.
 
 ---
 
 ## What makes this different
 
-Not a framework. Not an AI wrapper. Not another Notion template.
-
-- **Stall detection built in.** The system watches for rolling items and forces keep/kill/escalate decisions. Nothing else does this.
+- **Stall detection built in.** The system watches for rolling items and forces keep/kill/escalate decisions. Every retro.
 - **Revenue loop enforcement.** Every outreach or content action must log same-session. Catches the gap between "I'll do X" and "I did X."
-- **Role-as-router.** COO, BD, CMO, Chief of Staff are behavioural modes, not personas. The right mode activates based on what you're actually doing.
+- **Role as router.** COO, BD, CMO, Chief of Staff are behavioural modes, not personas. The right mode activates based on what you are actually doing.
 - **Plan A defines Plan B.** This product is a derivative of an actual founder's daily use. Features graduate from personal use into the product only after surviving contact with live P&L.
-- **Voice first.** Built around Wispr Flow (or any dictation tool) so capture cost approaches zero. Founders who can't sit and type for twenty minutes still get a working OS.
-- **Kill criteria in the product.** The only founder tool that tells you when to stop using it.
+- **Voice first.** Built around dictation so capture cost approaches zero.
+- **Kill criteria in the product.** Tells you when a flag has been open too long and forces a decision.
+
+---
+
+## Cloud Claude (web, desktop, mobile)
+
+The Notion Starter Kit is the safest path. Duplicate the Notion template, create a Claude Project, paste the system prompt from [`notion-package/system-prompts/paperclip-project-prompt.md`](notion-package/system-prompts/paperclip-project-prompt.md).
+
+Slash commands and local file writes only run in Claude Code. Cloud Claude can read this repo's files as context but cannot run `/founder-os:setup` from a checkout.
+
+Safe fallback prompt for Cloud Claude:
+
+```text
+Use this repo as the Founder OS system layer. Read README.md and CLAUDE.md first.
+If the founder context files are missing, stop and tell me to run /founder-os:setup
+or use the Notion quickstart. Do not invent identity, clients, priorities, decisions,
+revenue, or commitments.
+```
 
 ---
 
 ## Start here
 
-- **Non-technical founder:** [Notion Quickstart](notion-package/pages/01-quickstart.md)
-- **Already in Claude Code:** run `/founder-os:setup`
-- **Business inquiry / speaking / install support:** email alistair@arcassystems.com
+| Want to | Run |
+|---|---|
+| Install fastest, no-Code | [Notion Quickstart](notion-package/pages/01-quickstart.md) |
+| Install locally with Claude Code | `/founder-os:setup` |
+| Check today after setup | `/today` |
+| Update System Layer later | `/founder-os:update check` |
+| Business inquiry, install help, speaking | `alistair@arcassystems.com` |
 
 ---
 
 ## Status
 
-Version 0.1 (starter kit). Public launch week 2026-04-27.
+Version 1.0.1. Public launch week 2026-04-27.
 
-Early and honest. Read `notion-package/pages/05-what-youll-not-find.md` for the current limits.
+Early and honest. Read [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md) for the current limits.
+
+Built by [Alistair Aranha](https://github.com/ARCASSystems) at ARCAS Systems.

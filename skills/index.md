@@ -35,6 +35,6 @@ This plugin ships five slash commands:
 
 ## Status
 
-15 skills. 14 merged from the `founder-os-product` branch on 2026-04-22. `pre-send-check` added in Phase 1 of the competitive inspection pass. Each skill is generic (no ARCAS-specific references, no personal names). Voice-neutral for adaptation by the setup wizard using the founder's identity and writing-style rules.
+15 skills. Each skill is generic: no ARCAS-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity and writing-style rules.
 
 Scrubbed for brand leakage as part of the 2026-04-22 launch-prep pass. Any new skill added to this registry must pass the banned-token guard in `rules/plan-a-plan-b.md` before commit.

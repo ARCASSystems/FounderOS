@@ -52,6 +52,17 @@ If any of the 6 context files above is missing on session start, the OS is not y
 
 This rule is non-negotiable. A wrong recommendation built on hallucinated context is worse than no recommendation at all.
 
+## Cloud or Web Claude Behavior
+
+Founder OS has two supported surfaces:
+
+- Notion Starter Kit for Claude web or desktop Projects
+- Claude Code plugin for local markdown, commands, hooks, and git history
+
+If this repo is opened in Claude web, desktop, a cloud IDE, or another assistant that cannot run Claude Code slash commands, treat it as a system layer only. Do not claim that `/founder-os:setup`, `/founder-os:update`, hooks, or local writes have run unless the environment actually supports them.
+
+If the founder context files are missing, stop and route the user to the Notion quickstart or the Claude Code setup command. Do not invent identity, clients, revenue, priorities, decisions, commitments, or past business context.
+
 ## Roles
 
 Founder OS models the operating functions of a business as roles you can switch between:

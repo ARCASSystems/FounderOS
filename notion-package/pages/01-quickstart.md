@@ -93,8 +93,7 @@ That's the loop. You speak. Claude routes. You approve. Your operating system up
 
 ## What to read next
 
-- `02-your-first-route.md`. Worked example with a real transcript.
-- `03-the-two-drivers.md`. Why Claude plus Wispr Flow changes how founders work.
-- `05-what-youll-not-find.md`. Honest limits. What this doesn't do yet.
+- `00-landing.md`. The product promise and the six core files.
+- `05-current-limits.md`. Honest limits. What this doesn't do yet.
 
-If you want the power-user terminal version (local markdown, git history, hooks, custom skills), the waitlist is at github.com/ARCASSystems/FounderOS.
+If you want the power-user terminal version (local markdown, git history, hooks, custom skills), use the public repo root at github.com/ARCASSystems/FounderOS.
