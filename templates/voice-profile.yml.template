@@ -1,0 +1,64 @@
+# TEMPLATE - this is a starting structure. Run /personal-os:setup to populate it via the voice interview.
+# Or edit by hand if you know what you want.
+# The interview is faster and produces better results because it captures patterns you don't consciously know you have.
+
+voice:
+  # How sentences flow. Pick one: short_hits | long_builders | mixed | verse_like
+  rhythm: "[CHOOSE: short_hits | long_builders | mixed | verse_like]"
+
+  # How you open a piece. Pick one: punch | confession | question | observation | story | list
+  opening_style: "[CHOOSE: punch | confession | question | observation | story | list]"
+
+  # How you close a piece. Pick one: weight | hand | question | signoff
+  closing_style: "[CHOOSE: weight | hand | question | signoff]"
+
+  # Your sign-off phrase if closing_style is "signoff". Examples: "Cheers - <name>", "<name>", "All the best".
+  signoff_phrase: "[YOUR SIGN-OFF or empty if not applicable]"
+
+  # Default person. Pick one: first | second | mixed
+  person_default: "[CHOOSE: first | second | mixed]"
+
+  # Contraction policy. Pick one: always | sometimes | never
+  contractions: "[CHOOSE: always | sometimes | never]"
+
+  # How often you hedge. Pick one: frequent | occasional | rare
+  hedging: "[CHOOSE: frequent | occasional | rare]"
+
+  # Your target reading level (6 to 12). Default 8. Lower means simpler words.
+  reading_level: 8
+
+  # Words you use naturally and want to keep. The voice skill uses these where they fit.
+  preferred_words:
+    - "[example: build]"
+    - "[example: fix]"
+    - "[example: ship]"
+
+  # Words you want to avoid. These add to the universal anti-AI blacklist.
+  banned_words:
+    - "[example: synergy]"
+    - "[example: paradigm]"
+
+  # Your idiosyncratic patterns. Things you say that grammar-check would correct but you want kept.
+  # Examples: "alot" instead of "a lot", "coz" instead of "because", starting sentences with "And" or "But".
+  idiosyncrasies:
+    - "[example: starts sentences with And, But, So]"
+    - "[example: uses parentheses for asides]"
+    - "[example: short fragments after a longer thought for emphasis]"
+
+  # Reference samples. Paste 3 to 5 pieces of your writing that capture your voice. These are the ground truth.
+  # When the rules and the samples disagree, the samples win.
+  samples:
+    - title: "[short title for sample 1]"
+      context: "[where you wrote it - LinkedIn post, email, cover letter, etc.]"
+      text: |
+        [paste the full piece here]
+
+    - title: "[short title for sample 2]"
+      context: "[where you wrote it]"
+      text: |
+        [paste the full piece here]
+
+    - title: "[short title for sample 3]"
+      context: "[where you wrote it]"
+      text: |
+        [paste the full piece here]

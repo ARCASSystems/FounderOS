@@ -1,0 +1,69 @@
+# TEMPLATE - this is a starting structure. Run /personal-os:setup to populate it via the brand interview.
+# Or edit by hand if you already have a brand kit.
+# This file feeds the your-deliverable-template skill, which produces all your visual outputs (CV, proposals, decks, one-pagers).
+
+identity:
+  display_name: "[YOUR NAME or BRAND NAME]"
+  tagline: "[ONE-LINER under your name, optional]"
+  support_contact: "[email or URL where people get in touch with you]"
+
+colors:
+  # Pick 5 colors. Each has a hex code and a usage rule.
+  # The wizard helps you pick them if you don't have a brand kit yet.
+  primary:
+    hex: "[#XXXXXX]"
+    usage: "section headers + emphasis"
+  secondary:
+    hex: "[#XXXXXX]"
+    usage: "accents + CTAs"
+  dark:
+    hex: "[#XXXXXX]"
+    usage: "body text + dark backgrounds"
+  light:
+    hex: "[#XXXXXX]"
+    usage: "light backgrounds + dividers"
+  accent:
+    hex: "[#XXXXXX]"
+    usage: "highlights only - use sparingly"
+
+fonts:
+  primary:
+    family: "[FONT NAME, e.g. Inter, Poppins, Source Sans Pro]"
+    source: "[google_fonts | local | system]"
+  secondary:
+    family: "[OPTIONAL second font, e.g. Playfair Display for headings]"
+    source: "[google_fonts | local | system]"
+  weights:
+    section_header:  { font: "primary", weight: "Bold",         size_pt: 15 }
+    subsection:      { font: "primary", weight: "Medium",       size_pt: 11 }
+    body:            { font: "primary", weight: "Light",        size_pt: 9 }
+    emphasis:        { font: "primary", weight: "Regular",      size_pt: 10 }
+    footer:          { font: "primary", weight: "Light",        size_pt: 8 }
+    cover_title:     { font: "primary", weight: "Bold",         size_pt: 26 }
+    cover_subtitle:  { font: "primary", weight: "Medium",       size_pt: 15 }
+
+logo:
+  # Put your logo files in user/brand-assets/. The wizard prompts you for paths.
+  logomark:
+    path: "user/brand-assets/logomark.png"
+    description: "icon only - used on cover and closing pages"
+  full:
+    path: "user/brand-assets/full-logo.png"
+    description: "icon + name text - used on light backgrounds"
+  white:
+    path: "user/brand-assets/full-logo-white.png"
+    description: "white version for dark backgrounds, optional"
+
+footer:
+  text: "[default footer text - usually <display_name> | <support_contact>]"
+
+assets_dir: "user/brand-assets/"
+
+page:
+  size: "A4"           # A4 or US_Letter
+  orientation: "portrait"
+  margins:
+    left_pt: 52
+    right_pt: 52
+    top_pt: 60
+    bottom_pt: 60
