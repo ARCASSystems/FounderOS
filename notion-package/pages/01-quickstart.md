@@ -34,7 +34,7 @@ Projects are where Claude holds persistent context for one specific job. Think o
 
 Inside your new Project, find the **Custom instructions** or **Project instructions** field.
 
-Open the file `system-prompts/paperclip-project-prompt.md` from this package. Copy the whole thing. Paste it into your Project instructions. Save.
+Open the file `system-prompts/founder-os-project-prompt.md` from this package. Copy the whole thing. Paste it into your Project instructions. Save.
 
 This is what tells Claude how to route your voice notes into the right Notion database.
 

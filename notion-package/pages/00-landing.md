@@ -57,7 +57,7 @@ If you need crons, webhooks, offline triggers, or anything that fires while you'
 
 2. **Claude app with Notion MCP.** If you live in the Claude desktop or mobile app, point its Notion connector at the same workspace. Same logic, slightly less polished routing UI.
 
-3. **Claude Code terminal (power users).** For the founders who want local markdown, git history, and full control over every file. Waitlist open at github.com/ARCASSystems/FounderOS.
+3. **Claude Code terminal (power users).** For the founders who want local markdown, git history, and full control over every file. Public repo at github.com/ARCASSystems/FounderOS.
 
 ---
 

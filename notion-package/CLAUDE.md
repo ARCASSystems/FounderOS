@@ -21,7 +21,7 @@ notion-package/
     01-quickstart.md
     05-current-limits.md
   system-prompts/
-    paperclip-project-prompt.md  <- Claude Project system prompt running paperclip-router logic via Notion MCP
+    founder-os-project-prompt.md  <- Claude Project system prompt that runs the routing loop against Notion via the connector
   databases/
     schema.md                 <- Notion DB schemas (Profiles, Decisions, Priorities, Clients, Brain Log, Flags)
   announce/
@@ -34,7 +34,7 @@ notion-package/
 This project must be able to evolve itself over time. Pattern:
 1. Before adding any new file, read this CLAUDE.md and confirm scope fit.
 2. After every session that modifies notion-package/, append a dated entry to the "Session log" section at the bottom of this file with: date, what changed, why, commit SHA.
-3. If you are a new Claude session picking up this project cold, read this file first, then read plans/paperclip-agents/session-8-handoff-notion-package.md if it exists.
+3. If you are a new Claude session picking up this project cold, read this file first, then scan the most recent session log entries at the bottom of this file before changing anything.
 4. Never add banned words or ARCAS leakage. Run pre-commit guard before suggesting writes.
 5. If scope creep appears (someone asks to add workflows, webhooks, crons), refuse. Point at "What this is NOT" above. Direct them to the terminal version.
 

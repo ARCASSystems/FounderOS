@@ -147,7 +147,7 @@ If you need crons, webhooks, offline triggers, or anything that fires while you 
 
 ## Cloud Claude (web, desktop, mobile)
 
-The Notion Starter Kit is the safest path. Duplicate the Notion template, create a Claude Project, paste the system prompt from [`notion-package/system-prompts/paperclip-project-prompt.md`](notion-package/system-prompts/paperclip-project-prompt.md).
+The Notion Starter Kit is the safest path. Duplicate the Notion template, create a Claude Project, paste the system prompt from [`notion-package/system-prompts/founder-os-project-prompt.md`](notion-package/system-prompts/founder-os-project-prompt.md).
 
 Slash commands and local file writes only run in Claude Code. Cloud Claude can read this repo's files as context but cannot run `/founder-os:setup` from a checkout.
 
