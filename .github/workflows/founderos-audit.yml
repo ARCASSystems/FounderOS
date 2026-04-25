@@ -1,0 +1,77 @@
+name: FounderOS Integrity Audit
+
+on:
+  push:
+    branches: ["**"]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  audit:
+    name: Leakage & drift scan
+    runs-on: ubuntu-latest
+    outputs:
+      has_findings: ${{ steps.scan.outputs.has_findings }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run audit scan
+        id: scan
+        run: python3 .github/scripts/audit.py
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_REF: ${{ github.ref }}
+
+      - name: Upload findings artifact
+        if: steps.scan.outputs.has_findings == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-findings
+          path: /tmp/audit_findings.json
+          retention-days: 7
+
+  advise:
+    name: Fix advisor (Claude)
+    needs: audit
+    if: needs.audit.outputs.has_findings == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download findings artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: audit-findings
+          path: /tmp
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install anthropic
+
+      - name: Generate fix recommendations
+        run: python3 .github/scripts/fix_advisor.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_REF: ${{ github.ref }}
+
+      - name: Open GitHub issue
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-8)
+          gh issue create \
+            --title "[Audit] Integrity flags on ${SHORT_SHA} (${{ github.ref_name }})" \
+            --body-file /tmp/fix_recommendation.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
