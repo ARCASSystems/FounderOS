@@ -24,6 +24,7 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_REF: ${{ github.ref }}
+          FOUNDEROS_PRIVATE_AUDIT_PATTERNS: ${{ secrets.FOUNDEROS_PRIVATE_AUDIT_PATTERNS }}
 
       - name: File GitHub issue
         if: steps.scan.outputs.has_findings == 'true'

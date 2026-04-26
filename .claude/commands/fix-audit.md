@@ -44,15 +44,15 @@ Work through each finding in severity order (CRITICAL first):
 - Delete the entire line for each match. These must not appear in any form.
 - Use Edit to apply.
 
-**`internal_codenames`** (`paperclip`, `founder-os-product`)
-- Replace with `FounderOS` (exact case match). Use Edit with replace_all where appropriate.
+**`internal_codenames`**
+- Replace the exact matched private codename terms from the issue body with `FounderOS` (exact case match). Use Edit with replace_all where appropriate.
 
-**`old_namespace`** (`/personal-os:`)
-- Replace with `/founder-os:`. Use Edit with replace_all.
+**`old_namespace`**
+- Replace the deprecated command namespace shown in the issue body with the current FounderOS command namespace. Use Edit with replace_all.
 
-**`stale_version`** (`15 skills`, `1.0.1`)
-- `15 skills`: run `ls skills/ | wc -l` to get the real count, then update the number in each match.
-- `1.0.1`: read `VERSION` file, replace `1.0.1` with the current version in each match.
+**`stale_version`**
+- For stale skill-count matches: count the current skill directories, then update the number in each match.
+- For stale version matches: read `VERSION`, then update each old version string to the current version.
 
 **High-impact path changes** (`LICENSE`, `README.md`, `.claude-plugin/`)
 - Read the file and summarise the recent change for the user in 2 sentences. Ask if the change was intentional. Do not modify unless the user says so.

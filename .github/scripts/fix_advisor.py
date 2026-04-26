@@ -17,8 +17,8 @@ FIX_PLAYBOOK: dict[str, str] = {
     ),
     "internal_codenames": (
         "HIGH — internal codenames are leaking. Replace every occurrence of "
-        "'paperclip' or 'founder-os-product' with 'FounderOS' (the public product name). "
-        "Bulk-replace with: `grep -rl 'paperclip\\|founder-os-product' . | xargs sed -i 's/paperclip/FounderOS/g; s/founder-os-product/FounderOS/g'`"
+        "the matched private codename terms with `FounderOS` (the public product name). "
+        "Use the exact matches from the audit issue body; do not keep the private terms in docs, scripts, or examples."
     ),
     "internal_ids": (
         "CRITICAL — private Notion collection IDs or internal UUIDs are exposed. "

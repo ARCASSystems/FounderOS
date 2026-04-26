@@ -5,20 +5,12 @@ Writes /tmp/audit_findings.json and sets the has_findings GHA output.
 """
 import json
 import os
+import re
 import subprocess
-import sys
+import tempfile
 from pathlib import Path
 
 LEAKAGE_PATTERNS = [
-    (
-        "pii_names",
-        r"Aqsa|Afsha|Bilal|Ashrith|Teja|Surandar|Pupilar|XFest|IKEA|Festival City",
-    ),
-    ("internal_codenames", r"paperclip|founder-os-product"),
-    (
-        "internal_ids",
-        r"collection://|2c327c182a0f|33127c182a0f|33b27c182a0f|046a7ad8676",
-    ),
     ("old_namespace", r"/personal-os:"),
     ("stale_version", r"15 skills|1\.0\.1"),
 ]
@@ -26,24 +18,59 @@ LEAKAGE_PATTERNS = [
 HIGH_IMPACT_PATHS = [".claude-plugin/", "LICENSE", "README.md"]
 
 INCLUDE_GLOBS = ["*.md", "*.json", "*.sh", "*.yaml", "*.yml", "*.txt"]
+EXCLUDED_DIRS = {".git", ".github"}
 
 # Empty-tree SHA — used when HEAD has no parent (first commit)
 EMPTY_TREE = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
 
 
-def grep_pattern(label: str, pattern: str) -> dict | None:
-    cmd = [
-        "grep", "-rn",
-        "--exclude-dir=.git",
-        "--exclude-dir=.github",
-    ]
-    for glob in INCLUDE_GLOBS:
-        cmd += [f"--include={glob}"]
-    cmd += ["-E", pattern, "."]
+def load_private_patterns() -> list[tuple[str, str]]:
+    """Load private leakage patterns without committing the sensitive tokens."""
+    raw = os.environ.get("FOUNDEROS_PRIVATE_AUDIT_PATTERNS", "").strip()
+    if not raw:
+        return []
 
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    if result.returncode == 0 and result.stdout.strip():
-        matches = result.stdout.strip().splitlines()
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise ValueError("FOUNDEROS_PRIVATE_AUDIT_PATTERNS must be valid JSON") from exc
+
+    patterns: list[tuple[str, str]] = []
+    for item in data:
+        if not isinstance(item, dict):
+            raise ValueError("Each private audit pattern must be an object")
+        label = str(item.get("label", "")).strip()
+        pattern = str(item.get("pattern", "")).strip()
+        if not label or not pattern:
+            raise ValueError("Each private audit pattern needs label and pattern")
+        patterns.append((label, pattern))
+    return patterns
+
+
+def should_scan(path: Path) -> bool:
+    if any(part in EXCLUDED_DIRS for part in path.parts):
+        return False
+    return any(path.match(glob) for glob in INCLUDE_GLOBS)
+
+
+def scan_pattern(label: str, pattern: str) -> dict | None:
+    regex = re.compile(pattern)
+    matches: list[str] = []
+
+    for path in sorted(Path(".").rglob("*")):
+        if not path.is_file() or not should_scan(path):
+            continue
+        try:
+            lines = path.read_text(encoding="utf-8").splitlines()
+        except UnicodeDecodeError:
+            continue
+
+        for line_no, line in enumerate(lines, start=1):
+            if regex.search(line):
+                display_path = "./" + path.as_posix()
+                matches.append(f"{display_path}:{line_no}:{line}")
+
+    if matches:
         return {
             "check": label,
             "pattern": pattern,
@@ -78,10 +105,19 @@ def set_gha_output(key: str, value: str) -> None:
         print(f"OUTPUT: {key}={value}")
 
 
+def findings_path() -> Path:
+    configured = os.environ.get("AUDIT_FINDINGS_PATH")
+    if configured:
+        return Path(configured)
+    if os.name == "nt":
+        return Path(tempfile.gettempdir()) / "audit_findings.json"
+    return Path("/tmp/audit_findings.json")
+
+
 def main() -> None:
     leakage_findings = []
-    for label, pattern in LEAKAGE_PATTERNS:
-        result = grep_pattern(label, pattern)
+    for label, pattern in [*LEAKAGE_PATTERNS, *load_private_patterns()]:
+        result = scan_pattern(label, pattern)
         if result:
             leakage_findings.append(result)
 
@@ -103,7 +139,9 @@ def main() -> None:
         "has_findings": has_findings,
     }
 
-    Path("/tmp/audit_findings.json").write_text(json.dumps(output, indent=2))
+    output_path = findings_path()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(output, indent=2))
     set_gha_output("has_findings", "true" if has_findings else "false")
 
     if has_findings:
