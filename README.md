@@ -2,7 +2,9 @@
 
 The operating layer for a solo founder. Six files run your company. Claude reads them every session.
 
-Owned by you. Powered by Claude. Voice-first via Wispr Flow or any dictation tool.
+Owned by you. Powered by Claude. Talk to it.
+
+**Setup:** Paste the install command. Run `/founder-os:setup`. Talk to it for 15 minutes. Done.
 
 ---
 
@@ -100,6 +102,7 @@ The setup wizard asks six or seven questions and generates your full operating s
 | `/founder-os:setup` | Run the setup wizard. |
 | `/founder-os:update` | Pull the latest System Layer files. Subcommands: `check`, `rollback`. |
 | `/today` | 20-line one-screen view of today. |
+| `/next` | One recommended next action across priorities, deals, and cadence. |
 | `/pre-meeting` | Hard gate before any meeting. |
 | `/capture-meeting` | Route a transcript or brain dump into log + clients + open commitments. |
 
@@ -124,6 +127,22 @@ You are not installing a template. You are installing an operating layer. It lis
 
 ---
 
+## The ecosystem
+
+Three repos. One architecture. Choose the one that matches where you are.
+
+| Repo | For | Entry point |
+|---|---|---|
+| **PersonalOS** | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
+| **FounderOS** (this repo) | Solo founders running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **AgentOS** | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
+
+All three are Claude Code plugins. All three are local-first. FounderOS and PersonalOS are migrations of AgentOS with personal data stripped out.
+
+If you want someone to build and run this for you, that is [ARCAS Systems](https://arcassystems.com).
+
+---
+
 ## What it is not
 
 Not a workflow engine. Not a webhook server. Not a cloud tool that stores your data on someone else's servers.
@@ -140,7 +159,7 @@ If you need crons, webhooks, offline triggers, or anything that fires while you 
 - **Revenue loop enforcement.** Every outreach or content action must log same-session. Catches the gap between "I'll do X" and "I did X."
 - **Role as router.** COO, BD, CMO, Chief of Staff are behavioural modes, not personas. The right mode activates based on what you are actually doing.
 - **Plan A defines Plan B.** This product is a derivative of an actual founder's daily use. Features graduate from personal use into the product only after surviving contact with live P&L.
-- **Voice first.** Built around dictation so capture cost approaches zero.
+- **Talk to it.** Built around dictation. Claude Code's built-in dictation is the primary input. Wispr Flow is an optional power-user upgrade. On mobile, skills work via typed input - no dictation tool required.
 - **Kill criteria in the product.** Tells you when a flag has been open too long and forces a decision.
 
 ---
@@ -180,4 +199,4 @@ Version 1.1.0. Public launch week 2026-04-27.
 
 Early and honest. Read [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md) for the current limits.
 
-Built by [Alistair Aranha](https://github.com/ARCASSystems) at ARCAS Systems.
+Built by [Alistair Aranha](https://github.com/ARCASSystems) at [ARCAS Systems](https://arcassystems.com).
