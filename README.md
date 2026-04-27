@@ -139,6 +139,8 @@ Three repos. One architecture. Choose the one that matches where you are.
 
 All three are Claude Code plugins. All three are local-first. FounderOS and PersonalOS are migrations of AgentOS with personal data stripped out.
 
+The three repos share one architecture - User OS (Layer 1) / Company OS (Layer 2) / Knowledge Base (Layer 3). FounderOS lives at Layer 1 today and reads from Layer 2 when you're coordinating with teammates. The full picture is in [AgentOS/docs/three-layer-architecture.md](https://github.com/ARCASSystems/AgentOS/blob/main/docs/three-layer-architecture.md).
+
 If you want someone to build and run this for you, that is [ARCAS Systems](https://arcassystems.com).
 
 ---
