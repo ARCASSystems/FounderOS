@@ -191,7 +191,7 @@ revenue, or commitments.
 | Install locally with Claude Code | `/founder-os:setup` |
 | Check today after setup | `/today` |
 | Update System Layer later | `/founder-os:update check` |
-| Business inquiry, install help, speaking | `alistair@arcassystems.com` |
+| Business inquiry, install help, speaking | `solutions@arcassystems.com` |
 
 ---
 
