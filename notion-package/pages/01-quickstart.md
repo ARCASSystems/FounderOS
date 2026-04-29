@@ -8,7 +8,7 @@
 
 # Quickstart
 
-Five minutes if you already have Notion and a paid Claude plan. Ten if you need to set one of them up.
+Planned target: five minutes if you already have Notion and a paid Claude plan. Ten if you need to set one of them up. This is not available until the public duplicate template ships.
 
 You'll need:
 

@@ -4,7 +4,7 @@ The operating layer for a solo founder. Six files run your company. Claude reads
 
 Owned by you. Powered by Claude. Talk to it.
 
-**Setup:** Paste the install command. Run `/founder-os:setup`. Talk to it for 15 minutes. Done.
+**Setup:** Clone the repo. Open Claude Code. Run `/founder-os:setup`. Talk to it for 15 minutes. Done.
 
 ---
 
@@ -32,11 +32,11 @@ Plus four roles as behavioural modes: COO (default), BD, CMO, Chief of Staff.
 
 ## Three ways to install
 
-### 1. Notion Starter Kit (fastest, no-Code path)
+### 1. Notion Starter Kit (in development)
 
-Duplicate a Notion page. Paste one system prompt into a Claude Project. Five minutes.
+The no-code Notion path is not live yet. The quickstart is a design spec until a public duplicate template exists.
 
-Read [`notion-package/pages/01-quickstart.md`](notion-package/pages/01-quickstart.md).
+Use the Claude Code terminal path for an end-to-end install today. Read [`notion-package/pages/01-quickstart.md`](notion-package/pages/01-quickstart.md) only if you want to preview the planned Notion flow.
 
 ### 2. Claude app with Notion MCP
 
@@ -95,7 +95,7 @@ The setup wizard asks six or seven questions and generates your full operating s
 | your-deliverable-template | Produces all branded documents (CV, proposal, deck, one-pager) in your visual identity. |
 | business-context-loader | Loads, scans, and progressively fills a per-company context file. Routes you to the next highest-leverage move. |
 
-### Slash commands (5)
+### Slash commands (6)
 
 | Command | Purpose |
 |---|---|
@@ -112,8 +112,8 @@ The setup wizard writes from `templates/`. After setup, you edit the generated f
 
 ### Notion package
 
-Three drop-in artifacts for users who do not run Claude Code:
-- Notion duplication template (the six core files plus brain log and flags)
+Scaffold artifacts for users who do not run Claude Code. This path is not live until the public duplicate template ships:
+- Notion duplication template (planned)
 - System prompt for a Claude Project
 - Quickstart page
 
@@ -168,7 +168,7 @@ If you need crons, webhooks, offline triggers, or anything that fires while you 
 
 ## Cloud Claude (web, desktop, mobile)
 
-The Notion Starter Kit is the safest path. Duplicate the Notion template, create a Claude Project, paste the system prompt from [`notion-package/system-prompts/founder-os-project-prompt.md`](notion-package/system-prompts/founder-os-project-prompt.md).
+The Notion Starter Kit is in development. Until the public duplicate template ships, use the Claude Code path for setup. The system prompt at [`notion-package/system-prompts/founder-os-project-prompt.md`](notion-package/system-prompts/founder-os-project-prompt.md) is available for preview and testing only.
 
 Slash commands and local file writes only run in Claude Code. Cloud Claude can read this repo's files as context but cannot run `/founder-os:setup` from a checkout.
 
@@ -187,7 +187,7 @@ revenue, or commitments.
 
 | Want to | Run |
 |---|---|
-| Install fastest, no-Code | [Notion Quickstart](notion-package/pages/01-quickstart.md) |
+| Preview planned no-code path | [Notion Quickstart](notion-package/pages/01-quickstart.md) |
 | Install locally with Claude Code | `/founder-os:setup` |
 | Check today after setup | `/today` |
 | Update System Layer later | `/founder-os:update check` |

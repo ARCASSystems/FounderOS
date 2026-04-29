@@ -118,6 +118,7 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/pre-meeting <name>` - gate before any meeting; requires a capture artifact and a specific ask
 - `/capture-meeting <name>` - routes a transcript or brain dump into brain/log.md + context/clients.md + commitments (M3)
 - `/today` - 20-line one-screen view of today (anchor, decisions, flags, last 3 log entries, next calendar) (M4)
+- `/next` - one recommended next action across priorities, deals, and cadence
 
 **Hooks** (`.claude/hooks/`)
 - Session-close revenue-loop check (M2) - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update. Registered on the Stop event in `.claude/settings.json`.
@@ -130,7 +131,7 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks require the scheduled-tasks MCP to be installed in your Claude Code environment.
 
-## Skills (15 included)
+## Skills (20 included)
 
 | Skill | Purpose |
 |-------|---------|
@@ -149,6 +150,11 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 | content-repurposer | One piece, multiple formats |
 | strategic-analysis | Market sizing, competitive analysis, opportunity assessment |
 | pre-send-check | Hard gate before any client-facing deliverable leaves your machine |
+| voice-interview | Captures your writing voice into core/voice-profile.yml |
+| brand-interview | Captures your visual brand into core/brand-profile.yml |
+| your-voice | Applies your voice profile to written output |
+| your-deliverable-template | Produces branded documents from core/brand-profile.yml |
+| business-context-loader | Loads and completes per-company business context |
 
 ## Philosophy
 

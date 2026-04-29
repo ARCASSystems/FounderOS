@@ -13,6 +13,11 @@ brain/flags.md
 brain/patterns.md
 brain/decisions-parked.md
 brain/archive/
+clients/
+user/
+drafts/
+exports/
+reports/
 
 # Stack bindings (user fills these in during setup — not shareable as-is)
 # Committed as template with placeholders. User's filled version is private.
@@ -23,7 +28,13 @@ brain/archive/
 *.key
 
 # Local Claude settings (per-user, not shareable)
+CLAUDE.local.md
+AGENTS.local.md
+GEMINI.local.md
+.mcp.local.json
 .claude/settings.local.json
+.codex/
+.gemini/
 
 # OS + editor
 .DS_Store

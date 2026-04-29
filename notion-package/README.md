@@ -17,7 +17,7 @@ Powered by Claude (thinking) and Wispr Flow (speaking). Founder OS is the markdo
 - Not a workflow engine. A routing engine with an approval gate.
 
 ## Start here
-See pages/01-quickstart.md. 5 minutes. Zero install.
+See pages/01-quickstart.md to preview the planned flow. The public Notion duplicate template has not shipped yet, so the Claude Code path in the repo root is the only end-to-end install today.
 
 ## Power-user version
 The repo root ships the Claude Code version with local markdown, slash commands, hooks, and skills.

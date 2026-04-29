@@ -43,21 +43,21 @@ fonts:
     cover_subtitle:  { font: "primary", weight: "Medium",       size_pt: 15 }
 
 logo:
-  # Put your logo files in user/brand-assets/. The wizard prompts you for paths.
+  # Put your logo files in core/brand-assets/. The wizard prompts you for paths.
   logomark:
-    path: "user/brand-assets/logomark.png"
+    path: "core/brand-assets/logomark.png"
     description: "icon only - used on cover and closing pages"
   full:
-    path: "user/brand-assets/full-logo.png"
+    path: "core/brand-assets/full-logo.png"
     description: "icon + name text - used on light backgrounds"
   white:
-    path: "user/brand-assets/full-logo-white.png"
+    path: "core/brand-assets/full-logo-white.png"
     description: "white version for dark backgrounds, optional"
 
 footer:
   text: "[default footer text - usually <display_name> | <support_contact>]"
 
-assets_dir: "user/brand-assets/"
+assets_dir: "core/brand-assets/"
 
 page:
   size: "A4"           # A4 or US_Letter
