@@ -44,6 +44,8 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 ## Slash Commands
 
 - `/founder-os:setup` - first-run wizard
+- `/founder-os:voice-interview` - capture writing voice into `core/voice-profile.yml`
+- `/founder-os:brand-interview` - capture visual identity into `core/brand-profile.yml`
 - `/founder-os:status` - read-only OS readiness check
 - `/founder-os:update` - pull System Layer updates without touching user data
 - `/founder-os:uninstall` - cleanly remove (default mode preserves data; --purge wipes everything)

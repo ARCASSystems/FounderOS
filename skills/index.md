@@ -32,13 +32,16 @@ All others activate via `/skill-name` or are invoked implicitly by roles.
 
 ## Commands
 
-This plugin ships seven slash commands:
+This plugin ships ten slash commands:
 
 | Command | Purpose |
 |---------|---------|
 | [/founder-os:setup](../.claude/commands/setup.md) | Run the Founder OS setup wizard. Generates identity, priorities, decisions, cadence, and brain files from a guided interview. |
+| [/founder-os:voice-interview](../.claude/commands/voice-interview.md) | Capture how you write into `core/voice-profile.yml`. Unlocks the voice-coupled writing skills. |
+| [/founder-os:brand-interview](../.claude/commands/brand-interview.md) | Capture your visual identity into `core/brand-profile.yml`. Unlocks branded outputs. |
 | [/founder-os:status](../.claude/commands/status.md) | Read-only OS readiness check. Returns a weighted score and the next 3 high-leverage moves. |
 | [/founder-os:update](../.claude/commands/update.md) | Pull the latest System Layer files (skills, templates, commands, hooks) without touching your personal data. Subcommands: check, rollback. |
+| [/founder-os:uninstall](../.claude/commands/uninstall.md) | Cleanly remove Founder OS. Default mode preserves your data; `--purge` removes everything. |
 | [/pre-meeting](../.claude/commands/pre-meeting.md) | Hard gate before any meeting. Requires capture artifact + ask. Logs to brain/log.md. |
 | [/capture-meeting](../.claude/commands/capture-meeting.md) | Routes a transcript or brain dump into brain/log.md, context/clients.md, and open commitments. |
 | [/today](../.claude/commands/today.md) | 20-line one-screen view of today. Anchor, open decisions, active flags, last 3 log entries, next calendar event. |

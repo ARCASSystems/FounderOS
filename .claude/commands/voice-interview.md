@@ -1,0 +1,34 @@
+---
+description: Run the voice interview. Captures how you write into core/voice-profile.yml. Unlocks the voice-coupled writing skills (linkedin-post, client-update, proposal-writer, email-drafter, content-repurposer, sop-writer, your-voice). Takes about 10 minutes.
+allowed-tools: ["Read", "Write", "Edit"]
+---
+
+# Founder OS voice interview
+
+Entry point for the voice interview. Triggers the `voice-interview` skill, which captures the user's writing voice and writes it to `core/voice-profile.yml`.
+
+## Procedure (in order)
+
+1. Check whether `core/identity.md` exists at the repo root.
+
+2. If `core/identity.md` does NOT exist, reply: `Founder OS not set up here yet. Run /founder-os:setup first.` and stop. The voice interview depends on identity being filled.
+
+3. Check whether `core/voice-profile.yml` exists.
+
+   - If it does NOT exist, copy the template from `templates/voice-profile.yml.template` to `core/voice-profile.yml` (placeholders intact) before invoking the skill, so the skill can fill it in place.
+   - If it exists and contains real values (not `[CHOOSE: ...]`, `[YOUR ...]`, or `[example: ...]` placeholders), ask the founder, as a single message:
+
+     ```
+     Voice profile already filled. Re-run the interview and overwrite? (yes / no)
+     ```
+
+     Wait for the reply. If the reply is a clear `no`, reply: `Voice interview dismissed. Existing profile left untouched.` and stop. If the reply is a clear `yes`, proceed.
+
+4. Read the voice-interview skill at `skills/voice-interview/SKILL.md` and execute it end to end. The skill owns the interview flow: welcome, samples, shaping questions, confirmation, write. Follow its phases IN ORDER. Do not shortcut.
+
+## Rules
+
+- This command is a thin trigger. All logic lives in the skill. Do not duplicate interview steps here.
+- If the skill file is missing, reply: `Voice interview skill not found at skills/voice-interview/SKILL.md. This install is incomplete. Re-install the plugin.` and stop.
+- No em dashes or en dashes. Hyphens only with spaces.
+- Never overwrite an existing populated profile without the explicit re-run confirmation above.

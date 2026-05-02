@@ -105,11 +105,13 @@ Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and 
 | client-update | Voice-coupled client status update writer. |
 | proposal-writer | Voice and brand-coupled proposal writer. |
 
-### Slash commands (8)
+### Slash commands (10)
 
 | Command | Purpose |
 |---|---|
 | `/founder-os:setup` | Run the setup wizard. |
+| `/founder-os:voice-interview` | Capture how you write into `core/voice-profile.yml`. Unlocks the voice-coupled writing skills. |
+| `/founder-os:brand-interview` | Capture your visual identity into `core/brand-profile.yml`. Unlocks branded outputs. |
 | `/founder-os:status` | Read-only OS readiness check. Returns a weighted score and the next 3 high-leverage moves. |
 | `/founder-os:update` | Pull the latest System Layer files. Subcommands: `check`, `rollback`. |
 | `/founder-os:uninstall` | Cleanly remove Founder OS. Default mode preserves your data. `--purge` removes everything. |
