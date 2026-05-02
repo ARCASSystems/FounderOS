@@ -7,17 +7,17 @@
   },
   "metadata": {
     "description": "Founder OS plugin and related operating-system tools for solo founders",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "plugins": [
     {
       "name": "founder-os",
       "source": {
-        "source": "url",
-        "url": "https://github.com/ARCASSystems/FounderOS.git"
+        "source": "github",
+        "repo": "ARCASSystems/FounderOS"
       },
-      "description": "Complete operating system for solo founders: 4 role modes, 20 skills, voice and brand profiles, business-context loader, brain log, stall detection, revenue loop enforcement",
-      "version": "1.1.0",
+      "description": "Operating system for solo founders: 4 role modes, 24 skills, voice and brand profiles, business-context loader, brain log, stall detection, revenue loop enforcement, readiness check",
+      "version": "1.2.0",
       "strict": true
     }
   ]

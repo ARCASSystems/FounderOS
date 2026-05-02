@@ -4,7 +4,7 @@ The operating layer for a solo founder. Six files run your company. Claude reads
 
 Owned by you. Powered by Claude. Talk to it.
 
-**Setup:** Clone the repo. Open Claude Code. Run `/founder-os:setup`. Talk to it for 15 minutes. Done.
+**Setup:** Install the plugin. Open Claude Code. Run `/founder-os:setup`. Talk to it for 15 minutes. Done.
 
 ---
 
@@ -24,38 +24,40 @@ Two more files load on demand:
 - **Brain log.** Running thoughts, observations, patterns, flags.
 - **Flags.** Stalls, role feedback, friction. Used by Chief of Staff mode for stall detection.
 
-Around those: 20 skills covering meeting prep, knowledge capture, decisions, email drafting, content repurposing, founder coaching, weekly review, priority triage, SOPs, unit economics, strategic analysis, brain log, session handoff, pre-send check, the voice and brand interviews that capture how you write and how your work looks, the your-voice and your-deliverable-template skills that apply that profile to every output, the business-context-loader for per-company context, and the setup wizard.
+Around those: 24 skills covering meeting prep, knowledge capture, decisions, email drafting, content repurposing, founder coaching, weekly review, priority triage, SOPs, unit economics, strategic analysis, brain log, session handoff, pre-send check, the voice and brand interviews that capture how you write and how your work looks, the your-voice and your-deliverable-template skills that apply that profile to every output, the business-context-loader for per-company context, three voice-coupled writers (linkedin-post, client-update, proposal-writer), a readiness check, and the setup wizard.
 
 Plus four roles as behavioural modes: COO (default), BD, CMO, Chief of Staff.
 
 ---
 
-## Three ways to install
+## Install
 
-### 1. Notion Starter Kit (in development)
+Three install paths. Pick the one that matches your stack. Full details in [docs/install.md](docs/install.md).
 
-The no-code Notion path is not live yet. The quickstart is a design spec until a public duplicate template exists.
+### Path A - Claude Code plugin (cleanest)
 
-Use the Claude Code terminal path for an end-to-end install today. Read [`notion-package/pages/01-quickstart.md`](notion-package/pages/01-quickstart.md) only if you want to preview the planned Notion flow.
+```
+/plugin marketplace add ARCASSystems/FounderOS
+/plugin install founder-os@founder-os-marketplace
+/founder-os:setup
+```
 
-### 2. Claude app with Notion MCP
+Requires Claude Code with a Pro or Max plan. If the plugin install does not work in your Claude Code version, fall back to Path B.
 
-If you live in the Claude desktop or mobile app. Point the Notion connector at the duplicated workspace. Same logic.
-
-### 3. Claude Code terminal (recommended for power users)
-
-Local markdown files, git history, full control over hooks and slash commands.
+### Path B - Manual git clone (most reliable)
 
 Mac, Linux, or git-bash on Windows:
 
 ```bash
-git clone --depth 1 https://github.com/ARCASSystems/FounderOS.git ~/founder-os && cd ~/founder-os
+git clone --depth 1 https://github.com/ARCASSystems/FounderOS.git ~/founder-os
+cd ~/founder-os
 ```
 
 PowerShell on Windows:
 
 ```powershell
-git clone --depth 1 https://github.com/ARCASSystems/FounderOS.git "$HOME\founder-os"; cd "$HOME\founder-os"
+git clone --depth 1 https://github.com/ARCASSystems/FounderOS.git "$HOME\founder-os"
+cd "$HOME\founder-os"
 ```
 
 Open Claude Code in that folder, then run:
@@ -66,15 +68,20 @@ Open Claude Code in that folder, then run:
 
 The setup wizard asks six or seven questions and generates your full operating system locally. 15 to 20 minutes the first time.
 
+### Path C - Cloud Claude (read-only)
+
+Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and use the safe fallback prompt below. Cloud Claude cannot run slash commands or write to local disk - it's a read-only operating mode until the Notion Starter Kit ships. See [docs/install.md](docs/install.md) for the full instructions.
+
 ---
 
 ## What ships in this repo
 
-### Skills (20)
+### Skills (24)
 
 | Skill | What it does |
 |---|---|
 | founder-os-setup | Setup wizard. Generates identity, priorities, decisions, cadence, brain files. |
+| readiness-check | OS health audit. Run via `/founder-os:status`. |
 | weekly-review | Run the weekly retro. M/S/D bucket calculation, keep/kill/escalate on flags. |
 | priority-triage | Force a top-3 from a long list. Names what gets cut. |
 | brain-log | Route a thought to log, cross-reference, or act with same-session follow-through. |
@@ -93,14 +100,19 @@ The setup wizard asks six or seven questions and generates your full operating s
 | brand-interview | Captures your visual brand into core/brand-profile.yml. |
 | your-voice | Writes everything as you, using your voice profile. |
 | your-deliverable-template | Produces all branded documents (CV, proposal, deck, one-pager) in your visual identity. |
-| business-context-loader | Loads, scans, and progressively fills a per-company context file. Routes you to the next highest-leverage move. |
+| business-context-loader | Loads, scans, and progressively fills a per-company context file. Routes you to the next move. |
+| linkedin-post | Voice-coupled LinkedIn post writer. |
+| client-update | Voice-coupled client status update writer. |
+| proposal-writer | Voice and brand-coupled proposal writer. |
 
-### Slash commands (6)
+### Slash commands (8)
 
 | Command | Purpose |
 |---|---|
 | `/founder-os:setup` | Run the setup wizard. |
+| `/founder-os:status` | Read-only OS readiness check. Returns a weighted score and the next 3 high-leverage moves. |
 | `/founder-os:update` | Pull the latest System Layer files. Subcommands: `check`, `rollback`. |
+| `/founder-os:uninstall` | Cleanly remove Founder OS. Default mode preserves your data. `--purge` removes everything. |
 | `/today` | 20-line one-screen view of today. |
 | `/next` | One recommended next action across priorities, deals, and cadence. |
 | `/pre-meeting` | Hard gate before any meeting. |
@@ -119,6 +131,24 @@ Scaffold artifacts for users who do not run Claude Code. This path is not live u
 
 ---
 
+## Tools and MCPs
+
+Founder OS does not assume your stack. The OS is files and skills. Each skill declares which MCP servers it can use, and degrades gracefully when those MCPs are not available.
+
+20 of the 24 skills work end-to-end with zero MCPs. Four skills (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce better output with the relevant integration connected.
+
+The full catalog: [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+
+### What does NOT work without an MCP
+
+- Calendar event in `/today` line - needs Google Calendar or Outlook MCP. Without it, the line shows `no scheduled event next 24h`.
+- Pulling email context for `email-drafter` - needs Gmail or Outlook MCP. Without it, you paste the email by hand.
+- Writing captured insights directly to Notion via `knowledge-capture` - needs Notion MCP. Without it, captures stay in `brain/log.md` as markdown.
+
+Nothing in the OS hard-fails on a missing MCP. It tells you what it can't do and continues.
+
+---
+
 ## Who this is for
 
 You run the business alone or with one or two people. You are sharp but your day is chopped into thirty-minute pieces. You have tried productivity templates that promised the world and quietly stopped getting opened by week three.
@@ -127,17 +157,17 @@ You are not installing a template. You are installing an operating layer. It lis
 
 ---
 
-## The ecosystem
+## The repos
 
-Three repos. One architecture. Choose the one that matches where you are.
+Three repos. One architecture. FounderOS is production. The siblings are in development.
 
-| Repo | For | Entry point |
-|---|---|---|
-| **PersonalOS** | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
-| **FounderOS** (this repo) | Solo founders running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
-| **AgentOS** | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
+| Repo | Status | For | Entry point |
+|---|---|---|---|
+| **FounderOS** (this repo) | Production v1.2 | Solo founders running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
+| **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
-All three are Claude Code plugins. All three are local-first. FounderOS and PersonalOS are migrations of AgentOS with personal data stripped out.
+All three are Claude Code plugins. All three are local-first. FounderOS and PersonalOS are migrations of AgentOS with personal data stripped out. If you want a polished operating layer right now, FounderOS is the one to use. The siblings are previews.
 
 The three repos share one architecture - User OS (Layer 1) / Company OS (Layer 2) / Knowledge Base (Layer 3). FounderOS lives at Layer 1 today and reads from Layer 2 when you're coordinating with teammates. The full picture is in [AgentOS/docs/three-layer-architecture.md](https://github.com/ARCASSystems/AgentOS/blob/main/docs/three-layer-architecture.md).
 
@@ -149,7 +179,7 @@ If you want someone to build and run this for you, that is [ARCAS Systems](https
 
 Not a workflow engine. Not a webhook server. Not a cloud tool that stores your data on someone else's servers.
 
-Your Notion. Your Claude. Your files on your disk if you want them there. If you want to delete it, you delete the folder. Nothing to unsubscribe from.
+Your Notion. Your Claude. Your files on your disk if you want them there. If you want to delete it, run `/founder-os:uninstall` or just delete the folder. Nothing to unsubscribe from.
 
 If you need crons, webhooks, offline triggers, or anything that fires while you sleep, that is a different tool (n8n, Make, whatever you use). Founder OS holds the thinking layer. You stay in charge of the rest.
 
@@ -187,17 +217,20 @@ revenue, or commitments.
 
 | Want to | Run |
 |---|---|
-| Preview planned no-code path | [Notion Quickstart](notion-package/pages/01-quickstart.md) |
-| Install locally with Claude Code | `/founder-os:setup` |
+| Install via plugin | `/plugin marketplace add ARCASSystems/FounderOS` then `/plugin install founder-os@founder-os-marketplace` |
+| Install via git clone | See [docs/install.md](docs/install.md) Path B |
+| Set up after install | `/founder-os:setup` |
 | Check today after setup | `/today` |
+| Check OS health | `/founder-os:status` |
 | Update System Layer later | `/founder-os:update check` |
+| Cleanly remove | `/founder-os:uninstall` |
 | Business inquiry, install help, speaking | `solutions@arcassystems.com` |
 
 ---
 
 ## Status
 
-Version 1.1.0. Public launch week 2026-04-27.
+Version 1.2.0. Public push week of 2026-05-04.
 
 Early and honest. Read [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md) for the current limits.
 

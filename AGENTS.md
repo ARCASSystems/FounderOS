@@ -1,4 +1,4 @@
-# FounderOS — Agent Instructions
+# FounderOS - Agent Instructions
 
 Instructions for Codex, Gemini, and other non-Claude agents operating in this repo.
 
@@ -44,7 +44,9 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 ## Slash Commands
 
 - `/founder-os:setup` - first-run wizard
+- `/founder-os:status` - read-only OS readiness check
 - `/founder-os:update` - pull System Layer updates without touching user data
+- `/founder-os:uninstall` - cleanly remove (default mode preserves data; --purge wipes everything)
 - `/today` - 20-line daily dashboard
 - `/next` - one recommended next action
 - `/pre-meeting` - hard gate before any meeting

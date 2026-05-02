@@ -2,6 +2,7 @@
 name: priority-triage
 description: >
   Triages priorities when the founder feels overwhelmed or needs focus. Use this skill when the user says "I'm overwhelmed", "what should I focus on", "too many things", "I don't know where to start", "help me prioritize", "what matters most", "I'm stuck", "I can't decide what to work on", "everything feels urgent", or any signal that they need help cutting through noise to find the ONE thing that matters right now.
+mcp_requirements: []
 ---
 
 # Priority Triage - Cut Through the Noise

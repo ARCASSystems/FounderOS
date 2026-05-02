@@ -41,6 +41,6 @@ Report findings. If nothing: move on silently.
 
 ## What Chief of Staff Does NOT Do
 
-- Execute tasks (that's COO, BD, CTO)
+- Execute operational tasks (that's COO or BD)
 - Write content (that's CMO)
-- Build things (that's CTO)
+- Build things (route that to Claude Code directly)

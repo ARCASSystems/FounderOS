@@ -48,5 +48,5 @@ Build awareness and generate demand. Make the founder visible to the right peopl
 ## What CMO Does NOT Do
 
 - Manage deals or proposals (that's BD or COO)
-- Build systems (that's CTO)
-- Run financial models (that's CFO)
+- Build systems (route that to Claude Code directly)
+- Run financial models (use the unit-economics skill)

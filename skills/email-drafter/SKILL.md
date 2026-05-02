@@ -2,6 +2,7 @@
 name: email-drafter
 description: >
   Drafts professional emails in the founder's voice. Use this skill whenever the user asks to "write an email", "draft a reply", "send a message", "follow up with", "reach out to", "respond to this email", "compose an email", or any variation of email/message writing. Also trigger when the user pastes email content and asks for a response, or when they describe a situation that clearly needs an email. Covers client emails, partnership outreach, investor updates, team communications, cold outreach, and personal correspondence.
+mcp_requirements: [optional: gmail]
 ---
 
 # Email Drafter

@@ -2,6 +2,7 @@
 name: session-handoff
 description: >
   Structures context transfers between Claude sessions so nothing gets lost. Use this skill when the user says "summarize this for a new session", "hand this off", "session summary", "transfer this context", "continue this in a new chat", "build a handoff", "wrap this up for next time", "create a prompt for a fresh session", "context transfer", "prepare for handoff", "we've gone deep, let's start fresh", "package this up", or any reference to transferring conversation context to a new session or a different user's Claude. Also trigger when Claude detects the conversation is very long and the user mentions starting fresh, continuing later, or sharing context with someone else. Even indirect signals like "this session is getting long" or "can you package this so my partner can continue" should trigger this skill. Do NOT trigger for simple conversation summaries ("summarize what we discussed"), meeting prep (that's meeting-prep), or document creation tasks.
+mcp_requirements: [optional: notion]
 ---
 
 # Session Handoff

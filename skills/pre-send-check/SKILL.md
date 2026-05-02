@@ -2,6 +2,7 @@
 name: pre-send-check
 description: >
   Hard gate before any client-facing deliverable leaves the founder's machine. Use this skill when the user says "check this before I send", "review before I ship", "pre-send check", "ready to send", "final review", "look this over before it goes out", or any variation of pre-ship review on an email, proposal, deck, contract, post, invoice, or status update. Read-only - never modifies the deliverable. Reports PASS or FAIL on each of seven checks and returns a decision.
+mcp_requirements: []
 ---
 
 <HARD-GATE>

@@ -3,6 +3,7 @@ name: your-voice
 description: >
   Your personal writing voice. Apply this skill to ALL written output - LinkedIn posts, YouTube scripts, emails, cover letters, applications, internal docs, anything that contains words. This skill should fire for every single writing task, content creation request, message draft, document, report, or any output that contains written language. Reads `core/voice-profile.yml` for your specific patterns. If the profile is missing, fall back to anti-AI defaults and warn the user that the voice interview has not been run.
 allowed-tools: ["Read", "Write", "Edit"]
+mcp_requirements: []
 ---
 
 # Your Voice

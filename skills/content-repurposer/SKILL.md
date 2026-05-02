@@ -2,6 +2,7 @@
 name: content-repurposer
 description: >
   Takes one piece of content and adapts it for multiple channels. Use this skill when the user says "repurpose this", "turn this into", "adapt this for", "convert this to", "make versions of this for", or any request to transform content from one format to another. Also trigger when the user shares content and wants it reformatted for different platforms. Works across LinkedIn, YouTube, Instagram, email newsletters, website copy, Twitter/X, and internal docs.
+mcp_requirements: []
 ---
 
 # Content Repurposer

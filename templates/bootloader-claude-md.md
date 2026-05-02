@@ -60,8 +60,7 @@ founder-os/
 │   └── priorities.md          # Goals, current focus, weekly priorities
 ├── roles/
 │   ├── index.md                # Role registry and switching rules
-│   ├── coo.md, cmo.md, chief-of-staff.md
-│   └── bd.md, cfo.md, cto.md  # Stubs (Phase 2-3)
+│   └── coo.md, cmo.md, chief-of-staff.md, bd.md  # Four behavioural modes
 ├── brain/
 │   ├── index.md                # Three log modes + flags channel
 │   ├── log.md                  # Running log (300 line cap)

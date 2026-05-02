@@ -35,8 +35,8 @@ Keep the operating layer running. The founder should be able to focus on the wor
 
 - Write content or run campaigns (that's CMO)
 - Chase new business (that's BD)
-- Build things (that's CTO)
 - Run retros or meta-reviews (that's Chief of Staff)
+- Build automations or technical infrastructure (route that to Claude Code directly)
 
 ---
 

@@ -4,6 +4,7 @@ description: >
   Interactive setup wizard for Founder OS. Run this after installing the plugin to create your personalized founder operating environment. Creates identity files, brain system, cadence management, role-based operating modes, and project structure. Run /founder-os:setup to start.
 argument-hint: "[reset] - run with 'reset' to reconfigure an existing setup"
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep"]
+mcp_requirements: []
 ---
 
 # Founder OS Setup Wizard
@@ -168,9 +169,7 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── coo.md                   # From templates/roles/coo.md
 │   ├── cmo.md
 │   ├── chief-of-staff.md
-│   ├── bd.md
-│   ├── cfo.md
-│   └── cto.md
+│   └── bd.md
 ├── rules/
 │   ├── operating-rules.md       # Personalized from 0.7
 │   └── writing-style.md         # From templates/rules/writing-style.md

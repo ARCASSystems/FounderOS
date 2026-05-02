@@ -2,6 +2,7 @@
 name: brain-log
 description: >
   Manages the brain system - logging thoughts, flagging patterns, parking decisions. Use this skill when the user says "log this", "capture this", "flag this", "park this decision", "note this", "remember this", "save this thought", "brain dump", "I had an idea", "something to track", or any variation of capturing a thought, observation, or decision for later. Also trigger when the user shares an observation that should be recorded but doesn't need immediate action.
+mcp_requirements: []
 ---
 
 # Brain Log - Thinking in Motion
@@ -104,4 +105,4 @@ Newest entries on top. Keep entries concise - capture the insight, not the full 
 - One log entry per thought. Don't bundle unrelated items.
 - Cross-references must point to real files. Check the file exists before referencing it.
 - Parked decisions without trigger conditions are just avoidance. Push for a trigger.
-- When you detect a pattern across multiple log entries, proactively suggest adding it to `brain/patterns.md`.
+- When you detect a pattern across multiple log entries, suggest adding it to `brain/patterns.md` without waiting to be asked.

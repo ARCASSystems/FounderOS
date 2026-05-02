@@ -2,6 +2,7 @@
 name: unit-economics
 description: >
   Quick business math and financial modeling for founders. Use this skill when the user asks to "run the numbers", "what's the unit economics", "calculate margins", "pricing model", "break-even", "revenue projection", "cost analysis", "CAC", "LTV", "how much would it cost to", "is this profitable", "what should I charge", or any variation of business math, financial analysis, or pricing strategy. Also trigger when evaluating whether a deal, hire, or investment makes financial sense.
+mcp_requirements: []
 ---
 
 # Unit Economics Calculator

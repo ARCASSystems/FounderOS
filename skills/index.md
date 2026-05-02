@@ -1,11 +1,12 @@
-# Founder OS Skills - Plan B Registry
+# Founder OS Skills
 
-20 skills included. The setup wizard (`founder-os-setup`) is the entry point.
+24 skills included in v1.2. The setup wizard (`founder-os-setup`) is the entry point.
 All others activate via `/skill-name` or are invoked implicitly by roles.
 
 | Skill | Status | Replaces |
 |-------|--------|---------|
 | [founder-os-setup](founder-os-setup/SKILL.md) | Ready | Onboarding flow |
+| [readiness-check](readiness-check/SKILL.md) | Ready | OS health audit. Run via `/founder-os:status`. |
 | [weekly-review](weekly-review/SKILL.md) | Ready | |
 | [priority-triage](priority-triage/SKILL.md) | Ready | Reclaim, Taskade |
 | [brain-log](brain-log/SKILL.md) | Ready | |
@@ -25,21 +26,26 @@ All others activate via `/skill-name` or are invoked implicitly by roles.
 | [voice-interview](voice-interview/SKILL.md) | Ready | Captures user's writing voice into core/voice-profile.yml |
 | [brand-interview](brand-interview/SKILL.md) | Ready | Captures user's visual brand into core/brand-profile.yml |
 | [business-context-loader](business-context-loader/SKILL.md) | Ready | Per-company context file scanner and gap router |
+| [linkedin-post](linkedin-post/SKILL.md) | Ready | Voice-coupled LinkedIn post writer |
+| [client-update](client-update/SKILL.md) | Ready | Voice-coupled client status update writer |
+| [proposal-writer](proposal-writer/SKILL.md) | Ready | Voice and brand-coupled proposal writer |
 
 ## Commands
 
-This plugin ships five slash commands:
+This plugin ships seven slash commands:
 
 | Command | Purpose |
 |---------|---------|
 | [/founder-os:setup](../.claude/commands/setup.md) | Run the Founder OS setup wizard. Generates identity, priorities, decisions, cadence, and brain files from a guided interview. |
+| [/founder-os:status](../.claude/commands/status.md) | Read-only OS readiness check. Returns a weighted score and the next 3 high-leverage moves. |
 | [/founder-os:update](../.claude/commands/update.md) | Pull the latest System Layer files (skills, templates, commands, hooks) without touching your personal data. Subcommands: check, rollback. |
 | [/pre-meeting](../.claude/commands/pre-meeting.md) | Hard gate before any meeting. Requires capture artifact + ask. Logs to brain/log.md. |
 | [/capture-meeting](../.claude/commands/capture-meeting.md) | Routes a transcript or brain dump into brain/log.md, context/clients.md, and open commitments. |
 | [/today](../.claude/commands/today.md) | 20-line one-screen view of today. Anchor, open decisions, active flags, last 3 log entries, next calendar event. |
+| [/next](../.claude/commands/next.md) | One recommended next action across priorities, deals, and cadence. |
 
 ## Status
 
-20 skills. Each skill is generic: no ARCAS-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile.
+24 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile.
 
-Scrubbed for brand leakage as part of the 2026-04-22 launch-prep pass. Any new skill added to this registry must pass the banned-token guard in `rules/plan-a-plan-b.md` before commit.
+The three voice-coupled skills (`linkedin-post`, `client-update`, `proposal-writer`) and the readiness-check skill were added in v1.2.

@@ -3,6 +3,7 @@ name: business-context-loader
 description: >
  Loads, scans, and progressively fills a business-context file (`companies/<slug>-business.md` derived from `templates/business-context.template.md`). Use when the user opens a business-context file, asks "what's the next thing I should fill in", asks "what's stale", asks "give me an action based on what we know about <company>", or starts work on a company whose business context is partial. Adapts to whatever state the file is in - empty / partial / mostly-filled / stale - and routes the user to the next highest-leverage move. Mirrors the brand-interview / voice-interview pattern but for company context, not personal voice.
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep"]
+mcp_requirements: []
 ---
 
 # Business Context Loader

@@ -3,6 +3,7 @@ name: weekly-review
 description: >
   Runs the weekly sprint review and planning cycle. Use this skill when the user says "weekly review", "weekly retro", "roll the sprint", "what happened this week", "plan next week", "Friday review", "Monday planning", "weekly planning", "sprint review", or any reference to reviewing the past week or planning the next one. Also trigger on Fridays when the user opens a session in the Founder OS root.
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob"]
+mcp_requirements: []
 ---
 
 # Weekly Review - Sprint Roll and Retro

@@ -2,6 +2,7 @@
 name: knowledge-capture
 description: >
   Captures and structures knowledge from books, podcasts, conversations, conferences, articles, and experiences. Use this skill when the user says "capture notes from", "what I learned from", "book notes for", "takeaways from", "save this insight", "I just read", "I just listened to", "key points from", or any variation of knowledge capture and learning extraction. Also trigger when the user shares raw notes or highlights and wants them organized.
+mcp_requirements: [optional: notion]
 ---
 
 # Knowledge Capture - Learning System

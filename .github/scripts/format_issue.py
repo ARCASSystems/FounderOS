@@ -32,7 +32,7 @@ def main() -> None:
         f"",
         f"> Commit `{short_sha}` · actor **{findings['actor']}** · ref `{findings['ref']}`",
         f"> Opened automatically by `.github/workflows/founderos-audit.yml`.",
-        f"> Run `/fix-audit` in Claude Code to resolve.",
+        f"> Maintainer fix procedure: `.github/scripts/fix-audit.md`.",
         f"",
     ]
 
@@ -77,7 +77,7 @@ def main() -> None:
         "- [ ] Re-run `python3 .github/scripts/audit.py` locally — confirm zero findings",
         "- [ ] Commit, push, close this issue",
         "",
-        "*Detection by `.github/scripts/audit.py` · Fix via `/fix-audit` in Claude Code*",
+        "*Detection by `.github/scripts/audit.py` · Maintainer fix procedure in `.github/scripts/fix-audit.md`*",
     ]
 
     print("\n".join(lines))

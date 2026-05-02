@@ -1,11 +1,10 @@
----
-description: Read open audit issues from GitHub and fix flagged integrity problems directly in the repo.
-allowed-tools: ["Bash", "Read", "Edit", "Grep"]
----
+# Fix Audit (maintainer-only)
 
-# Fix Audit
+> Internal tool for the FounderOS repo maintainer. Not exposed to users as a slash command.
+> Runs against `gh issue list` for `ARCASSystems/FounderOS` to clean up `[Audit]` issues.
+> If you are a public user of FounderOS, ignore this file.
 
-Reads open `[Audit]` issues from this repo and applies fixes directly. No API key needed — runs entirely inside your Claude Code subscription.
+Reads open `[Audit]` issues from this repo and applies fixes directly. To run, paste the procedure below into a Claude Code session opened in the FounderOS repo root.
 
 ## Procedure
 
@@ -32,7 +31,7 @@ Tell the user which findings you are about to fix and how, in one short message.
 
 Wait for the reply. If no, stop.
 
-### 4. Apply fixes — one finding at a time
+### 4. Apply fixes - one finding at a time
 
 Work through each finding in severity order (CRITICAL first):
 
@@ -82,8 +81,8 @@ gh issue close <N> --comment "Fixed in $(git rev-parse --short HEAD). Audit scan
 
 ### Rules
 
-- Never delete a file — only edit lines within it.
-- Never use `git add -A` or `git add .` — stage specific files only.
+- Never delete a file - only edit lines within it.
+- Never use `git add -A` or `git add .` - stage specific files only.
 - Do not push unless the user explicitly confirms in step 6.
 - If a match line cannot be parsed (malformed grep output), skip it and tell the user which file to check manually.
 - If `gh` is not authenticated, tell the user to run `gh auth login` and stop.
