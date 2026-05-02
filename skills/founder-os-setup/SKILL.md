@@ -147,7 +147,9 @@ Create the full folder structure. Read each template before generating the perso
 [founder-os-root]/
 ├── CLAUDE.md                    # Bootloader (from templates/bootloader-claude-md.md)
 ├── core/
-│   └── identity.md              # From Phase 1.1
+│   ├── identity.md              # From Phase 1.1
+│   ├── voice-profile.yml        # Copied from templates/voice-profile.yml.template (placeholders intact - filled later by voice-interview)
+│   └── brand-profile.yml        # Copied from templates/brand-profile.yml.template (placeholders intact - filled later by brand-interview)
 ├── brain/
 │   ├── index.md                 # From templates/brain/index.md
 │   ├── log.md                   # From templates/brain/log.md
@@ -287,11 +289,19 @@ Open two different project folders (ideally different businesses). Confirm:
 Commit all company and project folders: "Add company folders and first project setup."
 
 ### 6.2 Orient the User
-Show the user what they have:
+Show the user what they have AND the next two unlock steps. The wizard creates the operating layer, but the writing skills are gated on the voice and brand profiles - tell them this directly.
 
-"Your Founder OS is set up. Here's how to use it:
+"Your Founder OS is set up. The operating layer is live. Two more 10-minute steps unlock the writing skills:
 
-**Daily:** Open Claude Code in your Founder OS folder. Claude reads your bootloader, knows your priorities, and operates in the right mode.
+**Step 1 - Voice profile.** Run `/founder-os:voice-interview`. The interview captures how you write. After this, linkedin-post, client-update, proposal-writer, email-drafter, content-repurposer, sop-writer, and your-voice all write as you instead of as Claude. ~10 minutes.
+
+**Step 2 - Brand profile.** Run `/founder-os:brand-interview`. Captures your visual brand (colors, fonts, logo). After this, your-deliverable-template, branded proposals, and branded client updates render in your visual identity. ~10 minutes.
+
+**Step 3 - Check readiness.** Run `/founder-os:status`. Returns a 0-100% score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Names the next 3 high-leverage moves.
+
+Then start using it:
+
+**Daily:** Open Claude Code in your Founder OS folder. Run `/today` for a one-screen view, or `/next` for one recommended action.
 
 **Weekly:** Run your weekly review. Claude rolls the sprint, does the retro, and sets the next week.
 
@@ -301,9 +311,15 @@ Show the user what they have:
 
 **Before meetings:** Say 'prep me for my call with [name]' - Claude builds a brief.
 
+**When you have a post / email / proposal to write:** Just ask. After the voice profile is filled, every output is in your voice.
+
 **When making decisions:** Say 'help me decide' - Claude walks you through a structured framework.
 
 **End of every session:** Claude commits changes. Your repo is your memory.
+
+**To audit anytime:** `/founder-os:status` shows the OS state in one screen.
+
+**To remove cleanly:** `/founder-os:uninstall` (default mode preserves your data; --purge wipes everything).
 
 **Your folder structure:**
 - Open `[founder-os-root]/` for strategic work

@@ -113,7 +113,9 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 
 **Slash commands** (`.claude/commands/`)
 - `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files (15 to 20 min). Run on first install.
+- `/founder-os:status` - read-only OS readiness check. Returns a weighted 0-100% score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Names the next 3 high-leverage moves. Use anytime to audit the OS in one shot.
 - `/founder-os:update` - pull the latest System Layer files without touching your personal data. Tells you what changed before applying.
+- `/founder-os:uninstall` - cleanly remove Founder OS. Default mode preserves your data; pass `--purge` to wipe everything.
 - `/pre-meeting <name>` - gate before any meeting; requires a capture artifact and a specific ask
 - `/capture-meeting <name>` - routes a transcript or brain dump into brain/log.md + context/clients.md + commitments (M3)
 - `/today` - 20-line one-screen view of today (anchor, decisions, flags, last 3 log entries, next calendar) (M4)
@@ -130,11 +132,12 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks require the scheduled-tasks MCP to be installed in your Claude Code environment.
 
-## Skills (20 included)
+## Skills (24 included)
 
 | Skill | Purpose |
 |-------|---------|
 | founder-os-setup | Interactive setup wizard (start here) |
+| readiness-check | OS health audit. Routed via `/founder-os:status`. |
 | weekly-review | Structured weekly retro and sprint roll |
 | priority-triage | Cut the list to what actually matters |
 | brain-log | Session logging and pattern capture |
@@ -154,6 +157,9 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 | your-voice | Applies your voice profile to written output |
 | your-deliverable-template | Produces branded documents from core/brand-profile.yml |
 | business-context-loader | Loads and completes per-company business context |
+| linkedin-post | Voice-coupled LinkedIn post writer |
+| client-update | Voice-coupled client status update writer |
+| proposal-writer | Voice and brand-coupled proposal writer |
 
 ## Philosophy
 

@@ -4,7 +4,7 @@ The operating layer for a solo founder. Six files run your company. Claude reads
 
 Owned by you. Powered by Claude. Talk to it.
 
-**Setup:** Install the plugin. Open Claude Code. Run `/founder-os:setup`. Talk to it for 15 minutes. Done.
+**Setup:** Install the plugin. Open Claude Code. Run `/founder-os:setup` (15 min). Then `/founder-os:voice-interview` (10 min) and `/founder-os:brand-interview` (10 min) to unlock the writing skills. Then `/founder-os:status` anytime to audit. Full first-day path in [docs/first-day.md](docs/first-day.md).
 
 ---
 
