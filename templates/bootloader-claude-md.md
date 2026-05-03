@@ -73,12 +73,32 @@ founder-os/
 │   └── annual-targets.md
 ├── network/
 │   ├── inner-circle.md, mentors.md, team.md
+├── raw/                       # Source archive (created on first /founder-os:ingest)
 ├── rules/
 │   ├── writing-style.md        # Voice and formatting
 │   └── operating-rules.md     # Behavioral rules
 └── skills/
     └── index.md                # Skill registry
 ```
+
+---
+
+## Wiki Conventions
+
+Founder OS is built like a personal wiki. Three layers:
+
+- **raw/** - immutable source documents (transcripts, articles, threads). Once written, never edited. Created lazily on first `/founder-os:ingest`.
+- **The wiki layer** - core/, context/, cadence/, brain/, network/. Edited by skills as you work.
+- **The schema** - this CLAUDE.md.
+
+Two operations:
+
+- **Ingest** (`/founder-os:ingest <source>`) - process a source into raw/ with provenance, propose wiki updates you approve. Different from knowledge-capture (which organizes takeaways without source preservation).
+- **Lint** (`/founder-os:lint`) - read-only audit. Broken cross-references, orphan pages, stale time-sensitive content, provenance gaps. Never auto-fixes.
+
+Cross-references between wiki files use `[[page-name]]` syntax. Lint catches `[[]]` links pointing to files that don't exist. Existing files that don't use the convention are not retrofitted - the convention applies forward.
+
+Both operations are opt-in. The OS works the same with or without them.
 
 ---
 

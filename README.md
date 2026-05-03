@@ -24,7 +24,7 @@ Two more files load on demand:
 - **Brain log.** Running thoughts, observations, patterns, flags.
 - **Flags.** Stalls, role feedback, friction. Used by Chief of Staff mode for stall detection.
 
-Around those: 24 skills covering meeting prep, knowledge capture, decisions, email drafting, content repurposing, founder coaching, weekly review, priority triage, SOPs, unit economics, strategic analysis, brain log, session handoff, pre-send check, the voice and brand interviews that capture how you write and how your work looks, the your-voice and your-deliverable-template skills that apply that profile to every output, the business-context-loader for per-company context, three voice-coupled writers (linkedin-post, client-update, proposal-writer), a readiness check, and the setup wizard.
+Around those: 26 skills covering meeting prep, knowledge capture, decisions, email drafting, content repurposing, founder coaching, weekly review, priority triage, SOPs, unit economics, strategic analysis, brain log, session handoff, pre-send check, the voice and brand interviews that capture how you write and how your work looks, the your-voice and your-deliverable-template skills that apply that profile to every output, the business-context-loader for per-company context, three voice-coupled writers (linkedin-post, client-update, proposal-writer), a readiness check, the setup wizard, and the v1.3 ingest + lint pair (file external sources with provenance, audit cross-references and freshness).
 
 Plus four roles as behavioural modes: COO (default), BD, CMO, Chief of Staff.
 
@@ -76,19 +76,21 @@ Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and 
 
 ## What ships in this repo
 
-### Skills (24)
+### Skills (26)
 
 | Skill | What it does |
 |---|---|
 | founder-os-setup | Setup wizard. Generates identity, priorities, decisions, cadence, brain files. |
 | readiness-check | OS health audit. Run via `/founder-os:status`. |
+| ingest | File a source into `raw/` with provenance. Propose wiki updates you approve. Run via `/founder-os:ingest`. |
+| lint | Read-only audit of wiki integrity. Broken links, orphans, stale content, provenance gaps. Run via `/founder-os:lint`. |
 | weekly-review | Run the weekly retro. M/S/D bucket calculation, keep/kill/escalate on flags. |
 | priority-triage | Force a top-3 from a long list. Names what gets cut. |
 | brain-log | Route a thought to log, cross-reference, or act with same-session follow-through. |
 | decision-framework | Surface trade-offs. No false simplicity. |
 | session-handoff | Pack up context for the next session or a different operator. |
 | meeting-prep | Pre-meeting brief plus post-meeting debrief. |
-| knowledge-capture | Capture from books, podcasts, courses, conversations. |
+| knowledge-capture | Capture from books, podcasts, courses, conversations (no source preservation). |
 | email-drafter | Draft in your voice once setup runs the voice interview. |
 | sop-writer | Turn a process into a delegation-ready document. |
 | founder-coaching | Coaching loop for stuck moments. |
@@ -105,7 +107,7 @@ Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and 
 | client-update | Voice-coupled client status update writer. |
 | proposal-writer | Voice and brand-coupled proposal writer. |
 
-### Slash commands (10)
+### Slash commands (12)
 
 | Command | Purpose |
 |---|---|
@@ -113,6 +115,8 @@ Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and 
 | `/founder-os:voice-interview` | Capture how you write into `core/voice-profile.yml`. Unlocks the voice-coupled writing skills. |
 | `/founder-os:brand-interview` | Capture your visual identity into `core/brand-profile.yml`. Unlocks branded outputs. |
 | `/founder-os:status` | Read-only OS readiness check. Returns a weighted score and the next 3 high-leverage moves. |
+| `/founder-os:ingest <source>` | File a URL, file path, or pasted text into `raw/` with provenance. Propose wiki updates you approve. |
+| `/founder-os:lint` | Read-only wiki audit. Cross-references, orphans, stale content, provenance, possible contradictions. |
 | `/founder-os:update` | Pull the latest System Layer files. Subcommands: `check`, `rollback`. |
 | `/founder-os:uninstall` | Cleanly remove Founder OS. Default mode preserves your data. `--purge` removes everything. |
 | `/today` | 20-line one-screen view of today. |
@@ -137,7 +141,7 @@ Scaffold artifacts for users who do not run Claude Code. This path is not live u
 
 Founder OS does not assume your stack. The OS is files and skills. Each skill declares which MCP servers it can use, and degrades gracefully when those MCPs are not available.
 
-20 of the 24 skills work end-to-end with zero MCPs. Four skills (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce better output with the relevant integration connected.
+22 of the 26 skills work end-to-end with zero MCPs. Four skills (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce better output with the relevant integration connected.
 
 The full catalog: [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
@@ -165,7 +169,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.2 | Owners running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.3 | Owners running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -232,7 +236,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.2.0. Public push week of 2026-05-04.
+Version 1.3.0. Public push week of 2026-05-04.
+
+v1.3 adds the wiki conventions block: a `raw/` source layer with provenance, a `[[wiki-link]]` cross-reference convention, the `/founder-os:ingest` skill (file a source, propose wiki updates), and the `/founder-os:lint` skill (read-only audit of broken links, orphans, stale content, provenance gaps). All additive. No existing skill, command, hook, or file changes behavior. See [CLAUDE.md "Wiki Conventions"](CLAUDE.md) for the spec.
 
 Early and honest. Read [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md) for the current limits.
 

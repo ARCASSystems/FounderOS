@@ -85,6 +85,23 @@ Supported adapters (configured during setup):
 - Automation: n8n, Make, Zapier
 - CRM: Notion DB, HubSpot, Airtable, or none
 
+## Wiki Conventions
+
+Founder OS is built like a personal wiki the LLM maintains. Three layers underneath your daily files:
+
+- **raw/** - immutable source documents (transcripts, articles, books, threads). Once written, never edited. See `raw/README.md` for the frontmatter spec. Scaffolded on first `/founder-os:ingest` use.
+- **The wiki layer** - your operating files: `core/`, `context/`, `cadence/`, `brain/`, `network/`. Edited by skills as you work.
+- **The schema** - this `CLAUDE.md` file. Tells Claude how the layers connect.
+
+Two operations the OS supports natively:
+
+- **Ingest** (`/founder-os:ingest <source>`) - process a source into raw/ with provenance, then propose wiki updates you approve. Different from `knowledge-capture`: ingest preserves the source, knowledge-capture organizes takeaways without source preservation. Use whichever fits.
+- **Lint** (`/founder-os:lint`) - read-only audit. Flags broken cross-references, orphan pages, stale time-sensitive content, provenance gaps, and contradictions. Never auto-fixes. Recommended cadence: weekly via `/loop weekly /founder-os:lint`.
+
+**Cross-references between wiki files use `[[page-name]]` syntax.** Example: a decision in `context/decisions.md` referencing your identity might write `as committed in [[core/identity.md]]`. The lint skill catches `[[]]` links pointing to files that don't exist. Existing files that don't use the convention are not retrofitted; the convention applies forward.
+
+Both operations are opt-in. The OS works the same with or without them.
+
 ## Agent Teams (recommended)
 
 Claude Code has an experimental Agent Teams feature that turns sequential workflows into parallel specialist teams. For a solo founder running Founder OS, this is the difference between a meeting flow that runs prep, capture, log, and client-update one after another, and the same flow running as parallel specialists that finish in a fraction of the time.
@@ -118,6 +135,8 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/founder-os:status` - read-only OS readiness check. Returns a weighted 0-100% score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Names the next 3 high-leverage moves. Use anytime to audit the OS in one shot.
 - `/founder-os:update` - pull the latest System Layer files without touching your personal data. Tells you what changed before applying.
 - `/founder-os:uninstall` - cleanly remove Founder OS. Default mode preserves your data; pass `--purge` to wipe everything.
+- `/founder-os:ingest <source>` - file a source into `raw/` with provenance, then propose wiki updates you approve. See Wiki Conventions above.
+- `/founder-os:lint` - read-only audit of cross-references, orphans, stale content, and provenance gaps. Never auto-fixes.
 - `/pre-meeting <name>` - gate before any meeting; requires a capture artifact and a specific ask
 - `/capture-meeting <name>` - routes a transcript or brain dump into brain/log.md + context/clients.md + commitments (M3)
 - `/today` - 20-line one-screen view of today (anchor, decisions, flags, last 3 log entries, next calendar) (M4)
@@ -134,19 +153,21 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks require the scheduled-tasks MCP to be installed in your Claude Code environment.
 
-## Skills (24 included)
+## Skills (26 included)
 
 | Skill | Purpose |
 |-------|---------|
 | founder-os-setup | Interactive setup wizard (start here) |
 | readiness-check | OS health audit. Routed via `/founder-os:status`. |
+| ingest | File a source into `raw/` with provenance, propose wiki updates. Routed via `/founder-os:ingest`. |
+| lint | Read-only audit of wiki integrity. Routed via `/founder-os:lint`. |
 | weekly-review | Structured weekly retro and sprint roll |
 | priority-triage | Cut the list to what actually matters |
 | brain-log | Session logging and pattern capture |
 | decision-framework | Structured decision-making for founders |
 | session-handoff | End-of-session state capture for continuity |
 | meeting-prep | Pre-meeting brief and post-meeting debrief |
-| knowledge-capture | Notes from books, podcasts, conversations |
+| knowledge-capture | Notes from books, podcasts, conversations (no source preservation) |
 | email-drafter | Emails in your voice |
 | sop-writer | Processes turned into delegation-ready docs |
 | founder-coaching | Bias toolkit, bottleneck diagnostic, zones |

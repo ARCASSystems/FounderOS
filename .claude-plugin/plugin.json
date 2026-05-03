@@ -1,11 +1,11 @@
 {
   "name": "founder-os",
-  "description": "An operating system for solo founders running on Claude Code. Persistent memory, decision tracking, four role-based operating modes, structured cadence, voice and brand profiles, brain log, and a readiness check. Install and run /founder-os:setup to get started.",
+  "description": "An operating system for solo founders running on Claude Code. Persistent memory, decision tracking, four role-based operating modes, structured cadence, voice and brand profiles, brain log, readiness check, source ingest with provenance, and read-only wiki lint. Install and run /founder-os:setup to get started.",
   "author": {
     "name": "Alistair Aranha",
     "email": "solutions@arcassystems.com"
   },
-  "version": "1.2.0",
+  "version": "1.3.0",
   "homepage": "https://github.com/ARCASSystems/FounderOS",
   "repository": {
     "type": "git",

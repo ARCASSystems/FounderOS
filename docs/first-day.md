@@ -70,6 +70,28 @@ Read-only. Returns a 0-100% readiness score across Core, Voice and Brand, Cadenc
 
 Run this whenever you want to see where the OS is and what to fill next.
 
+### Step 5 - Wiki integrity check (weekly, optional)
+
+```
+/founder-os:lint
+```
+
+Read-only audit of cross-references, orphans, stale time-sensitive content, and provenance. Surfaces what's drifted between sessions. Recommended cadence: weekly via `/loop weekly /founder-os:lint`.
+
+---
+
+## Working with sources (after the first week)
+
+Once you start feeding articles, threads, transcripts, or any source you want preserved alongside your notes, use:
+
+```
+/founder-os:ingest <url | file path | pasted text>
+```
+
+The skill files the source into a `raw/` folder (created lazily on first use), then proposes 2-5 wiki updates you approve before they land. Different from `knowledge-capture` - ingest preserves the source; knowledge-capture organizes takeaways without keeping the source. Pick whichever fits.
+
+The raw layer is immutable. The wiki layer is your derived working memory with `[[wiki-link]]` cross-references back to the source. The lint skill (Step 5) catches broken cross-references and "ingested but never used" provenance gaps.
+
 ---
 
 ## The cascade map
