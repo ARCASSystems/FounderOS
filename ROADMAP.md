@@ -1,8 +1,15 @@
 # Roadmap
 
-What's planned next. Items here are scoped and time-estimated. None of this gates v1.3 - the launch ships first, the items below land in v1.3.x patches over the following weeks.
+What's planned next. Items here are scoped and time-estimated. None of this gates the current release - the launch ships first, the items below land in patches over the following weeks.
 
 If something on this list matters to you, open an issue or email `solutions@arcassystems.com`.
+
+---
+
+## Shipped
+
+- **v1.3.0** - source ingest + read-only wiki lint. Two skills (`ingest`, `lint`), two commands, the `raw/` provenance convention, the `[[wikilink]]` cross-reference syntax.
+- **v1.4.0** - wiki graph builder + brain substrate. The `wiki-build` skill (companion to lint), bi-temporal + decay convention for entries (`rules/entry-conventions.md`), `system/quarantine.md` catch-net for silent hook/task failures, approval gate matrix template (`rules/approval-gates.md`), and the first SessionStart brief hook (surfaces flags, stale cadence, decay-due entries, and quarantine ACTIVE entries in one screen at session open).
 
 ---
 
@@ -26,9 +33,9 @@ If something on this list matters to you, open an issue or email `solutions@arca
 
 ---
 
-## v1.4 candidate - parallel-agent audit
+## v1.5 candidate - parallel-agent audit
 
-- **`/founder-os:audit` composite report** (~6 hr). Borrows the parallel-sub-agent pattern: run readiness-check, lint, brain-staleness, voice-completeness in parallel and return one composite OS-health report. Pure addition; readiness-check and lint stay as standalone commands.
+- **`/founder-os:audit` composite report** (~6 hr). Borrows the parallel-sub-agent pattern: run readiness-check, lint, wiki-build, brain-staleness, voice-completeness in parallel and return one composite OS-health report. Pure addition; readiness-check, lint, and wiki-build stay as standalone commands.
 
 ---
 

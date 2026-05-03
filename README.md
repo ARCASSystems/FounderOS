@@ -24,7 +24,9 @@ Two more files load on demand:
 - **Brain log.** Running thoughts, observations, patterns, flags.
 - **Flags.** Stalls, role feedback, friction. Used by Chief of Staff mode for stall detection.
 
-Around those: 26 skills covering meeting prep, knowledge capture, decisions, email drafting, content repurposing, founder coaching, weekly review, priority triage, SOPs, unit economics, strategic analysis, brain log, session handoff, pre-send check, the voice and brand interviews that capture how you write and how your work looks, the your-voice and your-deliverable-template skills that apply that profile to every output, the business-context-loader for per-company context, three voice-coupled writers (linkedin-post, client-update, proposal-writer), a readiness check, the setup wizard, and the v1.3 ingest + lint pair (file external sources with provenance, audit cross-references and freshness).
+Around those: 27 skills covering meeting prep, knowledge capture, decisions, email drafting, content repurposing, founder coaching, weekly review, priority triage, SOPs, unit economics, strategic analysis, brain log, session handoff, pre-send check, the voice and brand interviews that capture how you write and how your work looks, the your-voice and your-deliverable-template skills that apply that profile to every output, the business-context-loader for per-company context, three voice-coupled writers (linkedin-post, client-update, proposal-writer), a readiness check, the setup wizard, the v1.3 ingest + lint pair (file external sources with provenance, audit cross-references and freshness), and the v1.4 wiki-build skill (extracts your `[[wikilinks]]` into a real entity graph at `brain/relations.yaml`).
+
+**v1.4 also adds the substrate underneath all of this:** a decay-aware brain layer (set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires), a `system/quarantine.md` catch-net so failing hooks and scheduled tasks stop being silent, a documented approval gate matrix at `rules/approval-gates.md` so the OS knows what to do without asking and what to ask before doing, and a SessionStart brief that surfaces all of the above in one screen at every session open. Full convention spec at `rules/entry-conventions.md`.
 
 Plus four roles as behavioural modes: COO (default), BD, CMO, Chief of Staff.
 
@@ -76,7 +78,7 @@ Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and 
 
 ## What ships in this repo
 
-### Skills (26)
+### Skills (27)
 
 | Skill | What it does |
 |---|---|
@@ -84,6 +86,7 @@ Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and 
 | readiness-check | OS health audit. Run via `/founder-os:status`. |
 | ingest | File a source into `raw/` with provenance. Propose wiki updates you approve. Run via `/founder-os:ingest`. |
 | lint | Read-only audit of wiki integrity. Broken links, orphans, stale content, provenance gaps. Run via `/founder-os:lint`. |
+| wiki-build | Walk the OS markdown, extract `[[wikilinks]]`, refresh the auto-generated graph in `brain/relations.yaml`. Companion to lint. Run via `/founder-os:wiki-build`. |
 | weekly-review | Run the weekly retro. M/S/D bucket calculation, keep/kill/escalate on flags. |
 | priority-triage | Force a top-3 from a long list. Names what gets cut. |
 | brain-log | Route a thought to log, cross-reference, or act with same-session follow-through. |
@@ -107,7 +110,7 @@ Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and 
 | client-update | Voice-coupled client status update writer. |
 | proposal-writer | Voice and brand-coupled proposal writer. |
 
-### Slash commands (12)
+### Slash commands (13)
 
 | Command | Purpose |
 |---|---|
@@ -117,6 +120,7 @@ Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and 
 | `/founder-os:status` | Read-only OS readiness check. Returns a weighted score and the next 3 high-leverage moves. |
 | `/founder-os:ingest <source>` | File a URL, file path, or pasted text into `raw/` with provenance. Propose wiki updates you approve. |
 | `/founder-os:lint` | Read-only wiki audit. Cross-references, orphans, stale content, provenance, possible contradictions. |
+| `/founder-os:wiki-build` | Refresh the auto-generated wiki graph in `brain/relations.yaml`. Idempotent. |
 | `/founder-os:update` | Pull the latest System Layer files. Subcommands: `check`, `rollback`. |
 | `/founder-os:uninstall` | Cleanly remove Founder OS. Default mode preserves your data. `--purge` removes everything. |
 | `/today` | 20-line one-screen view of today. |

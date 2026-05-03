@@ -98,9 +98,19 @@ Two operations the OS supports natively:
 - **Ingest** (`/founder-os:ingest <source>`) - process a source into raw/ with provenance, then propose wiki updates you approve. Different from `knowledge-capture`: ingest preserves the source, knowledge-capture organizes takeaways without source preservation. Use whichever fits.
 - **Lint** (`/founder-os:lint`) - read-only audit. Flags broken cross-references, orphan pages, stale time-sensitive content, provenance gaps, and contradictions. Never auto-fixes. Recommended cadence: weekly via `/loop weekly /founder-os:lint`.
 
-**Cross-references between wiki files use `[[page-name]]` syntax.** Example: a decision in `context/decisions.md` referencing your identity might write `as committed in [[core/identity.md]]`. The lint skill catches `[[]]` links pointing to files that don't exist. Existing files that don't use the convention are not retrofitted; the convention applies forward.
+**Cross-references between wiki files use `[[page-name]]` syntax.** Example: a decision in `context/decisions.md` referencing your identity might write `as committed in [[core/identity.md]]`. The lint skill catches `[[]]` links pointing to files that don't exist. The wiki-build skill (`/founder-os:wiki-build`, v1.4) walks all wiki files, extracts the `[[wikilinks]]`, and writes them as a machine-readable graph in `brain/relations.yaml`. Idempotent. Run after a session that added cross-references. Existing files that don't use the convention are not retrofitted; the convention applies forward.
 
-Both operations are opt-in. The OS works the same with or without them.
+All wiki operations are opt-in. The OS works the same with or without them.
+
+### Brain substrate (v1.4)
+
+Three additions sit underneath the daily files. None require setup beyond running `/founder-os:setup` once.
+
+- **`rules/entry-conventions.md`** - bi-temporal + decay convention for entries in `context/decisions.md`, `context/priorities.md`, and the brain layer. Add `Decay after: 14d` (or a date) to a flag and the SessionStart brief surfaces it for keep/kill review when it expires. Add `Superseded by:` + `Invalidated on:` to a decision instead of overwriting it. Convention is forward-only (no backfill).
+- **`system/quarantine.md`** - catch-net for silent hook and scheduled-task failures. Helper functions for PowerShell and bash are in the file. SessionStart counts ACTIVE entries. Hooks fail silently by design; quarantine makes failure visible without blocking the session.
+- **`rules/approval-gates.md`** - explicit list of what auto-runs (brain/log appends, wiki-build, archive moves), what requires your yes (identity edits, decision supersession, sends, public pushes), and what is blocked outright (force push, hard reset, AI attribution in commits). Customize to match how you want the OS to behave.
+
+The SessionStart brief (`.claude/hooks/session-start-brief.sh`, registered on `SessionStart` in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.
 
 ## Agent Teams (recommended)
 
@@ -137,15 +147,17 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/founder-os:uninstall` - cleanly remove Founder OS. Default mode preserves your data; pass `--purge` to wipe everything.
 - `/founder-os:ingest <source>` - file a source into `raw/` with provenance, then propose wiki updates you approve. See Wiki Conventions above.
 - `/founder-os:lint` - read-only audit of cross-references, orphans, stale content, and provenance gaps. Never auto-fixes.
+- `/founder-os:wiki-build` - walk OS markdown, extract `[[wikilinks]]`, refresh the auto-generated graph in `brain/relations.yaml`. Idempotent. Companion to lint (lint audits the graph; wiki-build keeps it fresh).
 - `/pre-meeting <name>` - gate before any meeting; requires a capture artifact and a specific ask
 - `/capture-meeting <name>` - routes a transcript or brain dump into brain/log.md + context/clients.md + commitments (M3)
 - `/today` - 20-line one-screen view of today (anchor, decisions, flags, last 3 log entries, next calendar) (M4)
 - `/next` - one recommended next action across priorities, deals, and cadence
 
 **Hooks** (`.claude/hooks/`)
-- Session-close revenue-loop check (M2) - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update. Registered on the Stop event in `.claude/settings.json`.
+- SessionStart brief (v1.4) - surfaces open flags, stale cadence, pending decisions, [FILL] client rows, ACTIVE quarantine entries, and Review Due entries (past their `Decay after:` date). One screen at session open. Registered on the SessionStart event in `.claude/settings.json`. Quietly skips if the repo is not a Founder OS install (no `core/identity.md`).
+- Session-close revenue-loop check - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update. Registered on the Stop event in `.claude/settings.json`.
 
-**Windows note:** Hooks invoke bash. If you are on Windows, the install requires git-bash (which ships with Git for Windows). Without it, the session-close revenue check will silently no-op. PowerShell-only users should switch the hook command in `.claude/settings.json` to invoke the `.ps1` mirror in `.claude/hooks/` (a PowerShell version ships alongside the bash version).
+**Windows note:** Hooks invoke bash. If you are on Windows, the install requires git-bash (which ships with Git for Windows). Without it, hooks will silently no-op. PowerShell-only users should switch the hook commands in `.claude/settings.json` to invoke the `.ps1` mirrors in `.claude/hooks/` (PowerShell versions ship alongside the bash versions).
 
 **Scheduled tasks** (examples; set yours up via the scheduled-tasks MCP)
 - Weekly LinkedIn draft generation - Monday morning, reads your story bank, writes 3 drafts to your content pipeline
@@ -153,7 +165,7 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks require the scheduled-tasks MCP to be installed in your Claude Code environment.
 
-## Skills (26 included)
+## Skills (27 included)
 
 | Skill | Purpose |
 |-------|---------|
@@ -161,6 +173,7 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 | readiness-check | OS health audit. Routed via `/founder-os:status`. |
 | ingest | File a source into `raw/` with provenance, propose wiki updates. Routed via `/founder-os:ingest`. |
 | lint | Read-only audit of wiki integrity. Routed via `/founder-os:lint`. |
+| wiki-build | Walk markdown, extract `[[wikilinks]]`, refresh `brain/relations.yaml`. Companion to lint. Routed via `/founder-os:wiki-build`. |
 | weekly-review | Structured weekly retro and sprint roll |
 | priority-triage | Cut the list to what actually matters |
 | brain-log | Session logging and pattern capture |

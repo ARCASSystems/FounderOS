@@ -155,7 +155,12 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── log.md                   # From templates/brain/log.md
 │   ├── patterns.md              # From templates/brain/patterns.md
 │   ├── flags.md                 # From templates/brain/flags.md
-│   └── decisions-parked.md      # From templates/brain/decisions-parked.md
+│   ├── decisions-parked.md      # From templates/brain/decisions-parked.md
+│   └── relations.yaml           # From templates/brain/relations.yaml (replace {{TODAY}} with current date)
+├── system/
+│   └── quarantine.md            # From templates/system/quarantine.md (catch-net for silent hook/task failures)
+├── scripts/
+│   └── wiki-build.py            # From templates/scripts/wiki-build.py (extracts [[wikilinks]] into brain/relations.yaml)
 ├── cadence/
 │   ├── daily-anchors.md         # From templates/cadence/daily-anchors.md
 │   ├── weekly-commitments.md    # Personalized with their current priorities
@@ -174,7 +179,9 @@ Create the full folder structure. Read each template before generating the perso
 │   └── bd.md
 ├── rules/
 │   ├── operating-rules.md       # Personalized from 0.7
-│   └── writing-style.md         # From templates/rules/writing-style.md
+│   ├── writing-style.md         # From templates/rules/writing-style.md
+│   ├── entry-conventions.md     # From templates/rules/entry-conventions.md (bi-temporal + decay convention for flags/patterns/decisions)
+│   └── approval-gates.md        # From templates/rules/approval-gates.md (what auto-runs vs requires explicit yes)
 └── network/
     ├── inner-circle.md          # Personalized from 0.2 (key people mentioned)
     ├── mentors.md               # Stub

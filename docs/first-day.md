@@ -73,10 +73,29 @@ Run this whenever you want to see where the OS is and what to fill next.
 ### Step 5 - Wiki integrity check (weekly, optional)
 
 ```
+/founder-os:wiki-build
 /founder-os:lint
 ```
 
-Read-only audit of cross-references, orphans, stale time-sensitive content, and provenance. Surfaces what's drifted between sessions. Recommended cadence: weekly via `/loop weekly /founder-os:lint`.
+Run wiki-build first to refresh the auto-generated graph in `brain/relations.yaml` (extracts every `[[wikilink]]` you wrote since the last build). Then lint reads the freshest graph and surfaces broken cross-references, orphans, stale time-sensitive content, and provenance gaps.
+
+Recommended cadence: weekly via `/loop weekly /founder-os:wiki-build` followed by `/founder-os:lint`. Both are read-only on your wiki files (wiki-build only writes to `brain/relations.yaml` between auto-generated markers; lint never writes anywhere).
+
+---
+
+### What SessionStart shows you (v1.4)
+
+After v1.4, every Claude Code session opens with a one-screen brief that surfaces:
+
+- Open flags + Week 3+ severity
+- Daily and weekly cadence staleness
+- Decisions count
+- Client `[FILL]` rows awaiting data
+- Quarantine ACTIVE failures (from `system/quarantine.md` - silent hook/task errors land here)
+- Review Due entries (flags/patterns/parked decisions whose `Decay after:` has passed - convention in `rules/entry-conventions.md`)
+- Decay anchor missing (entries with relative `Decay after: 14d` but no `First observed:` / `Date parked:` to compute from)
+
+The brief takes under a second. Quietly skips if you are not in a Founder OS install. No action required - it is read-only surfacing.
 
 ---
 
