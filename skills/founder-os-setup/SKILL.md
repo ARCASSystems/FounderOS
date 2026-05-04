@@ -182,13 +182,24 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── writing-style.md         # From templates/rules/writing-style.md
 │   ├── entry-conventions.md     # From templates/rules/entry-conventions.md (bi-temporal + decay convention for flags/patterns/decisions)
 │   └── approval-gates.md        # From templates/rules/approval-gates.md (what auto-runs vs requires explicit yes)
-└── network/
-    ├── inner-circle.md          # Personalized from 0.2 (key people mentioned)
-    ├── mentors.md               # Stub
-    └── team.md                  # Personalized from 0.2 (team members mentioned)
+├── network/
+│   ├── inner-circle.md          # Personalized from 0.2 (key people mentioned)
+│   ├── mentors.md               # Stub
+│   └── team.md                  # Personalized from 0.2 (team members mentioned)
+└── .claude/
+    ├── settings.json            # Copied from <plugin-root>/.claude/settings.json (wires SessionStart + Stop hooks)
+    └── hooks/
+        ├── session-start-brief.sh   # Copied from <plugin-root>/.claude/hooks/session-start-brief.sh
+        ├── session-start-brief.ps1  # Copied from <plugin-root>/.claude/hooks/session-start-brief.ps1
+        ├── session-close-revenue-check.sh   # Copied from <plugin-root>/.claude/hooks/session-close-revenue-check.sh
+        └── session-close-revenue-check.ps1  # Copied from <plugin-root>/.claude/hooks/session-close-revenue-check.ps1
 ```
 
 Show the full list of files that will be created. Get approval. Then create them all.
+
+**Hook copy step (mandatory).** The SessionStart brief and session-close revenue check live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Find the plugin install path (same as where templates live), then copy the four hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart and Stop hook entries; do not overwrite the user's other hook customisations.
+
+**{{TODAY}} substitution.** The `templates/brain/relations.yaml` file contains the literal placeholder `{{TODAY}}`. When copying to `brain/relations.yaml`, replace every occurrence of `{{TODAY}}` with today's date in `YYYY-MM-DD` format (use `date -u +%Y-%m-%d` via Bash to get it).
 
 ### 2.3 Initialize Git
 

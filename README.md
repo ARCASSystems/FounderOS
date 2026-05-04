@@ -145,7 +145,7 @@ Scaffold artifacts for users who do not run Claude Code. This path is not live u
 
 Founder OS does not assume your stack. The OS is files and skills. Each skill declares which MCP servers it can use, and degrades gracefully when those MCPs are not available.
 
-22 of the 26 skills work end-to-end with zero MCPs. Four skills (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce better output with the relevant integration connected.
+23 of the 27 skills work end-to-end with zero MCPs. Four skills (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce better output with the relevant integration connected.
 
 The full catalog: [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 

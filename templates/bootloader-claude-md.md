@@ -65,18 +65,25 @@ founder-os/
 │   ├── index.md                # Three log modes + flags channel
 │   ├── log.md                  # Running log (300 line cap)
 │   ├── patterns.md, flags.md, decisions-parked.md
-│   └── archive/               # Monthly archives
+│   ├── relations.yaml          # Entity graph (hand-curated + auto-extracted from [[wikilinks]])
+│   └── archive/                # Monthly archives
 ├── cadence/
 │   ├── daily-anchors.md        # Today's deep work blocks
-│   ├── weekly-commitments.md  # Current sprint
-│   ├── quarterly-sprints.md   # 90-day focus
+│   ├── weekly-commitments.md   # Current sprint
+│   ├── quarterly-sprints.md    # 90-day focus
 │   └── annual-targets.md
 ├── network/
 │   ├── inner-circle.md, mentors.md, team.md
-├── raw/                       # Source archive (created on first /founder-os:ingest)
+├── raw/                        # Source archive (created on first /founder-os:ingest)
+├── system/
+│   └── quarantine.md           # Catch-net for silent hook/task failures
+├── scripts/
+│   └── wiki-build.py           # Extracts [[wikilinks]] into brain/relations.yaml
 ├── rules/
 │   ├── writing-style.md        # Voice and formatting
-│   └── operating-rules.md     # Behavioral rules
+│   ├── operating-rules.md      # Behavioral rules
+│   ├── entry-conventions.md    # Bi-temporal + decay convention for entries
+│   └── approval-gates.md       # What auto-runs vs requires explicit yes
 └── skills/
     └── index.md                # Skill registry
 ```
@@ -91,14 +98,36 @@ Founder OS is built like a personal wiki. Three layers:
 - **The wiki layer** - core/, context/, cadence/, brain/, network/. Edited by skills as you work.
 - **The schema** - this CLAUDE.md.
 
-Two operations:
+Three operations:
 
 - **Ingest** (`/founder-os:ingest <source>`) - process a source into raw/ with provenance, propose wiki updates you approve. Different from knowledge-capture (which organizes takeaways without source preservation).
 - **Lint** (`/founder-os:lint`) - read-only audit. Broken cross-references, orphan pages, stale time-sensitive content, provenance gaps. Never auto-fixes.
+- **Wiki build** (`/founder-os:wiki-build`) - walks the wiki layer, extracts every `[[wikilink]]`, writes them as a machine-readable graph in `brain/relations.yaml` between auto-generated sentinel markers. Hand-curated `relations:` section preserved. Idempotent.
 
-Cross-references between wiki files use `[[page-name]]` syntax. Lint catches `[[]]` links pointing to files that don't exist. Existing files that don't use the convention are not retrofitted - the convention applies forward.
+Cross-references between wiki files use `[[page-name]]` syntax. Lint catches `[[]]` links pointing to files that don't exist; wiki-build keeps the graph fresh. Existing files that don't use the convention are not retrofitted - the convention applies forward.
 
-Both operations are opt-in. The OS works the same with or without them.
+All three operations are opt-in. The OS works the same with or without them.
+
+---
+
+## Brain substrate
+
+Three additions sit underneath the daily files. None require setup beyond running `/founder-os:setup` once.
+
+- **`rules/entry-conventions.md`** - bi-temporal + decay convention for entries in `context/decisions.md`, `context/priorities.md`, and the brain layer. Add `Decay after: 14d` (or a date) to a flag and the SessionStart brief surfaces it for keep/kill review when it expires. Add `Superseded by:` + `Invalidated on:` to a decision instead of overwriting it. Convention is forward-only (no backfill). Scanner only fires on entries with explicit `Decay after:` field.
+- **`system/quarantine.md`** - catch-net for silent hook and scheduled-task failures. Helper functions for PowerShell and bash are in the file. SessionStart counts ACTIVE entries. Hooks fail silently by design; quarantine makes failure visible without blocking the session.
+- **`rules/approval-gates.md`** - explicit list of what auto-runs (brain/log appends, wiki-build, archive moves), what requires explicit yes (identity edits, decision supersession, sends, public pushes), and what is blocked outright (force push, hard reset, AI attribution in commits). Customize to match how the founder wants the OS to behave.
+
+The SessionStart brief (`.claude/hooks/session-start-brief.sh`, registered on `SessionStart` in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.
+
+---
+
+## Fabric (hooks, commands)
+
+- **SessionStart brief** - one-screen surfacing at every session open: open flags + Week 3+ severity, daily/weekly cadence staleness, decisions count, [FILL] client rows, ACTIVE quarantine entries, Review Due (past `Decay after:`), Decay anchor missing. Quietly skips if not in a Founder OS install.
+- **Session-close revenue-loop check** - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update.
+
+Both hooks fail gracefully and never block the session.
 
 ---
 
