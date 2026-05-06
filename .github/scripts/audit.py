@@ -1,0 +1,161 @@
+"""
+FounderOS integrity audit — runs on every push via GitHub Actions.
+Scans for leakage patterns and high-impact path drift.
+Writes /tmp/audit_findings.json and sets the has_findings GHA output.
+"""
+import json
+import os
+import re
+import subprocess
+import tempfile
+from pathlib import Path
+
+LEAKAGE_PATTERNS = [
+    ("old_namespace", r"/personal-os:"),
+    ("stale_version", r"15 skills|1\.0\.1"),
+]
+
+HIGH_IMPACT_PATHS = [".claude-plugin/", "LICENSE", "README.md"]
+
+INCLUDE_GLOBS = ["*.md", "*.json", "*.sh", "*.yaml", "*.yml", "*.txt"]
+EXCLUDED_DIRS = {".git", ".github"}
+
+# Empty-tree SHA — used when HEAD has no parent (first commit)
+EMPTY_TREE = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+
+
+def load_private_patterns() -> list[tuple[str, str]]:
+    """Load private leakage patterns without committing the sensitive tokens."""
+    raw = os.environ.get("FOUNDEROS_PRIVATE_AUDIT_PATTERNS", "").strip()
+    if not raw:
+        return []
+
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise ValueError("FOUNDEROS_PRIVATE_AUDIT_PATTERNS must be valid JSON") from exc
+
+    patterns: list[tuple[str, str]] = []
+    for item in data:
+        if not isinstance(item, dict):
+            raise ValueError("Each private audit pattern must be an object")
+        label = str(item.get("label", "")).strip()
+        pattern = str(item.get("pattern", "")).strip()
+        if not label or not pattern:
+            raise ValueError("Each private audit pattern needs label and pattern")
+        patterns.append((label, pattern))
+    return patterns
+
+
+def should_scan(path: Path) -> bool:
+    if any(part in EXCLUDED_DIRS for part in path.parts):
+        return False
+    return any(path.match(glob) for glob in INCLUDE_GLOBS)
+
+
+def scan_pattern(label: str, pattern: str) -> dict | None:
+    regex = re.compile(pattern)
+    matches: list[str] = []
+
+    for path in sorted(Path(".").rglob("*")):
+        if not path.is_file() or not should_scan(path):
+            continue
+        try:
+            lines = path.read_text(encoding="utf-8").splitlines()
+        except UnicodeDecodeError:
+            continue
+
+        for line_no, line in enumerate(lines, start=1):
+            if regex.search(line):
+                display_path = "./" + path.as_posix()
+                matches.append(f"{display_path}:{line_no}:{line}")
+
+    if matches:
+        return {
+            "check": label,
+            "pattern": pattern,
+            "matches": matches[:10],
+            "count": len(matches),
+        }
+    return None
+
+
+def get_changed_files() -> list[str]:
+    result = subprocess.run(
+        ["git", "diff", "--name-only", "HEAD~1", "HEAD"],
+        capture_output=True, text=True,
+    )
+    if result.returncode == 0:
+        return [f for f in result.stdout.strip().splitlines() if f]
+
+    # First commit — diff against empty tree
+    result = subprocess.run(
+        ["git", "diff", "--name-only", EMPTY_TREE, "HEAD"],
+        capture_output=True, text=True,
+    )
+    return [f for f in result.stdout.strip().splitlines() if f] if result.returncode == 0 else []
+
+
+def set_gha_output(key: str, value: str) -> None:
+    github_output = os.environ.get("GITHUB_OUTPUT", "")
+    if github_output:
+        with open(github_output, "a") as fh:
+            fh.write(f"{key}={value}\n")
+    else:
+        print(f"OUTPUT: {key}={value}")
+
+
+def findings_path() -> Path:
+    configured = os.environ.get("AUDIT_FINDINGS_PATH")
+    if configured:
+        return Path(configured)
+    if os.name == "nt":
+        return Path(tempfile.gettempdir()) / "audit_findings.json"
+    return Path("/tmp/audit_findings.json")
+
+
+def main() -> None:
+    leakage_findings = []
+    for label, pattern in [*LEAKAGE_PATTERNS, *load_private_patterns()]:
+        result = scan_pattern(label, pattern)
+        if result:
+            leakage_findings.append(result)
+
+    changed_files = get_changed_files()
+    touched_high_impact = [
+        p for p in HIGH_IMPACT_PATHS
+        if any(f == p or f.startswith(p) for f in changed_files)
+    ]
+
+    has_findings = bool(leakage_findings or touched_high_impact)
+
+    output = {
+        "commit": os.environ.get("GITHUB_SHA", "unknown"),
+        "actor": os.environ.get("GITHUB_ACTOR", "unknown"),
+        "ref": os.environ.get("GITHUB_REF", "unknown"),
+        "changed_files": changed_files,
+        "touched_high_impact": touched_high_impact,
+        "leakage_findings": leakage_findings,
+        "has_findings": has_findings,
+    }
+
+    output_path = findings_path()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(output, indent=2))
+    set_gha_output("has_findings", "true" if has_findings else "false")
+
+    if has_findings:
+        print(
+            f"::warning::Audit flagged {len(leakage_findings)} leakage pattern(s) "
+            f"and {len(touched_high_impact)} high-impact path change(s)"
+        )
+        for f in leakage_findings:
+            print(f"  - {f['check']}: {f['count']} match(es)")
+        for p in touched_high_impact:
+            print(f"  - High-impact path modified: {p}")
+    else:
+        print("Audit passed. No findings.")
+
+
+if __name__ == "__main__":
+    main()

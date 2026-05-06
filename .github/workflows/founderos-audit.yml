@@ -1,0 +1,37 @@
+name: FounderOS Integrity Audit
+
+on:
+  push:
+    branches: ["**"]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  audit:
+    name: Leakage & drift scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Run audit scan
+        id: scan
+        run: python3 .github/scripts/audit.py
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_REF: ${{ github.ref }}
+          FOUNDEROS_PRIVATE_AUDIT_PATTERNS: ${{ secrets.FOUNDEROS_PRIVATE_AUDIT_PATTERNS }}
+
+      - name: File GitHub issue
+        if: steps.scan.outputs.has_findings == 'true'
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-8)
+          python3 .github/scripts/format_issue.py | gh issue create \
+            --title "[Audit] Integrity flags · ${SHORT_SHA} (${{ github.ref_name }})" \
+            --body-file -
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  Reference HTML template for your-deliverable-template skill.
+  Replace every {{PLACEHOLDER}} with the matching value from core/brand-profile.yml.
+  This is the layout reference, not a finished document. Use it as a starting structure for one-pagers, portfolio pieces, and HTML deliverables.
+
+  Placeholder map:
+    {{DISPLAY_NAME}}      = identity.display_name
+    {{TAGLINE}}           = identity.tagline (omit the line if empty)
+    {{SUPPORT_CONTACT}}   = identity.support_contact
+    {{COLOR_PRIMARY}}     = colors.primary.hex
+    {{COLOR_SECONDARY}}   = colors.secondary.hex
+    {{COLOR_DARK}}        = colors.dark.hex
+    {{COLOR_LIGHT}}       = colors.light.hex
+    {{COLOR_ACCENT}}      = colors.accent.hex
+    {{FONT_PRIMARY}}      = fonts.primary.family
+    {{LOGO_BASE64}}       = base64-encoded logomark from logo.logomark.path
+    {{LOGO_WHITE_BASE64}} = base64-encoded white logo from logo.white.path (for footer)
+    {{FOOTER_TEXT}}       = footer.text
+    {{DOC_TITLE}}         = the document's own title (e.g. "Portfolio - Senior PM")
+    {{DOC_DATE}}          = today's date in YYYY-MM-DD
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{DOC_TITLE}}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family={{FONT_PRIMARY}}:wght@300;400;500;700&display=swap');
+
+    :root {
+      --c-primary: {{COLOR_PRIMARY}};
+      --c-secondary: {{COLOR_SECONDARY}};
+      --c-dark: {{COLOR_DARK}};
+      --c-light: {{COLOR_LIGHT}};
+      --c-accent: {{COLOR_ACCENT}};
+      --font-primary: '{{FONT_PRIMARY}}', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-primary);
+      font-weight: 300;
+      font-size: 9pt;
+      line-height: 1.4;
+      color: var(--c-dark);
+      background: white;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 52px;
+    }
+
+    /* Topbar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 24px;
+      border-bottom: 0.5pt solid var(--c-light);
+      margin-bottom: 32px;
+    }
+    .topbar img.logomark { width: 36px; height: 36px; }
+    .topbar .name { font-weight: 700; font-size: 14pt; color: var(--c-dark); }
+    .topbar .tagline { font-weight: 300; font-size: 9pt; color: var(--c-dark); opacity: 0.7; }
+
+    /* Hero / cover-style block for one-pagers */
+    .hero {
+      padding: 48px 0;
+      text-align: left;
+    }
+    .hero h1 {
+      font-weight: 700;
+      font-size: 26pt;
+      color: var(--c-primary);
+      margin-bottom: 8px;
+    }
+    .hero h2 {
+      font-weight: 500;
+      font-size: 15pt;
+      color: var(--c-dark);
+      opacity: 0.85;
+    }
+
+    /* Section headers */
+    h3.section {
+      font-weight: 700;
+      font-size: 15pt;
+      color: var(--c-primary);
+      margin: 24px 0 12px 0;
+      padding-left: 12px;
+      border-left: 3pt solid var(--c-secondary);
+    }
+
+    /* Subsection */
+    h4 {
+      font-weight: 500;
+      font-size: 11pt;
+      color: var(--c-dark);
+      margin: 16px 0 8px 0;
+    }
+
+    /* Body text */
+    p { margin-bottom: 6pt; }
+    p.emphasis { font-weight: 400; font-size: 10pt; }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+    thead {
+      background: var(--c-primary);
+      color: white;
+    }
+    th, td {
+      padding: 6pt;
+      text-align: left;
+      border: 0.5pt solid var(--c-light);
+    }
+    tbody tr:nth-child(even) { background: var(--c-light); }
+
+    /* Accent bar */
+    .accent-bar {
+      height: 4pt;
+      background: var(--c-secondary);
+      margin: 24px 0;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--c-dark);
+      color: white;
+      text-align: center;
+      padding: 32px;
+      margin-top: 48px;
+    }
+    .footer img.logo-white { height: 32px; margin-bottom: 16px; }
+    .footer .footer-text {
+      font-weight: 300;
+      font-size: 8pt;
+      opacity: 0.85;
+    }
+    .footer .footer-date { font-size: 7pt; opacity: 0.6; margin-top: 8px; }
+
+    /* Print rules */
+    @media print {
+      body { padding: 24pt; }
+      .footer { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Topbar -->
+  <div class="topbar">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <img class="logomark" src="{{LOGO_BASE64}}" alt="{{DISPLAY_NAME}} logomark">
+      <div>
+        <div class="name">{{DISPLAY_NAME}}</div>
+        <div class="tagline">{{TAGLINE}}</div>
+      </div>
+    </div>
+    <div style="text-align: right;">
+      <div style="font-size: 8pt; opacity: 0.7;">{{DOC_TITLE}}</div>
+      <div style="font-size: 7pt; opacity: 0.5;">{{DOC_DATE}}</div>
+    </div>
+  </div>
+
+  <!-- Hero (use for one-pager / cover style) -->
+  <div class="hero">
+    <h1>{{DOC_TITLE}}</h1>
+    <h2>One-line subtitle goes here.</h2>
+  </div>
+
+  <!-- Sections -->
+  <h3 class="section">Section One</h3>
+  <p>Body text uses 9pt Light. Color is dark from the brand profile. Line height is 1.4 for comfortable reading. Paragraphs are spaced 6pt apart.</p>
+  <p class="emphasis">Emphasis lines step up to 10pt Regular weight. Use sparingly - one or two per section.</p>
+
+  <h4>Subsection example</h4>
+  <p>Subsections use 11pt Medium. They separate ideas without taking the visual weight of a full section header.</p>
+
+  <h3 class="section">Section Two - With a Table</h3>
+  <table>
+    <thead>
+      <tr><th>Column One</th><th>Column Two</th><th>Column Three</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Row 1 cell</td><td>Row 1 cell</td><td>Row 1 cell</td></tr>
+      <tr><td>Row 2 cell</td><td>Row 2 cell</td><td>Row 2 cell</td></tr>
+      <tr><td>Row 3 cell</td><td>Row 3 cell</td><td>Row 3 cell</td></tr>
+    </tbody>
+  </table>
+
+  <div class="accent-bar"></div>
+
+  <h3 class="section">Section Three</h3>
+  <p>Sections are visually separated by 24pt of space above the header and 12pt below. The 3pt left border in the secondary color gives a consistent identifying stripe across all branded outputs.</p>
+
+  <!-- Footer with white logo on dark background -->
+  <div class="footer">
+    <img class="logo-white" src="{{LOGO_WHITE_BASE64}}" alt="{{DISPLAY_NAME}} logo">
+    <div class="footer-text">{{FOOTER_TEXT}}</div>
+    <div class="footer-date">{{DOC_DATE}}</div>
+  </div>
+</body>
+</html>

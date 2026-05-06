@@ -1,0 +1,33 @@
+# Entity Relation Graph
+# Updated: {{TODAY}}
+# Two sections:
+#   1. relations: hand-curated semantic edges (from -> type -> to). Types are
+#      blocks, informs, guards_against, about, active_on, linked_to. Add an
+#      entry whenever you create a flag, pattern, or parked decision that
+#      connects to an existing entity.
+#   2. wiki_links: auto-generated from Obsidian-style cross-references in
+#      markdown. Refreshed by /founder-os:wiki-build (scripts/wiki-build.py).
+#      On first run, wiki-build appends both sentinel markers and the block
+#      at the end of this file. On subsequent runs, only the block between
+#      the sentinels (#@@WIKI_LINKS_AUTOGEN_BEGIN@@ and END) is overwritten.
+#      Do not edit the block by hand.
+# Anchors use filename.md#heading-slug format.
+# Load this file only when answering multi-hop questions ("what blocks X?",
+# "what connects to Y?").
+
+version: 1
+updated: "{{TODAY}}"
+
+relations: []
+
+# Example entries (uncomment + edit when you have real edges to record):
+#
+#   - from: brain/flags.md#stalled-launch
+#     type: blocks
+#     to: context/priorities.md#q3-launch
+#     note: Launch is on hold pending design review
+#
+#   - from: brain/patterns.md#avoidance-as-strategy
+#     type: informs
+#     to: context/decisions.md#hire-or-do
+#     note: Pattern surfaced during the Friday retro
