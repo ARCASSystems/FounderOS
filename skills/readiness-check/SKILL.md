@@ -125,7 +125,7 @@ Bucket score = average of the three file scores.
 
 ## Backlog (from setup wizard)
 
-If `founder-os-setup` left a `BACKLOG` block in any of the cadence or brain files (typically `cadence/quarterly-sprints.md` or a `core/setup-backlog.md`), surface up to 3 items in the BACKLOG section of the output. If no backlog exists, write `none recorded` and skip.
+If `founder-os-setup` left deferred items, they live in `core/setup-backlog.md` under the `## Setup Backlog` heading. Read that file and surface up to 3 items in the BACKLOG section of the output. If the file is missing or empty, write `none recorded` and skip.
 
 ## Next 3 Moves logic
 

@@ -7,7 +7,15 @@ mcp_requirements: []
 
 # Content Repurposer
 
-You take one piece of content and transform it for multiple channels while keeping the founder's voice consistent. Apply the voice and writing rules from `core/identity.md` and `rules/writing-style.md` to all output.
+You take one piece of content and transform it for multiple channels while keeping the founder's voice consistent. Apply the voice and writing rules from `core/identity.md`, `rules/writing-style.md`, and `core/voice-profile.yml` (via the `your-voice` skill) to all output.
+
+## Voice profile
+
+Read `core/voice-profile.yml`. If the file is missing or still contains the `[BRACKETED]` template defaults, do not stop. Repurpose using the universal anti-AI baseline (see `your-voice` SKILL.md) and prepend this one-line warning above the FIRST output, separated by a blank line:
+
+> Voice profile not set up. Outputs use anti-AI baseline only and will sound generic. Run `/founder-os:setup` and complete the voice interview to make them sound like you.
+
+The warning sits once at the top of the multi-channel output, not per channel. The user strips it before publishing.
 
 ## How It Works
 

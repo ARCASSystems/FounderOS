@@ -56,8 +56,10 @@ cd "$HOME\founder-os"
 Open Claude Code in that folder, then run:
 
 ```
-/founder-os:setup
+/setup
 ```
+
+> **Note:** Commands in the manual clone path use bare names (`/setup`, `/status`, `/today`, etc.) because the plugin namespace is not active. The plugin install path (Path A) uses the `/founder-os:` prefix. The commands are identical underneath.
 
 **Pros**
 - Works regardless of plugin marketplace state.
@@ -68,8 +70,9 @@ Open Claude Code in that folder, then run:
 - Requires git installed.
 - Updates are manual via `git pull`.
 - Slightly longer first install than Path A.
+- Commands use bare names, not the `/founder-os:` namespace.
 
-**Verifying it worked:** From the Claude Code session opened in the cloned folder, run `/founder-os:setup`. The setup wizard should start its questions. If the slash command does not appear, confirm Claude Code's working directory is the FounderOS root (the folder containing `CLAUDE.md` and `.claude-plugin/`).
+**Verifying it worked:** From the Claude Code session opened in the cloned folder, run `/setup`. The setup wizard should start its questions. If the slash command does not appear, confirm Claude Code's working directory is the FounderOS root (the folder containing `CLAUDE.md` and `.claude-plugin/`).
 
 ---
 
@@ -124,9 +127,9 @@ You can switch paths anytime. The OS is your files - they're the same regardless
 
 All three paths converge on the same six files. Whichever path you picked, the next steps are:
 
-1. Run `/founder-os:setup` (Path A or B). Path C: skip until you've set up locally.
-2. Run `/founder-os:voice-interview` to capture how you write.
-3. Run `/founder-os:brand-interview` to capture how your work looks.
+1. Run `/founder-os:setup` (Path A) or `/setup` (Path B). Path C: skip until you've set up locally.
+2. Run `/founder-os:voice-interview` (Path A) or `/voice-interview` (Path B) to capture how you write.
+3. Run `/founder-os:brand-interview` (Path A) or `/brand-interview` (Path B) to capture how your work looks.
 4. Use the OS for a week on real work before tweaking templates.
 
 If anything breaks in the first 24 hours, email `solutions@arcassystems.com` with what you tried. We read every email.
@@ -135,15 +138,7 @@ If anything breaks in the first 24 hours, email `solutions@arcassystems.com` wit
 
 ## Known platform notes
 
-**Windows users.** The session-close revenue-loop hook is wired through `bash`. If you installed Claude Code without git-bash, the hook will not fire. Two fixes:
-
-1. Install [Git for Windows](https://git-scm.com/download/win), which includes git-bash. This is the recommended path - most Windows founders running Claude Code already have it.
-2. Or wire the PowerShell mirror manually. Edit `.claude/settings.json` and replace the Stop hook's command with:
-   ```
-   "command": "powershell -ExecutionPolicy Bypass -File \"$env:CLAUDE_PROJECT_DIR\\.claude\\hooks\\session-close-revenue-check.ps1\""
-   ```
-
-The hook is a soft warning, not a blocker. If it does not fire, the OS still works - you just lose the revenue-loop nudge.
+**Windows users.** Both hooks ship with bash and PowerShell variants. `.claude/settings.json` wires both automatically. If you have PowerShell installed (all modern Windows systems do), both the SessionStart brief and the Stop revenue-check will fire without any extra setup. If you also have git-bash, both variants run - they fail gracefully if the other shell is absent, so there is no double-output risk.
 
 **Mac, Linux.** Hooks run through bash with no extra setup.
 

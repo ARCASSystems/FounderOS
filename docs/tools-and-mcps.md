@@ -54,7 +54,7 @@ If you install Founder OS and add no MCPs, all of these skills work end-to-end o
 - business-context-loader
 - readiness-check (`/founder-os:status`)
 
-That is 20 of the 24 skills. The remaining four (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce noticeably better output with the relevant integration connected.
+That is 23 of the 27 skills. The remaining four (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce noticeably better output with the relevant integration connected.
 
 ---
 

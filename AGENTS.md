@@ -63,7 +63,7 @@ These only work in Claude Code. Other agents reading this repo should treat the 
 - Do not invent identity, priorities, decisions, clients, or revenue from context that is not in the files
 - Do not modify the user's data files (`core/`, `context/`, `cadence/`, `brain/`) without their explicit instruction
 - Do not skip the setup wizard if context files are missing - point the user to it
-- Do not operate the FounderOS as if it were the public test installs (`C:\arcas_dev\test-installs\*`) - those are disposable
+- Do not operate the FounderOS as if it were a disposable test install. After setup, the user's working directory IS their OS - treat it accordingly
 
 ---
 

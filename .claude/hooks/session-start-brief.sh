@@ -9,6 +9,15 @@ HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd "$HOOK_DIR/../.." && pwd)"
 TODAY="$(date +%Y-%m-%d)"
 
+# Resolve python interpreter once. Many Linux/macOS systems ship `python3` only.
+if command -v python3 >/dev/null 2>&1; then
+  PYTHON=python3
+elif command -v python >/dev/null 2>&1; then
+  PYTHON=python
+else
+  PYTHON=""
+fi
+
 # Quiet exit if the user's repo is not a Founder OS install.
 [ ! -f "$REPO/core/identity.md" ] && exit 0
 
@@ -48,8 +57,8 @@ fi
 WEEKLY="$REPO/cadence/weekly-commitments.md"
 if [ -f "$WEEKLY" ]; then
   WEEK_DATE=$(grep -m1 -oE '^## Week of [0-9]{4}-[0-9]{2}-[0-9]{2}' "$WEEKLY" | awk '{print $4}')
-  if [ -n "$WEEK_DATE" ] && command -v python >/dev/null 2>&1; then
-    AGE=$(python -c "from datetime import date; a=date.fromisoformat('$WEEK_DATE'); b=date.fromisoformat('$TODAY'); print((b-a).days)" 2>/dev/null)
+  if [ -n "$WEEK_DATE" ] && [ -n "$PYTHON" ]; then
+    AGE=$($PYTHON -c "from datetime import date; a=date.fromisoformat('$WEEK_DATE'); b=date.fromisoformat('$TODAY'); print((b-a).days)" 2>/dev/null)
     if [ -n "$AGE" ] && [ "$AGE" -gt 6 ] 2>/dev/null; then
       echo "Weekly: STALE (week of $WEEK_DATE, $AGE days old) - run retro before planning"
     else
@@ -84,7 +93,11 @@ if [ -f "$QUARANTINE" ]; then
     END { print n+0 }
   ' "$QUARANTINE")
   if [ -n "$Q_ACTIVE" ] && [ "$Q_ACTIVE" -gt 0 ] 2>/dev/null; then
-    Q_LATEST=$(grep -m1 -E "^## [0-9]{4}-[0-9]{2}-[0-9]{2}" "$QUARANTINE" | head -1)
+    Q_LATEST=$(awk '
+      /^[[:space:]]*```/ { fence = !fence; next }
+      fence { next }
+      /^## [0-9]{4}-[0-9]{2}-[0-9]{2}/ { print; exit }
+    ' "$QUARANTINE")
     echo ""
     echo "Quarantine: $Q_ACTIVE ACTIVE failure(s) - check system/quarantine.md"
     [ -n "$Q_LATEST" ] && echo "  most recent: $Q_LATEST"
@@ -96,7 +109,8 @@ fi
 scan_decay() {
   local file="$1" heading_re="$2"
   [ ! -f "$file" ] && return
-  python - "$file" "$heading_re" "$TODAY" <<'PYEOF' 2>/dev/null
+  [ -z "$PYTHON" ] && return
+  $PYTHON - "$file" "$heading_re" "$TODAY" <<'PYEOF' 2>/dev/null
 import sys, re
 from datetime import date, timedelta
 path, heading_re, today_str = sys.argv[1], sys.argv[2], sys.argv[3]
@@ -148,11 +162,11 @@ process(entry)
 PYEOF
 }
 
-if command -v python >/dev/null 2>&1; then
+if [ -n "$PYTHON" ]; then
   HITS=""
-  HITS="$HITS$(scan_decay "$REPO/brain/flags.md" '^##[[:space:]]')"$'\n'
-  HITS="$HITS$(scan_decay "$REPO/brain/patterns.md" '^###[[:space:]]')"$'\n'
-  HITS="$HITS$(scan_decay "$REPO/brain/decisions-parked.md" '^###[[:space:]]')"
+  HITS="$HITS$(scan_decay "$REPO/brain/flags.md" '^##\s')"$'\n'
+  HITS="$HITS$(scan_decay "$REPO/brain/patterns.md" '^###\s')"$'\n'
+  HITS="$HITS$(scan_decay "$REPO/brain/decisions-parked.md" '^###\s')"
   HITS=$(printf '%s\n' "$HITS" | grep -v '^$' || true)
   DECAY_HITS=$(printf '%s\n' "$HITS" | grep '^DECAY|' || true)
   NOANCHOR_HITS=$(printf '%s\n' "$HITS" | grep '^NOANCHOR|' || true)

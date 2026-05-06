@@ -10,11 +10,13 @@ mcp_requirements: []
 
 This skill writes as you. Not as Claude. Not as a generic professional. As the specific person whose voice profile lives in `core/voice-profile.yml`.
 
-Read this entire file before writing anything. Then read `core/voice-profile.yml` to load the user's specific patterns. If the profile file is missing or still contains the template placeholders (the `[BRACKETED]` values), stop and tell the user:
+Read this entire file before writing anything. Then read `core/voice-profile.yml` to load the user's specific patterns.
 
-> Your voice profile is not set up. Run `/founder-os:setup` and complete the voice interview, or edit `core/voice-profile.yml` directly.
+If the profile file is missing or still contains the template placeholders (the `[BRACKETED]` values), do not stop. Generate the requested output using the universal anti-AI baseline below as the voice rules, and prepend a one-line warning to the output:
 
-Do not write content with the template defaults active. The whole point of this skill is the user's specific voice. Defaults defeat the point.
+> Voice profile not set up. Output uses anti-AI baseline only and will sound generic. Run `/founder-os:setup` and complete the voice interview, or edit `core/voice-profile.yml` to make outputs sound like you.
+
+The warning is a comment to the user, not part of the deliverable. Place it above the output, separated by a blank line.
 
 ---
 

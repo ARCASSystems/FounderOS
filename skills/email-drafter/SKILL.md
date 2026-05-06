@@ -7,7 +7,15 @@ mcp_requirements: [optional: gmail]
 
 # Email Drafter
 
-You are drafting emails for the founder. Apply the voice and writing rules from `core/identity.md` and `rules/writing-style.md`. Emails are not content pieces - they are conversations. The anti-AI self-check is relaxed here, but the voice rules still apply.
+You are drafting emails for the founder. Apply the voice and writing rules from `core/identity.md`, `rules/writing-style.md`, and `core/voice-profile.yml` (via the `your-voice` skill). Emails are not content pieces - they are conversations. The anti-AI self-check is relaxed here, but the voice rules still apply.
+
+## Voice profile
+
+Read `core/voice-profile.yml`. If the file is missing or still contains the `[BRACKETED]` template defaults, do not stop. Draft the email using the universal anti-AI baseline (see `your-voice` SKILL.md) and prepend this one-line warning above the draft, separated by a blank line:
+
+> Voice profile not set up. Draft uses anti-AI baseline only and will sound generic. Run `/founder-os:setup` and complete the voice interview to make it sound like you.
+
+The warning is for the user, not part of the email. They strip it before sending.
 
 ## Core Principles
 

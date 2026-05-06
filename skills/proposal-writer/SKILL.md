@@ -34,7 +34,7 @@ If the user wants a plain-text proposal (email, Google Doc, plaintext), skip the
 
 ## Currency Rule
 
-Read the founder's identity or business context for their default currency. Use AED for UAE/GCC clients, USD for international, GBP for UK, EUR for Europe, INR for India - whatever matches the engagement. If unclear, ask the user before writing the price.
+Read the founder's identity or business context for their default currency. Use the currency that matches the engagement geography: EUR for Europe, GBP for UK, INR for India, USD for international, AED for UAE/GCC - or whatever the client's country uses. If unclear, ask the user before writing the price.
 
 ## Proposal Structure
 

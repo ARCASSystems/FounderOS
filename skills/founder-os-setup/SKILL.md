@@ -262,12 +262,11 @@ Read `templates/project-claude-md.md` for structure. Under 40 lines. Include:
 Subset of company MCPs relevant to this project.
 
 ### 4.4 Live Test
-Ask: "Let's test this. Give me a real task you'd do in this project."
+Ask: "Do you have a real task in this project we can try right now - even a small one? A draft, a note, a decision to log?"
 
-Execute the task. Confirm:
-- Only project context loaded (no bleed from other businesses)
-- MCPs work
-- Output quality is good
+If they have something, execute it. Confirm only project context loaded, MCPs work, output quality is good.
+
+If they don't have a task yet (no active clients, pre-revenue, just starting), skip the live test. Tell them: "You can run `/founder-os:status` anytime to check readiness, and test a real task once one comes up."
 
 ---
 
@@ -345,7 +344,7 @@ Then start using it:
 - Claude loads the right context based on where you are."
 
 ### 6.3 Backlog
-Show any skipped or deferred items from the setup. Save them to `brain/decisions-parked.md` or `cadence/weekly-commitments.md` as appropriate.
+Show any skipped or deferred items from the setup. Save them to `core/setup-backlog.md` as a simple markdown list under the heading `## Setup Backlog`. Create the file if it does not exist. Do not scatter deferred items across other files.
 
 ---
 

@@ -29,7 +29,7 @@ After this step, the OS knows who you are. These skills now work end to end:
 
 Anything you write through these comes out in a neutral tone. The next step fixes that.
 
-### Step 2 - Voice interview (10 min)
+### Step 2 - Voice interview (15 min)
 
 ```
 /founder-os:voice-interview

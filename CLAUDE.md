@@ -72,7 +72,7 @@ Founder OS models the operating functions of a business as four behavioural mode
 - **CMO** - content, brand, marketing, social
 - **Chief of Staff** - weekly retro, stall detection, meta-layer
 
-CFO, CSO, and CTO are not shipped as default modes in v1.2. Financial questions route through the unit-economics skill. Tech and automation questions are best handled by Claude Code itself. If you want a CFO or CTO lens added later, scaffold one with skill-creator.
+CFO, CSO, and CTO are not shipped as default modes. Financial questions route through the unit-economics skill. Tech and automation questions are best handled by Claude Code itself. If you want a CFO or CTO lens added later, scaffold one with skill-creator.
 
 ## Tool Stack
 
@@ -110,7 +110,7 @@ Three additions sit underneath the daily files. None require setup beyond runnin
 - **`system/quarantine.md`** - catch-net for silent hook and scheduled-task failures. Helper functions for PowerShell and bash are in the file. SessionStart counts ACTIVE entries. Hooks fail silently by design; quarantine makes failure visible without blocking the session.
 - **`rules/approval-gates.md`** - explicit list of what auto-runs (brain/log appends, wiki-build, archive moves), what requires your yes (identity edits, decision supersession, sends, public pushes), and what is blocked outright (force push, hard reset, AI attribution in commits). Customize to match how you want the OS to behave.
 
-The SessionStart brief (`.claude/hooks/session-start-brief.sh`, registered on `SessionStart` in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.
+The SessionStart brief (`.claude/hooks/session-start-brief.sh` on Mac/Linux/git-bash, `.claude/hooks/session-start-brief.ps1` on Windows, both registered in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.
 
 ## Agent Teams (recommended)
 

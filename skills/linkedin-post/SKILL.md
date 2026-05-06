@@ -12,13 +12,11 @@ You are writing LinkedIn posts for the founder whose voice profile lives in `cor
 
 ## Before you write
 
-Read `core/voice-profile.yml`. If the file is missing or still contains the `[BRACKETED]` template defaults, stop and tell the user:
+Read `core/voice-profile.yml`. If the file is missing or still contains the `[BRACKETED]` template defaults, do not stop. Draft the post using the universal anti-AI baseline (see `your-voice` SKILL.md) and prepend this one-line warning above the post, separated by a blank line:
 
-> Your voice profile is not set up. Run `/founder-os:setup` and complete the voice interview, or edit `core/voice-profile.yml` directly. Without a voice profile, this post will sound like Claude, not you.
+> Voice profile not set up. Post uses anti-AI baseline only and will sound generic. Run `/founder-os:setup` and complete the voice interview to make it sound like you.
 
-If the user wants to proceed anyway, draft to the universal anti-AI baseline and add a banner at the top of your output:
-
-> *Voice profile missing. This is a neutral-tone draft. Run the voice interview to make it sound like you.*
+The warning is for the user, not part of the post. They strip it before publishing.
 
 ## The Format
 
