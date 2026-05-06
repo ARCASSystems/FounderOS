@@ -7,8 +7,10 @@
 #      connects to an existing entity.
 #   2. wiki_links: auto-generated from Obsidian-style cross-references in
 #      markdown. Refreshed by /founder-os:wiki-build (scripts/wiki-build.py).
-#      The block between the auto-generated markers is overwritten on every
-#      run; do not edit by hand.
+#      On first run, wiki-build appends both sentinel markers and the block
+#      at the end of this file. On subsequent runs, only the block between
+#      the sentinels (#@@WIKI_LINKS_AUTOGEN_BEGIN@@ and END) is overwritten.
+#      Do not edit the block by hand.
 # Anchors use filename.md#heading-slug format.
 # Load this file only when answering multi-hop questions ("what blocks X?",
 # "what connects to Y?").
