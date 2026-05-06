@@ -1,10 +1,10 @@
 # Founder OS
 
-The operating layer for a solo founder. Six files run your company. Claude reads them every session.
+The operating layer for the person running the business. Six files run your company. Claude reads them every session.
 
-Owned by you. Powered by Claude. Talk to it.
+Owned by you. Runs locally in Claude Code. Talk to it.
 
-**Setup:** Install the plugin. Open Claude Code. Run `/founder-os:setup` (15 min). Then `/founder-os:voice-interview` (15 min) and `/founder-os:brand-interview` (10 min) to unlock the writing skills. Then `/founder-os:status` anytime to audit. Full first-day path in [docs/first-day.md](docs/first-day.md).
+**Setup:** Install the plugin. Open Claude Code. Run `/founder-os:setup` (15 min). Then `/founder-os:voice-interview` (15 min) so writing sounds like you, and `/founder-os:brand-interview` (10 min) so deliverables look like you. Then `/founder-os:status` anytime to audit. Full first-day path in [docs/first-day.md](docs/first-day.md).
 
 ---
 
@@ -80,43 +80,45 @@ Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and 
 
 ### Skills (27)
 
-| Skill | What it does |
+Every skill is an automated harness, not a passive description. You invoke it, it asks you structured questions or reads your files, and it writes a real output to disk.
+
+| Skill | What happens when you run it |
 |---|---|
-| founder-os-setup | Setup wizard. Generates identity, priorities, decisions, cadence, brain files. |
-| readiness-check | OS health audit. Run via `/founder-os:status`. |
-| ingest | File a source into `raw/` with provenance. Propose wiki updates you approve. Run via `/founder-os:ingest`. |
-| lint | Read-only audit of wiki integrity. Broken links, orphans, stale content, provenance gaps. Run via `/founder-os:lint`. |
-| wiki-build | Walk the OS markdown, extract `[[wikilinks]]`, refresh the auto-generated graph in `brain/relations.yaml`. Companion to lint. Run via `/founder-os:wiki-build`. |
-| weekly-review | Run the weekly retro. M/S/D bucket calculation, keep/kill/escalate on flags. |
-| priority-triage | Force a top-3 from a long list. Names what gets cut. |
-| brain-log | Route a thought to log, cross-reference, or act with same-session follow-through. |
-| decision-framework | Surface trade-offs. No false simplicity. |
-| session-handoff | Pack up context for the next session or a different operator. |
-| meeting-prep | Pre-meeting brief plus post-meeting debrief. |
-| knowledge-capture | Capture from books, podcasts, courses, conversations (no source preservation). |
-| email-drafter | Draft in your voice once setup runs the voice interview. |
-| sop-writer | Turn a process into a delegation-ready document. |
-| founder-coaching | Coaching loop for stuck moments. |
-| unit-economics | Run the math on a deal, hire, or pricing change. |
-| content-repurposer | One piece of content adapted across channels in your voice. |
-| strategic-analysis | Competitive scan, market sizing, opportunity assessment. |
-| pre-send-check | Hard gate before any client-facing deliverable leaves your machine. |
-| voice-interview | Captures your writing voice into core/voice-profile.yml. |
-| brand-interview | Captures your visual brand into core/brand-profile.yml. |
-| your-voice | Writes everything as you, using your voice profile. |
-| your-deliverable-template | Produces all branded documents (CV, proposal, deck, one-pager) in your visual identity. |
-| business-context-loader | Loads, scans, and progressively fills a per-company context file. Routes you to the next move. |
-| linkedin-post | Voice-coupled LinkedIn post writer. |
-| client-update | Voice-coupled client status update writer. |
-| proposal-writer | Voice and brand-coupled proposal writer. |
+| founder-os-setup | Asks 6 to 7 structured questions about your business, role, priorities, and tools. Writes your full operating system to local disk. 15 min. |
+| readiness-check | Scans your OS for stale priorities, missing decisions, empty cadence, broken voice profile. Returns a weighted score and the next 3 high-leverage moves. |
+| ingest | Files a URL, file path, or pasted text into `raw/` with provenance frontmatter (source, date, who). Then proposes wiki updates you approve before they land. |
+| lint | Walks the OS for broken `[[wikilinks]]`, orphan pages, stale time-sensitive content, provenance gaps, contradictions. Read-only, never auto-fixes. |
+| wiki-build | Extracts every `[[wikilink]]` across the OS and writes them to a machine-readable graph at `brain/relations.yaml`. Idempotent. |
+| weekly-review | Walks last week. Forces a Must/Should/Did bucket per priority. Surfaces every open flag for keep/kill/escalate. Closes the week so next week starts clean. |
+| priority-triage | Takes a long list of priorities. Forces a top 3. Explicitly names what gets cut and why. |
+| brain-log | Captures a thought. Routes to `brain/log.md`, ties to existing decisions or flags via `[[wikilinks]]`, and forces same-session action if you said you would do something. |
+| decision-framework | Walks you through a structured decision: criteria, options, trade-offs, kill criteria. Writes the resolved decision to `context/decisions.md`. |
+| session-handoff | Packs up what you did, what is open, what the next operator needs to know. Writes a handoff file. |
+| meeting-prep | Builds a brief from meeting context, attendees, and your prior interactions with them. Captures the debrief afterward into the right files. |
+| knowledge-capture | Captures takeaways from a book, podcast, or conversation. Routes insights to `brain/log.md`, patterns, or a topic-specific file. |
+| email-drafter | Drafts emails in your voice. Reads the inbox via Gmail or Outlook MCP if connected. Otherwise you paste the thread. |
+| sop-writer | Captures a process you describe verbally. Writes a structured SOP someone else could follow. |
+| founder-coaching | Coaching loop when you are stuck. References a bias toolkit and a zone framework to diagnose what is actually going on. |
+| unit-economics | Runs the math on a deal, hire, pricing change, or new business line. CAC, LTV, gross margin, breakeven. Stores the model file. |
+| content-repurposer | Takes one source piece. Repurposes it across LinkedIn, Twitter, newsletter, internal doc, all in your voice. |
+| strategic-analysis | Runs a market scan, competitor map, or opportunity assessment. Structured output you can act on. |
+| pre-send-check | Hard gate before any deliverable leaves your machine. Checks voice consistency, source verification, anti-AI scan, personalisation. Refuses to ship if any check fails. |
+| voice-interview | 20 structured questions. You paste 3 to 5 writing samples. Generates a voice profile every writing skill reads on every output. |
+| brand-interview | Structured questions on colors, fonts, logo, document layout. Generates a brand profile every visual deliverable inherits. |
+| your-voice | Reads `core/voice-profile.yml` and writes any text in your voice. Every other writing skill calls this one. |
+| your-deliverable-template | Produces branded documents (CV, proposal, deck, one-pager) using your visual brand profile. |
+| business-context-loader | Loads the per-company context file. Surfaces what is missing or stale. Routes to the next obvious move. |
+| linkedin-post | Writes a LinkedIn post in your voice. Pulls from your voice profile and applies anti-AI rules. |
+| client-update | Writes a status update for a client. Pulls progress from `context/clients.md` and frames it in your voice. |
+| proposal-writer | Writes a full proposal: scope, deliverables, terms, pricing. Inherits voice and visual brand. |
 
 ### Slash commands (13)
 
 | Command | Purpose |
 |---|---|
 | `/founder-os:setup` | Run the setup wizard. |
-| `/founder-os:voice-interview` | Capture how you write into `core/voice-profile.yml`. Unlocks the voice-coupled writing skills. |
-| `/founder-os:brand-interview` | Capture your visual identity into `core/brand-profile.yml`. Unlocks branded outputs. |
+| `/founder-os:voice-interview` | Capture how you write into `core/voice-profile.yml`. Required for the voice-coupled writing skills to sound like you. |
+| `/founder-os:brand-interview` | Capture your visual identity into `core/brand-profile.yml`. Required for branded deliverables to look like you. |
 | `/founder-os:status` | Read-only OS readiness check. Returns a weighted score and the next 3 high-leverage moves. |
 | `/founder-os:ingest <source>` | File a URL, file path, or pasted text into `raw/` with provenance. Propose wiki updates you approve. |
 | `/founder-os:lint` | Read-only wiki audit. Cross-references, orphans, stale content, provenance, possible contradictions. |
@@ -161,9 +163,23 @@ Nothing in the OS hard-fails on a missing MCP. It tells you what it can't do and
 
 ## Who this is for
 
-You run the business alone or with one or two people. You are sharp but your day is chopped into thirty-minute pieces. You have tried productivity templates that promised the world and quietly stopped getting opened by week three.
+You run the business or run a P&L inside one. Owner, operator, agency lead, consultancy head, head of department. If the buck stops with you, this is for you.
+
+You are sharp but your day is chopped into thirty-minute pieces. You have tried productivity templates that promised the world and quietly stopped getting opened by week three.
 
 You are not installing a template. You are installing an operating layer. It listens, routes, forgets nothing, and pushes back when you are about to ship something half-baked.
+
+---
+
+## Who this is NOT for
+
+You want a no-code app with a UI. This is files plus skills, not an interface. You operate it through Claude Code.
+
+You need shared state across a team. Founder OS is single-user. The Company OS layer (planned, not shipped) is what handles team coordination.
+
+You want push notifications, automated triggers, or anything that fires while you sleep. Founder OS is the thinking layer. n8n, Make, Zapier, or your own scripts handle offline triggers.
+
+You want a tool you install and forget. This is an operating layer that needs you to engage daily and review weekly. If you are not going to do that, this will sit unused like every other system.
 
 ---
 
@@ -173,7 +189,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.4.1 | Owners running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.4.2 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -240,11 +256,13 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.4.1. Public push week of 2026-05-04.
+Version 1.4.2. Public push week of 2026-05-04.
 
 v1.4 adds the wiki graph builder (`wiki-build`), the bi-temporal + decay convention for brain entries, the `system/quarantine.md` catch-net for silent hook failures, the approval gate matrix template, and the SessionStart brief hook that surfaces flags, stale cadence, decay-due entries, and quarantine failures at session open.
 
 v1.4.1 patches the bootloader template (new installs now get the full v1.4 substrate), fixes a skill-count drift in README, and adds an explicit hook-copy step to the setup wizard so the SessionStart brief fires on new installs.
+
+v1.4.2 closes two independent audits: Windows PowerShell hooks now wired automatically (Windows users without git-bash get the SessionStart brief without manual rewire), missing-voice-profile fallback unified across all 6 writing skills (warn and fall back, never stop), bash decay scanner regex fixed for Python compatibility, BACKLOG handoff path between setup and readiness-check unified to `core/setup-backlog.md`, plugin.json repository field corrected to spec, currency rule in proposal-writer made geography-neutral, plus README positioning rewrite and 'Who this is NOT for' section.
 
 Early and honest. Read [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md) for the current limits.
 
