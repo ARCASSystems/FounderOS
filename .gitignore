@@ -47,3 +47,6 @@ Thumbs.db
 dist/
 build/
 node_modules/
+
+# Audit artifacts (generated, not source-of-truth)
+audit-*.md

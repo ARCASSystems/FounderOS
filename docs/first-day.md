@@ -66,7 +66,7 @@ After this step, branded outputs render in your visual identity:
 /founder-os:status
 ```
 
-Read-only. Returns a 0-100% readiness score across Core, Voice and Brand, Cadence, Business Context, Brain Layer. Names the next 3 high-leverage moves.
+Read-only. Returns a 0-100% readiness score across Core, Voice and Brand, Cadence, Business Context, Brain Layer. Names the next 3 high-impact moves.
 
 Run this whenever you want to see where the OS is and what to fill next.
 

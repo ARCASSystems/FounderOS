@@ -317,7 +317,7 @@ Show the user what they have AND the next two unlock steps. The wizard creates t
 
 **Step 2 - Brand profile.** Run `/founder-os:brand-interview`. Captures your visual brand (colors, fonts, logo). After this, your-deliverable-template, branded proposals, and branded client updates render in your visual identity. ~10 minutes.
 
-**Step 3 - Check readiness.** Run `/founder-os:status`. Returns a 0-100% score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Names the next 3 high-leverage moves.
+**Step 3 - Check readiness.** Run `/founder-os:status`. Returns a 0-100% score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Names the next 3 high-impact moves.
 
 Then start using it:
 

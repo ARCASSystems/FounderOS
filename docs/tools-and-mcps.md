@@ -2,7 +2,7 @@
 
 Founder OS does not assume your stack. The OS is a set of files and skills. Each skill declares which Model Context Protocol (MCP) servers it can use, and degrades gracefully when those MCPs are not available.
 
-You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run most of the 24 skills end-to-end.
+You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run 23 of the 27 skills end-to-end.
 
 ---
 
@@ -22,7 +22,7 @@ Read the Claude Code docs for how to add MCP servers: [docs.claude.com/claude-co
 | Calendar | Google Calendar MCP | Outlook MCP, manual paste | meeting-prep, /today | No - degrades to "no calendar event" line |
 | Knowledge base | Notion MCP | Local markdown, Obsidian | knowledge-capture, session-handoff | No - skills work locally without it |
 | Sales / CRM | Apollo MCP | HubSpot MCP, manual entry | proposal-writer (pricing context only) | No |
-| Design and decks | Canva MCP, Gamma MCP | None - skill produces text spec | (future creative-deck-style skills) | No - v1.2 has no deck skills |
+| Design and decks | Canva MCP, Gamma MCP | None - skill produces text spec | (no deck skills shipped yet) | No |
 | Code repos | GitHub MCP | None - if no GitHub, skip | (future build-related skills) | No |
 | Database | Supabase MCP | None | (advanced users only) | No |
 | Web research | Web search (built-in) | None | strategic-analysis, knowledge-capture | No - usually built into Claude Code |
@@ -81,7 +81,7 @@ That is 23 of the 27 skills. The remaining four (`email-drafter`, `meeting-prep`
 - Useful only if you do enough cold outreach to justify Apollo's pricing.
 
 ### Supabase MCP
-- For advanced founders who want to wire database state into the OS. Not needed for v1.2 default skills.
+- For advanced founders who want to wire database state into the OS. Not needed for the default skills.
 
 ---
 

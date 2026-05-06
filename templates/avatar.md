@@ -1,7 +1,7 @@
 ---
 file: avatar.md
 purpose: Behavioral profile of the OS owner. Populated over time from rants, decisions, and observed patterns. Distinct from identity.md (factual identity) - avatar captures how they actually behave, what they actually want, what they actually pay for.
-populated_by: [setup wizard (placeholder seed), dream skill (rant -> avatar pattern), knowledge-capture (book/podcast triggers self-recognition)]
+populated_by: [setup wizard (placeholder seed), knowledge-capture (book/podcast triggers self-recognition), weekly review (operator updates from real use)]
 load_on_demand: true
 ---
 
@@ -13,7 +13,7 @@ load_on_demand: true
 [ Filled by setup wizard from your answers. Free-text. ]
 
 ## Pain right now
-[ Auto-grown from rants over time. The dream skill processes brain/rants/ and surfaces recurring pain themes here. ]
+[ Updated by you when patterns crystallise. Capture raw observations to brain/log.md as they happen. The weekly review surfaces recurring themes for you to promote into this section. ]
 
 ## What you pay for today
 [ Filled at setup. Updated when subscriptions change. ]

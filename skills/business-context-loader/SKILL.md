@@ -1,7 +1,7 @@
 ---
 name: business-context-loader
 description: >
- Loads, scans, and progressively fills a business-context file (`companies/<slug>-business.md` derived from `templates/business-context.template.md`). Use when the user opens a business-context file, asks "what's the next thing I should fill in", asks "what's stale", asks "give me an action based on what we know about <company>", or starts work on a company whose business context is partial. Adapts to whatever state the file is in - empty / partial / mostly-filled / stale - and routes the user to the next highest-leverage move. Mirrors the brand-interview / voice-interview pattern but for company context, not personal voice.
+ Loads, scans, and progressively fills a business-context file (`companies/<slug>-business.md` derived from `templates/business-context.template.md`). Use when the user opens a business-context file, asks "what's the next thing I should fill in", asks "what's stale", asks "give me an action based on what we know about <company>", or starts work on a company whose business context is partial. Adapts to whatever state the file is in - empty / partial / mostly-filled / stale - and routes the user to the next highest-impact move. Mirrors the brand-interview / voice-interview pattern but for company context, not personal voice.
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep"]
 mcp_requirements: []
 ---
@@ -60,7 +60,7 @@ Do not pad. Do not narrate. The user reads this in 10 seconds or it's failed.
 
 ### Step 3 - Pick the next question
 
-Apply this priority order to find the highest-leverage gap:
+Apply this priority order to find the highest-impact gap:
 
 1. **Section 1 (Identity & Stage)** - if anything `[FILL]` here, this is first. Nothing else makes sense without it.
 2. **Section 4 (ICP)** - if Section 1 is filled but ICP is `[FILL]`, ICP is next. Without ICP, sections 5-7 cannot be evaluated for sense.

@@ -1,7 +1,7 @@
 ---
 name: readiness-check
 description: >
-  Reads the current state of the Founder OS install and returns a weighted readiness score (0-100%) across five buckets: Core, Voice and Brand, Cadence, Business Context, Brain Layer. Surfaces the next 3 high-leverage moves the founder can make. Read-only - never writes to user files. Triggered by the `/founder-os:status` slash command. Use this when the founder asks "how am I doing", "what's my OS state", "readiness check", "how's the system", "what should I focus on next", or "where are the gaps".
+  Reads the current state of the Founder OS install and returns a weighted readiness score (0-100%) across five buckets: Core, Voice and Brand, Cadence, Business Context, Brain Layer. Surfaces the next 3 high-impact moves the founder can make. Read-only - never writes to user files. Triggered by the `/founder-os:status` slash command. Use this when the founder asks "how am I doing", "what's my OS state", "readiness check", "how's the system", "what should I focus on next", or "where are the gaps".
 allowed-tools: ["Read", "Glob", "Grep"]
 mcp_requirements: []
 ---
@@ -129,7 +129,7 @@ If `founder-os-setup` left deferred items, they live in `core/setup-backlog.md` 
 
 ## Next 3 Moves logic
 
-The next 3 moves are the highest-leverage gaps. Pick in this order:
+The next 3 moves are the highest-impact gaps. Pick in this order:
 
 1. If voice-profile is missing or template defaults: `Run /founder-os:voice-interview - unlocks <N> deliverable skills`.
 2. If brand-profile is missing or template defaults: `Run /founder-os:brand-interview - unlocks branded deliverables`.
@@ -182,7 +182,7 @@ BACKLOG (from setup wizard)
 | none recorded
 
 NEXT 3 MOVES
-- <highest-leverage gap>
+- <highest-impact gap>
 - <second>
 - <third>
 ```

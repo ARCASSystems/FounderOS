@@ -1,5 +1,5 @@
 ---
-description: Founder OS readiness check. Returns a weighted score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Surfaces the next 3 high-leverage moves. Read-only.
+description: Founder OS readiness check. Returns a weighted score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Surfaces the next 3 high-impact moves. Read-only.
 allowed-tools: ["Read", "Glob", "Grep"]
 ---
 

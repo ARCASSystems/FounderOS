@@ -85,7 +85,7 @@ Every skill is an automated harness, not a passive description. You invoke it, i
 | Skill | What happens when you run it |
 |---|---|
 | founder-os-setup | Asks 6 to 7 structured questions about your business, role, priorities, and tools. Writes your full operating system to local disk. 15 min. |
-| readiness-check | Scans your OS for stale priorities, missing decisions, empty cadence, broken voice profile. Returns a weighted score and the next 3 high-leverage moves. |
+| readiness-check | Scans your OS for stale priorities, missing decisions, empty cadence, broken voice profile. Returns a weighted score and the next 3 high-impact moves. |
 | ingest | Files a URL, file path, or pasted text into `raw/` with provenance frontmatter (source, date, who). Then proposes wiki updates you approve before they land. |
 | lint | Walks the OS for broken `[[wikilinks]]`, orphan pages, stale time-sensitive content, provenance gaps, contradictions. Read-only, never auto-fixes. |
 | wiki-build | Extracts every `[[wikilink]]` across the OS and writes them to a machine-readable graph at `brain/relations.yaml`. Idempotent. |
@@ -119,7 +119,7 @@ Every skill is an automated harness, not a passive description. You invoke it, i
 | `/founder-os:setup` | Run the setup wizard. |
 | `/founder-os:voice-interview` | Capture how you write into `core/voice-profile.yml`. Required for the voice-coupled writing skills to sound like you. |
 | `/founder-os:brand-interview` | Capture your visual identity into `core/brand-profile.yml`. Required for branded deliverables to look like you. |
-| `/founder-os:status` | Read-only OS readiness check. Returns a weighted score and the next 3 high-leverage moves. |
+| `/founder-os:status` | Read-only OS readiness check. Returns a weighted score and the next 3 high-impact moves. |
 | `/founder-os:ingest <source>` | File a URL, file path, or pasted text into `raw/` with provenance. Propose wiki updates you approve. |
 | `/founder-os:lint` | Read-only wiki audit. Cross-references, orphans, stale content, provenance, possible contradictions. |
 | `/founder-os:wiki-build` | Refresh the auto-generated wiki graph in `brain/relations.yaml`. Idempotent. |
@@ -189,7 +189,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.4.2 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.4.3 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -256,14 +256,16 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.4.2. Public push week of 2026-05-04.
+Version 1.4.3. Public push week of 2026-05-04.
 
-v1.4 adds the wiki graph builder (`wiki-build`), the bi-temporal + decay convention for brain entries, the `system/quarantine.md` catch-net for silent hook failures, the approval gate matrix template, and the SessionStart brief hook that surfaces flags, stale cadence, decay-due entries, and quarantine failures at session open.
-
-v1.4.1 patches the bootloader template (new installs now get the full v1.4 substrate), fixes a skill-count drift in README, and adds an explicit hook-copy step to the setup wizard so the SessionStart brief fires on new installs.
+v1.4.3 reframes the avatar as a user-owned template (was a marketing artifact), syncs `AGENTS.md` to the v1.4 surface, ships a public commit-naming rule (`rules/commit-naming.md`), enriches the brain templates so fresh installs see the lifecycle modelled by example, removes the empty `GEMINI.md` stub, and adds the standard public-repo files (`CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md`).
 
 v1.4.2 closes two independent audits: Windows PowerShell hooks now wired automatically (Windows users without git-bash get the SessionStart brief without manual rewire), missing-voice-profile fallback unified across all 6 writing skills (warn and fall back, never stop), bash decay scanner regex fixed for Python compatibility, BACKLOG handoff path between setup and readiness-check unified to `core/setup-backlog.md`, plugin.json repository field corrected to spec, currency rule in proposal-writer made geography-neutral, plus README positioning rewrite and 'Who this is NOT for' section.
 
-Early and honest. Read [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md) for the current limits.
+v1.4.1 patches the bootloader template (new installs now get the full v1.4 substrate), fixes a skill-count drift in README, and adds an explicit hook-copy step to the setup wizard so the SessionStart brief fires on new installs.
+
+v1.4.0 adds the wiki graph builder (`wiki-build`), the bi-temporal + decay convention for brain entries, the `system/quarantine.md` catch-net for silent hook failures, the approval gate matrix template, and the SessionStart brief hook that surfaces flags, stale cadence, decay-due entries, and quarantine failures at session open.
+
+Full history in [`CHANGELOG.md`](CHANGELOG.md). Current limits in [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md).
 
 Built by [Alistair Aranha](https://github.com/ARCASSystems) at [ARCAS Systems](https://arcassystems.com).

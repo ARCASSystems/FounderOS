@@ -82,7 +82,7 @@ Use Claude.ai web or desktop with this repo as context.
 
 **Best for:** Founders who do not have Claude Code installed and want to talk to the OS in the Claude app.
 
-**Honest limit:** Cloud Claude cannot run slash commands or write to your local disk. Path C is currently a read-only operating mode. The setup wizard cannot complete here. The Notion Starter Kit (which would unlock a writable cloud path) is in development.
+**Honest limit:** Cloud Claude cannot run slash commands or write to your local disk. Path C is currently a read-only operating mode. The setup wizard cannot complete here. The Notion Starter Kit (which would enable a writable cloud path) is in development.
 
 **Steps:**
 

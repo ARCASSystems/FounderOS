@@ -42,7 +42,7 @@ This plugin ships thirteen slash commands:
 | [/founder-os:setup](../.claude/commands/setup.md) | Run the Founder OS setup wizard. Generates identity, priorities, decisions, cadence, and brain files from a guided interview. |
 | [/founder-os:voice-interview](../.claude/commands/voice-interview.md) | Capture how you write into `core/voice-profile.yml`. Unlocks the voice-coupled writing skills. |
 | [/founder-os:brand-interview](../.claude/commands/brand-interview.md) | Capture your visual identity into `core/brand-profile.yml`. Unlocks branded outputs. |
-| [/founder-os:status](../.claude/commands/status.md) | Read-only OS readiness check. Returns a weighted score and the next 3 high-leverage moves. |
+| [/founder-os:status](../.claude/commands/status.md) | Read-only OS readiness check. Returns a weighted score and the next 3 high-impact moves. |
 | [/founder-os:ingest](../.claude/commands/ingest.md) | File a source (URL, file path, or pasted text) into `raw/` with provenance. Propose wiki updates you approve. |
 | [/founder-os:lint](../.claude/commands/lint.md) | Read-only wiki audit. Cross-references, orphans, stale content, provenance, possible contradictions. |
 | [/founder-os:wiki-build](../.claude/commands/wiki-build.md) | Refresh the auto-generated wiki graph in `brain/relations.yaml`. Idempotent. |
