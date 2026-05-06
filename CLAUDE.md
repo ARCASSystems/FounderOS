@@ -144,7 +144,7 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files (15 to 20 min). Run on first install.
 - `/founder-os:voice-interview` - capture how you write into `core/voice-profile.yml` (about 10 min). Unlocks linkedin-post, client-update, proposal-writer, email-drafter, content-repurposer, sop-writer, and your-voice.
 - `/founder-os:brand-interview` - capture your visual identity into `core/brand-profile.yml` (5 to 10 min). Unlocks your-deliverable-template and branded variants of proposal-writer and client-update.
-- `/founder-os:status` - read-only OS readiness check. Returns a weighted 0-100% score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Names the next 3 high-leverage moves. Use anytime to audit the OS in one shot.
+- `/founder-os:status` - read-only OS readiness check. Returns a weighted 0-100% score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Names the next 3 high-impact moves. Use anytime to audit the OS in one shot.
 - `/founder-os:update` - pull the latest System Layer files without touching your personal data. Tells you what changed before applying.
 - `/founder-os:uninstall` - cleanly remove Founder OS. Default mode preserves your data; pass `--purge` to wipe everything.
 - `/founder-os:ingest <source>` - file a source into `raw/` with provenance, then propose wiki updates you approve. See Wiki Conventions above.
@@ -205,6 +205,10 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 - **No lock-in.** All files are plain markdown. Obsidian can read them. So can any other markdown editor. The system does not depend on a proprietary platform.
 - **Boundary protection is a feature.** Saying no, parking scope, pushing back on unreasonable requests are designed in, not edge cases.
 - **People first. Systems second. AI where it earns the right.**
+
+## Commits
+
+Commit messages follow `rules/commit-naming.md`. Subjects state the user-visible change in plain language. No version-only subjects, no AI attribution, no banned words.
 
 ## Getting Help
 

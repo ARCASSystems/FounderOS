@@ -8,18 +8,19 @@ For Claude Code, the canonical instruction file is `CLAUDE.md`. This file mirror
 
 ## What This Repo Is
 
-FounderOS is a Claude Code plugin that acts as the operating layer for a solo founder. Six core files load every session so the AI has full context: identity, priorities, decisions, clients, daily anchors, weekly commitments. Plus brain log and flags.
+FounderOS is a Claude Code plugin that acts as the operating layer for the person running the business. Six core files load every session so the AI has full context: identity, priorities, decisions, clients, daily anchors, weekly commitments. Plus brain log and flags.
 
 There is no server. No database. No cloud sync. Everything is plain markdown on the user's local disk.
 
 ---
 
-## How to Navigate
+## Repo map
 
 Start with `README.md` for the full picture, then `CLAUDE.md` for the bootloader.
 
 The user's actual operating context (after they run setup) lives in:
 - `core/identity.md` - who they are, how they work
+- `core/avatar.md` - behavioural profile, loaded on demand by skills that need it
 - `context/priorities.md` - this week and quarter
 - `context/decisions.md` - open, parked, resolved
 - `context/clients.md` - prospects, active, won
@@ -27,6 +28,14 @@ The user's actual operating context (after they run setup) lives in:
 - `cadence/weekly-commitments.md` - this sprint
 - `brain/log.md` - running log
 - `brain/flags.md` - open observations needing decisions
+
+The system layer (do not edit per-user) lives in:
+- `skills/` - 27 skills, each in its own folder with a `SKILL.md`
+- `templates/` - source templates for files the setup wizard generates
+- `.claude/commands/` - 13 slash commands
+- `.claude/hooks/` - SessionStart brief and session-close revenue check
+- `rules/` - behavioural rules including writing-style, commit-naming, approval-gates
+- `system/` - quarantine catch-net for silent hook failures
 
 ---
 
@@ -41,20 +50,62 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 
 ---
 
-## Slash Commands
+## Slash Commands (13)
 
-- `/founder-os:setup` - first-run wizard
+- `/founder-os:setup` - first-run wizard. Generates identity, priorities, decisions, cadence, brain layer
 - `/founder-os:voice-interview` - capture writing voice into `core/voice-profile.yml`
 - `/founder-os:brand-interview` - capture visual identity into `core/brand-profile.yml`
-- `/founder-os:status` - read-only OS readiness check
-- `/founder-os:update` - pull System Layer updates without touching user data
+- `/founder-os:status` - read-only OS readiness check, returns weighted score and next 3 high-impact moves
+- `/founder-os:ingest <source>` - file a URL or pasted text into `raw/` with provenance, propose wiki updates
+- `/founder-os:lint` - read-only audit of wiki integrity, cross-references, orphans, stale content
+- `/founder-os:wiki-build` - walk markdown, extract `[[wikilinks]]`, refresh auto-generated graph in `brain/relations.yaml`
+- `/founder-os:update` - pull system layer updates without touching user data
 - `/founder-os:uninstall` - cleanly remove (default mode preserves data; --purge wipes everything)
 - `/today` - 20-line daily dashboard
-- `/next` - one recommended next action
-- `/pre-meeting` - hard gate before any meeting
+- `/next` - one recommended next action across priorities, deals, and cadence
+- `/pre-meeting` - hard gate before any meeting, requires capture artifact and ask
 - `/capture-meeting` - route a transcript or brain dump to log + clients + commitments
 
 These only work in Claude Code. Other agents reading this repo should treat the slash command files in `.claude/commands/` as procedural reference, not invokable.
+
+---
+
+## Substrate (v1.4)
+
+Three files sit underneath the daily files. Read them before changing brain/cadence/decisions behaviour:
+
+- `rules/entry-conventions.md` - bi-temporal and decay convention. Add `Decay after: 14d` to a flag and the SessionStart brief surfaces it for keep/kill review when it expires. Forward-only convention; existing files are not retrofitted.
+- `system/quarantine.md` - catch-net for silent hook and scheduled-task failures. SessionStart counts ACTIVE entries.
+- `rules/approval-gates.md` - matrix of what auto-runs, what requires explicit yes, and what is blocked outright. Customisable per founder.
+
+---
+
+## Wiki Conventions
+
+FounderOS is built like a personal wiki the LLM maintains. Three layers:
+
+- `raw/` - immutable source documents (transcripts, articles, threads). Once written, never edited. See `templates/raw/README.md` for the frontmatter spec.
+- The wiki layer - operating files in `core/`, `context/`, `cadence/`, `brain/`, `network/`. Edited by skills as the founder works.
+- `CLAUDE.md` - the schema. Tells Claude how the layers connect.
+
+Three operations the OS supports natively:
+
+- `ingest` - process a source into `raw/` with provenance, then propose wiki updates the founder approves.
+- `lint` - read-only audit. Flags broken cross-references, orphan pages, stale time-sensitive content, provenance gaps.
+- `wiki-build` - walk markdown, extract `[[wikilinks]]`, write the entity graph to `brain/relations.yaml`. Idempotent.
+
+Cross-references between wiki files use `[[page-name]]` syntax.
+
+---
+
+## Hooks
+
+Two hooks ship in `.claude/hooks/`:
+
+- **SessionStart brief** - surfaces open flags, stale cadence, decisions count, `[FILL]` client rows, ACTIVE quarantine entries, and entries past their `Decay after:` date. Reads `core/identity.md`; quietly skips if the repo is not a Founder OS install. Bash and PowerShell variants both ship.
+- **Session-close revenue check** - warns (does not block) if outreach verbs appear in recent `brain/log.md` without a matching `context/clients.md` update in the same session. Bash and PowerShell variants both ship.
+
+Both fail gracefully. Neither blocks the session.
 
 ---
 
@@ -87,6 +138,12 @@ If you are Codex, Cursor, Windsurf, Gemini, or any other agent reading this:
 2. Read both `README.md` and `CLAUDE.md` at session start.
 3. The slash commands are Claude Code specific. Skip them.
 4. Skills in `skills/<name>/SKILL.md` are readable as procedural reference. The trigger frontmatter is for Claude's auto-invocation, but the protocol body is portable.
+
+---
+
+## Commits
+
+Commit messages follow `rules/commit-naming.md`. Subject states the user-visible change in plain language. No version-only subjects, no AI attribution, no banned words.
 
 ---
 
