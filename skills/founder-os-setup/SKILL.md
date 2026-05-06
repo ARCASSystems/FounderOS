@@ -148,6 +148,7 @@ Create the full folder structure. Read each template before generating the perso
 ├── CLAUDE.md                    # Bootloader (from templates/bootloader-claude-md.md)
 ├── core/
 │   ├── identity.md              # From Phase 1.1
+│   ├── avatar.md                # From templates/avatar.md (replace {{FOUNDER_NAME}}, leave prompts intact)
 │   ├── voice-profile.yml        # Copied from templates/voice-profile.yml.template (placeholders intact - filled later by voice-interview)
 │   └── brand-profile.yml        # Copied from templates/brand-profile.yml.template (placeholders intact - filled later by brand-interview)
 ├── brain/
@@ -200,6 +201,8 @@ Show the full list of files that will be created. Get approval. Then create them
 **Hook copy step (mandatory).** The SessionStart brief and session-close revenue check live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Find the plugin install path (same as where templates live), then copy the four hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart and Stop hook entries; do not overwrite the user's other hook customisations.
 
 **{{TODAY}} substitution.** The `templates/brain/relations.yaml` file contains the literal placeholder `{{TODAY}}`. When copying to `brain/relations.yaml`, replace every occurrence of `{{TODAY}}` with today's date in `YYYY-MM-DD` format (use `date -u +%Y-%m-%d` via Bash to get it).
+
+**Avatar template copy.** Copy `templates/avatar.md` to `core/avatar.md` and replace `{{FOUNDER_NAME}}` with the founder name captured in Phase 0.1. Do not auto-populate the bracketed sections. The wizard asks the seed questions, then the founder fills or revises those prompts in their first review session.
 
 ### 2.3 Initialize Git
 

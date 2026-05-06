@@ -42,6 +42,8 @@ After setup, every Claude Code session starts with this CLAUDE.md loaded. Claude
 
 Two more files (`brain/log.md` and `brain/flags.md`) load on demand when you ask Claude to scan history or check what is being avoided.
 
+`core/avatar.md` is your behavioral profile. Skills load it on demand when behavioral context matters. It is not boot-loaded.
+
 When Claude knows all of this, it can give you recommendations instead of asking you to explain context every time.
 
 ## Empty-state behavior
