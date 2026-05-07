@@ -8,8 +8,11 @@ Decay is trigger-driven, not date-driven. No `Decay after:` line by default. The
 
 ## Format
 
+Every new entry gets a stable ID per `rules/entry-conventions.md` (channel: `parked`).
+
 ```
 ### [Decision Name]
+id: parked-YYYY-MM-DD-NNN
 Date parked: [YYYY-MM-DD]
 Decision: [what needs to be decided]
 Trigger to revisit: [the specific condition that makes this decision ready]
@@ -25,6 +28,7 @@ Options on the table: [brief list if known]
 
 ### Whether to hire a part-time ops lead
 
+id: parked-YYYY-MM-DD-NNN
 Date parked: 2024-01-01
 Decision: Hire a part-time ops lead now, or defer until revenue passes a threshold
 Trigger to revisit: Monthly recurring revenue crosses the figure named in `context/priorities.md` annual goals, OR three weeks in a row where ops work blocks delivery

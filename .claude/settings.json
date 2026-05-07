@@ -29,6 +29,21 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-tool-use-observation.sh\""
+          },
+          {
+            "type": "command",
+            "command": "powershell -NonInteractive -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-tool-use-observation.ps1\""
+          }
+        ]
+      }
     ]
   }
 }

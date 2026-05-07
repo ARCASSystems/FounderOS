@@ -4,10 +4,11 @@
 
 ## File Convention
 
-Each knowledge file uses this shape:
+Each knowledge file uses this shape. Every new file gets a stable ID per `rules/entry-conventions.md` (channel: `know`).
 
 ```yaml
 ---
+id: know-YYYY-MM-DD-NNN
 topic: <slug>
 captured: <YYYY-MM-DD>
 sources: [source title or URL]
@@ -27,9 +28,9 @@ tags: [book, podcast, article, conversation, experiment]
 
 ## Index
 
-| Topic | Captured | Tags | Source |
-|---|---|---|---|
-| Example | 2026-01-01 | example | Replace this row after your first capture |
+| ID | Topic | Captured | Tags | Source |
+|---|---|---|---|---|
+| know-YYYY-MM-DD-NNN | Example | 2026-01-01 | example | Replace this row after your first capture |
 
 ## Rules
 

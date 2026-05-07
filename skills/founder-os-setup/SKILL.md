@@ -117,6 +117,27 @@ When you write `core/identity.md` in Phase 1.1, populate `**Decision style:**` w
 ### 0.8 Privacy Layers
 Ask: "Last setup question. Some information is private to you, some you'd share with a co-founder or team member. Any businesses where someone else might see the project files? And anything that should ONLY live in your private global config?"
 
+### 0.9 Observation Logging (opt-in)
+
+Ask: "Optional: do you want Claude Code to log every tool call into a daily JSONL? Useful if you want a forensic record of what was touched in each session. Off by default. (yes / no / later)"
+
+This is the `FOUNDER_OS_OBSERVATIONS` opt-in. The PostToolUse hook ships disabled. It only writes when the env var is set to `1`.
+
+- If `no` or `later`: log to backlog as "Observation logging not enabled. Set `FOUNDER_OS_OBSERVATIONS=1` if you want it later." Move on.
+- If `yes`:
+  1. Create the `brain/observations/` folder at the Founder OS root.
+  2. Copy `templates/brain/observations/README.md` to `brain/observations/README.md`. Do not edit the contents.
+  3. Tell the user how to set the env var in their shell. Do NOT modify their shell config without explicit approval. Suggested copy:
+
+     > "Add this to your shell config so the hook fires in new sessions:
+     > - Bash / Zsh: `export FOUNDER_OS_OBSERVATIONS=1` in `~/.bashrc` or `~/.zshrc`
+     > - PowerShell: `$env:FOUNDER_OS_OBSERVATIONS = '1'` in `$PROFILE`
+     > - Windows (system-wide): run `setx FOUNDER_OS_OBSERVATIONS 1` once
+     >
+     > Restart your shell after editing. The hook stays silent until the variable is set."
+
+  4. Append a one-line note to `core/setup-backlog.md` reminding them to set the env var. If the file does not exist, create it with the heading `## Setup Backlog` followed by the note. Example note: `- [ ] Set FOUNDER_OS_OBSERVATIONS=1 in shell env to enable observation logging.`
+
 ---
 
 ## PHASE 1: IDENTITY + GLOBAL LAYER
@@ -236,17 +257,19 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── mentors.md               # Stub
 │   └── team.md                  # Personalized from 0.2 (team members mentioned)
 └── .claude/
-    ├── settings.json            # Copied from <plugin-root>/.claude/settings.json (wires SessionStart + Stop hooks)
+    ├── settings.json            # Copied from <plugin-root>/.claude/settings.json (wires SessionStart + Stop + PostToolUse hooks)
     └── hooks/
         ├── session-start-brief.sh   # Copied from <plugin-root>/.claude/hooks/session-start-brief.sh
         ├── session-start-brief.ps1  # Copied from <plugin-root>/.claude/hooks/session-start-brief.ps1
         ├── session-close-revenue-check.sh   # Copied from <plugin-root>/.claude/hooks/session-close-revenue-check.sh
-        └── session-close-revenue-check.ps1  # Copied from <plugin-root>/.claude/hooks/session-close-revenue-check.ps1
+        ├── session-close-revenue-check.ps1  # Copied from <plugin-root>/.claude/hooks/session-close-revenue-check.ps1
+        ├── post-tool-use-observation.sh     # Copied from <plugin-root>/.claude/hooks/post-tool-use-observation.sh (opt-in, off until FOUNDER_OS_OBSERVATIONS=1)
+        └── post-tool-use-observation.ps1    # Copied from <plugin-root>/.claude/hooks/post-tool-use-observation.ps1 (opt-in, off until FOUNDER_OS_OBSERVATIONS=1)
 ```
 
 Show the full list of files that will be created. Get approval. Then create them all.
 
-**Hook copy step (mandatory).** The SessionStart brief and session-close revenue check live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Find the plugin install path (same as where templates live), then copy the four hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart and Stop hook entries; do not overwrite the user's other hook customisations.
+**Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, and post-tool-use observation hook live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Find the plugin install path (same as where templates live), then copy all six hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
 **Scripts copy step (mandatory).** Copy `templates/scripts/wiki-build.py` to the founder's `scripts/wiki-build.py` and `templates/scripts/query.py` to `scripts/query.py`. These are not personalized templates. They are Python helpers used by `/founder-os:wiki-build` and `/founder-os:query`. Copy contents byte-for-byte. Do not edit. Verify both copies exist on disk before continuing.
 

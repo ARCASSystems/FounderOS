@@ -238,7 +238,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.6.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.7.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -305,9 +305,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.6.0. Public push week of 2026-05-07.
+Version 1.7.0. Public push week of 2026-05-07.
 
-v1.6.0 is the retrieval and ship-safety release. The README now groups skills by when founders actually use them. Eight public-safe operating skills land from the private OS pattern library, including forcing questions, blind-spot review, approval gates, handoff protocol, context persistence, data security, bottleneck diagnostic, and ship-deliverable. The knowledge layer now writes to `brain/knowledge/` and gets read back by proposals and strategy work. `/founder-os:query` adds plain-file graph retrieval. `/founder-os:audit` adds one OS health report across readiness, lint, wiki, brain, and voice.
+v1.7.0 is the retrieval-precision release. Brain entries now carry stable `<channel>-YYYY-MM-DD-NNN` IDs stamped at write time so `/dream` and other skills can cite IDs instead of restating content. `scripts/query.py` adds three modes (`--mode index`, `--mode timeline --anchor <slug>`, `--mode full --ids <comma-list>`) so the markdown corpus stays usable as it grows. A new opt-in `PostToolUse` hook appends one JSON line per tool call to `brain/observations/<YYYY-MM-DD>.jsonl` when `FOUNDER_OS_OBSERVATIONS=1` is set, and `/dream` rolls the day's observations into an OBSERVED section. Default behavior is unchanged for v1.6 users pulling v1.7.
 
 Full release history in [`CHANGELOG.md`](CHANGELOG.md). Current limits in [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md).
 

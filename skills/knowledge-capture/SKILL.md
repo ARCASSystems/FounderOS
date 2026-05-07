@@ -11,10 +11,11 @@ You help the founder capture, structure, and connect what they learn.
 
 ## Storage Convention
 
-Every captured knowledge piece writes to `brain/knowledge/<topic-slug>.md`. If the file exists, append a dated section. If it does not exist, create it with frontmatter:
+Every captured knowledge piece writes to `brain/knowledge/<topic-slug>.md`. If the file exists, append a dated section. If it does not exist, create it with frontmatter. Every new knowledge file gets a stable ID per `rules/entry-conventions.md` (channel: `know`).
 
 ```yaml
 ---
+id: know-YYYY-MM-DD-NNN
 topic: <slug>
 captured: <YYYY-MM-DD>
 sources: [source title or URL]
@@ -35,14 +36,33 @@ tags: [book, podcast, article, conversation, experiment]
 Also update `brain/knowledge/README.md` index table with one row. The columns are fixed:
 
 ```
-| Topic | Captured | Tags | Source |
-|---|---|---|---|
-| <slug> | <YYYY-MM-DD> | <comma-separated tags> | <source title or URL> |
+| ID | Topic | Captured | Tags | Source |
+|---|---|---|---|---|
+| know-YYYY-MM-DD-NNN | <slug> | <YYYY-MM-DD> | <comma-separated tags> | <source title or URL> |
 ```
 
 Insert the new row directly under the header. Do not invent additional columns. Ask for a topic slug if it is not obvious from the source title.
 
 Use `raw/` only when preserving the full source matters. Use `brain/knowledge/` for distilled notes that future skills should read.
+
+## ID Stamping
+
+Every new knowledge file gets a stable ID at write time. Convention spec: `rules/entry-conventions.md`.
+
+### Procedure (run before creating any new knowledge file)
+
+1. Compute today's date in `YYYY-MM-DD`.
+2. Read every existing file under `brain/knowledge/` plus the `README.md` index. Find every ID that matches `know-<today>-<NNN>`.
+3. Take the highest `<NNN>`. If none exist for today, start at `001` (the first ID of the day for this channel) and skip to step 5.
+4. Increment by 1. Format as 3-digit zero-padded.
+5. The result is the new file's ID. Stamp it in the file's frontmatter and in the index row.
+
+### Counter rules
+
+- Per channel, per day. Resets to `001` each new day.
+- IDs are stamped at write time, never retroactively.
+- IDs are case-sensitive lowercase only.
+- If a knowledge file already exists and you are appending a new dated section to it, do not change the file's existing ID. The ID belongs to the file, not to each appended section.
 
 ## Book / Long-Form Content
 

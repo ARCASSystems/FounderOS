@@ -12,11 +12,16 @@ Each entry has:
 
 ---
 
+## Format
+
+Every new entry gets a stable ID per `rules/entry-conventions.md` (channel: `need`).
+
 ## Open
 
 <!-- Newest at the top. Use this format:
 
 ## YYYY-MM-DD - <one-line ask>
+id: need-YYYY-MM-DD-NNN
 Status: OPEN
 
 **Specific:** Exactly what is needed. Be precise. "Pricing range for the diagnostic tier in AED" beats "pricing info."

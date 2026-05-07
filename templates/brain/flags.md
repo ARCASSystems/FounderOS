@@ -28,12 +28,15 @@ Default `Decay after: 14d` on every flag. After the decay date, the SessionStart
 
 ## Two flag types
 
+Every new flag gets a stable ID per `rules/entry-conventions.md` (channel: `flag`).
+
 ### Type 1: Role performance flag
 
 Things the OS (Claude) should be doing differently. Captured when the founder corrects behaviour or gives feedback on how the system is working.
 
 ```
 [YYYY-MM-DD] [FLAG] [what the issue is] | [what should change]
+id: flag-YYYY-MM-DD-NNN
 Status: OPEN. Severity Week 1.
 Decay after: 14d
 Trigger to escalate: [specific condition]
@@ -45,6 +48,7 @@ Things in the founder's work that are stuck, stalling, or creating drag. Capture
 
 ```
 [YYYY-MM-DD] [STALL] [what's stalled] | [last known status] | [suggested prompt]
+id: flag-YYYY-MM-DD-NNN
 Status: OPEN. Severity Week 1.
 Decay after: 14d
 Trigger to escalate: [specific condition]
@@ -58,6 +62,7 @@ Trigger to escalate: [specific condition]
 
 ## 2024-01-01 - Outreach has not started this week
 
+id: flag-YYYY-MM-DD-NNN
 Status: **OPEN.** Severity Week 1. Tag: #pipeline.
 
 The week is closing without any outbound touches logged. Pipeline file shows no new rows.

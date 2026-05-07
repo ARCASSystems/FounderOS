@@ -1,12 +1,68 @@
-# Entry Conventions: Bi-temporal + Decay
+# Entry Conventions: IDs + Bi-temporal + Decay
 
-Standard metadata fields for entries inside `context/decisions.md`, `context/priorities.md`, `brain/flags.md`, `brain/patterns.md`, and `brain/decisions-parked.md`.
+Standard metadata fields for entries inside `context/decisions.md`, `context/priorities.md`, `brain/flags.md`, `brain/patterns.md`, `brain/decisions-parked.md`, `brain/needs-input.md`, `brain/log.md`, and `brain/knowledge/`.
 
-Two purposes:
-1. **Bi-temporal tracking.** Never overwrite a live entry. Append a new one and mark the old as superseded. Past state stays queryable.
-2. **Decay.** Stale flags, patterns, and parked decisions surface as "Review Due" in the SessionStart brief instead of accumulating silently.
+Three purposes:
+1. **Stable IDs.** Every new entry gets a per-channel, per-day, zero-padded counter. Skills can cite `#log-2026-05-07-003` instead of restating content.
+2. **Bi-temporal tracking.** Never overwrite a live entry. Append a new one and mark the old as superseded. Past state stays queryable.
+3. **Decay.** Stale flags, patterns, and parked decisions surface as "Review Due" in the SessionStart brief instead of accumulating silently.
 
 This is a writing convention, not a schema validator. New entries follow it. Old entries adopt it the next time they are touched. No backfill pass.
+
+---
+
+## Citations-by-ID
+
+Every new entry written to a brain channel gets a stable ID at write time. The ID is what other skills cite. Without it, summaries like `/dream` end up restating content instead of pointing to it.
+
+### Format
+
+`<channel>-<YYYY-MM-DD>-<NNN>`
+
+- `<channel>` is one of: `log`, `pattern`, `flag`, `parked`, `need`, `know`.
+- `<YYYY-MM-DD>` is the entry date.
+- `<NNN>` is a 3-digit zero-padded counter for that channel on that date, starting at `001`.
+
+Channel mapping:
+
+| File | Channel |
+|---|---|
+| `brain/log.md` | `log` |
+| `brain/patterns.md` | `pattern` |
+| `brain/flags.md` | `flag` |
+| `brain/decisions-parked.md` | `parked` |
+| `brain/needs-input.md` | `need` |
+| `brain/knowledge/<topic>.md` | `know` |
+
+### Examples
+
+- `log-2026-05-07-001`
+- `pattern-2026-05-07-001`
+- `know-2026-05-07-002`
+
+### Where the ID lives
+
+The ID is the first frontmatter line of every entry. For list-based files like `brain/log.md`, the ID can also appear at the end of the entry heading line in parentheses:
+
+```
+### 2026-05-07 #context Got off the call (log-2026-05-07-003)
+```
+
+Both forms work. The frontmatter form is canonical when an entry has frontmatter. The trailing-parenthetical form is the fallback for short list entries.
+
+### Counter rules
+
+- Per channel, per day. The counter resets to `001` each day, per channel.
+- No global counter. Resolving the next ID requires only reading the day's existing entries in that file (no shared state).
+- IDs are stamped at write time, never retroactively. Existing entries without IDs are not retrofitted.
+- IDs are case-sensitive lowercase only.
+
+### How a writer picks the next ID
+
+1. Scan today's existing entries in the target file for the highest counter on that date for that channel.
+2. Increment by 1.
+3. Stamp the new entry with the resulting ID.
+4. If no entries exist for today in that channel, start at `001`.
 
 ---
 

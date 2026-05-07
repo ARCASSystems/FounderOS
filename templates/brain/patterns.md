@@ -9,8 +9,11 @@ Default `Decay after: 90d` per `rules/entry-conventions.md`. After decay, the Se
 
 ## Format
 
+Every new entry gets a stable ID per `rules/entry-conventions.md` (channel: `pattern`).
+
 ```
 ### [Pattern Name]
+id: pattern-YYYY-MM-DD-NNN
 First observed: [YYYY-MM-DD]
 Last seen: [YYYY-MM-DD]
 Decay after: 90d
@@ -27,6 +30,7 @@ Status: active | addressed | resolved
 
 ### Free-value drift on prospecting calls
 
+id: pattern-YYYY-MM-DD-NNN
 First observed: 2024-01-01
 Last seen: 2024-01-01
 Decay after: 90d
