@@ -2,8 +2,24 @@
 # Warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update.
 # Trigger: Stop event. Exits 0 in all cases.
 
-$RepoRoot = & git rev-parse --show-toplevel 2>$null
-if (-not $RepoRoot) { $RepoRoot = Get-Location }
+# Anchor on hook location, not CWD. Claude Code does not guarantee CWD is the
+# Founder OS install when the Stop event fires; git rev-parse would return the
+# wrong repo if the user is inside a nested checkout.
+$HookDir = $null
+if ($MyInvocation.MyCommand.Path) {
+  $HookDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+} elseif ($PSScriptRoot) {
+  $HookDir = $PSScriptRoot
+}
+if (-not $HookDir) { exit 0 }
+
+$RepoRoot = $null
+try {
+  $RepoRoot = (Resolve-Path (Join-Path $HookDir '..\..') -ErrorAction Stop).Path
+} catch {
+  exit 0
+}
+if (-not $RepoRoot) { exit 0 }
 
 $LogFile = Join-Path $RepoRoot "brain\log.md"
 $ClientsFile = Join-Path $RepoRoot "context\clients.md"

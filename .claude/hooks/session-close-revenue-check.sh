@@ -6,7 +6,13 @@
 # Trigger: Stop event (register in .claude/settings.local.json under hooks.Stop).
 # Exits 0 in all cases - this is a warning, not a blocker.
 
-REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+# Anchor on hook location, not CWD. Claude Code does not guarantee CWD is the
+# Founder OS install when the Stop event fires; git rev-parse would return the
+# wrong repo if the user is inside a nested checkout.
+HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)" || exit 0
+REPO_ROOT="$(cd "$HOOK_DIR/../.." 2>/dev/null && pwd)" || exit 0
+[ -z "$REPO_ROOT" ] && exit 0
+
 LOG="$REPO_ROOT/brain/log.md"
 CLIENTS="$REPO_ROOT/context/clients.md"
 

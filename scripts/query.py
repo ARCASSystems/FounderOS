@@ -476,17 +476,45 @@ def extract_full_block(text: str, entry_id: str) -> str | None:
             out.append(lines[j])
         return "\n".join(out).rstrip() + "\n"
 
-    # Mode 2: frontmatter id line
+    # Mode 2: frontmatter id line. Only match if the id: is genuinely inside a
+    # frontmatter block bounded by `---` fences. A bare `id:` line outside a
+    # block (malformed file or inline reference) must not match - otherwise the
+    # function returns raw YAML / prose instead of the entry body.
     fm_pattern = re.compile(rf"^\s*id:\s*{re.escape(entry_id)}\s*$")
     for i, line in enumerate(lines):
         if not fm_pattern.match(line):
             continue
-        # Find closing `---` after the matched id line.
-        body_start = i + 1
-        for k in range(i + 1, len(lines)):
-            if lines[k].strip() == "---":
-                body_start = k + 1
+
+        # Verify the id: line is preceded by an opening `---` fence with no
+        # heading or closing fence between. Frontmatter must start within the
+        # first few lines or after a heading; we only accept the canonical
+        # case: file starts with `---`, frontmatter, id line, closing `---`.
+        opening_fence_found = False
+        for k in range(i - 1, -1, -1):
+            stripped = lines[k].strip()
+            if stripped == "---":
+                opening_fence_found = True
                 break
+            if heading_level(lines[k]) is not None:
+                break
+            if stripped == "":
+                continue
+        if not opening_fence_found:
+            continue
+
+        # Require a closing `---` after the id line, before any heading.
+        closing_fence_idx = None
+        for k in range(i + 1, len(lines)):
+            stripped = lines[k].strip()
+            if stripped == "---":
+                closing_fence_idx = k
+                break
+            if heading_level(lines[k]) is not None:
+                break
+        if closing_fence_idx is None:
+            continue
+
+        body_start = closing_fence_idx + 1
         out = []
         for j in range(body_start, len(lines)):
             if heading_level(lines[j]) is not None:

@@ -56,7 +56,9 @@ founder-os/
 ├── CLAUDE.md                   # Bootloader (you're reading it)
 ├── core/
 │   ├── identity.md             # Who the founder is, how they work
-│   └── infrastructure.json    # All integration refs, IDs, URLs
+│   ├── avatar.md               # Behavioural profile, loaded on demand by skills
+│   ├── voice-profile.yml       # Filled by /founder-os:voice-interview
+│   └── brand-profile.yml       # Filled by /founder-os:brand-interview
 ├── context/
 │   ├── companies.md            # All companies and projects
 │   ├── clients.md              # Current and potential clients

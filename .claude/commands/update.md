@@ -30,9 +30,13 @@ Argument: `$ARGUMENTS` - optional. One of: `check`, `rollback`, or empty.
 - `.claude/` (commands, hooks, agents, settings)
 - `.claude-plugin/` (plugin.json, marketplace.json)
 - `skills/` (shared skill definitions)
+- `scripts/` (Python helpers: wiki-build.py, query.py, brain-snapshot.py, brain-pass-log.py)
 - `templates/` (structural templates)
 - `notion-package/` (Notion setup assets)
+- `rules/` (commit naming and other shared rules)
+- `docs/` (user-facing documentation)
 - `CLAUDE.md` (root bootloader)
+- `AGENTS.md` (cross-agent instructions)
 - `README.md`
 - `VERSION`
 
@@ -117,8 +121,8 @@ Current:  v<LOCAL_VERSION>
 Incoming: v<REMOTE_VERSION>
 
 This will update System Layer files only:
-- .claude/, .claude-plugin/, skills/, templates/, notion-package/
-- CLAUDE.md, README.md, VERSION
+- .claude/, .claude-plugin/, skills/, scripts/, templates/, notion-package/, rules/, docs/
+- CLAUDE.md, AGENTS.md, README.md, VERSION
 
 Your User Layer files will NOT be touched:
 - core/identity.md
@@ -133,7 +137,7 @@ Wait for reply. If not a clear `yes`, reply: `Update dismissed. Run /founder-os:
 
 Before applying anything, snapshot the System Layer paths so `rollback` works:
 
-1. `git stash push -m "founder-os-update-backup-<ISO-timestamp>" -- .claude .claude-plugin skills templates notion-package CLAUDE.md README.md VERSION`
+1. `git stash push -m "founder-os-update-backup-<ISO-timestamp>" -- .claude .claude-plugin skills scripts templates notion-package rules docs CLAUDE.md AGENTS.md README.md VERSION`
 2. If the install is not a git repo, reply: `Install is not under git. Initialize with git init and commit current state before updating, so rollback is possible.` Stop.
 
 ### Step 8. Apply updates

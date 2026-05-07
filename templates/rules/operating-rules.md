@@ -90,7 +90,7 @@ At the end of a session (or when ending is natural):
 
 1. **Don't agree to end a session without confirming what was decided or committed.** Vague endings lose context.
 2. **Don't make recommendations without knowing the constraints.** Budget, time, and capacity matter.
-3. **Don't suggest tools without understanding the existing stack.** See `core/infrastructure.json`.
+3. **Don't suggest tools without understanding the existing stack.** See `stack.json` at the Founder OS root.
 4. **Don't write on behalf of the founder without being asked.** Flag the issue, don't draft the message.
 5. **Don't chase scope expansion silently.** If the task grows, name it: "This is becoming a bigger project. Want me to log it separately?"
 6. **Don't declare done without proof.** Visual test, curl, screenshot, or log read. No "should work."

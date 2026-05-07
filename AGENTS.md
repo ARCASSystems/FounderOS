@@ -34,10 +34,11 @@ The user's actual operating context (after they run setup) lives in:
 A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` holds behavioral guards that persist across every session in this project.
 
 The system layer (do not edit per-user) lives in:
-- `skills/` - 37 skills, each in its own folder with a `SKILL.md`
+- `skills/` - 39 skills, each in its own folder with a `SKILL.md`
+- `scripts/` - Python helpers (wiki-build, query, brain-snapshot, brain-pass-log)
 - `templates/` - source templates for files the setup wizard generates
-- `.claude/commands/` - 19 slash commands
-- `.claude/hooks/` - SessionStart brief and session-close revenue check
+- `.claude/commands/` - 20 slash commands
+- `.claude/hooks/` - SessionStart brief, session-close revenue check, opt-in PostToolUse observation log
 - `rules/` - behavioural rules including writing-style, commit-naming, approval-gates
 - `system/` - quarantine catch-net for silent hook failures
 
@@ -54,7 +55,7 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 
 ---
 
-## Slash Commands (19)
+## Slash Commands (20)
 - `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files. Run on first install.
 - `/founder-os:voice-interview` - capture how you write into `core/voice-profile.yml`.
 - `/founder-os:brand-interview` - capture your visual identity into `core/brand-profile.yml`.
@@ -63,6 +64,7 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 - `/founder-os:lint` - read-only audit of cross-references, orphans, stale content, and provenance gaps.
 - `/founder-os:wiki-build` - refresh the auto-generated graph in `brain/relations.yaml`.
 - `/founder-os:query <question>` - return the top 3 to 5 OS nodes for a question.
+- `/founder-os:brain-pass "<question>"` - synthesised answer across the brain layer with stable-ID citations.
 - `/founder-os:audit` - composite health report across readiness, lint, wiki, brain, and voice.
 - `/founder-os:forcing-questions <initiative>` - six-question gate before new work starts.
 - `/founder-os:ship-deliverable <path>` - final read-only gate before an external deliverable is sent.
@@ -75,13 +77,18 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 - `/today` - 20-line one-screen view of today.
 - `/next` - one recommended next action across priorities, deals, and cadence.
 
-## Substrate (v1.4)
+## Substrate (v1.4 + v1.10)
 
 Three files sit underneath the daily files. Read them before changing brain/cadence/decisions behaviour:
 
-- `rules/entry-conventions.md` - bi-temporal and decay convention. Add `Decay after: 14d` to a flag and the SessionStart brief surfaces it for keep/kill review when it expires. Forward-only convention; existing files are not retrofitted.
+- `rules/entry-conventions.md` - bi-temporal and decay convention. Add `Decay after: 14d` to a flag and the SessionStart brief surfaces it for keep/kill review when it expires. Forward-only convention. Existing files are not retrofitted.
 - `system/quarantine.md` - catch-net for silent hook and scheduled-task failures. SessionStart counts ACTIVE entries.
 - `rules/approval-gates.md` - matrix of what auto-runs, what requires explicit yes, and what is blocked outright. Customisable per founder.
+
+Two v1.10 additions:
+
+- `scripts/brain-snapshot.py` writes a small deterministic markdown payload to `brain/.snapshot.md` (open flags, this week's must-do, recent decisions, voice and brand fields, staleness). Nine output-producing skills read it at task time so output reflects current state instead of starting cold.
+- `brain-pass` skill (`/founder-os:brain-pass "<question>"`) synthesises an answer across the brain layer with stable-ID citations. No embeddings. No API call. `meeting-prep` and `linkedin-post` auto-invoke it before producing output.
 
 ---
 
@@ -107,7 +114,8 @@ Cross-references between wiki files use `[[page-name]]` syntax.
 
 Two hooks ship in `.claude/hooks/`:
 
-- **SessionStart brief** - surfaces open flags, stale cadence, decisions count, `[FILL]` client rows, ACTIVE quarantine entries, and entries past their `Decay after:` date. Reads `core/identity.md`; quietly skips if the repo is not a Founder OS install. Bash and PowerShell variants both ship.
+- **SessionStart brief** - surfaces open flags, stale cadence, decisions count, `[FILL]` client rows, ACTIVE quarantine entries, and entries past their `Decay after:` date. Reads `core/identity.md` and quietly skips if the repo is not a Founder OS install. Bash and PowerShell variants both ship.
+- **PostToolUse observation log (opt-in)** - off by default. Set `FOUNDER_OS_OBSERVATIONS=1` in your shell env to append one JSON line per tool call to `brain/observations/<YYYY-MM-DD>.jsonl`. `/dream` rolls each day into an OBSERVED section.
 - **Session-close revenue check** - warns (does not block) if outreach verbs appear in recent `brain/log.md` without a matching `context/clients.md` update in the same session. Bash and PowerShell variants both ship.
 
 Both fail gracefully. Neither blocks the session.
@@ -129,7 +137,7 @@ FounderOS is built for dictation. The user is expected to talk to the AI, not ty
 
 - **Claude Code desktop** has built-in dictation. This is the primary input method.
 - **Wispr Flow** is an optional power-user upgrade for users who want a system-wide dictation overlay.
-- **Mobile path** - skills work via typed input. Do not assume voice input on mobile.
+- **Mobile path** - Claude Code does not run on mobile. There is no mobile execution surface for skills today.
 
 When generating responses, write so dictated input parses cleanly. Do not use complex syntactic structures that fail when read aloud back to the user.
 

@@ -228,9 +228,13 @@ Create the full folder structure. Read each template before generating the perso
 │   └── relations.yaml           # From templates/brain/relations.yaml (replace {{TODAY}} with current date)
 ├── system/
 │   └── quarantine.md            # From templates/system/quarantine.md (catch-net for silent hook/task failures)
+├── brain/archive/               # Empty dir. /dream and weekly-review move month-old brain entries here.
+├── companies/                   # Empty dir. business-context-loader writes per-company files here.
 ├── scripts/
 │   ├── wiki-build.py            # From templates/scripts/wiki-build.py (extracts [[wikilinks]] into brain/relations.yaml)
-│   └── query.py                 # From templates/scripts/query.py (plain-file graph query)
+│   ├── query.py                 # From templates/scripts/query.py (plain-file graph query)
+│   ├── brain-snapshot.py        # From templates/scripts/brain-snapshot.py (writes brain/.snapshot.md - runtime context for output skills)
+│   └── brain-pass-log.py        # From templates/scripts/brain-pass-log.py (opt-in JSONL telemetry for /founder-os:brain-pass)
 ├── cadence/
 │   ├── daily-anchors.md         # From templates/cadence/daily-anchors.md
 │   ├── weekly-commitments.md    # Personalized with their current priorities
@@ -271,7 +275,14 @@ Show the full list of files that will be created. Get approval. Then create them
 
 **Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, and post-tool-use observation hook live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Find the plugin install path (same as where templates live), then copy all six hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
-**Scripts copy step (mandatory).** Copy `templates/scripts/wiki-build.py` to the founder's `scripts/wiki-build.py` and `templates/scripts/query.py` to `scripts/query.py`. These are not personalized templates. They are Python helpers used by `/founder-os:wiki-build` and `/founder-os:query`. Copy contents byte-for-byte. Do not edit. Verify both copies exist on disk before continuing.
+**Scripts copy step (mandatory).** Copy all four Python helpers from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
+
+- `templates/scripts/wiki-build.py` → `scripts/wiki-build.py` (used by `/founder-os:wiki-build`)
+- `templates/scripts/query.py` → `scripts/query.py` (used by `/founder-os:query`)
+- `templates/scripts/brain-snapshot.py` → `scripts/brain-snapshot.py` (writes `brain/.snapshot.md`, read at task time by nine output-producing skills)
+- `templates/scripts/brain-pass-log.py` → `scripts/brain-pass-log.py` (opt-in JSONL telemetry for `/founder-os:brain-pass`)
+
+These are not personalized templates. Copy contents exactly. Do not edit. Verify all four copies exist on disk before continuing. If any are missing the brain-snapshot, brain-pass, and wiki-build skills will fail silently or hard-error.
 
 **{{TODAY}} substitution.** The `templates/brain/relations.yaml` file contains the literal placeholder `{{TODAY}}`. When copying to `brain/relations.yaml`, replace every occurrence of `{{TODAY}}` with today's date in `YYYY-MM-DD` format (use `date -u +%Y-%m-%d` via Bash to get it).
 
@@ -306,6 +317,14 @@ Read `templates/company-claude-md.md` for structure. Personalize with:
 - Business-specific rules or constraints
 
 Under 60 lines. Show draft. Get approval. Write it.
+
+### 3.2.5 Company business-context file (recommended)
+
+Copy `templates/business-context.template.md` to `companies/<slug>-business.md` (where `<slug>` is the company folder name from 3.1). Replace the obvious placeholders ({{COMPANY_NAME}}, {{TAGLINE}}, {{YEAR}}) with what the founder gave in Phase 0.1 / 0.2. Leave the `[FILL]` markers intact - the `business-context-loader` skill walks them on first run with the founder.
+
+This file is the input that `business-context-loader`, `proposal-writer`, `client-update`, and `strategic-analysis` read for ICP, pricing tier, positioning, and offer structure. Without it those skills produce generic output. The wizard surfaces it once; the founder fills it the first time they need a company-specific deliverable.
+
+If the founder skips it, log a backlog item: `- [ ] Fill companies/<slug>-business.md before next proposal or strategic analysis`.
 
 ### 3.3 Company .mcp.json
 Based on tool stack from 0.5, create a `.mcp.json` with only the MCPs this business needs.

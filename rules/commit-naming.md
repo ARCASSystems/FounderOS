@@ -16,12 +16,12 @@ Public repo commits are read by visitors who do not have your context. The subje
 **Bad subjects (the pattern this rule corrects):**
 - `fix: v1.4.2 - audit fixes, Windows hooks, voice fallback, bash decay scanner`
 - `feat: v1.4.0 - wiki graph builder + brain substrate`
-- `chore: drop internal codename "paperclip" from public docs`
+- `chore: drop legacy internal name from public docs`
 
 **Good subjects (the target pattern):**
 - `Windows users now get the session brief without git-bash`
 - `Wiki graph builds after every session that adds cross-references`
-- `Setup wizard no longer leaks an internal codename`
+- `Setup wizard no longer leaks legacy internal naming`
 
 The pattern: **what visible thing now works, or no longer breaks, for someone who installs this**.
 

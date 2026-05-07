@@ -44,7 +44,7 @@ Two more files (`brain/log.md` and `brain/flags.md`) load on demand when you ask
 
 `core/avatar.md` is your behavioral profile. Skills load it on demand when behavioral context matters. It is not boot-loaded.
 
-The brain layer also holds two capture surfaces and a knowledge store. `brain/rants/` captures raw voice dumps via `/rant`; `/dream` distils unprocessed rants into patterns, flags, parked decisions, and client signals. `brain/knowledge/` holds distilled notes from books, calls, and articles, which `proposal-writer` and `strategic-analysis` read back when relevant.
+The brain layer also holds two capture surfaces and a knowledge store. `brain/rants/` captures raw voice dumps via `/rant`. `/dream` distils unprocessed rants into patterns, flags, parked decisions, and client signals. `brain/knowledge/` holds distilled notes from books, calls, and articles, which `proposal-writer` and `strategic-analysis` read back when relevant.
 
 A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` (set up by the wizard) holds behavioral guards that persist across every session. Add a guard whenever you correct Claude on something that would otherwise come up again.
 
@@ -104,7 +104,7 @@ Two operations the OS supports natively:
 - **Ingest** (`/founder-os:ingest <source>`) - process a source into raw/ with provenance, then propose wiki updates you approve. Different from `knowledge-capture`: ingest preserves the source, knowledge-capture organizes takeaways without source preservation. Use whichever fits.
 - **Lint** (`/founder-os:lint`) - read-only audit. Flags broken cross-references, orphan pages, stale time-sensitive content, provenance gaps, and contradictions. Never auto-fixes. Recommended cadence: weekly via `/loop weekly /founder-os:lint`.
 
-**Cross-references between wiki files use `[[page-name]]` syntax.** Example: a decision in `context/decisions.md` referencing your identity might write `as committed in [[core/identity.md]]`. The lint skill catches `[[]]` links pointing to files that don't exist. The wiki-build skill (`/founder-os:wiki-build`, v1.4) walks all wiki files, extracts the `[[wikilinks]]`, and writes them as a machine-readable graph in `brain/relations.yaml`. Idempotent. Run after a session that added cross-references. Existing files that don't use the convention are not retrofitted; the convention applies forward.
+**Cross-references between wiki files use `[[page-name]]` syntax.** Example: a decision in `context/decisions.md` referencing your identity might write `as committed in [[core/identity.md]]`. The lint skill catches `[[]]` links pointing to files that don't exist. The wiki-build skill (`/founder-os:wiki-build`, v1.4) walks all wiki files, extracts the `[[wikilinks]]`, and writes them as a machine-readable graph in `brain/relations.yaml`. Idempotent. Run after a session that added cross-references. Existing files that don't use the convention are not retrofitted. The convention applies forward.
 
 All wiki operations are opt-in. The OS works the same with or without them.
 
@@ -113,10 +113,16 @@ All wiki operations are opt-in. The OS works the same with or without them.
 Three additions sit underneath the daily files. None require setup beyond running `/founder-os:setup` once.
 
 - **`rules/entry-conventions.md`** - bi-temporal + decay convention for entries in `context/decisions.md`, `context/priorities.md`, and the brain layer. Add `Decay after: 14d` (or a date) to a flag and the SessionStart brief surfaces it for keep/kill review when it expires. Add `Superseded by:` + `Invalidated on:` to a decision instead of overwriting it. Convention is forward-only (no backfill).
-- **`system/quarantine.md`** - catch-net for silent hook and scheduled-task failures. Helper functions for PowerShell and bash are in the file. SessionStart counts ACTIVE entries. Hooks fail silently by design; quarantine makes failure visible without blocking the session.
+- **`system/quarantine.md`** - catch-net for silent hook and scheduled-task failures. Helper functions for PowerShell and bash are in the file. SessionStart counts ACTIVE entries. Hooks fail silently by design. Quarantine makes failure visible without blocking the session.
 - **`rules/approval-gates.md`** - explicit list of what auto-runs (brain/log appends, wiki-build, archive moves), what requires your yes (identity edits, decision supersession, sends, public pushes), and what is blocked outright (force push, hard reset, AI attribution in commits). Customize to match how you want the OS to behave.
 
 The SessionStart brief (`.claude/hooks/session-start-brief.sh` on Mac/Linux/git-bash, `.claude/hooks/session-start-brief.ps1` on Windows, both registered in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.
+
+### Runtime brain context (v1.10)
+
+`scripts/brain-snapshot.py` writes a small deterministic markdown payload to `brain/.snapshot.md` (open flags, this week's must-do, recent decisions, voice and brand fields, staleness). Nine output-producing skills (meeting-prep, weekly-review, strategic-analysis, decision-framework, founder-coaching, knowledge-capture, unit-economics, priority-triage, brain-log) read it at task time so the output reflects current state instead of starting cold. Snapshot is opt-in via the file existing. Skills proceed with profile-only context if it is missing.
+
+The companion `brain-pass` skill (`/founder-os:brain-pass "<question>"`) synthesises an answer across the brain layer and returns Answer, Evidence, Confidence, and Gaps with stable-ID citations. No embeddings. No API call. Free-tier accessible. `meeting-prep` and `linkedin-post` auto-invoke brain-pass before producing output and fall back to `scripts/query.py` if it is unavailable.
 
 ## Agent Teams (recommended)
 
@@ -153,6 +159,7 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/founder-os:lint` - read-only audit of cross-references, orphans, stale content, and provenance gaps.
 - `/founder-os:wiki-build` - refresh the auto-generated graph in `brain/relations.yaml`.
 - `/founder-os:query <question>` - return the top 3 to 5 OS nodes for a question.
+- `/founder-os:brain-pass "<question>"` - synthesised answer across the brain layer with stable-ID citations.
 - `/founder-os:audit` - composite health report across readiness, lint, wiki, brain, and voice.
 - `/founder-os:forcing-questions <initiative>` - six-question gate before new work starts.
 - `/founder-os:ship-deliverable <path>` - final read-only gate before an external deliverable is sent.
@@ -171,13 +178,16 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 
 **Windows note:** Hooks invoke bash. If you are on Windows, the install requires git-bash (which ships with Git for Windows). Without it, hooks will silently no-op. PowerShell-only users should switch the hook commands in `.claude/settings.json` to invoke the `.ps1` mirrors in `.claude/hooks/` (PowerShell versions ship alongside the bash versions).
 
-**Scheduled tasks** (examples; set yours up via the scheduled-tasks MCP)
-- Weekly LinkedIn draft generation - Monday morning, reads your story bank, writes 3 drafts to your content pipeline
-- Weekly insights brief - Monday morning synthesis of last-week patterns, stalls, skills fired, revenue-loop health
+**Scheduled tasks** (optional, configured by you via the scheduled-tasks MCP if you install it). Founder OS does not ship any scheduled tasks out of the box. Two patterns founders commonly add once their cadence is established:
 
-All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks require the scheduled-tasks MCP to be installed in your Claude Code environment.
+- A weekly LinkedIn draft pass that reads your story bank and writes drafts to your content pipeline
+- A weekly insights brief that synthesises last-week patterns, stalls, and revenue-loop health
 
-## Skills (37 included)
+If you have not installed the scheduled-tasks MCP, ignore this section. Nothing in Founder OS depends on it.
+
+All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks are bring-your-own.
+
+## Skills (39 included)
 
 | Skill | Purpose |
 |-------|---------|
@@ -187,6 +197,8 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 | lint | Read-only audit of wiki integrity. Routed via `/founder-os:lint`. |
 | wiki-build | Walk markdown, extract `[[wikilinks]]`, refresh `brain/relations.yaml`. |
 | query | Graph and file retrieval. Routed via `/founder-os:query`. |
+| brain-snapshot | Writes `brain/.snapshot.md`, the runtime context payload nine output skills read at task time. |
+| brain-pass | Synthesised answer across the brain layer with stable-ID citations. Routed via `/founder-os:brain-pass`. |
 | audit | Composite health report. Routed via `/founder-os:audit`. |
 | weekly-review | Structured weekly retro and sprint roll. |
 | priority-triage | Cut the list to what actually matters. |
@@ -212,7 +224,7 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 | data-security | Data class and tool-safety check. |
 | voice-interview | Captures your writing voice into core/voice-profile.yml. |
 | brand-interview | Captures your visual brand into core/brand-profile.yml. |
-| your-voice | Applies your voice profile to written output. |
+| your-voice | Applies your voice profile to any written output. Every voice-coupled writing skill calls it. |
 | your-deliverable-template | Produces branded documents from core/brand-profile.yml. |
 | business-context-loader | Loads and completes per-company business context. |
 | linkedin-post | Voice-coupled LinkedIn post writer. |

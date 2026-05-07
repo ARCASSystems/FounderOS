@@ -4,9 +4,42 @@
 
 $ErrorActionPreference = 'SilentlyContinue'
 
-$HookDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$Repo = (Resolve-Path (Join-Path $HookDir '..\..')).Path
+# Resolve the hook directory robustly. $MyInvocation.MyCommand.Path can be null
+# in some invocation contexts (dot-sourced, -Command mode, certain CI runners).
+# Fall back to PSScriptRoot, then bail quietly if neither resolves.
+$HookDir = $null
+if ($MyInvocation.MyCommand.Path) {
+  $HookDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+} elseif ($PSScriptRoot) {
+  $HookDir = $PSScriptRoot
+}
+if (-not $HookDir) { exit 0 }
+
+$Repo = $null
+try {
+  $Repo = (Resolve-Path (Join-Path $HookDir '..\..') -ErrorAction Stop).Path
+} catch {
+  exit 0
+}
+if (-not $Repo) { exit 0 }
+
 $Today = Get-Date -Format 'yyyy-MM-dd'
+
+# Locale-safe ISO-8601 date parser. [datetime]"2026-05-04" uses thread culture
+# and breaks on non-English Windows. ParseExact with InvariantCulture is stable.
+function ConvertTo-IsoDate {
+  param([string]$value)
+  if (-not $value) { return $null }
+  try {
+    return [datetime]::ParseExact(
+      $value,
+      'yyyy-MM-dd',
+      [System.Globalization.CultureInfo]::InvariantCulture
+    )
+  } catch {
+    return $null
+  }
+}
 
 # Quiet exit if the user's repo is not a Founder OS install.
 if (-not (Test-Path (Join-Path $Repo 'core\identity.md'))) {
@@ -53,8 +86,14 @@ if (Test-Path $Weekly) {
   $m = (Get-Content $Weekly | Select-String -Pattern '^## Week of (\d{4}-\d{2}-\d{2})' | Select-Object -First 1)
   if ($m) {
     $weekDate = $m.Matches[0].Groups[1].Value
-    $age = (New-TimeSpan -Start ([datetime]$weekDate) -End ([datetime]$Today)).Days
-    if ($age -gt 6) {
+    $weekDt = ConvertTo-IsoDate $weekDate
+    $todayDtForWeek = ConvertTo-IsoDate $Today
+    if ($weekDt -and $todayDtForWeek) {
+      $age = (New-TimeSpan -Start $weekDt -End $todayDtForWeek).Days
+    } else {
+      $age = $null
+    }
+    if ($null -ne $age -and $age -gt 6) {
       Write-Output "Weekly: STALE (week of $weekDate, $age days old) - run retro before planning"
     } else {
       Write-Output "Weekly: current (week of $weekDate)"
@@ -102,7 +141,8 @@ if (Test-Path $Quarantine) {
 # Scans brain/flags.md, brain/patterns.md, brain/decisions-parked.md for
 # entries with explicit "Decay after:" field that has passed. Supports
 # YYYY-MM-DD or Nd. Convention defined in rules/entry-conventions.md.
-$todayDt = [datetime]$Today
+$todayDt = ConvertTo-IsoDate $Today
+if (-not $todayDt) { $todayDt = Get-Date }
 
 function Resolve-EntryAnchorDate {
   param([string[]]$entryLines, [string]$file)
@@ -137,11 +177,12 @@ function Get-DecayHits {
           $decayDate = $null
           $missingAnchor = $false
           if ($val -match '^\d{4}-\d{2}-\d{2}$') {
-            $decayDate = [datetime]$val
+            $decayDate = ConvertTo-IsoDate $val
           } elseif ($val -match '^(\d+)d$') {
             $days = [int]$matches[1]
             $anchor = Resolve-EntryAnchorDate -entryLines $entry -file $path
-            if ($anchor) { $decayDate = ([datetime]$anchor).AddDays($days) }
+            $anchorDt = if ($anchor) { ConvertTo-IsoDate $anchor } else { $null }
+            if ($anchorDt) { $decayDate = $anchorDt.AddDays($days) }
             else { $missingAnchor = $true }
           }
           if ($decayDate -and $decayDate -lt $todayDt) {

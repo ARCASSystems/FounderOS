@@ -39,7 +39,9 @@ Plugin registration:
 
 System layer (will be removed):
 - skills/<list of skill folders>
+- scripts/ (Python helpers: wiki-build.py, query.py, brain-snapshot.py, brain-pass-log.py)
 - templates/<list of template folders>
+- rules/, docs/
 - .claude/commands/<list of command files>
 - .claude/hooks/<list of hook files>
 - .claude/settings.json (if present)
@@ -65,7 +67,7 @@ Plugin registration:
 - .claude-plugin/
 
 System layer:
-- skills/, templates/, .claude/, docs/
+- skills/, scripts/, templates/, rules/, .claude/, docs/
 
 Personal data (WILL BE DELETED):
 - core/ (identity, voice profile, brand profile, brand assets)
@@ -97,7 +99,9 @@ Run these in order. After each, report success or failure on a single line.
 
 ```bash
 rm -rf skills/
+rm -rf scripts/
 rm -rf templates/
+rm -rf rules/
 rm -rf .claude/commands/
 rm -rf .claude/hooks/
 rm -rf .claude-plugin/
@@ -109,7 +113,7 @@ rm -f VERSION CLAUDE.md AGENTS.md GEMINI.md AVATAR.md README.md LICENSE stack.js
 If running in PowerShell on Windows native (no git-bash), use:
 
 ```powershell
-Remove-Item -Recurse -Force skills, templates, docs
+Remove-Item -Recurse -Force skills, scripts, templates, rules, docs
 Remove-Item -Recurse -Force .claude/commands, .claude/hooks, .claude-plugin
 Remove-Item -Force .claude/settings.json -ErrorAction SilentlyContinue
 Remove-Item -Force VERSION, CLAUDE.md, AGENTS.md, GEMINI.md, AVATAR.md, README.md, LICENSE, stack.json

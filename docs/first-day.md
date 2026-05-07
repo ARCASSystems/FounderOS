@@ -79,7 +79,7 @@ Run this whenever you want to see where the OS is and what to fill next.
 
 Run wiki-build first to refresh the auto-generated graph in `brain/relations.yaml` (extracts every `[[wikilink]]` you wrote since the last build). Then lint reads the freshest graph and surfaces broken cross-references, orphans, stale time-sensitive content, and provenance gaps.
 
-Recommended cadence: weekly via `/loop weekly /founder-os:wiki-build` followed by `/founder-os:lint`. Both are read-only on your wiki files (wiki-build only writes to `brain/relations.yaml` between auto-generated markers; lint never writes anywhere).
+Recommended cadence: weekly via `/loop weekly /founder-os:wiki-build` followed by `/founder-os:lint`. Both are read-only on your wiki files. wiki-build only writes to `brain/relations.yaml` between auto-generated markers, and lint never writes anywhere.
 
 ---
 
@@ -107,7 +107,7 @@ Once you start feeding articles, threads, transcripts, or any source you want pr
 /founder-os:ingest <url | file path | pasted text>
 ```
 
-The skill files the source into a `raw/` folder (created lazily on first use), then proposes 2-5 wiki updates you approve before they land. Different from `knowledge-capture` - ingest preserves the source; knowledge-capture organizes takeaways without keeping the source. Pick whichever fits.
+The skill files the source into a `raw/` folder (created lazily on first use), then proposes 2-5 wiki updates you approve before they land. Different from `knowledge-capture` - ingest preserves the source, knowledge-capture organizes takeaways without keeping the source. Pick whichever fits.
 
 The raw layer is immutable. The wiki layer is your derived working memory with `[[wiki-link]]` cross-references back to the source. The lint skill (Step 5) catches broken cross-references and "ingested but never used" provenance gaps.
 
@@ -233,6 +233,6 @@ In Claude Code, just say "run weekly review" - the skill auto-triggers.
 
 **The OS feels off-track in general** -> run `/founder-os:status`. The score and the next-3-moves block tell you exactly what's missing.
 
-**You want to remove the OS** -> `/founder-os:uninstall`. Default mode preserves your data; pass `--purge` to wipe everything.
+**You want to remove the OS** -> `/founder-os:uninstall`. Default mode preserves your data. Pass `--purge` to wipe everything.
 
 If any of the above doesn't work cleanly, email `solutions@arcassystems.com` with what you tried and the error you hit.

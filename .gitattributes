@@ -1,0 +1,27 @@
+# Enforce LF line endings on shell scripts and Python helpers so Windows clones
+# (default core.autocrlf=true) do not break Bash hooks with CRLF.
+# Without this, /usr/bin/env: 'bash\r' errors on every Windows install.
+
+*.sh         text eol=lf
+*.py         text eol=lf
+*.bash       text eol=lf
+.gitattributes text eol=lf
+
+# Markdown and JSON normalize on checkin, native on checkout.
+*.md         text
+*.json       text
+*.yml        text
+*.yaml       text
+
+# PowerShell scripts use CRLF (Windows native).
+*.ps1        text eol=crlf
+
+# Binary assets - never touch.
+*.png        binary
+*.jpg        binary
+*.jpeg       binary
+*.gif        binary
+*.ico        binary
+*.svg        text
+*.pdf        binary
+*.zip        binary

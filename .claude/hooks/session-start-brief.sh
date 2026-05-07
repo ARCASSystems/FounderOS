@@ -5,8 +5,11 @@
 
 set +e
 
-HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO="$(cd "$HOOK_DIR/../.." && pwd)"
+# Guard path resolution. Without || exit 0, a failed cd silently produces an
+# empty REPO and the rest of the script no-ops without explanation.
+HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)" || exit 0
+REPO="$(cd "$HOOK_DIR/../.." 2>/dev/null && pwd)" || exit 0
+[ -z "$REPO" ] && exit 0
 TODAY="$(date +%Y-%m-%d)"
 
 # Resolve python interpreter once. Many Linux/macOS systems ship `python3` only.

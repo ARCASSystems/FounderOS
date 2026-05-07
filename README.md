@@ -35,7 +35,7 @@ Areas for searching across the 39 skills:
 
 **Four roles as behavioural modes:** COO (default), BD, CMO, Chief of Staff. Claude switches mode based on what you are actually doing.
 
-A **SessionStart brief** runs on every session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up; you do not need to think about it. Details under [Substrate details](#substrate-details) below if curious.
+A **SessionStart brief** runs on every session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up. You do not need to think about it. Details under [Substrate details](#substrate-details) below if curious.
 
 **The capture-and-cite loop.** `/rant` captures a raw thought dump. `/dream` distils unprocessed rants into patterns, flags, parked decisions, and needs. Every new brain entry gets a stable `<channel>-YYYY-MM-DD-NNN` ID stamped at write time. The dream digest cites those IDs in one line each instead of restating content. `knowledge-capture` writes distilled takeaways from books, calls, and articles into `brain/knowledge/` with the same ID convention so proposal-writer and strategic-analysis can read them back. Optional: opt in to a tool-call observation log with `FOUNDER_OS_OBSERVATIONS=1` and `/dream` rolls each day's activity into an OBSERVED section.
 
@@ -207,7 +207,7 @@ Nothing in the OS hard-fails on a missing MCP. It tells you what it can't do and
 
 ## Substrate details
 
-Background plumbing the wizard sets up. You do not need to read this to use the system; the wizard handles all of it. Here for the curious.
+Background plumbing the wizard sets up. You do not need to read this to use the system. The wizard handles all of it. Here for the curious.
 
 - **Decay-aware brain layer.** Set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires.
 - **Stable entry IDs.** Every new brain entry (log, pattern, flag, parked, need, know) is stamped with a `<channel>-YYYY-MM-DD-NNN` ID at write time. Skills cite IDs in summaries instead of restating content.
@@ -250,13 +250,13 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.10.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.11.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
 All three are Claude Code plugins. All three are local-first. FounderOS and PersonalOS are migrations of AgentOS with personal data stripped out. If you want a polished operating layer right now, FounderOS is the one to use. The siblings are previews.
 
-The three repos share one architecture - User OS (Layer 1) / Company OS (Layer 2) / Knowledge Base (Layer 3). FounderOS lives at Layer 1 today and reads from Layer 2 when you're coordinating with teammates. The full picture is in [AgentOS/docs/three-layer-architecture.md](https://github.com/ARCASSystems/AgentOS/blob/main/docs/three-layer-architecture.md).
+The three repos share one architecture: User OS (Layer 1) / Company OS (Layer 2) / Knowledge Base (Layer 3). FounderOS lives at Layer 1 today. PersonalOS lives at Layer 1 with a personal lens. AgentOS will be the platform a builder ships to a client or team and adds Layer 2 (Company OS) and Layer 3 (Knowledge Base) on top of Layer 1. The deeper architecture write-up will land in the AgentOS repo when AgentOS reaches public preview. Until then, FounderOS is the production layer-1 system on its own.
 
 If you want someone to build and run this for you, that is [ARCAS Systems](https://arcassystems.com).
 
@@ -278,8 +278,8 @@ If you need crons, webhooks, offline triggers, or anything that fires while you 
 - **Revenue loop enforcement.** Every outreach or content action must log same-session. Catches the gap between "I'll do X" and "I did X."
 - **Role as router.** COO, BD, CMO, Chief of Staff are behavioural modes, not personas. The right mode activates based on what you are actually doing.
 - **Plan A defines Plan B.** This product is a derivative of an actual founder's daily use. Features graduate from personal use into the product only after surviving contact with live P&L.
-- **Talk to it.** Built around dictation. Claude Code's built-in dictation is the primary input. Wispr Flow is an optional power-user upgrade. On mobile, skills work via typed input - no dictation tool required.
-- **Kill criteria in the product.** Tells you when a flag has been open too long and forces a decision.
+- **Talk to it.** Built around dictation. Claude Code's built-in dictation is the primary input. Wispr Flow is an optional power-user upgrade. Claude Code is desktop-only today. There is no native mobile execution surface.
+- **Decay-driven keep/kill.** Set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires. The OS does not auto-kill, you decide.
 
 ---
 
@@ -317,9 +317,11 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.10.0. Public push week of 2026-05-07.
+Version 1.11.0. Public push week of 2026-05-07.
 
-v1.10.0 is the runtime brain context release. The OS now reasons across your memory, not just stores it. A small deterministic snapshot (open flags, this week's must-do, recent decisions, voice and brand fields, staleness) regenerates on demand at `brain/.snapshot.md`. Nine output-producing skills (meeting-prep, weekly-review, strategic-analysis, decision-framework, founder-coaching, knowledge-capture, unit-economics, priority-triage, brain-log) read it at task time so output reflects current state instead of starting cold. A new `brain-pass` skill (`/founder-os:brain-pass "<question>"`) synthesises answers across the brain layer with stable-ID citations - no embeddings, no API call, free-tier accessible. `meeting-prep` and `linkedin-post` auto-invoke brain-pass before producing output. v1.7.0 remains the latest substrate feature release (stable entry IDs, progressive query modes, opt-in observation logging). v1.10 sits on top.
+v1.11.0 is the launch-hardening release. v1.10 shipped the runtime brain context, but a few install-time gaps quietly broke the marquee feature for fresh users. v1.11 closes those gaps. The setup wizard now copies all four runtime helpers (was two) so brain-snapshot and brain-pass actually work after Path A install. `/founder-os:wiki-build` now runs on a fresh clone (the script was missing). `/founder-os:update` and `/founder-os:uninstall` now cover scripts, rules, docs, and AGENTS.md (previously omitted, so updates would silently miss new code). PowerShell hooks fixed for non-English Windows locales. Bash hooks gained exit guards on path resolution. New `.gitattributes` enforces LF on shell and Python so Windows clones don't break Bash hooks with CRLF. CLAUDE.md and AGENTS.md catch up to the v1.10 surface (39 skills, 20 commands, brain-pass / brain-snapshot rows). README mobile and kill-criteria claims corrected. End-to-end audit pass on leaks, code, docs, install flow, and skill integrity. No new surface. Just the finish.
+
+v1.10.0 was the runtime brain context release. A small deterministic snapshot (open flags, this week's must-do, recent decisions, voice and brand fields, staleness) regenerates on demand at `brain/.snapshot.md`. Nine output-producing skills (meeting-prep, weekly-review, strategic-analysis, decision-framework, founder-coaching, knowledge-capture, unit-economics, priority-triage, brain-log) read it at task time so output reflects current state instead of starting cold. A `brain-pass` skill (`/founder-os:brain-pass "<question>"`) synthesises answers across the brain layer with stable-ID citations - no embeddings, no API call, free-tier accessible. `meeting-prep` and `linkedin-post` auto-invoke brain-pass before producing output.
 
 Full release history in [`CHANGELOG.md`](CHANGELOG.md). Current limits in [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md).
 

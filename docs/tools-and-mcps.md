@@ -2,7 +2,7 @@
 
 Founder OS does not assume your stack. The OS is a set of files and skills. Each skill declares which Model Context Protocol (MCP) servers it can use, and degrades gracefully when those MCPs are not available.
 
-You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run 33 of the 37 skills end-to-end.
+You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run 35 of the 39 skills end-to-end.
 
 This doc covers three things: which MCPs activate which skills, which editors and surfaces (Obsidian, Claude Cowork, claude-mem) pair well with the OS, and what works under each surface.
 
@@ -47,6 +47,8 @@ If you install Founder OS and add no MCPs, all of these skills work end-to-end o
 - priority-triage
 - decision-framework
 - brain-log
+- brain-snapshot
+- brain-pass
 - founder-coaching
 - unit-economics
 - content-repurposer
@@ -56,7 +58,7 @@ If you install Founder OS and add no MCPs, all of these skills work end-to-end o
 - business-context-loader
 - readiness-check (`/founder-os:status`)
 
-That is 33 of the 37 skills. The remaining four (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce noticeably better output with the relevant integration connected.
+That is 35 of the 39 skills. The remaining four (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce noticeably better output with the relevant integration connected.
 
 ---
 
@@ -120,7 +122,7 @@ Open your founder-os folder as an Obsidian vault. Everything that uses Obsidian'
 
 What works:
 - `[[file.md]]`, `[[file.md#anchor]]`, `[[target|alias]]` all resolve in Obsidian's graph view.
-- `wiki-build` extracts the same wikilinks into `brain/relations.yaml`. Open the YAML in Obsidian as a regular note; nothing breaks.
+- `wiki-build` extracts the same wikilinks into `brain/relations.yaml`. Open the YAML in Obsidian as a regular note. Nothing breaks.
 - Frontmatter (the `---` blocks at the top of brain entries, knowledge files, raw sources) parses correctly in Obsidian's properties panel.
 - Obsidian's backlinks pane gives you the inverse view of what the lint skill audits.
 
@@ -142,7 +144,7 @@ What works in Cowork:
 
 What does not work in Cowork (yet):
 - SessionStart and Stop hooks. The session-start-brief and revenue-loop check do not fire.
-- Custom slash commands from `.claude/commands/`. The plugin marketplace tags plugins per-surface; FounderOS is not yet tagged "Works with: Cowork."
+- Custom slash commands from `.claude/commands/`. The plugin marketplace tags plugins per-surface, and FounderOS is not yet tagged "Works with: Cowork."
 - The fabric trio (`/today`, `/pre-meeting`, `/capture-meeting`) and the `/founder-os:*` namespace.
 
 Recommended pattern: use Cowork for execution work (drafting, scheduled briefs, file ops) pointed at the FounderOS folder. Keep Claude Code in terminal for any commit, ship, hook-driven, or cadence-refresh work. Track the [plugins directory](https://claude.com/plugins) for when FounderOS gains a "Works with: Cowork" tag.
@@ -154,7 +156,7 @@ Recommended pattern: use Cowork for execution work (drafting, scheduled briefs, 
 - claude-mem captures *tool-call telemetry* (what files did I touch, what commands ran).
 - FounderOS curates *founder thinking* (decisions, clients, voice rants, behavioural guards).
 
-You can install both in the same machine without conflict. claude-mem runs a Bun-managed worker on port 37777; FounderOS is plain markdown with no daemon. Audit claude-mem's `<private>` tag usage before installing in client repos - it ships private tool-call telemetry to its worker by default.
+You can install both on the same machine without conflict. claude-mem runs a Bun-managed worker on port 37777. FounderOS is plain markdown with no daemon. Audit claude-mem's `<private>` tag usage before installing in client repos - it ships private tool-call telemetry to its worker by default.
 
 Note: claude-mem is AGPL-3.0. We cannot vendor any of its code into FounderOS without licensing the public repo AGPL.
 
