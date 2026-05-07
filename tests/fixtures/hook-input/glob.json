@@ -1,0 +1,7 @@
+{
+  "session_id": "session-test-001",
+  "tool_name": "Glob",
+  "tool_input": {
+    "pattern": "brain/*.md"
+  }
+}

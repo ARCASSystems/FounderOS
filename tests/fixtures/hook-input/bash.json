@@ -1,0 +1,7 @@
+{
+  "session_id": "session-test-001",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "python scripts/query.py \"outreach stalled\""
+  }
+}

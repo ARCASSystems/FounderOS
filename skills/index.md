@@ -1,6 +1,6 @@
 # Founder OS Skills
 
-37 skills included as of v1.8 (count unchanged since v1.6). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. None of these added new skills. The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
+37 skills included as of v1.9 (count unchanged since v1.6). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. v1.9 added hook test coverage and documented the query `--root` flag. None of these added new skills. The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
 
 | Skill | Status | Replaces |
 |-------|--------|---------|
@@ -79,5 +79,8 @@ Release notes:
 - v1.4 added `wiki-build` and the brain substrate (decay convention, quarantine, approval gate matrix, SessionStart brief).
 - v1.5 wired the wizard's captured answers (decision style, communication style, tool stack) through to six daily skills (`sop-writer`, `meeting-prep`, `email-drafter`, `strategic-analysis`, `decision-framework`, `your-voice`). `/rant` and `/dream` shipped with the `brain/rants/` folder. Auto-memory `MEMORY.md` template seeded by the wizard.
 - v1.6 added eight translated operating skills (`forcing-questions`, `ship-deliverable`, `approval-gates`, `handoff-protocol`, `context-persistence`, `data-security`, `blind-spot-review`, `bottleneck-diagnostic`) plus `query` and `audit`. `brain/knowledge/` now feeds `proposal-writer` and `strategic-analysis`.
+- v1.7 added stable entry IDs, progressive query modes, and opt-in observation logging.
+- v1.8 added query test coverage for `scripts/query.py`.
+- v1.9 added hook test coverage and documented the query `--root` flag.
 
 All additions across v1.2 through v1.6 are additive. No existing skill behaviour was changed without an explicit version note.

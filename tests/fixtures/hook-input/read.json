@@ -1,0 +1,7 @@
+{
+  "session_id": "session-test-001",
+  "tool_name": "Read",
+  "tool_input": {
+    "file_path": "context/example.md"
+  }
+}

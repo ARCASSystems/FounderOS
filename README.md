@@ -243,7 +243,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.8.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.9.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -310,9 +310,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.8.0. Public push week of 2026-05-07.
+Version 1.9.0. Public push week of 2026-05-07.
 
-v1.8.0 is the query test coverage release. It adds a stdlib `unittest` suite for `scripts/query.py` with a synthetic corpus covering index, timeline, full, bare invocation, and guard paths. v1.7.0 remains the latest user-facing feature release: stable entry IDs, progressive query modes, and opt-in observation logging.
+v1.9.0 is the hook test coverage release. It adds stdlib `unittest` coverage for the opt-in observation hook, static parse checks for session hooks, and public docs for the query `--root` flag. v1.7.0 remains the latest user-facing feature release: stable entry IDs, progressive query modes, and opt-in observation logging.
 
 Full release history in [`CHANGELOG.md`](CHANGELOG.md). Current limits in [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md).
 

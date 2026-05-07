@@ -58,6 +58,14 @@ python scripts/query.py --mode full --ids log-2026-05-07-001,log-2026-05-07-002
 
 For each ID the script searches every markdown file in scope and matches the ID either as a frontmatter `id:` line or as a trailing parenthetical on a heading line `(<id>)`. The body returned is the heading line plus all lines up to the next heading at the same depth or shallower. If no match is found, the output is `id <X>: not found` and the script continues with the next ID.
 
+## Operating against a non-default root
+
+The script accepts `--root <path>` to point at another Founder OS-style folder, such as a vendored archive or a fixture corpus. Use it when the current shell is outside the folder you want to query.
+
+```bash
+python scripts/query.py --root /path/to/archive "outreach stalled"
+```
+
 ## Progressive Flow
 
 Recommended pattern for any non-trivial question:

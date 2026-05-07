@@ -21,6 +21,8 @@ python scripts/query.py $ARGUMENTS
 
 When `$ARGUMENTS` is a plain question (no `--mode` flag), pass it as a single quoted argument so the question is preserved as one string. When `$ARGUMENTS` already contains flags, pass it through as-is.
 
+The underlying script also accepts `--root <path>` for direct CLI use, for example `python scripts/query.py --root /path/to/archive "outreach stalled"`.
+
 5. Print stdout verbatim. If the script exits non-zero, print stderr and stop.
 6. If the script is missing, follow the manual procedure in the skill file.
 

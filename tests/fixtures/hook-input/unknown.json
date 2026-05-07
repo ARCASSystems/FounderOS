@@ -1,0 +1,7 @@
+{
+  "session_id": "session-test-001",
+  "tool_name": "Inspect",
+  "tool_input": {
+    "target": "public-safe-example"
+  }
+}
