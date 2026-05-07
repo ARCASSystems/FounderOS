@@ -19,14 +19,14 @@ This skill decides what data can go to which tool. It blocks unsafe movement bef
 
 ## Pre-Read
 
-Read the first available policy source:
+Read the first available policy source. Skip a source silently if it does not exist; do not error out.
 
-1. `rules/data-handling.md`
-2. `rules/approval-gates.md`
-3. `stack.json`
-4. `context/clients.md` for per-client restrictions
+1. `rules/data-handling.md` (likely absent on a fresh install - skip if missing)
+2. `rules/approval-gates.md` (or fall back to `templates/rules/approval-gates.md`)
+3. `stack.json` (lists which tools the user has approved)
+4. `context/clients.md` (per-client restrictions, if any are noted)
 
-If no policy exists, use the default matrix below and tell the user it is a fallback.
+If none of the above exist or yield a policy, use the default matrix below and tell the user it is a fallback.
 
 ## Data Classes
 

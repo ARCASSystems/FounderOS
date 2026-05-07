@@ -1,8 +1,10 @@
-# Tools and MCPs
+# Tools, MCPs, and surfaces
 
 Founder OS does not assume your stack. The OS is a set of files and skills. Each skill declares which Model Context Protocol (MCP) servers it can use, and degrades gracefully when those MCPs are not available.
 
 You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run 33 of the 37 skills end-to-end.
+
+This doc covers three things: which MCPs activate which skills, which editors and surfaces (Obsidian, Claude Cowork, claude-mem) pair well with the OS, and what works under each surface.
 
 ---
 
@@ -58,7 +60,7 @@ That is 33 of the 37 skills. The remaining four (`email-drafter`, `meeting-prep`
 
 ---
 
-## What unlocks with each MCP
+## What each MCP adds
 
 ### Gmail MCP
 - `email-drafter` can read your inbox to draft replies in context.
@@ -105,3 +107,66 @@ If a skill says it needs an MCP you don't have, it will tell you. Two options:
 2. **Skip that skill.** Use the local-file alternative the skill suggests (e.g. paste calendar events manually, write Notion exports as markdown into `brain/log.md`).
 
 If you get stuck, email `solutions@arcassystems.com` with the skill name and the error.
+
+---
+
+## Editor and surface compatibility
+
+Founder OS is plain markdown plus Python and shell scripts. Anything that reads markdown can read it. Three pairings worth knowing.
+
+### Obsidian (recommended companion editor)
+
+Open your founder-os folder as an Obsidian vault. Everything that uses Obsidian's `[[wikilink]]` convention is honoured because the OS already speaks Obsidian's syntax.
+
+What works:
+- `[[file.md]]`, `[[file.md#anchor]]`, `[[target|alias]]` all resolve in Obsidian's graph view.
+- `wiki-build` extracts the same wikilinks into `brain/relations.yaml`. Open the YAML in Obsidian as a regular note; nothing breaks.
+- Frontmatter (the `---` blocks at the top of brain entries, knowledge files, raw sources) parses correctly in Obsidian's properties panel.
+- Obsidian's backlinks pane gives you the inverse view of what the lint skill audits.
+
+What does not work:
+- Obsidian does not run skills, hooks, or slash commands. Use it as a viewer / editor, not an OS surface.
+- Obsidian's auto-rename of wikilinks on file move can race with `wiki-build` if both run at the same time. Run wiki-build after Obsidian-driven renames, not during.
+
+Setup: Obsidian → Open folder as vault → point at your founder-os install. The `.obsidian/` config folder it creates is gitignored.
+
+### Claude Cowork (Anthropic's desktop knowledge-work surface)
+
+Cowork is Anthropic's desktop agent for non-coding work. It can open local folders, read markdown, run MCPs, and execute scheduled tasks. Pair it with FounderOS for knowledge-work execution while keeping Claude Code as the OS layer.
+
+What works in Cowork:
+- Reading the file tree, CLAUDE.md as context (manually attached or via Cowork's "Folder instructions").
+- MCP connectors at the account level.
+- Scheduled tasks via `/schedule`.
+- Markdown reads and writes.
+
+What does not work in Cowork (yet):
+- SessionStart and Stop hooks. The session-start-brief and revenue-loop check do not fire.
+- Custom slash commands from `.claude/commands/`. The plugin marketplace tags plugins per-surface; FounderOS is not yet tagged "Works with: Cowork."
+- The fabric trio (`/today`, `/pre-meeting`, `/capture-meeting`) and the `/founder-os:*` namespace.
+
+Recommended pattern: use Cowork for execution work (drafting, scheduled briefs, file ops) pointed at the FounderOS folder. Keep Claude Code in terminal for any commit, ship, hook-driven, or cadence-refresh work. Track the [plugins directory](https://claude.com/plugins) for when FounderOS gains a "Works with: Cowork" tag.
+
+### claude-mem (complementary tool-call telemetry)
+
+[claude-mem](https://github.com/thedotmack/claude-mem) is a separate Claude Code plugin that auto-captures tool calls into a SQLite + vector store and re-injects relevant context on session start. Different problem from FounderOS:
+
+- claude-mem captures *tool-call telemetry* (what files did I touch, what commands ran).
+- FounderOS curates *founder thinking* (decisions, clients, voice rants, behavioural guards).
+
+You can install both in the same machine without conflict. claude-mem runs a Bun-managed worker on port 37777; FounderOS is plain markdown with no daemon. Audit claude-mem's `<private>` tag usage before installing in client repos - it ships private tool-call telemetry to its worker by default.
+
+Note: claude-mem is AGPL-3.0. We cannot vendor any of its code into FounderOS without licensing the public repo AGPL.
+
+---
+
+## Surface compatibility table
+
+| Surface | Reads markdown | Skills | Slash commands | Hooks | MCPs | Auto-memory |
+|---|---|---|---|---|---|---|
+| Claude Code (terminal) | Yes | Yes | Yes | Yes | Yes | `~/.claude/projects/<slug>/memory/MEMORY.md` |
+| Claude Cowork (desktop) | Yes | Partial | Partial | No | Yes (account-level) | Separate Cowork memory, not shared with Claude Code |
+| Obsidian | Yes (viewer) | No | No | No | No | No |
+| claude-mem | Reads via tool-call telemetry only | No (separate plugin) | No | Yes (own hooks) | Yes (own MCP server) | Own SQLite + Chroma store |
+
+Use Claude Code as the OS layer. Use Obsidian as the viewer. Use Cowork for desktop knowledge-work pointed at the same folder. Add claude-mem if you want tool-call telemetry on top.

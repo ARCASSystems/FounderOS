@@ -34,7 +34,7 @@ The local `rules/approval-gates.md` wins over this default table.
 
 1. State the action in one sentence.
 2. Classify the action type.
-3. Read the relevant gate from `rules/approval-gates.md`.
+3. Read the relevant gate from `rules/approval-gates.md`. If that file is absent, fall back to `templates/rules/approval-gates.md`. If neither exists, use the default table above.
 4. Return one of three calls:
    - `AUTO-RUN` - proceed and log if the action changes state.
    - `ASK FIRST` - show the exact action and wait for yes.

@@ -7,9 +7,9 @@
 
 ## Session Start Protocol
 
-1. Load the 5 boot files: CLAUDE.md, core/identity.md, context/priorities.md, context/decisions.md, rules/operating-rules.md
-2. Run Chief of Staff stall scan silently (see `roles/chief-of-staff.md`)
-3. If MCP tools are connected (calendar, email), check for today's events and any urgent messages
+1. Load the six operating-state files: `core/identity.md`, `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`. Plus this rules file. (CLAUDE.md is read automatically by Claude Code.)
+2. Run Chief of Staff stall scan silently (see `roles/chief-of-staff.md`).
+3. If MCP tools are connected (calendar, email), check for today's events and any urgent messages.
 4. Synthesize: what is the state of the world right now? Hold this context. Don't narrate it.
 5. Default to COO mode. Wait for the founder's opening.
 

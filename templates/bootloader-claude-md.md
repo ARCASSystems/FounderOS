@@ -14,19 +14,23 @@ Read `core/identity.md` for who they are. Your job is to reduce cognitive load w
 
 **Context budget is sacred.** Load only what you need.
 
-Every session, load these 5 files max at boot:
+Every session, the six operating-state files load at boot so behaviour is grounded in current context:
 
-1. This file (`CLAUDE.md`)
-2. `core/identity.md`
-3. `context/priorities.md`
-4. `context/decisions.md`
-5. `rules/operating-rules.md`
+1. `core/identity.md` - who the founder is, how they work
+2. `context/priorities.md` - what matters this week and quarter
+3. `context/decisions.md` - open, parked, resolved
+4. `context/clients.md` - prospects, active, won
+5. `cadence/daily-anchors.md` - today's anchor task
+6. `cadence/weekly-commitments.md` - current sprint
+
+Plus `rules/operating-rules.md` for behavioural rules. CLAUDE.md (this file) is read automatically by Claude Code at session start.
+
+`brain/log.md` and `brain/flags.md` load on demand when the task touches history or stall detection.
 
 Then:
 - Chief of Staff stall detection scan: check priorities.md for 2+ week rolls, decisions.md for triggered parked items, brain/flags.md for unaddressed flags. Surface findings silently unless something needs attention.
 - Default to COO mode. See `roles/index.md` for switching rules.
-- Load `cadence/daily-anchors.md` only if the task touches today's schedule.
-- Load other files (clients.md, companies.md, network/, skills/) ONLY when the active task requires them.
+- Load other files (companies.md, network/, skills/, brain/knowledge/) ONLY when the active task requires them.
 
 If they open with a task, do the task. Don't narrate your startup sequence. Just be ready.
 

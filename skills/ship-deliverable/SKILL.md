@@ -51,9 +51,11 @@ If no evidence exists, record `FAIL - run blind-spot-review first`.
 
 ### Link 4 - Pre-Send Check
 
-Run the `pre-send-check` skill end to end. It owns the final check for voice, source truth, recipient, date, token replacement, asset paths, and filing hygiene.
+Read `skills/pre-send-check/SKILL.md` and apply its checklist to this deliverable inline. The check covers voice consistency, source truth, recipient, date, token replacement, asset paths, and filing hygiene.
 
-If the skill is missing, record `FAIL - pre-send-check skill missing`.
+You cannot invoke another skill from inside a skill in Claude Code. So this link runs the pre-send-check logic against the deliverable directly using the criteria defined in that skill file. If the user wants the full skill output independently, they can run `/founder-os:pre-send-check` in a separate turn.
+
+If `skills/pre-send-check/SKILL.md` does not exist, record `FAIL - pre-send-check skill file missing - cannot apply checks`.
 
 ## Output Format
 

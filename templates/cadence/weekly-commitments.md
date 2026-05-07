@@ -1,7 +1,10 @@
 # Weekly Commitments
 
-**Week of:** {{WEEK_START_DATE}}
+## Week of {{WEEK_START_DATE}}
+
 **Sprint theme:** {{SPRINT_THEME}}
+
+> The `## Week of YYYY-MM-DD` heading MUST stay in this form. The SessionStart brief greps for it to compute weekly staleness. Roll the date forward at the start of each new sprint.
 
 ---
 

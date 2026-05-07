@@ -82,20 +82,21 @@ Use Claude.ai web or desktop with this repo as context.
 
 **Best for:** Founders who do not have Claude Code installed and want to talk to the OS in the Claude app.
 
-**Honest limit:** Cloud Claude cannot run slash commands or write to your local disk. Path C is currently a read-only operating mode. The setup wizard cannot complete here. The Notion Starter Kit (which would enable a writable cloud path) is in development.
+**Honest limit:** Cloud Claude cannot run slash commands or write to your local disk. Path C is **preview mode, not install mode**. The setup wizard cannot complete here. The Notion Starter Kit (which would enable a writable cloud path) is in development. If you want a working install, choose Path A or Path B.
 
 **Steps:**
 
 1. Open [Claude.ai](https://claude.ai).
 2. Start a new Project.
 3. Attach the repo's `README.md` and `CLAUDE.md` as Project context. (Optional: also attach `core/identity.md` after you have run setup somewhere else.)
-4. Use the safe fallback prompt below to start the conversation:
+4. Use this fallback prompt to start the conversation:
 
 ```
 Use this repo as the Founder OS system layer. Read README.md and CLAUDE.md first.
-If the founder context files are missing, stop and tell me to run /founder-os:setup
-or use the Notion quickstart. Do not invent identity, clients, priorities, decisions,
-revenue, or commitments.
+If you cannot find core/identity.md, treat the OS as not yet set up: do not invent
+identity, clients, priorities, decisions, revenue, or commitments. Tell me which
+setup path you recommend (Claude Code Path A or Path B) and why. Do not instruct
+me to run /founder-os:setup here - it will not work in this surface.
 ```
 
 **Pros**

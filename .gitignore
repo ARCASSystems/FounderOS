@@ -43,6 +43,9 @@ Thumbs.db
 .idea/
 *.swp
 
+# Obsidian vault config (per-user, not shareable; Obsidian writes this when the founder-os folder is opened as a vault)
+.obsidian/
+
 # Build artifacts (none expected, just in case)
 dist/
 build/

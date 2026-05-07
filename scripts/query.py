@@ -176,6 +176,9 @@ def main() -> int:
         return 1
 
     q_tokens = set(tokenize(question))
+    if not q_tokens:
+        print(f"QUERY: {question}\n---\nNo searchable tokens in the question. Try a question with at least one word or identifier (e.g. 'what blocks the launch?').")
+        return 2
     file_scores = score_files(files, root, q_tokens)
 
     relations_path = root / "brain" / "relations.yaml"

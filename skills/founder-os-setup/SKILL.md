@@ -66,16 +66,22 @@ Ask: "Of everything you just listed, what are the top 3 things you need Claude h
 These get built first. Everything else is structure for later.
 
 ### 0.5 Tool Stack
-Ask: "What tools do you use day to day? Go through this list:
-- Email: Gmail, Outlook, other?
-- Data: Google Sheets, Notion, Airtable, other?
-- Website: what platform? (Next.js, WordPress, Wix, other)
-- CRM: do you have one? What is it?
-- Project management: Notion, Linear, Trello, other?
-- Automation: n8n, Make, other?
-- Calendar: Google Calendar, Outlook, other?"
+Ask: "What tools do you use day to day? Go through this list. Skip any you do not use - I will record those as `none`."
 
-This determines MCP configuration per project.
+- **Knowledge base**: Notion, Obsidian, Google Drive, local-only?
+- **Email**: Gmail, Outlook, Apple Mail?
+- **Calendar**: Google Calendar, Outlook Calendar?
+- **Automation**: n8n, Make, Zapier, none?
+- **CRM**: Notion DB, HubSpot, Airtable, none?
+- **File storage**: Google Drive, Dropbox, local, none?
+- **Meeting notes**: Granola, Otter, Notion, none?
+- **Voice input**: Wispr Flow, Whisper local, none?
+- **Server / hosting**: Hostinger, DigitalOcean, Render, none?
+- **Prospecting database**: Apollo, Sales Navigator, LinkedIn, none?
+- **Video tool**: Loom, Zoom, none?
+- **Booking**: Cal.com, Calendly, none?
+
+These twelve fields populate `stack.json`, which sop-writer, meeting-prep, email-drafter, and other skills read at runtime to tailor output to the user's actual stack. Map answers to the exact lowercase tokens listed in `stack.json`'s `_allowed_values`.
 
 ### 0.6 Existing Setup Audit
 Before proceeding, scan the filesystem silently:

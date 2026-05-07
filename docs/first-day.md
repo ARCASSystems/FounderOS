@@ -113,14 +113,45 @@ The raw layer is immutable. The wiki layer is your derived working memory with `
 
 ---
 
+## The knowledge layer (`brain/knowledge/`)
+
+`knowledge-capture` writes distilled notes to `brain/knowledge/<topic-slug>.md`. These are first-class wiki pages. The proposal-writer and strategic-analysis skills read them when relevant - so a book you took notes on three months ago can shape a proposal you write today.
+
+Difference from `raw/`:
+- `raw/` = full source preserved verbatim (a transcript, an article, a screenshot)
+- `brain/knowledge/` = your distilled takeaways, structured to be re-read by skills
+
+You can use both: ingest a source into `raw/` for provenance, then run `knowledge-capture` to write the takeaways into `brain/knowledge/`. The two skills are complementary.
+
+---
+
+## The auto-memory layer (behavioural guards)
+
+The wizard's Phase 1.3 creates `MEMORY.md` at `~/.claude/projects/<slug>/memory/MEMORY.md` (Windows: `%USERPROFILE%\.claude\projects\<slug>\memory\MEMORY.md`). Claude Code reads this file automatically at every session start in the same project folder.
+
+Use it for behavioural guards - things you correct Claude on that you do not want to repeat. Examples that survive across sessions:
+
+- "Lead with the answer, not the warm-up. I value time over options."
+- "Don't draft on my behalf without asking. Flag the issue, offer to draft."
+- "Numbers before recommendations on anything that touches money or time."
+
+This is different from the `brain/` layer in your repo. `brain/` holds operating memory (what's happening in your business). `MEMORY.md` holds behavioural memory (how you want Claude to work with you). Both load every session.
+
+Add a guard whenever you correct Claude on something that would otherwise come up again. Keep the file under 200 lines.
+
+---
+
 ## The cascade map
 
 | Fill once | Skills it lights up |
 |---|---|
-| `core/identity.md` (setup wizard) | Almost all skills generically. |
+| `core/identity.md` (setup wizard) | Almost all skills generically. Decision-style read by `decision-framework`. Communication style by `your-voice`. |
+| `stack.json` (setup wizard Phase 5.0) | sop-writer, meeting-prep, email-drafter MCP block, founder-os-setup. |
 | `core/voice-profile.yml` (voice-interview) | email-drafter, linkedin-post, client-update, content-repurposer, your-voice, sop-writer voice. proposal-writer voice half. |
 | `core/brand-profile.yml` (brand-interview) | your-deliverable-template. proposal-writer brand half. client-update branded variant. |
 | `context/companies/<x>.md` (business-context-loader) | Per-business scoping for proposal-writer, meeting-prep, priority-triage, unit-economics, weekly-review. |
+| `brain/knowledge/<topic>.md` (knowledge-capture) | proposal-writer past-wins section, strategic-analysis pattern recall. |
+| `MEMORY.md` (Phase 1.3 auto-memory) | Every session in this project folder. Behavioural guards persist. |
 
 Pattern: a small one-time fill cascades into many skills. If a writer feels generic, the upstream profile is the gap.
 

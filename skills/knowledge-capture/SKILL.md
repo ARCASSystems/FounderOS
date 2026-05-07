@@ -32,7 +32,15 @@ tags: [book, podcast, article, conversation, experiment]
 - <application>
 ```
 
-Also update `brain/knowledge/README.md` with one row for the topic. Ask for a topic slug if it is not obvious from the source title.
+Also update `brain/knowledge/README.md` index table with one row. The columns are fixed:
+
+```
+| Topic | Captured | Tags | Source |
+|---|---|---|---|
+| <slug> | <YYYY-MM-DD> | <comma-separated tags> | <source title or URL> |
+```
+
+Insert the new row directly under the header. Do not invent additional columns. Ask for a topic slug if it is not obvious from the source title.
 
 Use `raw/` only when preserving the full source matters. Use `brain/knowledge/` for distilled notes that future skills should read.
 

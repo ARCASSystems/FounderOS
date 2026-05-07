@@ -15,13 +15,19 @@ If `core/identity.md` does not exist, stop with: `Founder OS not set up here. Ru
 
 ## Checks
 
-Run all five checks. Use the Agent tool to dispatch them in parallel when the environment supports sub-agents: send a single message with multiple Agent tool calls, one per check. If sub-agents are not available (e.g. the platform does not expose the Agent tool), run them in sequence and mark the report `parallel: unavailable`.
+Run all five checks. Sequential by default; parallel only if explicitly available.
 
-1. `readiness-check` - score and next moves.
-2. `lint` - broken links, orphans, stale content, provenance, contradictions.
-3. `wiki-build` state - read graph counts by default. If the user approves a write, run `/founder-os:wiki-build` first.
-4. Brain staleness - count entries past `Decay after`, flags older than Week 3, and rants older than 30 days.
-5. Voice completeness - check whether `core/voice-profile.yml` and `core/brand-profile.yml` still look like templates.
+**Parallel path (preferred when the Agent tool is exposed in this Claude Code build):** dispatch five sub-agents in a single message, one per check, each with a focused prompt that names the check and the expected output shape. Then merge the five results into the composite block.
+
+**Sequential path (fallback - applies if the Agent tool is not available, if a sub-agent fails, or if you are unsure):** read `skills/<check>/SKILL.md` for each of the five checks below and apply its logic inline against the live OS. Mark the report `parallel: unavailable`.
+
+For checks 4 and 5 there is no separate skill file - apply the rules below inline regardless of path.
+
+1. **readiness-check** - read `skills/readiness-check/SKILL.md` and apply. Returns score and next 3 moves.
+2. **lint** - read `skills/lint/SKILL.md` and apply. Returns broken links, orphans, stale content, provenance gaps, possible contradictions.
+3. **wiki-build state** - read `brain/relations.yaml` and report counts of curated edges and auto-generated wikilinks. Do NOT run wiki-build itself unless the user has approved the write at the gate above. If `brain/relations.yaml` does not exist, return `wiki: not initialised - run /founder-os:wiki-build to create it`.
+4. **Brain staleness** - count entries past `Decay after`, flags older than Week 3, and rants in `brain/rants/` older than 30 days where `processed: false`.
+5. **Voice completeness** - check whether `core/voice-profile.yml` and `core/brand-profile.yml` exist and have been filled past their template defaults.
 
 ## Wiki Write Gate
 

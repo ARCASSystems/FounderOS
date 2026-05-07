@@ -19,11 +19,13 @@ If `scripts/query.py` exists, use it. If not, perform the procedure manually.
 
 ## Script Path
 
-Run:
+Take the user's question (the literal text they typed after `/founder-os:query`) and pass it as a single quoted argument:
 
 ```bash
-python scripts/query.py "$ARGUMENTS"
+python scripts/query.py "<the user's question, verbatim>"
 ```
+
+Substitute the question text directly. Do not rely on shell variables like `$ARGUMENTS` - those are not exposed in the Claude Code Bash tool context. If the question contains double quotes, escape them with `\"`.
 
 Print the script output verbatim. If the script exits non-zero, print the error and stop.
 

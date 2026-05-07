@@ -40,9 +40,21 @@ If something on this list matters to you, open an issue or email `solutions@arca
 
 ## v1.7 candidates
 
-- **Stronger retrieval path** (~6 hr). Add richer ranking and optional cached indexes only if plain-file query misses real user questions twice.
+Three highest-impact candidates from a v1.6 review that compared FounderOS to claude-mem (a complementary tool-call telemetry plugin). All three are pure markdown / Python additions - no vector DB, no daemon.
+
+- **Token-aware progressive query** (~6 hr, M). Extend `scripts/query.py` into 3 modes: `--index` (filename + first heading + decay flag, ~50 tokens per hit), `--timeline <slug>` (entries within 7 days either side), `--full <ids>` (full nodes by ID). Mirrors claude-mem's 3-layer progressive disclosure pattern using grep + frontmatter parse only. The biggest payoff: the markdown corpus stays usable past ~500 entries without an index.
+- **Citations-by-ID** (~3 hr, S). Stamp every `brain/log.md` and `brain/knowledge/*.md` entry with a stable `id: log-2026-05-07-001` slug in frontmatter. Update `query.py` and `wiki-build` to surface and resolve them. Lets the dream digest cite "see #log-2026-05-07-003" instead of restating. Foundation for any future retrieval layer.
+- **Observation log auto-tail** (~4 hr, S). Add a `PostToolUse` hook that appends one-line observations to `brain/observations/<YYYY-MM-DD>.jsonl` (tool, file, intent-summary). Daily roll into `brain/log.md` via `/dream`. Closes the firehose-vs-curated gap without abandoning markdown. Optional, opt-in flag; off by default to respect zero-runtime principle.
+
+Older v1.7 backlog items still live but lower priority:
+
 - **Company OS layer 2 sketch** (~6 hr). Draft the multi-user state model once a real team handoff needs shared operating context.
 - **Install ergonomics sweep** (~4 hr). Re-check plugin install, script copy, and first-run docs after v1.6 reaches fresh users.
+
+## v1.8+ surface expansion
+
+- **"Works with: Cowork" tag** when Anthropic ships hook + `.claude/commands/` parity in Claude Cowork. Until then, FounderOS is Claude-Code-only on the active surface; Cowork pairs as read-only execution surface against the same folder.
+- **Notion Starter Kit** for Cloud Claude users who do not have Claude Code. Shipping path is a public Notion duplicate template plus a Claude Project system prompt. Tracked separately from this roadmap.
 
 ---
 
