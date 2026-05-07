@@ -16,6 +16,7 @@ If something on this list matters to you, open an issue or email `solutions@arca
 - **v1.5.0** - tailoring + memory release. Six daily skills (sop-writer, meeting-prep, email-drafter, strategic-analysis, decision-framework, your-voice) now actually read the wizard's captured answers. `/rant` and `/dream` ship with `brain/rants/` folder. Auto-memory `MEMORY.md` template + wizard step land cross-session continuity for behavioral guards. Brain example entries seeded with real dates so the SessionStart brief surfaces them on Day 1. README defines substrate / brain / wiki vocabulary in plain English. `docs/first-day.md` adds "A real Tuesday" walkthrough.
 - **v1.6.0** - retrieval and ship-safety release. README grouped by Day 1, Week 1, and Month 1+. Eight operating skills added, plus query and audit. `brain/knowledge/` now feeds proposal and strategy work. `/founder-os:query` traverses markdown and `brain/relations.yaml`. `/founder-os:audit` defines one health report across readiness, lint, wiki, brain, and voice.
 - **v1.7.0** - retrieval-precision release. Brain entries now carry stable `<channel>-YYYY-MM-DD-NNN` IDs stamped at write time. `scripts/query.py` adds three modes (`--mode index`, `--mode timeline --anchor <slug>`, `--mode full --ids <comma-list>`) so the markdown corpus stays usable past ~500 entries without an index. New opt-in `PostToolUse` hook appends one JSON line per tool call to `brain/observations/<YYYY-MM-DD>.jsonl` when `FOUNDER_OS_OBSERVATIONS=1` is set. `/dream` cites IDs and emits an OBSERVED section. WS4 (install ergonomics sweep) deferred pending tester feedback.
+- **v1.8.0** - query test coverage release. Added a stdlib `unittest` suite and synthetic corpus for `scripts/query.py`, covering index, timeline, full, bare invocation, and guard paths.
 
 ---
 
@@ -39,14 +40,14 @@ If something on this list matters to you, open an issue or email `solutions@arca
 
 ---
 
-## v1.8 candidates
+## v1.9 candidates
 
-- **Install ergonomics sweep** (~4 hr). Re-check plugin install, script copy, and first-run docs after v1.7 reaches fresh users. WS4 in the v1.7 plan was deferred for the same reason: no tester feedback file at build time. Roll any feedback captured between v1.7 and v1.8 into this pass.
+- **Install ergonomics sweep** (~4 hr). Re-check plugin install, script copy, and first-run docs after v1.7 reaches fresh users. WS4 in the v1.7 plan was deferred for the same reason: no tester feedback file at build time. Roll any feedback captured between v1.7 and v1.9 into this pass.
 - **Company OS layer 2 sketch** (~6 hr). Draft the multi-user state model once a real team handoff needs shared operating context.
 - **Observation rollup polish** (~3 hr). After v1.7's opt-in observation log gets used in real sessions, tune the `/dream` OBSERVED section format. Add a per-tool summary, dedupe noisy file reads, and surface unusual tool patterns.
 - **Query layer caching** (~4 hr). Once entry counts cross ~500 per channel, cache parsed frontmatter in `brain/.query-cache.json` so `query.py` does not re-parse every file on every run. Cache invalidates on file mtime change.
 
-## v1.8+ surface expansion
+## v1.9+ surface expansion
 
 - **"Works with: Cowork" tag** when Anthropic ships hook + `.claude/commands/` parity in Claude Cowork. Until then, FounderOS is Claude-Code-only on the active surface; Cowork pairs as read-only execution surface against the same folder.
 - **Notion Starter Kit** for Cloud Claude users who do not have Claude Code. Shipping path is a public Notion duplicate template plus a Claude Project system prompt. Tracked separately from this roadmap.

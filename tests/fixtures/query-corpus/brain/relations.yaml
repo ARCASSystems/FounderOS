@@ -1,0 +1,9 @@
+---
+date: 2026-05-05
+---
+
+edges:
+  - from: CLAUDE.md
+    to: brain/flags.md
+  - from: brain/flags.md
+    to: context/priorities.md

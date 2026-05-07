@@ -51,5 +51,10 @@ dist/
 build/
 node_modules/
 
+# Python bytecode (generated when tests/ runs)
+__pycache__/
+*.py[cod]
+*$py.class
+
 # Audit artifacts (generated, not source-of-truth)
 audit-*.md

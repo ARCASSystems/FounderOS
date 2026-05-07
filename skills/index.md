@@ -1,6 +1,6 @@
 # Founder OS Skills
 
-37 skills included as of v1.7 (count unchanged from v1.6). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log without adding new skills. The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
+37 skills included as of v1.8 (count unchanged since v1.6). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. None of these added new skills. The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
 
 | Skill | Status | Replaces |
 |-------|--------|---------|

@@ -31,6 +31,7 @@ EXCLUDED_PARTS = {
     "archive",
     "transcripts",
     "rants",
+    "tests",
 }
 
 # Mode caps and per-hit budgets.
