@@ -1,6 +1,6 @@
 # Founder OS Skills
 
-37 skills included as of v1.9 (count unchanged since v1.6). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. v1.9 added hook test coverage and documented the query `--root` flag. None of these added new skills. The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
+39 skills included as of v1.10 (37 from v1.9 plus `brain-snapshot` and `brain-pass`). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. v1.9 added hook test coverage and documented the query `--root` flag. v1.10 adds the runtime brain context layer: a deterministic snapshot every skill can consume at task time, plus a brain-pass skill that synthesises answers across the brain layer with citations. The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
 
 | Skill | Status | Replaces |
 |-------|--------|---------|
@@ -10,6 +10,8 @@
 | [lint](lint/SKILL.md) | Ready | Read-only audit of wiki integrity. Run via `/founder-os:lint`. |
 | [wiki-build](wiki-build/SKILL.md) | Ready | Walk markdown, extract `[[wikilinks]]`, refresh auto-generated graph in `brain/relations.yaml`. Companion to lint. Run via `/founder-os:wiki-build`. |
 | [query](query/SKILL.md) | Ready | Multi-hop traversal across `brain/relations.yaml` plus core operating files. Run via `/founder-os:query`. |
+| [brain-snapshot](brain-snapshot/SKILL.md) | Ready | Generates and documents the runtime context payload skills consume at task time. Output lives at `brain/.snapshot.md`. |
+| [brain-pass](brain-pass/SKILL.md) | Ready | Semantic retrieval over the brain layer. Synthesises answers across log, knowledge, decisions, flags, patterns. Run via `/founder-os:brain-pass "<question>"`. |
 | [audit](audit/SKILL.md) | Ready | Composite OS health report (readiness + lint + wiki + brain staleness + voice completeness). Run via `/founder-os:audit`. |
 | [weekly-review](weekly-review/SKILL.md) | Ready | |
 | [priority-triage](priority-triage/SKILL.md) | Ready | Reclaim, Taskade |
@@ -44,7 +46,7 @@
 
 ## Commands
 
-This plugin ships nineteen slash commands:
+This plugin ships twenty slash commands (nineteen from v1.9 plus `/founder-os:brain-pass`):
 
 | Command | Purpose |
 |---------|---------|
@@ -56,6 +58,7 @@ This plugin ships nineteen slash commands:
 | [/founder-os:lint](../.claude/commands/lint.md) | Read-only wiki audit. Cross-references, orphans, stale content, provenance, possible contradictions. |
 | [/founder-os:wiki-build](../.claude/commands/wiki-build.md) | Refresh the auto-generated wiki graph in `brain/relations.yaml`. Idempotent. |
 | [/founder-os:query](../.claude/commands/query.md) | Return the top 3 to 5 OS nodes for a multi-hop question. Plain markdown traversal, no embeddings. |
+| [/founder-os:brain-pass](../.claude/commands/brain-pass.md) | Synthesise an answer across the brain layer with citations. Use when a question spans multiple brain files. |
 | [/founder-os:audit](../.claude/commands/audit.md) | Composite OS health report across readiness, lint, wiki, brain staleness, and voice completeness. |
 | [/founder-os:forcing-questions](../.claude/commands/forcing-questions.md) | Six-question gate before any new initiative, scope expansion, or fresh idea is started. |
 | [/founder-os:ship-deliverable](../.claude/commands/ship-deliverable.md) | Final read-only gate before any external deliverable leaves your machine. |
@@ -70,7 +73,7 @@ This plugin ships nineteen slash commands:
 
 ## Status
 
-37 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile.
+39 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile.
 
 Release notes:
 
@@ -82,5 +85,6 @@ Release notes:
 - v1.7 added stable entry IDs, progressive query modes, and opt-in observation logging.
 - v1.8 added query test coverage for `scripts/query.py`.
 - v1.9 added hook test coverage and documented the query `--root` flag.
+- v1.10 added `brain-snapshot` (runtime context payload at `brain/.snapshot.md`), wired nine output-producing skills to consume it (meeting-prep, weekly-review, strategic-analysis, decision-framework, founder-coaching, knowledge-capture, unit-economics, priority-triage, brain-log), added `brain-pass` (semantic retrieval across the brain layer with citations), and auto-invoked brain-pass from meeting-prep and linkedin-post.
 
 All additions across v1.2 through v1.6 are additive. No existing skill behaviour was changed without an explicit version note.

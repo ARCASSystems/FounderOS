@@ -17,6 +17,18 @@ The founder is overwhelmed. Your job: find the ONE thing that unblocks the most,
 - `cadence/weekly-commitments.md` - what was planned
 - `brain/flags.md` - known stalls
 
+## Brain context (default)
+
+Before producing output, read `brain/.snapshot.md` if it exists.
+
+If the snapshot is missing, run:
+
+    python scripts/brain-snapshot.py --write
+
+Then read it. If the snapshot script is also missing (older install), proceed using only the profile files. Do not block.
+
+The snapshot tells you what flags are open, what the user is working on this week, and what the latest staleness state is. Apply this context to your output where it is relevant. Do not surface every snapshot field in every output - use judgment. For priority triage, open flags ARE the unfinished work that competes for the slot, the must-do list is the existing commitment that anchors today, and recent decisions tell you what is settled and should not be re-opened.
+
 ## Step 2: Apply Filters
 
 Run through these filters in order:

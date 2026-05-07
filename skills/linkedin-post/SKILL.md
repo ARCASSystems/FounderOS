@@ -18,6 +18,32 @@ Read `core/voice-profile.yml`. If the file is missing or still contains the `[BR
 
 The warning is for the user, not part of the post. They strip it before publishing.
 
+## Brain context (default)
+
+Before producing output, read `brain/.snapshot.md` if it exists.
+
+If the snapshot is missing, run:
+
+    python scripts/brain-snapshot.py --write
+
+Then read it. If the snapshot script is also missing (older install), proceed using only the profile files. Do not block.
+
+The snapshot tells you what flags are open, what the user is working on this week, and what the latest staleness state is. Apply this context to your output where it is relevant. Do not surface every snapshot field in every output - use judgment. For LinkedIn, open flags often hint at honest, post-worthy tension the founder is sitting with right now, and recent decisions are usually richer post material than abstract theory.
+
+## Brain pass (auto)
+
+Before drafting, invoke the `brain-pass` skill (`skills/brain-pass/SKILL.md`) with this question:
+
+> What has the user posted on LinkedIn recently? What themes are stale? What recent decisions or knowledge entries would make a fresh post?
+
+Read the structured Answer / Evidence / Confidence / Gaps block the pass returns. Use it to:
+
+- Suggest two or three angles the user has not posted recently.
+- Flag any theme repetition risk before drafting (so the post does not echo something from last week).
+- Tie the draft to a recent decision or knowledge entry when one fits, citing the entry ID at the bottom of the draft as a P.S. or pinned note for the user.
+
+If `skills/brain-pass/SKILL.md` is missing (older install), fall back to `python scripts/query.py "linkedin"` and reason from those raw matches. Do not block.
+
 ## The Format
 
 **Length:** 100-300 words typical. Up to 500 when the topic earns it. Never pad to fill space.

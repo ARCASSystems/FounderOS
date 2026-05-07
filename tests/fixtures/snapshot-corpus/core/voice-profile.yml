@@ -1,0 +1,24 @@
+voice:
+  rhythm: "short_hits"
+  opening_style: "punch"
+  closing_style: "weight"
+  signoff_phrase: ""
+  person_default: "first"
+  contractions: "sometimes"
+  hedging: "occasional"
+  reading_level: 8
+  preferred_words:
+    - "ship"
+    - "fix"
+    - "build"
+  banned_words:
+    - "synergy"
+    - "paradigm"
+  idiosyncrasies:
+    - "starts sentences with And"
+  samples:
+    - title: "demo"
+      context: "fixture"
+      text: |
+        sample voice line one.
+        sample voice line two.

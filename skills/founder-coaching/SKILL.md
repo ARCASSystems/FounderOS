@@ -24,6 +24,20 @@ The philosophy: Too many identities is the problem, not loss of one. Founders do
 
 ---
 
+## Brain context (default)
+
+Before producing output, read `brain/.snapshot.md` if it exists.
+
+If the snapshot is missing, run:
+
+    python scripts/brain-snapshot.py --write
+
+Then read it. If the snapshot script is also missing (older install), proceed using only the profile files. Do not block.
+
+The snapshot tells you what flags are open, what the user is working on this week, and what the latest staleness state is. Apply this context to your output where it is relevant. Do not surface every snapshot field in every output - use judgment. For coaching, open flags often map directly to coaching themes (role overload, avoidance, stalled commitments) - surface them by name when they fit, rather than re-asking the founder to recount them.
+
+---
+
 ## The Four Zones
 
 Every founder is operating in one of four zones at any given time. The zone determines WHAT you focus on and HOW you approach the conversation.

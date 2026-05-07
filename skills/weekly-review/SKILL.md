@@ -19,6 +19,18 @@ Read these files silently:
 - `brain/flags.md` - any stalls or friction
 - `cadence/daily-anchors.md` - what the daily work looked like
 
+## Brain context (default)
+
+Before producing output, read `brain/.snapshot.md` if it exists.
+
+If the snapshot is missing, run:
+
+    python scripts/brain-snapshot.py --write
+
+Then read it. If the snapshot script is also missing (older install), proceed using only the profile files. Do not block.
+
+The snapshot tells you what flags are open, what the user is working on this week, and what the latest staleness state is. Apply this context to your output where it is relevant. Do not surface every snapshot field in every output - use judgment. For the weekly review, open flags that have stayed open across multiple weeks are themselves the retro finding, and staleness in the cadence files is the headline of the planning block.
+
 ## Step 2: Retro
 
 Build a retro from the data:

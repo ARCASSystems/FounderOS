@@ -20,6 +20,18 @@ Read these three files so the analysis is grounded in the user's actual position
 
 If a file is empty or missing, name the gap explicitly in the OUR POSITIONING block. Do not silently default to a generic stance.
 
+## Brain context (default)
+
+Before producing output, read `brain/.snapshot.md` if it exists.
+
+If the snapshot is missing, run:
+
+    python scripts/brain-snapshot.py --write
+
+Then read it. If the snapshot script is also missing (older install), proceed using only the profile files. Do not block.
+
+The snapshot tells you what flags are open, what the user is working on this week, and what the latest staleness state is. Apply this context to your output where it is relevant. Do not surface every snapshot field in every output - use judgment. For strategic analysis, open flags often reveal blocking constraints the analysis must respect, and recent decisions bound the option space you are allowed to recommend from.
+
 ## Framework Selection
 
 **"Who are we competing with?"** -> Competitor Map

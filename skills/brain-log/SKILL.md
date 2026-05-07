@@ -35,6 +35,18 @@ The thought requires immediate action.
 
 **Default:** Infer the mode from context. The founder can override: "just log it" (Mode A), "tie this to priorities" (Mode B), "act on this now" (Mode C).
 
+## Brain context (default)
+
+Before producing output, read `brain/.snapshot.md` if it exists.
+
+If the snapshot is missing, run:
+
+    python scripts/brain-snapshot.py --write
+
+Then read it. If the snapshot script is also missing (older install), proceed using only the profile files. Do not block.
+
+The snapshot tells you what flags are open, what the user is working on this week, and what the latest staleness state is. Apply this context to your output where it is relevant. Do not surface every snapshot field in every output - use judgment. For brain logging, recent decisions and open flags help you choose the right tag - if a thought connects to an active flag or recent decision, prefer Mode B (cross-reference) over Mode A (log in isolation).
+
 ## ID Stamping
 
 Every new entry across the brain channels gets a stable ID at write time. Convention spec: `rules/entry-conventions.md`.

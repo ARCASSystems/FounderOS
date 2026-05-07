@@ -25,7 +25,7 @@ Three layers, in plain English. Skills read and write across all of them.
 - **Brain layer** - log, flags, patterns, parked decisions, rants, knowledge. The memory that captures what happened, what is stuck, and what is worth reusing.
 - **Wiki layer** - `[[cross-references]]` between files plus a source archive (`raw/`) for articles, transcripts, and anything you want preserved.
 
-Areas for searching across the 37 skills:
+Areas for searching across the 39 skills:
 
 - **Daily ops:** weekly-review, priority-triage, brain-log, decision-framework, session-handoff, meeting-prep, knowledge-capture, founder-coaching, unit-economics, strategic-analysis, pre-send-check, sop-writer, forcing-questions, blind-spot-review, ship-deliverable
 - **Voice and brand:** voice-interview, brand-interview, your-voice, your-deliverable-template
@@ -87,7 +87,7 @@ Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and 
 
 ## What ships in this repo
 
-### Skills (37)
+### Skills (39)
 
 Skills are grouped by when you will actually reach for them, not by category. If you are still on Day 1, you can ignore the rest.
 
@@ -141,9 +141,11 @@ Skills are grouped by when you will actually reach for them, not by category. If
 | data-security | Classifies data before paste, upload, or external tool use. Blocks unsafe data movement and names the safe path. |
 | bottleneck-diagnostic | Scores founder dependency across decisions, clients, process, revenue, and growth capacity. |
 | query | Traverses `brain/relations.yaml` plus operating files. Three progressive modes: `index` returns the top hits with stable IDs, `timeline` returns entries within a 7-day window of an anchor, `full` returns the body of specific IDs you ask for. Backwards-compatible bare invocation still works. |
+| brain-snapshot | Generates a small deterministic markdown payload (open flags, this week's must-do, recent decisions, voice and brand fields, staleness) at `brain/.snapshot.md`. Output-producing skills read it at task time so they reflect current state instead of starting cold. Pure stdlib, regenerates on demand. |
+| brain-pass | Reasons across the brain layer (log, decisions, knowledge, flags, patterns) and returns a synthesised answer with stable-ID citations. Free-tier accessible: the model running the skill IS the retrieval engine. No embeddings, no API call. |
 | audit | Runs readiness, lint, wiki state, brain staleness, and voice completeness as one OS health report. |
 
-### Slash commands (19)
+### Slash commands (20)
 
 | Command | Purpose |
 |---|---|
@@ -155,6 +157,7 @@ Skills are grouped by when you will actually reach for them, not by category. If
 | `/founder-os:lint` | Read-only wiki audit. Cross-references, orphans, stale content, provenance, possible contradictions. |
 | `/founder-os:wiki-build` | Refresh the auto-generated wiki graph in `brain/relations.yaml`. Idempotent. |
 | `/founder-os:query <question>` | Search the OS graph. Default returns top 3 to 5 nodes with stable IDs. `--mode timeline --anchor <slug>` returns entries within 7 days of an anchor. `--mode full --ids <a,b,c>` returns the full body of specific IDs. |
+| `/founder-os:brain-pass "<question>"` | Synthesise an answer across the brain layer with stable-ID citations. Use when a question spans multiple brain files and a keyword query is too noisy. |
 | `/founder-os:audit` | Composite OS health report across readiness, lint, wiki, brain, and voice. |
 | `/founder-os:forcing-questions <initiative>` | Run the six-question gate before starting a new initiative. |
 | `/founder-os:ship-deliverable <path>` | Run the final read-only deliverable ship gate. |
@@ -184,7 +187,7 @@ Scaffold artifacts for users who do not run Claude Code. This path is not live u
 
 Founder OS does not assume your stack. The OS is files and skills. Each skill declares which MCP servers it can use, and degrades gracefully when those MCPs are not available.
 
-Most of the 37 skills work end-to-end with zero MCPs. A few skills, including `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`, function without MCPs but produce better output with the relevant integration connected.
+Most of the 39 skills work end-to-end with zero MCPs. A few skills, including `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`, function without MCPs but produce better output with the relevant integration connected.
 
 The full catalog: [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
@@ -243,7 +246,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.9.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.10.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -310,9 +313,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.9.0. Public push week of 2026-05-07.
+Version 1.10.0. Public push week of 2026-05-07.
 
-v1.9.0 is the hook test coverage release. It adds stdlib `unittest` coverage for the opt-in observation hook, static parse checks for session hooks, and public docs for the query `--root` flag. v1.7.0 remains the latest user-facing feature release: stable entry IDs, progressive query modes, and opt-in observation logging.
+v1.10.0 is the runtime brain context release. The OS now reasons across your memory, not just stores it. A small deterministic snapshot (open flags, this week's must-do, recent decisions, voice and brand fields, staleness) regenerates on demand at `brain/.snapshot.md`. Nine output-producing skills (meeting-prep, weekly-review, strategic-analysis, decision-framework, founder-coaching, knowledge-capture, unit-economics, priority-triage, brain-log) read it at task time so output reflects current state instead of starting cold. A new `brain-pass` skill (`/founder-os:brain-pass "<question>"`) synthesises answers across the brain layer with stable-ID citations - no embeddings, no API call, free-tier accessible. `meeting-prep` and `linkedin-post` auto-invoke brain-pass before producing output. v1.7.0 remains the latest substrate feature release (stable entry IDs, progressive query modes, opt-in observation logging). v1.10 sits on top.
 
 Full release history in [`CHANGELOG.md`](CHANGELOG.md). Current limits in [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md).
 

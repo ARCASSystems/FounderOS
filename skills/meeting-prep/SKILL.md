@@ -19,6 +19,33 @@ Read three files so the brief is specific, not generic.
 
 If `stack.json` is null for a field, do not invent. Note "no calendar integration configured" and proceed.
 
+## Brain context (default)
+
+Before producing output, read `brain/.snapshot.md` if it exists.
+
+If the snapshot is missing, run:
+
+    python scripts/brain-snapshot.py --write
+
+Then read it. If the snapshot script is also missing (older install), proceed using only the profile files. Do not block.
+
+The snapshot tells you what flags are open, what the user is working on this week, and what the latest staleness state is. Apply this context to your output where it is relevant. Do not surface every snapshot field in every output - use judgment. For meeting prep, open flags often surface unresolved threads with the same person, and recent decisions tell you what is locked in already so the brief does not re-open settled questions.
+
+## Brain pass (auto)
+
+Before writing the meeting brief, invoke the `brain-pass` skill (`skills/brain-pass/SKILL.md`) with this question, substituting `<subject>` for the meeting subject (the person, company, or topic):
+
+> What do we know about `<subject>`? Past interactions, open commitments, unresolved threads, sensitivities.
+
+Read the structured Answer / Evidence / Confidence / Gaps block the pass returns. Use it to shape the brief:
+
+- Past commitments become explicit talking points or "watch for" items.
+- Unresolved tension becomes a sensitivity flag in PREP ITEMS.
+- A first-interaction answer routes to the New Prospect Detection block below.
+- Cite the entry IDs from Evidence in the brief so the founder can open the source if needed.
+
+If `skills/brain-pass/SKILL.md` is missing (older install), fall back to `python scripts/query.py --mode timeline --anchor <subject-slug>` and then `python scripts/query.py "<subject>"` if no anchor matches. Do not block.
+
 ## New Prospect Detection
 
 If the meeting is with a new prospect (someone the founder hasn't worked with before):

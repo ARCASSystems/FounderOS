@@ -1,0 +1,17 @@
+identity:
+  display_name: "Acme Studio"
+  tagline: ""
+  support_contact: "hello@example.com"
+
+colors:
+  primary:
+    hex: "#0A66C2"
+    usage: "section headers"
+  secondary:
+    hex: "#FF7A00"
+    usage: "accents"
+
+fonts:
+  primary:
+    family: "Inter"
+    source: "google_fonts"

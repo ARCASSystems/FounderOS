@@ -15,6 +15,18 @@ Read `core/identity.md`. Find the line `**Decision style:**` (Phase 0.7 captures
 
 If the file is missing or the field is unset, default to the standard template and offer to capture decision style next time.
 
+## Brain context (default)
+
+Before producing output, read `brain/.snapshot.md` if it exists.
+
+If the snapshot is missing, run:
+
+    python scripts/brain-snapshot.py --write
+
+Then read it. If the snapshot script is also missing (older install), proceed using only the profile files. Do not block.
+
+The snapshot tells you what flags are open, what the user is working on this week, and what the latest staleness state is. Apply this context to your output where it is relevant. Do not surface every snapshot field in every output - use judgment. For decision framing, recent decisions tell you what is already locked in (and should not be re-debated), and open flags often surface adjacent stalls that bear on the current choice.
+
 ### Lead-with templates by style
 
 **`gut`** - open with the GUT CHECK block:

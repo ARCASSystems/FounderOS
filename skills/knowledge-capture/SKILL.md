@@ -45,6 +45,18 @@ Insert the new row directly under the header. Do not invent additional columns. 
 
 Use `raw/` only when preserving the full source matters. Use `brain/knowledge/` for distilled notes that future skills should read.
 
+## Brain context (default)
+
+Before producing output, read `brain/.snapshot.md` if it exists.
+
+If the snapshot is missing, run:
+
+    python scripts/brain-snapshot.py --write
+
+Then read it. If the snapshot script is also missing (older install), proceed using only the profile files. Do not block.
+
+The snapshot tells you what flags are open, what the user is working on this week, and what the latest staleness state is. Apply this context to your output where it is relevant. Do not surface every snapshot field in every output - use judgment. For knowledge capture, recent decisions and open flags tell you which threads to cross-reference - a new note that connects to an active flag is more valuable than a standalone summary.
+
 ## ID Stamping
 
 Every new knowledge file gets a stable ID at write time. Convention spec: `rules/entry-conventions.md`.
