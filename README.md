@@ -11,7 +11,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 3. **`/founder-os:voice-interview`** - so every writing skill sounds like you, not Claude (15 min)
 4. **`/founder-os:brand-interview`** - so every deliverable looks like you (10 min)
 
-After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-screen view of today, and `/next` recommends one action. Full first-day path in [docs/first-day.md](docs/first-day.md).
+After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-screen view of today, and `/next` recommends one action. Full first-day path in [docs/first-day.md](docs/first-day.md). Full per-command reference (outcome, args, files written, prereqs, follow-ups) in [docs/commands.md](docs/commands.md).
 
 > **Path B users (manual git clone):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/today`, etc. The plugin namespace only activates on Path A. See [docs/install.md](docs/install.md) for the exact commands per path.
 
@@ -93,82 +93,86 @@ Skills are grouped by when you will actually reach for them, not by category. If
 
 #### Day 1 - use during your first session
 
-| Skill | What happens when you run it |
+Each row tells you the **outcome** (what you get when it finishes), not the process. Read-only skills are tagged.
+
+| Skill | What you get |
 |---|---|
-| founder-os-setup | Asks 6 to 7 structured questions about your business, role, priorities, and tools. Writes your full operating system to local disk. 15 min. |
-| voice-interview | 20 structured questions. You paste at least 2 writing samples. Generates a voice profile every writing skill reads on every output. |
-| brand-interview | Structured questions on colors, fonts, logo, document layout. Generates a brand profile every visual deliverable inherits. |
-| readiness-check | Scans your OS for stale priorities, missing decisions, empty cadence, broken voice profile. Returns a weighted score and the next 3 high-impact moves. |
-| business-context-loader | Loads the per-company context file. Surfaces what is missing or stale. Routes to the next obvious move. |
-| brain-log | Captures a thought. Routes to `brain/log.md` in one of three modes: log only, log with a cross-reference to an existing file, or log and act on it now. |
+| founder-os-setup | Your full operating layer on disk: identity, priorities, decisions, clients, daily anchor, weekly commitments, brain log, flags. 8+ files written. 15 min. |
+| voice-interview | A `core/voice-profile.yml` that captures how you actually write. Every writing skill reads it. Requires you paste 2+ writing samples. 15 min. |
+| brand-interview | A `core/brand-profile.yml` plus an assets folder. Every branded deliverable inherits the colors, fonts, and logo. 10 min. |
+| readiness-check | A weighted readiness score plus the next 3 high-impact moves to run. Read-only. |
+| business-context-loader | A loaded per-company context file plus a list of what is missing or stale and the next obvious move. Read-only. |
+| brain-log | A new entry in `brain/log.md` with a stable `log-YYYY-MM-DD-NNN` ID. Three modes: log only, log with cross-reference, or log and act. May also update the referenced file. |
 
 #### Week 1 - use within your first working week
 
-| Skill | What happens when you run it |
+| Skill | What you get |
 |---|---|
-| priority-triage | Takes a long list of priorities. Forces a top 3. Explicitly names what gets cut and why. |
-| weekly-review | Walks last week. Forces a Must/Should/Did bucket per priority. Surfaces every open flag for keep/kill/escalate. |
-| decision-framework | Walks you through a structured decision: criteria, options, trade-offs, kill criteria. Writes the resolved decision to `context/decisions.md`. |
-| meeting-prep | Builds a brief from meeting context, attendees, and your prior interactions with them. Captures the debrief afterward into the right files. |
-| email-drafter | Drafts emails in your voice. Reads the inbox via Gmail or Outlook MCP if connected. Otherwise you paste the thread. |
-| linkedin-post | Writes a LinkedIn post in your voice. Pulls from your voice profile and applies anti-AI rules. |
-| client-update | Writes a status update for a client. Pulls progress from `context/clients.md` and frames it in your voice. |
-| your-voice | Reads `core/voice-profile.yml` and writes any text in your voice. Every other writing skill calls this one. |
-| your-deliverable-template | Produces branded documents using your visual brand profile. |
-| pre-send-check | Hard gate before any deliverable leaves your machine. Checks voice, source truth, anti-AI scan, and personalization. |
-| session-handoff | Packs up what you did, what is open, what the next operator needs to know. Writes a handoff file. |
-| forcing-questions | Runs six fixed questions before a new initiative starts. Catches vague done states, phantom users, scope creep, and false urgency. |
-| blind-spot-review | Runs a second-pass review across legal, contracts, data, timing, relationships, upside, and walkaway risk before pre-send. |
-| ship-deliverable | Runs template fit, anti-AI scan, blind-spot evidence, and pre-send-check in one read-only final gate. |
+| priority-triage | A top 3 list with everything else explicitly cut and the reason for each cut. Read-only. |
+| weekly-review | A Must/Should/Did bucket per priority for last week, plus a keep/kill/escalate verdict on every open flag. Updates `cadence/weekly-commitments.md` and rolls forward. |
+| decision-framework | A structured decision document: criteria, options, trade-offs, kill criteria. Writes the resolved decision to `context/decisions.md` with a stable ID. |
+| meeting-prep | A brief covering attendees, prior interactions, talking points, and questions. Post-meeting: a debrief routed into `brain/log.md`, `context/clients.md`, and open commitments. |
+| email-drafter | A draft email in your voice ready to copy-paste. Reads the inbox via Gmail or Outlook MCP if connected. Otherwise you paste the thread. Read-only. |
+| linkedin-post | A LinkedIn post in your voice, anti-AI rules applied, hooks tested against the "see more" cutoff. Read-only. |
+| client-update | A status update for a named client, framed in your voice with progress lifted from `context/clients.md`. Read-only. |
+| your-voice | Any text rewritten in your voice using `core/voice-profile.yml`. Every writing skill calls this one. Read-only. |
+| your-deliverable-template | A branded document (proposal, deck, one-pager) inheriting colors, fonts, and logo from your brand profile. Writes to `drafts/` or `exports/`. |
+| pre-send-check | A pass or fail verdict across voice, source truth, anti-AI scan, and personalization. Names every issue. Nothing ships if anything fails. Read-only. |
+| session-handoff | A handoff file naming what you did, what is open, and what the next operator needs to know. Writes to `drafts/handoffs/` or a named path. |
+| forcing-questions | Six yes/no answers and a verdict on whether to start, kill, or postpone the initiative. Catches vague done states, phantom users, scope creep, false urgency. Read-only. |
+| blind-spot-review | A second-pass review across legal, contracts, data, timing, relationships, upside, and walkaway risk. Names risks before pre-send. Read-only. |
+| ship-deliverable | One pass-or-fail composite across template fit, anti-AI scan, blind-spot evidence, and pre-send-check. Final gate. Read-only. |
 
 #### Month 1+ - use as your pipeline and content rhythm grows
 
-| Skill | What happens when you run it |
+| Skill | What you get |
 |---|---|
-| proposal-writer | Writes a full proposal: scope, deliverables, terms, pricing. Inherits voice and visual brand. |
-| sop-writer | Captures a process you describe verbally. Writes a structured SOP someone else could follow. |
-| content-repurposer | Takes one source piece. Repurposes it across LinkedIn, Twitter, newsletter, internal doc, all in your voice. |
-| knowledge-capture | Captures takeaways from a book, podcast, article, or conversation into `brain/knowledge/`. Each note carries a stable `know-YYYY-MM-DD-NNN` ID so other skills cite it instead of restating content. |
-| founder-coaching | Coaching loop when you are stuck. References a bias toolkit and a zone framework to diagnose what is actually going on. |
-| unit-economics | Runs the math on a deal, hire, pricing change, or new business line. CAC, LTV, gross margin, breakeven. Stores the model file. |
-| strategic-analysis | Runs a market scan, competitor map, or opportunity assessment. Reads relevant `brain/knowledge/` notes before writing. |
-| ingest | Files a URL, file path, or pasted text into `raw/` with provenance. Then proposes wiki updates you approve before they land. |
-| lint | Walks the OS for broken `[[wikilinks]]`, orphan pages, stale time-sensitive content, provenance gaps, and contradictions. |
-| wiki-build | Extracts every `[[wikilink]]` across the OS and writes them to a machine-readable graph at `brain/relations.yaml`. |
-| approval-gates | Reads `rules/approval-gates.md` and decides whether an action is auto-runnable, ask-first, or refused. |
-| handoff-protocol | Creates a structured handoff artifact when work moves to another person, role, or future session. |
-| context-persistence | Searches the OS before asking the founder to repeat context. Cites source paths or names what is missing. |
-| data-security | Classifies data before paste, upload, or external tool use. Blocks unsafe data movement and names the safe path. |
-| bottleneck-diagnostic | Scores founder dependency across decisions, clients, process, revenue, and growth capacity. |
-| query | Traverses `brain/relations.yaml` plus operating files. Three progressive modes: `index` returns the top hits with stable IDs, `timeline` returns entries within a 7-day window of an anchor, `full` returns the body of specific IDs you ask for. Backwards-compatible bare invocation still works. |
-| brain-snapshot | Generates a small deterministic markdown payload (open flags, this week's must-do, recent decisions, voice and brand fields, staleness) at `brain/.snapshot.md`. Output-producing skills read it at task time so they reflect current state instead of starting cold. Pure stdlib, regenerates on demand. |
-| brain-pass | Reasons across the brain layer (log, decisions, knowledge, flags, patterns) and returns a synthesised answer with stable-ID citations. Free-tier accessible: the model running the skill IS the retrieval engine. No embeddings, no API call. |
-| audit | Runs readiness, lint, wiki state, brain staleness, and voice completeness as one OS health report. |
+| proposal-writer | A full proposal document (scope, deliverables, terms, pricing) inheriting voice and brand. Writes a branded file to `drafts/`. |
+| sop-writer | A structured SOP document someone else could follow, captured from how you describe the process verbally. Writes to `drafts/sops/` or a named path. |
+| content-repurposer | One source piece reformatted across LinkedIn, Twitter, newsletter, and internal doc, all in your voice. Read-only. |
+| knowledge-capture | A new `brain/knowledge/<topic>.md` note with a stable `know-YYYY-MM-DD-NNN` ID, plus a row in the knowledge index. Other skills cite it directly instead of restating content. |
+| founder-coaching | A diagnostic across the four operating zones (peacetime, pre-war, wartime, recovery), a role/identity map, and a verdict on what to shed. Read-only. |
+| unit-economics | The math on a deal, hire, pricing change, or new business line: CAC, LTV, gross margin, breakeven, payback period. Stores the model file under `drafts/`. |
+| strategic-analysis | A market scan, competitor map, or opportunity assessment grounded in your `brain/knowledge/` notes. Read-only. |
+| ingest | A new file in `raw/<source>.md` with provenance, plus proposed wiki updates you approve before they land. |
+| lint | A list of broken `[[wikilinks]]`, orphan pages, stale entries past their decay date, provenance gaps, and possible contradictions. Read-only. |
+| wiki-build | A refreshed `brain/relations.yaml` graph extracted from every `[[wikilink]]` in your OS. Idempotent. |
+| approval-gates | An auto-run / ask-first / refuse verdict on a proposed action against `rules/approval-gates.md`. Read-only. |
+| handoff-protocol | A structured handoff artifact for moving work to another person, role, or future session. Writes a named handoff file. |
+| context-persistence | A source-cited answer to "what do we already know about X" before you re-explain. Read-only. |
+| data-security | A data classification (Public, Internal, Confidential, Restricted) plus a safe-path verdict before any paste, upload, or external tool use. Read-only. |
+| bottleneck-diagnostic | A founder-dependency score across decisions, clients, process, revenue, and growth capacity, plus the highest-impact shed. Read-only. |
+| query | The top 3 to 5 OS nodes that match your question, each with a stable ID and the path that reached it. Three modes: index (default), timeline, full. Read-only. |
+| brain-snapshot | A small deterministic markdown payload at `brain/.snapshot.md` (open flags, this week's must-do, recent decisions, voice and brand fields, staleness). Output-producing skills read it at task time so they reflect current state instead of starting cold. Writes one file. |
+| brain-pass | A synthesised answer across the brain layer with stable-ID citations: Answer, Evidence, Confidence, Gaps. The model IS the retrieval engine. No embeddings, no API call. Read-only. |
+| audit | One composite health report across readiness, wiki state, brain staleness, voice completeness, and quarantine. Read-only. |
 
 ### Slash commands (20)
 
-| Command | Purpose |
+Each row tells you the **outcome** (what you see when it finishes) and whether it **writes** anything. Detailed behaviour, sample output, args, and follow-ups live in [`docs/commands.md`](docs/commands.md).
+
+| Command | What you get |
 |---|---|
-| `/founder-os:setup` | Run the setup wizard. |
-| `/founder-os:voice-interview` | Capture how you write into `core/voice-profile.yml`. Required for the voice-coupled writing skills to sound like you. |
-| `/founder-os:brand-interview` | Capture your visual identity into `core/brand-profile.yml`. Required for branded deliverables to look like you. |
-| `/founder-os:status` | Read-only OS readiness check. Returns a weighted score and the next 3 high-impact moves. |
-| `/founder-os:ingest <source>` | File a URL, file path, or pasted text into `raw/` with provenance. Propose wiki updates you approve. |
-| `/founder-os:lint` | Read-only wiki audit. Cross-references, orphans, stale content, provenance, possible contradictions. |
-| `/founder-os:wiki-build` | Refresh the auto-generated wiki graph in `brain/relations.yaml`. Idempotent. |
-| `/founder-os:query <question>` | Search the OS graph. Default returns top 3 to 5 nodes with stable IDs. `--mode timeline --anchor <slug>` returns entries within 7 days of an anchor. `--mode full --ids <a,b,c>` returns the full body of specific IDs. |
-| `/founder-os:brain-pass "<question>"` | Synthesise an answer across the brain layer with stable-ID citations. Use when a question spans multiple brain files and a keyword query is too noisy. |
-| `/founder-os:audit` | Composite OS health report across readiness, lint, wiki, brain, and voice. |
-| `/founder-os:forcing-questions <initiative>` | Run the six-question gate before starting a new initiative. |
-| `/founder-os:ship-deliverable <path>` | Run the final read-only deliverable ship gate. |
-| `/founder-os:update` | Pull the latest System Layer files. Subcommands: `check`, `rollback`. |
-| `/founder-os:uninstall` | Cleanly remove Founder OS. Default mode preserves your data. `--purge` removes everything. |
-| `/founder-os:rant` | Capture a raw thought dump into `brain/rants/`. |
-| `/founder-os:dream` | Process unprocessed rants into patterns, flags, parked decisions, needs-input, and client signals. Stamps stable IDs on every new entry and cites them in the digest. Rolls today's tool-call observation log into an OBSERVED section when the opt-in log is enabled. |
-| `/today` | 20-line one-screen view of today. |
-| `/next` | One recommended next action across priorities, deals, and cadence. |
-| `/pre-meeting` | Hard gate before any meeting. |
-| `/capture-meeting` | Route a transcript or brain dump into log + clients + open commitments. |
+| `/founder-os:setup` | A guided interview that ends with your full operating layer on disk: identity, priorities, decisions, clients, daily anchor, weekly commitments, brain log, flags. Writes 8+ files under `core/`, `context/`, `cadence/`, `brain/`. 15 min. |
+| `/founder-os:voice-interview` | A `core/voice-profile.yml` that captures how you actually write. Every voice-coupled writing skill (LinkedIn, email, proposal, client update) reads it on every output. 15 min. |
+| `/founder-os:brand-interview` | A `core/brand-profile.yml` plus an assets folder. Every branded deliverable (proposal, deck, one-pager) inherits these colors, fonts, and logo. 10 min. |
+| `/founder-os:status` | A weighted readiness score plus the next 3 high-impact moves to run right now. Read-only. |
+| `/founder-os:ingest <source>` | A new file in `raw/<source>.md` with provenance frontmatter, plus proposed wiki updates you approve before they land. Writes `raw/`, optionally updates `brain/relations.yaml`. |
+| `/founder-os:lint` | A list of broken `[[wikilinks]]`, orphan files, stale entries past their decay date, provenance gaps, and possible contradictions. Read-only. |
+| `/founder-os:wiki-build` | A refreshed `brain/relations.yaml` graph extracted from every `[[wikilink]]` in your OS. Idempotent. Writes `brain/relations.yaml`. |
+| `/founder-os:query <question>` | The top 3 to 5 OS nodes that match your question, each with a stable ID and the path that reached it. `--mode timeline --anchor <slug>` returns entries within 7 days of an anchor. `--mode full --ids <a,b,c>` returns full bodies. Read-only. |
+| `/founder-os:brain-pass "<question>"` | A synthesised answer with stable-ID citations: Answer, Evidence, Confidence, Gaps. Use when a question spans multiple brain files and a keyword query is too noisy. Read-only. |
+| `/founder-os:audit` | One composite health report covering readiness, wiki integrity, brain staleness, voice completeness, and quarantine state. Read-only. |
+| `/founder-os:forcing-questions <initiative>` | Six yes/no answers plus a scope-creep verdict on whether to start, kill, or postpone the initiative. Read-only. |
+| `/founder-os:ship-deliverable <path>` | A pass or fail verdict across template fit, anti-AI scan, blind-spot review, and pre-send checks. Names every issue. Nothing ships if anything fails. Read-only. |
+| `/founder-os:update` | A diff of System Layer files (skills, templates, commands, hooks) refreshed from the latest release. Your personal data (`core/`, `context/`, `cadence/`, `brain/`) is never touched. Subcommands: `check`, `rollback`. |
+| `/founder-os:uninstall` | A confirmation list of every file that will be removed, plus the actual cleanup. Default preserves your data. `--purge` removes everything. |
+| `/founder-os:rant` | A new `brain/rants/<YYYY-MM-DD>.md` file holding your raw dump verbatim. No structure asked. The `/dream` command processes it later. Writes `brain/rants/`. |
+| `/founder-os:dream` | A 5-line digest in `brain/log.md` plus stable-ID entries in `brain/patterns.md`, `brain/flags.md`, `brain/decisions-parked.md`, `brain/needs-input.md` as warranted. Each rant marked processed. Writes 5+ files. |
+| `/today` | A 20-line one-screen view: today's anchor, top open decisions, active flags, last 3 log entries, next calendar event. Read-only. |
+| `/next` | One recommended next action across priorities, deals, and cadence. Not a list, one action. Read-only. |
+| `/pre-meeting <subject>` | Pass or fail on the pre-meeting gate (capture artifact present, ask defined). Logs an intent entry to `brain/log.md` on pass. |
+| `/capture-meeting <subject>` | A routed summary: meeting log entry in `brain/log.md`, updated client status in `context/clients.md`, and any new open commitments. Writes 2 to 3 files. |
 
 ### Templates
 
