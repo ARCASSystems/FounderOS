@@ -11,7 +11,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 3. **`/founder-os:voice-interview`** - so every writing skill sounds like you, not Claude (15 min)
 4. **`/founder-os:brand-interview`** - so every deliverable looks like you (10 min)
 
-After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-screen view of today, and `/next` recommends one action. Full first-day path in [docs/first-day.md](docs/first-day.md). Full per-command reference (outcome, args, files written, prereqs, follow-ups) in [docs/commands.md](docs/commands.md).
+After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-screen view of today, and `/next` recommends one action. Full first-day path in [docs/first-day.md](docs/first-day.md). Full per-command reference in [docs/commands.md](docs/commands.md). Full per-skill reference (outcome, reads, writes, voice rules, prereqs, follow-ups) in [docs/skills.md](docs/skills.md).
 
 > **Path B users (manual git clone):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/today`, etc. The plugin namespace only activates on Path A. See [docs/install.md](docs/install.md) for the exact commands per path.
 
@@ -91,9 +91,9 @@ Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and 
 
 Skills are grouped by when you will actually reach for them, not by category. If you are still on Day 1, you can ignore the rest.
 
-#### Day 1 - use during your first session
+Each row tells you the **outcome** (what you get when it finishes). Detailed reads, writes, voice rules, prereqs, and follow-ups for every skill live in [`docs/skills.md`](docs/skills.md).
 
-Each row tells you the **outcome** (what you get when it finishes), not the process. Read-only skills are tagged.
+#### Day 1 - use during your first session
 
 | Skill | What you get |
 |---|---|
