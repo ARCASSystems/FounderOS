@@ -74,6 +74,23 @@ When called from inside another skill (the calling skill provides the question),
 
 Summarise. Do not paste raw entry bodies that contain personal or client-sensitive content. Cite the ID. Let the user open the source if they want detail.
 
+## Telemetry (opt-in)
+
+When the environment variable `FOUNDER_OS_OBSERVATIONS=1` is set, after producing your structured block, run the telemetry appender so the user can spot shallow synthesis or repeated questions over time:
+
+```bash
+python scripts/brain-pass-log.py \
+  --question "<the question you were asked>" \
+  --confidence "<high|medium|low>" \
+  --ids-cited "<comma-separated stable IDs from your Evidence section, or empty>" \
+  --files-read <integer count of files you opened during the pass> \
+  --has-gaps "<yes|no - did your Gaps section flag missing context?>"
+```
+
+Pass the values you used when synthesising. If `FOUNDER_OS_OBSERVATIONS` is not set, the script exits silently and writes nothing - safe to call unconditionally. If `scripts/brain-pass-log.py` is missing (older install), skip this step. Do not block.
+
+The line appends to `brain/observations/<YYYY-MM-DD>.jsonl` next to the existing PostToolUse observation log. `/dream` rolls it into the OBSERVED section so the user sees patterns over time (which questions repeat, which return low confidence, which surface large Gaps).
+
 ## Why this works inside Claude Code (or any model surface)
 
 The model running this skill IS the retrieval engine. The skill instructs it to read the right files, reason, and synthesise. There is no API call, no vector index, no paid tier. The free-tier accessibility floor is preserved. On Claude Code, Codex, or any other model surface that can read local files, this skill produces the same shape of output - performance varies, but the contract stays the same.
