@@ -126,6 +126,47 @@ Pattern: a small one-time fill cascades into many skills. If a writer feels gene
 
 ---
 
+## A real Tuesday after the OS is set up
+
+This is what an actual session feels like once setup is done. Not aspirational. Just the rhythm.
+
+**Open Claude Code in your founder-os folder.** SessionStart fires. You see the brief: `Flags: 2 OPEN. Daily: STALE. Decisions: 4 tracked. Clients: 1 [FILL] row.` Five seconds.
+
+**Type `/today`.** One screen back: today's anchor task, your top three priorities for the week, the next calendar event, last three brain log entries. You orient in fifteen seconds.
+
+**Talk to Claude.** "Help me prep for my call with Sarah at 2pm." Meeting-prep reads `context/clients.md` for prior touches with Sarah, lifts your timezone from `core/identity.md`, builds the brief in your tone (because voice profile is filled). You scan it. Add one note.
+
+**Drop a rant.** "/rant just got off a call with Mahmoud, he wants to push the proposal another two weeks, I think he's quietly fading and I should call it. Also frustrated that ops keeps eating Tuesdays." Two-line confirmation: `Captured. 1 rant today. /dream when ready.`
+
+**Sarah call ends.** "Captured. Sarah wants pricing by Thursday, decided to scope a paid audit first, no proposal needed yet." Capture-meeting routes that into `context/clients.md` (her row updates), `brain/log.md` (#acted [S]), and a row in `cadence/weekly-commitments.md` (pricing draft Thursday).
+
+**Friday afternoon.** `/founder-os:weekly-review`. The skill walks every priority. Forces a Must-Should-Did bucket. Surfaces the open Mahmoud flag. Asks: keep, kill, or escalate. You decide. The week closes clean.
+
+**Sunday night.** `/dream`. Five-line digest in chat:
+
+> ### 2026-01-26 #dream
+> **DREAMT:** week of 2026-01-20, 6 rants processed
+> - Pattern: ops eating Tuesdays - 3 rants this week
+> - Mahmoud silently fading - flag raised, decay 14d
+> - Pricing model question still parked, no trigger fired yet
+> **Action:** block Tuesday morning before next week, no calls
+
+That is the loop. The OS is the layer between you and your business that catches what would have fallen through.
+
+**A note on cadence.** `/rant` works on Day 1. `/dream` is technically usable Day 1 too, but its real value compounds at week 2-3 when 10+ rants exist and pattern detection has signal. Do not expect a one-rant `/dream` to surface anything dramatic. The loop is a slow burn that pays off at the second weekly retro, not the first hour.
+
+---
+
+## What [FILL] markers mean
+
+Fresh installs ship with `[FILL]` placeholders in `context/clients.md`, `cadence/weekly-commitments.md`, and a few other files. These are not bugs. They are the holes the OS expects you to fill as work happens.
+
+The SessionStart brief counts `[FILL]` rows so you can see at a glance how complete the picture is. As clients enter your pipeline, you replace `[FILL]` rows with real names and statuses. As priorities get committed, `[FILL]` slots in cadence get real entries.
+
+You do not need to fill them all at once. The system surfaces what is missing without nagging.
+
+---
+
 ## After the first day
 
 **Daily**

@@ -28,11 +28,15 @@ The user's actual operating context (after they run setup) lives in:
 - `cadence/weekly-commitments.md` - this sprint
 - `brain/log.md` - running log
 - `brain/flags.md` - open observations needing decisions
+- `brain/knowledge/` - distilled notes from books, calls, articles. Read by `proposal-writer` and `strategic-analysis`.
+- `brain/rants/` - raw voice dumps captured by `/rant`, processed into the brain layer by `/dream`.
+
+A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` holds behavioral guards that persist across every session in this project.
 
 The system layer (do not edit per-user) lives in:
-- `skills/` - 27 skills, each in its own folder with a `SKILL.md`
+- `skills/` - 37 skills, each in its own folder with a `SKILL.md`
 - `templates/` - source templates for files the setup wizard generates
-- `.claude/commands/` - 13 slash commands
+- `.claude/commands/` - 19 slash commands
 - `.claude/hooks/` - SessionStart brief and session-close revenue check
 - `rules/` - behavioural rules including writing-style, commit-naming, approval-gates
 - `system/` - quarantine catch-net for silent hook failures
@@ -50,25 +54,26 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 
 ---
 
-## Slash Commands (13)
-
-- `/founder-os:setup` - first-run wizard. Generates identity, priorities, decisions, cadence, brain layer
-- `/founder-os:voice-interview` - capture writing voice into `core/voice-profile.yml`
-- `/founder-os:brand-interview` - capture visual identity into `core/brand-profile.yml`
-- `/founder-os:status` - read-only OS readiness check, returns weighted score and next 3 high-impact moves
-- `/founder-os:ingest <source>` - file a URL or pasted text into `raw/` with provenance, propose wiki updates
-- `/founder-os:lint` - read-only audit of wiki integrity, cross-references, orphans, stale content
-- `/founder-os:wiki-build` - walk markdown, extract `[[wikilinks]]`, refresh auto-generated graph in `brain/relations.yaml`
-- `/founder-os:update` - pull system layer updates without touching user data
-- `/founder-os:uninstall` - cleanly remove (default mode preserves data; --purge wipes everything)
-- `/today` - 20-line daily dashboard
-- `/next` - one recommended next action across priorities, deals, and cadence
-- `/pre-meeting` - hard gate before any meeting, requires capture artifact and ask
-- `/capture-meeting` - route a transcript or brain dump to log + clients + commitments
-
-These only work in Claude Code. Other agents reading this repo should treat the slash command files in `.claude/commands/` as procedural reference, not invokable.
-
----
+## Slash Commands (19)
+- `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files. Run on first install.
+- `/founder-os:voice-interview` - capture how you write into `core/voice-profile.yml`.
+- `/founder-os:brand-interview` - capture your visual identity into `core/brand-profile.yml`.
+- `/founder-os:status` - read-only OS readiness check.
+- `/founder-os:ingest <source>` - file a source into `raw/` with provenance, then propose wiki updates.
+- `/founder-os:lint` - read-only audit of cross-references, orphans, stale content, and provenance gaps.
+- `/founder-os:wiki-build` - refresh the auto-generated graph in `brain/relations.yaml`.
+- `/founder-os:query <question>` - return the top 3 to 5 OS nodes for a question.
+- `/founder-os:audit` - composite health report across readiness, lint, wiki, brain, and voice.
+- `/founder-os:forcing-questions <initiative>` - six-question gate before new work starts.
+- `/founder-os:ship-deliverable <path>` - final read-only gate before an external deliverable is sent.
+- `/founder-os:update` - pull latest System Layer files without touching personal data.
+- `/founder-os:uninstall` - cleanly remove Founder OS.
+- `/founder-os:rant` - capture a raw thought dump into `brain/rants/`.
+- `/founder-os:dream` - process unprocessed rants into patterns, flags, parked decisions, needs-input, and client signals.
+- `/pre-meeting <name>` - gate before any meeting.
+- `/capture-meeting <name>` - route a transcript or brain dump into log, clients, and commitments.
+- `/today` - 20-line one-screen view of today.
+- `/next` - one recommended next action across priorities, deals, and cadence.
 
 ## Substrate (v1.4)
 

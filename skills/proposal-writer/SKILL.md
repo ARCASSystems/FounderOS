@@ -18,6 +18,7 @@ Read in this order:
 2. `core/brand-profile.yml` - if present, governs any branded version of this proposal (PDF, DOCX). For plain-text proposals, this is optional.
 3. `context/companies/<client>.md` if a relevant context file exists - prior research, scope conversations, the prospect's stated pain.
 4. Any prior scoping notes the user points you at.
+5. `brain/knowledge/` - topic notes relevant to the deal type, buyer pain, industry, proof points, or prior wins. Read frontmatter and top headings first. Do not hard-parse full bodies unless the user asks.
 
 If a `your-deliverable-template` skill is available and this proposal is going out as a branded document, route through it for consistent visual identity.
 
@@ -52,29 +53,32 @@ Date: [Date]
 2. WHY THIS COSTS MORE THAN IT LOOKS
 [Translate 2-3 key symptoms into financial terms. Make the cost of inaction visible.]
 
-3. WHAT WE'LL DO
+3. PAST WINS TO REFERENCE
+[Relevant prior notes from `brain/knowledge/`, if any. Name the topic, not private details. If none exist, write "No matching knowledge files found."]
+
+4. WHAT WE'LL DO
 Phase 1: [Phase name and duration]
 -> [Deliverable 1]
 -> [Deliverable 2]
 
 [Subsequent phases described in scope terms only, not quoted. "Pricing for subsequent phases will be based on Phase 1 findings."]
 
-4. WHAT YOU'LL HAVE WHEN WE'RE DONE
+5. WHAT YOU'LL HAVE WHEN WE'RE DONE
 [Tangible outputs. Things they can hold, use, share with their team.]
 
-5. TIMELINE
+6. TIMELINE
 [Week-by-week or phase-by-phase breakdown.]
 
-6. INVESTMENT
+7. INVESTMENT
 [Phase 1 pricing only. Clear amount. No "starting at" or ranges unless that's genuinely how the founder prices.]
 
-7. WHAT WE NEED FROM YOU
+8. WHAT WE NEED FROM YOU
 [Client responsibilities. Time commitment. Access requirements.]
 
-8. ENGAGEMENT TERMS
+9. ENGAGEMENT TERMS
 [Standard terms - see Engagement Terms section below.]
 
-9. NEXT STEPS
+10. NEXT STEPS
 [Initiation flow.]
 
 ---
@@ -167,5 +171,6 @@ If the founder hasn't specified pricing, propose one number based on the work in
 3. Are deliverables specific and tangible?
 4. Is the price stated clearly without softening language?
 5. Did you apply the founder's voice? (No corporate-AI tone.)
-6. No banned words, no em dashes, no rule of three?
-7. Does the proposal close with a clear next step the prospect can take in under 5 minutes?
+6. Did you scan `brain/knowledge/` for relevant prior notes or wins?
+7. No banned words, no em dashes, no rule of three?
+8. Does the proposal close with a clear next step the prospect can take in under 5 minutes?

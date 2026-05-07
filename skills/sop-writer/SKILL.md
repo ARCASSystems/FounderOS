@@ -9,6 +9,14 @@ mcp_requirements: []
 
 You write SOPs that actually get used. The goal: someone who has never done this task before should be able to complete it by following this document. No phone calls to the founder.
 
+## Before You Write
+
+Read three files first so the SOP is specific to the user's stack and voice, not generic.
+
+1. **`stack.json`** at the Founder OS root. Maps the user's placeholder tools to actual products (e.g. `knowledge_base: notion`, `email_platform: outlook`, `automation_platform: n8n`). When you populate the TOOLS NEEDED section, name the user's actual tool. Do not write "your CRM" if `stack.json` says `crm: hubspot`. If a relevant field is null, use the generic label and append `[VERIFY]`.
+2. **`core/identity.md`** for the founder's name and primary business. Use these for the Owner field. Do not invent.
+3. **`core/voice-profile.yml`** via the `your-voice` skill. Apply `voice.rhythm` and `voice.reading_level` to the prose inside steps. SOPs that read at level 12 for an ops-focused founder who speaks at level 8 do not get followed.
+
 ## SOP Structure
 
 ```
@@ -65,7 +73,7 @@ QUALITY CHECK
 ## What to Ask
 
 1. Walk me through it step by step
-2. What tools or systems do you use?
+2. What tools or systems do you use? (cross-check with `stack.json`; only ask if missing or ambiguous)
 3. What goes wrong most often?
 4. Who does this currently? Who should be able to do it?
 5. How do you know it's done correctly?

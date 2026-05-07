@@ -50,7 +50,7 @@ Ask these questions one at a time. Record answers internally.
 ### 0.1 Who Are You?
 Ask: "Let's set up your Founder OS. First - what's your name, and what do you do? Give me the one-sentence version of your business (or businesses if you run more than one)."
 
-### 0.2 Business Landscape
+### 0.2 Business Map
 If they mentioned multiple businesses, ask for each: "For each business, tell me: name, what it does in one sentence, and who else is involved (co-founders, key team members, or just you)."
 
 If they have one business, move to 0.3.
@@ -94,6 +94,20 @@ Ask: "A few quick ones about how you work:
 
 These answers personalize the operating rules and identity file.
 
+**Encoding (mandatory).** Map the answers to these structured tokens. Skills downstream read the tokens, not the prose.
+
+- "gut feel" / "instinct" / "feel" → `gut`
+- "spreadsheets" / "data" / "numbers" / "math first" → `data`
+- "talk it through" / "out loud" / "sounding board" → `dialogue`
+- mixed answer or unclear → `mixed`
+
+For communication style:
+
+- "direct" / "short" / "lead with the answer" / "no filler" → `direct`
+- "detailed" / "thorough" / "context first" / "build up" → `detailed`
+
+When you write `core/identity.md` in Phase 1.1, populate `**Decision style:**` with the token. When you write `rules/operating-rules.md` in Phase 2.2, populate `**Communication style:**` with the token. Use the prose answer for the descriptive paragraph that follows.
+
 ### 0.8 Privacy Layers
 Ask: "Last setup question. Some information is private to you, some you'd share with a co-founder or team member. Any businesses where someone else might see the project files? And anything that should ONLY live in your private global config?"
 
@@ -117,7 +131,29 @@ This file should:
 
 Show the draft. Get approval. Write it.
 
-### 1.3 Global Settings (opt-in)
+### 1.3 Auto-memory layer (cross-session behavioral memory)
+
+Claude Code reads a per-project `MEMORY.md` automatically at every session start. This is the layer that remembers behavioral corrections across sessions. Without it, the same corrections need to be repeated every new session.
+
+Steps:
+
+1. Resolve the auto-memory path for the founder's working directory.
+   - **First, check what already exists.** List the entries under `~/.claude/projects/` (macOS / Linux) or `%USERPROFILE%\.claude\projects\` (Windows). Since this wizard is running inside Claude Code, the slug for the founder's current working directory is already there. Pick the entry that matches the absolute path of the install location (most recently modified is usually it).
+   - **If no matching entry exists** (rare - means Claude Code has not registered the project yet), fall back to the computed slug rule:
+     - macOS / Linux: take the absolute path, replace `/` with `-`, drop the leading `-` if any. e.g. `/Users/jane/founder-os` -> `Users-jane-founder-os`.
+     - Windows: prefix with `c--` (the colon becomes `--`), replace `\` with `-`, lowercase the drive letter. e.g. `C:\Users\Jane\founder-os` -> `c--Users-Jane-founder-os`.
+   - Target file: `<claude_projects_dir>/<slug>/memory/MEMORY.md` where `<claude_projects_dir>` is `~/.claude/projects/` on macOS / Linux and `%USERPROFILE%\.claude\projects\` on Windows.
+   - **Confirm the path with the user** before writing. Show: "I will write your auto-memory template to: `<full path>`. Proceed? (yes / no / I'll set it up later)" - this catches a wrong slug before the file lands in the wrong place.
+
+2. If the target file already exists, read it. If it has any real content (not just template scaffolding), do not overwrite. Add a note to the setup backlog: "Auto-memory file already exists at <path>. Skipped templating to preserve existing entries."
+
+3. If the target file does not exist or only contains placeholders, copy `templates/memory/MEMORY.md` verbatim to the target path. Create parent directories as needed.
+
+4. Confirm to the user: "Wrote auto-memory template to `<path>`. Add behavioral guards as Claude needs corrections - they persist across every future session in this folder."
+
+This step is optional. If the user opts out (no), log to backlog and continue. Skills do not depend on auto-memory existing; this is a continuity layer, not a hard dependency.
+
+### 1.4 Global Settings (opt-in)
 
 This phase is OPT-IN. Never silently modify the user's global settings file.
 
@@ -157,11 +193,17 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── patterns.md              # From templates/brain/patterns.md
 │   ├── flags.md                 # From templates/brain/flags.md
 │   ├── decisions-parked.md      # From templates/brain/decisions-parked.md
+│   ├── needs-input.md           # From templates/brain/needs-input.md
+│   ├── knowledge/
+│   │   └── README.md            # From templates/brain/knowledge/README.md
+│   ├── rants/
+│   │   └── README.md            # From templates/brain/rants/README.md (kept by /rant + /dream)
 │   └── relations.yaml           # From templates/brain/relations.yaml (replace {{TODAY}} with current date)
 ├── system/
 │   └── quarantine.md            # From templates/system/quarantine.md (catch-net for silent hook/task failures)
 ├── scripts/
-│   └── wiki-build.py            # From templates/scripts/wiki-build.py (extracts [[wikilinks]] into brain/relations.yaml)
+│   ├── wiki-build.py            # From templates/scripts/wiki-build.py (extracts [[wikilinks]] into brain/relations.yaml)
+│   └── query.py                 # From templates/scripts/query.py (plain-file graph query)
 ├── cadence/
 │   ├── daily-anchors.md         # From templates/cadence/daily-anchors.md
 │   ├── weekly-commitments.md    # Personalized with their current priorities
@@ -199,6 +241,8 @@ Create the full folder structure. Read each template before generating the perso
 Show the full list of files that will be created. Get approval. Then create them all.
 
 **Hook copy step (mandatory).** The SessionStart brief and session-close revenue check live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Find the plugin install path (same as where templates live), then copy the four hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart and Stop hook entries; do not overwrite the user's other hook customisations.
+
+**Scripts copy step (mandatory).** Copy `templates/scripts/wiki-build.py` to the founder's `scripts/wiki-build.py` and `templates/scripts/query.py` to `scripts/query.py`. These are not personalized templates. They are Python helpers used by `/founder-os:wiki-build` and `/founder-os:query`. Copy contents byte-for-byte. Do not edit. Verify both copies exist on disk before continuing.
 
 **{{TODAY}} substitution.** The `templates/brain/relations.yaml` file contains the literal placeholder `{{TODAY}}`. When copying to `brain/relations.yaml`, replace every occurrence of `{{TODAY}}` with today's date in `YYYY-MM-DD` format (use `date -u +%Y-%m-%d` via Bash to get it).
 
@@ -309,9 +353,9 @@ Open two different project folders (ideally different businesses). Confirm:
 Commit all company and project folders: "Add company folders and first project setup."
 
 ### 6.2 Orient the User
-Show the user what they have AND the next two unlock steps. The wizard creates the operating layer, but the writing skills are gated on the voice and brand profiles - tell them this directly.
+Show the user what they have AND the next two profile steps. The wizard creates the operating layer, but the writing skills are gated on the voice and brand profiles - tell them this directly.
 
-"Your Founder OS is set up. The operating layer is live. Two more 10-minute steps unlock the writing skills:
+"Your Founder OS is set up. The operating layer is live. Two more 10-minute steps activate the writing skills:
 
 **Step 1 - Voice profile.** Run `/founder-os:voice-interview`. The interview captures how you write. After this, linkedin-post, client-update, proposal-writer, email-drafter, content-repurposer, sop-writer, and your-voice all write as you instead of as Claude. ~10 minutes.
 

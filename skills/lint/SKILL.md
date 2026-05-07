@@ -24,7 +24,7 @@ If `core/identity.md` does not exist, stop with: `Founder OS not set up here. Ru
 
 ## Scope
 
-Wiki layer = files under `core/`, `context/`, `cadence/`, `brain/`, `network/`, `companies/`. Skill files (`skills/`), templates (`templates/`), commands (`.claude/commands/`), hooks (`.claude/hooks/`), docs (`docs/`), and root metadata (`README.md`, `CLAUDE.md`, `VERSION`, etc.) are NOT scanned. Raw layer (`raw/`) is scanned only for provenance gaps (Check 4).
+Wiki layer = files under `core/`, `context/`, `cadence/`, `brain/` including `brain/knowledge/`, `network/`, `companies/`. Skill files (`skills/`), templates (`templates/`), commands (`.claude/commands/`), hooks (`.claude/hooks/`), docs (`docs/`), and root metadata (`README.md`, `CLAUDE.md`, `VERSION`, etc.) are NOT scanned. Raw layer (`raw/`) is scanned only for provenance gaps (Check 4).
 
 ## Check 1 - Broken cross-references
 

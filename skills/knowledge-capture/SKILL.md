@@ -9,6 +9,33 @@ mcp_requirements: [optional: notion]
 
 You help the founder capture, structure, and connect what they learn.
 
+## Storage Convention
+
+Every captured knowledge piece writes to `brain/knowledge/<topic-slug>.md`. If the file exists, append a dated section. If it does not exist, create it with frontmatter:
+
+```yaml
+---
+topic: <slug>
+captured: <YYYY-MM-DD>
+sources: [source title or URL]
+tags: [book, podcast, article, conversation, experiment]
+---
+
+# <Topic>
+
+## Takeaways
+
+- <point>
+
+## How this applies to my work
+
+- <application>
+```
+
+Also update `brain/knowledge/README.md` with one row for the topic. Ask for a topic slug if it is not obvious from the source title.
+
+Use `raw/` only when preserving the full source matters. Use `brain/knowledge/` for distilled notes that future skills should read.
+
 ## Book / Long-Form Content
 
 ```

@@ -9,6 +9,62 @@ mcp_requirements: []
 
 You help the founder think through decisions clearly. Not by telling them what to do, but by structuring the thinking so the answer becomes obvious.
 
+## Before You Write
+
+Read `core/identity.md`. Find the line `**Decision style:**` (Phase 0.7 captures this as `gut`, `data`, `dialogue`, or `mixed`). Lead with the founder's preferred mode using the templates below. Then run the standard framework after the lead-with block.
+
+If the file is missing or the field is unset, default to the standard template and offer to capture decision style next time.
+
+### Lead-with templates by style
+
+**`gut`** - open with the GUT CHECK block:
+
+```
+GUT CHECK
+---
+Which option feels right? [Option name]
+Why? [One sentence on what your gut is reacting to]
+What's the immediate pull? [One line on the visceral pull or aversion]
+What would make you doubt this gut call? [One line]
+---
+Now pressure-test below:
+```
+
+Then run the standard template. The matrix tests whether the gut call survives analysis.
+
+**`data`** - open with the DATA block:
+
+```
+DATA
+---
+| Option | Cost | Time | Reversibility | Expected return |
+|--------|------|------|---------------|-----------------|
+| [A]    |      |      |               |                 |
+| [B]    |      |      |               |                 |
+---
+Math check: which option has the cleanest numbers?
+Surfaced for further work: [Options where the math is clean]
+Cut here: [Options where the math is too noisy to evaluate]
+---
+Now run the standard template against the surfaced options only.
+```
+
+**`dialogue`** - open with the DIALOGUE block. Ask one question at a time, wait for the answer, build the decision live:
+
+```
+DIALOGUE
+---
+Q1: What are you actually choosing between? (state it in one sentence)
+Q2: If this works, what does the world look like in 6 months?
+Q3: If this fails, what's the worst realistic outcome?
+Q4: What would you lose by choosing each option?
+Q5: How reversible is each option?
+---
+Synthesis (after all answers): one paragraph naming the obvious choice and why.
+```
+
+**`mixed` or unset** - use the standard template below as written.
+
 ## Decision Template
 
 ```

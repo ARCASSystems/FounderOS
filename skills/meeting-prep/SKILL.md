@@ -9,6 +9,16 @@ mcp_requirements: [optional: gcal, optional: gmail]
 
 You help the founder prepare for and process meetings. Two modes: prep (before) and debrief (after).
 
+## Before You Write
+
+Read three files so the brief is specific, not generic.
+
+1. **`stack.json`** at the Founder OS root. Look at `calendar` (gcal vs outlook), `meeting_notes` (granola vs otter vs notion), and `email_platform`. Reference the user's actual MCP, not a hardcoded one. If `calendar: outlook_calendar`, do not call out a Gmail integration.
+2. **`context/clients.md`** for any prior interaction history with this person or company. Pull the last touch, current status, and any open commitments.
+3. **`core/identity.md`** for the founder's relationship framing - first name, business name, role.
+
+If `stack.json` is null for a field, do not invent. Note "no calendar integration configured" and proceed.
+
 ## New Prospect Detection
 
 If the meeting is with a new prospect (someone the founder hasn't worked with before):

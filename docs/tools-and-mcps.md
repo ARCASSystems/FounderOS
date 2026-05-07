@@ -2,7 +2,7 @@
 
 Founder OS does not assume your stack. The OS is a set of files and skills. Each skill declares which Model Context Protocol (MCP) servers it can use, and degrades gracefully when those MCPs are not available.
 
-You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run 23 of the 27 skills end-to-end.
+You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run 33 of the 37 skills end-to-end.
 
 ---
 
@@ -54,7 +54,7 @@ If you install Founder OS and add no MCPs, all of these skills work end-to-end o
 - business-context-loader
 - readiness-check (`/founder-os:status`)
 
-That is 23 of the 27 skills. The remaining four (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce noticeably better output with the relevant integration connected.
+That is 33 of the 37 skills. The remaining four (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce noticeably better output with the relevant integration connected.
 
 ---
 

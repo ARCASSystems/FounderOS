@@ -18,16 +18,24 @@
 version: 1
 updated: "{{TODAY}}"
 
-relations: []
+# Three seeded examples below. Delete them once you record your first real edge.
+# They are kept here so wiki-build does not reset to an empty file and so a new
+# user sees the format by example, not just by spec.
 
-# Example entries (uncomment + edit when you have real edges to record):
-#
-#   - from: brain/flags.md#stalled-launch
-#     type: blocks
-#     to: context/priorities.md#q3-launch
-#     note: Launch is on hold pending design review
-#
-#   - from: brain/patterns.md#avoidance-as-strategy
-#     type: informs
-#     to: context/decisions.md#hire-or-do
-#     note: Pattern surfaced during the Friday retro
+relations:
+  - from: brain/flags.md
+    anchor: 2024-01-01-outreach-has-not-started-this-week
+    type: blocks
+    to: context/priorities.md
+    note: EXAMPLE - delete once you have a real edge. Shows how a flag blocks a priority.
+
+  - from: brain/patterns.md
+    anchor: free-value-drift-on-prospecting-calls
+    type: informs
+    to: context/decisions.md
+    note: EXAMPLE - delete once you have a real edge. Shows how a pattern feeds a decision.
+
+  - from: context/clients.md
+    type: linked_to
+    to: brain/rants/
+    note: EXAMPLE - delete once you have a real edge. Shows how a client signal links back to its source rants. Anchor values are free-text labels here, not resolvable slugs.

@@ -54,13 +54,15 @@ Trigger to escalate: [specific condition]
 
 ## Example (delete this section once your first real flag is logged)
 
-## YYYY-MM-DD - Outreach has not started this week
+> The dated entry below is wired to surface as Review Due on your first SessionStart brief. That is the demo. Once you have seen the system surface it, delete this example and write your own.
+
+## 2024-01-01 - Outreach has not started this week
 
 Status: **OPEN.** Severity Week 1. Tag: #pipeline.
 
 The week is closing without any outbound touches logged. Pipeline file shows no new rows.
 
-Decay after: 14d.
+Decay after: 14d
 
 Trigger to escalate: 7 more days with no rows added to context/clients.md.
 

@@ -17,6 +17,16 @@ Read `core/voice-profile.yml`. If the file is missing or still contains the `[BR
 
 The warning is for the user, not part of the email. They strip it before sending.
 
+## Stack-aware sending
+
+Read `stack.json`. The `email_platform` field is one of `gmail`, `outlook`, `apple_mail`, or `null`.
+
+- `gmail`: if a Gmail MCP is connected, offer to read the inbound thread for context. Otherwise ask the user to paste the prior message.
+- `outlook`: same pattern via Outlook MCP. Do not assume Gmail.
+- `apple_mail` or `null`: prompt the user to paste the prior message. No MCP integration available.
+
+Do not hardcode "Gmail" in instructions to the user. Mirror their actual platform.
+
 ## Core Principles
 
 **Lead with the point.** No warm-up paragraphs. No "I hope this email finds you well." No "I wanted to reach out regarding." Just say why you're writing in the first sentence.

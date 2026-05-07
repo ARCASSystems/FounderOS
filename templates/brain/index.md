@@ -34,7 +34,26 @@ Use when something was captured AND an action was taken (file updated, decision 
 | `patterns.md` | Emerging patterns surfaced from the log | No cap |
 | `flags.md` | Active flags: role performance + friction/stall | No cap |
 | `decisions-parked.md` | Decisions that need a trigger before they can be made | No cap |
+| `needs-input.md` | What is blocked on the user's input | No cap |
+| `knowledge/` | Distilled notes from books, calls, articles, and experiments | One file per topic |
+| `rants/` | Raw voice dumps captured by `/rant`, processed by `/dream` | One file per day |
 | `archive/` | Monthly archives when log hits 300 lines | - |
+
+---
+
+## Knowledge Layer
+
+`brain/knowledge/` holds durable notes that future skills can read back. `knowledge-capture` writes topic files and updates `brain/knowledge/README.md`. Proposal and strategy skills read frontmatter and top headings when relevant.
+
+---
+
+## Rant and Dream Loop
+
+`/rant` captures a raw voice dump verbatim into `rants/<YYYY-MM-DD>.md`. No structure asked. The volume is the thinking.
+
+`/dream` processes all unprocessed rants. Distils into the brain layer (patterns, flags, parked, needs-input, client signals). Writes a 5-line digest to `log.md`. Flips each rant's `processed:` flag.
+
+Run `/dream` whenever the brain feels noisy. Weekly as part of the retro is a good cadence.
 
 ---
 

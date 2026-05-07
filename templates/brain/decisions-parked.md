@@ -21,12 +21,14 @@ Options on the table: [brief list if known]
 
 ## Example (delete once your first real parked decision lands)
 
+> Parked decisions surface when their trigger fires, not on a clock. The example below is illustrative. Once you have read it, delete it and write your own.
+
 ### Whether to hire a part-time ops lead
 
-Date parked: YYYY-MM-DD
+Date parked: 2024-01-01
 Decision: Hire a part-time ops lead now, or defer until revenue passes a threshold
 Trigger to revisit: Monthly recurring revenue crosses the figure named in `context/priorities.md` annual goals, OR three weeks in a row where ops work blocks delivery
-Context: Strong candidate from the network surfaced in [YYYY-MM] but cash runway makes the hire premature
+Context: Strong candidate from the network surfaced in early 2024 but cash runway makes the hire premature
 Options on the table: Hire now (15 hrs/wk, fixed retainer), hire on revenue trigger, or restructure delivery to stop creating ops debt
 
 ---

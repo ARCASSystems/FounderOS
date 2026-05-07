@@ -34,6 +34,8 @@
 
 ## Decision Style
 
+**Decision style:** {{DECISION_STYLE}} (one of: gut, data, dialogue, mixed - read by the `decision-framework` skill)
+
 {{DECISION_STYLE_PARAGRAPH}}
 (e.g. data-first, moves on gut + data, needs time to process, decides fast and adjusts)
 

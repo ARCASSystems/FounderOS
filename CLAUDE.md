@@ -44,6 +44,10 @@ Two more files (`brain/log.md` and `brain/flags.md`) load on demand when you ask
 
 `core/avatar.md` is your behavioral profile. Skills load it on demand when behavioral context matters. It is not boot-loaded.
 
+The brain layer also holds two capture surfaces and a knowledge store. `brain/rants/` captures raw voice dumps via `/rant`; `/dream` distils unprocessed rants into patterns, flags, parked decisions, and client signals. `brain/knowledge/` holds distilled notes from books, calls, and articles, which `proposal-writer` and `strategic-analysis` read back when relevant.
+
+A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` (set up by the wizard) holds behavioral guards that persist across every session. Add a guard whenever you correct Claude on something that would otherwise come up again.
+
 When Claude knows all of this, it can give you recommendations instead of asking you to explain context every time.
 
 ## Empty-state behavior
@@ -92,7 +96,7 @@ Supported adapters (configured during setup):
 Founder OS is built like a personal wiki the LLM maintains. Three layers underneath your daily files:
 
 - **raw/** - immutable source documents (transcripts, articles, books, threads). Once written, never edited. See `raw/README.md` for the frontmatter spec. Scaffolded on first `/founder-os:ingest` use.
-- **The wiki layer** - your operating files: `core/`, `context/`, `cadence/`, `brain/`, `network/`. Edited by skills as you work.
+- **The wiki layer** - your operating files: `core/`, `context/`, `cadence/`, `brain/` (including `brain/knowledge/` for distilled notes and `brain/rants/` for raw dumps), `network/`. Edited by skills as you work.
 - **The schema** - this `CLAUDE.md` file. Tells Claude how the layers connect.
 
 Two operations the OS supports natively:
@@ -120,7 +124,7 @@ Claude Code has an experimental Agent Teams feature that turns sequential workfl
 
 You do not need Agent Teams to run Founder OS. Subagents are the stable default and cover most real work. Agent Teams is an opt-in upgrade once you are comfortable with the system.
 
-**What it unlocks:**
+**What it adds:**
 
 - Parallel execution for the weekly insights brief (state files read in parallel, not sequence)
 - Multi-step proposal flow (scope, terms, voice pass, deliverable format) run as specialist agents
@@ -141,19 +145,25 @@ No other config needed. Founder OS skills and commands work the same way. The fl
 Founder OS ships with a thin fabric layer that makes the files behave like an operating system, not just documentation.
 
 **Slash commands** (`.claude/commands/`)
-- `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files (15 to 20 min). Run on first install.
-- `/founder-os:voice-interview` - capture how you write into `core/voice-profile.yml` (about 10 min). Unlocks linkedin-post, client-update, proposal-writer, email-drafter, content-repurposer, sop-writer, and your-voice.
-- `/founder-os:brand-interview` - capture your visual identity into `core/brand-profile.yml` (5 to 10 min). Unlocks your-deliverable-template and branded variants of proposal-writer and client-update.
-- `/founder-os:status` - read-only OS readiness check. Returns a weighted 0-100% score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Names the next 3 high-impact moves. Use anytime to audit the OS in one shot.
-- `/founder-os:update` - pull the latest System Layer files without touching your personal data. Tells you what changed before applying.
-- `/founder-os:uninstall` - cleanly remove Founder OS. Default mode preserves your data; pass `--purge` to wipe everything.
-- `/founder-os:ingest <source>` - file a source into `raw/` with provenance, then propose wiki updates you approve. See Wiki Conventions above.
-- `/founder-os:lint` - read-only audit of cross-references, orphans, stale content, and provenance gaps. Never auto-fixes.
-- `/founder-os:wiki-build` - walk OS markdown, extract `[[wikilinks]]`, refresh the auto-generated graph in `brain/relations.yaml`. Idempotent. Companion to lint (lint audits the graph; wiki-build keeps it fresh).
-- `/pre-meeting <name>` - gate before any meeting; requires a capture artifact and a specific ask
-- `/capture-meeting <name>` - routes a transcript or brain dump into brain/log.md + context/clients.md + commitments (M3)
-- `/today` - 20-line one-screen view of today (anchor, decisions, flags, last 3 log entries, next calendar) (M4)
-- `/next` - one recommended next action across priorities, deals, and cadence
+- `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files. Run on first install.
+- `/founder-os:voice-interview` - capture how you write into `core/voice-profile.yml`.
+- `/founder-os:brand-interview` - capture your visual identity into `core/brand-profile.yml`.
+- `/founder-os:status` - read-only OS readiness check.
+- `/founder-os:ingest <source>` - file a source into `raw/` with provenance, then propose wiki updates.
+- `/founder-os:lint` - read-only audit of cross-references, orphans, stale content, and provenance gaps.
+- `/founder-os:wiki-build` - refresh the auto-generated graph in `brain/relations.yaml`.
+- `/founder-os:query <question>` - return the top 3 to 5 OS nodes for a question.
+- `/founder-os:audit` - composite health report across readiness, lint, wiki, brain, and voice.
+- `/founder-os:forcing-questions <initiative>` - six-question gate before new work starts.
+- `/founder-os:ship-deliverable <path>` - final read-only gate before an external deliverable is sent.
+- `/founder-os:update` - pull latest System Layer files without touching personal data.
+- `/founder-os:uninstall` - cleanly remove Founder OS.
+- `/founder-os:rant` - capture a raw thought dump into `brain/rants/`.
+- `/founder-os:dream` - process unprocessed rants into patterns, flags, parked decisions, needs-input, and client signals.
+- `/pre-meeting <name>` - gate before any meeting.
+- `/capture-meeting <name>` - route a transcript or brain dump into log, clients, and commitments.
+- `/today` - 20-line one-screen view of today.
+- `/next` - one recommended next action across priorities, deals, and cadence.
 
 **Hooks** (`.claude/hooks/`)
 - SessionStart brief (v1.4) - surfaces open flags, stale cadence, pending decisions, [FILL] client rows, ACTIVE quarantine entries, and Review Due entries (past their `Decay after:` date). One screen at session open. Registered on the SessionStart event in `.claude/settings.json`. Quietly skips if the repo is not a Founder OS install (no `core/identity.md`).
@@ -167,37 +177,47 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks require the scheduled-tasks MCP to be installed in your Claude Code environment.
 
-## Skills (27 included)
+## Skills (37 included)
 
 | Skill | Purpose |
 |-------|---------|
-| founder-os-setup | Interactive setup wizard (start here) |
+| founder-os-setup | Interactive setup wizard. |
 | readiness-check | OS health audit. Routed via `/founder-os:status`. |
-| ingest | File a source into `raw/` with provenance, propose wiki updates. Routed via `/founder-os:ingest`. |
+| ingest | File a source into `raw/` with provenance. Routed via `/founder-os:ingest`. |
 | lint | Read-only audit of wiki integrity. Routed via `/founder-os:lint`. |
-| wiki-build | Walk markdown, extract `[[wikilinks]]`, refresh `brain/relations.yaml`. Companion to lint. Routed via `/founder-os:wiki-build`. |
-| weekly-review | Structured weekly retro and sprint roll |
-| priority-triage | Cut the list to what actually matters |
-| brain-log | Session logging and pattern capture |
-| decision-framework | Structured decision-making for founders |
-| session-handoff | End-of-session state capture for continuity |
-| meeting-prep | Pre-meeting brief and post-meeting debrief |
-| knowledge-capture | Notes from books, podcasts, conversations (no source preservation) |
-| email-drafter | Emails in your voice |
-| sop-writer | Processes turned into delegation-ready docs |
-| founder-coaching | Bias toolkit, bottleneck diagnostic, zones |
-| unit-economics | Business math, margins, break-even |
-| content-repurposer | One piece, multiple formats |
-| strategic-analysis | Market sizing, competitive analysis, opportunity assessment |
-| pre-send-check | Hard gate before any client-facing deliverable leaves your machine |
-| voice-interview | Captures your writing voice into core/voice-profile.yml |
-| brand-interview | Captures your visual brand into core/brand-profile.yml |
-| your-voice | Applies your voice profile to written output |
-| your-deliverable-template | Produces branded documents from core/brand-profile.yml |
-| business-context-loader | Loads and completes per-company business context |
-| linkedin-post | Voice-coupled LinkedIn post writer |
-| client-update | Voice-coupled client status update writer |
-| proposal-writer | Voice and brand-coupled proposal writer |
+| wiki-build | Walk markdown, extract `[[wikilinks]]`, refresh `brain/relations.yaml`. |
+| query | Graph and file retrieval. Routed via `/founder-os:query`. |
+| audit | Composite health report. Routed via `/founder-os:audit`. |
+| weekly-review | Structured weekly retro and sprint roll. |
+| priority-triage | Cut the list to what actually matters. |
+| brain-log | Session logging and pattern capture. |
+| decision-framework | Structured decision-making for founders. |
+| forcing-questions | Gate before new initiatives start. |
+| session-handoff | End-of-session state capture for continuity. |
+| handoff-protocol | Human or role-to-role handoff artifact. |
+| context-persistence | Source-backed context lookup before asking the user to repeat. |
+| meeting-prep | Pre-meeting brief and post-meeting debrief. |
+| knowledge-capture | Distilled notes in `brain/knowledge/`. |
+| email-drafter | Emails in your voice. |
+| sop-writer | Processes turned into delegation-ready docs. |
+| founder-coaching | Bias toolkit, bottleneck check, zones. |
+| bottleneck-diagnostic | Founder dependency diagnostic. |
+| unit-economics | Business math, margins, break-even. |
+| content-repurposer | One piece, multiple formats. |
+| strategic-analysis | Market sizing, competitor analysis, opportunity assessment. |
+| pre-send-check | Hard gate before any client-facing deliverable leaves your machine. |
+| blind-spot-review | Second-pass review before pre-send. |
+| ship-deliverable | Final deliverable ship gate. |
+| approval-gates | Auto-run, ask-first, or refuse gate checks. |
+| data-security | Data class and tool-safety check. |
+| voice-interview | Captures your writing voice into core/voice-profile.yml. |
+| brand-interview | Captures your visual brand into core/brand-profile.yml. |
+| your-voice | Applies your voice profile to written output. |
+| your-deliverable-template | Produces branded documents from core/brand-profile.yml. |
+| business-context-loader | Loads and completes per-company business context. |
+| linkedin-post | Voice-coupled LinkedIn post writer. |
+| client-update | Voice-coupled client status update writer. |
+| proposal-writer | Voice and brand-coupled proposal writer. |
 
 ## Philosophy
 

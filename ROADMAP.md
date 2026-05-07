@@ -13,10 +13,12 @@ If something on this list matters to you, open an issue or email `solutions@arca
 - **v1.4.1** - patch. Bootloader template (`templates/bootloader-claude-md.md`) was missing the v1.4 substrate sections - new users running `/founder-os:setup` got a stale CLAUDE.md. Fixed. README skill-count drift fixed (22 of 26 -> 23 of 27). Setup wizard now has an explicit hook-copy step so the SessionStart brief actually fires for new installs.
 - **v1.4.2** - patch. Windows PowerShell hooks now wired automatically (no git-bash needed for SessionStart brief). Voice fallback unified across all six writing skills. Bash decay scanner regex fixed for Python compatibility. Plugin manifest repository field corrected. README positioning broadened from "solo founder" to "the person running the business".
 - **v1.4.3** - patch. Avatar reframed as a user-owned template (was marketing copy). AGENTS.md caught up to the v1.4 surface. Public commit-naming rule shipped (`rules/commit-naming.md`). Brain templates teach the lifecycle by example. GEMINI.md stub removed. CONTRIBUTING, SECURITY, CHANGELOG added. Stale "v1.2" references swept. readiness output reads "high-impact" instead of corporate jargon.
+- **v1.5.0** - tailoring + memory release. Six daily skills (sop-writer, meeting-prep, email-drafter, strategic-analysis, decision-framework, your-voice) now actually read the wizard's captured answers. `/rant` and `/dream` ship with `brain/rants/` folder. Auto-memory `MEMORY.md` template + wizard step land cross-session continuity for behavioral guards. Brain example entries seeded with real dates so the SessionStart brief surfaces them on Day 1. README defines substrate / brain / wiki vocabulary in plain English. `docs/first-day.md` adds "A real Tuesday" walkthrough.
+- **v1.6.0** - retrieval and ship-safety release. README grouped by Day 1, Week 1, and Month 1+. Eight operating skills added, plus query and audit. `brain/knowledge/` now feeds proposal and strategy work. `/founder-os:query` traverses markdown and `brain/relations.yaml`. `/founder-os:audit` defines one health report across readiness, lint, wiki, brain, and voice.
 
 ---
 
-## v1.3.x - within 2 weeks of v1.3 launch
+## Patch candidates (deferred from earlier releases, still valid)
 
 ### Install ergonomics
 
@@ -36,9 +38,11 @@ If something on this list matters to you, open an issue or email `solutions@arca
 
 ---
 
-## v1.5 candidate - parallel-agent audit
+## v1.7 candidates
 
-- **`/founder-os:audit` composite report** (~6 hr). Borrows the parallel-sub-agent pattern: run readiness-check, lint, wiki-build, brain-staleness, voice-completeness in parallel and return one composite OS-health report. Pure addition; readiness-check, lint, and wiki-build stay as standalone commands.
+- **Stronger retrieval path** (~6 hr). Add richer ranking and optional cached indexes only if plain-file query misses real user questions twice.
+- **Company OS layer 2 sketch** (~6 hr). Draft the multi-user state model once a real team handoff needs shared operating context.
+- **Install ergonomics sweep** (~4 hr). Re-check plugin install, script copy, and first-run docs after v1.6 reaches fresh users.
 
 ---
 
