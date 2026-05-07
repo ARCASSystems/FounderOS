@@ -37,6 +37,8 @@ Areas for searching across the 37 skills:
 
 A **SessionStart brief** runs on every session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up; you do not need to think about it. Details under [Substrate details](#substrate-details) below if curious.
 
+**The capture-and-cite loop.** `/rant` captures a raw thought dump. `/dream` distils unprocessed rants into patterns, flags, parked decisions, and needs. Every new brain entry gets a stable `<channel>-YYYY-MM-DD-NNN` ID stamped at write time. The dream digest cites those IDs in one line each instead of restating content. `knowledge-capture` writes distilled takeaways from books, calls, and articles into `brain/knowledge/` with the same ID convention so proposal-writer and strategic-analysis can read them back. Optional: opt in to a tool-call observation log with `FOUNDER_OS_OBSERVATIONS=1` and `/dream` rolls each day's activity into an OBSERVED section.
+
 ---
 
 ## Install
@@ -126,7 +128,7 @@ Skills are grouped by when you will actually reach for them, not by category. If
 | proposal-writer | Writes a full proposal: scope, deliverables, terms, pricing. Inherits voice and visual brand. |
 | sop-writer | Captures a process you describe verbally. Writes a structured SOP someone else could follow. |
 | content-repurposer | Takes one source piece. Repurposes it across LinkedIn, Twitter, newsletter, internal doc, all in your voice. |
-| knowledge-capture | Captures takeaways from a book, podcast, article, or conversation into `brain/knowledge/` so future skills can read them back. |
+| knowledge-capture | Captures takeaways from a book, podcast, article, or conversation into `brain/knowledge/`. Each note carries a stable `know-YYYY-MM-DD-NNN` ID so other skills cite it instead of restating content. |
 | founder-coaching | Coaching loop when you are stuck. References a bias toolkit and a zone framework to diagnose what is actually going on. |
 | unit-economics | Runs the math on a deal, hire, pricing change, or new business line. CAC, LTV, gross margin, breakeven. Stores the model file. |
 | strategic-analysis | Runs a market scan, competitor map, or opportunity assessment. Reads relevant `brain/knowledge/` notes before writing. |
@@ -138,7 +140,7 @@ Skills are grouped by when you will actually reach for them, not by category. If
 | context-persistence | Searches the OS before asking the founder to repeat context. Cites source paths or names what is missing. |
 | data-security | Classifies data before paste, upload, or external tool use. Blocks unsafe data movement and names the safe path. |
 | bottleneck-diagnostic | Scores founder dependency across decisions, clients, process, revenue, and growth capacity. |
-| query | Traverses `brain/relations.yaml` plus operating files and returns the 3 to 5 most relevant nodes for a question. |
+| query | Traverses `brain/relations.yaml` plus operating files. Three progressive modes: `index` returns the top hits with stable IDs, `timeline` returns entries within a 7-day window of an anchor, `full` returns the body of specific IDs you ask for. Backwards-compatible bare invocation still works. |
 | audit | Runs readiness, lint, wiki state, brain staleness, and voice completeness as one OS health report. |
 
 ### Slash commands (19)
@@ -152,14 +154,14 @@ Skills are grouped by when you will actually reach for them, not by category. If
 | `/founder-os:ingest <source>` | File a URL, file path, or pasted text into `raw/` with provenance. Propose wiki updates you approve. |
 | `/founder-os:lint` | Read-only wiki audit. Cross-references, orphans, stale content, provenance, possible contradictions. |
 | `/founder-os:wiki-build` | Refresh the auto-generated wiki graph in `brain/relations.yaml`. Idempotent. |
-| `/founder-os:query <question>` | Search the OS graph and return the top 3 to 5 related nodes. |
+| `/founder-os:query <question>` | Search the OS graph. Default returns top 3 to 5 nodes with stable IDs. `--mode timeline --anchor <slug>` returns entries within 7 days of an anchor. `--mode full --ids <a,b,c>` returns the full body of specific IDs. |
 | `/founder-os:audit` | Composite OS health report across readiness, lint, wiki, brain, and voice. |
 | `/founder-os:forcing-questions <initiative>` | Run the six-question gate before starting a new initiative. |
 | `/founder-os:ship-deliverable <path>` | Run the final read-only deliverable ship gate. |
 | `/founder-os:update` | Pull the latest System Layer files. Subcommands: `check`, `rollback`. |
 | `/founder-os:uninstall` | Cleanly remove Founder OS. Default mode preserves your data. `--purge` removes everything. |
 | `/founder-os:rant` | Capture a raw thought dump into `brain/rants/`. |
-| `/founder-os:dream` | Process unprocessed rants into patterns, flags, parked decisions, needs-input, and client signals. |
+| `/founder-os:dream` | Process unprocessed rants into patterns, flags, parked decisions, needs-input, and client signals. Stamps stable IDs on every new entry and cites them in the digest. Rolls today's tool-call observation log into an OBSERVED section when the opt-in log is enabled. |
 | `/today` | 20-line one-screen view of today. |
 | `/next` | One recommended next action across priorities, deals, and cadence. |
 | `/pre-meeting` | Hard gate before any meeting. |
@@ -201,6 +203,9 @@ Nothing in the OS hard-fails on a missing MCP. It tells you what it can't do and
 Background plumbing the wizard sets up. You do not need to read this to use the system; the wizard handles all of it. Here for the curious.
 
 - **Decay-aware brain layer.** Set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires.
+- **Stable entry IDs.** Every new brain entry (log, pattern, flag, parked, need, know) is stamped with a `<channel>-YYYY-MM-DD-NNN` ID at write time. Skills cite IDs in summaries instead of restating content.
+- **Token-aware progressive query.** `scripts/query.py` and `/founder-os:query` operate in three modes: `index` for top hits, `timeline` for entries within a 7-day window of an anchor file or ID, `full` for the body of specific IDs. Pure markdown plus stdlib, no vector DB.
+- **Opt-in observation log.** Set `FOUNDER_OS_OBSERVATIONS=1` to enable a `PostToolUse` hook that appends one line per tool call to `brain/observations/<date>.jsonl`. `/dream` rolls each day's activity into an OBSERVED section. Off by default.
 - **`system/quarantine.md`** is a catch-net so failing hooks and scheduled tasks stop being silent.
 - **Approval gate matrix** at `rules/approval-gates.md` tells the OS what to auto-run, what to ask about, and what to refuse outright.
 - **`brain/relations.yaml`** is a hand-curated graph of edges between files, plus auto-extracted `[[wikilinks]]` refreshed by `/founder-os:wiki-build`.
