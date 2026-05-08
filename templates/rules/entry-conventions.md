@@ -78,7 +78,7 @@ Add as bullet sub-fields directly under the `### Entry Heading`, after existing 
 
 ### Decay (use on flags, patterns, parked-decisions)
 
-- `Decay after:` - absolute date (YYYY-MM-DD) OR relative duration (`14d`, `90d`). When the date passes (or relative duration elapsed from `created`/`Date parked`), the entry surfaces as Review Due.
+- `Decay after:` - absolute date (YYYY-MM-DD) OR relative duration (`14d`, `90d`). When the date passes (or the relative duration elapses from the entry's anchor date - flag heading date for flags, `First observed:` for patterns, `Date parked:` for parked decisions), the entry surfaces as Review Due. The `Decay anchor missing` block surfaces entries that use a relative duration but lack the matching anchor.
 - `Decay reason:` - one line on why this decay window. Optional but recommended for non-default values.
 
 ---

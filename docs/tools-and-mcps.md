@@ -147,7 +147,9 @@ Setup: Obsidian → Open folder as vault → point at your founder-os install. T
 
 #### Bare-slug ambiguity
 
-If the same bare slug matches multiple files (e.g. `[[index]]` matching `brain/index.md`, `network/index.md`, and `roles/index.md`), Obsidian prompts you to pick at link-creation time. The lint skill (`/founder-os:lint`) flags ambiguous slugs, names every candidate, and tells you the deterministic pick. Disambiguate by writing the path form: `[[brain/index.md]]`.
+If the same bare slug matches multiple files (e.g. `[[index]]` matching `brain/index.md`, `network/index.md`, and `roles/index.md`), Obsidian prompts you to pick at link-creation time. The lint skill (`/founder-os:lint`) flags ambiguous slugs, names every candidate, and names the deterministic pick.
+
+The pick rule: scan directories in the order declared in `scripts/wiki-build.py:INCLUDE_PREFIXES` (`core/`, `context/`, `cadence/`, `brain/`, `network/`, `companies/`, `roles/`, `rules/`), then alphabetical within the first matching directory. First match wins. So `[[index]]` resolves to `brain/index.md` because `brain/` comes before `network/` and `roles/` in `INCLUDE_PREFIXES`. Disambiguate explicitly by writing the path form: `[[brain/index.md]]`.
 
 #### Day-0 expectations
 

@@ -252,7 +252,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.18.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.19.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -319,7 +319,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.18.0. Public push week of 2026-05-07.
+Version 1.19.0. Public push week of 2026-05-07.
+
+v1.19.0 closes the Codex-review pass on v1.15.0. Six fixes a user would actually notice. Search now reads the wiki connections you build between files (the parser was silently dropping every auto-generated edge during traversal). Search now covers your role and rule files (v1.14 added them to the wiki graph; this release catches up the search side). Fresh installs run clean again (lint stopped flagging the seeded parked-decisions example as a "stale entry" warning). The test suite passes on every Windows shell, not just git-bash (it was failing 14/43 on a Windows machine where `bash` points at WSL; the "43/43 pass" claim in earlier notes was true on git-bash and untrue on WSL). The manual-clone install gets correct command guidance on Day 1 (`docs/first-day.md` now carries a Path B note at the top; before, you would hit "command not found" on the first command). And the plugin marketplace shows the right version (the manifests had been stamped at v1.13.0 since that release, even after v1.14-v1.18 shipped). Plus three smaller doc-and-surface fixes. Five new tests cover the search/wiki connection logic. 39 skills, 20 commands, 48 tests. Same surface, fewer silent failures.
 
 v1.18.0 closes the third layer of doc drift. v1.16 caught the root-level docs and v1.17 caught the first-day/bootloader inventory. v1.18 catches the per-skill and per-command reference docs (`docs/skills.md` and `docs/commands.md`), which described the lint outcome with the pre-v1.15 surface (no decay-gap, no log-cap, ambiguous slugs only listed candidates instead of naming the deterministic pick). Both reference files now describe what `/founder-os:lint` actually prints. No code changes. 39 skills, 20 commands, 43 tests.
 

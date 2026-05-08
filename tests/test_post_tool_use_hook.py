@@ -220,20 +220,29 @@ class PostToolUseBashHookTests(unittest.TestCase):
             return str(path)
         env = os.environ.copy()
         env["TARGET_PATH"] = str(path)
-        result = subprocess.run(
-            [self.bash, "-lc", 'command -v cygpath >/dev/null 2>&1 && cygpath -u "$TARGET_PATH"'],
+        # Probe cygpath (git-bash, MSYS2) then wslpath (WSL). Each tool only
+        # exists in its own shell, so the resolved bash flavor picks the right
+        # converter.
+        probe = subprocess.run(
+            [
+                self.bash,
+                "-lc",
+                'if command -v cygpath >/dev/null 2>&1; then cygpath -u "$TARGET_PATH"; '
+                'elif command -v wslpath >/dev/null 2>&1; then wslpath -u "$TARGET_PATH"; fi',
+            ],
             text=True,
             capture_output=True,
             env=env,
         )
-        if result.returncode == 0 and result.stdout.strip():
-            return result.stdout.strip()
+        if probe.returncode == 0 and probe.stdout.strip():
+            return probe.stdout.strip()
+        # Last-resort fallback: git-bash /<drive>/ convention. WSL bash will not
+        # find this shape, but neither shell ships without its converter so the
+        # probe above almost always wins.
         path_text = str(path)
         if len(path_text) > 2 and path_text[1] == ":":
             drive = path_text[0].lower()
             rest = path_text[3:].replace("\\", "/")
-            # Git-bash convention is /<drive>/path. The WSL convention (/mnt/<drive>/)
-            # is a separate shell and not the right fallback here.
             return f"/{drive}/{rest}"
         return path_text
 

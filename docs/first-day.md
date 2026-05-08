@@ -4,6 +4,8 @@ The OS is files. Skills read those files. The more files you fill, the more skil
 
 This page maps the cascade. You don't need to do all of it on day one - but knowing the order means you stop wondering why a writing skill sounds generic.
 
+> **Path B users (manual git clone):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/status`, `/wiki-build`, `/lint`, `/today`. The plugin namespace only activates on Path A install. The commands below show the Path A form; remove the prefix on Path B. See [docs/install.md](install.md) for the exact mapping.
+
 ---
 
 ## The 35-minute first run

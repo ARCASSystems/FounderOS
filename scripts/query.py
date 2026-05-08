@@ -81,7 +81,10 @@ def candidate_files(root: Path) -> list[Path]:
     specific = [root / p for p in DEFAULT_FILES if (root / p).exists()]
     if specific:
         extra = []
-        for dirname in ["brain/knowledge", "companies", "network"]:
+        # Match scripts/wiki-build.py:INCLUDE_PREFIXES so the live rescan agrees
+        # with the persisted graph. Without roles/ and rules/ here, a query
+        # could miss a node that wiki-build.py recorded as a graph entry.
+        for dirname in ["brain/knowledge", "companies", "network", "roles", "rules"]:
             folder = root / dirname
             if folder.exists():
                 extra.extend(p for p in folder.rglob("*.md") if should_scan(p, root))
@@ -199,24 +202,65 @@ def decay_flag(text: str) -> str | None:
 
 
 def parse_edges(relations_text: str) -> list[tuple[str, str]]:
+    """Parse edges out of brain/relations.yaml.
+
+    Supports three shapes that coexist in the file:
+      1. Flat curated entries under `relations:` -- `- source: a` / `target: b`
+         or `- from: a` / `to: b`.
+      2. The auto-generated `wiki_links:` block written by
+         scripts/wiki-build.py, which uses `- source: a` followed by
+         `targets:` and a nested list of quoted target strings.
+      3. Both, in the same file.
+
+    Stdlib only. No PyYAML dependency.
+    """
     edges: list[tuple[str, str]] = []
-    current: dict[str, str] = {}
+    pending: dict[str, str] = {}
+    current_source: str | None = None
+    in_targets_block = False
+    target_list_re = re.compile(r'^\s+-\s+(.+?)\s*$')
+    flat_key_re = re.compile(r'^(from|to|source|target):\s')
+
     for raw in relations_text.splitlines():
+        # Inside a `targets:` list, each `- "name"` (or `- name`) is one edge
+        # target for the most recent source line. A `- source:` line ends the
+        # block (the next record has begun) -- without that exit, the source
+        # label would be captured as a fake target.
+        if in_targets_block:
+            target_match = target_list_re.match(raw)
+            if target_match:
+                candidate = target_match.group(1).strip().strip('"\'')
+                if flat_key_re.match(candidate):
+                    in_targets_block = False  # fall through to flat handling
+                else:
+                    if current_source and candidate:
+                        edges.append((current_source, candidate))
+                    continue
+            else:
+                in_targets_block = False  # fall through to flat handling
+
         line = raw.strip()
-        match = re.match(r"(?:-\s+)?(from|to|source|target):\s*(.+)$", line)
+        if line == 'targets:':
+            in_targets_block = True
+            continue
+
+        match = re.match(r"(?:-\s+)?(from|to|source|target):\s*(.*)$", line)
         if not match:
             continue
         key, value = match.groups()
         value = value.strip().strip('"\'')
+
         if key in {"from", "source"}:
-            if current:
-                current = {}
-            current["from"] = value
+            if pending:
+                pending = {}
+            pending["from"] = value
+            current_source = value if key == "source" else None
         elif key in {"to", "target"}:
-            current["to"] = value
-        if "from" in current and "to" in current:
-            edges.append((current["from"], current["to"]))
-            current = {}
+            pending["to"] = value
+
+        if "from" in pending and "to" in pending:
+            edges.append((pending["from"], pending["to"]))
+            pending = {}
     return edges
 
 

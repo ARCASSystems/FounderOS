@@ -243,13 +243,15 @@ if (Test-Path $MemoryDiff) {
   }
 }
 
-Write-Output "=== end brief ==="
-
 # --- Observations (opt-in telemetry, FOUNDER_OS_OBSERVATIONS=1 to enable) ---
+# Printed inside the brief so the visual closure (=== end brief ===) is the
+# last line.
 if ($env:FOUNDER_OS_OBSERVATIONS -eq "1") {
     Write-Output "Observations: enabled (writing to brain/observations/<date>.jsonl)"
 } else {
     Write-Output "Observations: disabled (set FOUNDER_OS_OBSERVATIONS=1 to enable)"
 }
+
+Write-Output "=== end brief ==="
 
 exit 0

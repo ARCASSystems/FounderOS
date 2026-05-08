@@ -2,6 +2,50 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.19.0 - 2026-05-08
+
+The Codex-review close. v1.16-v1.18 caught doc drift; v1.19 catches the substantive fixes. Six issues a user would actually notice: search now reads the wiki connections you build, search now covers role and rule files, fresh installs run clean again, the test suite passes on every Windows shell, the manual-clone install gets correct command guidance on Day 1, and the plugin marketplace shows the right version. Plus three smaller doc fixes and the metadata that should have shipped earlier.
+
+### Fixed - search now reads the wiki connections you build
+
+- **`/founder-os:query` now uses the graph that `/founder-os:wiki-build` creates.** When you write `[[wikilinks]]` between files and run wiki-build, those connections land in `brain/relations.yaml`. Search was supposed to traverse that graph to find related results, but the parser was only reading old-format curated entries and silently dropping every auto-generated edge. The result: any link you wrote between files was invisible to search. Both the live script and the template now read the auto-generated nested format. Five new unit tests in `tests/test_query.py` lock in the behavior on both copies so the two cannot drift again.
+  - Detail for engineers: `scripts/query.py:parse_edges()` now handles the nested `wiki_links:` block (`- source: <path>` followed by `targets:` and a list of quoted strings) on top of the old flat `from`/`to` pairs. Same change in `templates/scripts/query.py`.
+
+### Fixed - search now covers your role and rule files
+
+- **Live search rescan widened to `roles/` and `rules/`.** v1.14 added these directories to the wiki graph builder so cross-references inside role definitions and operating rules would land in `brain/relations.yaml`. The query side never caught up, so search results were missing nodes the graph already knew about. Now the two agree: search scans the same set of directories the graph builder records.
+  - Detail for engineers: `scripts/query.py:candidate_files()` now walks `brain/knowledge/`, `companies/`, `network/`, `roles/`, `rules/`. Mirrored to the template.
+
+### Fixed - fresh installs run clean again
+
+- **Lint no longer warns about the seeded parked-decisions example as a stale entry.** A new install ships `brain/decisions-parked.md` with one example dated 2024-01-01 to teach the format. v1.15 added a "decay-gap" warning that flagged any flag, pattern, or parked entry older than 30 days without a `Decay after:` line. That broke the Day-1 promise: every new user saw a false warning on the very first lint run. Parked decisions are trigger-driven by convention (the file says so explicitly), so they are now excluded from the decay-gap scan. The other two scopes (flags and patterns) still surface real adoption gaps.
+
+### Fixed - the test suite passes on every Windows shell
+
+- **Tests probe `wslpath` after `cygpath`.** The suite was passing on git-bash and silently failing 14 out of 43 on a Windows machine where `bash` resolves to WSL. The cause was a path conversion that only knew about git-bash's `/c/path` shape. Both shells run cleanly now. The "43/43 pass" claim in earlier release notes was true on git-bash but untrue on WSL; this release closes that honesty gap and ships five new tests that cover the search/wiki logic on top.
+
+### Fixed - the manual-clone install gets correct Day-1 command guidance
+
+- **`docs/first-day.md` now carries a Path B note at the top.** If you installed via manual git clone (Path B) instead of the plugin marketplace (Path A), the slash commands ship without the `/founder-os:` prefix. The README and `docs/install.md` already said so. The first-day walkthrough did not, so a Path B user running the walkthrough verbatim would hit "command not found" on the very first command. Closed.
+
+### Fixed - the plugin marketplace shows the right version
+
+- **`.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` now read 1.19.0.** Both manifests had been stale at 1.13.0 since the v1.13 release. The README stamp was bumped in v1.16 and the `VERSION` file in v1.18, but the plugin manifests were left behind. The plugin marketplace reads from those manifests, so anyone installing through the marketplace was seeing a stale version stamp on a current build.
+
+### Fixed - smaller doc and surface fixes
+
+- **The decay convention doc names the right anchor fields.** `templates/rules/entry-conventions.md` was telling users that relative decay (`14d`, `90d`) computes from a `created` field. No template uses a `created` field. The actual scanner uses the flag heading date, the `First observed:` line on patterns, and the `Date parked:` line on parked decisions. The doc now matches.
+- **The bare-slug ambiguity rule is spelled out in docs.** `docs/tools-and-mcps.md` was saying "lint will tell you" the deterministic pick when a `[[bare-slug]]` matched multiple files. The rule itself was only documented inside the lint skill. Now spelled out in the user-facing doc: scan `INCLUDE_PREFIXES` order (`core/`, `context/`, `cadence/`, `brain/`, `network/`, `companies/`, `roles/`, `rules/`), alphabetical within the first matching directory, first match wins.
+- **The session-start brief visually closes correctly.** `=== end brief ===` is now the last line of the hook output. The `Observations:` status line used to print after that closure, so the visual boundary did not actually mark the end of the brief. Re-ordered in both the bash and PowerShell hooks.
+- **The lint reference example block shows all four kinds of stale-content output.** v1.15 added `decay-gap` and `log-cap` outputs to lint but the rendered example block in the skill file still only showed the older two. Updated.
+
+### Notes
+
+- 48 tests now pass (was 43). Five new tests cover the search/wiki connection logic and run against both the live script and its template mirror to catch future drift between the two.
+- No new skills, no new commands. 39 skills, 20 commands. Same surface, fewer silent failures.
+- Free-tier accessibility floor preserved. Nothing in the install or daily-use path requires a paid AI subscription, API key, or external service.
+- Codex's NIT 11 (300-line cap wording: `templates/brain/index.md:62` says "hits 300", `skills/lint/SKILL.md:85` says "exceeds 300") is deferred. Codex itself flagged it as a v1.16+ punt; not blocking.
+
 ## v1.18.0 - 2026-05-08
 
 Third-layer doc-drift release. v1.16 caught the root-level docs (README, ROADMAP, CLAUDE.md, AGENTS.md). v1.17 caught the first-day walkthrough and the bootloader template that becomes the user's CLAUDE.md after setup. v1.18 catches the per-skill and per-command reference docs (`docs/skills.md` and `docs/commands.md`), which still described the pre-v1.15 lint outcome. A user clicking through to either reference would see fewer lint surfaces than the skill actually prints. No code changes.

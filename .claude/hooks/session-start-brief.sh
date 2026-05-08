@@ -210,13 +210,15 @@ if [ -f "$MEMORY_DIFF" ] && [ -n "$PYTHON" ]; then
   $PYTHON "$MEMORY_DIFF" "$REPO" 2>/dev/null
 fi
 
-echo "=== end brief ==="
-
 # --- Observations (opt-in telemetry, FOUNDER_OS_OBSERVATIONS=1 to enable) ---
+# Printed inside the brief so the visual closure (=== end brief ===) is the
+# last line.
 if [ -n "$FOUNDER_OS_OBSERVATIONS" ] && [ "$FOUNDER_OS_OBSERVATIONS" = "1" ]; then
   echo "Observations: enabled (writing to brain/observations/<date>.jsonl)"
 else
   echo "Observations: disabled (set FOUNDER_OS_OBSERVATIONS=1 to enable)"
 fi
+
+echo "=== end brief ==="
 
 exit 0

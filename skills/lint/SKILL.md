@@ -62,16 +62,16 @@ Anything else with zero inbound references is flagged as orphan.
 | `cadence/quarterly-sprints.md` | If file exists, oldest unresolved item is more than 90 days old |
 | `context/decisions.md` | Any decision marked `pending` with no update in 14+ days |
 | `context/clients.md` | Any client row with `Last contact` (or equivalent last-touch) field 30+ days behind today |
-| `brain/flags.md`, `brain/patterns.md`, `brain/decisions-parked.md` | Any entry whose anchor date (flag header date / `First observed:` / `Date parked:`) is 30+ days behind today AND the entry does NOT have a `Decay after:` field. Soft signal, not a defect. |
+| `brain/flags.md`, `brain/patterns.md` | Any entry whose anchor date (flag header date / `First observed:`) is 30+ days behind today AND the entry does NOT have a `Decay after:` field. Soft signal, not a defect. Parked decisions are excluded by convention (`rules/entry-conventions.md` defines them as trigger-driven, not date-driven). |
 | `brain/log.md` | File exceeds 300 lines (documented cap in `templates/brain/log.md:2` and `templates/brain/index.md:33`). |
 
 Use the dated headers and frontmatter dates first. Fall back to file mtime only if no in-content dates.
 
 ### Decay-convention adoption gap
 
-For each entry in `brain/flags.md` (`##` headings), `brain/patterns.md` (`###` headings), and `brain/decisions-parked.md` (`###` headings):
+For each entry in `brain/flags.md` (`##` headings) and `brain/patterns.md` (`###` headings):
 
-- Determine the anchor date. For flags: the date in the heading line (`## YYYY-MM-DD - <title>`). For patterns: a `First observed:` line. For parked decisions: a `Date parked:` line.
+- Determine the anchor date. For flags: the date in the heading line (`## YYYY-MM-DD - <title>`). For patterns: a `First observed:` line.
 - If anchor date is 30+ days behind today AND the entry has no `Decay after:` field: flag.
 
 Render under STALE CONTENT, prefixed `decay-gap`:
@@ -79,6 +79,8 @@ Render under STALE CONTENT, prefixed `decay-gap`:
 `decay-gap brain/flags.md: "<entry heading>" - <N> days old, no Decay after: field. Suggest: Decay after: <today YYYY-MM-DD>`
 
 This is a soft suggestion, not a defect. The user may have deliberately omitted the field. Cap at the 5 oldest entries per file to avoid flooding.
+
+`brain/decisions-parked.md` is intentionally excluded. The entry conventions in `rules/entry-conventions.md` define parked decisions as trigger-driven (no auto-decay), so a parked entry without `Decay after:` is the documented default, not a gap. The seeded template ships an example with no `Decay after:` for the same reason; flagging it would be noise on a fresh install.
 
 ### Log size cap
 
@@ -129,6 +131,8 @@ ORPHAN PAGES (<N> issues)
 STALE CONTENT (<N> issues)
 - cadence/daily-anchors.md: top header is YYYY-MM-DD (5 days stale)
 - context/decisions.md: <decision title> pending since YYYY-MM-DD (18 days)
+- decay-gap brain/flags.md: "<entry heading>" - 42 days old, no Decay after: field. Suggest: Decay after: YYYY-MM-DD
+- log-cap brain/log.md: 327 lines (cap is 300). Move oldest entries to brain/archive/log-YYYY-MM.md.
 (or: "Clean.")
 
 PROVENANCE (<N> issues)

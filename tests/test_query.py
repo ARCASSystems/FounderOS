@@ -1,3 +1,4 @@
+import importlib.util
 import re
 import subprocess
 import sys
@@ -7,12 +8,20 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 QUERY_SCRIPT = REPO_ROOT / "scripts" / "query.py"
+TEMPLATE_QUERY_SCRIPT = REPO_ROOT / "templates" / "scripts" / "query.py"
 FIXTURE_ROOT = Path(__file__).resolve().parent / "fixtures" / "query-corpus"
 
 
 def run_query(*args: str) -> subprocess.CompletedProcess[str]:
     cmd = [sys.executable, str(QUERY_SCRIPT), "--root", str(FIXTURE_ROOT), *args]
     return subprocess.run(cmd, text=True, capture_output=True)
+
+
+def load_query_module(path: Path, name: str):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 class QueryCliTests(unittest.TestCase):
@@ -69,6 +78,88 @@ class QueryCliTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 2)
         self.assertIn("Usage: python scripts/query.py <question>", result.stdout)
+
+
+class ParseEdgesTests(unittest.TestCase):
+    """Direct unit tests for parse_edges in scripts/query.py and its template
+    mirror. Confirms both flat curated entries and the nested wiki_links block
+    written by scripts/wiki-build.py round-trip into edges."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.live = load_query_module(QUERY_SCRIPT, "query_live")
+        cls.template = load_query_module(TEMPLATE_QUERY_SCRIPT, "query_template")
+
+    def _both(self, text: str) -> list[list[tuple[str, str]]]:
+        return [self.live.parse_edges(text), self.template.parse_edges(text)]
+
+    def test_flat_from_to_pairs(self) -> None:
+        text = (
+            "relations:\n"
+            "  - from: a.md\n"
+            "    to: b.md\n"
+            "  - from: c.md\n"
+            "    to: d.md\n"
+        )
+        for edges in self._both(text):
+            self.assertEqual(edges, [("a.md", "b.md"), ("c.md", "d.md")])
+
+    def test_flat_source_target_pairs(self) -> None:
+        text = (
+            "relations:\n"
+            "  - source: a.md\n"
+            "    target: b.md\n"
+        )
+        for edges in self._both(text):
+            self.assertEqual(edges, [("a.md", "b.md")])
+
+    def test_nested_wiki_links_block(self) -> None:
+        text = (
+            "wiki_links:\n"
+            "  - source: cadence/daily-anchors.md\n"
+            "    targets:\n"
+            "      - \"context/priorities\"\n"
+            "      - \"brain/log\"\n"
+            "  - source: roles/coo.md\n"
+            "    targets:\n"
+            "      - \"rules/operating-rules\"\n"
+        )
+        for edges in self._both(text):
+            self.assertIn(("cadence/daily-anchors.md", "context/priorities"), edges)
+            self.assertIn(("cadence/daily-anchors.md", "brain/log"), edges)
+            self.assertIn(("roles/coo.md", "rules/operating-rules"), edges)
+
+    def test_mixed_curated_and_wiki_links(self) -> None:
+        text = (
+            "relations:\n"
+            "  - source: a.md\n"
+            "    target: b.md\n"
+            "wiki_links:\n"
+            "  - source: c.md\n"
+            "    targets:\n"
+            "      - \"d\"\n"
+        )
+        for edges in self._both(text):
+            self.assertIn(("a.md", "b.md"), edges)
+            self.assertIn(("c.md", "d"), edges)
+
+    def test_targets_block_does_not_swallow_next_source(self) -> None:
+        # Without the source-line exit guard, the second source label would
+        # have been captured as a fake target of the first source.
+        text = (
+            "wiki_links:\n"
+            "  - source: a.md\n"
+            "    targets:\n"
+            "      - \"b\"\n"
+            "  - source: c.md\n"
+            "    targets:\n"
+            "      - \"d\"\n"
+        )
+        for edges in self._both(text):
+            self.assertEqual(
+                sorted(edges),
+                [("a.md", "b"), ("c.md", "d")],
+            )
 
 
 if __name__ == "__main__":
