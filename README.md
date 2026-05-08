@@ -252,7 +252,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.19.2 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.19.3 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -319,7 +319,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.19.2. Public push week of 2026-05-07.
+Version 1.19.3. Public push week of 2026-05-07.
+
+v1.19.3 closes two follow-ups from a fourth review pass. The v1.19.2 escape-unescape fix was applied symmetrically to both quote characters, which over-applied: a hand-written single-quoted YAML target like `'foo\"bar'` would have parsed as `foo"bar`, losing the literal backslash that belongs to the user's content. The unescape is now quote-char-aware (only `\"` inside `"..."`, only `\'` inside `'...'`). And the ROADMAP `v1.19.0` shipped bullet still summarised "Six fixes" and credited v1.19.0 with the `WSLENV/p` fix; CHANGELOG and README had been corrected, ROADMAP had not. Now matches. One new test locks the single-quote round-trip in. 39 skills, 20 commands, 53 tests.
 
 v1.19.2 closes three follow-ups from a third review pass. The v1.19.1 narrative reintroduced the previous reviewer's tool name while explaining its earlier removal (cleaned up). The v1.19.0 narrative still summarised the WSL fix as if it had landed in v1.19.0 (it didn't fully land until v1.19.1, now reflected). And `parse_edges()` was reading `\"` literally inside a quoted target instead of unescaping it back to `"` (the wiki-build serializer escapes the quote on output, so the round-trip was asymmetric for any target containing a literal double-quote). One new test covers the escape round-trip. 39 skills, 20 commands, 52 tests.
 

@@ -193,6 +193,24 @@ class ParseEdgesTests(unittest.TestCase):
         for edges in self._both(text):
             self.assertIn(("a.md", 'foo"bar'), edges)
 
+    def test_single_quoted_target_preserves_backslash(self) -> None:
+        # A hand-written single-quoted YAML target like 'foo\"bar' is NOT a
+        # double-quoted escape -- the backslash is literal. The unescape must
+        # only operate on the matching quote character. Cross-quote unescape
+        # (treating \" as escape inside a single-quoted string) would corrupt
+        # the literal backslash.
+        # Python string literal: "'foo\\\"bar'" = single-quote, f, o, o,
+        # backslash, double-quote, b, a, r, single-quote.
+        text = (
+            "wiki_links:\n"
+            "  - source: a.md\n"
+            "    targets:\n"
+            "      - 'foo\\\"bar'\n"
+        )
+        for edges in self._both(text):
+            self.assertIn(("a.md", "foo\\\"bar"), edges)
+            self.assertNotIn(("a.md", 'foo"bar'), edges)
+
 
 class CandidateFilesScopeTests(unittest.TestCase):
     """Confirms candidate_files walks every prefix in INCLUDE_PREFIXES so a

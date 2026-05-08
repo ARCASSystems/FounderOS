@@ -251,11 +251,19 @@ def parse_edges(relations_text: str) -> list[tuple[str, str]]:
         if in_targets_block:
             quoted = target_quoted_re.match(raw)
             if quoted:
-                # scripts/wiki-build.py escapes a literal `"` inside a target
-                # as `\"`. Unescape on the way back so the edge name contains
-                # the original character. Symmetric for `'` even though the
-                # generator currently only emits double-quoted targets.
-                target = quoted.group(2).replace('\\"', '"').replace("\\'", "'")
+                # Only the matching quote needs un-escaping. scripts/wiki-build.py
+                # emits double-quoted targets and escapes an inner `"` as `\"`,
+                # so a `"` quote unescapes `\"`. A hand-written single-quoted
+                # target may use `\'` for an inner apostrophe, so a `'` quote
+                # unescapes `\'`. Crossing the two would corrupt literal
+                # backslashes in the other shape (e.g. `'foo\"bar'` should
+                # round-trip as `foo\"bar`, not `foo"bar`).
+                quote_char = quoted.group(1)
+                inner = quoted.group(2)
+                if quote_char == '"':
+                    target = inner.replace('\\"', '"')
+                else:
+                    target = inner.replace("\\'", "'")
                 if current_source and target:
                     edges.append((current_source, target))
                 continue

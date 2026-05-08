@@ -2,6 +2,25 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.19.3 - 2026-05-09
+
+Fourth-review patch. v1.19.2's quoted-target escape-unescape over-applied across quote shapes, and the ROADMAP `v1.19.0` shipped bullet had not caught up to the corrected v1.19.0 narrative in CHANGELOG and README. Two fixes.
+
+### Fixed - parse_edges escape-unescape is quote-char-aware
+
+- **`scripts/query.py:parse_edges()` and `templates/scripts/query.py:parse_edges()` now only unescape `\"` inside double-quoted targets and only unescape `\'` inside single-quoted targets.** v1.19.2 unescaped both forms regardless of the surrounding quote, which was correct for the double-quoted output `scripts/wiki-build.py` writes but corrupted hand-written single-quoted YAML. A target like `'foo\"bar'` (where the user wants a literal backslash and a literal double-quote) would have parsed as `foo"bar`, losing the backslash. The unescape now reads the surrounding quote character from the regex group and only reverses the matching escape. New test `tests/test_query.py::ParseEdgesTests::test_single_quoted_target_preserves_backslash` locks the asymmetric behavior in.
+
+### Fixed - ROADMAP v1.19.0 bullet matches CHANGELOG and README
+
+- **ROADMAP `v1.19.0` shipped entry now reads "five user-visible fixes plus an attempted WSL fix" and points the WSLENV/p fix at v1.19.1.** v1.19.2 corrected the v1.19.0 summary in CHANGELOG and the v1.19.0 paragraph in README, but the parallel ROADMAP bullet still said "Six fixes" with the `WSLENV/p` work credited to v1.19.0. A reader skimming ROADMAP would have seen contradictory framing across the three public docs. Now consistent.
+
+### Notes
+
+- 53 tests now pass on git-bash (was 52). One new test for the single-quote-preserves-backslash edge case.
+- WSL bash verification: confirmed clean by the v1.19.1 review pass. v1.19.2 added the round-trip fix on top; v1.19.3 keeps both and only narrows the unescape scope.
+- No new skills, no new commands. 39 skills, 20 commands. Same surface as v1.19.2.
+- Free-tier accessibility floor preserved.
+
 ## v1.19.2 - 2026-05-09
 
 Third-review patch. The v1.19.1 release closed the v1.19.0 review's findings, but the patch narrative itself reintroduced the previous reviewer's tool name while explaining its earlier removal, the v1.19.0 summary still framed an incomplete fix as complete, and a parser edge case the third review surfaced was real. v1.19.2 closes all three.
