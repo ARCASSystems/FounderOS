@@ -30,7 +30,7 @@ Argument: `$ARGUMENTS` - optional. One of: `check`, `rollback`, or empty.
 - `.claude/` (commands, hooks, agents, settings)
 - `.claude-plugin/` (plugin.json, marketplace.json)
 - `skills/` (shared skill definitions)
-- `scripts/` (Python helpers: wiki-build.py, query.py, brain-snapshot.py, brain-pass-log.py)
+- `scripts/` (Python helpers: wiki-build.py, query.py, brain-snapshot.py, brain-pass-log.py, memory-diff.py)
 - `templates/` (structural templates)
 - `notion-package/` (Notion setup assets)
 - `rules/` (commit naming and other shared rules)

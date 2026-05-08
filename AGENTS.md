@@ -35,7 +35,7 @@ A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` hol
 
 The system layer (do not edit per-user) lives in:
 - `skills/` - 39 skills, each in its own folder with a `SKILL.md`
-- `scripts/` - Python helpers (wiki-build, query, brain-snapshot, brain-pass-log)
+- `scripts/` - Python helpers (wiki-build, query, brain-snapshot, brain-pass-log, memory-diff)
 - `templates/` - source templates for files the setup wizard generates
 - `.claude/commands/` - 20 slash commands
 - `.claude/hooks/` - SessionStart brief, session-close revenue check, opt-in PostToolUse observation log
@@ -77,7 +77,7 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 - `/today` - 20-line one-screen view of today.
 - `/next` - one recommended next action across priorities, deals, and cadence.
 
-## Substrate (v1.4 + v1.10)
+## Substrate (v1.4 + v1.10 + v1.12)
 
 Three files sit underneath the daily files. Read them before changing brain/cadence/decisions behaviour:
 
@@ -89,6 +89,10 @@ Two v1.10 additions:
 
 - `scripts/brain-snapshot.py` writes a small deterministic markdown payload to `brain/.snapshot.md` (open flags, this week's must-do, recent decisions, voice and brand fields, staleness). Nine output-producing skills read it at task time so output reflects current state instead of starting cold.
 - `brain-pass` skill (`/founder-os:brain-pass "<question>"`) synthesises an answer across the brain layer with stable-ID citations. No embeddings. No API call. `meeting-prep` and `linkedin-post` auto-invoke it before producing output.
+
+One v1.12 addition:
+
+- `scripts/memory-diff.py` runs from the SessionStart hook. Walks `clients/<slug>/` and flags any folder that has no matching entry in the auto-memory layer. Closes the cross-session gap where a cloud or parallel local Claude session creates a client folder that the next local session boots blind to. Hook-only feature. No new skill, no new command.
 
 ---
 
@@ -114,7 +118,7 @@ Cross-references between wiki files use `[[page-name]]` syntax.
 
 Two hooks ship in `.claude/hooks/`:
 
-- **SessionStart brief** - surfaces open flags, stale cadence, decisions count, `[FILL]` client rows, ACTIVE quarantine entries, and entries past their `Decay after:` date. Reads `core/identity.md` and quietly skips if the repo is not a Founder OS install. Bash and PowerShell variants both ship.
+- **SessionStart brief** - surfaces open flags, stale cadence, decisions count, `[FILL]` client rows, ACTIVE quarantine entries, entries past their `Decay after:` date, and `clients/<slug>/` folders without an auto-memory entry (v1.12). Reads `core/identity.md` and quietly skips if the repo is not a Founder OS install. Bash and PowerShell variants both ship.
 - **PostToolUse observation log (opt-in)** - off by default. Set `FOUNDER_OS_OBSERVATIONS=1` in your shell env to append one JSON line per tool call to `brain/observations/<YYYY-MM-DD>.jsonl`. `/dream` rolls each day into an OBSERVED section.
 - **Session-close revenue check** - warns (does not block) if outreach verbs appear in recent `brain/log.md` without a matching `context/clients.md` update in the same session. Bash and PowerShell variants both ship.
 

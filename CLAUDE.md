@@ -124,6 +124,8 @@ The SessionStart brief (`.claude/hooks/session-start-brief.sh` on Mac/Linux/git-
 
 The companion `brain-pass` skill (`/founder-os:brain-pass "<question>"`) synthesises an answer across the brain layer and returns Answer, Evidence, Confidence, and Gaps with stable-ID citations. No embeddings. No API call. Free-tier accessible. `meeting-prep` and `linkedin-post` auto-invoke brain-pass before producing output and fall back to `scripts/query.py` if it is unavailable.
 
+`scripts/memory-diff.py` (added v1.12) is read by the SessionStart brief on every session open. It walks `clients/<slug>/` and flags any folder that has no matching entry in your auto-memory (`MEMORY.md` or `project_<slug>.md`). Closes the gap where a cloud or parallel local Claude session creates a client folder that the next local session boots blind to. Hook-only feature. No new skill, no new command.
+
 ## Agent Teams (recommended)
 
 Claude Code has an experimental Agent Teams feature that turns sequential workflows into parallel specialist teams. For a solo founder running Founder OS, this is the difference between a meeting flow that runs prep, capture, log, and client-update one after another, and the same flow running as parallel specialists that finish in a fraction of the time.
@@ -173,7 +175,7 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/next` - one recommended next action across priorities, deals, and cadence.
 
 **Hooks** (`.claude/hooks/`)
-- SessionStart brief (v1.4) - surfaces open flags, stale cadence, pending decisions, [FILL] client rows, ACTIVE quarantine entries, and Review Due entries (past their `Decay after:` date). One screen at session open. Registered on the SessionStart event in `.claude/settings.json`. Quietly skips if the repo is not a Founder OS install (no `core/identity.md`).
+- SessionStart brief (v1.4 + v1.12) - surfaces open flags, stale cadence, pending decisions, [FILL] client rows, ACTIVE quarantine entries, Review Due entries (past their `Decay after:` date), and `clients/<slug>/` folders without an auto-memory entry. One screen at session open. Registered on the SessionStart event in `.claude/settings.json`. Quietly skips if the repo is not a Founder OS install (no `core/identity.md`).
 - Session-close revenue-loop check - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update. Registered on the Stop event in `.claude/settings.json`.
 
 **Windows note:** Hooks invoke bash. If you are on Windows, the install requires git-bash (which ships with Git for Windows). Without it, hooks will silently no-op. PowerShell-only users should switch the hook commands in `.claude/settings.json` to invoke the `.ps1` mirrors in `.claude/hooks/` (PowerShell versions ship alongside the bash versions).

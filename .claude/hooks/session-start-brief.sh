@@ -191,5 +191,13 @@ if [ -n "$PYTHON" ]; then
   fi
 fi
 
+# --- Memory/Retrieval diff (clients folders without memory entries) ---
+# Closes the cross-session gap where cloud or parallel sessions create
+# clients/<slug>/ folders that the next local session boots blind to.
+MEMORY_DIFF="$REPO/scripts/memory-diff.py"
+if [ -f "$MEMORY_DIFF" ] && [ -n "$PYTHON" ]; then
+  $PYTHON "$MEMORY_DIFF" "$REPO" 2>/dev/null
+fi
+
 echo "=== end brief ==="
 exit 0

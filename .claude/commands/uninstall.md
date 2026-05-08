@@ -39,7 +39,7 @@ Plugin registration:
 
 System layer (will be removed):
 - skills/<list of skill folders>
-- scripts/ (Python helpers: wiki-build.py, query.py, brain-snapshot.py, brain-pass-log.py)
+- scripts/ (Python helpers: wiki-build.py, query.py, brain-snapshot.py, brain-pass-log.py, memory-diff.py)
 - templates/<list of template folders>
 - rules/, docs/
 - .claude/commands/<list of command files>

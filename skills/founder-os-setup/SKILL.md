@@ -234,7 +234,8 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── wiki-build.py            # From templates/scripts/wiki-build.py (extracts [[wikilinks]] into brain/relations.yaml)
 │   ├── query.py                 # From templates/scripts/query.py (plain-file graph query)
 │   ├── brain-snapshot.py        # From templates/scripts/brain-snapshot.py (writes brain/.snapshot.md - runtime context for output skills)
-│   └── brain-pass-log.py        # From templates/scripts/brain-pass-log.py (opt-in JSONL telemetry for /founder-os:brain-pass)
+│   ├── brain-pass-log.py        # From templates/scripts/brain-pass-log.py (opt-in JSONL telemetry for /founder-os:brain-pass)
+│   └── memory-diff.py           # From templates/scripts/memory-diff.py (SessionStart helper - flags clients/ folders without an auto-memory entry)
 ├── cadence/
 │   ├── daily-anchors.md         # From templates/cadence/daily-anchors.md
 │   ├── weekly-commitments.md    # Personalized with their current priorities
@@ -275,14 +276,15 @@ Show the full list of files that will be created. Get approval. Then create them
 
 **Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, and post-tool-use observation hook live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Find the plugin install path (same as where templates live), then copy all six hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
-**Scripts copy step (mandatory).** Copy all four Python helpers from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
+**Scripts copy step (mandatory).** Copy all five Python helpers from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
 
 - `templates/scripts/wiki-build.py` → `scripts/wiki-build.py` (used by `/founder-os:wiki-build`)
 - `templates/scripts/query.py` → `scripts/query.py` (used by `/founder-os:query`)
 - `templates/scripts/brain-snapshot.py` → `scripts/brain-snapshot.py` (writes `brain/.snapshot.md`, read at task time by nine output-producing skills)
 - `templates/scripts/brain-pass-log.py` → `scripts/brain-pass-log.py` (opt-in JSONL telemetry for `/founder-os:brain-pass`)
+- `templates/scripts/memory-diff.py` → `scripts/memory-diff.py` (SessionStart helper that flags `clients/<slug>/` folders without an auto-memory entry)
 
-These are not personalized templates. Copy contents exactly. Do not edit. Verify all four copies exist on disk before continuing. If any are missing the brain-snapshot, brain-pass, and wiki-build skills will fail silently or hard-error.
+These are not personalized templates. Copy contents exactly. Do not edit. Verify all five copies exist on disk before continuing. If any are missing the brain-snapshot, brain-pass, wiki-build, or memory-diff helpers will fail silently or hard-error.
 
 **{{TODAY}} substitution.** The `templates/brain/relations.yaml` file contains the literal placeholder `{{TODAY}}`. When copying to `brain/relations.yaml`, replace every occurrence of `{{TODAY}}` with today's date in `YYYY-MM-DD` format (use `date -u +%Y-%m-%d` via Bash to get it).
 

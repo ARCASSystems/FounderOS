@@ -224,5 +224,16 @@ if ($missingAnchorHits.Count -gt 0) {
   }
 }
 
+# --- Memory/Retrieval diff (clients folders without memory entries) ---
+# Closes the cross-session gap where cloud or parallel sessions create
+# clients/<slug>/ folders that the next local session boots blind to.
+$MemoryDiff = Join-Path $Repo 'scripts\memory-diff.py'
+if (Test-Path $MemoryDiff) {
+  $py = Get-Command python -ErrorAction SilentlyContinue
+  if ($py) {
+    & python $MemoryDiff $Repo 2>$null
+  }
+}
+
 Write-Output "=== end brief ==="
 exit 0
