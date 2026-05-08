@@ -2,9 +2,40 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.19.1 - 2026-05-08
+
+The v1.19 follow-up. A second review pass over v1.19.0 found one BLOCKER and three MAJOR issues that v1.19 either left open or introduced. v1.19.1 closes them. Four user-visible fixes plus three new tests.
+
+### Fixed - WSL test path conversion no longer silently fails to "."
+
+- **`tests/test_session_hooks.py:bash_path()` and `tests/test_post_tool_use_hook.py:to_bash_path()` now use `WSLENV/p` propagation and validate the converted path.** v1.19 added a `wslpath` probe that was supposed to handle the case where `bash` resolves to WSL bash on Windows. It did not work: a Windows-side env var does not cross into WSL bash unless `WSLENV` whitelists it, so `TARGET_PATH` arrived empty and the probe returned `.` (the cwd). The bash parse-test then attempted to parse a directory and failed 14 of 48 tests. The new path adds `WSLENV=TARGET_PATH/p` so the WSL launcher translates the Windows path into POSIX form before the bash subprocess reads it, rejects any probe result that is empty or `.`, and falls back to a manual `/mnt/<drive>/` shape when the bash binary is at `system32` (WSL) or `/<drive>/` otherwise (git-bash, MSYS2). v1.19 overstated this fix as "passes on every Windows shell"; the v1.19 entry below has been updated to describe what actually shipped, and the v1.19.1 fix here is what makes the claim true.
+
+### Fixed - query and wiki-build now agree on scope
+
+- **`scripts/query.py:candidate_files()` walks every prefix in `INCLUDE_PREFIXES`.** v1.19 widened the live rescan to `roles/` and `rules/` but missed `core/`, `cadence/`, and the rest of `context/`. The persisted wiki graph already included those (see `scripts/wiki-build.py:INCLUDE_PREFIXES`), so files like `context/clients.md`, `cadence/daily-anchors.md`, and `core/identity.md` were graph nodes that could never surface as query candidates. `INCLUDE_PREFIXES` is now defined in `scripts/query.py` as well, with an explicit comment to keep the two files in sync. Mirrored to `templates/scripts/query.py`. Two new tests build a synthetic install with one node per prefix and assert each surfaces.
+
+### Fixed - parse_edges keeps quoted targets that happen to begin with a key word
+
+- **`scripts/query.py:parse_edges()` now distinguishes quoted targets from unquoted record boundaries.** A wikilink target like `[[source: note]]` round-trips through `scripts/wiki-build.py` as `      - "source: note"`. The v1.19 parser stripped the surrounding quotes first, then matched `source:` against its key pattern, exited the targets block, and dropped the edge. The new state machine treats anything in quotes as a target (always), and only treats unquoted list items as potential boundaries. One new test locks the behavior in.
+
+### Fixed - parked-decision decay prose matches what the hook actually does
+
+- **`templates/rules/entry-conventions.md` and `templates/brain/decisions-parked.md` no longer claim the SessionStart hook auto-surfaces parked decisions on trigger.** The hook only fires on entries that explicitly set `Decay after:`; it does not evaluate trigger conditions. Both files now state that parked decisions surface manually during the Chief of Staff scan or weekly review, and that an explicit `Decay after:` line is the way to put one on the auto-surface path. Lint already excludes parked decisions from the `decay-gap` scan (v1.19 fix); this release brings the prose into line with that behavior.
+
+### Fixed - `Codex` attribution removed from public release narrative
+
+- **CHANGELOG, README, and ROADMAP v1.19 narratives no longer name the external reviewer.** `rules/commit-naming.md:11` bans AI-tool attribution in public history. The v1.19 narratives said "Codex review" / "Codex's NIT 11" / "Codex-review close" in three public docs. Replaced with "external review" / "the review's NIT 11" / "external-review close". The v1.19 commit message itself stays in history (cannot be amended without rewriting public history); future release commits will follow the rule.
+
+### Notes
+
+- 51 tests now pass on git-bash (was 48). Three new: one for parse_edges quoted-target-with-key, two for candidate_files walking each prefix in INCLUDE_PREFIXES.
+- WSL bash verification: the path-conversion fix is correct in theory and reasoned through against `WSLENV/p` semantics, but I could not run the suite under WSL bash on this machine. If you have a Windows machine where `bash` resolves to WSL, run `python -m unittest discover -s tests` and confirm 51/51 pass; if any fail, please open an issue.
+- No new skills, no new commands. 39 skills, 20 commands. Same surface as v1.19.0.
+- Free-tier accessibility floor preserved.
+
 ## v1.19.0 - 2026-05-08
 
-The Codex-review close. v1.16-v1.18 caught doc drift; v1.19 catches the substantive fixes. Six issues a user would actually notice: search now reads the wiki connections you build, search now covers role and rule files, fresh installs run clean again, the test suite passes on every Windows shell, the manual-clone install gets correct command guidance on Day 1, and the plugin marketplace shows the right version. Plus three smaller doc fixes and the metadata that should have shipped earlier.
+The external-review close. v1.16-v1.18 caught doc drift; v1.19 catches the substantive fixes surfaced by an independent review of v1.15.0. Six issues a user would actually notice: search now reads the wiki connections you build, search now covers role and rule files, fresh installs run clean again, the test suite passes on every Windows shell, the manual-clone install gets correct command guidance on Day 1, and the plugin marketplace shows the right version. Plus three smaller doc fixes and the metadata that should have shipped earlier.
 
 ### Fixed - search now reads the wiki connections you build
 
@@ -20,9 +51,9 @@ The Codex-review close. v1.16-v1.18 caught doc drift; v1.19 catches the substant
 
 - **Lint no longer warns about the seeded parked-decisions example as a stale entry.** A new install ships `brain/decisions-parked.md` with one example dated 2024-01-01 to teach the format. v1.15 added a "decay-gap" warning that flagged any flag, pattern, or parked entry older than 30 days without a `Decay after:` line. That broke the Day-1 promise: every new user saw a false warning on the very first lint run. Parked decisions are trigger-driven by convention (the file says so explicitly), so they are now excluded from the decay-gap scan. The other two scopes (flags and patterns) still surface real adoption gaps.
 
-### Fixed - the test suite passes on every Windows shell
+### Fixed - the test suite path conversion learns about WSL bash (partial in v1.19, completed in v1.19.1)
 
-- **Tests probe `wslpath` after `cygpath`.** The suite was passing on git-bash and silently failing 14 out of 43 on a Windows machine where `bash` resolves to WSL. The cause was a path conversion that only knew about git-bash's `/c/path` shape. Both shells run cleanly now. The "43/43 pass" claim in earlier release notes was true on git-bash but untrue on WSL; this release closes that honesty gap and ships five new tests that cover the search/wiki logic on top.
+- **Tests probe `wslpath` after `cygpath`.** The suite was passing on git-bash and silently failing 14 out of 43 on a Windows machine where `bash` resolves to WSL. v1.19 added a `wslpath` branch but did not propagate the path argument into WSL bash, so the probe still returned `.` (its cwd) and the suite still failed there. v1.19.1 closes the gap with `WSLENV/p` propagation and a result-validation check; see the v1.19.1 entry above. The "43/43 pass" claim in v1.15-v1.18 release notes was true on git-bash and untrue on WSL; v1.19.1 is the release where it becomes true on both. v1.19 also ships five new tests that cover the search/wiki logic on top.
 
 ### Fixed - the manual-clone install gets correct Day-1 command guidance
 
@@ -44,7 +75,7 @@ The Codex-review close. v1.16-v1.18 caught doc drift; v1.19 catches the substant
 - 48 tests now pass (was 43). Five new tests cover the search/wiki connection logic and run against both the live script and its template mirror to catch future drift between the two.
 - No new skills, no new commands. 39 skills, 20 commands. Same surface, fewer silent failures.
 - Free-tier accessibility floor preserved. Nothing in the install or daily-use path requires a paid AI subscription, API key, or external service.
-- Codex's NIT 11 (300-line cap wording: `templates/brain/index.md:62` says "hits 300", `skills/lint/SKILL.md:85` says "exceeds 300") is deferred. Codex itself flagged it as a v1.16+ punt; not blocking.
+- The review's NIT 11 (300-line cap wording: `templates/brain/index.md:62` says "hits 300", `skills/lint/SKILL.md:85` says "exceeds 300") is deferred and self-flagged as a v1.16+ punt by the reviewer; not blocking.
 
 ## v1.18.0 - 2026-05-08
 

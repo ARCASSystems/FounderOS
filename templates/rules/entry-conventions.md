@@ -5,7 +5,7 @@ Standard metadata fields for entries inside `context/decisions.md`, `context/pri
 Three purposes:
 1. **Stable IDs.** Every new entry gets a per-channel, per-day, zero-padded counter. Skills can cite `#log-2026-05-07-003` instead of restating content.
 2. **Bi-temporal tracking.** Never overwrite a live entry. Append a new one and mark the old as superseded. Past state stays queryable.
-3. **Decay.** Stale flags, patterns, and parked decisions surface as "Review Due" in the SessionStart brief instead of accumulating silently.
+3. **Decay.** Stale flags and patterns surface as "Review Due" in the SessionStart brief instead of accumulating silently. Parked decisions are trigger-driven by default (not date-driven), so the hook does not auto-surface them; you check their trigger conditions manually during the Chief of Staff scan or weekly review. If you want a parked decision on the auto-surface path, set an explicit `Decay after:` line on it.
 
 This is a writing convention, not a schema validator. New entries follow it. Old entries adopt it the next time they are touched. No backfill pass.
 
@@ -76,10 +76,12 @@ Add as bullet sub-fields directly under the `### Entry Heading`, after existing 
 - `Invalidated on:` - date (YYYY-MM-DD) the entry was marked superseded. Pairs with `Superseded by`.
 - `Replaces:` - link back from the new entry to the one it superseded. Optional but useful for audit.
 
-### Decay (use on flags, patterns, parked-decisions)
+### Decay (default on flags and patterns; opt-in for parked decisions)
 
 - `Decay after:` - absolute date (YYYY-MM-DD) OR relative duration (`14d`, `90d`). When the date passes (or the relative duration elapses from the entry's anchor date - flag heading date for flags, `First observed:` for patterns, `Date parked:` for parked decisions), the entry surfaces as Review Due. The `Decay anchor missing` block surfaces entries that use a relative duration but lack the matching anchor.
 - `Decay reason:` - one line on why this decay window. Optional but recommended for non-default values.
+
+Parked decisions are trigger-driven by default. The hook does not evaluate trigger conditions, so a parked decision without `Decay after:` will never auto-surface; you check it manually during the Chief of Staff scan or weekly review. Set `Decay after:` explicitly only when you also want a date-based reminder.
 
 ---
 

@@ -21,6 +21,20 @@ DEFAULT_FILES = [
     "brain/flags.md",
     "brain/relations.yaml",
 ]
+# Wiki-layer scope. Must match scripts/wiki-build.py:INCLUDE_PREFIXES so a node
+# the persisted graph references can also surface as a query candidate. Drift
+# between these two lists means a query can miss content the graph already
+# knows about. Update both files together if you change scope.
+INCLUDE_PREFIXES = (
+    "core",
+    "context",
+    "cadence",
+    "brain",
+    "network",
+    "companies",
+    "roles",
+    "rules",
+)
 EXCLUDED_PARTS = {
     ".git",
     ".claude",
@@ -78,17 +92,20 @@ def all_markdown_files(root: Path) -> list[Path]:
 
 
 def candidate_files(root: Path) -> list[Path]:
+    """All in-scope wiki-layer files. Walks every prefix in INCLUDE_PREFIXES so
+    a node the persisted graph references can also surface as a query
+    candidate. DEFAULT_FILES are listed first so the canonical seeded files
+    lead the index. Falls back to all in-scope markdown if neither survives.
+    """
     specific = [root / p for p in DEFAULT_FILES if (root / p).exists()]
-    if specific:
-        extra = []
-        # Match scripts/wiki-build.py:INCLUDE_PREFIXES so the live rescan agrees
-        # with the persisted graph. Without roles/ and rules/ here, a query
-        # could miss a node that wiki-build.py recorded as a graph entry.
-        for dirname in ["brain/knowledge", "companies", "network", "roles", "rules"]:
-            folder = root / dirname
-            if folder.exists():
-                extra.extend(p for p in folder.rglob("*.md") if should_scan(p, root))
-        return sorted(set(specific + extra))
+    extra: list[Path] = []
+    for prefix in INCLUDE_PREFIXES:
+        folder = root / prefix
+        if folder.exists():
+            extra.extend(p for p in folder.rglob("*.md") if should_scan(p, root))
+    combined = sorted(set(specific + extra))
+    if combined:
+        return combined
     return all_markdown_files(root)
 
 
@@ -218,18 +235,29 @@ def parse_edges(relations_text: str) -> list[tuple[str, str]]:
     pending: dict[str, str] = {}
     current_source: str | None = None
     in_targets_block = False
-    target_list_re = re.compile(r'^\s+-\s+(.+?)\s*$')
+    # Quoted form is what scripts/wiki-build.py emits and is always a target,
+    # even if the inner value happens to start with `source:` or `target:`.
+    target_quoted_re = re.compile(r'^\s+-\s+(["\'])(.*)\1\s*$')
+    # Unquoted form -- a hand-written list item in YAML.
+    target_unquoted_re = re.compile(r'^\s+-\s+([^"\'\s].*?)\s*$')
     flat_key_re = re.compile(r'^(from|to|source|target):\s')
 
     for raw in relations_text.splitlines():
-        # Inside a `targets:` list, each `- "name"` (or `- name`) is one edge
-        # target for the most recent source line. A `- source:` line ends the
-        # block (the next record has begun) -- without that exit, the source
-        # label would be captured as a fake target.
+        # Inside a `targets:` list, each `- "name"` (quoted) or `- name`
+        # (unquoted) is one edge target for the most recent source. A
+        # `- source:` boundary ends the block. Quoted values are always
+        # treated as targets; only unquoted values can signal a record
+        # boundary by matching the flat-key pattern.
         if in_targets_block:
-            target_match = target_list_re.match(raw)
-            if target_match:
-                candidate = target_match.group(1).strip().strip('"\'')
+            quoted = target_quoted_re.match(raw)
+            if quoted:
+                target = quoted.group(2)
+                if current_source and target:
+                    edges.append((current_source, target))
+                continue
+            unquoted = target_unquoted_re.match(raw)
+            if unquoted:
+                candidate = unquoted.group(1).strip()
                 if flat_key_re.match(candidate):
                     in_targets_block = False  # fall through to flat handling
                 else:

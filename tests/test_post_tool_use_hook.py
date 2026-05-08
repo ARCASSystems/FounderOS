@@ -220,29 +220,37 @@ class PostToolUseBashHookTests(unittest.TestCase):
             return str(path)
         env = os.environ.copy()
         env["TARGET_PATH"] = str(path)
-        # Probe cygpath (git-bash, MSYS2) then wslpath (WSL). Each tool only
-        # exists in its own shell, so the resolved bash flavor picks the right
-        # converter.
+        # WSLENV with /p tells the WSL launcher to translate the Windows path
+        # into POSIX form (/mnt/c/...) when bash reads $TARGET_PATH. Without
+        # it, an env var set on the Windows side does not cross into WSL bash;
+        # the variable arrives empty and the probe returns "." (its cwd),
+        # which then fails as a non-existent script path. No effect on git-bash.
+        existing = env.get("WSLENV", "")
+        env["WSLENV"] = "TARGET_PATH/p" + (":" + existing if existing else "")
         probe = subprocess.run(
             [
                 self.bash,
                 "-lc",
-                'if command -v cygpath >/dev/null 2>&1; then cygpath -u "$TARGET_PATH"; '
-                'elif command -v wslpath >/dev/null 2>&1; then wslpath -u "$TARGET_PATH"; fi',
+                'if command -v cygpath >/dev/null 2>&1; then '
+                'cygpath -u "$TARGET_PATH"; '
+                'else echo "$TARGET_PATH"; fi',
             ],
             text=True,
             capture_output=True,
             env=env,
         )
-        if probe.returncode == 0 and probe.stdout.strip():
-            return probe.stdout.strip()
-        # Last-resort fallback: git-bash /<drive>/ convention. WSL bash will not
-        # find this shape, but neither shell ships without its converter so the
-        # probe above almost always wins.
+        converted = probe.stdout.strip()
+        if probe.returncode == 0 and converted and converted != ".":
+            return converted
+        # Last-resort manual conversion. WSL bash lives at
+        # C:\Windows\System32\bash.exe and reads /mnt/<drive>/; git-bash and
+        # MSYS2 use /<drive>/.
         path_text = str(path)
         if len(path_text) > 2 and path_text[1] == ":":
             drive = path_text[0].lower()
             rest = path_text[3:].replace("\\", "/")
+            if "system32" in self.bash.lower():
+                return f"/mnt/{drive}/{rest}"
             return f"/{drive}/{rest}"
         return path_text
 

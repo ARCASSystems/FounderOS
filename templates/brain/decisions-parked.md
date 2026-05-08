@@ -2,7 +2,7 @@
 
 > Decisions that cannot be made yet because a trigger condition has not been met. These are NOT forgotten - they are waiting. Check this file during the Chief of Staff scan. If a trigger condition is now true, surface the decision.
 
-Decay is trigger-driven, not date-driven. No `Decay after:` line by default. The SessionStart brief surfaces a parked decision the moment its trigger fires. See `rules/entry-conventions.md`.
+Decay is trigger-driven, not date-driven. No `Decay after:` line by default. The SessionStart brief does not evaluate trigger conditions, so parked decisions surface manually during the Chief of Staff scan or the weekly review when their trigger fires. If you also want a date-based reminder, set an explicit `Decay after:` line. See `rules/entry-conventions.md`.
 
 ---
 

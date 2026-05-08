@@ -2,6 +2,7 @@ import importlib.util
 import re
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -160,6 +161,86 @@ class ParseEdgesTests(unittest.TestCase):
                 sorted(edges),
                 [("a.md", "b"), ("c.md", "d")],
             )
+
+    def test_quoted_target_starting_with_key_word_is_kept(self) -> None:
+        # A quoted target whose value begins with `source:`/`target:`/`from:`/
+        # `to:` is still a target, not a record boundary. The previous parser
+        # stripped the quotes first and then treated the inner string as a key
+        # match, dropping the edge.
+        text = (
+            "wiki_links:\n"
+            "  - source: a.md\n"
+            "    targets:\n"
+            "      - \"source: note\"\n"
+            "      - \"target: another note\"\n"
+            "      - \"plain target\"\n"
+        )
+        for edges in self._both(text):
+            self.assertIn(("a.md", "source: note"), edges)
+            self.assertIn(("a.md", "target: another note"), edges)
+            self.assertIn(("a.md", "plain target"), edges)
+
+
+class CandidateFilesScopeTests(unittest.TestCase):
+    """Confirms candidate_files walks every prefix in INCLUDE_PREFIXES so a
+    node the persisted graph references can also surface as a query
+    candidate. Locks in parity with scripts/wiki-build.py:INCLUDE_PREFIXES."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.live = load_query_module(QUERY_SCRIPT, "query_live_scope")
+        cls.template = load_query_module(TEMPLATE_QUERY_SCRIPT, "query_template_scope")
+
+    def _build_fixture(self, tmp: Path) -> None:
+        # Create one in-scope markdown under each of the eight INCLUDE_PREFIXES
+        # plus a few that should be excluded (skills/, raw/, .git/).
+        for sub in ("core", "context", "cadence", "brain", "network",
+                    "companies", "roles", "rules"):
+            (tmp / sub).mkdir(parents=True, exist_ok=True)
+            (tmp / sub / f"{sub}-node.md").write_text(
+                f"# {sub} node\n", encoding="utf-8"
+            )
+        (tmp / "skills").mkdir()
+        (tmp / "skills" / "should-be-skipped.md").write_text("# skip\n", encoding="utf-8")
+        (tmp / "raw").mkdir()
+        (tmp / "raw" / "should-be-skipped.md").write_text("# skip\n", encoding="utf-8")
+        (tmp / "context" / "clients.md").write_text("# clients\n", encoding="utf-8")
+        (tmp / "cadence" / "daily-anchors.md").write_text(
+            "# Today: 2026-05-09\n", encoding="utf-8"
+        )
+
+    def _check(self, module) -> None:
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            self._build_fixture(tmp)
+            files = module.candidate_files(tmp)
+            rel_names = {p.relative_to(tmp).as_posix() for p in files}
+
+            # Every prefix must contribute at least one node.
+            for sub in ("core", "context", "cadence", "brain", "network",
+                        "companies", "roles", "rules"):
+                self.assertTrue(
+                    any(name.startswith(f"{sub}/") for name in rel_names),
+                    f"no {sub}/ node surfaced; got {sorted(rel_names)}",
+                )
+            # Specific files Codex called out as previously missing.
+            self.assertIn("context/clients.md", rel_names)
+            self.assertIn("cadence/daily-anchors.md", rel_names)
+            # skills/ and raw/ stay out of scope.
+            self.assertFalse(
+                any(name.startswith("skills/") for name in rel_names),
+                f"skills/ leaked into candidates: {sorted(rel_names)}",
+            )
+            self.assertFalse(
+                any(name.startswith("raw/") for name in rel_names),
+                f"raw/ leaked into candidates: {sorted(rel_names)}",
+            )
+
+    def test_live_walks_every_include_prefix(self) -> None:
+        self._check(self.live)
+
+    def test_template_walks_every_include_prefix(self) -> None:
+        self._check(self.template)
 
 
 if __name__ == "__main__":
