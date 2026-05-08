@@ -2,6 +2,24 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.17.0 - 2026-05-08
+
+Second-layer doc-drift release. v1.16 caught the user-facing root-level docs (README, ROADMAP, CLAUDE.md, AGENTS.md). v1.17 catches the documentation files a user reads AFTER install: the first-day walkthrough and the bootloader template that becomes the user's CLAUDE.md after `/founder-os:setup`. Both had a SessionStart-brief inventory frozen at v1.4 that missed two items added since: the `clients/<slug>/` auto-memory diff (v1.12) and the `Observations:` line (v1.15). A new user reading either file would see fewer brief surfaces than the hooks actually print on their machine. No code changes.
+
+### Fixed - docs/first-day.md SessionStart inventory now lists all nine surfaces
+
+- **`docs/first-day.md` "What SessionStart shows you" section heading and body updated.** Was titled "(v1.4)"; now reads "(v1.4 + v1.12 + v1.15)" so the reader knows the inventory tracks the actual hook output. Two missing surfaces added: `clients/<slug>/` folders without an auto-memory entry (v1.12) and the final `Observations:` line that surfaces `FOUNDER_OS_OBSERVATIONS` state (v1.15).
+
+### Fixed - templates/bootloader-claude-md.md ships an accurate brief inventory to every fresh install
+
+- **`templates/bootloader-claude-md.md` Fabric section updated.** The bootloader is what `/founder-os:setup` writes as the user's CLAUDE.md. Its SessionStart-brief description was missing the same two surfaces. Every fresh install since v1.12 has shipped a CLAUDE.md that under-reported the brief. Now matches what the hooks print.
+
+### Notes
+
+- 43/43 existing tests still pass (no code changed).
+- No new dependencies, no new skills, no new commands. Doc-only release.
+- Free-tier accessibility floor preserved.
+
 ## v1.16.0 - 2026-05-08
 
 Docs-sync release. README, ROADMAP, CLAUDE.md, and AGENTS.md were claiming v1.13 surface state after v1.14 and v1.15 had already shipped earlier the same day. A first-time user cloning the repo would have seen version drift in the first thirty seconds (README "Production v1.13.0", VERSION file `1.15.0`). This release closes that drift. No code changes.

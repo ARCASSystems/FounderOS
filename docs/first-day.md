@@ -83,7 +83,7 @@ Recommended cadence: weekly. Run `/founder-os:wiki-build` first, then `/founder-
 
 ---
 
-### What SessionStart shows you (v1.4)
+### What SessionStart shows you (v1.4 + v1.12 + v1.15)
 
 After v1.4, every Claude Code session opens with a one-screen brief that surfaces:
 
@@ -94,6 +94,8 @@ After v1.4, every Claude Code session opens with a one-screen brief that surface
 - Quarantine ACTIVE failures (from `system/quarantine.md` - silent hook/task errors land here)
 - Review Due entries (flags/patterns/parked decisions whose `Decay after:` has passed - convention in `rules/entry-conventions.md`)
 - Decay anchor missing (entries with relative `Decay after: 14d` but no `First observed:` / `Date parked:` to compute from)
+- `clients/<slug>/` folders without an auto-memory entry (v1.12 - closes the cross-session gap where a cloud or parallel local session creates a client folder the next local session boots blind to)
+- A final `Observations:` line stating whether `FOUNDER_OS_OBSERVATIONS=1` is set (v1.15 - so the silent-disable case for the opt-in observation log is visible)
 
 The brief takes under a second. Quietly skips if you are not in a Founder OS install. No action required - it is read-only surfacing.
 

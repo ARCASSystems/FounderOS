@@ -130,7 +130,7 @@ The SessionStart brief (`.claude/hooks/session-start-brief.sh`, registered on `S
 
 ## Fabric (hooks, commands)
 
-- **SessionStart brief** - one-screen surfacing at every session open: open flags + Week 3+ severity, daily/weekly cadence staleness, decisions count, [FILL] client rows, ACTIVE quarantine entries, Review Due (past `Decay after:`), Decay anchor missing. Quietly skips if not in a Founder OS install.
+- **SessionStart brief** - one-screen surfacing at every session open: open flags + Week 3+ severity, daily/weekly cadence staleness, decisions count, [FILL] client rows, ACTIVE quarantine entries, Review Due (past `Decay after:`), Decay anchor missing, `clients/<slug>/` folders without an auto-memory entry (v1.12), and a final `Observations:` line stating whether `FOUNDER_OS_OBSERVATIONS=1` is set so the silent-disable case is visible (v1.15). Quietly skips if not in a Founder OS install.
 - **Session-close revenue-loop check** - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update.
 
 Both hooks fail gracefully and never block the session.
