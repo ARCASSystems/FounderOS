@@ -211,4 +211,12 @@ if [ -f "$MEMORY_DIFF" ] && [ -n "$PYTHON" ]; then
 fi
 
 echo "=== end brief ==="
+
+# --- Observations (opt-in telemetry, FOUNDER_OS_OBSERVATIONS=1 to enable) ---
+if [ -n "$FOUNDER_OS_OBSERVATIONS" ] && [ "$FOUNDER_OS_OBSERVATIONS" = "1" ]; then
+  echo "Observations: enabled (writing to brain/observations/<date>.jsonl)"
+else
+  echo "Observations: disabled (set FOUNDER_OS_OBSERVATIONS=1 to enable)"
+fi
+
 exit 0

@@ -34,7 +34,7 @@ Scan all wiki files for `[[link]]` patterns. For each:
 
 - If the link points to an existing file, OK.
 - If the link points to a missing file, flag.
-- If the link uses an ambiguous slug that matches multiple files, flag with the candidates.
+- If the link uses an ambiguous slug that matches multiple files, flag with all candidates AND name the deterministic pick. Resolution order: scan directories in the order listed in `scripts/wiki-build.py:INCLUDE_PREFIXES`, then alphabetical within the first matching directory. The first match wins. Format the output as `[[slug]] -> ambiguous: <candidate list>; would resolve to <first match>`.
 
 `[[link]]` syntax accepts: `[[file.md]]`, `[[path/to/file.md]]`, `[[page-name]]` (resolves to first match across the wiki).
 
@@ -62,8 +62,31 @@ Anything else with zero inbound references is flagged as orphan.
 | `cadence/quarterly-sprints.md` | If file exists, oldest unresolved item is more than 90 days old |
 | `context/decisions.md` | Any decision marked `pending` with no update in 14+ days |
 | `context/clients.md` | Any client row with `Last contact` (or equivalent last-touch) field 30+ days behind today |
+| `brain/flags.md`, `brain/patterns.md`, `brain/decisions-parked.md` | Any entry whose anchor date (flag header date / `First observed:` / `Date parked:`) is 30+ days behind today AND the entry does NOT have a `Decay after:` field. Soft signal, not a defect. |
+| `brain/log.md` | File exceeds 300 lines (documented cap in `templates/brain/log.md:2` and `templates/brain/index.md:33`). |
 
 Use the dated headers and frontmatter dates first. Fall back to file mtime only if no in-content dates.
+
+### Decay-convention adoption gap
+
+For each entry in `brain/flags.md` (`##` headings), `brain/patterns.md` (`###` headings), and `brain/decisions-parked.md` (`###` headings):
+
+- Determine the anchor date. For flags: the date in the heading line (`## YYYY-MM-DD - <title>`). For patterns: a `First observed:` line. For parked decisions: a `Date parked:` line.
+- If anchor date is 30+ days behind today AND the entry has no `Decay after:` field: flag.
+
+Render under STALE CONTENT, prefixed `decay-gap`:
+
+`decay-gap brain/flags.md: "<entry heading>" - <N> days old, no Decay after: field. Suggest: Decay after: <today YYYY-MM-DD>`
+
+This is a soft suggestion, not a defect. The user may have deliberately omitted the field. Cap at the 5 oldest entries per file to avoid flooding.
+
+### Log size cap
+
+If `brain/log.md` exceeds 300 lines, output under STALE CONTENT:
+
+`log-cap brain/log.md: <N> lines (cap is 300). Move oldest entries to brain/archive/log-<YYYY-MM>.md.`
+
+The cap is a writing convention (not a hard limit). This is a reminder, not a defect.
 
 ## Check 4 - Provenance gaps
 
@@ -96,7 +119,7 @@ Last checked: <YYYY-MM-DD>
 
 CROSS-REFERENCES (<N> issues)
 - <file:line>: [[broken-link]] -> file does not exist
-- <file:line>: [[ambiguous-slug]] -> matches: <list>
+- <file:line>: [[ambiguous-slug]] -> ambiguous: <list>; would resolve to <first match>
 (or: "Clean.")
 
 ORPHAN PAGES (<N> issues)

@@ -2,6 +2,38 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.15.0 - 2026-05-08
+
+Wiki-hardening Phase 2. v1.14.0 closed four wiki-integrity issues (graph scope, link dedupe, orphan exemptions, stale-content field name). The same audit surfaced five more places where the OS quietly degrades without telling the user: a missing `Decay after:` field is silent, `brain/log.md` past its 300-line cap is silent, ambiguous `[[bare-slug]]` resolution is undefined, the observation log silently disables when `FOUNDER_OS_OBSERVATIONS` is unset, and a fresh Obsidian vault looks broken on day 0 because the seeded files are not cross-linked. All five are surfaced (not auto-fixed) in this release. No new skills, no new commands, no new tests, no script changes.
+
+### Fixed - lint surfaces the decay-convention adoption gap
+
+- **`skills/lint/SKILL.md` Check 3 now flags entries that lack `Decay after:`.** The decay scanner in `.claude/hooks/session-start-brief.sh` is forward-only by design: it only fires on entries that explicitly include the field. Any flag, pattern, or parked decision written before the user reads the convention silently never qualifies for Review Due. Lint now scans `brain/flags.md`, `brain/patterns.md`, and `brain/decisions-parked.md`, and emits `decay-gap` lines under STALE CONTENT for entries 30+ days old without the field. Capped at 5 oldest per file. Soft signal, not a defect. Hook behaviour is unchanged.
+
+### Fixed - lint warns when brain/log.md breaches its 300-line cap
+
+- **`skills/lint/SKILL.md` Check 3 now flags `brain/log.md` over 300 lines.** The cap is documented in `templates/brain/log.md:2` and `templates/brain/index.md:33` but no script enforces it. Lint now emits `log-cap` under STALE CONTENT with current line count and the manual-archive path. No auto-archive (the user runs that manually per the existing convention).
+
+### Fixed - lint names the deterministic pick on bare-slug ambiguity
+
+- **`skills/lint/SKILL.md` Check 1 ambiguous-slug rule rewritten.** Was "flag with the candidates", which left three different behaviors for one syntax (lint reported only candidates, wiki-build stored the literal string, Obsidian prompted the user). Lint now also names the deterministic pick: scan in `scripts/wiki-build.py:INCLUDE_PREFIXES` order, alphabetical within the first matching directory, first match wins. Output format updated accordingly. No script change. Resolution is a query-time concern; v1.14.0 already settled the build/store path.
+- **`docs/tools-and-mcps.md` Obsidian section now documents the rule.** Sub-section "Bare-slug ambiguity" added under `### Obsidian`, naming the lint output and the path-form disambiguation (`[[brain/index.md]]`).
+
+### Fixed - SessionStart brief surfaces FOUNDER_OS_OBSERVATIONS state
+
+- **`.claude/hooks/session-start-brief.sh` and `.ps1` now print observation-log status on every open.** Before, `scripts/brain-pass-log.py` exited 0 silently when the env var was absent; the user could believe observations were recording when they were not. The brief now ends with one line stating "Observations: enabled" or "Observations: disabled (set FOUNDER_OS_OBSERVATIONS=1 to enable)" regardless of state. The silent-disable path is now visible.
+
+### Fixed - day-0 Obsidian graph empty is expected, not broken
+
+- **`docs/tools-and-mcps.md` Obsidian section now names the day-0 expectation.** A first-time user opening the vault sees an empty graph view because the seeded files are not retrofitted with cross-references (the wikilink convention is forward-only by design). New "Day-0 expectations" sub-section explains why the graph is empty on first open and how it fills in (write `[[wikilinks]]` between files, run `/founder-os:wiki-build` to refresh).
+
+### Notes
+
+- 43/43 existing tests still pass after these changes. No new tests added (the changed surfaces are documentation-style and shell-output only; existing `test_session_hooks.py` exercises hook output structure).
+- No new dependencies. No API key needed. Free-tier accessibility floor preserved.
+- The new Obsidian sub-sections in `docs/tools-and-mcps.md` use `####` (H4) so they nest correctly under `### Obsidian`. The plan draft used `###` literally, which would have made them siblings of Obsidian rather than children.
+- `scripts/wiki-build.py` and `scripts/query.py` unchanged. v1.14.0 already settled the build and query path; this release is surface-and-doc fixes only.
+
 ## v1.14.0 - 2026-05-08
 
 Wiki integrity release. An audit prompted by an Obsidian-vault user question surfaced four issues that quietly degrade the memory and operational layer: cross-references inside `roles/` and `rules/` were silently dropped from the graph, `[[file]]` and `[[file.md]]` produced separate graph nodes, lint flagged most seeded root files as orphans on a fresh install, and one stale-content rule named a field that no template uses. All four are closed in this release. No new skills, no new commands, no new tests.

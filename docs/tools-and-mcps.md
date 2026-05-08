@@ -145,6 +145,14 @@ What does not work:
 
 Setup: Obsidian → Open folder as vault → point at your founder-os install. The `.obsidian/` config folder it creates is gitignored.
 
+#### Bare-slug ambiguity
+
+If the same bare slug matches multiple files (e.g. `[[index]]` matching `brain/index.md`, `network/index.md`, and `roles/index.md`), Obsidian prompts you to pick at link-creation time. The lint skill (`/founder-os:lint`) flags ambiguous slugs, names every candidate, and tells you the deterministic pick. Disambiguate by writing the path form: `[[brain/index.md]]`.
+
+#### Day-0 expectations
+
+When you first open the founder-os folder as an Obsidian vault, the graph view will be empty. Every seeded file is an isolated node by design. The wikilink convention is forward-only: existing template files are not retrofitted with cross-references. The graph fills in as you write `[[wikilinks]]` between files (a flag references a decision, a meeting note references a client, a knowledge note references a pattern). Run `/founder-os:wiki-build` after a session that added cross-references to refresh `brain/relations.yaml`.
+
 ### Claude Cowork (Anthropic's desktop knowledge-work surface)
 
 Cowork is Anthropic's desktop agent for non-coding work. It can open local folders, read markdown, run MCPs, and execute scheduled tasks. Pair it with FounderOS for knowledge-work execution while keeping Claude Code as the OS layer.
