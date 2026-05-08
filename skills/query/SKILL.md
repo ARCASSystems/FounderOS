@@ -140,4 +140,4 @@ FULL: id1, id2
 
 ## Later Path
 
-Embedding retrieval and graph databases stay parked for a future version behind the triggers in `ROADMAP.md`.
+Embedding retrieval and graph databases stay parked for a future version behind the triggers in the public ROADMAP at `https://github.com/ARCASSystems/FounderOS/blob/main/ROADMAP.md`.

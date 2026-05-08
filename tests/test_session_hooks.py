@@ -33,7 +33,9 @@ def bash_path(bash: str, path: Path) -> str:
     if len(path_text) > 2 and path_text[1] == ":":
         drive = path_text[0].lower()
         rest = path_text[3:].replace("\\", "/")
-        return f"/mnt/{drive}/{rest}"
+        # Git-bash convention is /<drive>/path. The WSL convention (/mnt/<drive>/)
+        # is a separate shell and not the right fallback here.
+        return f"/{drive}/{rest}"
     return path_text
 
 def powershell_bin() -> str | None:

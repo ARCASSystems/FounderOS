@@ -288,6 +288,8 @@ These are not personalized templates. Copy contents exactly. Do not edit. Verify
 
 **{{TODAY}} substitution.** The `templates/brain/relations.yaml` file contains the literal placeholder `{{TODAY}}`. When copying to `brain/relations.yaml`, replace every occurrence of `{{TODAY}}` with today's date in `YYYY-MM-DD` format (use `date -u +%Y-%m-%d` via Bash to get it).
 
+**{{DATE}} substitution.** The `templates/cadence/daily-anchors.md` file contains the literal placeholder `{{DATE}}` on the `## Today: {{DATE}}` heading. When copying to `cadence/daily-anchors.md`, replace `{{DATE}}` with today's date in `YYYY-MM-DD` format (same source as `{{TODAY}}` above). The SessionStart brief and `/today` command both grep this heading - leaving the placeholder in place would make the very first session report STALE before the founder has done anything.
+
 **Avatar template copy.** Copy `templates/avatar.md` to `core/avatar.md` and replace `{{FOUNDER_NAME}}` with the founder name captured in Phase 0.1. Do not auto-populate the bracketed sections. The wizard asks the seed questions, then the founder fills or revises those prompts in their first review session.
 
 ### 2.3 Initialize Git

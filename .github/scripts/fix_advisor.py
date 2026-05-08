@@ -1,14 +1,42 @@
 """
-FounderOS fix advisor — called by GitHub Actions when audit finds issues.
-Reads /tmp/audit_findings.json, calls Claude API, writes /tmp/fix_recommendation.md.
+FounderOS fix advisor - optional Claude-powered enrichment for the audit issue body.
+Not currently wired into `.github/workflows/founderos-audit.yml`. The workflow
+runs `audit.py` then `format_issue.py` for the raw issue body. To enable this
+script, add a workflow step that runs it after `audit.py` and before
+`format_issue.py`, with `ANTHROPIC_API_KEY` available as a secret and
+`pip install anthropic` in the same job.
+
+Reads the audit findings JSON and writes a fix recommendation. Skips
+gracefully if ANTHROPIC_API_KEY is not configured or the anthropic SDK is
+not installed.
 """
 import json
 import os
+import tempfile
 from pathlib import Path
 
-import anthropic
 
-# Per-check remediation playbook — keeps the prompt grounded without hallucinating steps.
+def findings_path() -> Path:
+    """Same helper as audit.py and format_issue.py so the three scripts agree
+    on the input path and Windows local runs do not break on /tmp/."""
+    configured = os.environ.get("AUDIT_FINDINGS_PATH")
+    if configured:
+        return Path(configured)
+    if os.name == "nt":
+        return Path(tempfile.gettempdir()) / "audit_findings.json"
+    return Path("/tmp/audit_findings.json")
+
+
+def fix_recommendation_path() -> Path:
+    configured = os.environ.get("FIX_RECOMMENDATION_PATH")
+    if configured:
+        return Path(configured)
+    if os.name == "nt":
+        return Path(tempfile.gettempdir()) / "fix_recommendation.md"
+    return Path("/tmp/fix_recommendation.md")
+
+
+# Per-check remediation playbook - keeps the prompt grounded without hallucinating steps.
 FIX_PLAYBOOK: dict[str, str] = {
     "pii_names": (
         "CRITICAL — personal names or private event names in a public repo. "
@@ -84,16 +112,29 @@ def build_user_prompt(findings: dict) -> str:
 
 
 def main() -> None:
-    findings_path = Path("/tmp/audit_findings.json")
-    if not findings_path.exists():
-        print("No findings file — skipping fix advisor")
+    fp = findings_path()
+    if not fp.exists():
+        print("No findings file - skipping fix advisor")
         return
 
-    findings = json.loads(findings_path.read_text())
+    findings = json.loads(fp.read_text())
 
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        raise ValueError("ANTHROPIC_API_KEY secret is not set")
+        print(
+            "ANTHROPIC_API_KEY not set - skipping fix advisor. "
+            "format_issue.py still produces the raw findings issue body."
+        )
+        return
+
+    try:
+        import anthropic  # local import keeps the script importable without the SDK
+    except ImportError:
+        print(
+            "anthropic SDK not installed - skipping fix advisor. "
+            "Add `pip install anthropic` to the workflow if you want this step."
+        )
+        return
 
     client = anthropic.Anthropic(api_key=api_key)
 
@@ -128,9 +169,11 @@ def main() -> None:
 Audit script: `.github/scripts/audit.py`*
 """
 
-    Path("/tmp/fix_recommendation.md").write_text(body)
-    print(f"Fix recommendation written ({len(body)} chars)")
-    print(f"Claude usage — input: {message.usage.input_tokens}, output: {message.usage.output_tokens}")
+    out_path = fix_recommendation_path()
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(body)
+    print(f"Fix recommendation written to {out_path} ({len(body)} chars)")
+    print(f"Claude usage - input: {message.usage.input_tokens}, output: {message.usage.output_tokens}")
 
 
 if __name__ == "__main__":

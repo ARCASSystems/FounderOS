@@ -1,10 +1,23 @@
 """
-Formats /tmp/audit_findings.json into a GitHub issue body.
+Formats audit_findings.json into a GitHub issue body.
 No Claude. No API key. Plain markdown from raw grep results.
 Piped into `gh issue create --body-file -` by the audit workflow.
 """
 import json
+import os
+import tempfile
 from pathlib import Path
+
+
+def findings_path() -> Path:
+    """Mirror of the helper in audit.py so both scripts agree on the path
+    and so local Windows runs do not break on a hardcoded /tmp/."""
+    configured = os.environ.get("AUDIT_FINDINGS_PATH")
+    if configured:
+        return Path(configured)
+    if os.name == "nt":
+        return Path(tempfile.gettempdir()) / "audit_findings.json"
+    return Path("/tmp/audit_findings.json")
 
 SEVERITY = {
     "pii_names": "CRITICAL",
@@ -24,7 +37,7 @@ HINT = {
 
 
 def main() -> None:
-    findings = json.loads(Path("/tmp/audit_findings.json").read_text())
+    findings = json.loads(findings_path().read_text())
     short_sha = findings["commit"][:8]
 
     lines = [

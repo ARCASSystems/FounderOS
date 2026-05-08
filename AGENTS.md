@@ -116,7 +116,7 @@ Cross-references between wiki files use `[[page-name]]` syntax.
 
 ## Hooks
 
-Two hooks ship in `.claude/hooks/`:
+Three hooks ship in `.claude/hooks/`:
 
 - **SessionStart brief** - surfaces open flags, stale cadence, decisions count, `[FILL]` client rows, ACTIVE quarantine entries, entries past their `Decay after:` date, and `clients/<slug>/` folders without an auto-memory entry (v1.12). Reads `core/identity.md` and quietly skips if the repo is not a Founder OS install. Bash and PowerShell variants both ship.
 - **PostToolUse observation log (opt-in)** - off by default. Set `FOUNDER_OS_OBSERVATIONS=1` in your shell env to append one JSON line per tool call to `brain/observations/<YYYY-MM-DD>.jsonl`. `/dream` rolls each day into an OBSERVED section.

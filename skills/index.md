@@ -1,6 +1,6 @@
 # Founder OS Skills
 
-39 skills included as of v1.10 (37 from v1.9 plus `brain-snapshot` and `brain-pass`). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. v1.9 added hook test coverage and documented the query `--root` flag. v1.10 adds the runtime brain context layer: a deterministic snapshot every skill can consume at task time, plus a brain-pass skill that synthesises answers across the brain layer with citations. The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
+39 skills included as of v1.12 (37 from v1.9 plus `brain-snapshot` and `brain-pass`, both added in v1.10). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. v1.9 added hook test coverage and documented the query `--root` flag. v1.10 added the runtime brain context layer (a deterministic snapshot every skill can consume at task time, plus a brain-pass skill that synthesises answers across the brain layer with citations). v1.11 was launch hardening (no new skills, install ergonomics fixed). v1.12 added a hook-only memory-diff helper that flags `clients/<slug>/` folders missing from auto-memory (no new skills, no new commands). The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
 
 | Skill | Status | Replaces |
 |-------|--------|---------|
@@ -51,8 +51,8 @@ This plugin ships twenty slash commands (nineteen from v1.9 plus `/founder-os:br
 | Command | Purpose |
 |---------|---------|
 | [/founder-os:setup](../.claude/commands/setup.md) | Run the Founder OS setup wizard. Generates identity, priorities, decisions, cadence, and brain files from a guided interview. |
-| [/founder-os:voice-interview](../.claude/commands/voice-interview.md) | Capture how you write into `core/voice-profile.yml`. Unlocks the voice-coupled writing skills. |
-| [/founder-os:brand-interview](../.claude/commands/brand-interview.md) | Capture your visual identity into `core/brand-profile.yml`. Unlocks branded outputs. |
+| [/founder-os:voice-interview](../.claude/commands/voice-interview.md) | Capture how you write into `core/voice-profile.yml`. Activates the voice-coupled writing skills. |
+| [/founder-os:brand-interview](../.claude/commands/brand-interview.md) | Capture your visual identity into `core/brand-profile.yml`. Activates branded outputs. |
 | [/founder-os:status](../.claude/commands/status.md) | Read-only OS readiness check. Returns a weighted score and the next 3 high-impact moves. |
 | [/founder-os:ingest](../.claude/commands/ingest.md) | File a source (URL, file path, or pasted text) into `raw/` with provenance. Propose wiki updates you approve. |
 | [/founder-os:lint](../.claude/commands/lint.md) | Read-only wiki audit. Cross-references, orphans, stale content, provenance, possible contradictions. |
@@ -86,5 +86,7 @@ Release notes:
 - v1.8 added query test coverage for `scripts/query.py`.
 - v1.9 added hook test coverage and documented the query `--root` flag.
 - v1.10 added `brain-snapshot` (runtime context payload at `brain/.snapshot.md`), wired nine output-producing skills to consume it (meeting-prep, weekly-review, strategic-analysis, decision-framework, founder-coaching, knowledge-capture, unit-economics, priority-triage, brain-log), added `brain-pass` (semantic retrieval across the brain layer with citations), and auto-invoked brain-pass from meeting-prep and linkedin-post.
+- v1.11 closed v1.10 install gaps so Path A users actually get the runtime brain context. Setup wizard now copies all runtime helpers, the wiki-build script ships at repo root, `/founder-os:update` and `/founder-os:uninstall` cover scripts and rules, PowerShell hooks parse ISO dates with InvariantCulture, and `.gitattributes` keeps `.sh` and `.py` LF-only on Windows clones. No new skills, no new commands.
+- v1.12 added a hook-only memory-diff helper that runs from the SessionStart brief and flags `clients/<slug>/` folders without an auto-memory entry. No new skills, no new commands. Test count rose from 34 to 43.
 
-All additions across v1.2 through v1.6 are additive. No existing skill behaviour was changed without an explicit version note.
+All additions across v1.2 through v1.12 are additive. No existing skill behaviour was changed without an explicit version note.

@@ -1,5 +1,5 @@
 ---
-description: Run the brand interview. Captures your visual identity (colors, fonts, logo) into core/brand-profile.yml. Unlocks branded outputs (your-deliverable-template, branded proposals, branded client updates). Takes 5 to 10 minutes.
+description: Run the brand interview. Captures your visual identity (colors, fonts, logo) into core/brand-profile.yml. Activates branded outputs (your-deliverable-template, branded proposals, branded client updates). Takes about 10 minutes.
 allowed-tools: ["Read", "Write", "Edit", "Bash"]
 ---
 

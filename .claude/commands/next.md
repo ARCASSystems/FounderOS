@@ -50,7 +50,7 @@ If `cadence/daily-anchors.md` is current and has unfinished anchors, recommend t
 **Rule 5 - This week's MUST DO commitments next.**
 If a `weekly-commitments.md` MUST DO item has no recent log activity and no kill-criterion fire, recommend its next move via the matching priority.
 
-**Rule 6 - Highest-leverage SHOULD DO if MUSTs are clear.**
+**Rule 6 - Highest-impact SHOULD DO if MUSTs are clear.**
 If all MUST DO items have recent activity, recommend the highest-impact SHOULD DO item.
 
 **Rule 7 - No clear recommendation.**

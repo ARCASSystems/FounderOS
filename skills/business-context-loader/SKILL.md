@@ -52,7 +52,7 @@ Mature stage (8-10): <state per section>
 Quarterly refresh (11-12): <state + age in days>
 
 Gap profile:
-- Highest-leverage next question: <pick one, see Step 3 priority rules>
+- Highest-impact next question: <pick one, see Step 3 priority rules>
 - Next action you can take based on what IS filled: <pick one, see Step 4 routing>
 ```
 

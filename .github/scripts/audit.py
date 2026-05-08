@@ -53,12 +53,30 @@ def should_scan(path: Path) -> bool:
     return any(path.match(glob) for glob in INCLUDE_GLOBS)
 
 
-def scan_pattern(label: str, pattern: str) -> dict | None:
+def repo_root() -> Path:
+    """Resolve the repo root via git so local subdirectory runs scan the right
+    tree. Falls back to the current working directory in CI where the checkout
+    root is already CWD."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            capture_output=True, text=True, check=False,
+        )
+        if result.returncode == 0:
+            top = result.stdout.strip()
+            if top:
+                return Path(top)
+    except FileNotFoundError:
+        pass
+    return Path(".").resolve()
+
+
+def scan_pattern(label: str, pattern: str, root: Path) -> dict | None:
     regex = re.compile(pattern)
     matches: list[str] = []
 
-    for path in sorted(Path(".").rglob("*")):
-        if not path.is_file() or not should_scan(path):
+    for path in sorted(root.rglob("*")):
+        if not path.is_file() or not should_scan(path.relative_to(root) if path.is_absolute() else path):
             continue
         try:
             lines = path.read_text(encoding="utf-8").splitlines()
@@ -67,7 +85,11 @@ def scan_pattern(label: str, pattern: str) -> dict | None:
 
         for line_no, line in enumerate(lines, start=1):
             if regex.search(line):
-                display_path = "./" + path.as_posix()
+                try:
+                    display_rel = path.relative_to(root).as_posix()
+                except ValueError:
+                    display_rel = path.as_posix()
+                display_path = "./" + display_rel
                 matches.append(f"{display_path}:{line_no}:{line}")
 
     if matches:
@@ -115,9 +137,10 @@ def findings_path() -> Path:
 
 
 def main() -> None:
+    root = repo_root()
     leakage_findings = []
     for label, pattern in [*LEAKAGE_PATTERNS, *load_private_patterns()]:
-        result = scan_pattern(label, pattern)
+        result = scan_pattern(label, pattern, root)
         if result:
             leakage_findings.append(result)
 

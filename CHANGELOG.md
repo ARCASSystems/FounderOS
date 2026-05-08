@@ -2,6 +2,61 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.13.0 - 2026-05-08
+
+The install-ergonomics and hardening release. v1.12 shipped the cross-session memory diff but a full audit found the public install paths still had a handful of walls a first-time user would hit cold from the README. v1.13 closes those walls, hardens the query command against shell injection, and makes sure the setup wizard actually ships the fixed runtime helpers. No new skills, no new commands.
+
+### Fixed - install paths now reach a working setup
+
+- **Path B no longer sends users to a non-existent command.** README told Path B users to run `/founder-os:setup`, but Path B is a manual clone with no plugin namespace active. The bare command is `/setup`. Aligned across README, `docs/install.md`, `docs/commands.md`, and the "Start here" quick-reference table.
+- **Path A now tells users about `/reload-plugins`.** After `/plugin install`, the plugin namespace does not activate until reload. Users who typed `/founder-os:setup` and got "command not found" had no signal what to do. README and `docs/install.md` now name the fallback.
+- **Path A verify step uses the real Claude Code command.** `/plugin list` is not a Claude Code slash command; the real surface is `/plugin` plus the Installed tab. `docs/install.md` updated.
+
+### Fixed - phantom commands and skills removed
+
+- **`/loop weekly` references removed.** `CLAUDE.md` (which ships into every fresh install) and `docs/first-day.md` told users to schedule wiki-build via `/loop weekly`. There is no `/loop` command. Both files now describe the weekly cadence in plain language.
+- **`skill-creator` references replaced.** `CLAUDE.md` and `templates/roles/index.md` told users to "scaffold with skill-creator". No such skill ships. Both now say "copy an existing `skills/<name>/` folder and modify it", which matches `CONTRIBUTING.md`.
+- **`weekly-review` is now correctly framed as a skill, not a command.** `docs/first-day.md` and `skills/readiness-check/SKILL.md` no longer surface `/founder-os:weekly-review` as a slash command. Users are told to say "run my weekly review" instead.
+- **Day 1 STALE bug closed.** `templates/cadence/daily-anchors.md` ships with a `{{DATE}}` placeholder. The wizard PHASE 2.2 now has an explicit substitution step. Without this, the SessionStart brief would report STALE on the very first session.
+
+### Fixed - cross-session memory diff actually fires on macOS
+
+- **`session-start-brief.ps1` now probes `python3` first, then `python`.** macOS users running pwsh have only `python3` on the PATH; the v1.12 hook used `python` and silently no-op'd, breaking the marquee v1.12 feature for that audience.
+
+### Fixed - setup wizard ships the fixed helpers
+
+- **`templates/scripts/wiki-build.py` now matches the live `scripts/wiki-build.py`.** The template was the un-refactored copy. Every fresh Path A install would have written the broken version over the fixed one. Both now accept `--root`, both raise `SystemExit`, both share docstring.
+- **`scripts/wiki-build.py` accepts `--root`.** Module-level `Path.cwd()` was replaced with an argparse-resolved root, so calling the script from a hook, a subdirectory, or via an absolute path now operates on the right tree instead of silently scanning the wrong one.
+
+### Fixed - shell injection hardened on query command
+
+- **`/founder-os:query` no longer interpolates `$ARGUMENTS` into a shell line.** The previous procedure could execute user input containing `;`, `|`, backticks, or `$(...)`. The command now passes plain questions via an environment variable and rejects flag tokens that contain shell metacharacters.
+
+### Fixed - cross-platform reliability
+
+- **`session-start-brief.sh` daily-staleness compare is locale-stable.** Was POSIX string compare which depends on locale collation; now delegates to Python with an `LC_ALL=C` fallback when Python is absent.
+- **`.github/scripts/format_issue.py` works on Windows.** Was hardcoded to `/tmp/audit_findings.json`; now mirrors `audit.py`'s `findings_path()` helper so local Windows debug runs do not crash.
+- **`.github/scripts/audit.py` resolves repo root via git.** Was anchored on `Path(".")`; now finds the repo root with `git rev-parse --show-toplevel` so a contributor running it from a subfolder gets correct results.
+- **`.github/scripts/fix_advisor.py` no longer hard-errors without an API key.** Lazy-imports the `anthropic` SDK and skips gracefully if the key or SDK is missing. Free-tier accessibility floor preserved.
+- **Test path-conversion fallback uses git-bash convention.** `tests/test_session_hooks.py` and `tests/test_post_tool_use_hook.py` previously fell back to WSL2's `/mnt/<drive>/` shape when `cygpath` was missing. Git-bash uses `/<drive>/`. Both files corrected.
+
+### Changed - doc accuracy across surfaces
+
+- **Setup wizard prompt count aligned.** README, `docs/commands.md`, and `docs/first-day.md` all now say "about 15 to 20 prompts across 6 phases". Was three different framings.
+- **Voice and brand interview times aligned at 10 minutes each.** Was inconsistent (15/10/5-10) across README, command files, and the wizard itself. Setup ladder total updated to 40 minutes.
+- **`AGENTS.md` says three hooks ship, not two.** SessionStart brief, opt-in PostToolUse observation log, session-close revenue check.
+- **`docs/tools-and-mcps.md` zero-MCP list expanded to 35 skills.** Earlier the list named 22 while the prose claimed 35.
+- **`skills/index.md` header bumped from "as of v1.10" to "as of v1.13".** Release notes now cover v1.11, v1.12, and v1.13.
+- **ROADMAP shipped order corrected.** Was v1.10 -> v1.12 -> v1.11. Now v1.10 -> v1.11 -> v1.12 -> v1.13 in chronological order.
+- **`CLAUDE.md` Windows-hooks note matches `docs/install.md`.** Was telling Windows users they need git-bash; the install doc says PowerShell works automatically. The PowerShell wiring is canonical.
+- **Banned-style polish.** Eight "unlocks" / "leverage (verb)" / "optimize" instances replaced with plain alternatives across user-facing prose.
+
+### Notes
+
+- 43/43 tests pass after every fix in this release. No new tests added; the existing suite covers the changed code.
+- Free-tier accessibility floor preserved. Nothing in the install or daily-use path requires an API key, embeddings, or external service.
+- Skill count stays 39, command count stays 20, hook count stays 3 (six files counting bash/PowerShell pairs and the opt-in observation log). No surface change.
+
 ## v1.12.0 - 2026-05-08
 
 Cross-session memory gap now surfaces in the session brief. When a cloud Claude session, a parallel local session, or a teammate creates a new `clients/<slug>/` folder with intel and prep, the next local session boots blind to it because `MEMORY.md` does not auto-populate from filesystem changes. v1.12 ships a small read-only helper that runs from the SessionStart hook and flags any client folder with no matching auto-memory entry, so the operator knows to write one before the work goes cold.

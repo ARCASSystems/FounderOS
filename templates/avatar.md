@@ -32,4 +32,4 @@ load_on_demand: true
 [ Auto-grown from brain/log.md and brain/patterns.md. Read-mostly section - skills append here when a pattern crosses a threshold (3+ occurrences). Do not edit by hand. ]
 
 ## What you are NOT trying to be
-[ Filled at setup or first weekly review. Names the things the OS should never optimize toward. ]
+[ Filled at setup or first weekly review. Names the things the OS should never push you toward. ]

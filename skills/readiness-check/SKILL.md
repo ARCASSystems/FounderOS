@@ -131,12 +131,12 @@ If `founder-os-setup` left deferred items, they live in `core/setup-backlog.md` 
 
 The next 3 moves are the highest-impact gaps. Pick in this order:
 
-1. If voice-profile is missing or template defaults: `Run /founder-os:voice-interview - unlocks <N> deliverable skills`.
-2. If brand-profile is missing or template defaults: `Run /founder-os:brand-interview - unlocks branded deliverables`.
+1. If voice-profile is missing or template defaults: `Run /founder-os:voice-interview - activates <N> deliverable skills`.
+2. If brand-profile is missing or template defaults: `Run /founder-os:brand-interview - activates branded deliverables`.
 3. If identity.md is missing: `Run /founder-os:setup - the OS has no idea who you are yet`.
 4. If priorities.md is missing or stale: `Update context/priorities.md - this week's focus is unclear`.
 5. If daily-anchors is stale by 4+ days: `Roll cadence/daily-anchors.md and run a weekly-review` (chain).
-6. If weekly-commitments is stale by 7+ days: `Run /founder-os:weekly-review`.
+6. If weekly-commitments is stale by 7+ days: `Say "run my weekly review" - weekly-review is a skill, not a slash command`.
 7. If brain/log.md has 0 entries in last 7 days: `Open brain-log skill and capture this week's signals`.
 8. If a declared business has no `context/companies/<name>.md`: `Run business-context-loader for <name>`.
 9. If quarterly-sprints is empty: `Set this quarter's focus in cadence/quarterly-sprints.md`.

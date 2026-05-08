@@ -4,11 +4,11 @@ The operating layer for the person running the business. Six files run your comp
 
 Owned by you. Runs locally in Claude Code. Talk to it.
 
-**Setup ladder (45 min total, do in this order):**
+**Setup ladder (40 min total, do in this order):**
 
 1. **Install** - pick an [install path](#install) below (5 min)
 2. **`/founder-os:setup`** - the wizard builds your operating layer from your answers (15 min)
-3. **`/founder-os:voice-interview`** - so every writing skill sounds like you, not Claude (15 min)
+3. **`/founder-os:voice-interview`** - so every writing skill sounds like you, not Claude (10 min)
 4. **`/founder-os:brand-interview`** - so every deliverable looks like you (10 min)
 
 After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-screen view of today, and `/next` recommends one action. Full first-day path in [docs/first-day.md](docs/first-day.md). Full per-command reference in [docs/commands.md](docs/commands.md). Full per-skill reference (outcome, reads, writes, voice rules, prereqs, follow-ups) in [docs/skills.md](docs/skills.md).
@@ -53,7 +53,7 @@ Three install paths. Pick the one that matches your stack. Full details in [docs
 /founder-os:setup
 ```
 
-Requires Claude Code with a Pro or Max plan. If the plugin install does not work in your Claude Code version, fall back to Path B.
+Requires Claude Code with a Pro or Max plan. If `/founder-os:setup` is not recognised after install, run `/reload-plugins` (or restart Claude Code) so the plugin namespace activates, then try again. If the plugin install still does not work, fall back to Path B.
 
 ### Path B - Manual git clone (most reliable)
 
@@ -74,10 +74,12 @@ cd "$HOME\founder-os"
 Open Claude Code in that folder, then run:
 
 ```
-/founder-os:setup
+/setup
 ```
 
-The setup wizard asks six or seven questions and generates your full operating system locally. 15 to 20 minutes the first time.
+> Path B uses bare command names (`/setup`, `/today`, etc.) because the plugin namespace only activates on Path A. See [docs/install.md](docs/install.md) for the exact mapping.
+
+The setup wizard walks through about 15 to 20 prompts across six phases (identity, business, priorities, voice/brand seed, tool stack, file generation) and generates your full operating system locally. 15 to 20 minutes the first time.
 
 ### Path C - Cloud Claude (read-only)
 
@@ -98,7 +100,7 @@ Each row tells you the **outcome** (what you get when it finishes). Detailed rea
 | Skill | What you get |
 |---|---|
 | founder-os-setup | Your full operating layer on disk: identity, priorities, decisions, clients, daily anchor, weekly commitments, brain log, flags. 8+ files written. 15 min. |
-| voice-interview | A `core/voice-profile.yml` that captures how you actually write. Every writing skill reads it. Requires you paste 2+ writing samples. 15 min. |
+| voice-interview | A `core/voice-profile.yml` that captures how you actually write. Every writing skill reads it. Requires you paste 2+ writing samples. 10 min. |
 | brand-interview | A `core/brand-profile.yml` plus an assets folder. Every branded deliverable inherits the colors, fonts, and logo. 10 min. |
 | readiness-check | A weighted readiness score plus the next 3 high-impact moves to run. Read-only. |
 | business-context-loader | A loaded per-company context file plus a list of what is missing or stale and the next obvious move. Read-only. |
@@ -154,7 +156,7 @@ Each row tells you the **outcome** (what you see when it finishes) and whether i
 | Command | What you get |
 |---|---|
 | `/founder-os:setup` | A guided interview that ends with your full operating layer on disk: identity, priorities, decisions, clients, daily anchor, weekly commitments, brain log, flags. Writes 8+ files under `core/`, `context/`, `cadence/`, `brain/`. 15 min. |
-| `/founder-os:voice-interview` | A `core/voice-profile.yml` that captures how you actually write. Every voice-coupled writing skill (LinkedIn, email, proposal, client update) reads it on every output. 15 min. |
+| `/founder-os:voice-interview` | A `core/voice-profile.yml` that captures how you actually write. Every voice-coupled writing skill (LinkedIn, email, proposal, client update) reads it on every output. 10 min. |
 | `/founder-os:brand-interview` | A `core/brand-profile.yml` plus an assets folder. Every branded deliverable (proposal, deck, one-pager) inherits these colors, fonts, and logo. 10 min. |
 | `/founder-os:status` | A weighted readiness score plus the next 3 high-impact moves to run right now. Read-only. |
 | `/founder-os:ingest <source>` | A new file in `raw/<source>.md` with provenance frontmatter, plus proposed wiki updates you approve before they land. Writes `raw/`, optionally updates `brain/relations.yaml`. |
@@ -250,7 +252,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.12.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.13.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -306,7 +308,7 @@ revenue, or commitments.
 |---|---|
 | Install via plugin | `/plugin marketplace add ARCASSystems/FounderOS` then `/plugin install founder-os@founder-os-marketplace` |
 | Install via git clone | See [docs/install.md](docs/install.md) Path B |
-| Set up after install | `/founder-os:setup` |
+| Set up after install | `/founder-os:setup` (Path A) or `/setup` (Path B) |
 | Check today after setup | `/today` |
 | Check OS health | `/founder-os:status` |
 | Update System Layer later | `/founder-os:update check` |
@@ -317,7 +319,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.12.0. Public push week of 2026-05-07.
+Version 1.13.0. Public push week of 2026-05-07.
+
+v1.13.0 is the install-ergonomics and hardening release. A full audit caught a handful of walls a first-time user would hit cold from the README. Path B told users to run `/founder-os:setup` when the bare command for a manual clone is `/setup`. Path A had no signal that `/reload-plugins` is sometimes needed before the namespace activates. `CLAUDE.md` referenced a `/loop weekly` command and a `skill-creator` skill that do not ship. The v1.12 memory-diff hook used `python` only and silently no-op'd on macOS PowerShell. The setup wizard was shipping the un-refactored template copy of `wiki-build.py` over the fixed one. `/founder-os:query` interpolated user input into a shell line, which would execute `;`, `|`, backticks, and `$(...)`. v1.13 closes all of those, plus a set of cross-platform fixes in the audit scripts, the bash hook, and the tests. No new skills, no new commands. 39 skills, 20 commands, 43 tests - same surface, install paths that actually work.
 
 v1.12.0 closes a cross-session memory gap. When a cloud Claude session, a parallel local session, or a teammate creates a new `clients/<slug>/` folder with intel and prep, the next local session boots blind to it because `MEMORY.md` does not auto-populate from filesystem changes. A new helper at `scripts/memory-diff.py` (template-mirrored to `templates/scripts/memory-diff.py`) runs from the SessionStart hook on every session open. It walks `clients/<slug>/`, checks each slug against your auto-memory index and per-file `project_*.md` entries, and prints any uncovered slugs with a one-line nudge to write a memory entry. Stdlib only. Free-tier accessible. Hook-only feature - no new skill, no new command. Setup wizard now copies five Python helpers (was four) so fresh installs get the helper out of the box. 39 skills, 20 commands, 43 tests (nine new memory-diff tests) - no surface change beyond the helper itself.
 

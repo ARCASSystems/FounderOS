@@ -13,13 +13,17 @@ Run the query skill at `skills/query/SKILL.md` end to end.
 1. If `$ARGUMENTS` is empty, reply `What should I query? Re-run as /founder-os:query <question>.` and stop.
 2. If `core/identity.md` does not exist, reply `Founder OS not set up here. Run /founder-os:setup first.` and stop.
 3. If `skills/query/SKILL.md` is missing, reply `Query skill not found at skills/query/SKILL.md. Re-install the plugin.` and stop.
-4. If `scripts/query.py` exists, run:
+4. If `scripts/query.py` exists, invoke it via the **Bash** tool using the `env` form below so user input is never interpolated into a shell command line. The user's `$ARGUMENTS` may contain `;`, `|`, backticks, or `$(...)` and the shell would execute them if pasted verbatim.
 
-```bash
-python scripts/query.py $ARGUMENTS
-```
+   **Plain question (no `--` flags in `$ARGUMENTS`):** pass the question as one argument via an env var. Substitute the placeholder `__QUESTION__` literally with the user's argument string (do not escape, do not quote - the env var carries it intact):
 
-When `$ARGUMENTS` is a plain question (no `--mode` flag), pass it as a single quoted argument so the question is preserved as one string. When `$ARGUMENTS` already contains flags, pass it through as-is.
+   ```bash
+   FOUNDER_OS_Q='__QUESTION__' python scripts/query.py "$FOUNDER_OS_Q"
+   ```
+
+   **Argument string contains flags (`--mode`, `--ids`, `--anchor`, `--root`):** parse the user's argument string into individual tokens yourself (split on whitespace), then call `python scripts/query.py` with each token as a separate Bash tool argument. Do not concatenate them into a single command-line string. Reject any token whose first character is not in `[A-Za-z0-9_/.-]` or that contains `;`, `|`, `&`, backticks, `$(`, or `>` - reply `Refusing to forward potentially unsafe argument token: <token>` and stop.
+
+   If neither form fits, stop and reply: `Could not parse arguments safely. Re-run as /founder-os:query "<your question>" or with explicit flags.`
 
 The underlying script also accepts `--root <path>` for direct CLI use, for example `python scripts/query.py --root /path/to/archive "outreach stalled"`.
 

@@ -21,9 +21,10 @@ Wiki-layer scope: scans `core/`, `context/`, `cadence/`, `brain/`, `network/`,
 `docs/`), the source archive (`raw/`), brain archive, and binary files are
 excluded.
 
-Run via /founder-os:wiki-build, or directly:  python scripts/wiki-build.py
+Run via /founder-os:wiki-build, or directly:  python scripts/wiki-build.py [--root /path/to/repo]
 """
 
+import argparse
 import os
 import re
 import sys
@@ -31,7 +32,6 @@ from collections import defaultdict
 from datetime import date
 from pathlib import Path
 
-REPO = Path.cwd()
 INCLUDE_PREFIXES = (
     'core/',
     'context/',
@@ -79,11 +79,23 @@ def extract_links(text: str):
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        description='Walk markdown files in a Founder OS repo and refresh the '
+                    'wiki_links section in brain/relations.yaml.'
+    )
+    parser.add_argument(
+        '--root',
+        default='.',
+        help='Founder OS root directory. Defaults to the current working directory.',
+    )
+    args = parser.parse_args()
+    repo = Path(args.root).resolve()
+
     by_source = defaultdict(set)
     total = 0
 
-    for md in REPO.rglob('*.md'):
-        rel = str(md.relative_to(REPO)).replace('\\', '/')
+    for md in repo.rglob('*.md'):
+        rel = str(md.relative_to(repo)).replace('\\', '/')
         if not is_in_scope(rel):
             continue
         try:
@@ -111,7 +123,7 @@ def main():
     out.append('#@@WIKI_LINKS_AUTOGEN_END@@')
     new_block = '\n'.join(out)
 
-    yaml_path = REPO / 'brain' / 'relations.yaml'
+    yaml_path = repo / 'brain' / 'relations.yaml'
     if not yaml_path.exists():
         print(
             "ERROR: brain/relations.yaml not found. Run /founder-os:setup "
@@ -149,4 +161,4 @@ def main():
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    raise SystemExit(main())

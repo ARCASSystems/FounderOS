@@ -20,6 +20,8 @@ Two slash commands. Auto-updates available. Cleanest first-run experience.
 /founder-os:setup
 ```
 
+If `/founder-os:setup` is not recognised after the install, run `/reload-plugins` (or restart Claude Code) so the plugin namespace activates, then try again.
+
 **Pros**
 - Two commands and you're set up.
 - Plugin updates flow through `/plugin update`.
@@ -29,7 +31,7 @@ Two slash commands. Auto-updates available. Cleanest first-run experience.
 - Requires Claude Code with a paid Claude plan.
 - Plugin marketplace behaviour can vary by Claude Code version. If the install does not work, fall back to Path B.
 
-**Verifying it worked:** Run `/plugin list`. You should see `founder-os` listed as installed. Then `/founder-os:setup` should be available in the slash command palette.
+**Verifying it worked:** Open `/plugin` and check the Installed tab. You should see `founder-os` listed. Then `/founder-os:setup` should appear in the slash command palette. If the command is missing, run `/reload-plugins` first.
 
 ---
 

@@ -48,10 +48,21 @@ DAILY="$REPO/cadence/daily-anchors.md"
 if [ -f "$DAILY" ]; then
   DAILY_DATE=$(grep -m1 -oE '^## Today: [0-9]{4}-[0-9]{2}-[0-9]{2}' "$DAILY" | awk '{print $3}')
   if [ -n "$DAILY_DATE" ]; then
-    if [ "$DAILY_DATE" \< "$TODAY" ]; then
-      echo "Daily: STALE (anchor dated $DAILY_DATE, today is $TODAY) - refresh before planning"
+    if [ -n "$PYTHON" ]; then
+      # Delegate the comparison to Python so collation order is locale-stable.
+      DAILY_DELTA=$($PYTHON -c "from datetime import date; a=date.fromisoformat('$DAILY_DATE'); b=date.fromisoformat('$TODAY'); print((b-a).days)" 2>/dev/null)
+      if [ -n "$DAILY_DELTA" ] && [ "$DAILY_DELTA" -gt 0 ] 2>/dev/null; then
+        echo "Daily: STALE (anchor dated $DAILY_DATE, today is $TODAY) - refresh before planning"
+      else
+        echo "Daily: current ($DAILY_DATE)"
+      fi
     else
-      echo "Daily: current ($DAILY_DATE)"
+      # Python absent. ISO-8601 string compare under LC_ALL=C is byte-stable.
+      if LC_ALL=C [ "$DAILY_DATE" \< "$TODAY" ]; then
+        echo "Daily: STALE (anchor dated $DAILY_DATE, today is $TODAY) - refresh before planning"
+      else
+        echo "Daily: current ($DAILY_DATE)"
+      fi
     fi
   fi
 fi

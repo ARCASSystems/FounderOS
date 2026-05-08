@@ -14,7 +14,7 @@
 | Chief of Staff | `chief-of-staff.md` | Surface what the founder isn't seeing | Meta-work: retros, flags, stall scans. |
 | BD | `bd.md` | Build and manage the pipeline | Outreach, proposals, deal progression. |
 
-CFO, CSO, and CTO modes are not shipped as defaults. The thinking they cover gets routed through the four active roles, the unit-economics skill, and external tools. If you want a CFO or CTO lens added later, scaffold it via skill-creator.
+CFO, CSO, and CTO modes are not shipped as defaults. The thinking they cover gets routed through the four active roles, the unit-economics skill, and external tools. If you want a CFO or CTO lens added later, copy an existing `skills/<name>/` folder and modify its `SKILL.md`.
 
 ---
 

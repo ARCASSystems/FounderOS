@@ -2,7 +2,7 @@
 
 Founder OS does not assume your stack. The OS is a set of files and skills. Each skill declares which Model Context Protocol (MCP) servers it can use, and degrades gracefully when those MCPs are not available.
 
-You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run 35 of the 39 skills end-to-end.
+You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run most of the 39 skills end-to-end. The four skills that produce noticeably better output with the relevant MCP connected are `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`. They still function without one, but with reduced context.
 
 This doc covers three things: which MCPs activate which skills, which editors and surfaces (Obsidian, Claude Cowork, claude-mem) pair well with the OS, and what works under each surface.
 
@@ -36,6 +36,8 @@ Read the Claude Code docs for how to add MCP servers: [docs.claude.com/claude-co
 If you install Founder OS and add no MCPs, all of these skills work end-to-end on your local files:
 
 - founder-os-setup
+- readiness-check (`/founder-os:status`)
+- audit
 - voice-interview
 - brand-interview
 - your-voice
@@ -50,15 +52,26 @@ If you install Founder OS and add no MCPs, all of these skills work end-to-end o
 - brain-snapshot
 - brain-pass
 - founder-coaching
+- bottleneck-diagnostic
 - unit-economics
 - content-repurposer
 - strategic-analysis (without web search, less useful but still runs)
 - pre-send-check
+- blind-spot-review
+- ship-deliverable
 - sop-writer
+- forcing-questions
+- approval-gates
+- handoff-protocol
+- context-persistence
+- data-security
 - business-context-loader
-- readiness-check (`/founder-os:status`)
+- ingest
+- lint
+- wiki-build
+- query
 
-That is 35 of the 39 skills. The remaining four (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce noticeably better output with the relevant integration connected.
+The four remaining skills (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce noticeably better output with the relevant integration connected.
 
 ---
 

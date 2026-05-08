@@ -78,7 +78,7 @@ Founder OS models the operating functions of a business as four behavioural mode
 - **CMO** - content, brand, marketing, social
 - **Chief of Staff** - weekly retro, stall detection, meta-layer
 
-CFO, CSO, and CTO are not shipped as default modes. Financial questions route through the unit-economics skill. Tech and automation questions are best handled by Claude Code itself. If you want a CFO or CTO lens added later, scaffold one with skill-creator.
+CFO, CSO, and CTO are not shipped as default modes. Financial questions route through the unit-economics skill. Tech and automation questions are best handled by Claude Code itself. If you want a CFO or CTO lens added later, copy an existing `skills/<name>/` folder and modify the SKILL.md.
 
 ## Tool Stack
 
@@ -102,7 +102,7 @@ Founder OS is built like a personal wiki the LLM maintains. Three layers underne
 Two operations the OS supports natively:
 
 - **Ingest** (`/founder-os:ingest <source>`) - process a source into raw/ with provenance, then propose wiki updates you approve. Different from `knowledge-capture`: ingest preserves the source, knowledge-capture organizes takeaways without source preservation. Use whichever fits.
-- **Lint** (`/founder-os:lint`) - read-only audit. Flags broken cross-references, orphan pages, stale time-sensitive content, provenance gaps, and contradictions. Never auto-fixes. Recommended cadence: weekly via `/loop weekly /founder-os:lint`.
+- **Lint** (`/founder-os:lint`) - read-only audit. Flags broken cross-references, orphan pages, stale time-sensitive content, provenance gaps, and contradictions. Never auto-fixes. Recommended cadence: weekly. Run `/founder-os:lint` after `/founder-os:wiki-build`.
 
 **Cross-references between wiki files use `[[page-name]]` syntax.** Example: a decision in `context/decisions.md` referencing your identity might write `as committed in [[core/identity.md]]`. The lint skill catches `[[]]` links pointing to files that don't exist. The wiki-build skill (`/founder-os:wiki-build`, v1.4) walks all wiki files, extracts the `[[wikilinks]]`, and writes them as a machine-readable graph in `brain/relations.yaml`. Idempotent. Run after a session that added cross-references. Existing files that don't use the convention are not retrofitted. The convention applies forward.
 
@@ -178,7 +178,7 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - SessionStart brief (v1.4 + v1.12) - surfaces open flags, stale cadence, pending decisions, [FILL] client rows, ACTIVE quarantine entries, Review Due entries (past their `Decay after:` date), and `clients/<slug>/` folders without an auto-memory entry. One screen at session open. Registered on the SessionStart event in `.claude/settings.json`. Quietly skips if the repo is not a Founder OS install (no `core/identity.md`).
 - Session-close revenue-loop check - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update. Registered on the Stop event in `.claude/settings.json`.
 
-**Windows note:** Hooks invoke bash. If you are on Windows, the install requires git-bash (which ships with Git for Windows). Without it, hooks will silently no-op. PowerShell-only users should switch the hook commands in `.claude/settings.json` to invoke the `.ps1` mirrors in `.claude/hooks/` (PowerShell versions ship alongside the bash versions).
+**Windows note:** Hooks ship in both bash and PowerShell variants. `.claude/settings.json` wires both automatically. If you have PowerShell installed (every modern Windows install does), the SessionStart brief and the Stop revenue-check fire without any extra setup. Git-bash is optional - useful if you also want the bash variants to run, but not required.
 
 **Scheduled tasks** (optional, configured by you via the scheduled-tasks MCP if you install it). Founder OS does not ship any scheduled tasks out of the box. Two patterns founders commonly add once their cadence is established:
 

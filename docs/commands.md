@@ -21,7 +21,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:setup`
 
-- **Outcome.** A guided 6 to 7 question interview ends with your full operating layer on disk. Final summary lists every file written.
+- **Outcome.** A guided interview of about 15 to 20 prompts across six phases ends with your full operating layer on disk. Final summary lists every file written.
 - **Args.** None.
 - **Writes.** `core/identity.md`, `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `context/companies.md`, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `brain/log.md`, `brain/flags.md`, plus the auto-memory `MEMORY.md` index.
 - **Prereqs.** Founder OS plugin or repo present. Nothing else.
@@ -30,7 +30,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:voice-interview`
 
-- **Outcome.** A 20 question interview plus a voice profile written to disk. You paste at least 2 writing samples. The interview captures rhythm, openings, closings, contractions, idiosyncrasies, and reading level.
+- **Outcome.** A short interview (about 3 writing samples plus 6 shaping questions, ~10 minutes) plus a voice profile written to disk. The interview captures rhythm, openings, closings, contractions, idiosyncrasies, and reading level.
 - **Args.** None.
 - **Writes.** `core/voice-profile.yml`.
 - **Prereqs.** `/founder-os:setup` complete (so `core/` exists).

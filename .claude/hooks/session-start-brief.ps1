@@ -229,9 +229,17 @@ if ($missingAnchorHits.Count -gt 0) {
 # clients/<slug>/ folders that the next local session boots blind to.
 $MemoryDiff = Join-Path $Repo 'scripts\memory-diff.py'
 if (Test-Path $MemoryDiff) {
-  $py = Get-Command python -ErrorAction SilentlyContinue
-  if ($py) {
-    & python $MemoryDiff $Repo 2>$null
+  # Prefer python3 (macOS / Linux pwsh ships only python3) and fall back to python (Windows / older systems).
+  $pyExe = $null
+  $py3 = Get-Command python3 -ErrorAction SilentlyContinue
+  if ($py3) {
+    $pyExe = $py3.Source
+  } else {
+    $py = Get-Command python -ErrorAction SilentlyContinue
+    if ($py) { $pyExe = $py.Source }
+  }
+  if ($pyExe) {
+    & $pyExe $MemoryDiff $Repo 2>$null
   }
 }
 

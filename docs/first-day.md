@@ -8,7 +8,7 @@ This page maps the cascade. You don't need to do all of it on day one - but know
 
 ## The 35-minute first run
 
-Three steps. Each step unlocks the skills underneath it.
+Three steps. Each step activates the skills underneath it.
 
 ### Step 1 - Setup wizard (15 min)
 
@@ -16,7 +16,7 @@ Three steps. Each step unlocks the skills underneath it.
 /founder-os:setup
 ```
 
-Asks you 15-20 questions about who you are, what you run, what tools you use. From your answers it generates: identity, priorities, decisions, cadence, brain layer, role files, network stubs.
+Walks you through about 15-20 prompts across 6 phases (identity, business, priorities, voice/brand seed, tool stack, file generation). From your answers it generates: identity, priorities, decisions, cadence, brain layer, role files, network stubs.
 
 After this step, the OS knows who you are. These skills now work end to end:
 - `/today`, `/next`
@@ -29,7 +29,7 @@ After this step, the OS knows who you are. These skills now work end to end:
 
 Anything you write through these comes out in a neutral tone. The next step fixes that.
 
-### Step 2 - Voice interview (15 min)
+### Step 2 - Voice interview (10 min)
 
 ```
 /founder-os:voice-interview
@@ -79,7 +79,7 @@ Run this whenever you want to see where the OS is and what to fill next.
 
 Run wiki-build first to refresh the auto-generated graph in `brain/relations.yaml` (extracts every `[[wikilink]]` you wrote since the last build). Then lint reads the freshest graph and surfaces broken cross-references, orphans, stale time-sensitive content, and provenance gaps.
 
-Recommended cadence: weekly via `/loop weekly /founder-os:wiki-build` followed by `/founder-os:lint`. Both are read-only on your wiki files. wiki-build only writes to `brain/relations.yaml` between auto-generated markers, and lint never writes anywhere.
+Recommended cadence: weekly. Run `/founder-os:wiki-build` first, then `/founder-os:lint`. Both are read-only on your wiki files. wiki-build only writes to `brain/relations.yaml` between auto-generated markers, and lint never writes anywhere.
 
 ---
 
@@ -171,7 +171,7 @@ This is what an actual session feels like once setup is done. Not aspirational. 
 
 **Sarah call ends.** "Captured. Sarah wants pricing by Thursday, decided to scope a paid audit first, no proposal needed yet." Capture-meeting routes that into `context/clients.md` (her row updates), `brain/log.md` (#acted [S]), and a row in `cadence/weekly-commitments.md` (pricing draft Thursday).
 
-**Friday afternoon.** `/founder-os:weekly-review`. The skill walks every priority. Forces a Must-Should-Did bucket. Surfaces the open Mahmoud flag. Asks: keep, kill, or escalate. You decide. The week closes clean.
+**Friday afternoon.** Say "run my weekly review." The `weekly-review` skill walks every priority. Forces a Must-Should-Did bucket. Surfaces the open Mahmoud flag. Asks: keep, kill, or escalate. You decide. The week closes clean.
 
 **Sunday night.** `/dream`. Five-line digest in chat:
 
@@ -209,11 +209,7 @@ You do not need to fill them all at once. The system surfaces what is missing wi
 
 **Weekly**
 
-```
-/founder-os:weekly-review     # via skill-name (no slash command yet for this one)
-```
-
-In Claude Code, just say "run weekly review" - the skill auto-triggers.
+Say "run my weekly review" in Claude Code. The `weekly-review` skill triggers from the skill name. There is no slash command for it.
 
 **When you make a commitment**: Claude logs it to `brain/log.md` and tracks it.
 
