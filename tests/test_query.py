@@ -180,6 +180,19 @@ class ParseEdgesTests(unittest.TestCase):
             self.assertIn(("a.md", "target: another note"), edges)
             self.assertIn(("a.md", "plain target"), edges)
 
+    def test_quoted_target_with_escaped_quote_round_trips(self) -> None:
+        # scripts/wiki-build.py escapes a literal `"` inside a target as `\"`
+        # before writing it inside double quotes. parse_edges must reverse the
+        # escape so the edge name contains the original character.
+        text = (
+            "wiki_links:\n"
+            "  - source: a.md\n"
+            "    targets:\n"
+            r'      - "foo\"bar"' + "\n"
+        )
+        for edges in self._both(text):
+            self.assertIn(("a.md", 'foo"bar'), edges)
+
 
 class CandidateFilesScopeTests(unittest.TestCase):
     """Confirms candidate_files walks every prefix in INCLUDE_PREFIXES so a
@@ -223,7 +236,7 @@ class CandidateFilesScopeTests(unittest.TestCase):
                     any(name.startswith(f"{sub}/") for name in rel_names),
                     f"no {sub}/ node surfaced; got {sorted(rel_names)}",
                 )
-            # Specific files Codex called out as previously missing.
+            # Specific files the prior review called out as previously missing.
             self.assertIn("context/clients.md", rel_names)
             self.assertIn("cadence/daily-anchors.md", rel_names)
             # skills/ and raw/ stay out of scope.

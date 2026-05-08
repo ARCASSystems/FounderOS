@@ -2,6 +2,29 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.19.2 - 2026-05-09
+
+Third-review patch. The v1.19.1 release closed the v1.19.0 review's findings, but the patch narrative itself reintroduced the previous reviewer's tool name while explaining its earlier removal, the v1.19.0 summary still framed an incomplete fix as complete, and a parser edge case the third review surfaced was real. v1.19.2 closes all three.
+
+### Fixed - parse_edges round-trips a target containing a literal double-quote
+
+- **`scripts/query.py:parse_edges()` and `templates/scripts/query.py:parse_edges()` now unescape `\"` back to `"` after stripping the surrounding quotes.** `scripts/wiki-build.py` escapes a literal `"` inside a target as `\"` when writing the YAML line. The v1.19.1 parser read the captured group verbatim, so a target containing a literal double-quote round-tripped as `foo\"bar` instead of `foo"bar`. The serializer and parser are now symmetric. Edge case in practice (wikilinks rarely contain literal quotes), but a real correctness defect. One new test in `tests/test_query.py::ParseEdgesTests::test_quoted_target_with_escaped_quote_round_trips` locks the round-trip behavior in.
+
+### Fixed - tool branding scrubbed from v1.19.1 patch narrative
+
+- **CHANGELOG, README, and ROADMAP v1.19.1 narratives no longer name the previous reviewer by tool brand.** The v1.19.1 patch had added narrative explaining the v1.19.0 attribution scrub and re-leaked the brand name in the act of explaining the scrub. Replaced with neutral wording ("the previous reviewer" / "tool-branding attribution"). Same fix for one comment in `tests/test_query.py` that named the reviewer by brand. Three pre-existing mentions in published v1.16 / v1.7 narratives (a cross-agent file audience description, an external file path reference, and a delegatable-to-AI-agents line in ROADMAP) are descriptive rather than attribution and were not flagged in this review pass; they remain as-is.
+
+### Fixed - v1.19.0 summary now honestly describes the WSL state at v1.19.0
+
+- **CHANGELOG and README v1.19.0 summary paragraphs no longer claim the WSL test fix landed in v1.19.0.** The detailed CHANGELOG section (under "the test suite path conversion learns about WSL bash") was already corrected in v1.19.1 to say the WSL fix was "partial in v1.19, completed in v1.19.1". The short summary paragraphs at the top of the v1.19.0 entry and in README's Status section had not caught up: they still listed "the test suite passes on every Windows shell" / "falls back gracefully under WSL" as a v1.19.0 fix and described the `WSLENV/p` fix as v1.19.0 work. Both summaries now read five user-visible v1.19.0 fixes plus an attempted WSL fix that did not fully land, with a forward pointer to v1.19.1 where it actually lands.
+
+### Notes
+
+- 52 tests now pass on git-bash (was 51). One new test for the quoted-target escape round-trip.
+- WSL bash verification: confirmed clean by the v1.19.1 review pass. The reviewer ran the suite under a `bash` that resolved to `C:\Windows\system32\bash.exe`, got 51/51 OK, and reported the converted hook path as `/mnt/c/arcas_dev/ARCAS/founder-os/.claude/hooks/session-start-brief.sh`. v1.19.2 keeps that path and adds the round-trip fix on top, so 52/52 should pass on WSL too.
+- No new skills, no new commands. 39 skills, 20 commands. Same surface as v1.19.1.
+- Free-tier accessibility floor preserved.
+
 ## v1.19.1 - 2026-05-08
 
 The v1.19 follow-up. A second review pass over v1.19.0 found one BLOCKER and three MAJOR issues that v1.19 either left open or introduced. v1.19.1 closes them. Four user-visible fixes plus three new tests.
@@ -22,9 +45,9 @@ The v1.19 follow-up. A second review pass over v1.19.0 found one BLOCKER and thr
 
 - **`templates/rules/entry-conventions.md` and `templates/brain/decisions-parked.md` no longer claim the SessionStart hook auto-surfaces parked decisions on trigger.** The hook only fires on entries that explicitly set `Decay after:`; it does not evaluate trigger conditions. Both files now state that parked decisions surface manually during the Chief of Staff scan or weekly review, and that an explicit `Decay after:` line is the way to put one on the auto-surface path. Lint already excludes parked decisions from the `decay-gap` scan (v1.19 fix); this release brings the prose into line with that behavior.
 
-### Fixed - `Codex` attribution removed from public release narrative
+### Fixed - tool branding removed from public release narrative
 
-- **CHANGELOG, README, and ROADMAP v1.19 narratives no longer name the external reviewer.** `rules/commit-naming.md:11` bans AI-tool attribution in public history. The v1.19 narratives said "Codex review" / "Codex's NIT 11" / "Codex-review close" in three public docs. Replaced with "external review" / "the review's NIT 11" / "external-review close". The v1.19 commit message itself stays in history (cannot be amended without rewriting public history); future release commits will follow the rule.
+- **CHANGELOG, README, and ROADMAP v1.19 narratives no longer name the external reviewer.** `rules/commit-naming.md:11` bans AI-tool attribution in public history. The v1.19 narratives previously named the reviewing tool by brand in three public docs. Replaced with neutral wording ("external review" / "the review's NIT 11" / "external-review close"). The v1.19 commit message itself stays in history (cannot be amended without rewriting public history); future release commits will follow the rule.
 
 ### Notes
 
@@ -35,7 +58,7 @@ The v1.19 follow-up. A second review pass over v1.19.0 found one BLOCKER and thr
 
 ## v1.19.0 - 2026-05-08
 
-The external-review close. v1.16-v1.18 caught doc drift; v1.19 catches the substantive fixes surfaced by an independent review of v1.15.0. Six issues a user would actually notice: search now reads the wiki connections you build, search now covers role and rule files, fresh installs run clean again, the test suite passes on every Windows shell, the manual-clone install gets correct command guidance on Day 1, and the plugin marketplace shows the right version. Plus three smaller doc fixes and the metadata that should have shipped earlier.
+The external-review close. v1.16-v1.18 caught doc drift; v1.19 catches the substantive fixes surfaced by an independent review of v1.15.0. Five issues a user would actually notice: search now reads the wiki connections you build, search now covers role and rule files, fresh installs run clean again, the manual-clone install gets correct command guidance on Day 1, and the plugin marketplace shows the right version. Plus an attempted WSL bash test fix that did not fully land (v1.19 added a `wslpath` probe but did not propagate the path into WSL bash; v1.19.1 closes the gap with `WSLENV/p` and result validation). Plus three smaller doc fixes and the metadata that should have shipped earlier.
 
 ### Fixed - search now reads the wiki connections you build
 

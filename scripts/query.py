@@ -251,7 +251,11 @@ def parse_edges(relations_text: str) -> list[tuple[str, str]]:
         if in_targets_block:
             quoted = target_quoted_re.match(raw)
             if quoted:
-                target = quoted.group(2)
+                # scripts/wiki-build.py escapes a literal `"` inside a target
+                # as `\"`. Unescape on the way back so the edge name contains
+                # the original character. Symmetric for `'` even though the
+                # generator currently only emits double-quoted targets.
+                target = quoted.group(2).replace('\\"', '"').replace("\\'", "'")
                 if current_source and target:
                     edges.append((current_source, target))
                 continue
