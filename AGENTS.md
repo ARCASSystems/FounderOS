@@ -118,7 +118,7 @@ Cross-references between wiki files use `[[page-name]]` syntax.
 
 Three hooks ship in `.claude/hooks/`:
 
-- **SessionStart brief** - surfaces open flags, stale cadence, decisions count, `[FILL]` client rows, ACTIVE quarantine entries, entries past their `Decay after:` date, and `clients/<slug>/` folders without an auto-memory entry (v1.12). Reads `core/identity.md` and quietly skips if the repo is not a Founder OS install. Bash and PowerShell variants both ship.
+- **SessionStart brief** - surfaces open flags, stale cadence, decisions count, `[FILL]` client rows, ACTIVE quarantine entries, entries past their `Decay after:` date, `clients/<slug>/` folders without an auto-memory entry (v1.12), and a final `Observations:` line stating whether `FOUNDER_OS_OBSERVATIONS=1` is set so the silent-disable case is visible (v1.15). Reads `core/identity.md` and quietly skips if the repo is not a Founder OS install. Bash and PowerShell variants both ship.
 - **PostToolUse observation log (opt-in)** - off by default. Set `FOUNDER_OS_OBSERVATIONS=1` in your shell env to append one JSON line per tool call to `brain/observations/<YYYY-MM-DD>.jsonl`. `/dream` rolls each day into an OBSERVED section.
 - **Session-close revenue check** - warns (does not block) if outreach verbs appear in recent `brain/log.md` without a matching `context/clients.md` update in the same session. Bash and PowerShell variants both ship.
 

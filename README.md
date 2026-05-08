@@ -252,7 +252,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.13.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.16.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -319,7 +319,13 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.13.0. Public push week of 2026-05-07.
+Version 1.16.0. Public push week of 2026-05-07.
+
+v1.16.0 is the docs-sync release. README, ROADMAP, CLAUDE.md, and AGENTS.md were claiming v1.13 surface state after v1.14 and v1.15 had already shipped. New users cloning the repo would see version drift in the first thirty seconds. v1.16 catches the docs up: README "Production" stamp now reads v1.16.0, the Status section names v1.14 + v1.15 prose, ROADMAP Shipped list extends to v1.15, and the SessionStart-brief inventory in CLAUDE.md and AGENTS.md names the new `Observations:` line. No code changes. 39 skills, 20 commands, 43 tests.
+
+v1.15.0 is the wiki-hardening Phase 2 release. After v1.14 closed four wiki-integrity issues, the same audit surfaced five more places where the OS quietly degrades without telling the user. Lint now flags entries that lack `Decay after:` (silent decay miss across flags, patterns, and parked decisions), `brain/log.md` past its 300-line cap, and names the deterministic pick on ambiguous bare slugs (resolution order is `INCLUDE_PREFIXES` then alphabetical, first match wins). SessionStart brief now surfaces `FOUNDER_OS_OBSERVATIONS` state on every open so the silent-disable case is visible. `docs/tools-and-mcps.md` Obsidian section names the day-0 empty-graph expectation and the bare-slug ambiguity rule. 39 skills, 20 commands, 43 tests. No script changes; lint and doc surfaces only.
+
+v1.14.0 is the wiki integrity release. An audit prompted by an Obsidian-vault user question surfaced four issues that quietly degrade the memory and operational layer: cross-references inside `roles/` and `rules/` were silently dropped from `brain/relations.yaml`, `[[file]]` and `[[file.md]]` produced two unrelated graph nodes, lint flagged most seeded root files as orphans on a fresh install, and one stale-content rule named a field that no template uses. All four closed. 39 skills, 20 commands, 43 tests. No new skills, no new commands.
 
 v1.13.0 is the install-ergonomics and hardening release. A full audit caught a handful of walls a first-time user would hit cold from the README. Path B told users to run `/founder-os:setup` when the bare command for a manual clone is `/setup`. Path A had no signal that `/reload-plugins` is sometimes needed before the namespace activates. `CLAUDE.md` referenced a `/loop weekly` command and a `skill-creator` skill that do not ship. The v1.12 memory-diff hook used `python` only and silently no-op'd on macOS PowerShell. The setup wizard was shipping the un-refactored template copy of `wiki-build.py` over the fixed one. `/founder-os:query` interpolated user input into a shell line, which would execute `;`, `|`, backticks, and `$(...)`. v1.13 closes all of those, plus a set of cross-platform fixes in the audit scripts, the bash hook, and the tests. No new skills, no new commands. 39 skills, 20 commands, 43 tests - same surface, install paths that actually work.
 

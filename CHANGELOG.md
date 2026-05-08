@@ -2,6 +2,31 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.16.0 - 2026-05-08
+
+Docs-sync release. README, ROADMAP, CLAUDE.md, and AGENTS.md were claiming v1.13 surface state after v1.14 and v1.15 had already shipped earlier the same day. A first-time user cloning the repo would have seen version drift in the first thirty seconds (README "Production v1.13.0", VERSION file `1.15.0`). This release closes that drift. No code changes.
+
+### Fixed - README claims now match shipped state
+
+- **`README.md` "Production" stamp updated to v1.16.0.** Was `v1.13.0` after v1.14 + v1.15 shipped. The repo card on GitHub-rendered README would have shown a stale version to anyone landing on the repo cold.
+- **`README.md` Status section gains v1.14, v1.15, and v1.16 prose.** Was telling the v1.13 story. New users now see the most recent three releases described before older ones.
+- **`README.md` "Version" line updated.** Was `Version 1.13.0`, now reads `Version 1.16.0`.
+
+### Fixed - ROADMAP Shipped list extends through v1.16
+
+- **`ROADMAP.md` Shipped list updated.** Was last updated at v1.13.0. Now includes v1.14.0 (wiki integrity), v1.15.0 (wiki-hardening Phase 2), and v1.16.0 (this docs-sync entry).
+
+### Fixed - CLAUDE.md and AGENTS.md SessionStart-brief inventory matches what the hooks actually print
+
+- **`CLAUDE.md:178` SessionStart-brief description now names the `Observations:` line.** v1.15 added a final "Observations: enabled" or "Observations: disabled (set FOUNDER_OS_OBSERVATIONS=1 to enable)" line so the silent-disable case is visible. The CLAUDE.md inventory previously did not list it.
+- **`AGENTS.md:121` SessionStart-brief description gets the same update.** Cross-agent docs (Codex, Gemini) now describe the same printed surface as the live hooks.
+
+### Notes
+
+- 43/43 existing tests still pass (no code changed).
+- No new dependencies, no new skills, no new commands. Doc-only release.
+- Free-tier accessibility floor preserved.
+
 ## v1.15.0 - 2026-05-08
 
 Wiki-hardening Phase 2. v1.14.0 closed four wiki-integrity issues (graph scope, link dedupe, orphan exemptions, stale-content field name). The same audit surfaced five more places where the OS quietly degrades without telling the user: a missing `Decay after:` field is silent, `brain/log.md` past its 300-line cap is silent, ambiguous `[[bare-slug]]` resolution is undefined, the observation log silently disables when `FOUNDER_OS_OBSERVATIONS` is unset, and a fresh Obsidian vault looks broken on day 0 because the seeded files are not cross-linked. All five are surfaced (not auto-fixed) in this release. No new skills, no new commands, no new tests, no script changes.

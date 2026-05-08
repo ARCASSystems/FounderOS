@@ -175,7 +175,7 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/next` - one recommended next action across priorities, deals, and cadence.
 
 **Hooks** (`.claude/hooks/`)
-- SessionStart brief (v1.4 + v1.12) - surfaces open flags, stale cadence, pending decisions, [FILL] client rows, ACTIVE quarantine entries, Review Due entries (past their `Decay after:` date), and `clients/<slug>/` folders without an auto-memory entry. One screen at session open. Registered on the SessionStart event in `.claude/settings.json`. Quietly skips if the repo is not a Founder OS install (no `core/identity.md`).
+- SessionStart brief (v1.4 + v1.12 + v1.15) - surfaces open flags, stale cadence, pending decisions, [FILL] client rows, ACTIVE quarantine entries, Review Due entries (past their `Decay after:` date), `clients/<slug>/` folders without an auto-memory entry, and a final `Observations:` line stating whether `FOUNDER_OS_OBSERVATIONS=1` is set so the silent-disable case is visible. One screen at session open. Registered on the SessionStart event in `.claude/settings.json`. Quietly skips if the repo is not a Founder OS install (no `core/identity.md`).
 - Session-close revenue-loop check - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update. Registered on the Stop event in `.claude/settings.json`.
 
 **Windows note:** Hooks ship in both bash and PowerShell variants. `.claude/settings.json` wires both automatically. If you have PowerShell installed (every modern Windows install does), the SessionStart brief and the Stop revenue-check fire without any extra setup. Git-bash is optional - useful if you also want the bash variants to run, but not required.
