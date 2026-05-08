@@ -221,13 +221,23 @@ def parse_edges(relations_text: str) -> list[tuple[str, str]]:
 
 
 def wikilink_edges(files: Iterable[Path], root: Path) -> list[tuple[str, str]]:
+    """Extract [[wikilinks]] and produce (source, target) edges.
+
+    Targets are normalized (trailing .md stripped, backslashes converted) so
+    edges agree with the persisted graph in brain/relations.yaml. See
+    scripts/wiki-build.py:normalize_target.
+    """
     edges: list[tuple[str, str]] = []
     pattern = re.compile(r"\[\[([^\]|#]+)(?:#[^\]|]+)?(?:\|[^\]]+)?\]\]")
     for path in files:
         text = safe_read(path)
         source = rel(path, root)
         for target in pattern.findall(text):
-            edges.append((source, target.strip()))
+            normalized = target.replace('\\', '/').strip()
+            if normalized.endswith('.md'):
+                normalized = normalized[:-3]
+            if normalized:
+                edges.append((source, normalized))
     return edges
 
 

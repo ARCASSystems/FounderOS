@@ -17,9 +17,9 @@ Wikilink syntax (Obsidian-compatible):
   [[target|display text]]  - alias form, display text discarded for graph
 
 Wiki-layer scope: scans `core/`, `context/`, `cadence/`, `brain/`, `network/`,
-`companies/`. Plugin-internal directories (`.claude/`, `skills/`, `templates/`,
-`docs/`), the source archive (`raw/`), brain archive, and binary files are
-excluded.
+`companies/`, `roles/`, `rules/`. Plugin-internal directories (`.claude/`,
+`skills/`, `templates/`, `docs/`), the source archive (`raw/`), brain archive,
+and binary files are excluded.
 
 Run via /founder-os:wiki-build, or directly:  python scripts/wiki-build.py [--root /path/to/repo]
 """
@@ -32,6 +32,12 @@ from collections import defaultdict
 from datetime import date
 from pathlib import Path
 
+# NOTE: If you change INCLUDE_PREFIXES, also update:
+#   - templates/scripts/wiki-build.py (template parity, must match line-for-line)
+#   - skills/lint/SKILL.md (Scope section)
+#   - skills/wiki-build/SKILL.md (Scope section)
+# The lint skill scopes are documentation, not code, so they will silently drift
+# unless updated by hand here.
 INCLUDE_PREFIXES = (
     'core/',
     'context/',
@@ -39,6 +45,8 @@ INCLUDE_PREFIXES = (
     'brain/',
     'network/',
     'companies/',
+    'roles/',
+    'rules/',
 )
 EXCLUDE_PREFIXES = (
     '.git/',
@@ -59,10 +67,31 @@ def is_in_scope(rel_path: str) -> bool:
     return any(rel.startswith(p) for p in INCLUDE_PREFIXES)
 
 
+def normalize_target(target: str) -> str:
+    """Canonicalize a wikilink target so [[file]] and [[file.md]] dedupe to one node.
+
+    Strips a trailing `.md` from the path part (preserves any `#anchor` suffix)
+    and normalizes Windows backslashes to forward slashes. Does not lowercase
+    (preserves the user's display intent). Bare slugs and path forms are both
+    handled: [[file]], [[file.md]], [[brain/log]], [[brain/log.md]],
+    [[brain/log.md#anchor]] all collapse to a stable graph node name.
+    """
+    target = target.replace('\\', '/').strip()
+    if '#' in target:
+        path, _, anchor = target.partition('#')
+        if path.endswith('.md'):
+            path = path[:-3]
+        return f'{path}#{anchor}' if anchor else path
+    if target.endswith('.md'):
+        return target[:-3]
+    return target
+
+
 def extract_links(text: str):
     """Yield (target, line_no) for each wikilink. Skips fenced code blocks
     and inline backtick-delimited code spans (so docs that describe the
-    [[wikilink]] syntax don't pollute the graph)."""
+    [[wikilink]] syntax don't pollute the graph). Targets are normalized via
+    normalize_target() so [[file]] and [[file.md]] produce the same node."""
     in_fence = False
     for line_no, line in enumerate(text.splitlines(), 1):
         stripped = line.strip()
@@ -73,7 +102,7 @@ def extract_links(text: str):
             continue
         cleaned = INLINE_CODE_PATTERN.sub('', line)
         for m in WIKI_PATTERN.finditer(cleaned):
-            target = m.group(1).strip()
+            target = normalize_target(m.group(1))
             if target:
                 yield target, line_no
 

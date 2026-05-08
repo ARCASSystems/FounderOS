@@ -24,7 +24,9 @@ If `core/identity.md` does not exist, stop with: `Founder OS not set up here. Ru
 
 ## Scope
 
-Wiki layer = files under `core/`, `context/`, `cadence/`, `brain/` including `brain/knowledge/`, `network/`, `companies/`. Skill files (`skills/`), templates (`templates/`), commands (`.claude/commands/`), hooks (`.claude/hooks/`), docs (`docs/`), and root metadata (`README.md`, `CLAUDE.md`, `VERSION`, etc.) are NOT scanned. Raw layer (`raw/`) is scanned only for provenance gaps (Check 4).
+The wiki layer is the directories listed in `scripts/wiki-build.py:INCLUDE_PREFIXES`. That file is the canonical source of truth. Currently: `core/`, `context/`, `cadence/`, `brain/` (including `brain/knowledge/`), `network/`, `companies/`, `roles/`, `rules/`. Keep this prose list in sync with the script when prefixes change.
+
+Skill files (`skills/`), templates (`templates/`), commands (`.claude/commands/`), hooks (`.claude/hooks/`), docs (`docs/`), and root metadata (`README.md`, `CLAUDE.md`, `VERSION`, etc.) are NOT scanned. Raw layer (`raw/`) is scanned only for provenance gaps (Check 4).
 
 ## Check 1 - Broken cross-references
 
@@ -42,9 +44,11 @@ For each wiki file, check whether any other wiki file references it (`[[]]` link
 
 Pages that are intentional roots and never get linked TO are exempt:
 - `core/identity.md`
-- `context/priorities.md`
+- `context/priorities.md`, `context/clients.md`, `context/companies.md`, `context/decisions.md`
 - `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `cadence/quarterly-sprints.md`, `cadence/annual-targets.md`
-- `brain/log.md`, `brain/flags.md`, `brain/patterns.md`, `brain/decisions-parked.md`
+- `brain/log.md`, `brain/flags.md`, `brain/patterns.md`, `brain/decisions-parked.md`, `brain/needs-input.md`, `brain/index.md`, `brain/relations.yaml`
+- All files under `roles/` (registry + role definitions; loaded by mode, not by reference)
+- All files under `rules/` (operating rules + entry conventions; loaded by mode, not by reference)
 - All `README.md` files
 
 Anything else with zero inbound references is flagged as orphan.
@@ -57,7 +61,7 @@ Anything else with zero inbound references is flagged as orphan.
 | `cadence/weekly-commitments.md` | Top `## Week of` date is more than 7 days behind today |
 | `cadence/quarterly-sprints.md` | If file exists, oldest unresolved item is more than 90 days old |
 | `context/decisions.md` | Any decision marked `pending` with no update in 14+ days |
-| `context/clients.md` | Any client row with last-touch field 30+ days behind today |
+| `context/clients.md` | Any client row with `Last contact` (or equivalent last-touch) field 30+ days behind today |
 
 Use the dated headers and frontmatter dates first. Fall back to file mtime only if no in-content dates.
 

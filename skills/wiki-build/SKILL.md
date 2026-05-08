@@ -35,6 +35,8 @@ Scans these directories for `[[wikilinks]]`:
 - `brain/`
 - `network/`
 - `companies/`
+- `roles/`
+- `rules/`
 
 Excluded: plugin-internal (`.claude/`, `skills/`, `templates/`, `docs/`), source archive (`raw/`), brain archive (`brain/archive/`), transient brain (`brain/transcripts/`, `brain/rants/`), `.git/`, `node_modules/`.
 

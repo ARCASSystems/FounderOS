@@ -2,6 +2,34 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.14.0 - 2026-05-08
+
+Wiki integrity release. An audit prompted by an Obsidian-vault user question surfaced four issues that quietly degrade the memory and operational layer: cross-references inside `roles/` and `rules/` were silently dropped from the graph, `[[file]]` and `[[file.md]]` produced separate graph nodes, lint flagged most seeded root files as orphans on a fresh install, and one stale-content rule named a field that no template uses. All four are closed in this release. No new skills, no new commands, no new tests.
+
+### Fixed - wiki layer scope now matches what Obsidian sees
+
+- **`scripts/wiki-build.py` and `templates/scripts/wiki-build.py` now include `roles/` and `rules/` in `INCLUDE_PREFIXES`.** A `[[wikilink]]` written inside `rules/operating-rules.md` or `roles/coo.md` was previously invisible to `brain/relations.yaml` while Obsidian rendered the edge in its graph view. The two views now agree.
+- **`skills/wiki-build/SKILL.md` and `skills/lint/SKILL.md` scope sections updated to match.** Lint and wiki-build had parallel wiki-layer scopes that drifted by hand; both now point at `scripts/wiki-build.py:INCLUDE_PREFIXES` as the canonical source of truth, with explicit cross-file sync notes in the scripts.
+
+### Fixed - `[[file]]` and `[[file.md]]` dedupe to one graph node
+
+- **`scripts/wiki-build.py` and the template now apply `normalize_target()` at extraction.** Trailing `.md` is stripped (`#anchor` preserved), and Windows backslashes are converted to forward slashes. `[[priorities]]` and `[[priorities.md]]` previously produced two unrelated nodes in `brain/relations.yaml`. They now collapse to one. The case of the slug is preserved so display intent is not lost.
+- **`scripts/query.py` `wikilink_edges()` applies the same normalization.** The in-memory traversal graph and the persisted graph now agree on node names, which prevents silent partial-match misses during `index` and `timeline` queries.
+
+### Fixed - lint orphan check no longer floods on a fresh install
+
+- **`skills/lint/SKILL.md` orphan exemption list extended.** Was missing `context/clients.md`, `context/companies.md`, `context/decisions.md`, `brain/needs-input.md`, `brain/index.md`, `brain/relations.yaml`, all of `roles/`, and all of `rules/`. A user running `/founder-os:lint` after `/founder-os:setup` will no longer see those seeded roots reported as orphans. Restores the "fresh install runs clean" promise.
+
+### Fixed - stale-content rule cites a field that exists
+
+- **`skills/lint/SKILL.md` stale-content rule renamed.** Was "Any client row with last-touch field 30+ days behind today"; the seeded template uses `Last contact`. Updated to name `Last contact` explicitly while still allowing equivalent last-touch field names.
+
+### Notes
+
+- 43/43 existing tests still pass after these changes. Smoke-tested by running `wiki-build.py` against a populated install.
+- Free-tier accessibility floor preserved. No new dependencies, no API key needed, no behavior change for existing users with no `[[wikilinks]]` in their wiki layer yet.
+- Plugin-internal `templates/`, `skills/`, `.claude/`, `docs/`, and `raw/` remain excluded from the wiki layer.
+
 ## v1.13.0 - 2026-05-08
 
 The install-ergonomics and hardening release. v1.12 shipped the cross-session memory diff but a full audit found the public install paths still had a handful of walls a first-time user would hit cold from the README. v1.13 closes those walls, hardens the query command against shell injection, and makes sure the setup wizard actually ships the fixed runtime helpers. No new skills, no new commands.
