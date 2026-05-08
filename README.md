@@ -252,7 +252,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.17.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.18.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -319,7 +319,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.17.0. Public push week of 2026-05-07.
+Version 1.18.0. Public push week of 2026-05-07.
+
+v1.18.0 closes the third layer of doc drift. v1.16 caught the root-level docs and v1.17 caught the first-day/bootloader inventory. v1.18 catches the per-skill and per-command reference docs (`docs/skills.md` and `docs/commands.md`), which described the lint outcome with the pre-v1.15 surface (no decay-gap, no log-cap, ambiguous slugs only listed candidates instead of naming the deterministic pick). Both reference files now describe what `/founder-os:lint` actually prints. No code changes. 39 skills, 20 commands, 43 tests.
 
 v1.17.0 closes the second layer of doc drift caught in the v1.16 sync. `docs/first-day.md` had a "What SessionStart shows you (v1.4)" section listing the brief's surfaces - the inventory was frozen at v1.4 and missed two items added since: the `clients/<slug>/` auto-memory diff (v1.12) and the `Observations:` line (v1.15). `templates/bootloader-claude-md.md` (the file every fresh `/founder-os:setup` writes as the user's CLAUDE.md) had the same stale inventory. A new user reading first-day.md or their newly-installed CLAUDE.md would see fewer brief surfaces than the hooks actually print. Both files now name all nine surfaces. No code changes. 39 skills, 20 commands, 43 tests.
 

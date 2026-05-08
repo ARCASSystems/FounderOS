@@ -74,7 +74,7 @@ If a skill has a slash command that wraps it, that command is named at the end. 
 
 ### lint
 
-- **Outcome.** A list of broken `[[wikilinks]]`, orphan files (no inbound links), entries past `Decay after:` date, provenance gaps in `raw/`, possible contradictions across files.
+- **Outcome.** A list of broken `[[wikilinks]]` (ambiguous slugs now name the deterministic pick the resolver would choose, not just the candidate list), orphan files (no inbound links), entries past `Decay after:` date, entries that LACK a `Decay after:` field where the anchor date is 30+ days old (soft signal, prefixed `decay-gap`, not a defect), `brain/log.md` past its 300-line cap (reminder, prefixed `log-cap`, not a defect), provenance gaps in `raw/`, possible contradictions across files.
 - **Reads.** Every markdown file in scope (skips `.git`, `archive`, `tests`).
 - **Writes.** Read-only.
 - **Voice rules.** No.

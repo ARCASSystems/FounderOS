@@ -2,6 +2,21 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.18.0 - 2026-05-08
+
+Third-layer doc-drift release. v1.16 caught the root-level docs (README, ROADMAP, CLAUDE.md, AGENTS.md). v1.17 caught the first-day walkthrough and the bootloader template that becomes the user's CLAUDE.md after setup. v1.18 catches the per-skill and per-command reference docs (`docs/skills.md` and `docs/commands.md`), which still described the pre-v1.15 lint outcome. A user clicking through to either reference would see fewer lint surfaces than the skill actually prints. No code changes.
+
+### Fixed - docs/skills.md and docs/commands.md describe the v1.15 lint output
+
+- **`docs/skills.md` `### lint` Outcome line updated.** Was listing four lint findings: broken `[[wikilinks]]`, orphan files, entries past `Decay after:` date, provenance gaps, possible contradictions. Now also names: ambiguous slugs (lint names the deterministic pick, not just the candidate list), `decay-gap` (entries 30+ days old that lack a `Decay after:` field, soft signal), and `log-cap` (`brain/log.md` over 300 lines, reminder).
+- **`docs/commands.md` `### /founder-os:lint` Outcome line updated.** Same gap, same fix. The two reference docs now describe the same surface as `skills/lint/SKILL.md` Check 1 and Check 3.
+
+### Notes
+
+- 43/43 existing tests still pass (no code changed).
+- No new dependencies, no new skills, no new commands. Doc-only release.
+- Free-tier accessibility floor preserved.
+
 ## v1.17.0 - 2026-05-08
 
 Second-layer doc-drift release. v1.16 caught the user-facing root-level docs (README, ROADMAP, CLAUDE.md, AGENTS.md). v1.17 catches the documentation files a user reads AFTER install: the first-day walkthrough and the bootloader template that becomes the user's CLAUDE.md after `/founder-os:setup`. Both had a SessionStart-brief inventory frozen at v1.4 that missed two items added since: the `clients/<slug>/` auto-memory diff (v1.12) and the `Observations:` line (v1.15). A new user reading either file would see fewer brief surfaces than the hooks actually print on their machine. No code changes.

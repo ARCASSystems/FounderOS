@@ -70,7 +70,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:lint`
 
-- **Outcome.** A list of broken `[[wikilinks]]`, orphan files (no inbound links), entries past their `Decay after:` date, provenance gaps in `raw/`, and possible contradictions across files.
+- **Outcome.** A list of broken `[[wikilinks]]` (ambiguous slugs now name the deterministic pick the resolver would choose, not just the candidate list), orphan files (no inbound links), entries past their `Decay after:` date, entries that LACK a `Decay after:` field where the anchor date is 30+ days old (soft signal, prefixed `decay-gap`, not a defect), `brain/log.md` past its 300-line cap (reminder, prefixed `log-cap`, not a defect), provenance gaps in `raw/`, and possible contradictions across files.
 - **Args.** None.
 - **Writes.** Read-only.
 - **Prereqs.** `/founder-os:setup` complete.
