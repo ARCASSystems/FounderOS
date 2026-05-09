@@ -242,6 +242,27 @@ def parse_edges(relations_text: str) -> list[tuple[str, str]]:
     target_unquoted_re = re.compile(r'^\s+-\s+([^"\'\s].*?)\s*$')
     flat_key_re = re.compile(r'^(from|to|source|target):\s')
 
+    def unquote(value: str) -> str:
+        """Strip surrounding quotes and reverse the matching escape only.
+
+        scripts/wiki-build.py escapes an inner `"` inside a double-quoted
+        YAML value as `\\"`. A hand-written single-quoted value may escape
+        an inner `'` as `\\'`. The unescape must be quote-character-aware:
+        crossing the two would corrupt literal backslashes in the other
+        shape (e.g. `'foo\\"bar'` round-trips as `foo\\"bar`, not `foo"bar`).
+        Unquoted values pass through unchanged. Used by both the nested
+        `targets:` list handling and the flat `source:` / `target:` /
+        `from:` / `to:` handling so the two stay in sync.
+        """
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'"):
+            quote = value[0]
+            inner = value[1:-1]
+            if quote == '"':
+                return inner.replace('\\"', '"')
+            return inner.replace("\\'", "'")
+        return value
+
     for raw in relations_text.splitlines():
         # Inside a `targets:` list, each `- "name"` (quoted) or `- name`
         # (unquoted) is one edge target for the most recent source. A
@@ -251,13 +272,6 @@ def parse_edges(relations_text: str) -> list[tuple[str, str]]:
         if in_targets_block:
             quoted = target_quoted_re.match(raw)
             if quoted:
-                # Only the matching quote needs un-escaping. scripts/wiki-build.py
-                # emits double-quoted targets and escapes an inner `"` as `\"`,
-                # so a `"` quote unescapes `\"`. A hand-written single-quoted
-                # target may use `\'` for an inner apostrophe, so a `'` quote
-                # unescapes `\'`. Crossing the two would corrupt literal
-                # backslashes in the other shape (e.g. `'foo\"bar'` should
-                # round-trip as `foo\"bar`, not `foo"bar`).
                 quote_char = quoted.group(1)
                 inner = quoted.group(2)
                 if quote_char == '"':
@@ -288,7 +302,7 @@ def parse_edges(relations_text: str) -> list[tuple[str, str]]:
         if not match:
             continue
         key, value = match.groups()
-        value = value.strip().strip('"\'')
+        value = unquote(value)
 
         if key in {"from", "source"}:
             if pending:

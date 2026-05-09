@@ -2,6 +2,21 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.19.4 - 2026-05-09
+
+Fifth-review patch. The quote-aware unescape introduced in v1.19.2 and narrowed in v1.19.3 was only applied to the nested `wiki_links:` list path. The flat curated path used a different (older) shape for handling quoted values, so the two paths disagreed on round-trip behavior. v1.19.4 unifies them.
+
+### Fixed - flat curated quoted values round-trip the same way as nested targets
+
+- **`scripts/query.py:parse_edges()` and `templates/scripts/query.py:parse_edges()` now use a single `unquote` helper for both the flat curated path (`source:` / `target:` / `from:` / `to:`) and the nested `targets:` list path.** v1.19.2 and v1.19.3 added quote-aware unescape to the nested path, but the flat path still used `value.strip().strip('"\'')` -- it stripped outer quotes but left any inner escape verbatim. A flat entry like `target: "foo\"bar"` parsed as `foo\"bar`, not `foo"bar`; `target: 'don\'t'` parsed as `don\'t`, not `don't`. The new `unquote` helper strips matching outer quotes and reverses only the matching escape (`\"` inside `"..."`, `\'` inside `'...'`). Three new tests cover the flat-path round-trip in both quote shapes plus the literal-backslash-preserved case.
+
+### Notes
+
+- 56 tests now pass on git-bash (was 53). Three new tests for the flat-path round-trip behavior.
+- WSL bash verification: confirmed clean by an earlier review pass. v1.19.4 only narrows the parser; the WSL path is unchanged.
+- No new skills, no new commands. 39 skills, 20 commands. Same surface as v1.19.3.
+- Free-tier accessibility floor preserved.
+
 ## v1.19.3 - 2026-05-09
 
 Fourth-review patch. v1.19.2's quoted-target escape-unescape over-applied across quote shapes, and the ROADMAP `v1.19.0` shipped bullet had not caught up to the corrected v1.19.0 narrative in CHANGELOG and README. Two fixes.

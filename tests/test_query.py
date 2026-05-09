@@ -211,6 +211,41 @@ class ParseEdgesTests(unittest.TestCase):
             self.assertIn(("a.md", "foo\\\"bar"), edges)
             self.assertNotIn(("a.md", 'foo"bar'), edges)
 
+    def test_flat_double_quoted_value_unescapes(self) -> None:
+        # The same delimiter-aware unescape applies to flat curated entries.
+        # A double-quoted value with an inner \" should round-trip to a
+        # literal " in the edge.
+        text = (
+            "relations:\n"
+            "  - source: \"foo\\\"bar\"\n"
+            "    target: \"baz\\\"qux\"\n"
+        )
+        for edges in self._both(text):
+            self.assertEqual(edges, [('foo"bar', 'baz"qux')])
+
+    def test_flat_single_quoted_value_unescapes(self) -> None:
+        # A single-quoted value with an inner \' should round-trip to a
+        # literal ' in the edge.
+        text = (
+            "relations:\n"
+            "  - source: 'a.md'\n"
+            "    target: 'don\\'t panic'\n"
+        )
+        for edges in self._both(text):
+            self.assertEqual(edges, [("a.md", "don't panic")])
+
+    def test_flat_single_quoted_value_preserves_backslash(self) -> None:
+        # Single-quoted value with a literal \" is NOT a double-quoted
+        # escape; the backslash must survive.
+        text = (
+            "relations:\n"
+            "  - source: 'a.md'\n"
+            "    target: 'foo\\\"bar'\n"
+        )
+        for edges in self._both(text):
+            self.assertEqual(edges, [("a.md", "foo\\\"bar")])
+            self.assertNotIn(("a.md", 'foo"bar'), edges)
+
 
 class CandidateFilesScopeTests(unittest.TestCase):
     """Confirms candidate_files walks every prefix in INCLUDE_PREFIXES so a
