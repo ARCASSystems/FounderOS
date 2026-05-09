@@ -237,7 +237,10 @@ def parse_edges(relations_text: str) -> list[tuple[str, str]]:
     in_targets_block = False
     # Quoted form is what scripts/wiki-build.py emits and is always a target,
     # even if the inner value happens to start with `source:` or `target:`.
-    target_quoted_re = re.compile(r'^\s+-\s+(["\'])(.*)\1\s*$')
+    # Group 1 captures the entire quoted token (including the outer quotes)
+    # so the same `unquote` helper used by the flat path can strip and
+    # unescape it.
+    target_quoted_re = re.compile(r'^\s+-\s+((["\']).*\2)\s*$')
     # Unquoted form -- a hand-written list item in YAML.
     target_unquoted_re = re.compile(r'^\s+-\s+([^"\'\s].*?)\s*$')
     flat_key_re = re.compile(r'^(from|to|source|target):\s')
@@ -272,12 +275,7 @@ def parse_edges(relations_text: str) -> list[tuple[str, str]]:
         if in_targets_block:
             quoted = target_quoted_re.match(raw)
             if quoted:
-                quote_char = quoted.group(1)
-                inner = quoted.group(2)
-                if quote_char == '"':
-                    target = inner.replace('\\"', '"')
-                else:
-                    target = inner.replace("\\'", "'")
+                target = unquote(quoted.group(1))
                 if current_source and target:
                     edges.append((current_source, target))
                 continue

@@ -2,6 +2,20 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.19.5 - 2026-05-09
+
+Parser maintainability cleanup. v1.19.4's narrative described the parser as using a "single shared helper" for both flat and nested quoted-value handling, but the nested branch still had the unescape logic inlined. Behavior was identical, but the duplication was a future-drift trap. v1.19.5 makes the claim literally true.
+
+### Changed - parse_edges nested branch routes through the unquote helper
+
+- **`scripts/query.py:parse_edges()` and `templates/scripts/query.py:parse_edges()` nested-targets branch now calls `unquote()` instead of duplicating the quote-aware unescape inline.** The `target_quoted_re` regex captures the entire quoted token (including the outer quotes) in group 1 so it can be passed directly to `unquote()`. Both code paths now run through one helper, so future drift between the flat and nested handling is structurally prevented (an earlier review iteration found the two paths had drifted apart, producing different round-trip behavior for the same input shape). No behavior change; the existing 56 tests still pass.
+
+### Notes
+
+- 56 tests pass on git-bash. WSL bash was confirmed clean by an earlier review.
+- No behavior change. The flat and nested paths now produce literally identical handling for any quoted-value input shape.
+- No new skills, no new commands. 39 skills, 20 commands. Same surface as v1.19.4.
+
 ## v1.19.4 - 2026-05-09
 
 Fifth-review patch. The quote-aware unescape introduced in v1.19.2 and narrowed in v1.19.3 was only applied to the nested `wiki_links:` list path. The flat curated path used a different (older) shape for handling quoted values, so the two paths disagreed on round-trip behavior. v1.19.4 unifies them.
