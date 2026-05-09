@@ -2,6 +2,32 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.19.6 - 2026-05-09
+
+Hotfix from a two-pass external review. Three things closed: the wizard's final orientation handed Path B users namespaced commands that do not work on a manual clone, the README plus install doc under-instructed Cowork users on what does and does not fire there, and the orientation tone across the wizard and install doc led with slash commands the way technical docs do - but real founders will not memorize a 20-command surface. The orientation now leads with natural-language phrasing ("say 'set up my voice profile'") and treats slash commands as parenthetical shortcuts for power users. Same release also fixes a self-introduced rendering bug found while applying the tone rewrite (the prefix substitution would have rendered without a leading slash on Path B). No script changes.
+
+### Fixed - wizard orientation now path-aware (Path A vs Path B)
+
+- **`skills/founder-os-setup/SKILL.md` Phase 6.2 detects the command prefix before rendering the orientation block.** Path A (plugin install) keeps the `/founder-os:` namespace; Path B (manual git clone) drops it. The detection reads `.claude-plugin/marketplace.json` at the user's working directory: present means Path B (bare commands); absent means Path A (namespaced). The orientation now substitutes a `<prefix>` placeholder for `voice-interview`, `brand-interview`, `status`, and `uninstall`. On Path B `<prefix>` resolves to `/` so `<prefix>voice-interview` renders as `/voice-interview`; on Path A it resolves to `/founder-os:` so the same placeholder renders as `/founder-os:voice-interview`. Always-bare commands (`/today`, `/next`, `/pre-meeting`, `/capture-meeting`) render unchanged on both paths. Before this patch, a Path B user reading the orientation would have hit "command not found" on every namespaced command in the post-setup checklist.
+
+### Fixed - orientation leads with natural language, slash commands are shortcuts
+
+- **`skills/founder-os-setup/SKILL.md` Phase 6.2 orientation block flipped from slash-command-led to natural-language-led.** The previous prose said "Run `<prefix>voice-interview`" as the primary instruction. The new prose says "Say 'set up my voice profile' (or run `<prefix>voice-interview`)." Same change applied to brand profile, readiness check, daily view, weekly review, audit, and uninstall lines. The pattern was already present in the orientation for overwhelmed / learn / meetings / decisions sections; this change makes it consistent across the whole block. Reason: real users do not memorize a 20-command surface, and Cowork mode (which does not fire slash commands at all) needs natural language as the primary interface.
+- **`docs/install.md` "After install" list rewritten with the same pattern.** Each step now leads with the natural-language phrasing and notes the slash command alongside. A one-line preface tells the reader why: "talking to Claude is the default, slash commands are optional shortcuts for power users."
+
+### Fixed - Cowork mode is now documented end-to-end
+
+- **`README.md` SessionStart claim qualified to "every Claude Code session open."** The previous wording implied the brief fires regardless of surface. Cowork users would have assumed the brief, the Stop hook, and slash commands work there; none of them do.
+- **`README.md` adds a Path D section** pointing Cowork users at the FounderOS folder, naming what works (markdown reads/writes, MCPs, scheduled tasks) and what does not (hooks, slash commands), and pointing to the full setup recipe in `docs/install.md`.
+- **`docs/install.md` adds a "Cowork mode" subsection** with a six-step setup recipe (open folder, attach `CLAUDE.md` as folder instructions, attach `brain/.snapshot.md` if present, talk in natural language, return to Claude Code for hooks/commits/cadence). Honest-limits block lists the four things that silently do not fire there.
+- **`docs/install.md` "After install" list now includes `/today` and `/next`** as the first-day actions after the voice and brand interviews. The full Day-1 path is now visible from the install doc without bouncing through the README.
+
+### Notes
+
+- 56 tests still pass. No script changes; this is a docs and wizard-prompt patch.
+- No new skills, no new commands. 39 skills, 20 commands. Same surface as v1.19.5.
+- Free-tier accessibility floor preserved.
+
 ## v1.19.5 - 2026-05-09
 
 Parser maintainability cleanup. v1.19.4's narrative described the parser as using a "single shared helper" for both flat and nested quoted-value handling, but the nested branch still had the unescape logic inlined. Behavior was identical, but the duplication was a future-drift trap. v1.19.5 makes the claim literally true.

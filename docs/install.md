@@ -128,14 +128,39 @@ You can switch paths anytime. The OS is your files - they're the same regardless
 
 ## After install
 
-All three paths converge on the same six files. Whichever path you picked, the next steps are:
+All three paths converge on the same six files. Whichever path you picked, the next steps are below. You can run the slash command OR ask Claude in plain English - both work. Real users do not memorize a 20-command surface; talking to Claude is the default, slash commands are optional shortcuts for power users.
 
-1. Run `/founder-os:setup` (Path A) or `/setup` (Path B). Path C: skip until you've set up locally.
-2. Run `/founder-os:voice-interview` (Path A) or `/voice-interview` (Path B) to capture how you write.
-3. Run `/founder-os:brand-interview` (Path A) or `/brand-interview` (Path B) to capture how your work looks.
-4. Use the OS for a week on real work before tweaking templates.
+1. Start the wizard. Say "set up Founder OS" or run `/founder-os:setup` on Path A, `/setup` on Path B. Path C: skip until you have set up locally.
+2. Add your voice. Say "set up my voice profile" or run `/founder-os:voice-interview` on Path A, `/voice-interview` on Path B. Captures how you write so every writing skill sounds like you.
+3. Add your brand. Say "set up my brand profile" or run `/founder-os:brand-interview` on Path A, `/brand-interview` on Path B. Captures colors, fonts, logo so every branded deliverable looks like you.
+4. See your day. Ask "what's on for today?" or run `/today`, then ask "what should I focus on next?" or run `/next`. Both bare on either path.
+5. Use the OS for a week on real work before tweaking templates.
 
 If anything breaks in the first 24 hours, email `solutions@arcassystems.com` with what you tried. We read every email.
+
+---
+
+## Cowork mode (partial, desktop knowledge work)
+
+Claude Cowork is Anthropic's desktop surface for non-coding work. It reads markdown, runs MCPs, and executes scheduled tasks - but hooks and the `/founder-os:*` slash command namespace do not fire there. Pair it with FounderOS for drafting and scheduled execution. Keep Claude Code as the OS layer.
+
+**Setup recipe:**
+
+1. Install via Path A or Path B first. Cowork is not a setup surface.
+2. In Cowork, open the FounderOS folder you set up.
+3. Attach `CLAUDE.md` as folder instructions (or use Cowork's "Folder instructions" if available on your version).
+4. If `brain/.snapshot.md` exists, attach it too. Skills produced this snapshot from your current state - it is the cheapest way to give Cowork live context.
+5. Talk to Cowork in natural language. "What is on my plate today?" "Draft a follow-up to the call with X." Cowork reads markdown and writes markdown. It can also run scheduled tasks - say "schedule this" or use `/schedule` directly - useful for automated briefs while you are not in Claude Code.
+6. Return to Claude Code for any of: SessionStart brief, Stop revenue-check, slash commands (`/today`, `/next`, `/founder-os:status` on Path A or `/status` on Path B, `/founder-os:wiki-build` on Path A or `/wiki-build` on Path B), commits, cadence refresh, or the natural-language weekly review skill (`run my weekly review`).
+
+**Honest limits in Cowork:**
+
+- The SessionStart brief does not fire. You will not see flags, stale cadence, or decay items unless you ask.
+- The Stop revenue-check does not fire. Outreach actions captured in Cowork must be logged manually until you return to Claude Code.
+- The fabric trio (`/today`, `/pre-meeting`, `/capture-meeting`) and the `/founder-os:*` namespace do not run.
+- Cowork memory is separate from Claude Code's auto-memory. Behavioural guards in `~/.claude/projects/<slug>/memory/MEMORY.md` do not load in Cowork.
+
+Full surface-by-surface compatibility detail in [docs/tools-and-mcps.md](tools-and-mcps.md).
 
 ---
 

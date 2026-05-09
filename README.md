@@ -35,7 +35,7 @@ Areas for searching across the 39 skills:
 
 **Four roles as behavioural modes:** COO (default), BD, CMO, Chief of Staff. Claude switches mode based on what you are actually doing.
 
-A **SessionStart brief** runs on every session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up. You do not need to think about it. Details under [Substrate details](#substrate-details) below if curious.
+A **SessionStart brief** runs on every Claude Code session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up. You do not need to think about it. The brief, the Stop hook, and slash commands are Claude Code-only - on Cowork or Cloud Claude they do not fire. Details under [Substrate details](#substrate-details) below if curious. Surface-by-surface compatibility table in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 **The capture-and-cite loop.** `/rant` captures a raw thought dump. `/dream` distils unprocessed rants into patterns, flags, parked decisions, and needs. Every new brain entry gets a stable `<channel>-YYYY-MM-DD-NNN` ID stamped at write time. The dream digest cites those IDs in one line each instead of restating content. `knowledge-capture` writes distilled takeaways from books, calls, and articles into `brain/knowledge/` with the same ID convention so proposal-writer and strategic-analysis can read them back. Optional: opt in to a tool-call observation log with `FOUNDER_OS_OBSERVATIONS=1` and `/dream` rolls each day's activity into an OBSERVED section.
 
@@ -84,6 +84,10 @@ The setup wizard walks through about 15 to 20 prompts across six phases (identit
 ### Path C - Cloud Claude (read-only)
 
 Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and use the safe fallback prompt below. Cloud Claude cannot run slash commands or write to local disk - it's a read-only operating mode until the Notion Starter Kit ships. See [docs/install.md](docs/install.md) for the full instructions.
+
+### Path D - Claude Cowork (desktop, partial)
+
+Cowork can open the FounderOS folder, read `CLAUDE.md` as folder instructions, read `brain/.snapshot.md` if present, and run MCPs at the account level. Hooks (SessionStart brief, Stop revenue-check) and the `/founder-os:*` slash command namespace do not fire on Cowork. Use Cowork for natural-language drafting and scheduled execution against the same folder, and return to Claude Code for hooks, slash commands, commits, and cadence refresh. Full Cowork setup recipe in [docs/install.md](docs/install.md).
 
 ---
 
@@ -252,7 +256,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.19.5 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.19.6 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -319,9 +323,11 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.19.5. Public push week of 2026-05-07.
+Version 1.19.6. Public push week of 2026-05-07.
 
-v1.19.5 is a maintainability cleanup. The v1.19.4 narrative described the parser as using a "single shared helper" for both flat and nested quoted-value handling, but the nested branch still had the unescape logic inlined. Behavior was identical, but the duplication was a future-drift trap of the same kind that produced earlier review findings. The nested branch now routes through the same `unquote()` helper. No behavior change; 56 tests still pass.
+v1.19.6 is a hotfix from a two-pass external review. Three things closed. The setup wizard's final orientation now detects whether the user installed via Path A (plugin namespace) or Path B (manual git clone) and renders the right command form for the path they used. Before this patch, a Path B user reading the post-setup checklist would have hit "command not found" on every namespaced command. The same review found a self-introduced prefix rendering bug that would have rendered Path B commands without a leading slash; fixed in the same release. Separately, the README's SessionStart claim was qualified to "every Claude Code session open" (it does not fire on Cowork or Cloud Claude), a Path D Cowork section was added to the README, and `docs/install.md` gained a full Cowork mode setup recipe plus `/today` and `/next` in the After-install checklist. Finally, the orientation tone across the wizard and install doc was flipped from slash-command-led to natural-language-led: real users do not memorize a 20-command surface, and Cowork mode does not fire slash commands at all, so the orientation now leads with "say 'set up my voice profile'" and treats slash commands as parenthetical shortcuts. No script changes; 56 tests still pass.
+
+v1.19.5 was a maintainability cleanup. The v1.19.4 narrative described the parser as using a "single shared helper" for both flat and nested quoted-value handling, but the nested branch still had the unescape logic inlined. Behavior was identical, but the duplication was a future-drift trap of the same kind that produced earlier review findings. The nested branch now routes through the same `unquote()` helper. No behavior change; 56 tests still pass.
 
 v1.19.4 closes one follow-up from a fifth review pass. The quote-aware unescape introduced in v1.19.2 and narrowed in v1.19.3 was only applied to the nested `wiki_links:` list path. The flat curated path (`source: "..."` / `target: "..."` / `from: '...'` / `to: '...'`) was still using the older "strip outer quotes only" logic, so a flat double-quoted value with an inner `\"` parsed as `foo\"bar` instead of `foo"bar`. Both paths now share a single `unquote` helper that strips outer quotes and reverses only the matching escape. Three new tests cover the flat-path round-trip in both quote shapes plus the literal-backslash preservation case. 39 skills, 20 commands, 56 tests.
 
