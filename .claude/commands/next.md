@@ -1,5 +1,5 @@
 ---
-description: Recommend the single next action across your business. Reads priorities, clients, cadence, and brain, then recommends one thing with reasoning.
+description: Recommend the next action. Say "what should I focus on next?" (or run /next). Reads priorities, clients, cadence, and brain, then recommends one thing with reasoning. Read-only.
 ---
 
 # /next

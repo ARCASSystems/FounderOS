@@ -1,19 +1,22 @@
 # Founder OS Commands Reference
 
-The full reference for every slash command. The README's command table tells you the **outcome** in one line. This file tells you everything else: arguments, what runs, what changes on disk, what appears in chat, and what to run next.
+The full reference for every slash command. The README's command table tells you the **outcome** in one line and the natural-language phrase that triggers each one. This file tells you everything else: arguments, what runs, what changes on disk, what appears in chat, and what to run next.
 
-Each command has six labels.
+FounderOS routes on natural language. Each command below leads with the natural-language phrase the founder would actually say in chat. The slash command appears alongside as a power-user shortcut. If you forget what's available, say "show me what you can do" (or run `/founder-os:menu`) and the OS returns 5 to 7 capability suggestions tailored to your current state.
 
+Each command has seven labels.
+
+- **Or say.** The natural-language phrase the founder would say in chat to trigger the same skill.
 - **Outcome.** What appears in chat after the command finishes.
 - **Args.** Required and optional arguments.
 - **Writes.** Files created or updated. `Read-only` if nothing.
 - **Prereqs.** What must already exist for the command to work.
-- **When to run.** The signal or trigger that makes this command the right next move.
+- **When to run.** The signal or trigger that makes this the right next move.
 - **Follow-up.** What to run after.
 
 Path B users (manual git clone) drop the `/founder-os:` prefix. So `/founder-os:setup` becomes `/setup`. The plain bare commands (`/today`, `/next`, `/pre-meeting`, `/capture-meeting`) work the same on both paths.
 
-If a command is not behaving as documented, run `/founder-os:audit` to confirm the OS surface is intact, then [open an issue](https://github.com/ARCASSystems/FounderOS/issues).
+If a command is not behaving as documented, say "audit the OS" (or run `/founder-os:audit`) to confirm the OS surface is intact, then [open an issue](https://github.com/ARCASSystems/FounderOS/issues).
 
 ---
 
@@ -21,6 +24,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:setup`
 
+- **Or say.** "set up Founder OS"
 - **Outcome.** A guided interview of about 15 to 20 prompts across six phases ends with your full operating layer on disk. Final summary lists every file written.
 - **Args.** None.
 - **Writes.** `core/identity.md`, `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `context/companies.md`, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `brain/log.md`, `brain/flags.md`, plus the auto-memory `MEMORY.md` index.
@@ -30,6 +34,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:voice-interview`
 
+- **Or say.** "set up my voice profile"
 - **Outcome.** A short interview (about 3 writing samples plus 6 shaping questions, ~10 minutes) plus a voice profile written to disk. The interview captures rhythm, openings, closings, contractions, idiosyncrasies, and reading level.
 - **Args.** None.
 - **Writes.** `core/voice-profile.yml`.
@@ -39,6 +44,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:brand-interview`
 
+- **Or say.** "set up my brand profile"
 - **Outcome.** A brand profile and an assets folder. Captures colors, fonts, logo paths, footer text, page size and margins.
 - **Args.** None.
 - **Writes.** `core/brand-profile.yml`, `core/brand-assets/` folder structure.
@@ -48,10 +54,25 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ---
 
+## Discovery
+
+### `/founder-os:menu`
+
+- **Or say.** "show me what you can do" / "what's available"
+- **Outcome.** A tailored list of 5 to 7 capabilities scored against your current state. Each row has the natural-language phrasing first, the slash command shortcut parenthetical, and a one-sentence why-now. The single entry point if you forget what's available. Output ends with: "These are tailored to your current state. Say any of the natural-language phrases above. Or ask Claude anything in plain English - most of FounderOS routes by what you say, not what you type."
+- **Args.** None.
+- **Writes.** Read-only.
+- **Prereqs.** Founder OS plugin or repo present. Works on a brand-new install (returns the Day-1 starter set: voice-interview, brand-interview, priority-triage, today, ingest).
+- **When to run.** Any time you forget what's available, or when current state changes (new flag, stale cadence, new initiative) and you want to know what to do next.
+- **Follow-up.** Say any of the natural-language phrases the menu surfaces, or run the slash command shortcut alongside.
+
+---
+
 ## Audit and health
 
 ### `/founder-os:status`
 
+- **Or say.** "check my OS readiness"
 - **Outcome.** A weighted readiness score and the next 3 high-impact moves to run. Score breaks down by Identity, Priorities, Decisions, Cadence, Voice.
 - **Args.** None.
 - **Writes.** Read-only.
@@ -61,6 +82,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:audit`
 
+- **Or say.** "audit the OS"
 - **Outcome.** One composite health report covering readiness, wiki state (broken links, orphans, stale entries), brain staleness, voice completeness, and quarantine state. Each section gets a pass or fail.
 - **Args.** None.
 - **Writes.** Read-only. Optionally writes a dated audit file under `audit-YYYY-MM-DD.md` (gitignored).
@@ -70,6 +92,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:lint`
 
+- **Or say.** tool invocation (run `/founder-os:lint` directly)
 - **Outcome.** A list of broken `[[wikilinks]]` (ambiguous slugs now name the deterministic pick the resolver would choose, not just the candidate list), orphan files (no inbound links), entries past their `Decay after:` date, entries that LACK a `Decay after:` field where the anchor date is 30+ days old (soft signal, prefixed `decay-gap`, not a defect), `brain/log.md` past its 300-line cap (reminder, prefixed `log-cap`, not a defect), provenance gaps in `raw/`, and possible contradictions across files.
 - **Args.** None.
 - **Writes.** Read-only.
@@ -79,6 +102,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:wiki-build`
 
+- **Or say.** tool invocation (run `/founder-os:wiki-build` directly)
 - **Outcome.** A refreshed wiki graph extracted from every `[[wikilink]]` across markdown files in the OS. Reports new edges added and dead edges removed.
 - **Args.** None.
 - **Writes.** `brain/relations.yaml` (the auto section between markers, manual edges are preserved).
@@ -92,6 +116,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:query <question>`
 
+- **Or say.** "find the file about [topic]" / "search my OS for [topic]"
 - **Outcome.** Top 3 to 5 OS nodes that match your question, each with a stable ID, a one-line context, and the multi-hop path that reached it.
 - **Args.** One free-form question (default index mode), or `--mode timeline --anchor <slug-or-id>` for a 7-day window, or `--mode full --ids <a,b,c>` for full bodies.
 - **Writes.** Read-only.
@@ -101,6 +126,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:brain-pass "<question>"`
 
+- **Or say.** "what do I know about [topic]" / "synthesise across the brain"
 - **Outcome.** A synthesised answer in four sections: Answer (2 to 4 lines), Evidence (cited entry IDs), Confidence (high / medium / low with reason), Gaps (what the brain does not know that would change the answer).
 - **Args.** One quoted question.
 - **Writes.** Read-only.
@@ -114,6 +140,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/today`
 
+- **Or say.** "what's on for today?"
 - **Outcome.** A 20-line one-screen view of today: anchor, immovable commitments, deep work window, top open decisions, active flags, last 3 log entries, next calendar event.
 - **Args.** None.
 - **Writes.** Read-only.
@@ -123,6 +150,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/next`
 
+- **Or say.** "what should I focus on next?"
 - **Outcome.** One recommended next action across priorities, deals, and cadence. Not a list. One action with a one-line reason.
 - **Args.** None.
 - **Writes.** Read-only.
@@ -132,6 +160,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/pre-meeting <subject>`
 
+- **Or say.** "prep me for my call with [name]"
 - **Outcome.** A pass-or-fail verdict on the pre-meeting gate. Pass requires a capture artifact (notes file, doc link, or transcript path) and an ask (what you want from the meeting). Fail names what is missing.
 - **Args.** Subject (person, company, or meeting topic). Use a slug.
 - **Writes.** On pass, an intent entry in `brain/log.md` with `#pre-meeting` tag and a stable `log-YYYY-MM-DD-NNN` ID.
@@ -141,6 +170,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/capture-meeting <subject>`
 
+- **Or say.** "capture this" / "log this"
 - **Outcome.** A routed summary: meeting log entry in `brain/log.md`, updated client status in `context/clients.md` if the subject matches an existing row, and any new open commitments named.
 - **Args.** Subject (matches the slug used for `/pre-meeting`).
 - **Writes.** `brain/log.md`, `context/clients.md`, optional `context/decisions.md` if a decision was made.
@@ -154,6 +184,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:rant`
 
+- **Or say.** "I want to rant" / "let me dump something"
 - **Outcome.** A new `brain/rants/<YYYY-MM-DD>.md` file holding your raw dump verbatim. No structure asked. No editing.
 - **Args.** None. Pasted or dictated content follows the command.
 - **Writes.** `brain/rants/<YYYY-MM-DD>.md`. Appends if today's file exists.
@@ -163,6 +194,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:dream`
 
+- **Or say.** "process my rants" / "dream on the rants"
 - **Outcome.** A 5-line digest in `brain/log.md` with stable-ID citations, plus new entries in `brain/patterns.md`, `brain/flags.md`, `brain/decisions-parked.md`, `brain/needs-input.md` as warranted. Each rant marked processed. If the opt-in observation log is enabled, today's tool calls are rolled into an OBSERVED section.
 - **Args.** None.
 - **Writes.** `brain/log.md`, `brain/patterns.md`, `brain/flags.md`, `brain/decisions-parked.md`, `brain/needs-input.md`, `context/clients.md` if a client signal surfaces. Marks rants processed in place.
@@ -176,6 +208,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:forcing-questions <initiative>`
 
+- **Or say.** "I'm thinking of starting [X]" / "should I do this"
 - **Outcome.** Six yes/no answers (vague done state, phantom user, scope creep, false urgency, sunk-cost trap, opportunity cost) plus a verdict: start, kill, postpone, or scope down.
 - **Args.** Initiative name or one-line description.
 - **Writes.** Read-only. Optional log entry to `brain/log.md` if you ask for one.
@@ -185,6 +218,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:ship-deliverable <path>`
 
+- **Or say.** "is this ready to send" / "ship-check this"
 - **Outcome.** A composite pass-or-fail verdict across template fit (your-deliverable-template), anti-AI scan (your-voice rules), blind-spot evidence (legal, contract, data, timing, relationship, upside, walkaway), and pre-send checks (voice, source truth, personalization).
 - **Args.** Path to the deliverable file.
 - **Writes.** Read-only. The deliverable is not modified. The skill only reports.
@@ -198,6 +232,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:ingest <source>`
 
+- **Or say.** "ingest this" / "save this source"
 - **Outcome.** A new file in `raw/<source>.md` with provenance frontmatter (URL or path, captured date, source title), plus proposed wiki updates you approve before they land.
 - **Args.** A URL, a file path, or pasted text with a name.
 - **Writes.** `raw/<source>.md`. Optionally `brain/relations.yaml` if you approve wiki edges.
@@ -207,6 +242,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:update`
 
+- **Or say.** "update Founder OS" / "pull the latest"
 - **Outcome.** A diff of System Layer files (skills, templates, commands, hooks) between your installed version and the latest release. Asks for confirmation before applying. Subcommand `check` previews without writing. Subcommand `rollback` restores the previous System Layer.
 - **Args.** Optional `check` or `rollback`.
 - **Writes.** `skills/`, `templates/`, `.claude/commands/`, `.claude/hooks/`. Personal data (`core/`, `context/`, `cadence/`, `brain/`) is never touched.
@@ -216,6 +252,7 @@ If a command is not behaving as documented, run `/founder-os:audit` to confirm t
 
 ### `/founder-os:uninstall`
 
+- **Or say.** "uninstall Founder OS"
 - **Outcome.** A confirmation list of every file and folder that will be removed. Default mode preserves your personal data and only removes the System Layer. `--purge` removes everything.
 - **Args.** Optional `--purge`.
 - **Writes.** Default removes `skills/`, `templates/`, `.claude/`, `scripts/`. `--purge` additionally removes `core/`, `context/`, `cadence/`, `brain/`, `raw/`, `clients/`, `drafts/`, `exports/`, `reports/`, `audit-*.md`.

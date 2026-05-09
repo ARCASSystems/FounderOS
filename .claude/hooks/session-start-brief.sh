@@ -210,6 +210,76 @@ if [ -f "$MEMORY_DIFF" ] && [ -n "$PYTHON" ]; then
   $PYTHON "$MEMORY_DIFF" "$REPO" 2>/dev/null
 fi
 
+# --- Tip (rotates weekly, surfaces one underused capability) ---
+# Scans brain/log.md for the last 30 days of #used or invocation tags. Picks a
+# capability not invoked in 14+ days that matches current state. Rotates the
+# pick weekly so the same tip does not repeat. If no eligible tip, the line
+# is omitted (do NOT print "no tip" or similar).
+LOG="$REPO/brain/log.md"
+if [ -f "$LOG" ] && [ -n "$PYTHON" ]; then
+  TIP=$($PYTHON - "$LOG" "$TODAY" <<'PYEOF' 2>/dev/null
+import sys, re
+from datetime import date, timedelta
+log_path, today_str = sys.argv[1], sys.argv[2]
+today = date.fromisoformat(today_str)
+# Capabilities with their natural-language tip lines. Order matters for the
+# weekly rotation tie-break.
+TIPS = [
+    ("decision-framework", "Try saying \"help me decide\" next time you're stuck on a choice - the decision-framework skill walks you through it."),
+    ("priority-triage", "Say \"what should I focus on next\" when the open list grows past five - priority-triage cuts it down to one thing."),
+    ("forcing-questions", "Try \"force me to think this through\" before starting something new - forcing-questions runs six tests on the idea before you commit."),
+    ("weekly-review", "Say \"run my weekly review\" on Friday or Monday - weekly-review rolls the sprint and forces a verdict on every open flag."),
+    ("audit", "Say \"audit the OS\" when things feel drifty - one composite report on health, voice, and wiki state."),
+    ("brain-pass", "Try \"ask the brain about <topic>\" - brain-pass synthesises across log, knowledge, and decisions instead of one keyword match."),
+    ("knowledge-capture", "Say \"capture this\" after a book or podcast worth keeping - knowledge-capture files it with a stable ID."),
+    ("ingest", "Say \"ingest this\" on a URL or transcript - ingest preserves the source with provenance and proposes wiki updates."),
+    ("bottleneck-diagnostic", "Try \"what's blocking me\" once a quarter - bottleneck-diagnostic scores founder dependency across five dimensions."),
+    ("strategic-analysis", "Say \"analyze this market\" or \"competitor map\" - strategic-analysis grounds the scan in your knowledge notes."),
+]
+try:
+    text = open(log_path, encoding='utf-8').read()
+except Exception:
+    sys.exit(0)
+# Build last-used-on map. Walk lines, track current date header, accumulate
+# capability mentions. We treat any reference (#used:foo, /founder-os:foo,
+# foo skill) as a use.
+date_re = re.compile(r'^##\s+(\d{4}-\d{2}-\d{2})')
+last_used = {}
+cur = None
+for ln in text.splitlines():
+    m = date_re.match(ln)
+    if m:
+        cur = date.fromisoformat(m.group(1))
+        continue
+    if cur is None:
+        continue
+    for cap, _ in TIPS:
+        if cap in ln:
+            prev = last_used.get(cap)
+            if prev is None or cur > prev:
+                last_used[cap] = cur
+# Eligible: not used in 14+ days OR never used.
+eligible = []
+for cap, tip in TIPS:
+    last = last_used.get(cap)
+    if last is None or (today - last).days >= 14:
+        eligible.append((cap, tip))
+if not eligible:
+    sys.exit(0)
+# Weekly rotation: pick the index based on iso-week so the same tip does not
+# repeat within a week. Falls back to first eligible if rotation lands on a
+# capability that was used in the meantime.
+week = today.isocalendar()[1]
+idx = week % len(eligible)
+print(eligible[idx][1])
+PYEOF
+  )
+  if [ -n "$TIP" ]; then
+    echo ""
+    echo "Tip: $TIP"
+  fi
+fi
+
 # --- Observations (opt-in telemetry, FOUNDER_OS_OBSERVATIONS=1 to enable) ---
 # Printed inside the brief so the visual closure (=== end brief ===) is the
 # last line.

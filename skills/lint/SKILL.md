@@ -1,7 +1,7 @@
 ---
 name: lint
 description: >
-  Read-only audit of the Founder OS wiki integrity. Five checks: broken cross-references, orphan pages, stale time-sensitive content, provenance gaps, and contradictions. Never auto-fixes - findings are advisory. Triggered by /founder-os:lint. Use when the user says "lint", "audit the OS", "check wiki integrity", "find broken links", "what's stale", or wants to know what's drifted before a weekly review.
+  Audit the wiki for integrity issues. Say "lint the wiki", "check wiki integrity", "find broken links", "what's stale", or "what's drifted" (or run /founder-os:lint). Five checks: broken cross-references, orphan pages, stale time-sensitive content, provenance gaps, and contradictions. Read-only - findings are advisory. Run before a weekly review.
 allowed-tools: ["Read", "Glob", "Grep"]
 mcp_requirements: []
 ---

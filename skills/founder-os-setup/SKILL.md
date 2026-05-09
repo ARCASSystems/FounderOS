@@ -1,7 +1,7 @@
 ---
 name: founder-os-setup
 description: >
-  Interactive setup wizard for Founder OS. Run this after installing the plugin to create your personalized founder operating environment. Creates identity files, brain system, cadence management, role-based operating modes, and project structure. Run /founder-os:setup to start.
+  Set up Founder OS from scratch. Say "set up Founder OS", "run the setup wizard", or "install Founder OS" (or run /founder-os:setup). Walks the founder through identity, tool stack, work style, brain system, cadence, roles, and the first project as an interactive wizard. Pass "reset" to reconfigure an existing setup.
 argument-hint: "[reset] - run with 'reset' to reconfigure an existing setup"
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep"]
 mcp_requirements: []
@@ -66,22 +66,28 @@ Ask: "Of everything you just listed, what are the top 3 things you need Claude h
 These get built first. Everything else is structure for later.
 
 ### 0.5 Tool Stack
-Ask: "What tools do you use day to day? Go through this list. Skip any you do not use - I will record those as `none`."
 
-- **Knowledge base**: Notion, Obsidian, Google Drive, local-only?
-- **Email**: Gmail, Outlook, Apple Mail?
-- **Calendar**: Google Calendar, Outlook Calendar?
-- **Automation**: n8n, Make, Zapier, none?
-- **CRM**: Notion DB, HubSpot, Airtable, none?
-- **File storage**: Google Drive, Dropbox, local, none?
-- **Meeting notes**: Granola, Otter, Notion, none?
-- **Voice input**: Wispr Flow, Whisper local, none?
-- **Server / hosting**: Hostinger, DigitalOcean, Render, none?
-- **Prospecting database**: Apollo, Sales Navigator, LinkedIn, none?
-- **Video tool**: Loom, Zoom, none?
-- **Booking**: Cal.com, Calendly, none?
+Ask four short multi-choice prompts in sequence. One question, one line of options. No preamble between them. Wait for the answer before moving to the next.
 
-These twelve fields populate `stack.json`, which sop-writer, meeting-prep, email-drafter, and other skills read at runtime to tailor output to the user's actual stack. Map answers to the exact lowercase tokens listed in `stack.json`'s `_allowed_values`.
+1. "Where do you store written knowledge? Notion / Obsidian / Google Drive / local files only / other / skip."
+2. "What email do you use for work? Gmail / Outlook / Apple Mail / other / none / skip."
+3. "What calendar do you use? Google Calendar / Outlook / Apple Calendar / other / none / skip."
+4. "Where do you track deals or pipeline? Notion DB / HubSpot / Airtable / spreadsheet / nothing yet / skip."
+
+Map each answer to the exact lowercase token from `stack.json`'s `_allowed_values`:
+
+- Knowledge base -> `knowledge_base` (notion / obsidian / google_drive / local). "other" or unrecognised tool -> `null` and log the actual name in the backlog.
+- Email -> `email_platform` (gmail / outlook / apple_mail). "none" or "other" -> `null`.
+- Calendar -> `calendar` (google_calendar / outlook_calendar). Apple Calendar / "other" / "none" -> `null` and log to backlog.
+- CRM or pipeline -> `crm` (notion_db / hubspot / airtable / none). "spreadsheet" -> `null` with a backlog note. "nothing yet" -> `none`.
+
+"skip" on any prompt records `null` for that field and continues. No "are you sure?" follow-up. No re-ask later in the wizard.
+
+The other eight `stack.json` fields (`automation_platform`, `file_storage`, `meeting_notes`, `voice_input`, `server`, `prospecting_db`, `video_tool`, `booking`) stay `null` by default. If the founder dumps additional tool names in any earlier or later phase ("I use n8n and Granola"), parse them into the matching fields. They are not asked individually because they are not load-bearing for first-run output skills.
+
+**Backward compatibility (parse-everything-at-once path).** If the founder replies to the first prompt with multiple tools in one shot ("Notion, Gmail, Google Calendar, no CRM"), parse all of it, populate every matching field, and skip the remaining prompts in this phase. Confirm what was captured in one line. Do not re-ask.
+
+These fields populate `stack.json`, which sop-writer, meeting-prep, email-drafter, and other skills read at runtime to tailor output to the founder's actual stack. The full write happens in Phase 5.0.
 
 ### 0.6 Existing Setup Audit
 Before proceeding, scan the filesystem silently:
@@ -92,27 +98,50 @@ Before proceeding, scan the filesystem silently:
 Report what you found. This prevents duplication.
 
 ### 0.7 How You Work
-Ask: "A few quick ones about how you work:
-- Do you prefer morning or evening deep work?
-- How do you make decisions - gut feel, spreadsheets, or talk it through?
-- What's your communication style - direct and short, or detailed and thorough?
-- What overwhelms you most about running your business?"
+
+Ask four short multi-choice prompts in sequence. One question, one line of options. No preamble between them. Wait for the answer before moving to the next.
+
+1. "When do you do your best deep work? Morning / afternoon / evening / variable / skip."
+2. "How do you usually make decisions? Gut / data / dialogue with someone / mixed / skip."
+3. "How do you prefer Claude to communicate with you? Direct and short / detailed and explanatory / skip."
+4. "What overwhelms you most? Too many open loops / unclear next step / context switching / decision fatigue / other / skip."
+
+"skip" on any prompt records `null` for that field and continues. No "are you sure?" follow-up.
+
+**Backward compatibility (parse-everything-at-once path).** If the founder dumps all four answers in one reply ("morning, gut, direct, too many open loops"), parse them, mark all four as answered, and skip the remaining prompts in this phase. Confirm what was captured in one line.
 
 These answers personalize the operating rules and identity file.
 
-**Encoding (mandatory).** Map the answers to these structured tokens. Skills downstream read the tokens, not the prose.
+**Encoding (mandatory).** Map the answers to these structured tokens. Skills downstream read the tokens, not the prose. "skip" on any prompt records `null` for that field.
 
-- "gut feel" / "instinct" / "feel" → `gut`
-- "spreadsheets" / "data" / "numbers" / "math first" → `data`
-- "talk it through" / "out loud" / "sounding board" → `dialogue`
-- mixed answer or unclear → `mixed`
+Deep work time:
 
-For communication style:
+- "morning" -> `morning`
+- "afternoon" -> `afternoon`
+- "evening" -> `evening`
+- "variable" / unclear -> `variable`
 
-- "direct" / "short" / "lead with the answer" / "no filler" → `direct`
-- "detailed" / "thorough" / "context first" / "build up" → `detailed`
+Decision style:
 
-When you write `core/identity.md` in Phase 1.1, populate `**Decision style:**` with the token. When you write `rules/operating-rules.md` in Phase 2.2, populate `**Communication style:**` with the token. Use the prose answer for the descriptive paragraph that follows.
+- "gut" / "gut feel" / "instinct" / "feel" -> `gut`
+- "data" / "spreadsheets" / "numbers" / "math first" -> `data`
+- "dialogue" / "talk it through" / "out loud" / "sounding board" -> `dialogue`
+- "mixed" / unclear -> `mixed`
+
+Communication style:
+
+- "direct" / "short" / "lead with the answer" / "no filler" -> `direct`
+- "detailed" / "thorough" / "context first" / "build up" / "explanatory" -> `detailed`
+
+What overwhelms you:
+
+- "too many open loops" -> `open_loops`
+- "unclear next step" -> `unclear_next`
+- "context switching" -> `context_switching`
+- "decision fatigue" -> `decision_fatigue`
+- "other" -> capture the prose verbatim
+
+When you write `core/identity.md` in Phase 1.1, populate `**Decision style:**` with the token. When you write `rules/operating-rules.md` in Phase 2.2, populate `**Communication style:**` with the token. Use the prose answer (or the `other` capture) for the descriptive paragraph that follows. Deep work time and overwhelm token go into `core/identity.md` under their respective sections.
 
 ### 0.8 Privacy Layers
 Ask: "Last setup question. Some information is private to you, some you'd share with a co-founder or team member. Any businesses where someone else might see the project files? And anything that should ONLY live in your private global config?"

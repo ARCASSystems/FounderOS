@@ -1,6 +1,6 @@
 ---
 name: forcing-questions
-description: Use before starting a new initiative, expanding scope mid-task, or investing time in a fresh idea. Runs six fixed questions that test done state, user pain, smallest ship, replacement cost, urgency, and proof.
+description: Pressure-test a new initiative before starting it. Say "should I start this", "is this worth doing", "force me to think this through", or "run forcing questions" (or run /founder-os:forcing-questions). Fires when the founder is about to start something new, expand scope mid-task, or invest time in a fresh idea. Runs six fixed questions that test done state, user pain, smallest ship, replacement cost, urgency, and proof.
 allowed-tools: ["Read", "Write", "Edit"]
 mcp_requirements: []
 ---

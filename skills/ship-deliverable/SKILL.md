@@ -1,6 +1,6 @@
 ---
 name: ship-deliverable
-description: Use as the final read-only gate before any external deliverable leaves the founder's machine. Runs template fit, anti-AI scan, blind-spot evidence check, and pre-send-check in one report.
+description: Run the final ship gate before any external deliverable goes out. Say "ship this", "is this ready to ship", "final gate", or "run the ship checks" (or run /founder-os:ship-deliverable). Composes template fit, anti-AI scan, blind-spot evidence check, and pre-send-check in one report. Read-only.
 allowed-tools: ["Read", "Grep"]
 mcp_requirements: []
 ---

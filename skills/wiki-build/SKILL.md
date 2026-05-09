@@ -1,7 +1,7 @@
 ---
 name: wiki-build
 description: >
-  Walk the OS markdown, extract Obsidian-style [[wikilinks]], and refresh the auto-generated wiki_links section in brain/relations.yaml. Companion to lint - lint checks the wiki, wiki-build keeps the graph fresh. Triggered by /founder-os:wiki-build. Use when the user says "build the wiki graph", "refresh relations", "rebuild the wiki", "extract wikilinks", or after a session that added cross-references between files.
+  Rebuild the wiki graph from extracted [[wikilinks]]. Say "rebuild the wiki graph", "refresh relations", "build the wiki graph", or "extract wikilinks" (or run /founder-os:wiki-build). Walks all markdown, extracts Obsidian-style [[wikilinks]], and refreshes the auto-generated section in `brain/relations.yaml`. Companion to lint - lint checks the wiki, wiki-build keeps the graph fresh. Run after a session that added cross-references between files.
 allowed-tools: ["Bash", "Read"]
 mcp_requirements: []
 ---

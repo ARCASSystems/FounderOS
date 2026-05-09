@@ -1,5 +1,5 @@
 ---
-description: Query the Founder OS graph and operating files. Three modes (index, timeline, full) for progressive disclosure. Read-only.
+description: Query the OS for a topic. Say "find the file about [topic]" or "search my OS for [topic]" (or run /founder-os:query <question>). Three modes (index, timeline, full) for progressive disclosure. Read-only.
 argument-hint: <question> | --mode timeline --anchor <slug> | --mode full --ids <id1,id2>
 allowed-tools: ["Read", "Bash"]
 ---

@@ -1,6 +1,8 @@
 import os
 import shutil
 import subprocess
+import tempfile
+import textwrap
 import unittest
 from pathlib import Path
 
@@ -15,6 +17,7 @@ SESSION_POWERSHELL_HOOKS = [
     HOOK_ROOT / "session-start-brief.ps1",
     HOOK_ROOT / "session-close-revenue-check.ps1",
 ]
+SESSION_START_HOOK = HOOK_ROOT / "session-start-brief.sh"
 
 
 
@@ -107,6 +110,118 @@ class SessionHookSmokeTests(unittest.TestCase):
                 )
 
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+
+class SessionStartTipTests(unittest.TestCase):
+    """Tests for the v1.20 SessionStart Tip line.
+
+    The tip rotates a natural-language hint about an underused capability.
+    Surfaces only when there is at least one capability not invoked in 14+ days.
+    Omitted entirely when no eligible tip exists (no fresh-install false
+    positive).
+    """
+
+    def _make_install(self, tmp: Path, log_body: str) -> Path:
+        """Build a minimal Founder OS install layout the hook will accept."""
+        (tmp / "core").mkdir(parents=True)
+        (tmp / "brain").mkdir(parents=True)
+        (tmp / ".claude" / "hooks").mkdir(parents=True)
+        # Hook bails out if core/identity.md is missing.
+        (tmp / "core" / "identity.md").write_text("# identity\n", encoding="utf-8")
+        (tmp / "brain" / "log.md").write_text(log_body, encoding="utf-8")
+        # Copy the hook script into the synthetic repo so its path resolution
+        # ($REPO/../..) lands on tmp.
+        target = tmp / ".claude" / "hooks" / "session-start-brief.sh"
+        target.write_bytes(SESSION_START_HOOK.read_bytes())
+        return target
+
+    def _run_hook(self, hook_path: Path) -> str:
+        bash = shutil.which("bash")
+        if not bash:
+            self.skipTest("bash is not on PATH")
+        result = subprocess.run(
+            [bash, bash_path(bash, hook_path)],
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return result.stdout
+
+    def test_tip_present_when_no_recent_invocations(self) -> None:
+        """Empty log => every capability is "never used" => tip surfaces."""
+        with tempfile.TemporaryDirectory() as tmp:
+            hook = self._make_install(Path(tmp), "# Brain log\n")
+            output = self._run_hook(hook)
+            self.assertIn("Tip:", output)
+            # Tip uses natural-language phrasing, never slash-command-first.
+            tip_line = next(
+                (line for line in output.splitlines() if line.startswith("Tip:")),
+                "",
+            )
+            self.assertNotRegex(
+                tip_line,
+                r"^Tip:\s*/",
+                "Tip line must not lead with a slash command",
+            )
+            self.assertNotRegex(
+                tip_line,
+                r"You haven't run",
+                "Tip must use the natural-language pattern, not the "
+                "frequency-of-use anti-pattern",
+            )
+
+    def test_tip_omitted_when_all_capabilities_recently_used(self) -> None:
+        """Every capability touched within the last day => no eligible tip."""
+        # Use yesterday so the hook's "today" math is stable across runs.
+        from datetime import date, timedelta
+        recent = (date.today() - timedelta(days=1)).isoformat()
+        capabilities = [
+            "decision-framework",
+            "priority-triage",
+            "forcing-questions",
+            "weekly-review",
+            "audit",
+            "brain-pass",
+            "knowledge-capture",
+            "ingest",
+            "bottleneck-diagnostic",
+            "strategic-analysis",
+        ]
+        body_lines = [f"## {recent}", ""]
+        for cap in capabilities:
+            body_lines.append(f"- log-{recent}-001 #used:{cap} did the thing")
+        body = "\n".join(body_lines) + "\n"
+        with tempfile.TemporaryDirectory() as tmp:
+            hook = self._make_install(Path(tmp), body)
+            output = self._run_hook(hook)
+            # Brief still renders end markers, just no Tip line.
+            self.assertIn("=== end brief ===", output)
+            self.assertNotIn(
+                "Tip:",
+                output,
+                "Tip line must be omitted when all capabilities used within "
+                "the last 14 days",
+            )
+
+    def test_tip_uses_natural_language_phrasing(self) -> None:
+        """The tip must lead with a natural-language phrase, not a command."""
+        with tempfile.TemporaryDirectory() as tmp:
+            hook = self._make_install(Path(tmp), "# Brain log\n")
+            output = self._run_hook(hook)
+            tip_lines = [line for line in output.splitlines() if line.startswith("Tip:")]
+            self.assertEqual(
+                len(tip_lines),
+                1,
+                "Exactly one Tip line is expected when eligible",
+            )
+            tip = tip_lines[0]
+            # Pattern: contains a quoted natural-language phrase.
+            self.assertRegex(
+                tip,
+                r'"[^"]+"',
+                "Tip should contain a quoted natural-language phrase the "
+                "operator can say to Claude",
+            )
 
 
 if __name__ == "__main__":

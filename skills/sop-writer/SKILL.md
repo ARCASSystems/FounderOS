@@ -1,7 +1,7 @@
 ---
 name: sop-writer
 description: >
-  Creates clear, delegation-ready Standard Operating Procedures and process documentation. Use this skill when the user asks to "write an SOP", "document this process", "create a procedure", "process documentation", "how-to guide", "write up the steps for", "create a runbook", or any request to turn a process into a reusable document. Also trigger when the user describes how something works and wants it captured for someone else to follow.
+  Write a delegation-ready SOP. Trigger on "write an SOP", "document this process", "create a procedure", "process documentation", "how-to guide", "write up the steps for", "create a runbook", or any request to turn a process into a reusable document. Also fires when the user describes how something works and wants it captured for someone else to follow.
 mcp_requirements: []
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: brain-log
 description: >
-  Manages the brain system - logging thoughts, flagging patterns, parking decisions. Use this skill when the user says "log this", "capture this", "flag this", "park this decision", "note this", "remember this", "save this thought", "brain dump", "I had an idea", "something to track", or any variation of capturing a thought, observation, or decision for later. Also trigger when the user shares an observation that should be recorded but doesn't need immediate action.
+  Capture a thought, flag, or decision into the brain system. Trigger on "capture this", "log this", "flag this", "park this decision", "note this", "remember this", "save this thought", "brain dump", "I had an idea", "something to track", or any variation. Also fires when the user shares an observation that should be recorded but does not need immediate action. Three modes: log, cross-reference, or act.
 mcp_requirements: []
 ---
 

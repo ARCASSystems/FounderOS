@@ -1,5 +1,5 @@
 ---
-description: Cleanly remove Founder OS. Lists what will be removed, asks confirmation, then removes plugin registration and (optionally with --purge) your data files. Default mode preserves your data.
+description: Uninstall Founder OS. Say "uninstall Founder OS" (or run /founder-os:uninstall). Lists what will be removed, asks confirmation, then removes plugin registration and (optionally with --purge) your data files. Default mode preserves your data.
 argument-hint: "[--purge]"
 allowed-tools: ["Read", "Bash", "Glob"]
 ---

@@ -1,5 +1,5 @@
 ---
-description: Distil unprocessed rants into the brain layer. Writes a 5-line digest. Updates patterns, flags, parked decisions, needs-input, and client signals as warranted.
+description: Process my rants. Say "process my rants" or "dream on the rants" (or run /founder-os:dream). Distils unprocessed rants into a 5-line digest and updates patterns, flags, parked decisions, needs-input, and client signals as warranted.
 ---
 
 # Dream

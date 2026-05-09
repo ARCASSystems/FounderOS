@@ -243,6 +243,64 @@ if (Test-Path $MemoryDiff) {
   }
 }
 
+# --- Tip (rotates weekly, surfaces one underused capability) ---
+# Scans brain/log.md for the last 30 days of #used or invocation tags. Picks a
+# capability not invoked in 14+ days that matches current state. Rotates the
+# pick weekly so the same tip does not repeat. If no eligible tip, the line is
+# omitted (do NOT print "no tip" or similar).
+$Log = Join-Path $Repo 'brain\log.md'
+if (Test-Path $Log) {
+  $tips = @(
+    @{cap='decision-framework'; tip='Try saying "help me decide" next time you''re stuck on a choice - the decision-framework skill walks you through it.'},
+    @{cap='priority-triage'; tip='Say "what should I focus on next" when the open list grows past five - priority-triage cuts it down to one thing.'},
+    @{cap='forcing-questions'; tip='Try "force me to think this through" before starting something new - forcing-questions runs six tests on the idea before you commit.'},
+    @{cap='weekly-review'; tip='Say "run my weekly review" on Friday or Monday - weekly-review rolls the sprint and forces a verdict on every open flag.'},
+    @{cap='audit'; tip='Say "audit the OS" when things feel drifty - one composite report on health, voice, and wiki state.'},
+    @{cap='brain-pass'; tip='Try "ask the brain about <topic>" - brain-pass synthesises across log, knowledge, and decisions instead of one keyword match.'},
+    @{cap='knowledge-capture'; tip='Say "capture this" after a book or podcast worth keeping - knowledge-capture files it with a stable ID.'},
+    @{cap='ingest'; tip='Say "ingest this" on a URL or transcript - ingest preserves the source with provenance and proposes wiki updates.'},
+    @{cap='bottleneck-diagnostic'; tip='Try "what''s blocking me" once a quarter - bottleneck-diagnostic scores founder dependency across five dimensions.'},
+    @{cap='strategic-analysis'; tip='Say "analyze this market" or "competitor map" - strategic-analysis grounds the scan in your knowledge notes.'}
+  )
+  $lastUsed = @{}
+  $curDate = $null
+  foreach ($line in (Get-Content $Log)) {
+    if ($line -match '^##\s+(\d{4}-\d{2}-\d{2})') {
+      $curDate = ConvertTo-IsoDate $matches[1]
+      continue
+    }
+    if (-not $curDate) { continue }
+    foreach ($t in $tips) {
+      if ($line -like ('*' + $t.cap + '*')) {
+        $prev = $lastUsed[$t.cap]
+        if ($null -eq $prev -or $curDate -gt $prev) {
+          $lastUsed[$t.cap] = $curDate
+        }
+      }
+    }
+  }
+  $eligible = @()
+  foreach ($t in $tips) {
+    $last = $lastUsed[$t.cap]
+    if ($null -eq $last) {
+      $eligible += $t
+    } else {
+      $age = (New-TimeSpan -Start $last -End $todayDt).Days
+      if ($age -ge 14) { $eligible += $t }
+    }
+  }
+  if ($eligible.Count -gt 0) {
+    # Weekly rotation: index by ISO week so the same tip does not repeat
+    # within a week.
+    $cal = [System.Globalization.CultureInfo]::InvariantCulture.Calendar
+    $weekRule = [System.Globalization.CalendarWeekRule]::FirstFourDayWeek
+    $week = $cal.GetWeekOfYear($todayDt, $weekRule, [System.DayOfWeek]::Monday)
+    $idx = $week % $eligible.Count
+    Write-Output ""
+    Write-Output ("Tip: " + $eligible[$idx].tip)
+  }
+}
+
 # --- Observations (opt-in telemetry, FOUNDER_OS_OBSERVATIONS=1 to enable) ---
 # Printed inside the brief so the visual closure (=== end brief ===) is the
 # last line.

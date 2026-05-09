@@ -1,5 +1,5 @@
 ---
-description: Run the voice interview. Captures how you write into core/voice-profile.yml. Activates the voice-coupled writing skills (linkedin-post, client-update, proposal-writer, email-drafter, content-repurposer, sop-writer, your-voice). Takes about 10 minutes.
+description: Set up your voice profile. Say "set up my voice profile" (or run /founder-os:voice-interview). Captures how you write into core/voice-profile.yml. Activates the voice-coupled writing skills (linkedin-post, client-update, proposal-writer, email-drafter, content-repurposer, sop-writer, your-voice). Takes about 10 minutes.
 allowed-tools: ["Read", "Write", "Edit"]
 ---
 

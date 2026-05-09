@@ -1,5 +1,5 @@
 ---
-description: Capture a raw voice rant or brain dump into brain/rants/. No structure asked of the user. The /dream command processes rants later.
+description: Capture a raw rant. Say "I want to rant" or "let me dump something" (or run /founder-os:rant). Captures the raw voice dump verbatim into brain/rants/ with no structure asked. The /dream command processes rants later.
 ---
 
 # Rant

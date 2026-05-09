@@ -1,6 +1,6 @@
 ---
 name: handoff-protocol
-description: Use when work moves from one person, role, or session to another. Creates a structured handoff artifact with ownership, done state, deadline, constraints, open questions, and source links.
+description: Build a handoff doc when work moves to someone else. Say "hand this off to <person>", "build a handoff", "delegate this", or "package this for the next person". Creates a structured artifact with ownership, done state, deadline, constraints, open questions, and source links.
 allowed-tools: ["Read", "Write"]
 mcp_requirements: ["optional: knowledge_base", "optional: project_management"]
 ---

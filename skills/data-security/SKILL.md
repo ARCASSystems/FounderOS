@@ -1,6 +1,6 @@
 ---
 name: data-security
-description: Use before pasting, uploading, forwarding, or sending data to an external tool or AI model. Classifies the data and checks it against the user's data-handling policy.
+description: Check whether data is safe to share with an external tool. Say "is this safe to paste", "can I send this to <tool>", or "classify this data". Fires before pasting, uploading, forwarding, or sending data to an external tool or AI model. Classifies the data and checks it against the user's data-handling policy.
 allowed-tools: ["Read", "Grep"]
 mcp_requirements: []
 ---

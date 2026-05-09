@@ -1,7 +1,7 @@
 ---
 name: readiness-check
 description: >
-  Reads the current state of the Founder OS install and returns a weighted readiness score (0-100%) across five buckets: Core, Voice and Brand, Cadence, Business Context, Brain Layer. Surfaces the next 3 high-impact moves the founder can make. Read-only - never writes to user files. Triggered by the `/founder-os:status` slash command. Use this when the founder asks "how am I doing", "what's my OS state", "readiness check", "how's the system", "what should I focus on next", or "where are the gaps".
+  Score the OS install across five buckets and name the next 3 moves. Trigger on "check my OS readiness", "audit the OS", "how am I doing", "what's my OS state", "readiness check", "how's the system", or "where are the gaps" (or run /founder-os:status). Returns a 0-100% score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Read-only.
 allowed-tools: ["Read", "Glob", "Grep"]
 mcp_requirements: []
 ---

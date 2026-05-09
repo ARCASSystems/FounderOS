@@ -1,6 +1,6 @@
 ---
 name: query
-description: Use when the founder asks a multi-hop question across their OS, such as what blocks a priority, what connects to a client, or what history explains a decision. Traverses `brain/relations.yaml` plus core operating files. Three modes (index, timeline, full) for progressive disclosure.
+description: Search across the OS with a multi-hop query. Say "what blocks <priority>", "what connects to <client>", "what history explains <decision>", or "search the OS for <topic>" (or run /founder-os:query). Traverses `brain/relations.yaml` plus core operating files. Three modes (index, timeline, full) for progressive disclosure.
 allowed-tools: ["Read", "Bash"]
 mcp_requirements: []
 ---

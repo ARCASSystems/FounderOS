@@ -1,7 +1,7 @@
 ---
 name: meeting-prep
 description: >
-  Prepares meeting briefs and post-meeting debriefs for founders. Use this skill when the user asks to "prep for a meeting", "prepare for a call", "get me ready for", "meeting notes", "debrief this meeting", "summarize the call", "what should I ask in", "prep me for my call with", or any reference to preparing for or processing meetings, calls, interviews, or conversations. Also trigger when the user mentions an upcoming meeting and needs context, talking points, or questions.
+  Prep for a meeting or debrief one after. Trigger on "prep me for my call with [name]", "prep for a meeting", "prepare for a call", "get me ready for", "meeting notes", "debrief this meeting", "summarize the call", "what should I ask in", or any reference to preparing for or processing meetings, calls, interviews, or conversations. Also fires when the user mentions an upcoming meeting and needs context, talking points, or questions.
 mcp_requirements: [optional: gcal, optional: gmail]
 ---
 

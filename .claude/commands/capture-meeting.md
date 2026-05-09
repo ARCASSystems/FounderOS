@@ -1,5 +1,5 @@
 ---
-description: Capture a meeting. Routes a transcript or brain dump into brain/log.md + context/clients.md + open commitments. Part of the fabric trio (M3).
+description: Capture a meeting. Say "capture this" or "log this" (or run /capture-meeting <name>). Routes a transcript or brain dump into brain/log.md + context/clients.md + open commitments.
 argument-hint: <person or meeting name>
 ---
 

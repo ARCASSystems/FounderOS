@@ -1,7 +1,7 @@
 ---
 name: strategic-analysis
 description: >
-  Structured strategic analysis for founders - competitive analysis, market sizing, opportunity assessment, business model evaluation. Use this skill when the user asks to "analyze this market", "competitor map", "evaluate this opportunity", "market research", "SWOT", "who are the competitors", "market sizing", "TAM SAM SOM", or any variation of strategic business analysis. Also trigger when the user describes a business opportunity or competitor and wants structured thinking.
+  Run a strategic analysis: competitive map, market sizing, opportunity, or business model. Trigger on "analyze this market", "competitor map", "evaluate this opportunity", "market research", "SWOT", "who are the competitors", "market sizing", "TAM SAM SOM", or any variation of strategic business analysis. Also fires when the user describes a business opportunity or competitor and wants structured thinking.
 mcp_requirements: []
 ---
 

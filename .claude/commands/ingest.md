@@ -1,5 +1,5 @@
 ---
-description: File a source (URL, file path, or pasted text) into raw/ with provenance, then propose wiki updates the user approves before writing.
+description: Save a source for later. Say "ingest this" or "save this source" (or run /founder-os:ingest <url|path|text>). Files the source into raw/ with provenance, then proposes wiki updates the user approves before writing.
 argument-hint: "<url | file path | pasted text>"
 allowed-tools: ["Read", "Write", "Edit", "WebFetch", "Glob", "Grep", "Bash"]
 ---

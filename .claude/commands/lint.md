@@ -1,5 +1,5 @@
 ---
-description: Read-only audit of the Founder OS wiki integrity. Flags broken cross-references, orphan pages, stale time-sensitive content, provenance gaps, and possible contradictions. Never auto-fixes.
+description: Audit the wiki. Tool invocation (run /founder-os:lint). Read-only check across broken cross-references, orphan pages, stale time-sensitive content, provenance gaps, and possible contradictions. Never auto-fixes.
 allowed-tools: ["Read", "Glob", "Grep"]
 ---
 

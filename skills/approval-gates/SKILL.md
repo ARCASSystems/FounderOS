@@ -1,6 +1,6 @@
 ---
 name: approval-gates
-description: Use before any send, publish, payment, contract action, deletion, public change, or other action that may need explicit human approval. Reads `rules/approval-gates.md` and classifies the action as auto-runnable, ask-first, or refused.
+description: Check whether an action needs approval before doing it. Triggers when the founder is about to send, publish, pay, sign, delete, or push something public. Reads `rules/approval-gates.md` and classifies the action as auto-runnable, ask-first, or refused. Other skills call this internally.
 allowed-tools: ["Read", "Write"]
 mcp_requirements: []
 ---

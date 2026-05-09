@@ -1,5 +1,5 @@
 ---
-description: Synthesise a focused answer across the brain layer with citations. Use when a question spans multiple brain files and a keyword query is too noisy.
+description: Synthesise an answer across the brain. Say "what do I know about [topic]" or "synthesise across the brain" (or run /founder-os:brain-pass "<question>"). Returns Answer / Evidence / Confidence / Gaps with stable-ID citations. Use when a question spans multiple brain files.
 argument-hint: "<question>"
 allowed-tools: ["Read", "Grep", "Glob"]
 ---

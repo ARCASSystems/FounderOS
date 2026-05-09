@@ -1,7 +1,7 @@
 ---
 name: priority-triage
 description: >
-  Triages priorities when the founder feels overwhelmed or needs focus. Use this skill when the user says "I'm overwhelmed", "what should I focus on", "too many things", "I don't know where to start", "help me prioritize", "what matters most", "I'm stuck", "I can't decide what to work on", "everything feels urgent", or any signal that they need help cutting through noise to find the ONE thing that matters right now.
+  Cut through overwhelm to ONE thing to do next. Trigger on "I'm overwhelmed", "what should I focus on", "what should I focus on next", "too many things", "I don't know where to start", "help me prioritize", "what matters most", "I'm stuck", "I can't decide what to work on", "everything feels urgent", or any signal the founder needs help cutting through noise. Returns one recommendation, not a list.
 mcp_requirements: []
 ---
 

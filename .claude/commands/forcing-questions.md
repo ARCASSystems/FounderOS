@@ -1,5 +1,5 @@
 ---
-description: Six forcing questions before starting a new initiative. Anti-scope gate. Use as /founder-os:forcing-questions <one-line initiative>.
+description: Pressure-test a new initiative. Say "I'm thinking of starting [X]" or "should I do this" (or run /founder-os:forcing-questions <one-line initiative>). Six forcing questions and a verdict. Anti-scope gate.
 argument-hint: <one-line initiative>
 allowed-tools: ["Read", "Write", "Edit"]
 ---

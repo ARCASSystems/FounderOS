@@ -1,7 +1,7 @@
 ---
 name: proposal-writer
 description: >
-  Creates consulting and service proposals for the founder. Use this skill when the user asks to "write a proposal", "create a quote", "draft a SOW", "scope of work", "put together a proposal", "pricing for", "engagement letter", or any variation of creating business proposals, quotes, scoping documents, or service agreements. Also trigger when the user describes a potential client engagement and needs it formalized. Reads `core/voice-profile.yml`, `core/brand-profile.yml`, and any relevant `context/companies/<client>.md` for engagement specifics.
+  Write a consulting or service proposal. Trigger on "write a proposal", "create a quote", "draft a SOW", "scope of work", "put together a proposal", "pricing for", "engagement letter", or any variation of creating business proposals, quotes, scoping documents, or service agreements. Also fires when the user describes a potential client engagement and needs it formalized. Reads `core/voice-profile.yml`, `core/brand-profile.yml`, and any relevant `context/companies/<client>.md`.
 allowed-tools: ["Read", "Write", "Edit"]
 mcp_requirements: []
 ---

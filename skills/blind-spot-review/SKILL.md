@@ -1,6 +1,6 @@
 ---
 name: blind-spot-review
-description: Use after a first draft of a client-facing or external deliverable exists and before pre-send review. Runs nine fixed review categories to find gaps in evidence, risk, timing, relationships, data, upside, and walkaway planning.
+description: Pressure-test a draft for blind spots before pre-send review. Say "find blind spots", "what am I missing", or "review for risk". Runs nine fixed review categories covering evidence, risk, timing, relationships, data, upside, and walkaway planning. Read-only.
 allowed-tools: ["Read", "Write"]
 mcp_requirements: []
 ---

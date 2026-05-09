@@ -2,6 +2,66 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.20.0 - 2026-05-10
+
+FounderOS now routes on natural language. Slash commands stayed but became parenthetical shortcuts. New `/founder-os:menu` returns capability suggestions tailored to your current state. The release also closes two pass-1 findings deferred from v1.19.6: `scripts/query.py` zero-score fallback returns a no-positive-match block instead of graph-popular junk, and the setup wizard's tool-stack and work-style questions become 4 + 4 short multi-choice prompts instead of two long open-ended walls.
+
+### Changed - command and skill descriptions lead with natural-language phrasing
+
+- **Every file in `.claude/commands/*.md` (now 21) reworked.** Frontmatter `description` field leads with the natural-language phrasing the founder would actually say in chat. The slash command appears second, parenthetically. Tool-only commands (`/founder-os:lint`, `/founder-os:wiki-build`) lead with tool framing ("Audit the wiki" / "Rebuild the wiki graph") with the slash command alongside. Pattern: "Set up your voice profile. Say 'set up my voice profile' (or run /founder-os:voice-interview)." Reason: real users do not memorize a 21-command surface, and Cowork mode (which does not fire slash commands at all) needs natural language as the primary interface.
+- **Every file in `skills/*/SKILL.md` (39) reworked the same way.** Trigger phrases the operator already uses ("prep me for my call", "what's on for today?", "run my weekly review", "I'm overwhelmed", "capture this", "log this", "help me decide") appear verbatim in the relevant skill descriptions so auto-trigger by description match keeps working. Skill behavior is unchanged.
+- **`docs/commands.md` per-command reference table reworked.** Every row now leads with the natural-language phrasing.
+- **`docs/skills.md` per-skill reference reworked.** Same pattern.
+
+### Added - new `/founder-os:menu` capability discovery entry
+
+- **New `.claude/commands/menu.md` and `skills/menu/SKILL.md`.** Say "show me what you can do" (or run `/founder-os:menu`). Returns 5 to 7 capability suggestions tailored to current state. Algorithm: read `brain/.snapshot.md` if present, current week's commitments from `cadence/weekly-commitments.md`, last 7 days of `brain/log.md`, and presence of `core/voice-profile.yml` and `core/brand-profile.yml`. Score capabilities against state. Examples of the surface_when rules: voice-interview surfaces when `core/voice-profile.yml` is missing or empty, weekly-review surfaces when current date is more than 6 days past the `## Week of` date, priority-triage surfaces when `context/priorities.md` has 3+ items rolled forward, audit surfaces when last `/founder-os:audit` invocation in `brain/log.md` is more than 14 days old. Each row: natural-language phrasing first, slash command shortcut parenthetical, one-sentence why-now. Zero-state safety: brand-new install with no snapshot returns the Day-1 starter set (voice-interview, brand-interview, priority-triage, today, ingest). No LLM call inside the algorithm. Free-tier accessible.
+- **New `tests/test_menu.py`.** Covers zero-state install (Day-1 starter set), present-state install (context-aware top 5 to 7), missing snapshot (graceful fallback to profile-only context).
+
+### Added - SessionStart brief surfaces one underused capability per week
+
+- **`.claude/hooks/session-start-brief.sh` and `.claude/hooks/session-start-brief.ps1` add a Tip line.** After existing flags and stale-cadence checks, before the close, the brief now prints one sentence suggesting a capability the operator has not used in 14+ days. Algorithm scans the last 30 days of `brain/log.md` for `#used` or invocation tags, picks one capability that has not been invoked in 14+ days AND has a clear use-case match for current state. Pattern: "Try saying 'help me decide' next time you're stuck on a choice - the decision-framework skill walks you through it." If no eligible tip, the line is omitted (no "no tip" placeholder).
+
+### Changed - README leads with natural-language as the primary surface
+
+- **New "How to use it - talk to Claude" section near the top, after "What you actually get".** Three sentences: the OS routes on natural language, slash commands are speed shortcuts, the new `/founder-os:menu` is the single entry to discover what's available.
+- **Slash command table gets a third "Or say…" column.** Every row now shows the natural-language equivalent alongside the slash form. Where the slash form has no natural-language equivalent (`/founder-os:lint`, `/founder-os:wiki-build`), the cell reads "tool invocation". The new `/founder-os:menu` is the first row.
+- **No "Quick reference" or "Cheatsheet" section added.** Re-introducing a memorize-the-commands surface would defeat the point of the release.
+
+### Fixed - `scripts/query.py` zero-score fallback returns "no positive match"
+
+- **`scripts/query.py` and `templates/scripts/query.py`.** Previously, if `scored_candidates` was empty after scoring, the code still started traversal from the top-5 zero-score nodes, returning graph-popular junk. Now: if the highest-scoring candidate has score 0, return a structured no-match block with three suggestions (rephrase, add "rant" or "dump" if looking for a recent rant, run `/founder-os:brain-pass` for a synthesis across the whole brain layer). The point of the fix is honesty: do not return a "best guess" with a low-confidence warning when nothing matched.
+
+### Fixed - `scripts/query.py` stop-word filter, light stemming, recency bonus
+
+- **Tokenizer in `scripts/query.py` excludes a small list of English stop words** (a, an, the, of, to, in, on, for, with, by, at, from, is, was, are, were, be, been, has, have, had, do, does, did, this, that, these, those, what, when, where, why, how, who, my, your, our, their, can, could, should). Hardcoded list, no external dependency.
+- **Light stemming strips common suffixes** (-s, -es, -ed, -ing, -ly, -tion). Hardcoded suffix list, no PyStemmer.
+- **Recency bonus.** Files modified in the last 7 days get +0.5 score boost via `os.path.getmtime()`. Stdlib only.
+
+### Fixed - `scripts/query.py` includes rants when the question is about rants
+
+- **`INCLUDE_PREFIXES` logic now expands to include `brain/rants/`** when the query contains any of: "rant", "dump", "avoidance", "vent", "raw", "last N rants" (where N is a number). Detection is on the raw query string before tokenization. Case-insensitive substring match. Default is still rants excluded.
+
+### Fixed - `brain-pass` preflights through `query.py`
+
+- **`skills/brain-pass/SKILL.md`.** Brain-pass now first invokes `scripts/query.py` with the question to get the top candidate list, then synthesizes across those candidates. If query returns no positive match, brain-pass surfaces that to the operator and asks if they want to broaden the search. Brain-pass still always includes `brain/.snapshot.md` in its synthesis context regardless of query results.
+
+### Changed - setup wizard tool-stack becomes 4 multi-choice prompts
+
+- **`skills/founder-os-setup/SKILL.md` Phase 0.6 reworked.** The previous one-long-question pattern (knowledge base, email, calendar, CRM, automation, document storage in one prompt) becomes four sequential prompts, each with explicit options: knowledge base (Notion / Obsidian / Google Drive / local files only / other / skip), email (Gmail / Outlook / Apple Mail / other / none / skip), calendar (Google Calendar / Outlook / Apple Calendar / other / none / skip), CRM or pipeline tracking (Notion DB / HubSpot / Airtable / spreadsheet / nothing yet / skip). Each prompt is one sentence + one line of options. "Skip" works on every prompt, records `null` in `core/stack.json` and continues. If the user dumps everything in one chat reply ("Notion, Gmail, Google Calendar, no CRM"), the wizard parses it and skips the individual prompts. Backward compatibility preserved.
+
+### Changed - setup wizard work-style becomes 4 multi-choice prompts
+
+- **`skills/founder-os-setup/SKILL.md` work-style phase reworked.** Same pattern: deep work time (morning / afternoon / evening / variable / skip), decision style (gut / data / dialogue with someone / mixed / skip), communication style (direct and short / detailed and explanatory / skip), what overwhelms you (too many open loops / unclear next step / context switching / decision fatigue / other / skip). Existing schema in `core/identity.md` and `core/operating-preferences.yml` is preserved; only the prompt shape changed.
+
+### Notes
+
+- 21 commands now (added `menu`). 39 skills.
+- 56 existing tests still pass plus new tests for menu, tip, query scoring, and the MC wizard.
+- No new dependencies. Stdlib Python, bash, PowerShell only. Free-tier accessibility floor preserved.
+- No banned phrases in new prose. No em dashes, no en dashes.
+- Path A (plugin install) and Path B (manual git clone) prefix detection from v1.19.6 is preserved. New menu surfaces and SessionStart tips that reference slash commands use the same `<prefix>` substitution model where applicable. Always-bare commands stay bare.
+
 ## v1.19.6 - 2026-05-09
 
 Hotfix from a two-pass external review. Three things closed: the wizard's final orientation handed Path B users namespaced commands that do not work on a manual clone, the README plus install doc under-instructed Cowork users on what does and does not fire there, and the orientation tone across the wizard and install doc led with slash commands the way technical docs do - but real founders will not memorize a 20-command surface. The orientation now leads with natural-language phrasing ("say 'set up my voice profile'") and treats slash commands as parenthetical shortcuts for power users. Same release also fixes a self-introduced rendering bug found while applying the tone rewrite (the prefix substitution would have rendered without a leading slash on Path B). No script changes.

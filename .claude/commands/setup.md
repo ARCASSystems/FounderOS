@@ -1,5 +1,5 @@
 ---
-description: Run the Founder OS setup wizard. Generates your identity, priorities, decisions, cadence, and brain files from a guided interview. Takes 15 to 20 minutes.
+description: Set up Founder OS. Say "set up Founder OS" (or run /founder-os:setup). Guided interview generates your identity, priorities, decisions, cadence, and brain files. Takes 15 to 20 minutes.
 argument-hint: "[--reset]"
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep"]
 ---

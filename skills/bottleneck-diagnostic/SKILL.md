@@ -1,6 +1,6 @@
 ---
 name: bottleneck-diagnostic
-description: Use when the founder asks what is actually blocking the business, why everything routes through them, or whether a company can run without them. Scores founder dependency across five practical dimensions.
+description: Find the real bottleneck in the business. Say "what's blocking me", "why does everything route through me", "can the business run without me", or "where am I the bottleneck". Scores founder dependency across five practical dimensions and names the highest-impact thing to shed.
 allowed-tools: ["Read", "Write"]
 mcp_requirements: []
 ---

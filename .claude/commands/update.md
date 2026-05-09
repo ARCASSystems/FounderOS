@@ -1,5 +1,5 @@
 ---
-description: Pull the latest Founder OS System Layer files without touching your personal data. Usage - /founder-os:update (install), /founder-os:update check (dry-run), /founder-os:update rollback (revert).
+description: Update Founder OS. Say "update Founder OS" or "pull the latest" (or run /founder-os:update). Pulls the latest System Layer files without touching your personal data. Subcommands: check (dry-run), rollback (revert).
 argument-hint: "[check | rollback]"
 ---
 

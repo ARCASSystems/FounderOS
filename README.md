@@ -41,6 +41,12 @@ A **SessionStart brief** runs on every Claude Code session open and surfaces sta
 
 ---
 
+## How to use it - talk to Claude
+
+The OS routes on natural language. Say what you need ("set up my voice profile", "what's on for today?", "prep me for my call with Sarah") and the right skill fires. Slash commands are speed shortcuts for power users, not the primary surface. If you forget what's available, say "show me what you can do" (or run `/founder-os:menu`) and the OS returns 5 to 7 capabilities scored against your current state.
+
+---
+
 ## Install
 
 Three install paths. Pick the one that matches your stack. Full details in [docs/install.md](docs/install.md).
@@ -153,32 +159,33 @@ Each row tells you the **outcome** (what you get when it finishes). Detailed rea
 | brain-pass | A synthesised answer across the brain layer with stable-ID citations: Answer, Evidence, Confidence, Gaps. The model IS the retrieval engine. No embeddings, no API call. Read-only. |
 | audit | One composite health report across readiness, wiki state, brain staleness, voice completeness, and quarantine. Read-only. |
 
-### Slash commands (20)
+### Slash commands (21)
 
-Each row tells you the **outcome** (what you see when it finishes) and whether it **writes** anything. Detailed behaviour, sample output, args, and follow-ups live in [`docs/commands.md`](docs/commands.md).
+Each row tells you the **outcome** (what you see when it finishes), the natural-language phrase that triggers the same skill, and whether it **writes** anything. Detailed behaviour, sample output, args, and follow-ups live in [`docs/commands.md`](docs/commands.md).
 
-| Command | What you get |
-|---|---|
-| `/founder-os:setup` | A guided interview that ends with your full operating layer on disk: identity, priorities, decisions, clients, daily anchor, weekly commitments, brain log, flags. Writes 8+ files under `core/`, `context/`, `cadence/`, `brain/`. 15 min. |
-| `/founder-os:voice-interview` | A `core/voice-profile.yml` that captures how you actually write. Every voice-coupled writing skill (LinkedIn, email, proposal, client update) reads it on every output. 10 min. |
-| `/founder-os:brand-interview` | A `core/brand-profile.yml` plus an assets folder. Every branded deliverable (proposal, deck, one-pager) inherits these colors, fonts, and logo. 10 min. |
-| `/founder-os:status` | A weighted readiness score plus the next 3 high-impact moves to run right now. Read-only. |
-| `/founder-os:ingest <source>` | A new file in `raw/<source>.md` with provenance frontmatter, plus proposed wiki updates you approve before they land. Writes `raw/`, optionally updates `brain/relations.yaml`. |
-| `/founder-os:lint` | A list of broken `[[wikilinks]]`, orphan files, stale entries past their decay date, provenance gaps, and possible contradictions. Read-only. |
-| `/founder-os:wiki-build` | A refreshed `brain/relations.yaml` graph extracted from every `[[wikilink]]` in your OS. Idempotent. Writes `brain/relations.yaml`. |
-| `/founder-os:query <question>` | The top 3 to 5 OS nodes that match your question, each with a stable ID and the path that reached it. `--mode timeline --anchor <slug>` returns entries within 7 days of an anchor. `--mode full --ids <a,b,c>` returns full bodies. Read-only. |
-| `/founder-os:brain-pass "<question>"` | A synthesised answer with stable-ID citations: Answer, Evidence, Confidence, Gaps. Use when a question spans multiple brain files and a keyword query is too noisy. Read-only. |
-| `/founder-os:audit` | One composite health report covering readiness, wiki integrity, brain staleness, voice completeness, and quarantine state. Read-only. |
-| `/founder-os:forcing-questions <initiative>` | Six yes/no answers plus a scope-creep verdict on whether to start, kill, or postpone the initiative. Read-only. |
-| `/founder-os:ship-deliverable <path>` | A pass or fail verdict across template fit, anti-AI scan, blind-spot review, and pre-send checks. Names every issue. Nothing ships if anything fails. Read-only. |
-| `/founder-os:update` | A diff of System Layer files (skills, templates, commands, hooks) refreshed from the latest release. Your personal data (`core/`, `context/`, `cadence/`, `brain/`) is never touched. Subcommands: `check`, `rollback`. |
-| `/founder-os:uninstall` | A confirmation list of every file that will be removed, plus the actual cleanup. Default preserves your data. `--purge` removes everything. |
-| `/founder-os:rant` | A new `brain/rants/<YYYY-MM-DD>.md` file holding your raw dump verbatim. No structure asked. The `/dream` command processes it later. Writes `brain/rants/`. |
-| `/founder-os:dream` | A 5-line digest in `brain/log.md` plus stable-ID entries in `brain/patterns.md`, `brain/flags.md`, `brain/decisions-parked.md`, `brain/needs-input.md` as warranted. Each rant marked processed. Writes 5+ files. |
-| `/today` | A 20-line one-screen view: today's anchor, top open decisions, active flags, last 3 log entries, next calendar event. Read-only. |
-| `/next` | One recommended next action across priorities, deals, and cadence. Not a list, one action. Read-only. |
-| `/pre-meeting <subject>` | Pass or fail on the pre-meeting gate (capture artifact present, ask defined). Logs an intent entry to `brain/log.md` on pass. |
-| `/capture-meeting <subject>` | A routed summary: meeting log entry in `brain/log.md`, updated client status in `context/clients.md`, and any new open commitments. Writes 2 to 3 files. |
+| Command | Or say… | What you get |
+|---|---|---|
+| `/founder-os:menu` | "show me what you can do" | A tailored list of 5 to 7 capabilities scored against your current state. The single entry point if you forget what's available. Read-only. |
+| `/founder-os:setup` | "set up Founder OS" | A guided interview that ends with your full operating layer on disk: identity, priorities, decisions, clients, daily anchor, weekly commitments, brain log, flags. Writes 8+ files under `core/`, `context/`, `cadence/`, `brain/`. 15 min. |
+| `/founder-os:voice-interview` | "set up my voice profile" | A `core/voice-profile.yml` that captures how you actually write. Every voice-coupled writing skill (LinkedIn, email, proposal, client update) reads it on every output. 10 min. |
+| `/founder-os:brand-interview` | "set up my brand profile" | A `core/brand-profile.yml` plus an assets folder. Every branded deliverable (proposal, deck, one-pager) inherits these colors, fonts, and logo. 10 min. |
+| `/founder-os:status` | "check my OS readiness" | A weighted readiness score plus the next 3 high-impact moves to run right now. Read-only. |
+| `/founder-os:ingest <source>` | "ingest this" / "save this source" | A new file in `raw/<source>.md` with provenance frontmatter, plus proposed wiki updates you approve before they land. Writes `raw/`, optionally updates `brain/relations.yaml`. |
+| `/founder-os:lint` | tool invocation | A list of broken `[[wikilinks]]`, orphan files, stale entries past their decay date, provenance gaps, and possible contradictions. Read-only. |
+| `/founder-os:wiki-build` | tool invocation | A refreshed `brain/relations.yaml` graph extracted from every `[[wikilink]]` in your OS. Idempotent. Writes `brain/relations.yaml`. |
+| `/founder-os:query <question>` | "find the file about [topic]" | The top 3 to 5 OS nodes that match your question, each with a stable ID and the path that reached it. `--mode timeline --anchor <slug>` returns entries within 7 days of an anchor. `--mode full --ids <a,b,c>` returns full bodies. Read-only. |
+| `/founder-os:brain-pass "<question>"` | "what do I know about [topic]" | A synthesised answer with stable-ID citations: Answer, Evidence, Confidence, Gaps. Use when a question spans multiple brain files. Read-only. |
+| `/founder-os:audit` | "audit the OS" | One composite health report covering readiness, wiki integrity, brain staleness, voice completeness, and quarantine state. Read-only. |
+| `/founder-os:forcing-questions <initiative>` | "I'm thinking of starting [X]" | Six yes/no answers plus a scope-creep verdict on whether to start, kill, or postpone the initiative. Read-only. |
+| `/founder-os:ship-deliverable <path>` | "is this ready to send" | A pass or fail verdict across template fit, anti-AI scan, blind-spot review, and pre-send checks. Names every issue. Nothing ships if anything fails. Read-only. |
+| `/founder-os:update` | "update Founder OS" | A diff of System Layer files (skills, templates, commands, hooks) refreshed from the latest release. Your personal data (`core/`, `context/`, `cadence/`, `brain/`) is never touched. Subcommands: `check`, `rollback`. |
+| `/founder-os:uninstall` | "uninstall Founder OS" | A confirmation list of every file that will be removed, plus the actual cleanup. Default preserves your data. `--purge` removes everything. |
+| `/founder-os:rant` | "I want to rant" / "let me dump something" | A new `brain/rants/<YYYY-MM-DD>.md` file holding your raw dump verbatim. No structure asked. The `/dream` command processes it later. Writes `brain/rants/`. |
+| `/founder-os:dream` | "process my rants" | A 5-line digest in `brain/log.md` plus stable-ID entries in `brain/patterns.md`, `brain/flags.md`, `brain/decisions-parked.md`, `brain/needs-input.md` as warranted. Each rant marked processed. Writes 5+ files. |
+| `/today` | "what's on for today?" | A 20-line one-screen view: today's anchor, top open decisions, active flags, last 3 log entries, next calendar event. Read-only. |
+| `/next` | "what should I focus on next?" | One recommended next action across priorities, deals, and cadence. Not a list, one action. Read-only. |
+| `/pre-meeting <subject>` | "prep me for my call with [name]" | Pass or fail on the pre-meeting gate (capture artifact present, ask defined). Logs an intent entry to `brain/log.md` on pass. |
+| `/capture-meeting <subject>` | "capture this" / "log this" | A routed summary: meeting log entry in `brain/log.md`, updated client status in `context/clients.md`, and any new open commitments. Writes 2 to 3 files. |
 
 ### Templates
 
@@ -256,7 +263,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.19.6 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.20.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -323,9 +330,11 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.19.6. Public push week of 2026-05-07.
+Version 1.20.0. Public push week of 2026-05-10.
 
-v1.19.6 is a hotfix from a two-pass external review. Three things closed. The setup wizard's final orientation now detects whether the user installed via Path A (plugin namespace) or Path B (manual git clone) and renders the right command form for the path they used. Before this patch, a Path B user reading the post-setup checklist would have hit "command not found" on every namespaced command. The same review found a self-introduced prefix rendering bug that would have rendered Path B commands without a leading slash; fixed in the same release. Separately, the README's SessionStart claim was qualified to "every Claude Code session open" (it does not fire on Cowork or Cloud Claude), a Path D Cowork section was added to the README, and `docs/install.md` gained a full Cowork mode setup recipe plus `/today` and `/next` in the After-install checklist. Finally, the orientation tone across the wizard and install doc was flipped from slash-command-led to natural-language-led: real users do not memorize a 20-command surface, and Cowork mode does not fire slash commands at all, so the orientation now leads with "say 'set up my voice profile'" and treats slash commands as parenthetical shortcuts. No script changes; 56 tests still pass.
+v1.20.0 is the discoverability release. FounderOS now routes on natural language. Slash commands stayed but became parenthetical shortcuts. Every command and skill description leads with the natural-language phrasing the founder would actually say in chat. A new `/founder-os:menu` (say "show me what you can do") returns 5 to 7 capability suggestions tailored to your current state, scored against `brain/.snapshot.md`, this week's commitments, the last 7 days of `brain/log.md`, and the presence of voice and brand profiles. README adds a third "Or say…" column to the slash command table and a new "How to use it - talk to Claude" section near the top. The release also closes two pass-1 findings deferred from v1.19.6: `scripts/query.py` now returns a no-positive-match block instead of graph-popular junk on a zero-score query, includes rants when the question contains "rant", "dump", "avoidance", "vent", or "raw", and applies stop-word filtering, light stemming, and a recency bonus; the setup wizard's tool-stack and work-style questions are now 4 + 4 short multi-choice prompts instead of two long open-ended walls. 21 commands now (added `menu`). 56 tests still pass plus new tests for menu, tip, query scoring, and the MC wizard.
+
+v1.19.6 was a hotfix from a two-pass external review. Three things closed. The setup wizard's final orientation now detects whether the user installed via Path A (plugin namespace) or Path B (manual git clone) and renders the right command form for the path they used. Before this patch, a Path B user reading the post-setup checklist would have hit "command not found" on every namespaced command. The same review found a self-introduced prefix rendering bug that would have rendered Path B commands without a leading slash; fixed in the same release. Separately, the README's SessionStart claim was qualified to "every Claude Code session open" (it does not fire on Cowork or Cloud Claude), a Path D Cowork section was added to the README, and `docs/install.md` gained a full Cowork mode setup recipe plus `/today` and `/next` in the After-install checklist. Finally, the orientation tone across the wizard and install doc was flipped from slash-command-led to natural-language-led: real users do not memorize a 20-command surface, and Cowork mode does not fire slash commands at all, so the orientation now leads with "say 'set up my voice profile'" and treats slash commands as parenthetical shortcuts. No script changes; 56 tests still pass.
 
 v1.19.5 was a maintainability cleanup. The v1.19.4 narrative described the parser as using a "single shared helper" for both flat and nested quoted-value handling, but the nested branch still had the unescape logic inlined. Behavior was identical, but the duplication was a future-drift trap of the same kind that produced earlier review findings. The nested branch now routes through the same `unquote()` helper. No behavior change; 56 tests still pass.
 

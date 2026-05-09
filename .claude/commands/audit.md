@@ -1,5 +1,5 @@
 ---
-description: Composite Founder OS health report. Runs readiness, lint, wiki state, brain staleness, and voice completeness. Read-only unless the user approves wiki-build.
+description: Audit the OS. Say "audit the OS" or "give me a health report" (or run /founder-os:audit). Composite report across readiness, lint, wiki state, brain staleness, and voice completeness. Read-only unless the user approves wiki-build.
 allowed-tools: ["Read", "Glob", "Grep", "Bash"]
 ---
 

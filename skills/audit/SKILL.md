@@ -1,6 +1,6 @@
 ---
 name: audit
-description: Use when the founder asks for OS health, release readiness, or a full audit. Runs readiness, lint, wiki graph state, brain staleness, and voice completeness as one composite report.
+description: Audit the OS in one composite report. Say "audit the OS", "check OS health", "full audit", or "is the OS healthy" (or run /founder-os:audit). Runs readiness, lint, wiki graph state, brain staleness, and voice completeness together. Read-only.
 allowed-tools: ["Read", "Glob", "Grep", "Bash"]
 mcp_requirements: []
 ---

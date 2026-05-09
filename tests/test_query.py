@@ -1,9 +1,12 @@
 import importlib.util
+import os
 import re
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
+from datetime import date, timedelta
 from pathlib import Path
 
 
@@ -307,6 +310,145 @@ class CandidateFilesScopeTests(unittest.TestCase):
 
     def test_template_walks_every_include_prefix(self) -> None:
         self._check(self.template)
+
+
+class ScoringBehaviorTests(unittest.TestCase):
+    """v1.20 query scoring additions: zero-score fallback, stop-word filter,
+    light stemming, recency bonus, rant-keyword inclusion. Each test runs
+    against scripts/query.py via subprocess to verify the user-visible
+    output, plus the in-process module for the unit-level helpers.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.live = load_query_module(QUERY_SCRIPT, "query_live_scoring")
+        cls.template = load_query_module(TEMPLATE_QUERY_SCRIPT, "query_template_scoring")
+
+    def _run_in_corpus(self, corpus: Path, *args: str) -> subprocess.CompletedProcess[str]:
+        cmd = [sys.executable, str(QUERY_SCRIPT), "--root", str(corpus), *args]
+        return subprocess.run(cmd, text=True, capture_output=True)
+
+    def _make_corpus(self, tmp: Path) -> None:
+        """Minimal in-scope corpus: one file with the marker token."""
+        (tmp / "context").mkdir()
+        (tmp / "context" / "priorities.md").write_text(
+            "# Priorities\n\nLaunch outreach next week.\n", encoding="utf-8"
+        )
+
+    def test_zero_score_fallback_returns_no_match_block_live(self) -> None:
+        # The query argument is a deliberately unique token nothing in the
+        # fixture corpus will match. Old behaviour: fall back to graph-
+        # popular nodes. v1.20: return the honest no-match block instead.
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            self._make_corpus(tmp)
+            result = self._run_in_corpus(
+                tmp, "zzzz-no-such-token-anywhere-zzzz"
+            )
+
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("No positive match for", result.stdout)
+        self.assertIn("Suggestions:", result.stdout)
+        self.assertIn("Rephrase with a more specific term.", result.stdout)
+        self.assertIn("rant", result.stdout)
+        self.assertIn("/founder-os:brain-pass", result.stdout)
+        # Zero-score fallback must NOT print the "Top results:" header,
+        # otherwise users see the no-match block AND a list of guesses.
+        self.assertNotIn("Top results:", result.stdout)
+
+    def _both_modules(self):
+        return [self.live, self.template]
+
+    def test_stop_words_are_filtered(self) -> None:
+        # Stop words like "the", "is", "what" must be removed from the
+        # tokenized question. If they leaked through, every file with the
+        # stop word would score and the index would be noisy.
+        for module in self._both_modules():
+            tokens = module.tokenize("what is the launch")
+            self.assertNotIn("the", tokens)
+            self.assertNotIn("is", tokens)
+            self.assertNotIn("what", tokens)
+            self.assertIn("launch", tokens)
+
+    def test_stemming_matches_plurals(self) -> None:
+        # "decisions" should stem to the same root as "decision" so a
+        # query for "decisions" matches a file containing "decision".
+        # This is the canonical stemming guarantee the plan calls out.
+        for module in self._both_modules():
+            self.assertEqual(
+                module.stem("decisions"), module.stem("decision"),
+                f"plural and singular must share a stem in {module.__name__}",
+            )
+            # Past-tense suffix should also collapse to the verb root.
+            self.assertEqual(
+                module.stem("launched"), module.stem("launches"),
+                f"past tense and plural verb must share a stem in {module.__name__}",
+            )
+
+    def test_recency_bonus_surfaces_recent_file(self) -> None:
+        # Two files containing the same single-token match. The recent
+        # file has its mtime set to today; the older file is set 30 days
+        # ago. The recent file must rank above the older one.
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            (tmp / "context").mkdir()
+            recent = tmp / "context" / "recent.md"
+            older = tmp / "context" / "older.md"
+            recent.write_text("# Recent\n\nlaunch plan\n", encoding="utf-8")
+            older.write_text("# Older\n\nlaunch plan\n", encoding="utf-8")
+            now = time.time()
+            old_ts = now - 30 * 86400
+            os.utime(older, (old_ts, old_ts))
+            os.utime(recent, (now, now))
+
+            for module in self._both_modules():
+                today = date.today()
+                scores = module.score_files(
+                    [recent, older],
+                    tmp,
+                    {"launch", "plan"},
+                    today=today,
+                )
+                recent_score = scores["context/recent.md"][0]
+                older_score = scores["context/older.md"][0]
+                self.assertGreater(
+                    recent_score, older_score,
+                    f"recent file must score higher than older file in {module.__name__}; "
+                    f"got recent={recent_score}, older={older_score}",
+                )
+
+    def test_rant_keyword_includes_brain_rants(self) -> None:
+        # Default scope excludes brain/rants/. A query containing a rant
+        # trigger word must include rant entries in the candidate set.
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            (tmp / "brain" / "rants").mkdir(parents=True)
+            (tmp / "context").mkdir()
+            rant_file = tmp / "brain" / "rants" / "2026-05-07.md"
+            rant_file.write_text(
+                "# Rant\n\nfrustrated about pipeline\n", encoding="utf-8"
+            )
+            (tmp / "context" / "priorities.md").write_text(
+                "# Priorities\n\npipeline launch\n", encoding="utf-8"
+            )
+
+            # Default query: rant file is excluded.
+            default = self._run_in_corpus(tmp, "pipeline")
+            self.assertEqual(default.returncode, 0)
+            self.assertNotIn("brain/rants/2026-05-07.md", default.stdout)
+
+            # Rant query: rant file is included.
+            rant = self._run_in_corpus(tmp, "what was I ranting about")
+            self.assertEqual(rant.returncode, 0)
+            self.assertIn("brain/rants/2026-05-07.md", rant.stdout)
+
+    def test_is_rant_query_detects_triggers(self) -> None:
+        for module in self._both_modules():
+            self.assertTrue(module.is_rant_query("what was I ranting about"))
+            self.assertTrue(module.is_rant_query("show me the latest brain dump"))
+            self.assertTrue(module.is_rant_query("avoidance pattern this week"))
+            self.assertTrue(module.is_rant_query("a raw vent from yesterday"))
+            self.assertFalse(module.is_rant_query("what is the launch plan"))
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 ---
 name: decision-framework
 description: >
-  Structured decision-making tool for founders. Use this skill when the user is weighing options, facing a decision, or needs help thinking through a choice. Trigger phrases include "help me decide", "should I", "what would you do", "weigh these options", "pros and cons", "I'm stuck between", "I can't decide", "trade-offs", "which option", or any situation where the user is evaluating alternatives. Covers business decisions, personal decisions, and strategic choices.
+  Walk through a structured decision when the founder is stuck. Trigger phrases: "help me decide", "should I", "what would you do", "weigh these options", "pros and cons", "I'm stuck between", "I can't decide", "trade-offs", "which option", or any situation where the user is evaluating alternatives. Covers business decisions, personal decisions, and strategic choices.
 mcp_requirements: []
 ---
 

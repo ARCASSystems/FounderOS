@@ -1,5 +1,5 @@
 ---
-description: Walk the OS markdown, extract [[wikilinks]], refresh the wiki_links section in brain/relations.yaml. Run after a session that added cross-references between files. Read-only on source markdown; writes only to relations.yaml between auto-generated markers.
+description: Rebuild the wiki graph. Tool invocation (run /founder-os:wiki-build). Walks OS markdown, extracts [[wikilinks]], refreshes the wiki_links section in brain/relations.yaml. Read-only on source markdown.
 allowed-tools: ["Bash", "Read"]
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: voice-interview
 description: >
-  Interactive interview that captures the user's writing voice and writes it to core/voice-profile.yml. Run this as part of /founder-os:setup, or standalone if the user wants to refresh their voice. The interview extracts intent from messy real-world answers - it does not require the user to be structured. It asks for samples first because samples beat self-description, then asks shaping questions to fill in the gaps.
+  Set up the writing-voice profile. Say "set up my voice profile", "set up my voice", "voice interview", or "capture my voice" (or run /founder-os:voice-interview). Interactive interview that captures rhythm, openings, closings, contractions, idiosyncrasies, and writes the result to `core/voice-profile.yml`. Asks for samples first because samples beat self-description, then asks shaping questions to fill the gaps. Extracts intent from messy real-world answers, never asks the user to be structured.
 allowed-tools: ["Read", "Write", "Edit"]
 mcp_requirements: []
 ---

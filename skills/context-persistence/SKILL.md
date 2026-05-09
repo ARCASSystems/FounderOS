@@ -1,6 +1,6 @@
 ---
 name: context-persistence
-description: Use at session start, after a gap, or when the founder references prior context. Prevents re-explaining and prevents the agent from stating facts without source paths.
+description: Pull what we already know about a topic before re-explaining. Say "what do we know about <topic>", "give me the prior context", or "remind me where we left off". Fires at session start, after a gap, or when the founder references prior context. Prevents the agent from stating facts without source paths.
 allowed-tools: ["Read", "Grep", "Glob"]
 mcp_requirements: []
 ---

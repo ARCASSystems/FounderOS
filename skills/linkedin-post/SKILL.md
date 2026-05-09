@@ -1,7 +1,7 @@
 ---
 name: linkedin-post
 description: >
-  Creates LinkedIn posts in the founder's voice. Use this skill whenever the user asks to write a LinkedIn post, create LinkedIn social media content, draft a thought leadership piece, or mentions "LinkedIn" in the context of creating content. Also trigger when the user shares an idea, insight, or experience and says something like "turn this into a post", "make this a LinkedIn post", "post about this", or "I want to share this on LinkedIn". Covers founder stories, leadership insights, hiring perspectives, AI commentary, systems thinking, and business-related content. Reads `core/voice-profile.yml` and applies the founder's voice.
+  Write a LinkedIn post in the founder's voice. Trigger on "write a LinkedIn post", "draft a post", "post about this", "make this a LinkedIn post", "turn this into a post", "I want to share this on LinkedIn", or any mention of "LinkedIn" in the context of creating content. Also fires when the user shares an idea, insight, or experience and wants it shaped into a post. Covers founder stories, leadership insights, hiring perspectives, AI commentary, systems thinking, and business-related content. Reads `core/voice-profile.yml`.
 allowed-tools: ["Read", "Write", "Edit"]
 mcp_requirements: []
 ---

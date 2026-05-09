@@ -1,5 +1,5 @@
 ---
-description: 20-line one-screen view of today. Anchor, open decisions, active flags, last 3 log entries, next calendar event. Part of the fabric trio (M4).
+description: Show what's on for today. Say "what's on for today?" (or run /today). 20-line view: anchor, open decisions, active flags, last 3 log entries, next calendar event.
 ---
 
 # Today

@@ -1,7 +1,7 @@
 ---
 name: your-deliverable-template
 description: >
-  Master template for ALL personal-branded documents. Every output that carries the user's name and visual identity (CV, cover letter, proposal, pitch deck, one-pager, portfolio, PDF, DOCX, PPTX, HTML) MUST read this skill first. Reads `core/brand-profile.yml` for the user's specific brand. Trigger when the user says "make a CV", "write a proposal", "build a pitch deck", "create a one-pager", "branded doc", "in my brand", "use my colors", or asks to produce any visual deliverable. If in doubt about whether a document should be branded, it should be branded.
+  Build a branded document inheriting the founder's colors, fonts, and logo. Say "make a CV", "write a proposal", "build a pitch deck", "create a one-pager", "branded doc", "in my brand", or "use my colors". Master template for ALL personal-branded documents (CV, cover letter, proposal, pitch deck, one-pager, portfolio, PDF, DOCX, PPTX, HTML). Reads `core/brand-profile.yml`. If in doubt about whether a document should be branded, it should be branded.
 allowed-tools: ["Read", "Write", "Edit", "Bash"]
 mcp_requirements: []
 ---

@@ -1,8 +1,8 @@
 ---
 name: brain-pass
 description: >
-  Semantic retrieval over the brain layer. Use when a question needs synthesis across log, knowledge, decisions, flags, patterns, and needs-input - not a raw text match. Run via `/founder-os:brain-pass "<question>"`. Other skills invoke this when they need brain context with reasoning, not text dumps. The model running this skill IS the retrieval engine: read the right files, reason across them, return a structured answer with citations. No embeddings, no API call, no paid tier required.
-allowed-tools: ["Read", "Grep", "Glob"]
+  Synthesise an answer across the brain layer. Say "what did I decide about X", "what have I been avoiding", "what do I know about Y", "give me the brain on this" (or run `/founder-os:brain-pass "<question>"`). Use when a question needs reasoning across log, knowledge, decisions, flags, patterns, and needs-input - not a raw text match. The skill preflights through `scripts/query.py` to pick the candidate files, then synthesises across them. The model running this skill IS the retrieval engine. No embeddings, no API call, no paid tier required.
+allowed-tools: ["Read", "Grep", "Glob", "Bash"]
 mcp_requirements: []
 ---
 
@@ -27,7 +27,20 @@ The brain pass is where the model's reasoning meets the user's stored memory. Th
 
 You are doing a brain pass.
 
-1. **Pick the relevant files.** The brain layer has structured channels:
+1. **Preflight through query.** Before picking files manually, run:
+
+   ```bash
+   python scripts/query.py "<the question you were asked>"
+   ```
+
+   The query script returns a ranked candidate list with stable IDs. Use that list to drive Step 2. Two cases:
+
+   - **Query returns top results.** Pick the two-to-four highest-ranked files from the list and proceed to Step 2. The query layer already handled stop words, light stemming, recency bonus, and rant-keyword routing, so the candidates are tighter than a hand-pick.
+   - **Query returns "No positive match for ...".** Surface this to the operator. Ask if they want you to broaden the search (read `brain/.snapshot.md` plus the channel-level files in the table below) or rephrase the question. Do not silently fall back. The honest no-match signal is the value here.
+
+   Always include `brain/.snapshot.md` in the synthesis context, regardless of what query returns. The snapshot is the runtime state and belongs in every pass.
+
+2. **Pick the relevant files.** The brain layer has structured channels:
 
    | File | What it holds |
    |---|---|
@@ -41,13 +54,13 @@ You are doing a brain pass.
    | `cadence/weekly-commitments.md` | This week's must-do, should-do, waiting-on. |
    | `cadence/quarterly-sprints.md` | The 90-day arc and sprint targets. |
 
-   Do not read every file. Pick the two-to-four most likely to contain the answer.
+   When the query preflight returned candidates, the picks come from there. Otherwise pick the two-to-four most likely to contain the answer. Do not read every file.
 
-2. **Scan with intent.** Use `Read` for short files. Use `Grep` to locate concept matches in long files (`brain/log.md` in particular). Stop reading once you have enough to answer. Do not exhaustively load.
+3. **Scan with intent.** Use `Read` for short files. Use `Grep` to locate concept matches in long files (`brain/log.md` in particular). Stop reading once you have enough to answer. Do not exhaustively load.
 
-3. **Synthesise.** The output is your reasoning across the matches, not a paste of the matches. Cite stable entry IDs (`log-YYYY-MM-DD-NNN`, `flag-YYYY-MM-DD-NNN`, etc.) when they exist so the user can open the source.
+4. **Synthesise.** The output is your reasoning across the matches, not a paste of the matches. Cite stable entry IDs (`log-YYYY-MM-DD-NNN`, `flag-YYYY-MM-DD-NNN`, etc.) when they exist so the user can open the source.
 
-4. **Output format.** This is the contract. Other skills depend on it.
+5. **Output format.** This is the contract. Other skills depend on it.
 
    ```
    ## Brain pass: <question>
@@ -64,7 +77,7 @@ You are doing a brain pass.
    **Gaps.** <What the brain does not know that would change the answer.>
    ```
 
-5. **If the brain has no relevant content, say so.** Output the block with `Answer.` set to "No prior brain content found on this question." and skip Evidence. Do not fabricate.
+6. **If the brain has no relevant content, say so.** Output the block with `Answer.` set to "No prior brain content found on this question." and skip Evidence. Do not fabricate.
 
 ## Composition with other skills
 

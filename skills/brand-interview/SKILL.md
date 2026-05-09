@@ -1,7 +1,7 @@
 ---
 name: brand-interview
 description: >
-  Interactive interview that captures the user's visual brand and writes it to core/brand-profile.yml. Run this as part of /founder-os:setup, or standalone if the user wants to refresh their brand. Adapts to whatever the user has - existing brand kit, partial brand, or starting from zero. Extracts intent from messy input, never asks the user to be more structured.
+  Set up the visual brand profile. Say "set up my brand profile", "set up my brand", "brand interview", or "capture my brand" (or run /founder-os:brand-interview). Interactive interview that captures colors, fonts, logos, footer text, and writes the result to `core/brand-profile.yml`. Adapts to existing brand kit, partial brand, or starting from zero. Extracts intent from messy input, never asks the user to be more structured.
 allowed-tools: ["Read", "Write", "Edit", "Bash"]
 mcp_requirements: []
 ---

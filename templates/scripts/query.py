@@ -48,6 +48,36 @@ EXCLUDED_PARTS = {
     "tests",
 }
 
+# Stop words filtered out of question tokens. Hardcoded so the query layer
+# stays stdlib-only. Free-tier accessibility floor: no NLTK, no PyStemmer.
+STOP_WORDS = frozenset({
+    "a", "an", "the", "of", "to", "in", "on", "for", "with", "by", "at",
+    "from", "is", "was", "are", "were", "be", "been", "has", "have", "had",
+    "do", "does", "did", "this", "that", "these", "those", "what", "when",
+    "where", "why", "how", "who", "my", "your", "our", "their", "can",
+    "could", "should",
+})
+
+# Light stemming: strip these suffixes in order. The first match wins so
+# longer suffixes are tried first (e.g. -tion before -s). Hardcoded; no
+# external stemmer.
+STEM_SUFFIXES = ("tion", "ing", "es", "ed", "ly", "s")
+MIN_STEM_LENGTH = 4
+
+# Substrings that signal a question is about rants. Detection runs on the
+# raw query string before tokenization so the suffix stripping in stemming
+# does not erase the cue. Case-insensitive.
+RANT_TRIGGERS = ("rant", "dump", "avoidance", "vent", "raw")
+
+# Rant keywords expand INCLUDE_PREFIXES to add brain/rants/. Default scope
+# excludes rants.
+RANT_PREFIX = "brain/rants"
+
+# Recency bonus: files modified within this window get a score boost so a
+# fresh entry can beat an older equivalent.
+RECENCY_WINDOW_DAYS = 7
+RECENCY_BONUS = 0.5
+
 # Mode caps and per-hit budgets.
 INDEX_HIT_CAP = 10
 INDEX_CONTEXT_CHARS = 200
@@ -56,8 +86,41 @@ TIMELINE_BODY_CHARS = 600
 TIMELINE_WINDOW_DAYS = 7
 
 
+def stem(token: str) -> str:
+    """Light suffix-stripping stemmer.
+
+    Strips one common English suffix from the end of a token if the result
+    is at least MIN_STEM_LENGTH characters. The first matching suffix wins,
+    so STEM_SUFFIXES is ordered longest-first (-tion before -s). Hardcoded;
+    no PyStemmer dependency. Stems are returned for both the question side
+    and the file side so plurals and gerunds match.
+    """
+    for suffix in STEM_SUFFIXES:
+        if token.endswith(suffix) and len(token) - len(suffix) >= MIN_STEM_LENGTH:
+            return token[: -len(suffix)]
+    return token
+
+
 def tokenize(text: str) -> list[str]:
-    return [t.lower() for t in re.findall(r"[a-zA-Z0-9][a-zA-Z0-9_-]+", text)]
+    """Lowercase, strip stop words, light-stem the rest.
+
+    Stop-word filter and stemming run on both the question and the file
+    bodies so they stay symmetrical: a stemmed question token must match
+    a stemmed file token. Stdlib-only.
+    """
+    raw = [t.lower() for t in re.findall(r"[a-zA-Z0-9][a-zA-Z0-9_-]+", text)]
+    return [stem(t) for t in raw if t not in STOP_WORDS]
+
+
+def is_rant_query(question: str) -> bool:
+    """True when the raw question string mentions any rant trigger.
+
+    Detection runs before tokenization. Substring match, case-insensitive.
+    Stemming would strip 'rant' from 'rants' or 'avoidance' to 'avoid', so
+    we test the original string.
+    """
+    lowered = question.lower()
+    return any(trigger in lowered for trigger in RANT_TRIGGERS)
 
 
 def safe_read(path: Path) -> str:
@@ -76,37 +139,55 @@ def rel(path: Path, root: Path) -> str:
         return path.as_posix()
 
 
-def should_scan(path: Path, root: Path) -> bool:
+def should_scan(path: Path, root: Path, include_rants: bool = False) -> bool:
     try:
         parts = set(path.relative_to(root).parts)
     except ValueError:
         return False
-    if parts & EXCLUDED_PARTS:
+    excluded = EXCLUDED_PARTS - {"rants"} if include_rants else EXCLUDED_PARTS
+    if parts & excluded:
         return False
     return path.suffix.lower() in {".md", ".yaml", ".yml"}
 
 
-def all_markdown_files(root: Path) -> list[Path]:
+def all_markdown_files(root: Path, include_rants: bool = False) -> list[Path]:
     """All in-scope markdown/yaml files under root, used by timeline and full modes."""
-    return sorted(p for p in root.rglob("*") if p.is_file() and should_scan(p, root))
+    return sorted(
+        p for p in root.rglob("*")
+        if p.is_file() and should_scan(p, root, include_rants=include_rants)
+    )
 
 
-def candidate_files(root: Path) -> list[Path]:
+def candidate_files(root: Path, include_rants: bool = False) -> list[Path]:
     """All in-scope wiki-layer files. Walks every prefix in INCLUDE_PREFIXES so
     a node the persisted graph references can also surface as a query
     candidate. DEFAULT_FILES are listed first so the canonical seeded files
     lead the index. Falls back to all in-scope markdown if neither survives.
+
+    When include_rants is True, brain/rants/ is added to the walked set so
+    rant entries can surface for rant-keyword queries. Default keeps rants
+    out of the index per the original scope.
     """
     specific = [root / p for p in DEFAULT_FILES if (root / p).exists()]
     extra: list[Path] = []
     for prefix in INCLUDE_PREFIXES:
         folder = root / prefix
         if folder.exists():
-            extra.extend(p for p in folder.rglob("*.md") if should_scan(p, root))
+            extra.extend(
+                p for p in folder.rglob("*.md")
+                if should_scan(p, root, include_rants=include_rants)
+            )
+    if include_rants:
+        rant_folder = root / RANT_PREFIX
+        if rant_folder.exists():
+            extra.extend(
+                p for p in rant_folder.rglob("*.md")
+                if should_scan(p, root, include_rants=True)
+            )
     combined = sorted(set(specific + extra))
     if combined:
         return combined
-    return all_markdown_files(root)
+    return all_markdown_files(root, include_rants=include_rants)
 
 
 def heading_or_match(text: str, tokens: set[str]) -> str:
@@ -347,15 +428,38 @@ def build_graph(edges: Iterable[tuple[str, str]]) -> dict[str, set[str]]:
     return graph
 
 
-def score_files(files: Iterable[Path], root: Path, question_tokens: set[str]) -> dict[str, tuple[int, str, str | None]]:
-    scores: dict[str, tuple[int, str, str | None]] = {}
+def score_files(
+    files: Iterable[Path],
+    root: Path,
+    question_tokens: set[str],
+    today: date | None = None,
+) -> dict[str, tuple[float, str, str | None]]:
+    """Score each file against the question tokens.
+
+    Score is the sum of token hits across the file body and node path.
+    Files modified within RECENCY_WINDOW_DAYS get a small recency bonus
+    (RECENCY_BONUS) added on top, so a recent entry beats an older
+    equivalent. The recency bonus only applies when the base text-match
+    score is non-zero, so a freshly-touched but irrelevant file does NOT
+    surface ahead of a real match. today is injected for testability.
+    """
+    if today is None:
+        today = date.today()
+    cutoff = today - timedelta(days=RECENCY_WINDOW_DAYS)
+    scores: dict[str, tuple[float, str, str | None]] = {}
     for path in files:
         text = safe_read(path)
         node = rel(path, root)
         words = Counter(tokenize(node + "\n" + text[:12000]))
-        score = sum(words[t] for t in question_tokens)
+        score: float = float(sum(words[t] for t in question_tokens))
         if score:
             score += sum(2 for t in question_tokens if t in node.lower())
+            try:
+                mtime = date.fromtimestamp(path.stat().st_mtime)
+            except OSError:
+                mtime = None
+            if mtime is not None and mtime >= cutoff:
+                score += RECENCY_BONUS
         context = heading_or_match(text, question_tokens)
         entry_id = top_entry_id(text)
         scores[node] = (score, context, entry_id)
@@ -382,8 +486,26 @@ def traverse(starts: list[str], graph: dict[str, set[str]], limit: int = 3) -> d
 # ---------- Mode: index ----------
 
 
+def print_no_match(question: str) -> None:
+    """Print the no-positive-match block.
+
+    Honest fallback when the highest-scoring candidate has score 0.
+    Returning the top-N graph-popular nodes in that case fakes a result
+    that no token actually justifies. The block tells the user three
+    things they can try next.
+    """
+    print(f"QUERY: {question}")
+    print("---")
+    print(f'No positive match for "{question}".')
+    print("Suggestions:")
+    print("- Rephrase with a more specific term.")
+    print('- If you are looking for a recent rant, add the word "rant" or "dump" to the query.')
+    print(f'- Run /founder-os:brain-pass "{question}" for a synthesis across the whole brain layer.')
+
+
 def run_index_mode(question: str, root: Path) -> int:
-    files = candidate_files(root)
+    include_rants = is_rant_query(question)
+    files = candidate_files(root, include_rants=include_rants)
     if not files:
         print(f"QUERY: {question}\n---\nTop results:\n\nNo markdown files found under {root}.")
         return 1
@@ -396,6 +518,14 @@ def run_index_mode(question: str, root: Path) -> int:
         )
         return 2
     file_scores = score_files(files, root, q_tokens)
+
+    # Zero-score fallback: if no file has a positive match, surface the
+    # honest no-match block instead of returning graph-popular junk. The
+    # graph fallback in the previous version returned the top-5 zero-score
+    # nodes by edge count, which looks like a result but isn't one.
+    if not any(score > 0 for score, _, _ in file_scores.values()):
+        print_no_match(question)
+        return 0
 
     relations_path = root / "brain" / "relations.yaml"
     relation_edges = parse_edges(safe_read(relations_path)) if relations_path.exists() else []

@@ -1,5 +1,5 @@
 ---
-description: Final read-only gate before an external deliverable is sent. Runs template fit, anti-AI scan, blind-spot evidence, and pre-send-check.
+description: Final ship gate. Say "is this ready to send" or "ship-check this" (or run /founder-os:ship-deliverable <path>). Runs template fit, anti-AI scan, blind-spot evidence, and pre-send-check. Read-only.
 argument-hint: <path to deliverable>
 allowed-tools: ["Read", "Grep"]
 ---

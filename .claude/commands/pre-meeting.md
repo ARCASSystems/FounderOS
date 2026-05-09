@@ -1,5 +1,5 @@
 ---
-description: Gate before any meeting. Requires capture artifact + ask. Logs intent to brain/log.md.
+description: Gate before any meeting. Say "prep me for my call with [name]" (or run /pre-meeting <name>). Requires capture artifact + ask. Logs intent to brain/log.md.
 argument-hint: <person or meeting name>
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: ingest
 description: >
-  Files a source (URL, file path, or pasted text) into raw/ with provenance preserved, then proposes wiki updates the user approves before writing. Different from knowledge-capture - ingest preserves the source. Triggered by /founder-os:ingest. Use when the user says "ingest this", "process this source", "file this article", "save this transcript", "add this thread to the OS", or shares a source they want preserved alongside extracted takeaways.
+  File a source (URL, file path, or pasted text) into raw/ with provenance preserved. Trigger on "ingest this", "process this source", "file this article", "save this transcript", "add this thread to the OS" (or run /founder-os:ingest). Also fires when the user shares a source they want preserved alongside extracted takeaways. Proposes wiki updates the user approves before writing. Different from knowledge-capture - ingest preserves the source.
 allowed-tools: ["Read", "Write", "Edit", "WebFetch", "Glob", "Grep", "Bash"]
 mcp_requirements: []
 ---
