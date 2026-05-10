@@ -34,10 +34,10 @@ The user's actual operating context (after they run setup) lives in:
 A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` holds behavioral guards that persist across every session in this project.
 
 The system layer (do not edit per-user) lives in:
-- `skills/` - 39 skills, each in its own folder with a `SKILL.md`
+- `skills/` - 42 skills, each in its own folder with a `SKILL.md`
 - `scripts/` - Python helpers (wiki-build, query, brain-snapshot, brain-pass-log, memory-diff)
 - `templates/` - source templates for files the setup wizard generates
-- `.claude/commands/` - 20 slash commands
+- `.claude/commands/` - 24 slash commands
 - `.claude/hooks/` - SessionStart brief, session-close revenue check, opt-in PostToolUse observation log
 - `rules/` - behavioural rules including writing-style, commit-naming, approval-gates
 - `system/` - quarantine catch-net for silent hook failures
@@ -55,7 +55,8 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 
 ---
 
-## Slash Commands (20)
+## Slash Commands (24)
+- `/founder-os:menu` - show 5 to 7 capability suggestions tailored to current state.
 - `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files. Run on first install.
 - `/founder-os:voice-interview` - capture how you write into `core/voice-profile.yml`.
 - `/founder-os:brand-interview` - capture your visual identity into `core/brand-profile.yml`.
@@ -68,9 +69,12 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 - `/founder-os:audit` - composite health report across readiness, lint, wiki, brain, and voice.
 - `/founder-os:forcing-questions <initiative>` - six-question gate before new work starts.
 - `/founder-os:ship-deliverable <path>` - final read-only gate before an external deliverable is sent.
+- `/founder-os:legal-setup` - set up legal-compliance for the founder's jurisdiction.
+- `/founder-os:legal-add-source <source>` - add a legal source URL or PDF path to the loaded jurisdiction.
+- `/founder-os:legal-update` - refresh legal-compliance source freshness.
 - `/founder-os:update` - pull latest System Layer files without touching personal data.
 - `/founder-os:uninstall` - cleanly remove Founder OS.
-- `/founder-os:rant` - capture a raw thought dump into `brain/rants/`.
+- `/founder-os:rant` - qualify a raw voice dump, then route to a decision, draft, plan, log, or capture path.
 - `/founder-os:dream` - process unprocessed rants into patterns, flags, parked decisions, needs-input, and client signals.
 - `/pre-meeting <name>` - gate before any meeting.
 - `/capture-meeting <name>` - route a transcript or brain dump into log, clients, and commitments.
@@ -166,4 +170,4 @@ Commit messages follow `rules/commit-naming.md`. Subject states the user-visible
 
 ## Built by
 
-[Alistair Aranha](https://github.com/ARCASSystems) at [ARCAS Systems](https://arcassystems.com).
+[ARCAS Systems](https://arcassystems.com).

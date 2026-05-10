@@ -45,6 +45,14 @@ voice:
     - "[example: uses parentheses for asides]"
     - "[example: short fragments after a longer thought for emphasis]"
 
+  # The buyer's words, not your cleaned-up version. Writing skills use this
+  # to speak to the problem the buyer actually feels.
+  buyer_language:
+    first_sentence: "[example: Our site does not match the business anymore.]"
+    phrases:
+      - "[example: We look smaller than we are.]"
+      - "[example: People do not get what we do.]"
+
   # Reference samples. Paste 3 to 5 pieces of your writing that capture your voice. These are the ground truth.
   # When the rules and the samples disagree, the samples win.
   samples:

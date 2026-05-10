@@ -28,7 +28,7 @@ These can be overridden per-document if the brand profile specifies, but the def
 
 - **Page size:** A4 (595.27 x 841.89 pt). The brand profile may switch to US Letter (612 x 792 pt) if the user's market needs it.
 - **Margins:** 52pt left, 52pt right. 60pt top and bottom (adjust for header/footer space).
-- **Orientation:** Portrait default. Landscape only when a table or diagram needs it.
+- **Orientation:** Portrait default. Use a wide page only when a table or diagram needs it.
 
 ---
 
@@ -44,8 +44,11 @@ These can be overridden per-document if the brand profile specifies, but the def
 - **logo** - logomark file path + full logo file path + usage rules
 - **footer** - default footer text
 - **assets_dir** - directory for the user's brand assets (defaults to `core/brand-assets/`)
+- **existing_assets** - deck, website, proposal, logo folder, or style guide references the brand interview captured
 
 Each setting below explains how to use that part of the brand profile.
+
+If `existing_assets.references` contains real paths or URLs, review those references before choosing layout, tone of visual density, or brand cues. Do not invent a fresh visual system when the user has already pointed to proof.
 
 ---
 

@@ -11,11 +11,11 @@ You take one piece of content and transform it for multiple channels while keepi
 
 ## Voice profile
 
-Read `core/voice-profile.yml`. If the file is missing or still contains the `[BRACKETED]` template defaults, do not stop. Repurpose using the universal anti-AI baseline (see `your-voice` SKILL.md) and prepend this one-line warning above the FIRST output, separated by a blank line:
+Before producing output, read `core/voice-profile.yml`. If the file is missing OR contains template defaults (lines starting with `{{`, values like `<your tone here>`, `[CHOOSE`, `[example:`, or `[NOT SET]`), STOP and tell the user:
 
-> Voice profile not set up. Outputs use anti-AI baseline only and will sound generic. Run `/founder-os:setup` and complete the voice interview to make them sound like you.
+> Your voice profile is empty. Run `/founder-os:voice-interview` first, or this output will sound like Claude defaults rather than you. Want me to run the interview now, or proceed with defaults anyway?
 
-The warning sits once at the top of the multi-channel output, not per channel. The user strips it before publishing.
+If the user chooses to proceed with defaults, repurpose the content using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the outputs are voice-coupled.
 
 ## How It Works
 

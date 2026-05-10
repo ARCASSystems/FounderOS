@@ -2,6 +2,29 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.20.2 - 2026-05-10
+
+v1.20.2 closes the intake-to-output gap. A founder can run setup, voice, and brand intake, then draft from a real situation with buyer, offer, pain, buyer language, and brand proof present in the files. Rants now qualify and route instead of always becoming a dump.
+
+### Changed - intake now feeds output
+
+- **Setup wizard positioning.** `skills/founder-os-setup/SKILL.md` adds three skip-able questions for who the founder sells to, what they sell, and the visible buyer pain. `templates/identity.md` now has a `## Positioning` section with `Sells to`, `Sells`, and `Buyer pain`.
+- **Voice interview buyer language.** `skills/voice-interview/SKILL.md` adds two questions for the buyer's own words. `templates/voice-profile.yml.template` adds `buyer_language.first_sentence` and `buyer_language.phrases`. `your-voice` and `linkedin-post` now read the field.
+- **Brand interview visual proof.** `skills/brand-interview/SKILL.md` asks for existing decks, sites, logo folders, proposals, or style guides. `templates/brand-profile.yml.template` adds `existing_assets`, and `your-deliverable-template` reads those references before choosing a visual direction.
+- **Rant route.** `.claude/commands/rant.md` asks one question: decision, draft, plan, or capture. It routes to `decision-framework`, the right writing skill, `priority-triage`, `forcing-questions`, `brain-log`, or the existing rants file path.
+
+### Changed - quality gates and small release items
+
+- **Writing-skill voice gates.** `linkedin-post`, `client-update`, `proposal-writer`, `email-drafter`, and `content-repurposer` now stop when `core/voice-profile.yml` is missing or still template-filled, then ask whether to run the voice interview or proceed with defaults.
+- **Today skill wrapper.** New `skills/today/SKILL.md` hosts the natural-language trigger "what's on for today?" for surfaces where slash commands do not fire.
+- **README setup ladder.** The first setup path now uses "Say X (or run Y)" for setup, voice, and brand.
+- **SessionStart Tip detection.** Bash and PowerShell hooks now count only explicit `#used-<capability>` tags or `#acted` lines that name the capability, so planning notes no longer suppress a Tip.
+- **Release evidence.** `traces/v1202-first-60-min.md`, `traces/v1202-gaps.md`, and `traces/v1202-post-patch.md` show the before state, patch list, and output lift.
+
+### Tests
+
+- Added coverage for positioning prompts, buyer-language fields, brand visual proof, routed rant behavior, writing-skill gates, and tag-based Tip detection.
+
 ## v1.20.1 - 2026-05-10
 
 v1.20.1 closes the four functional defects Codex flagged against v1.20.0. The menu skill now has an actual engine. The SessionStart Tip line stops surfacing on a fresh install with no log history. The setup wizard has real test coverage for its 4 + 4 multi-choice prompts. Skill count corrected from 39 to 40 (the v1.20.0 release added the `menu` skill but the docs never caught up). README copy lapses are deferred to v1.21 - the operator's stated priority is functional truth, not surface prose.
@@ -437,7 +460,7 @@ The install-ergonomics and hardening release. v1.12 shipped the cross-session me
 - **`skills/index.md` header bumped from "as of v1.10" to "as of v1.13".** Release notes now cover v1.11, v1.12, and v1.13.
 - **ROADMAP shipped order corrected.** Was v1.10 -> v1.12 -> v1.11. Now v1.10 -> v1.11 -> v1.12 -> v1.13 in chronological order.
 - **`CLAUDE.md` Windows-hooks note matches `docs/install.md`.** Was telling Windows users they need git-bash; the install doc says PowerShell works automatically. The PowerShell wiring is canonical.
-- **Banned-style polish.** Eight "unlocks" / "leverage (verb)" / "optimize" instances replaced with plain alternatives across user-facing prose.
+- **Banned-style polish.** Eight corporate phrasing instances replaced with plain alternatives across user-facing prose.
 
 ### Notes
 

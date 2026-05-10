@@ -11,7 +11,7 @@ mcp_requirements: []
 You are running an interactive interview to capture the user's writing voice. The output is `core/voice-profile.yml`. The voice-profile feeds the `your-voice` skill, which then writes everything as the user from that point on.
 
 <HARD-GATE>
-Do not generate `core/voice-profile.yml` until you have collected at least 2 reference samples AND walked the shaping questions. Samples are the ground truth. If the user refuses to paste samples, ask them to write 2 short pieces in the chat right now (a 2-sentence work email and a LinkedIn-style hook). Don't proceed without samples - the profile without samples is a stereotype.
+Do not generate `core/voice-profile.yml` until you have collected at least 2 reference samples AND walked the shaping questions, including buyer-language questions. Samples are the ground truth. If the user refuses to paste samples, ask them to write 2 short pieces in the chat right now (a 2-sentence work email and a LinkedIn-style hook). Don't proceed without samples - the profile without samples is a stereotype.
 
 Do not invent answers. If the user skips a question, leave the field as `[NOT SET]` and tell them they can re-run the interview later.
 </HARD-GATE>
@@ -58,7 +58,7 @@ This always works. Capture both as samples.
 
 After samples are captured, say:
 
-> Got it. Now I'll ask 6 shaping questions to fill in patterns the samples might not show. Quick answers are fine.
+> Got it. Now I'll ask 8 shaping questions to fill in patterns the samples might not show. Quick answers are fine.
 
 ---
 
@@ -114,6 +114,22 @@ Ask:
 
 Capture as `idiosyncrasies` list. If they say "no quirks", leave the list empty.
 
+### Q7. Buyer first sentence
+
+Ask:
+
+> Question 7. When your buyer describes their problem to you, what is the first sentence out of their mouth?
+
+Capture as `buyer_language.first_sentence`. If they say they do not know, write `[NOT SET]`. Do not rewrite it into cleaner marketing language. The rough phrasing is the useful part.
+
+### Q8. Buyer phrases
+
+Ask:
+
+> Question 8. What is a phrase your buyer says that makes you nod every time? One to three phrases is enough.
+
+Capture as `buyer_language.phrases`. These phrases help `linkedin-post`, `email-drafter`, `proposal-writer`, and `client-update` meet the buyer in their own words.
+
 ---
 
 ## Phase 3 - Confirm and save
@@ -133,6 +149,8 @@ Show this exact block (filled with the captured values):
 > - Preferred words: <list>
 > - Banned words (in addition to universal blacklist): <list>
 > - Idiosyncrasies: <list>
+> - Buyer first sentence: <value>
+> - Buyer phrases: <list>
 > - Samples: <count> pieces captured
 >
 > Looks right? (yes / change X)
@@ -166,6 +184,11 @@ voice:
   idiosyncrasies:
     - "<quirk>"
     - "<quirk>"
+  buyer_language:
+    first_sentence: "<what the buyer says first>"
+    phrases:
+      - "<phrase>"
+      - "<phrase>"
   samples:
     - title: "<title>"
       context: "<context>"

@@ -46,9 +46,12 @@ If `rules/operating-rules.md` is missing or the style is not captured, default t
 - **Person** (first / second / third defaults)
 - **Reading level** (the user's target)
 - **Hedging** (how vulnerability shows up in the writing)
+- **Buyer language** (the rough phrases the user's buyer uses before they buy)
 - **Reference samples** (3 to 5 pieces the user pasted in setup that capture their voice)
 
 When you write, you read the profile and apply each setting. The reference samples are the ground truth. If the rules and the samples disagree, the samples win.
+
+If `buyer_language` is present, use it to choose hooks, examples, and plain problem statements. Do not clean the buyer's phrases into polished marketing copy. The rough wording is often what makes the output feel specific.
 
 ---
 

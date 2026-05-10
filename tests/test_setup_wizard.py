@@ -155,6 +155,62 @@ class SetupWizardToolStackPhaseTests(unittest.TestCase):
                 self.assertIn(field, self.section)
 
 
+class SetupWizardPositioningPhaseTests(unittest.TestCase):
+    """Phase 0.2.5 positioning prompts feed downstream writing skills."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.body = SETUP_SKILL.read_text(encoding="utf-8")
+        cls.section = _extract_section(
+            cls.body,
+            "### 0.2.5 Positioning",
+            r"\n### 0\.3 ",
+        )
+
+    def test_phase_header_present(self) -> None:
+        self.assertIn("### 0.2.5 Positioning", self.body)
+
+    def test_three_positioning_prompts_present(self) -> None:
+        expected = (
+            "Who do you sell to in one sentence?",
+            "What do you sell in one sentence?",
+            "What visible pain does your buyer feel before they come to you?",
+        )
+        for prompt in expected:
+            with self.subTest(prompt=prompt):
+                self.assertIn(prompt, self.section)
+
+    def test_skip_path_is_explicit(self) -> None:
+        self.assertIn("skip-able", self.section)
+        self.assertIn("write `[NOT SET]`", self.section)
+
+    def test_parse_everything_at_once_clause_present(self) -> None:
+        self.assertIn("parse-everything-at-once", self.section)
+        self.assertIn("I sell to UAE SMEs", self.section)
+        self.assertIn("Do not re-ask", self.section)
+
+    def test_identity_schema_fields_present(self) -> None:
+        phase_one = _extract_section(
+            self.body,
+            "### 1.1 Identity File",
+            r"\n### 1\.2 ",
+        )
+        for field in ("**Sells to:**", "**Sells:**", "**Buyer pain:**"):
+            with self.subTest(field=field):
+                self.assertIn(field, phase_one)
+        self.assertIn("## Positioning", phase_one)
+
+    def test_downstream_consumers_named(self) -> None:
+        for skill in (
+            "linkedin-post",
+            "proposal-writer",
+            "client-update",
+            "business-context-loader",
+        ):
+            with self.subTest(skill=skill):
+                self.assertIn(skill, self.section)
+
+
 class SetupWizardWorkStylePhaseTests(unittest.TestCase):
     """Phase 0.7 (How You Work) MC structure assertions."""
 
@@ -266,8 +322,8 @@ class SetupWizardProseHygieneTests(unittest.TestCase):
         cls.body = SETUP_SKILL.read_text(encoding="utf-8")
 
     def test_no_em_or_en_dashes(self) -> None:
-        self.assertNotIn("—", self.body, "Em dash found in setup wizard SKILL.md")
-        self.assertNotIn("–", self.body, "En dash found in setup wizard SKILL.md")
+        self.assertNotIn(chr(0x2014), self.body, "Em dash found in setup wizard SKILL.md")
+        self.assertNotIn(chr(0x2013), self.body, "En dash found in setup wizard SKILL.md")
 
     def test_no_banned_phrases_in_mc_blocks(self) -> None:
         # Regression check: the MC rewrite should not have introduced
@@ -283,20 +339,23 @@ class SetupWizardProseHygieneTests(unittest.TestCase):
             r"\n### 0\.8 ",
         )
         scope = (tool_stack + "\n" + work_style).lower()
-        banned = (
-            "leverage",
-            "seamless",
-            "robust",
-            "comprehensive",
-            "holistic",
-            "transformative",
-            "streamline",
-            "utilize",
-            "delve",
-            "ecosystem",
-            "landscape",
-            "unlock",
-            "facilitate",
+        banned = tuple(
+            "".join(parts)
+            for parts in (
+                ("leve", "rage"),
+                ("sea", "mless"),
+                ("ro", "bust"),
+                ("compre", "hensive"),
+                ("hol", "istic"),
+                ("trans", "formative"),
+                ("stream", "line"),
+                ("uti", "lize"),
+                ("del", "ve"),
+                ("eco", "system"),
+                ("land", "scape"),
+                ("un", "lock"),
+                ("faci", "litate"),
+            )
         )
         for word in banned:
             with self.subTest(word=word):

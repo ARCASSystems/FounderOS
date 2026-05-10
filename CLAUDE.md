@@ -153,6 +153,7 @@ No other config needed. Founder OS skills and commands work the same way. The fl
 Founder OS ships with a thin fabric layer that makes the files behave like an operating system, not just documentation.
 
 **Slash commands** (`.claude/commands/`)
+- `/founder-os:menu` - show 5 to 7 capability suggestions tailored to current state.
 - `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files. Run on first install.
 - `/founder-os:voice-interview` - capture how you write into `core/voice-profile.yml`.
 - `/founder-os:brand-interview` - capture your visual identity into `core/brand-profile.yml`.
@@ -165,9 +166,12 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/founder-os:audit` - composite health report across readiness, lint, wiki, brain, and voice.
 - `/founder-os:forcing-questions <initiative>` - six-question gate before new work starts.
 - `/founder-os:ship-deliverable <path>` - final read-only gate before an external deliverable is sent.
+- `/founder-os:legal-setup` - set up legal-compliance for the founder's jurisdiction.
+- `/founder-os:legal-add-source <source>` - add a legal source URL or PDF path to the loaded jurisdiction.
+- `/founder-os:legal-update` - refresh legal-compliance source freshness.
 - `/founder-os:update` - pull latest System Layer files without touching personal data.
 - `/founder-os:uninstall` - cleanly remove Founder OS.
-- `/founder-os:rant` - capture a raw thought dump into `brain/rants/`.
+- `/founder-os:rant` - qualify a raw voice dump, then route to a decision, draft, plan, log, or capture path.
 - `/founder-os:dream` - process unprocessed rants into patterns, flags, parked decisions, needs-input, and client signals.
 - `/pre-meeting <name>` - gate before any meeting.
 - `/capture-meeting <name>` - route a transcript or brain dump into log, clients, and commitments.
@@ -189,7 +193,7 @@ If you have not installed the scheduled-tasks MCP, ignore this section. Nothing 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks are bring-your-own.
 
-## Skills (39 included)
+## Skills (42 included)
 
 | Skill | Purpose |
 |-------|---------|
@@ -202,6 +206,8 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 | brain-snapshot | Writes `brain/.snapshot.md`, the runtime context payload nine output skills read at task time. |
 | brain-pass | Synthesised answer across the brain layer with stable-ID citations. Routed via `/founder-os:brain-pass`. |
 | audit | Composite health report. Routed via `/founder-os:audit`. |
+| menu | Capability discovery. Say "show me what you can do" or run `/founder-os:menu`. |
+| today | One-screen daily brief. Say "what's on for today?" or run `/today`. |
 | weekly-review | Structured weekly retro and sprint roll. |
 | priority-triage | Cut the list to what actually matters. |
 | brain-log | Session logging and pattern capture. |
@@ -224,6 +230,7 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 | ship-deliverable | Final deliverable ship gate. |
 | approval-gates | Auto-run, ask-first, or refuse gate checks. |
 | data-security | Data class and tool-safety check. |
+| legal-compliance | Jurisdiction-aware legal reference layer. |
 | voice-interview | Captures your writing voice into core/voice-profile.yml. |
 | brand-interview | Captures your visual brand into core/brand-profile.yml. |
 | your-voice | Applies your voice profile to any written output. Every voice-coupled writing skill calls it. |

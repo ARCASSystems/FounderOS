@@ -12,7 +12,11 @@ Writes client-facing communications. Updates build trust through transparency, n
 
 ## Before you write
 
-Read `core/voice-profile.yml` if it exists. The founder's voice rules apply to client updates the same as everything else - simple language, no padding, no hedging on bad news. If the voice profile is missing, fall back to the universal anti-AI baseline and warn the user that the update will sound generic until the voice interview is run.
+Before producing output, read `core/voice-profile.yml`. If the file is missing OR contains template defaults (lines starting with `{{`, values like `<your tone here>`, `[CHOOSE`, `[example:`, or `[NOT SET]`), STOP and tell the user:
+
+> Your voice profile is empty. Run `/founder-os:voice-interview` first, or this output will sound like Claude defaults rather than you. Want me to run the interview now, or proceed with defaults anyway?
+
+If the user chooses to proceed with defaults, write the update using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the update is voice-coupled.
 
 If the founder has filled `core/brand-profile.yml`, follow the visual brand for any branded version of the update (PDF, doc, etc.). Plain-text updates do not need brand assets.
 

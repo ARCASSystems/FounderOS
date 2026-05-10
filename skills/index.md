@@ -1,6 +1,6 @@
 # Founder OS Skills
 
-40 skills included as of v1.20.1 (39 from v1.12 plus `menu`, added in v1.20.0). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. v1.9 added hook test coverage and documented the query `--root` flag. v1.10 added the runtime brain context layer (a deterministic snapshot every skill can consume at task time, plus a brain-pass skill that synthesises answers across the brain layer with citations). v1.11 was launch hardening (no new skills, install ergonomics fixed). v1.12 added a hook-only memory-diff helper that flags `clients/<slug>/` folders missing from auto-memory (no new skills, no new commands). v1.20.0 was the natural-language routing release plus the new `/founder-os:menu` capability discovery entry. v1.20.1 corrected the skill count drift introduced when v1.20.0 added `menu` without updating the docs. The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
+42 skills included as of v1.20.2 (the live filesystem count, including `legal-compliance`, `menu`, and `today`). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. v1.9 added hook test coverage and documented the query `--root` flag. v1.10 added the runtime brain context layer (a deterministic snapshot every skill can consume at task time, plus a brain-pass skill that synthesises answers across the brain layer with citations). v1.11 was launch hardening. v1.12 added a hook-only memory-diff helper that flags `clients/<slug>/` folders missing from auto-memory. v1.20.0 was the natural-language routing release plus the new `/founder-os:menu` capability discovery entry. v1.20.2 adds the `today` wrapper skill and corrects this index to the live directory count. The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
 
 | Skill | Status | Replaces |
 |-------|--------|---------|
@@ -14,6 +14,7 @@
 | [brain-pass](brain-pass/SKILL.md) | Ready | Semantic retrieval over the brain layer. Synthesises answers across log, knowledge, decisions, flags, patterns. Run via `/founder-os:brain-pass "<question>"`. |
 | [audit](audit/SKILL.md) | Ready | Composite OS health report (readiness + lint + wiki + brain staleness + voice completeness). Run via `/founder-os:audit`. |
 | [menu](menu/SKILL.md) | Ready | Capability discovery. Say "show me what you can do" or run `/founder-os:menu`. Returns 5 to 7 capability suggestions tailored to current state. |
+| [today](today/SKILL.md) | Ready | Today brief wrapper. Say "what's on for today?" or run `/today`. |
 | [weekly-review](weekly-review/SKILL.md) | Ready | |
 | [priority-triage](priority-triage/SKILL.md) | Ready | Reclaim, Taskade |
 | [brain-log](brain-log/SKILL.md) | Ready | |
@@ -36,6 +37,7 @@
 | [ship-deliverable](ship-deliverable/SKILL.md) | Ready | Final composition gate (template + anti-AI + blind-spot + pre-send). Run via `/founder-os:ship-deliverable`. |
 | [approval-gates](approval-gates/SKILL.md) | Ready | Auto-run, ask-first, or refuse gate checks against `rules/approval-gates.md`. |
 | [data-security](data-security/SKILL.md) | Ready | Data class and tool-safety check before sending content to external services. |
+| [legal-compliance](legal-compliance/SKILL.md) | Ready | Jurisdiction-aware legal reference layer. |
 | [your-voice](your-voice/SKILL.md) | Ready | Generic AI tone for all written output |
 | [your-deliverable-template](your-deliverable-template/SKILL.md) | Ready | Canva templates, generic CV/deck builders |
 | [voice-interview](voice-interview/SKILL.md) | Ready | Captures user's writing voice into core/voice-profile.yml |
@@ -47,7 +49,7 @@
 
 ## Commands
 
-This plugin ships twenty-one slash commands (twenty from v1.9 plus `/founder-os:menu` from v1.20.0):
+This plugin ships 24 slash commands:
 
 | Command | Purpose |
 |---------|---------|
@@ -64,7 +66,10 @@ This plugin ships twenty-one slash commands (twenty from v1.9 plus `/founder-os:
 | [/founder-os:audit](../.claude/commands/audit.md) | Composite OS health report across readiness, lint, wiki, brain staleness, and voice completeness. |
 | [/founder-os:forcing-questions](../.claude/commands/forcing-questions.md) | Six-question gate before any new initiative, scope expansion, or fresh idea is started. |
 | [/founder-os:ship-deliverable](../.claude/commands/ship-deliverable.md) | Final read-only gate before any external deliverable leaves your machine. |
-| [/founder-os:rant](../.claude/commands/rant.md) | Capture a raw voice dump into `brain/rants/<YYYY-MM-DD>.md`. No structure asked. |
+| [/founder-os:legal-setup](../.claude/commands/legal-setup.md) | Set up legal-compliance for the founder's jurisdiction. |
+| [/founder-os:legal-add-source](../.claude/commands/legal-add-source.md) | Add a legal source URL or PDF path to the loaded jurisdiction. |
+| [/founder-os:legal-update](../.claude/commands/legal-update.md) | Refresh legal-compliance source freshness. |
+| [/founder-os:rant](../.claude/commands/rant.md) | Qualify a raw voice dump, then route to a decision, draft, plan, log, or capture path. |
 | [/founder-os:dream](../.claude/commands/dream.md) | Distil unprocessed rants into patterns, flags, parked decisions, needs-input, and client signals. Writes a 5-line digest to `brain/log.md`. |
 | [/founder-os:update](../.claude/commands/update.md) | Pull the latest System Layer files (skills, templates, commands, hooks) without touching your personal data. Subcommands: check, rollback. |
 | [/founder-os:uninstall](../.claude/commands/uninstall.md) | Cleanly remove Founder OS. Default mode preserves your data; `--purge` removes everything. |
@@ -75,7 +80,7 @@ This plugin ships twenty-one slash commands (twenty from v1.9 plus `/founder-os:
 
 ## Status
 
-40 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile.
+42 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile.
 
 Release notes:
 
@@ -92,5 +97,6 @@ Release notes:
 - v1.12 added a hook-only memory-diff helper that runs from the SessionStart brief and flags `clients/<slug>/` folders without an auto-memory entry. No new skills, no new commands. Test count rose from 34 to 43.
 - v1.20.0 was the discoverability release. Natural-language routing, the new `menu` skill (`/founder-os:menu`), and SessionStart Tip line. 21 commands, 56 + new tests.
 - v1.20.1 corrected the v1.20.0 skill-count drift (docs claimed 39 skills after `menu` brought the filesystem total to 40), extracted the menu engine into `scripts/menu.py`, gated the SessionStart Tip line on a state-signal AND age requirement so a fresh install with no log history stays quiet, and added wizard test coverage for the 4 + 4 multi-choice prompts.
+- v1.20.2 added positioning, buyer language, existing visual proof, a routed rant path, writing-skill voice gates, the `today` wrapper skill, and tag-based Tip use detection.
 
-All additions across v1.2 through v1.20.1 are additive. No existing skill behaviour was changed without an explicit version note.
+All additions across v1.2 through v1.20.2 are additive. No existing skill behaviour was changed without an explicit version note.

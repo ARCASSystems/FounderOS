@@ -7,9 +7,9 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 **Setup ladder (40 min total, do in this order):**
 
 1. **Install** - pick an [install path](#install) below (5 min)
-2. **`/founder-os:setup`** - the wizard builds your operating layer from your answers (15 min)
-3. **`/founder-os:voice-interview`** - so every writing skill sounds like you, not Claude (10 min)
-4. **`/founder-os:brand-interview`** - so every deliverable looks like you (10 min)
+2. **Say "set up Founder OS"** (or run `/founder-os:setup`) - the wizard builds your operating layer from your answers (15 min)
+3. **Say "set up my voice profile"** (or run `/founder-os:voice-interview`) - so every writing skill sounds like you, not Claude (10 min)
+4. **Say "set up my brand profile"** (or run `/founder-os:brand-interview`) - so every deliverable looks like you (10 min)
 
 After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-screen view of today, and `/next` recommends one action. Full first-day path in [docs/first-day.md](docs/first-day.md). Full per-command reference in [docs/commands.md](docs/commands.md). Full per-skill reference (outcome, reads, writes, voice rules, prereqs, follow-ups) in [docs/skills.md](docs/skills.md).
 
@@ -25,9 +25,9 @@ Three layers, in plain English. Skills read and write across all of them.
 - **Brain layer** - log, flags, patterns, parked decisions, rants, knowledge. The memory that captures what happened, what is stuck, and what is worth reusing.
 - **Wiki layer** - `[[cross-references]]` between files plus a source archive (`raw/`) for articles, transcripts, and anything you want preserved.
 
-Areas for searching across the 40 skills:
+Areas for searching across the 42 skills:
 
-- **Daily ops:** weekly-review, priority-triage, brain-log, decision-framework, session-handoff, meeting-prep, knowledge-capture, founder-coaching, unit-economics, strategic-analysis, pre-send-check, sop-writer, forcing-questions, blind-spot-review, ship-deliverable
+- **Daily ops:** today, weekly-review, priority-triage, brain-log, decision-framework, session-handoff, meeting-prep, knowledge-capture, founder-coaching, unit-economics, strategic-analysis, pre-send-check, sop-writer, forcing-questions, blind-spot-review, ship-deliverable
 - **Voice and brand:** voice-interview, brand-interview, your-voice, your-deliverable-template
 - **Voice-coupled writers:** linkedin-post, client-update, proposal-writer, email-drafter, content-repurposer
 - **Setup and audit:** founder-os-setup, readiness-check, business-context-loader, query, audit
@@ -40,7 +40,7 @@ A **SessionStart brief** runs on every Claude Code session open and surfaces sta
 
 **The legal layer (as-needed, not daily).** Most founders won't open this every day. But when a question lands - "can I let someone go", "what's our VAT obligation", "is this NDA enforceable", or you have a meeting with a lawyer next week and need to ask the right questions - the OS already knows your jurisdiction, holds the gazetted source documents, and surfaces compliance deadlines on its own. UAE founders get a full reference set out of the box (10 domain files covering company formation, employment, tax, visas, contracts, IP, data protection, dispute resolution, and industry permits, with 27 primary government sources tracked for freshness). Founders elsewhere run `/founder-os:legal-setup`, name their jurisdiction, and load their own gazetted sources via `/founder-os:legal-add-source <url-or-pdf>`. The skill never invents law - it quotes from sources you've loaded and tells you when a source is missing. SessionStart surfaces anything in `context/compliance.md` that's overdue or due within 30 days, so a license renewal, VAT return, or visa expiry doesn't slip past you. Details below under [Legal layer](#legal-layer).
 
-**The capture-and-cite loop.** `/rant` captures a raw thought dump. `/dream` distils unprocessed rants into patterns, flags, parked decisions, and needs. Every new brain entry gets a stable `<channel>-YYYY-MM-DD-NNN` ID stamped at write time. The dream digest cites those IDs in one line each instead of restating content. `knowledge-capture` writes distilled takeaways from books, calls, and articles into `brain/knowledge/` with the same ID convention so proposal-writer and strategic-analysis can read them back. Optional: opt in to a tool-call observation log with `FOUNDER_OS_OBSERVATIONS=1` and `/dream` rolls each day's activity into an OBSERVED section.
+**The capture-and-cite loop.** `/rant` qualifies a raw thought dump with one question, then routes it to a decision, draft, plan, log, or capture path. `/dream` distils captured rants into patterns, flags, parked decisions, and needs. Every new brain entry gets a stable `<channel>-YYYY-MM-DD-NNN` ID stamped at write time. The dream digest cites those IDs in one line each instead of restating content. `knowledge-capture` writes distilled takeaways from books, calls, and articles into `brain/knowledge/` with the same ID convention so proposal-writer and strategic-analysis can read them back. Optional: opt in to a tool-call observation log with `FOUNDER_OS_OBSERVATIONS=1` and `/dream` rolls each day's activity into an OBSERVED section.
 
 ---
 
@@ -102,7 +102,7 @@ Cowork can open the FounderOS folder, read `CLAUDE.md` as folder instructions, r
 
 ## What ships in this repo
 
-### Skills (40)
+### Skills (42)
 
 Skills are grouped by when you will actually reach for them, not by category. If you are still on Day 1, you can ignore the rest.
 
@@ -118,6 +118,7 @@ Each row tells you the **outcome** (what you get when it finishes). Detailed rea
 | readiness-check | A weighted readiness score plus the next 3 high-impact moves to run. Read-only. |
 | business-context-loader | A loaded per-company context file plus a list of what is missing or stale and the next obvious move. Read-only. |
 | brain-log | A new entry in `brain/log.md` with a stable `log-YYYY-MM-DD-NNN` ID. Three modes: log only, log with cross-reference, or log and act. May also update the referenced file. |
+| today | A one-screen today brief. Same output as `/today` for surfaces where slash commands do not fire. Read-only. |
 
 #### Week 1 - use within your first working week
 
@@ -161,8 +162,9 @@ Each row tells you the **outcome** (what you get when it finishes). Detailed rea
 | brain-snapshot | A small deterministic markdown payload at `brain/.snapshot.md` (open flags, this week's must-do, recent decisions, voice and brand fields, staleness). Output-producing skills read it at task time so they reflect current state instead of starting cold. Writes one file. |
 | brain-pass | A synthesised answer across the brain layer with stable-ID citations: Answer, Evidence, Confidence, Gaps. The model IS the retrieval engine. No embeddings, no API call. Read-only. |
 | audit | One composite health report across readiness, wiki state, brain staleness, voice completeness, and quarantine. Read-only. |
+| legal-compliance | Jurisdiction-aware legal reference lookup and compliance guidance from loaded sources. Read-only unless adding sources. |
 
-### Slash commands (21)
+### Slash commands (24)
 
 Each row tells you the **outcome** (what you see when it finishes), the natural-language phrase that triggers the same skill, and whether it **writes** anything. Detailed behaviour, sample output, args, and follow-ups live in [`docs/commands.md`](docs/commands.md).
 
@@ -181,9 +183,12 @@ Each row tells you the **outcome** (what you see when it finishes), the natural-
 | `/founder-os:audit` | "audit the OS" | One composite health report covering readiness, wiki integrity, brain staleness, voice completeness, and quarantine state. Read-only. |
 | `/founder-os:forcing-questions <initiative>` | "I'm thinking of starting [X]" | Six yes/no answers plus a scope-creep verdict on whether to start, kill, or postpone the initiative. Read-only. |
 | `/founder-os:ship-deliverable <path>` | "is this ready to send" | A pass or fail verdict across template fit, anti-AI scan, blind-spot review, and pre-send checks. Names every issue. Nothing ships if anything fails. Read-only. |
+| `/founder-os:legal-setup` | "set up my legal context" | A jurisdiction setup flow for the legal reference layer. Writes `jurisdiction:` and `context/compliance.md` when approved. |
+| `/founder-os:legal-add-source <source>` | "add this legal source" | Registers a URL or PDF against your jurisdiction's legal source set. Writes `sources.yml` and optional domain stubs. |
+| `/founder-os:legal-update` | "refresh legal sources" | Checks source freshness for the loaded jurisdiction and updates review dates after confirmation. |
 | `/founder-os:update` | "update Founder OS" | A diff of System Layer files (skills, templates, commands, hooks) refreshed from the latest release. Your personal data (`core/`, `context/`, `cadence/`, `brain/`) is never touched. Subcommands: `check`, `rollback`. |
 | `/founder-os:uninstall` | "uninstall Founder OS" | A confirmation list of every file that will be removed, plus the actual cleanup. Default preserves your data. `--purge` removes everything. |
-| `/founder-os:rant` | "I want to rant" / "let me dump something" | A new `brain/rants/<YYYY-MM-DD>.md` file holding your raw dump verbatim. No structure asked. The `/dream` command processes it later. Writes `brain/rants/`. |
+| `/founder-os:rant` | "I want to rant" / "let me dump something" | One short qualification, then a route to a decision, draft, plan, log, or raw capture in `brain/rants/`. |
 | `/founder-os:dream` | "process my rants" | A 5-line digest in `brain/log.md` plus stable-ID entries in `brain/patterns.md`, `brain/flags.md`, `brain/decisions-parked.md`, `brain/needs-input.md` as warranted. Each rant marked processed. Writes 5+ files. |
 | `/today` | "what's on for today?" | A 20-line one-screen view: today's anchor, top open decisions, active flags, last 3 log entries, next calendar event. Read-only. |
 | `/next` | "what should I focus on next?" | One recommended next action across priorities, deals, and cadence. Not a list, one action. Read-only. |
@@ -240,7 +245,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 Founder OS does not assume your stack. The OS is files and skills. Each skill declares which MCP servers it can use, and degrades gracefully when those MCPs are not available.
 
-Most of the 40 skills work end-to-end with zero MCPs. A few skills, including `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`, function without MCPs but produce better output with the relevant integration connected.
+Most of the 42 skills work end-to-end with zero MCPs. A few skills, including `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`, function without MCPs but produce better output with the relevant integration connected.
 
 The full catalog: [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
@@ -299,7 +304,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.20.1 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.20.2 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -366,7 +371,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.20.1. Public push week of 2026-05-10.
+Version 1.20.2. Public push week of 2026-05-10.
+
+v1.20.2 closes the intake-to-output loop. The setup wizard now captures positioning, the voice interview captures buyer language, and the brand interview records existing visual proof so first drafts have the buyer, offer, pain, and brand references they need. `/rant` now asks one qualifying question and routes to a decision, draft, plan, log, or capture path instead of always writing a dump. The writing skills stop when voice data is empty instead of quietly drafting from defaults. The README setup ladder is natural-language-first, `skills/today` covers "what's on for today?", and SessionStart Tip detection now counts explicit action tags instead of planning mentions.
 
 v1.20.1 closes Codex CTO findings against v1.20.0. Real fixes, not cosmetic. The menu skill now has an actual engine: `scripts/menu.py` reads state and scores capabilities deterministically instead of asking the model to do it inline. The SessionStart Tip line no longer surfaces on a fresh install with no log history. The setup wizard now has test coverage for the 4 + 4 multi-choice tool-stack and work-style prompts. Skill count corrected from 39 to 40 across README, manifests, ROADMAP, CHANGELOG, and `skills/index.md` (the v1.20.0 release added the `menu` skill but the docs never caught up). 56 tests still pass plus new coverage for menu engine, tip gate, and wizard MC structure.
 
@@ -419,4 +426,4 @@ MIT. Copyright (c) 2026 ARCAS Systems. See [`LICENSE`](LICENSE).
 
 ---
 
-Built by [Alistair Aranha](https://github.com/ARCASSystems) at [ARCAS Systems](https://arcassystems.com).
+Built by [ARCAS Systems](https://arcassystems.com).

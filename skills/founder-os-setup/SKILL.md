@@ -55,6 +55,18 @@ If they mentioned multiple businesses, ask for each: "For each business, tell me
 
 If they have one business, move to 0.3.
 
+### 0.2.5 Positioning
+
+Ask three short positioning questions in sequence. One question, one line. Each is skip-able. Wait for the answer before moving to the next unless the founder dumps all three answers at once.
+
+1. "Who do you sell to in one sentence? You can say skip."
+2. "What do you sell in one sentence? You can say skip."
+3. "What visible pain does your buyer feel before they come to you? You can say skip."
+
+These answers populate `core/identity.md` under `## Positioning`, which `linkedin-post`, `proposal-writer`, `client-update`, and `business-context-loader` read before drafting. If the founder says "skip", write `[NOT SET]` for that line and continue.
+
+**Backward compatibility (parse-everything-at-once path).** If the founder answers with all three in one reply ("I sell to UAE SMEs, I sell brand and web projects, they feel embarrassed by a website that no longer matches the business"), parse all three, mark the section answered, and skip the remaining prompts in this phase. Confirm what was captured in one line. Do not re-ask.
+
 ### 0.3 Active Workstreams
 For EACH business: "What are you actively working on right now in [business name]? Examples: website, email campaigns, lead generation, content, product development, client delivery, hiring."
 
@@ -172,7 +184,15 @@ This is the `FOUNDER_OS_OBSERVATIONS` opt-in. The PostToolUse hook ships disable
 ## PHASE 1: IDENTITY + GLOBAL LAYER
 
 ### 1.1 Identity File
-Using discovery answers, draft `core/identity.md`. Read the template from `templates/identity.md` for structure. Personalize with their actual background, work style, decision style, communication preferences, and overwhelm triggers.
+Using discovery answers, draft `core/identity.md`. Read the template from `templates/identity.md` for structure. Personalize with their actual background, positioning, work style, decision style, communication preferences, and overwhelm triggers.
+
+The `## Positioning` section is load-bearing. Populate:
+
+- `**Sells to:**` from 0.2.5 question 1
+- `**Sells:**` from 0.2.5 question 2
+- `**Buyer pain:**` from 0.2.5 question 3
+
+If any positioning answer was skipped, write `[NOT SET]` for that line. Do not invent a buyer, offer, or pain.
 
 Show the draft. Get approval. Don't write yet.
 

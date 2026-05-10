@@ -35,7 +35,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 ### voice-interview
 
 - **Say.** "set up my voice profile", "set up my voice", or "voice interview".
-- **Outcome.** A voice profile that captures rhythm, openings, closings, contractions, idiosyncrasies, reading level, preferred and banned words, plus 3 reference samples.
+- **Outcome.** A voice profile that captures rhythm, openings, closings, contractions, idiosyncrasies, buyer language, reading level, preferred and banned words, plus 3 reference samples.
 - **Reads.** `templates/voice-profile.yml.template` for the schema. Your pasted writing samples drive the inference.
 - **Writes.** `core/voice-profile.yml`.
 - **Voice rules.** This is the source.
@@ -46,7 +46,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 ### brand-interview
 
 - **Say.** "set up my brand profile", "set up my brand", or "brand interview".
-- **Outcome.** A brand profile capturing colors, fonts, logo paths, footer text, page size, and margins. Plus an empty `core/brand-assets/` folder ready for your logo files.
+- **Outcome.** A brand profile capturing colors, fonts, logo paths, existing visual proof, footer text, page size, and margins. Plus an empty `core/brand-assets/` folder ready for your logo files.
 - **Reads.** `templates/brand-profile.yml.template` for the schema.
 - **Writes.** `core/brand-profile.yml`, `core/brand-assets/`.
 - **Voice rules.** No.
@@ -68,6 +68,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Prereqs.** None. Works on a brand-new install (returns the Day-1 starter set).
 - **When to run.** When you forget what to ask for. When new to FounderOS. When you want a periodic nudge on capabilities you have not used.
 - **Follow-up.** Say one of the natural-language phrases the menu surfaces. Slash command: `/founder-os:menu`.
+
+### today
+
+- **Say.** "what's on for today?"
+- **Outcome.** A 20-line one-screen view of today's anchor, open decisions, active flags, last 3 log entries, and next event.
+- **Reads.** `cadence/daily-anchors.md`, `context/decisions.md`, `brain/flags.md`, `brain/log.md`.
+- **Writes.** Read-only.
+- **Voice rules.** No.
+- **Prereqs.** Founder OS setup complete.
+- **When to run.** At the start of a work session, especially in Cowork mode where slash commands do not fire.
+- **Follow-up.** Work the named anchor or ask "what should I focus on next?" Slash command: `/today`.
 
 ---
 

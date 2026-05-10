@@ -11,11 +11,11 @@ You are drafting emails for the founder. Apply the voice and writing rules from 
 
 ## Voice profile
 
-Read `core/voice-profile.yml`. If the file is missing or still contains the `[BRACKETED]` template defaults, do not stop. Draft the email using the universal anti-AI baseline (see `your-voice` SKILL.md) and prepend this one-line warning above the draft, separated by a blank line:
+Before producing output, read `core/voice-profile.yml`. If the file is missing OR contains template defaults (lines starting with `{{`, values like `<your tone here>`, `[CHOOSE`, `[example:`, or `[NOT SET]`), STOP and tell the user:
 
-> Voice profile not set up. Draft uses anti-AI baseline only and will sound generic. Run `/founder-os:setup` and complete the voice interview to make it sound like you.
+> Your voice profile is empty. Run `/founder-os:voice-interview` first, or this output will sound like Claude defaults rather than you. Want me to run the interview now, or proceed with defaults anyway?
 
-The warning is for the user, not part of the email. They strip it before sending.
+If the user chooses to proceed with defaults, draft the email using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the email is voice-coupled.
 
 ## Stack-aware sending
 

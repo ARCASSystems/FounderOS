@@ -35,7 +35,7 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 ### `/founder-os:voice-interview`
 
 - **Or say.** "set up my voice profile"
-- **Outcome.** A short interview (about 3 writing samples plus 6 shaping questions, ~10 minutes) plus a voice profile written to disk. The interview captures rhythm, openings, closings, contractions, idiosyncrasies, and reading level.
+- **Outcome.** A short interview (about 3 writing samples plus 8 shaping questions, ~10 minutes) plus a voice profile written to disk. The interview captures rhythm, openings, closings, contractions, idiosyncrasies, buyer language, and reading level.
 - **Args.** None.
 - **Writes.** `core/voice-profile.yml`.
 - **Prereqs.** `/founder-os:setup` complete (so `core/` exists).
@@ -45,7 +45,7 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 ### `/founder-os:brand-interview`
 
 - **Or say.** "set up my brand profile"
-- **Outcome.** A brand profile and an assets folder. Captures colors, fonts, logo paths, footer text, page size and margins.
+- **Outcome.** A brand profile and an assets folder. Captures colors, fonts, logo paths, footer text, page size, margins, and any existing visual proof to review later.
 - **Args.** None.
 - **Writes.** `core/brand-profile.yml`, `core/brand-assets/` folder structure.
 - **Prereqs.** `/founder-os:setup` complete.
@@ -185,12 +185,12 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 ### `/founder-os:rant`
 
 - **Or say.** "I want to rant" / "let me dump something"
-- **Outcome.** A new `brain/rants/<YYYY-MM-DD>.md` file holding your raw dump verbatim. No structure asked. No editing.
+- **Outcome.** One short qualification, then a route to a decision, draft, plan, log, or a new `brain/rants/<YYYY-MM-DD>.md` file holding your raw dump verbatim.
 - **Args.** None. Pasted or dictated content follows the command.
-- **Writes.** `brain/rants/<YYYY-MM-DD>.md`. Appends if today's file exists.
+- **Writes.** `brain/rants/<YYYY-MM-DD>.md` only when the answer is capture. Other routes use the named skill.
 - **Prereqs.** `/founder-os:setup` complete.
-- **When to run.** Mid-day, end-of-day, or whenever you need to think out loud without structure.
-- **Follow-up.** `/founder-os:dream` later in the day or week to process unprocessed rants into structured entries.
+- **When to run.** Mid-day, end-of-day, or whenever you need to think out loud and decide if the thought needs action now.
+- **Follow-up.** If captured, `/founder-os:dream` later in the day or week to process unprocessed rants into structured entries.
 
 ### `/founder-os:dream`
 
@@ -225,6 +225,40 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **Prereqs.** `/founder-os:setup` complete. Voice profile filled. Brand profile filled if the deliverable is branded.
 - **When to run.** Final gate before any deliverable leaves your machine.
 - **Follow-up.** Fix every issue named, then re-run. Loop until the verdict is pass.
+
+---
+
+## Legal layer
+
+### `/founder-os:legal-setup`
+
+- **Or say.** "set up my legal context"
+- **Outcome.** A jurisdiction setup flow for `legal-compliance`. Captures jurisdiction, fiscal year end, structure, and upcoming filings or renewals.
+- **Args.** None.
+- **Writes.** `core/identity.md` `jurisdiction:` when approved, `context/compliance.md`, and a jurisdiction scaffold for non-UAE installs when approved.
+- **Prereqs.** `/founder-os:setup` complete.
+- **When to run.** Once before asking jurisdiction-specific legal questions, or after moving jurisdiction, structure, or fiscal year.
+- **Follow-up.** Add missing primary sources with `/founder-os:legal-add-source <source>`.
+
+### `/founder-os:legal-add-source <source>`
+
+- **Or say.** "add this legal source"
+- **Outcome.** Registers a source against the loaded jurisdiction and classifies the domains it covers.
+- **Args.** URL or PDF path. Optional `-- <one-line description>`.
+- **Writes.** `skills/legal-compliance/references/<jurisdiction>/sources.yml` and optional domain stubs.
+- **Prereqs.** `jurisdiction:` set in `core/identity.md`, usually via `/founder-os:legal-setup`.
+- **When to run.** When the legal skill says a source is missing, or when a regulator publishes a source you want tracked.
+- **Follow-up.** Ask the legal question again, or run `/founder-os:legal-update` when sources need freshness checks.
+
+### `/founder-os:legal-update`
+
+- **Or say.** "refresh legal sources"
+- **Outcome.** A source freshness audit for the loaded jurisdiction, with stale, warming, and fresh groups.
+- **Args.** None.
+- **Writes.** `last_checked_on:` dates, `last_full_review:`, and domain file verification dates only after confirmation.
+- **Prereqs.** `jurisdiction:` set and `sources.yml` present for that jurisdiction.
+- **When to run.** Quarterly, before a client-facing legal memo, or before relying on a source-heavy answer.
+- **Follow-up.** Add or replace any dead source surfaced by the audit.
 
 ---
 

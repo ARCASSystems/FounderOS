@@ -1,11 +1,11 @@
 {
   "name": "founder-os",
-  "description": "An operating system for owners running on Claude Code. 40 skills, 21 commands, persistent memory, decision tracking, four role modes, structured cadence, voice and brand profiles, knowledge notes, stable entry IDs, token-aware progressive query, opt-in observation log, graph query, audit report, readiness check, source ingest, wiki lint, wiki graph builder, approval gates, delivery ship checks, runtime brain snapshot, brain-pass synthesis, and a natural-language menu of capabilities tailored to current state. Talk to Claude in plain English or run /founder-os:setup to get started.",
+  "description": "An operating system for owners running on Claude Code. 42 skills, 24 commands, persistent memory, decision tracking, four role modes, structured cadence, voice and brand profiles, knowledge notes, stable entry IDs, token-aware progressive query, opt-in observation log, graph query, audit report, readiness check, source ingest, wiki lint, wiki graph builder, approval gates, delivery ship checks, legal reference layer, runtime brain snapshot, brain-pass synthesis, today brief wrapper, and a natural-language menu of capabilities tailored to current state. Talk to Claude in plain English or run /founder-os:setup to get started.",
   "author": {
-    "name": "Alistair Aranha",
+    "name": "ARCAS Systems",
     "email": "solutions@arcassystems.com"
   },
-  "version": "1.20.1",
+  "version": "1.20.2",
   "homepage": "https://github.com/ARCASSystems/FounderOS",
   "repository": "https://github.com/ARCASSystems/FounderOS"
 }

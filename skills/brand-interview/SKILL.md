@@ -39,6 +39,14 @@ Map the answer:
 
 If the answer is unclear, ask one clarifying question: "Do you have a logo file you'd want on your CV?"
 
+## Phase 0.5 - Existing visual proof
+
+Ask once before running the selected path:
+
+> Do you have any existing visual proof I should look at later - a deck, website, logo folder, proposal, or style guide? If yes, where is it? If no, say no.
+
+Capture the answer as `existing_assets`. This does not replace the logo fields. It tells `your-deliverable-template` where to look when it needs a real visual reference instead of making a fresh layout from mood words alone.
+
 ---
 
 ## Path A - Existing Kit
@@ -202,6 +210,7 @@ Show this exact block (filled with captured values):
 >   - Logomark: <path or "text-only">
 >   - Full logo: <path or "not set">
 >   - White logo: <path or "not set">
+> - Existing visual proof: <deck, website, logo folder, style guide, or "none">
 > - Footer text: <value>
 >
 > Looks right? (yes / change X)
@@ -214,7 +223,7 @@ If they want to change something, edit and re-confirm.
 
 ## File output
 
-Write `core/brand-profile.yml`. Use the exact structure from `templates/brand-profile.yml.template`. Replace every `[BRACKETED]` placeholder with the captured value or `[NOT SET]` if the user skipped it.
+Write `core/brand-profile.yml`. Use the exact structure from `templates/brand-profile.yml.template`, including the `existing_assets:` block. Replace every `[BRACKETED]` placeholder with the captured value or `[NOT SET]` if the user skipped it.
 
 Also create the `core/brand-assets/` directory if it doesn't exist. If the user gave logo file paths that don't exist yet, leave them in the profile and tell the user:
 

@@ -59,6 +59,15 @@ footer:
 
 assets_dir: "core/brand-assets/"
 
+existing_assets:
+  # Visual proof the user already has. The deliverable template checks this
+  # before inventing from mood words alone.
+  has_assets: "[yes | no | partial]"
+  references:
+    - type: "[deck | website | logo_folder | proposal | style_guide | other]"
+      location: "[path or URL]"
+      notes: "[what to look at]"
+
 page:
   size: "A4"           # A4 or US_Letter
   orientation: "portrait"

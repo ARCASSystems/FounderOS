@@ -242,7 +242,7 @@ class SessionStartTipTests(unittest.TestCase):
         # the per-capability "last used" is within 14 days.
         entries = self._seasoned_log_entries(today, count=10, span_days=35)
         recent = (today - timedelta(days=1)).isoformat()
-        recent_lines = [f"- log-{recent}-{i:03d} #used:{cap} did the thing"
+        recent_lines = [f"- log-{recent}-{i:03d} #used-{cap} did the thing"
                         for i, cap in enumerate(capabilities)]
         entries.append((recent, recent_lines))
         body = self._build_log_body(entries)
@@ -296,6 +296,46 @@ class SessionStartTipTests(unittest.TestCase):
                 "Tip should contain a quoted natural-language phrase the "
                 "operator can say to Claude.",
             )
+
+    def test_tip_ignores_untagged_planning_mentions(self) -> None:
+        """A line saying to run a capability later is not a use."""
+        from datetime import date, timedelta
+        today = date.today()
+        capabilities = [
+            "decision-framework",
+            "priority-triage",
+            "forcing-questions",
+            "weekly-review",
+            "brain-pass",
+            "knowledge-capture",
+            "ingest",
+            "bottleneck-diagnostic",
+            "strategic-analysis",
+        ]
+        entries = self._seasoned_log_entries(today, count=10, span_days=35)
+        recent = (today - timedelta(days=1)).isoformat()
+        recent_lines = [f"- log-{recent}-{i:03d} #used-{cap} did the thing"
+                        for i, cap in enumerate(capabilities)]
+        recent_lines.append("- I should run audit later when I have time.")
+        entries.append((recent, recent_lines))
+        body = self._build_log_body(entries)
+        with tempfile.TemporaryDirectory() as tmp:
+            hook = self._make_install(Path(tmp), body)
+            output = self._run_hook(hook)
+            self.assertIn('Tip: Say "audit the OS"', output)
+
+    def test_tip_counts_acted_tag_with_capability_name(self) -> None:
+        """#acted lines count only when they name the capability."""
+        from datetime import date, timedelta
+        today = date.today()
+        entries = self._seasoned_log_entries(today, count=12, span_days=45)
+        recent = (today - timedelta(days=1)).isoformat()
+        entries.append((recent, ["- #acted audit completed the weekly check."]))
+        body = self._build_log_body(entries)
+        with tempfile.TemporaryDirectory() as tmp:
+            hook = self._make_install(Path(tmp), body)
+            output = self._run_hook(hook)
+            self.assertIn("=== end brief ===", output)
 
 
 if __name__ == "__main__":

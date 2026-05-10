@@ -4,7 +4,7 @@
 
 $ErrorActionPreference = 'SilentlyContinue'
 
-# Resolve the hook directory robustly. $MyInvocation.MyCommand.Path can be null
+# Resolve the hook directory safely. $MyInvocation.MyCommand.Path can be null
 # in some invocation contexts (dot-sourced, -Command mode, certain CI runners).
 # Fall back to PSScriptRoot, then bail quietly if neither resolves.
 $HookDir = $null
@@ -298,7 +298,8 @@ if (Test-Path $MemoryDiff) {
 }
 
 # --- Tip (rotates weekly, surfaces one underused capability) ---
-# Scans brain/log.md for capability invocation tags. Picks a capability not
+# Scans brain/log.md for explicit action tags only. Counts `#used-<capability>`
+# or `#acted` lines that name the capability. Picks a capability not
 # invoked in 14+ days. Rotates the pick weekly so the same tip does not
 # repeat. Fresh-install gate: the log must have at least 10 entries
 # (### date headings) AND span at least 30 days from the earliest entry to
@@ -345,7 +346,10 @@ if (Test-Path $Log) {
       }
       if (-not $curDate) { continue }
       foreach ($t in $tips) {
-        if ($line -like ('*' + $t.cap + '*')) {
+        $capPattern = [regex]::Escape($t.cap)
+        $usedPattern = "(^|\s)#used-$capPattern\b"
+        $actedPattern = "(^|\s)#acted\b"
+        if (($line -match $usedPattern) -or (($line -match $actedPattern) -and ($line -match $capPattern))) {
           $prev = $lastUsed[$t.cap]
           if ($null -eq $prev -or $curDate -gt $prev) {
             $lastUsed[$t.cap] = $curDate

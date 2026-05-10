@@ -22,6 +22,14 @@
 
 ---
 
+## Positioning
+
+**Sells to:** {{SELLS_TO}}
+**Sells:** {{SELLS}}
+**Buyer pain:** {{BUYER_PAIN}}
+
+---
+
 ## How They Work
 
 **Work style:** {{WORK_STYLE}} (e.g. sequential tasks, parallel threads, deep work blocks)

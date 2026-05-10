@@ -12,11 +12,11 @@ You are writing LinkedIn posts for the founder whose voice profile lives in `cor
 
 ## Before you write
 
-Read `core/voice-profile.yml`. If the file is missing or still contains the `[BRACKETED]` template defaults, do not stop. Draft the post using the universal anti-AI baseline (see `your-voice` SKILL.md) and prepend this one-line warning above the post, separated by a blank line:
+Before producing output, read `core/voice-profile.yml`. If the file is missing OR contains template defaults (lines starting with `{{`, values like `<your tone here>`, `[CHOOSE`, `[example:`, or `[NOT SET]`), STOP and tell the user:
 
-> Voice profile not set up. Post uses anti-AI baseline only and will sound generic. Run `/founder-os:setup` and complete the voice interview to make it sound like you.
+> Your voice profile is empty. Run `/founder-os:voice-interview` first, or this output will sound like Claude defaults rather than you. Want me to run the interview now, or proceed with defaults anyway?
 
-The warning is for the user, not part of the post. They strip it before publishing.
+If the user chooses to proceed with defaults, draft the post using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the post is voice-coupled.
 
 ## Brain context (default)
 
@@ -29,6 +29,12 @@ If the snapshot is missing, run:
 Then read it. If the snapshot script is also missing (older install), proceed using only the profile files. Do not block.
 
 The snapshot tells you what flags are open, what the user is working on this week, and what the latest staleness state is. Apply this context to your output where it is relevant. Do not surface every snapshot field in every output - use judgment. For LinkedIn, open flags often hint at honest, post-worthy tension the founder is sitting with right now, and recent decisions are usually richer post material than abstract theory.
+
+## Positioning and buyer language
+
+Before drafting, also read `core/identity.md` and the `buyer_language:` block in `core/voice-profile.yml` if present.
+
+Use `core/identity.md` `## Positioning` to understand who the founder sells to, what they sell, and the visible buyer pain. Use `buyer_language` for the buyer's actual words. If these fields exist, the post should speak to that buyer instead of a generic founder audience.
 
 ## Brain pass (auto)
 

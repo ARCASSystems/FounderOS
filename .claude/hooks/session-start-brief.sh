@@ -283,7 +283,8 @@ if [ -f "$MEMORY_DIFF" ] && [ -n "$PYTHON" ]; then
 fi
 
 # --- Tip (rotates weekly, surfaces one underused capability) ---
-# Scans brain/log.md for capability invocation tags. Picks a capability not
+# Scans brain/log.md for explicit action tags only. Counts #used-<capability>
+# or #acted lines that name the capability. Picks a capability not
 # invoked in 14+ days that matches current state. Rotates the pick weekly so
 # the same tip does not repeat. Fresh-install gate: the log must have at
 # least 10 entries (### date headings) AND span at least 30 days from the
@@ -332,8 +333,8 @@ earliest = min(entry_dates)
 if (today - earliest).days < 30:
     sys.exit(0)
 # Build last-used-on map. Walk lines, track current date header (## or ###),
-# accumulate capability mentions. We treat any reference (#used:foo,
-# /founder-os:foo, foo skill) as a use.
+# accumulate explicit action tags. A planning line like "run audit later" is
+# not a use. Count #used-<capability>, or #acted lines that name a capability.
 date_re = re.compile(r'^#{2,3}\s+(\d{4}-\d{2}-\d{2})')
 last_used = {}
 cur = None
@@ -348,7 +349,7 @@ for ln in text.splitlines():
     if cur is None:
         continue
     for cap, _ in TIPS:
-        if cap in ln:
+        if f"#used-{cap}" in ln or ("#acted" in ln and cap in ln):
             prev = last_used.get(cap)
             if prev is None or cur > prev:
                 last_used[cap] = cur
