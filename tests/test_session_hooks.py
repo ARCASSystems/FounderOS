@@ -147,34 +147,84 @@ class SessionStartTipTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         return result.stdout
 
-    def test_tip_present_when_no_recent_invocations(self) -> None:
-        """Empty log => every capability is "never used" => tip surfaces."""
+    def _build_log_body(self, entries: list[tuple[str, list[str]]]) -> str:
+        """Render a log body from (iso-date, [body lines]) tuples.
+
+        Each tuple becomes a `### <date> ...` heading plus its body lines.
+        Mirrors the entry format the fresh-install gate looks for.
+        """
+        out = ["# Brain log", ""]
+        for idx, (iso, lines) in enumerate(entries):
+            out.append(f"### {iso} entry-{idx:03d}")
+            out.extend(lines)
+            out.append("")
+        return "\n".join(out) + "\n"
+
+    def _seasoned_log_entries(
+        self,
+        today,
+        *,
+        count: int = 12,
+        span_days: int = 45,
+    ) -> list[tuple[str, list[str]]]:
+        """Build a log spanning >= 30 days with >= 10 entries.
+
+        Default is 12 entries spread across 45 days, which clears both gates
+        (entries >= 10, span >= 30).
+        """
+        from datetime import timedelta
+        entries: list[tuple[str, list[str]]] = []
+        # Earliest first so min(date) maths is obvious.
+        earliest = today - timedelta(days=span_days)
+        # Spread `count` entries linearly between earliest and today.
+        for i in range(count):
+            offset = (span_days * i) // max(count - 1, 1)
+            d = (earliest + timedelta(days=offset)).isoformat()
+            entries.append((d, [f"- log-{d}-{i:03d} routine work"]))
+        return entries
+
+    def test_tip_omitted_on_fresh_install_empty_log(self) -> None:
+        """Fresh install (empty log, no state) must omit the Tip line.
+
+        v1.20.0 surfaced a Tip on day 1, contradicting the plan's intent of
+        only pitching capabilities to operators with enough history that the
+        pitch can match current state. v1.20.1 gates Tip on >= 10 entries
+        AND >= 30 days of span.
+        """
         with tempfile.TemporaryDirectory() as tmp:
             hook = self._make_install(Path(tmp), "# Brain log\n")
             output = self._run_hook(hook)
-            self.assertIn("Tip:", output)
-            # Tip uses natural-language phrasing, never slash-command-first.
-            tip_line = next(
-                (line for line in output.splitlines() if line.startswith("Tip:")),
-                "",
+            self.assertIn("=== end brief ===", output)
+            self.assertNotIn(
+                "Tip:",
+                output,
+                "Tip must be omitted on fresh install (empty log).",
             )
-            self.assertNotRegex(
-                tip_line,
-                r"^Tip:\s*/",
-                "Tip line must not lead with a slash command",
-            )
-            self.assertNotRegex(
-                tip_line,
-                r"You haven't run",
-                "Tip must use the natural-language pattern, not the "
-                "frequency-of-use anti-pattern",
+
+    def test_tip_omitted_when_log_under_ten_entries(self) -> None:
+        """Log with < 10 entries (regardless of span) omits Tip."""
+        from datetime import date, timedelta
+        today = date.today()
+        # Five entries spread across 60 days. Span passes, count fails.
+        entries = []
+        for i in range(5):
+            d = (today - timedelta(days=60 - i * 12)).isoformat()
+            entries.append((d, [f"- log-{d}-{i:03d} sparse work"]))
+        body = self._build_log_body(entries)
+        with tempfile.TemporaryDirectory() as tmp:
+            hook = self._make_install(Path(tmp), body)
+            output = self._run_hook(hook)
+            self.assertIn("=== end brief ===", output)
+            self.assertNotIn(
+                "Tip:",
+                output,
+                "Tip must be omitted when log has fewer than 10 entries.",
             )
 
     def test_tip_omitted_when_all_capabilities_recently_used(self) -> None:
-        """Every capability touched within the last day => no eligible tip."""
-        # Use yesterday so the hook's "today" math is stable across runs.
+        """Seasoned log but every capability touched within 14 days => no tip."""
         from datetime import date, timedelta
-        recent = (date.today() - timedelta(days=1)).isoformat()
+        today = date.today()
         capabilities = [
             "decision-framework",
             "priority-triage",
@@ -187,40 +237,64 @@ class SessionStartTipTests(unittest.TestCase):
             "bottleneck-diagnostic",
             "strategic-analysis",
         ]
-        body_lines = [f"## {recent}", ""]
-        for cap in capabilities:
-            body_lines.append(f"- log-{recent}-001 #used:{cap} did the thing")
-        body = "\n".join(body_lines) + "\n"
+        # Seasoned base log: 10 routine entries spanning 35 days. Plus a
+        # recent entry (yesterday) where every capability is mentioned, so
+        # the per-capability "last used" is within 14 days.
+        entries = self._seasoned_log_entries(today, count=10, span_days=35)
+        recent = (today - timedelta(days=1)).isoformat()
+        recent_lines = [f"- log-{recent}-{i:03d} #used:{cap} did the thing"
+                        for i, cap in enumerate(capabilities)]
+        entries.append((recent, recent_lines))
+        body = self._build_log_body(entries)
         with tempfile.TemporaryDirectory() as tmp:
             hook = self._make_install(Path(tmp), body)
             output = self._run_hook(hook)
-            # Brief still renders end markers, just no Tip line.
             self.assertIn("=== end brief ===", output)
             self.assertNotIn(
                 "Tip:",
                 output,
-                "Tip line must be omitted when all capabilities used within "
-                "the last 14 days",
+                "Tip must be omitted when every capability was used in the "
+                "last 14 days, even if the log is seasoned.",
             )
 
-    def test_tip_uses_natural_language_phrasing(self) -> None:
-        """The tip must lead with a natural-language phrase, not a command."""
+    def test_tip_surfaces_when_log_seasoned_and_capability_idle(self) -> None:
+        """Seasoned log + a capability not used in 14+ days => Tip surfaces."""
+        from datetime import date
+        today = date.today()
+        # Seasoned log with no capability mentions => every capability is
+        # "never used", but the gate passes so they count as eligible.
+        entries = self._seasoned_log_entries(today, count=12, span_days=45)
+        body = self._build_log_body(entries)
         with tempfile.TemporaryDirectory() as tmp:
-            hook = self._make_install(Path(tmp), "# Brain log\n")
+            hook = self._make_install(Path(tmp), body)
             output = self._run_hook(hook)
-            tip_lines = [line for line in output.splitlines() if line.startswith("Tip:")]
+            tip_lines = [line for line in output.splitlines()
+                         if line.startswith("Tip:")]
             self.assertEqual(
                 len(tip_lines),
                 1,
-                "Exactly one Tip line is expected when eligible",
+                "Exactly one Tip line is expected when log is seasoned and "
+                "an eligible capability exists.",
             )
             tip = tip_lines[0]
-            # Pattern: contains a quoted natural-language phrase.
+            # Natural-language phrasing: never slash-command-first, never the
+            # frequency-of-use anti-pattern.
+            self.assertNotRegex(
+                tip,
+                r"^Tip:\s*/",
+                "Tip line must not lead with a slash command.",
+            )
+            self.assertNotRegex(
+                tip,
+                r"You haven't run",
+                "Tip must use the natural-language pattern, not the "
+                "frequency-of-use anti-pattern.",
+            )
             self.assertRegex(
                 tip,
                 r'"[^"]+"',
                 "Tip should contain a quoted natural-language phrase the "
-                "operator can say to Claude",
+                "operator can say to Claude.",
             )
 
 

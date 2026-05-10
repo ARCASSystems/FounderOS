@@ -2,113 +2,51 @@
 name: menu
 description: >
   Show what FounderOS can do right now. Say "show me what you can do", "what can FounderOS do", "what should I try next", or "what's relevant right now" (or run /founder-os:menu). Returns 5 to 7 capability suggestions tailored to current state. Reads `brain/.snapshot.md`, open flags, this week's must-do, the last 7 days of `brain/log.md`, and the presence of `core/voice-profile.yml` and `core/brand-profile.yml`. Free-tier accessible - no LLM call inside the algorithm.
-allowed-tools: ["Read", "Glob", "Grep"]
+allowed-tools: ["Bash", "Read"]
 mcp_requirements: []
 ---
 
 # Menu
 
-Discovery entry for FounderOS. Returns a small, ranked list of capabilities the founder is most likely to want right now, scored against current state. Natural-language phrasing is primary, slash commands appear parenthetically.
+Discovery entry for FounderOS. Returns a small, ranked list of capabilities the founder is most likely to want right now, scored against current state. Natural-language phrasing is primary, slash commands appear parenthetically only for capabilities that have a real command file.
 
-This skill must:
+## How this skill runs
 
-- Run end-to-end without writing to any file.
-- Read state files only. No LLM call. No web call.
-- Return at least 5 rows on every install, including a brand-new one.
-- Finish in under 2 seconds on a populated install.
-
-## Algorithm
-
-The model running this skill IS the menu engine. Read the state, score capabilities, return top 5 to 7. No external service.
-
-### Step 1 - Read current state
-
-Read these files if they exist. Skip silently if missing.
-
-- `brain/.snapshot.md` - the runtime context payload (do NOT regenerate it; just read it).
-- `brain/flags.md` - count entries with `Status: OPEN`.
-- `cadence/weekly-commitments.md` - extract the `## Week of` date and the `Must Do` items.
-- `brain/log.md` - read last 7 days of entries (group by `## YYYY-MM-DD` headers).
-- `core/voice-profile.yml` - check existence and whether body is template defaults (`{{HANDLEBARS}}` markers present).
-- `core/brand-profile.yml` - same check.
-- `context/priorities.md` - look for items rolled forward (lines tagged `Week 2+`, `Week 3+`, or similar).
-- `drafts/` directory - count files modified in the last 24 hours (if directory exists).
-
-Do not synthesize. Just collect facts.
-
-### Step 2 - Score capabilities
-
-Each capability has a `surface_when` rule. Score 1 if the rule fires, 0 otherwise.
-
-- `voice-interview` - surface when `core/voice-profile.yml` is missing OR contains template defaults.
-- `brand-interview` - surface when `core/brand-profile.yml` is missing OR contains template defaults.
-- `priority-triage` - surface when `context/priorities.md` has 3 or more items rolled forward (lines containing `Week 2+`, `Week 3+`, or `Week 4+`), OR when `brain/log.md` last 7 days mentions overwhelm, stuck, too many.
-- `weekly-review` - surface when current date is more than 6 days past the `## Week of` date in `cadence/weekly-commitments.md`, OR when no weekly commitments file exists.
-- `forcing-questions` - surface when log mentions a new initiative, scope expansion, or "should I start" in the last 7 days.
-- `pre-send-check` - surface when `drafts/` has files modified in the last 24 hours.
-- `capture-meeting` - surface when next 24h calendar event is less than 1 hour away (only if calendar MCP is connected; otherwise skip silently).
-- `audit` - surface when last `audit` invocation in `brain/log.md` is more than 14 days old, OR never run.
-
-Capability rows that did not fire still get scored 0 and remain available as fallback when fewer than 5 rows fired.
-
-### Step 3 - Pick top 5 to 7
-
-Sort by score (1 first, 0 second). Tie-break by surface order in Step 2. Take the first 5 to 7.
-
-### Step 4 - Render rows
-
-Each row has three parts:
-
-- Natural-language phrasing first.
-- Slash command in parentheses second.
-- One-sentence why-now after a hyphen.
-
-Pattern:
+The menu engine is `scripts/menu.py`. The skill invokes the script and prints its output verbatim. The model does not score capabilities, does not invent rows, and does not paraphrase the engine's output.
 
 ```
-- Say "set up my voice profile" (or run <prefix>voice-interview) - your voice profile is empty and writing skills will fall back to anti-AI defaults until it's filled.
+python scripts/menu.py
 ```
 
-Use the same `<prefix>` substitution model the wizard uses (see `skills/founder-os-setup/SKILL.md` Phase 6.2). On Path A, `<prefix>` is `/founder-os:`. On Path B, `<prefix>` is `/`. Always-bare commands (`/today`, `/next`, `/pre-meeting`, `/capture-meeting`) stay bare on both paths.
+The script:
 
-### Step 5 - Close
+- Reads state files only (`brain/.snapshot.md`, `brain/flags.md`, `cadence/weekly-commitments.md`, `brain/log.md`, `core/voice-profile.yml`, `core/brand-profile.yml`, `context/priorities.md`, `drafts/`).
+- Scores capabilities against deterministic rules.
+- Returns the top 5 to 7 by score, with a Day-1 starter set as zero-state fallback.
+- Renders rows natural-language-first, with slash commands only for capabilities that have a real `.claude/commands/<name>.md` file. Skill-only capabilities (`weekly-review`, `priority-triage`, `pre-send-check`) render natural-language only and never invent a slash form.
+- Closes with the verbatim line specified in `scripts/menu.py`.
+- Stdlib only. No LLM call. No network call. Free-tier accessible.
 
-End the output with this line, verbatim:
+## What the skill does
 
-> These are tailored to your current state. Say any of the natural-language phrases above. Or ask Claude anything in plain English - most of FounderOS routes by what you say, not what you type.
+1. Locate the FounderOS install root (the working directory, or the repo root if the user is inside a sub-folder).
+2. Run `python scripts/menu.py --root <root>` and capture stdout.
+3. Print stdout verbatim. Do not summarize, do not paraphrase, do not add commentary.
+4. If the script exits non-zero, surface the error to the user and stop.
 
-## Zero-state safety
+## What the skill does not do
 
-On a brand-new install with no `brain/.snapshot.md`, no `brain/log.md` entries, and no `context/priorities.md`, return the Day-1 starter set in this exact order. Never return an empty list. Never return "no capabilities to suggest."
-
-Day-1 starter set:
-
-1. `voice-interview` - "Say 'set up my voice profile' (or run <prefix>voice-interview) - day one move. Without it, writing skills fall back to anti-AI defaults."
-2. `brand-interview` - "Say 'set up my brand profile' (or run <prefix>brand-interview) - day one move. Without it, branded deliverables render plain."
-3. `priority-triage` - "Say 'what should I focus on next' (or run <prefix>priority-triage) - cuts a long open list down to one thing."
-4. `today` - "Say 'what's on for today?' (or run /today) - one-screen view of today's anchor, open flags, and next event."
-5. `ingest` - "Say 'ingest this' on any URL or file (or run <prefix>ingest) - files a source into raw/ with provenance preserved."
-
-## Sample output
-
-Rendered output for a partially populated install with voice profile missing, weekly commitments stale, and 4 items rolled forward:
-
-```
-Here are 5 things FounderOS can do right now, picked for your current state:
-
-- Say "set up my voice profile" (or run /founder-os:voice-interview) - your voice profile is empty so writing skills are falling back to anti-AI defaults.
-- Say "run my weekly review" (or run /founder-os:weekly-review) - your weekly commitments file is 9 days old, the sprint needs rolling.
-- Say "what should I focus on next" (or run /founder-os:priority-triage) - 4 priorities rolled forward, list needs cutting.
-- Say "audit the OS" (or run /founder-os:audit) - last audit was 18 days ago, worth a fresh pass.
-- Say "what's on for today?" (or run /today) - one-screen view of today's anchor and next event.
-
-These are tailored to your current state. Say any of the natural-language phrases above. Or ask Claude anything in plain English - most of FounderOS routes by what you say, not what you type.
-```
+- Does not score capabilities itself. The script is authoritative.
+- Does not invent slash commands. If the script omits a slash form, the model omits it too.
+- Does not write to any file.
+- Does not call an LLM. The scoring is deterministic, file-based, free-tier accessible.
 
 ## Constraints
 
-- No LLM call inside the algorithm. The menu reads files, scores against rules, returns the top N.
-- No write operations. This skill never modifies any file.
-- Free-tier accessibility floor preserved. Works without a paid AI subscription.
-- Anti-AI rules apply to any prose generated. No banned phrases, no em dashes, no en dashes.
-- Trigger phrases listed in `skills/founder-os-setup/SKILL.md` Phase 6.2 must appear verbatim where relevant ("set up my voice profile", "set up my brand profile", "what should I focus on next", "what's on for today?", "audit the OS").
+- Output must end with the closing line from `scripts/menu.py` verbatim.
+- Trigger phrases the operator already uses ("set up my voice profile", "set up my brand profile", "what should I focus on next", "what's on for today?", "audit the OS") appear in the script's rendered rows when the corresponding capability surfaces. The script handles this; the skill does not.
+- If `scripts/menu.py` is missing on this install, surface that to the user and stop. Do not fall back to a model-side menu (that would re-introduce the v1.20.0 defect this skill was rewritten to fix).
+
+## Tests
+
+Behavioural tests live at `tests/test_menu.py`. They run the script against fixture roots (zero-state, populated, missing snapshot) and assert on stdout. The skill itself is verified by `SkillFileSurface` in the same test file: the SKILL.md must reference `scripts/menu.py` and must not delegate scoring to the model.

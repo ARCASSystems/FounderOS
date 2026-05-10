@@ -1,6 +1,6 @@
 # Founder OS Skills
 
-39 skills included as of v1.12 (37 from v1.9 plus `brain-snapshot` and `brain-pass`, both added in v1.10). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. v1.9 added hook test coverage and documented the query `--root` flag. v1.10 added the runtime brain context layer (a deterministic snapshot every skill can consume at task time, plus a brain-pass skill that synthesises answers across the brain layer with citations). v1.11 was launch hardening (no new skills, install ergonomics fixed). v1.12 added a hook-only memory-diff helper that flags `clients/<slug>/` folders missing from auto-memory (no new skills, no new commands). The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
+40 skills included as of v1.20.1 (39 from v1.12 plus `menu`, added in v1.20.0). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. v1.9 added hook test coverage and documented the query `--root` flag. v1.10 added the runtime brain context layer (a deterministic snapshot every skill can consume at task time, plus a brain-pass skill that synthesises answers across the brain layer with citations). v1.11 was launch hardening (no new skills, install ergonomics fixed). v1.12 added a hook-only memory-diff helper that flags `clients/<slug>/` folders missing from auto-memory (no new skills, no new commands). v1.20.0 was the natural-language routing release plus the new `/founder-os:menu` capability discovery entry. v1.20.1 corrected the skill count drift introduced when v1.20.0 added `menu` without updating the docs. The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
 
 | Skill | Status | Replaces |
 |-------|--------|---------|
@@ -13,6 +13,7 @@
 | [brain-snapshot](brain-snapshot/SKILL.md) | Ready | Generates and documents the runtime context payload skills consume at task time. Output lives at `brain/.snapshot.md`. |
 | [brain-pass](brain-pass/SKILL.md) | Ready | Semantic retrieval over the brain layer. Synthesises answers across log, knowledge, decisions, flags, patterns. Run via `/founder-os:brain-pass "<question>"`. |
 | [audit](audit/SKILL.md) | Ready | Composite OS health report (readiness + lint + wiki + brain staleness + voice completeness). Run via `/founder-os:audit`. |
+| [menu](menu/SKILL.md) | Ready | Capability discovery. Say "show me what you can do" or run `/founder-os:menu`. Returns 5 to 7 capability suggestions tailored to current state. |
 | [weekly-review](weekly-review/SKILL.md) | Ready | |
 | [priority-triage](priority-triage/SKILL.md) | Ready | Reclaim, Taskade |
 | [brain-log](brain-log/SKILL.md) | Ready | |
@@ -46,10 +47,11 @@
 
 ## Commands
 
-This plugin ships twenty slash commands (nineteen from v1.9 plus `/founder-os:brain-pass`):
+This plugin ships twenty-one slash commands (twenty from v1.9 plus `/founder-os:menu` from v1.20.0):
 
 | Command | Purpose |
 |---------|---------|
+| [/founder-os:menu](../.claude/commands/menu.md) | Show 5 to 7 capability suggestions tailored to current state. Say "show me what you can do" or run `/founder-os:menu`. Read-only. |
 | [/founder-os:setup](../.claude/commands/setup.md) | Run the Founder OS setup wizard. Generates identity, priorities, decisions, cadence, and brain files from a guided interview. |
 | [/founder-os:voice-interview](../.claude/commands/voice-interview.md) | Capture how you write into `core/voice-profile.yml`. Activates the voice-coupled writing skills. |
 | [/founder-os:brand-interview](../.claude/commands/brand-interview.md) | Capture your visual identity into `core/brand-profile.yml`. Activates branded outputs. |
@@ -73,7 +75,7 @@ This plugin ships twenty slash commands (nineteen from v1.9 plus `/founder-os:br
 
 ## Status
 
-39 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile.
+40 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile.
 
 Release notes:
 
@@ -88,5 +90,7 @@ Release notes:
 - v1.10 added `brain-snapshot` (runtime context payload at `brain/.snapshot.md`), wired nine output-producing skills to consume it (meeting-prep, weekly-review, strategic-analysis, decision-framework, founder-coaching, knowledge-capture, unit-economics, priority-triage, brain-log), added `brain-pass` (semantic retrieval across the brain layer with citations), and auto-invoked brain-pass from meeting-prep and linkedin-post.
 - v1.11 closed v1.10 install gaps so Path A users actually get the runtime brain context. Setup wizard now copies all runtime helpers, the wiki-build script ships at repo root, `/founder-os:update` and `/founder-os:uninstall` cover scripts and rules, PowerShell hooks parse ISO dates with InvariantCulture, and `.gitattributes` keeps `.sh` and `.py` LF-only on Windows clones. No new skills, no new commands.
 - v1.12 added a hook-only memory-diff helper that runs from the SessionStart brief and flags `clients/<slug>/` folders without an auto-memory entry. No new skills, no new commands. Test count rose from 34 to 43.
+- v1.20.0 was the discoverability release. Natural-language routing, the new `menu` skill (`/founder-os:menu`), and SessionStart Tip line. 21 commands, 56 + new tests.
+- v1.20.1 corrected the v1.20.0 skill-count drift (docs claimed 39 skills after `menu` brought the filesystem total to 40), extracted the menu engine into `scripts/menu.py`, gated the SessionStart Tip line on a state-signal AND age requirement so a fresh install with no log history stays quiet, and added wizard test coverage for the 4 + 4 multi-choice prompts.
 
-All additions across v1.2 through v1.12 are additive. No existing skill behaviour was changed without an explicit version note.
+All additions across v1.2 through v1.20.1 are additive. No existing skill behaviour was changed without an explicit version note.

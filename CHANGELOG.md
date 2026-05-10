@@ -2,6 +2,44 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.20.1 - 2026-05-10
+
+v1.20.1 closes the four functional defects Codex flagged against v1.20.0. The menu skill now has an actual engine. The SessionStart Tip line stops surfacing on a fresh install with no log history. The setup wizard has real test coverage for its 4 + 4 multi-choice prompts. Skill count corrected from 39 to 40 (the v1.20.0 release added the `menu` skill but the docs never caught up). README copy lapses are deferred to v1.21 - the operator's stated priority is functional truth, not surface prose.
+
+### Changed - menu has a real engine
+
+- **NEW `scripts/menu.py` (489 LOC, stdlib only).** The scoring algorithm lives here. Reads state files (`brain/.snapshot.md`, `brain/flags.md`, `cadence/weekly-commitments.md`, `brain/log.md`, `core/voice-profile.yml`, `core/brand-profile.yml`, `context/priorities.md`, `drafts/`), scores capabilities against deterministic rules, returns the top 5 to 7 with a Day-1 starter set as the zero-state fallback. No LLM call. No network call. Free-tier accessible. Renders rows natural-language-first; slash commands appear only for capabilities that have a real `.claude/commands/<name>.md` file. Skill-only capabilities (`weekly-review`, `priority-triage`, `pre-send-check`) render natural-language only and never invent a slash form.
+- **`skills/menu/SKILL.md` rewritten as a thin wrapper.** The skill invokes `python scripts/menu.py` and prints stdout verbatim. The model does not score capabilities. Reason: the v1.20.0 SKILL.md said "the model running this skill IS the menu engine," which is an LLM call by definition and contradicted the plan's "no LLM call inside the algorithm" constraint. The v1.20.0 implementation also invented `/founder-os:weekly-review` and `/founder-os:priority-triage` (commands that do not exist).
+- **`tests/test_menu.py` rewritten as behavioural tests (15 tests).** Runs `scripts/menu.py` against fixture roots (zero-state, populated, missing snapshot) and asserts on stdout. Covers: zero-state returns Day-1 set, populated returns 5 to 7 rows, capability-to-command map never invents skill-only slash forms, closing line verbatim, no LLM/network imports, no banned phrases or em/en dashes in rendered output, SKILL.md surface points to the script.
+
+### Changed - SessionStart Tip fresh-install gate
+
+- **`.claude/hooks/session-start-brief.sh` and `.ps1`.** Tip line now requires `brain/log.md` to have at least 10 entries spanning at least 30 days before any Tip surfaces. Reason: v1.20.0 surfaced a Tip on a fresh install with an empty log because "never used" counted as eligible. Fresh installs should not get pitched a capability they have not had time to use. The 14-day age filter on individual capabilities is preserved on top of the global gate.
+- **`tests/test_session_hooks.py` updated.** Removed the broken assertion that empty-log surfaces a Tip. Added: empty log omits Tip, log under 10 entries omits Tip, log spanning under 30 days omits Tip, seasoned log with all capabilities recently used omits Tip, seasoned log with at least one idle capability surfaces Tip with natural-language phrasing.
+
+### Added - setup wizard test coverage
+
+- **NEW `tests/test_setup_wizard.py` (26 tests, 3 test classes).** Parses `skills/founder-os-setup/SKILL.md` and asserts on the 4 + 4 multi-choice structure: tool-stack prompts (knowledge base, email, calendar, CRM/pipeline), work-style prompts (deep work time, decision style, communication style, what overwhelms you), skip-records-null behaviour, parse-everything-at-once backward compatibility, allowed-values tokens preserved, downstream schema field references intact (`Decision style:` in `core/identity.md`, `Communication style:` in `rules/operating-rules.md`). Plus prose hygiene checks (no em/en dashes, no banned phrases) on the MC sections.
+
+### Changed - skill count drift corrected
+
+- **`skills/index.md` rewritten.** Adds the `menu` skill row that v1.20.0 missed. Adds `/founder-os:menu` to the command table. Bumps skill count to 40 and command count to 21. Adds release notes for v1.20.0 and v1.20.1.
+- **`README.md`.** Every live-state "39 skills" mention updated to "40 skills." Production stamp updated to v1.20.1.
+- **`.claude-plugin/marketplace.json`** and **`.claude-plugin/plugin.json`.** Both `version` fields bumped to 1.20.1. Description fields updated to "40 skills."
+- **`VERSION`.** 1.20.0 -> 1.20.1.
+- **`ROADMAP.md`.** New v1.20.1 entry at the top of Shipped.
+
+### Tests
+
+107 tests, all passing in ~58s. Up from 76 in v1.20.0. New coverage: 4 menu behavioural tests above the 11 carried forward (15 total), 3 session-hook gate tests, 26 wizard MC structural tests.
+
+### Out of scope (deferred to v1.21)
+
+- README setup ladder rewrite (currently leads with `/founder-os:setup` etc.; v1.21 will rewrite as "Say X (or run Y)").
+- `skills/today/SKILL.md` to host the "what's on for today?" trigger phrase (currently routes via the `/today` command only).
+- Tip detection switching from log substring matches to `#used` tag matches (refinement, not a P0 blocker).
+- Time-awareness primitive: session-to-session continuity, message timestamps, skipped-day detection. Captured as a separate planning track.
+
 ## v1.20.0 - 2026-05-10
 
 FounderOS now routes on natural language. Slash commands stayed but became parenthetical shortcuts. New `/founder-os:menu` returns capability suggestions tailored to your current state. The release also closes two pass-1 findings deferred from v1.19.6: `scripts/query.py` zero-score fallback returns a no-positive-match block instead of graph-popular junk, and the setup wizard's tool-stack and work-style questions become 4 + 4 short multi-choice prompts instead of two long open-ended walls.
