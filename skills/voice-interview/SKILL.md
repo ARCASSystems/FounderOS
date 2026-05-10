@@ -11,7 +11,7 @@ mcp_requirements: []
 You are running an interactive interview to capture the user's writing voice. The output is `core/voice-profile.yml`. The voice-profile feeds the `your-voice` skill, which then writes everything as the user from that point on.
 
 <HARD-GATE>
-Do not generate `core/voice-profile.yml` until you have collected at least 2 reference samples AND walked the shaping questions, including buyer-language questions. Samples are the ground truth. If the user refuses to paste samples, ask them to write 2 short pieces in the chat right now (a 2-sentence work email and a LinkedIn-style hook). Don't proceed without samples - the profile without samples is a stereotype.
+Do not generate `core/voice-profile.yml` until you have collected at least 2 reference samples AND walked the shaping questions, including buyer-language questions and anti-example questions. Samples are the ground truth. If the user refuses to paste samples, ask them to write 2 short pieces in the chat right now (a 2-sentence work email and a LinkedIn-style hook). Don't proceed without samples - the profile without samples is a stereotype.
 
 Do not invent answers. If the user skips a question, leave the field as `[NOT SET]` and tell them they can re-run the interview later.
 </HARD-GATE>
@@ -22,7 +22,7 @@ Do not invent answers. If the user skips a question, leave the field as `[NOT SE
 
 People are bad at describing their own voice. Ask "what's your writing style?" and they say "professional and friendly." That's useless.
 
-Samples are the ground truth. The shaping questions exist to fill in patterns the samples don't show (vocabulary blacklist, sign-off phrasing, person default for content the user has not written yet).
+Samples are the ground truth. The shaping questions exist to fill in patterns the samples don't show (vocabulary blacklist, sign-off phrasing, person default for content the user has not written yet). Anti-examples catch what the user rejects, so later drafts can remove lines that sound plausible but wrong.
 
 The interview should feel like a 10-minute conversation, not a 30-minute form. Adapt to messy input. If the user rambles, extract the answer from the ramble and reflect it back in one line. If they answer multiple questions at once, capture all of them and skip ahead. Never tell the user to be more concise.
 
@@ -58,7 +58,7 @@ This always works. Capture both as samples.
 
 After samples are captured, say:
 
-> Got it. Now I'll ask 8 shaping questions to fill in patterns the samples might not show. Quick answers are fine.
+> Got it. Now I'll ask 12 shaping questions to fill in patterns the samples might not show. Quick answers are fine.
 
 ---
 
@@ -70,7 +70,7 @@ Ask each one in order. ONE at a time.
 
 Ask:
 
-> Question 1 of 6. When you write, do your sentences run short and punchy, longer and building, mixed up aggressively, or more like verse with line breaks for breath? Pick the one that feels closest. Or describe it your own way.
+> Question 1. When you write, do your sentences run short and punchy, longer and building, mixed up aggressively, or more like verse with line breaks for breath? Pick the one that feels closest. Or describe it your own way.
 
 Map the answer to: `short_hits | long_builders | mixed | verse_like`. If they describe it their own way, infer the closest match and reflect it back: "Sounds like X to me. Right?"
 
@@ -132,6 +132,52 @@ Capture as `buyer_language.phrases`. These phrases help `linkedin-post`, `email-
 
 ---
 
+## Phase 2.5 - Anti-examples
+
+Ask each one in order. ONE at a time.
+
+### Q9. Contrarian take
+
+Ask:
+
+> Question 9. Name one belief you hold about your work that most people in your field would push back on. One sentence.
+
+Capture as `anti_examples.contrarian_takes`. If they give more than one, keep 1 to 3 entries. If they skip, write `[]`.
+
+### Q10. Aesthetic crime
+
+Ask:
+
+> Question 10. What is one phrase, sentence structure, or formatting tic that makes you cringe when you see it in writing? Doesn't have to be in your own writing - anywhere.
+
+Capture as `anti_examples.aesthetic_crimes`. If they give more than one, keep 1 to 3 entries. If they skip, write `[]`.
+
+### Q11. Red flag
+
+Ask:
+
+> Question 11. When you read something and immediately suspect the writer is faking expertise, what was the tell? Name one specific pattern.
+
+Capture as `anti_examples.red_flags`. If they give more than one, keep 1 to 3 entries. If they skip, write `[]`.
+
+### Q12. Anti-example pairs
+
+First show this worked example:
+
+> Bad: "It's not just about hiring fast - it's about hiring right."
+> Good: "Most of the bad hires came from agreeing too quickly."
+> Rule: "Cut negation-contrast openings. Lead with the specific incident."
+
+Then ask:
+
+> Question 12. Now pick 3-6 short pieces from the samples you pasted earlier. For each one, write a BAD version: how Claude or a generic AI would have written the same idea. Then write your GOOD version (which is the original sample line, slightly tightened if needed). Add a one-line rule that explains what the rewrite changes.
+
+Capture as `anti_examples.pairs`. Each pair has `bad`, `good`, and `rule`. The BAD line must be plausible, not a strawman. The GOOD line must be drawn from or directly inspired by a real sample. The rule must be one line and usable by a writing skill.
+
+If the user struggles, offer to extract one candidate pair from their pasted samples and ask them to confirm or rewrite it. Do not write the pair until they approve it. Capture 3 to 6 pairs. If the user gives fewer than 3 after one prompt, accept what they have and write only those pairs.
+
+---
+
 ## Phase 3 - Confirm and save
 
 Show this exact block (filled with the captured values):
@@ -151,6 +197,10 @@ Show this exact block (filled with the captured values):
 > - Idiosyncrasies: <list>
 > - Buyer first sentence: <value>
 > - Buyer phrases: <list>
+> - Contrarian takes: <list>
+> - Aesthetic crimes: <list>
+> - Red flags: <list>
+> - Anti-example pairs: <count> pairs captured
 > - Samples: <count> pieces captured
 >
 > Looks right? (yes / change X)
@@ -189,6 +239,17 @@ voice:
     phrases:
       - "<phrase>"
       - "<phrase>"
+  anti_examples:
+    pairs:
+      - bad: "<sentence the user would never write>"
+        good: "<the user's rewrite of the same idea>"
+        rule: "<one-line rule the rewrite teaches>"
+    contrarian_takes:
+      - "<belief the user holds that their field pushes back on>"
+    aesthetic_crimes:
+      - "<phrase, structure, or word that makes the user cringe>"
+    red_flags:
+      - "<pattern that signals fake expertise>"
   samples:
     - title: "<title>"
       context: "<context>"
@@ -204,7 +265,7 @@ voice:
         <pasted text>
 ```
 
-If a field is not set, write `"[NOT SET]"` for strings, `0` for numbers, or `[]` for lists. Do not invent values.
+If a field is not set, write `"[NOT SET]"` for strings, `0` for numbers, or `[]` for lists. If an anti-example sub-block is empty, write that sub-block as `[]`. Do not invent values.
 
 ---
 

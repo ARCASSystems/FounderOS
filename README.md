@@ -304,7 +304,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.20.2 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.20.3 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -371,7 +371,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.20.2. Public push week of 2026-05-10.
+Version 1.20.3. Public push week of 2026-05-10.
+
+v1.20.3 deepens the voice profile with anti-examples. The voice interview now asks for contrarian takes, aesthetic crimes, red flags, and 3 to 6 BAD/GOOD writing pairs. The profile stores those under `voice.anti_examples`, and the five voice-coupled writing skills run a final filter that scans for the user's rejected patterns before returning a draft. Trace files show the Marcus pre/post LinkedIn pass on a topic with no prior buyer phrase.
 
 v1.20.2 closes the intake-to-output loop. The setup wizard now captures positioning, the voice interview captures buyer language, and the brand interview records existing visual proof so first drafts have the buyer, offer, pain, and brand references they need. `/rant` now asks one qualifying question and routes to a decision, draft, plan, log, or capture path instead of always writing a dump. The writing skills stop when voice data is empty instead of quietly drafting from defaults. The README setup ladder is natural-language-first, `skills/today` covers "what's on for today?", and SessionStart Tip detection now counts explicit action tags instead of planning mentions.
 

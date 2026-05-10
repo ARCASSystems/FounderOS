@@ -37,5 +37,38 @@ class WritingSkillVoiceGateTests(unittest.TestCase):
                     self.assertIn(marker, body)
 
 
+class WritingSkillAntiExampleFilterTests(unittest.TestCase):
+    def test_each_writing_skill_documents_anti_example_filter(self) -> None:
+        required_phrases = (
+            "After producing a draft and before returning it, run the anti-examples filter",
+            "anti_examples.pairs",
+            "core/voice-profile.yml",
+            "scan for matches against any `bad:` pattern",
+            "rewrite it using the `good:` pattern",
+            "the `rule:` line as the constraint",
+            "aesthetic_crimes",
+            "red_flags",
+            "Return the cleaned draft",
+            "Do not surface this filter to the user as a separate step",
+        )
+        for name, path in WRITING_SKILLS.items():
+            with self.subTest(skill=name):
+                body = path.read_text(encoding="utf-8")
+                for phrase in required_phrases:
+                    self.assertIn(phrase, body)
+
+    def test_each_filter_names_structural_markers(self) -> None:
+        markers = (
+            "literal substrings",
+            "negation-contrast",
+            "rule-of-three",
+        )
+        for name, path in WRITING_SKILLS.items():
+            with self.subTest(skill=name):
+                body = path.read_text(encoding="utf-8")
+                for marker in markers:
+                    self.assertIn(marker, body)
+
+
 if __name__ == "__main__":
     unittest.main()

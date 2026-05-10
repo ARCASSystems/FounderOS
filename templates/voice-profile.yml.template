@@ -53,6 +53,20 @@ voice:
       - "[example: We look smaller than we are.]"
       - "[example: People do not get what we do.]"
 
+  # Contrastive voice rules. These teach the writing skills what you would never write.
+  # Leave lists as [] if you have not captured them yet.
+  anti_examples:
+    pairs:
+      - bad: "[example: It's not just about hiring fast - it's about hiring right.]"
+        good: "[example: Most of the bad hires came from agreeing too quickly.]"
+        rule: "[example: Cut negation-contrast openings. Lead with the specific incident.]"
+    contrarian_takes:
+      - "[example: The fashionable answer in your field is often wrong because it skips the actual handoff.]"
+    aesthetic_crimes:
+      - "[example: Saying 'it's not just about X, it's about Y']"
+    red_flags:
+      - "[example: A tidy rule-of-three list with no concrete scene behind it]"
+
   # Reference samples. Paste 3 to 5 pieces of your writing that capture your voice. These are the ground truth.
   # When the rules and the samples disagree, the samples win.
   samples:

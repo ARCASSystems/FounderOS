@@ -2,6 +2,22 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.20.3 - 2026-05-10
+
+v1.20.3 adds contrastive voice depth. A founder can now teach the OS what they would never write, not only what they tend to write. The five voice-coupled writing skills use those anti-examples as a quiet final filter before returning drafts.
+
+### Changed - voice profiles now carry anti-examples
+
+- **Voice profile schema.** `templates/voice-profile.yml.template` now includes `voice.anti_examples` with `pairs`, `contrarian_takes`, `aesthetic_crimes`, and `red_flags`.
+- **Voice interview Phase 2.5.** `skills/voice-interview/SKILL.md` adds Q9 to Q12. The load-bearing Q12 walks the user through a BAD/GOOD pair before asking for 3 to 6 of their own.
+- **Writing-skill cleanup filter.** `linkedin-post`, `client-update`, `proposal-writer`, `email-drafter`, and `content-repurposer` now scan drafts against `anti_examples.pairs`, aesthetic crimes, and red flags before returning the cleaned draft.
+- **Release evidence.** `traces/v1203-pre-anti-examples.md` captures Marcus's v1.20.2 drift on a new LinkedIn topic. `traces/v1203-post-anti-examples.md` shows the same topic after the anti-example filter and pairs each rewritten line with the original drift.
+
+### Tests
+
+- Added coverage for the anti-example filter contract in all five writing skills.
+- Added coverage for voice-interview Phase 2.5, Q9 to Q12, the Q12 worked example, and the new file output structure.
+
 ## v1.20.2 - 2026-05-10
 
 v1.20.2 closes the intake-to-output gap. A founder can run setup, voice, and brand intake, then draft from a real situation with buyer, offer, pain, buyer language, and brand proof present in the files. Rants now qualify and route instead of always becoming a dump.

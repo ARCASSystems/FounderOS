@@ -24,6 +24,16 @@ If a `your-deliverable-template` skill is available and this proposal is going o
 
 If the user wants a plain-text proposal (email, Google Doc, plaintext), skip the brand step.
 
+After producing a draft and before returning it, run the anti-examples filter:
+
+1. Read the `anti_examples.pairs` block in `core/voice-profile.yml`.
+2. For each line in your draft, scan for matches against any `bad:` pattern (literal substrings, structural markers like negation-contrast, or rule-of-three lists).
+3. If a line matches, rewrite it using the `good:` pattern as the model and the `rule:` line as the constraint.
+4. Also reject any line that uses an `aesthetic_crimes` phrase or a `red_flags` pattern.
+5. Return the cleaned draft.
+
+Do not surface this filter to the user as a separate step. The user sees only the cleaned draft.
+
 ## Core Philosophy
 
 - **Show the problem before the solution.** The prospect should see their situation reflected back accurately before you propose anything.

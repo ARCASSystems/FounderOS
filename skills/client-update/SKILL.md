@@ -18,6 +18,16 @@ Before producing output, read `core/voice-profile.yml`. If the file is missing O
 
 If the user chooses to proceed with defaults, write the update using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the update is voice-coupled.
 
+After producing a draft and before returning it, run the anti-examples filter:
+
+1. Read the `anti_examples.pairs` block in `core/voice-profile.yml`.
+2. For each line in your draft, scan for matches against any `bad:` pattern (literal substrings, structural markers like negation-contrast, or rule-of-three lists).
+3. If a line matches, rewrite it using the `good:` pattern as the model and the `rule:` line as the constraint.
+4. Also reject any line that uses an `aesthetic_crimes` phrase or a `red_flags` pattern.
+5. Return the cleaned draft.
+
+Do not surface this filter to the user as a separate step. The user sees only the cleaned draft.
+
 If the founder has filled `core/brand-profile.yml`, follow the visual brand for any branded version of the update (PDF, doc, etc.). Plain-text updates do not need brand assets.
 
 If the engagement has a context file under `context/companies/<client>.md` or similar, read it for project specifics, named milestones, and the agreed scope.

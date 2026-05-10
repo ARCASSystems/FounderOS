@@ -35,7 +35,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 ### voice-interview
 
 - **Say.** "set up my voice profile", "set up my voice", or "voice interview".
-- **Outcome.** A voice profile that captures rhythm, openings, closings, contractions, idiosyncrasies, buyer language, reading level, preferred and banned words, plus 3 reference samples.
+- **Outcome.** A voice profile that captures rhythm, openings, closings, contractions, idiosyncrasies, buyer language, anti-examples, reading level, preferred and banned words, plus 3 reference samples.
 - **Reads.** `templates/voice-profile.yml.template` for the schema. Your pasted writing samples drive the inference.
 - **Writes.** `core/voice-profile.yml`.
 - **Voice rules.** This is the source.

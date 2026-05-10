@@ -33,9 +33,34 @@ class VoiceInterviewBuyerLanguageTests(unittest.TestCase):
                 self.assertIn(field, self.skill)
                 self.assertIn(field, self.template)
 
+    def test_anti_example_fields_are_saved(self) -> None:
+        for field in (
+            "anti_examples:",
+            "pairs:",
+            "bad:",
+            "good:",
+            "rule:",
+            "contrarian_takes:",
+            "aesthetic_crimes:",
+            "red_flags:",
+        ):
+            with self.subTest(field=field):
+                self.assertIn(field, self.skill)
+                self.assertIn(field, self.template)
+
     def test_confirm_step_surfaces_buyer_language(self) -> None:
         self.assertIn("Buyer first sentence", self.skill)
         self.assertIn("Buyer phrases", self.skill)
+
+    def test_confirm_step_surfaces_anti_examples(self) -> None:
+        for label in (
+            "Contrarian takes",
+            "Aesthetic crimes",
+            "Red flags",
+            "Anti-example pairs",
+        ):
+            with self.subTest(label=label):
+                self.assertIn(label, self.skill)
 
     def test_downstream_writers_named(self) -> None:
         for skill_name in (
