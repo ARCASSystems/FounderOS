@@ -97,6 +97,78 @@ if [ -f "$CLIENTS" ]; then
   fi
 fi
 
+# --- Compliance deadlines (legal-compliance skill) ---
+# Surfaces entries in context/compliance.md with a date within the next 30 days
+# OR overdue. Format expected: "## YYYY-MM-DD - <description>" headings.
+# Quiet exit if file missing - skill is opt-in via /founder-os:legal-setup.
+COMPLIANCE="$REPO/context/compliance.md"
+if [ -f "$COMPLIANCE" ] && [ -n "$PYTHON" ]; then
+  COMPLIANCE_HITS=$($PYTHON - "$COMPLIANCE" "$TODAY" <<'PYEOF' 2>/dev/null
+import sys, re
+from datetime import date
+path, today_str = sys.argv[1], sys.argv[2]
+today = date.fromisoformat(today_str)
+upcoming = []
+overdue = []
+try:
+    with open(path, encoding='utf-8') as f:
+        lines = f.read().splitlines()
+except Exception:
+    sys.exit(0)
+heading_re = re.compile(r'^##\s+(\d{4}-\d{2}-\d{2})\s*[-:]\s*(.+?)\s*$')
+status_re = re.compile(r'^\s*-\s*Status:\s*(\w+)', re.IGNORECASE)
+i = 0
+while i < len(lines):
+    m = heading_re.match(lines[i])
+    if not m:
+        i += 1
+        continue
+    deadline = date.fromisoformat(m.group(1))
+    desc = m.group(2)
+    status = 'OPEN'
+    j = i + 1
+    while j < len(lines) and not lines[j].startswith('## '):
+        sm = status_re.match(lines[j])
+        if sm:
+            status = sm.group(1).upper()
+            break
+        j += 1
+    if status == 'DONE':
+        i = j
+        continue
+    delta = (deadline - today).days
+    if delta < 0:
+        overdue.append((deadline, desc, abs(delta)))
+    elif delta <= 30:
+        upcoming.append((deadline, desc, delta))
+    i = j
+if overdue:
+    print(f'OVERDUE|{len(overdue)}')
+    for d, desc, days_past in sorted(overdue)[:3]:
+        print(f'  {d} - {desc} (overdue {days_past}d)')
+if upcoming:
+    print(f'UPCOMING|{len(upcoming)}')
+    for d, desc, days_to in sorted(upcoming)[:3]:
+        print(f'  {d} - {desc} (in {days_to}d)')
+PYEOF
+  )
+  if [ -n "$COMPLIANCE_HITS" ]; then
+    echo ""
+    OVERDUE_LINE=$(printf '%s\n' "$COMPLIANCE_HITS" | grep '^OVERDUE|' || true)
+    UPCOMING_LINE=$(printf '%s\n' "$COMPLIANCE_HITS" | grep '^UPCOMING|' || true)
+    if [ -n "$OVERDUE_LINE" ]; then
+      OVERDUE_COUNT=$(printf '%s' "$OVERDUE_LINE" | cut -d'|' -f2)
+      echo "Compliance: $OVERDUE_COUNT OVERDUE deadline(s) - file or escalate today"
+      printf '%s\n' "$COMPLIANCE_HITS" | grep -A100 '^OVERDUE|' | grep -v '^OVERDUE|' | grep -v '^UPCOMING|' | head -3
+    fi
+    if [ -n "$UPCOMING_LINE" ]; then
+      UPCOMING_COUNT=$(printf '%s' "$UPCOMING_LINE" | cut -d'|' -f2)
+      echo "Compliance: $UPCOMING_COUNT deadline(s) within 30 days"
+      printf '%s\n' "$COMPLIANCE_HITS" | grep -A100 '^UPCOMING|' | grep -v '^UPCOMING|' | grep -v '^OVERDUE|' | head -3
+    fi
+  fi
+fi
+
 # --- Quarantine ---
 QUARANTINE="$REPO/system/quarantine.md"
 if [ -f "$QUARANTINE" ]; then
@@ -211,10 +283,13 @@ if [ -f "$MEMORY_DIFF" ] && [ -n "$PYTHON" ]; then
 fi
 
 # --- Tip (rotates weekly, surfaces one underused capability) ---
-# Scans brain/log.md for the last 30 days of #used or invocation tags. Picks a
-# capability not invoked in 14+ days that matches current state. Rotates the
-# pick weekly so the same tip does not repeat. If no eligible tip, the line
-# is omitted (do NOT print "no tip" or similar).
+# Scans brain/log.md for capability invocation tags. Picks a capability not
+# invoked in 14+ days that matches current state. Rotates the pick weekly so
+# the same tip does not repeat. Fresh-install gate: the log must have at
+# least 10 entries (### date headings) AND span at least 30 days from the
+# earliest entry to today. Below that floor the Tip is omitted entirely so
+# new users don't see capability pitches before they have any state. If no
+# eligible tip, the line is omitted (do NOT print "no tip" or similar).
 LOG="$REPO/brain/log.md"
 if [ -f "$LOG" ] && [ -n "$PYTHON" ]; then
   TIP=$($PYTHON - "$LOG" "$TODAY" <<'PYEOF' 2>/dev/null
@@ -240,16 +315,35 @@ try:
     text = open(log_path, encoding='utf-8').read()
 except Exception:
     sys.exit(0)
-# Build last-used-on map. Walk lines, track current date header, accumulate
-# capability mentions. We treat any reference (#used:foo, /founder-os:foo,
-# foo skill) as a use.
-date_re = re.compile(r'^##\s+(\d{4}-\d{2}-\d{2})')
+# Fresh-install gate. An entry is a line starting with "### " followed by an
+# ISO date. Require >= 10 entries AND earliest-entry-to-today >= 30 days.
+entry_re = re.compile(r'^###\s+(\d{4}-\d{2}-\d{2})')
+entry_dates = []
+for ln in text.splitlines():
+    m = entry_re.match(ln)
+    if m:
+        try:
+            entry_dates.append(date.fromisoformat(m.group(1)))
+        except ValueError:
+            continue
+if len(entry_dates) < 10:
+    sys.exit(0)
+earliest = min(entry_dates)
+if (today - earliest).days < 30:
+    sys.exit(0)
+# Build last-used-on map. Walk lines, track current date header (## or ###),
+# accumulate capability mentions. We treat any reference (#used:foo,
+# /founder-os:foo, foo skill) as a use.
+date_re = re.compile(r'^#{2,3}\s+(\d{4}-\d{2}-\d{2})')
 last_used = {}
 cur = None
 for ln in text.splitlines():
     m = date_re.match(ln)
     if m:
-        cur = date.fromisoformat(m.group(1))
+        try:
+            cur = date.fromisoformat(m.group(1))
+        except ValueError:
+            cur = None
         continue
     if cur is None:
         continue
@@ -258,7 +352,9 @@ for ln in text.splitlines():
             prev = last_used.get(cap)
             if prev is None or cur > prev:
                 last_used[cap] = cur
-# Eligible: not used in 14+ days OR never used.
+# Eligible: not used in 14+ days OR never used. "Never used" only counts
+# here because the fresh-install gate above already enforced enough log
+# history for the pitch to make sense.
 eligible = []
 for cap, tip in TIPS:
     last = last_used.get(cap)
@@ -267,8 +363,7 @@ for cap, tip in TIPS:
 if not eligible:
     sys.exit(0)
 # Weekly rotation: pick the index based on iso-week so the same tip does not
-# repeat within a week. Falls back to first eligible if rotation lands on a
-# capability that was used in the meantime.
+# repeat within a week.
 week = today.isocalendar()[1]
 idx = week % len(eligible)
 print(eligible[idx][1])

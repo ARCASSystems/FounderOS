@@ -25,17 +25,20 @@ Three layers, in plain English. Skills read and write across all of them.
 - **Brain layer** - log, flags, patterns, parked decisions, rants, knowledge. The memory that captures what happened, what is stuck, and what is worth reusing.
 - **Wiki layer** - `[[cross-references]]` between files plus a source archive (`raw/`) for articles, transcripts, and anything you want preserved.
 
-Areas for searching across the 39 skills:
+Areas for searching across the 40 skills:
 
 - **Daily ops:** weekly-review, priority-triage, brain-log, decision-framework, session-handoff, meeting-prep, knowledge-capture, founder-coaching, unit-economics, strategic-analysis, pre-send-check, sop-writer, forcing-questions, blind-spot-review, ship-deliverable
 - **Voice and brand:** voice-interview, brand-interview, your-voice, your-deliverable-template
 - **Voice-coupled writers:** linkedin-post, client-update, proposal-writer, email-drafter, content-repurposer
 - **Setup and audit:** founder-os-setup, readiness-check, business-context-loader, query, audit
 - **Wiki and safety layer:** ingest, lint, wiki-build, approval-gates, handoff-protocol, context-persistence, data-security, bottleneck-diagnostic
+- **As-needed (not daily, high value when needed):** legal-compliance
 
 **Four roles as behavioural modes:** COO (default), BD, CMO, Chief of Staff. Claude switches mode based on what you are actually doing.
 
 A **SessionStart brief** runs on every Claude Code session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up. You do not need to think about it. The brief, the Stop hook, and slash commands are Claude Code-only - on Cowork or Cloud Claude they do not fire. Details under [Substrate details](#substrate-details) below if curious. Surface-by-surface compatibility table in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+
+**The legal layer (as-needed, not daily).** Most founders won't open this every day. But when a question lands - "can I let someone go", "what's our VAT obligation", "is this NDA enforceable", or you have a meeting with a lawyer next week and need to ask the right questions - the OS already knows your jurisdiction, holds the gazetted source documents, and surfaces compliance deadlines on its own. UAE founders get a full reference set out of the box (10 domain files covering company formation, employment, tax, visas, contracts, IP, data protection, dispute resolution, and industry permits, with 27 primary government sources tracked for freshness). Founders elsewhere run `/founder-os:legal-setup`, name their jurisdiction, and load their own gazetted sources via `/founder-os:legal-add-source <url-or-pdf>`. The skill never invents law - it quotes from sources you've loaded and tells you when a source is missing. SessionStart surfaces anything in `context/compliance.md` that's overdue or due within 30 days, so a license renewal, VAT return, or visa expiry doesn't slip past you. Details below under [Legal layer](#legal-layer).
 
 **The capture-and-cite loop.** `/rant` captures a raw thought dump. `/dream` distils unprocessed rants into patterns, flags, parked decisions, and needs. Every new brain entry gets a stable `<channel>-YYYY-MM-DD-NNN` ID stamped at write time. The dream digest cites those IDs in one line each instead of restating content. `knowledge-capture` writes distilled takeaways from books, calls, and articles into `brain/knowledge/` with the same ID convention so proposal-writer and strategic-analysis can read them back. Optional: opt in to a tool-call observation log with `FOUNDER_OS_OBSERVATIONS=1` and `/dream` rolls each day's activity into an OBSERVED section.
 
@@ -99,7 +102,7 @@ Cowork can open the FounderOS folder, read `CLAUDE.md` as folder instructions, r
 
 ## What ships in this repo
 
-### Skills (39)
+### Skills (40)
 
 Skills are grouped by when you will actually reach for them, not by category. If you are still on Day 1, you can ignore the rest.
 
@@ -200,11 +203,44 @@ Scaffold artifacts for users who do not run Claude Code. This path is not live u
 
 ---
 
+## Legal layer
+
+Not a daily skill. A safety layer for the moments you do need it: a hire or a fire, a VAT or corporate tax filing, an NDA you've been asked to sign, a license renewal coming up, a meeting with a lawyer or accountant where you want to walk in informed instead of guessing.
+
+The skill is jurisdiction-aware. It reads a `jurisdiction:` field from `core/identity.md` and loads only that jurisdiction's reference folder. UAE founders get a complete reference set out of the box - 10 domain files (company formation, employment, tax/VAT, visas, contracts, IP, data protection, dispute resolution, industry permits) plus 27 tracked primary government sources (mohre.gov.ae, tax.gov.ae, icp.gov.ae, det.gov.ae, difc.ae, adgm.com, etc.) plus document templates for NDAs, employment offers, privacy policies. Verified 2026-04-25.
+
+Founders outside the UAE run `/founder-os:legal-setup` to:
+1. Name their jurisdiction (e.g., `US-Delaware-LLC`, `UK-Ltd`, `IN-Karnataka-Pvt-Ltd`)
+2. Get a scaffold folder created from the `_template/` shape
+3. Capture their fiscal year end, business structure, and active filings/renewals into `context/compliance.md`
+
+Then load three priority sources via `/founder-os:legal-add-source <url-or-pdf>`:
+- Your country's tax authority (IRS, HMRC, IRAS, ATO, etc.)
+- Your country's business / companies law
+- Your country's labour / employment law
+
+Until at least those three load, the skill **refuses to answer** legal questions for your jurisdiction. It will not invent law. The UAE references give it the *shape* of how a complete reference set looks; your sources give it the *content* for your country.
+
+**What you actually get when the skill is loaded:**
+
+- Plain-language answers grounded in your loaded sources, with citation
+- Escalation level on every response: 🟢 confident / 🟡 confirm with a lawyer / 🔴 lawyer required
+- Source freshness check: the skill flags the answer if a source hasn't been verified in 6+ months
+- A list of right-question prompts before any meeting with a legal consultant - so you go in with the actual questions instead of the lawyer asking what you're asking about
+
+**SessionStart surfaces deadlines automatically.** Anything in `context/compliance.md` overdue or due within 30 days appears at the top of every session. License renewal due in 14 days. VAT return due in 21 days. Visa expiring in 28 days. You don't need to remember.
+
+**Maintenance.** Run `/founder-os:legal-update` quarterly. The command walks each loaded source, web-fetches the canonical URL, captures any material change (a new ministerial decision, an updated threshold, a fee schedule revision), and updates `last_checked_on:`. Anything older than 6 months gets surfaced first.
+
+The skill is opt-in - the rest of Founder OS works without it. You activate it by running `/founder-os:legal-setup` when you want it.
+
+---
+
 ## Tools and MCPs
 
 Founder OS does not assume your stack. The OS is files and skills. Each skill declares which MCP servers it can use, and degrades gracefully when those MCPs are not available.
 
-Most of the 39 skills work end-to-end with zero MCPs. A few skills, including `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`, function without MCPs but produce better output with the relevant integration connected.
+Most of the 40 skills work end-to-end with zero MCPs. A few skills, including `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`, function without MCPs but produce better output with the relevant integration connected.
 
 The full catalog: [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
@@ -263,7 +299,7 @@ Three repos. One architecture. FounderOS is production. The siblings are in deve
 
 | Repo | Status | For | Entry point |
 |---|---|---|---|
-| **FounderOS** (this repo) | Production v1.20.0 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
+| **FounderOS** (this repo) | Production v1.20.1 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
 | **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
 | **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
 
@@ -330,7 +366,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.20.0. Public push week of 2026-05-10.
+Version 1.20.1. Public push week of 2026-05-10.
+
+v1.20.1 closes Codex CTO findings against v1.20.0. Real fixes, not cosmetic. The menu skill now has an actual engine: `scripts/menu.py` reads state and scores capabilities deterministically instead of asking the model to do it inline. The SessionStart Tip line no longer surfaces on a fresh install with no log history. The setup wizard now has test coverage for the 4 + 4 multi-choice tool-stack and work-style prompts. Skill count corrected from 39 to 40 across README, manifests, ROADMAP, CHANGELOG, and `skills/index.md` (the v1.20.0 release added the `menu` skill but the docs never caught up). 56 tests still pass plus new coverage for menu engine, tip gate, and wizard MC structure.
 
 v1.20.0 is the discoverability release. FounderOS now routes on natural language. Slash commands stayed but became parenthetical shortcuts. Every command and skill description leads with the natural-language phrasing the founder would actually say in chat. A new `/founder-os:menu` (say "show me what you can do") returns 5 to 7 capability suggestions tailored to your current state, scored against `brain/.snapshot.md`, this week's commitments, the last 7 days of `brain/log.md`, and the presence of voice and brand profiles. README adds a third "Or say…" column to the slash command table and a new "How to use it - talk to Claude" section near the top. The release also closes two pass-1 findings deferred from v1.19.6: `scripts/query.py` now returns a no-positive-match block instead of graph-popular junk on a zero-score query, includes rants when the question contains "rant", "dump", "avoidance", "vent", or "raw", and applies stop-word filtering, light stemming, and a recency bonus; the setup wizard's tool-stack and work-style questions are now 4 + 4 short multi-choice prompts instead of two long open-ended walls. 21 commands now (added `menu`). 56 tests still pass plus new tests for menu, tip, query scoring, and the MC wizard.
 

@@ -116,6 +116,60 @@ if (Test-Path $Clients) {
   if ($fill -gt 0) { Write-Output "Clients: $fill [FILL] rows awaiting data" }
 }
 
+# --- Compliance deadlines (legal-compliance skill) ---
+# Surfaces entries in context/compliance.md within next 30 days or overdue.
+# Quiet exit if file missing - skill is opt-in via /founder-os:legal-setup.
+$Compliance = Join-Path $Repo 'context\compliance.md'
+if (Test-Path $Compliance) {
+  $complianceLines = Get-Content $Compliance
+  $overdue = @()
+  $upcoming = @()
+  $i = 0
+  while ($i -lt $complianceLines.Count) {
+    $line = $complianceLines[$i]
+    if ($line -match '^##\s+(\d{4}-\d{2}-\d{2})\s*[-:]\s*(.+?)\s*$') {
+      $deadlineStr = $matches[1]
+      $desc = $matches[2]
+      $deadlineDt = ConvertTo-IsoDate $deadlineStr
+      $status = 'OPEN'
+      $j = $i + 1
+      while ($j -lt $complianceLines.Count -and -not ($complianceLines[$j] -match '^##\s')) {
+        if ($complianceLines[$j] -match '^\s*-\s*Status:\s*(\w+)') {
+          $status = $matches[1].ToUpper()
+          break
+        }
+        $j++
+      }
+      if ($status -ne 'DONE' -and $deadlineDt -and $todayDt) {
+        $delta = [int]($deadlineDt - $todayDt).TotalDays
+        if ($delta -lt 0) {
+          $overdue += [PSCustomObject]@{ date = $deadlineStr; desc = $desc; daysPast = [Math]::Abs($delta) }
+        } elseif ($delta -le 30) {
+          $upcoming += [PSCustomObject]@{ date = $deadlineStr; desc = $desc; daysTo = $delta }
+        }
+      }
+      $i = $j
+    } else {
+      $i++
+    }
+  }
+  if ($overdue.Count -gt 0 -or $upcoming.Count -gt 0) {
+    Write-Output ""
+    if ($overdue.Count -gt 0) {
+      Write-Output "Compliance: $($overdue.Count) OVERDUE deadline(s) - file or escalate today"
+      foreach ($o in ($overdue | Sort-Object date | Select-Object -First 3)) {
+        Write-Output ("  " + $o.date + " - " + $o.desc + " (overdue " + $o.daysPast + "d)")
+      }
+    }
+    if ($upcoming.Count -gt 0) {
+      Write-Output "Compliance: $($upcoming.Count) deadline(s) within 30 days"
+      foreach ($u in ($upcoming | Sort-Object date | Select-Object -First 3)) {
+        Write-Output ("  " + $u.date + " - " + $u.desc + " (in " + $u.daysTo + "d)")
+      }
+    }
+  }
+}
+
 # --- Quarantine ---
 # Counts entries with "**Status:** ACTIVE" outside of fenced code blocks
 # (so the doc's own example snippets don't false-positive).
@@ -244,10 +298,13 @@ if (Test-Path $MemoryDiff) {
 }
 
 # --- Tip (rotates weekly, surfaces one underused capability) ---
-# Scans brain/log.md for the last 30 days of #used or invocation tags. Picks a
-# capability not invoked in 14+ days that matches current state. Rotates the
-# pick weekly so the same tip does not repeat. If no eligible tip, the line is
-# omitted (do NOT print "no tip" or similar).
+# Scans brain/log.md for capability invocation tags. Picks a capability not
+# invoked in 14+ days. Rotates the pick weekly so the same tip does not
+# repeat. Fresh-install gate: the log must have at least 10 entries
+# (### date headings) AND span at least 30 days from the earliest entry to
+# today. Below that floor the Tip is omitted entirely so new users don't see
+# capability pitches before they have any state. If no eligible tip, the
+# line is omitted (do NOT print "no tip" or similar).
 $Log = Join-Path $Repo 'brain\log.md'
 if (Test-Path $Log) {
   $tips = @(
@@ -262,42 +319,60 @@ if (Test-Path $Log) {
     @{cap='bottleneck-diagnostic'; tip='Try "what''s blocking me" once a quarter - bottleneck-diagnostic scores founder dependency across five dimensions.'},
     @{cap='strategic-analysis'; tip='Say "analyze this market" or "competitor map" - strategic-analysis grounds the scan in your knowledge notes.'}
   )
-  $lastUsed = @{}
-  $curDate = $null
-  foreach ($line in (Get-Content $Log)) {
-    if ($line -match '^##\s+(\d{4}-\d{2}-\d{2})') {
-      $curDate = ConvertTo-IsoDate $matches[1]
-      continue
+  $logLines = Get-Content $Log
+  # Fresh-install gate. An entry is a line starting with "### " followed by
+  # an ISO date. Require >= 10 entries AND earliest-entry-to-today >= 30 days.
+  $entryDates = @()
+  foreach ($line in $logLines) {
+    if ($line -match '^###\s+(\d{4}-\d{2}-\d{2})') {
+      $d = ConvertTo-IsoDate $matches[1]
+      if ($d) { $entryDates += $d }
     }
-    if (-not $curDate) { continue }
-    foreach ($t in $tips) {
-      if ($line -like ('*' + $t.cap + '*')) {
-        $prev = $lastUsed[$t.cap]
-        if ($null -eq $prev -or $curDate -gt $prev) {
-          $lastUsed[$t.cap] = $curDate
+  }
+  $gatePassed = $false
+  if ($entryDates.Count -ge 10) {
+    $earliest = ($entryDates | Sort-Object)[0]
+    $span = (New-TimeSpan -Start $earliest -End $todayDt).Days
+    if ($span -ge 30) { $gatePassed = $true }
+  }
+  if ($gatePassed) {
+    $lastUsed = @{}
+    $curDate = $null
+    foreach ($line in $logLines) {
+      if ($line -match '^#{2,3}\s+(\d{4}-\d{2}-\d{2})') {
+        $curDate = ConvertTo-IsoDate $matches[1]
+        continue
+      }
+      if (-not $curDate) { continue }
+      foreach ($t in $tips) {
+        if ($line -like ('*' + $t.cap + '*')) {
+          $prev = $lastUsed[$t.cap]
+          if ($null -eq $prev -or $curDate -gt $prev) {
+            $lastUsed[$t.cap] = $curDate
+          }
         }
       }
     }
-  }
-  $eligible = @()
-  foreach ($t in $tips) {
-    $last = $lastUsed[$t.cap]
-    if ($null -eq $last) {
-      $eligible += $t
-    } else {
-      $age = (New-TimeSpan -Start $last -End $todayDt).Days
-      if ($age -ge 14) { $eligible += $t }
+    $eligible = @()
+    foreach ($t in $tips) {
+      $last = $lastUsed[$t.cap]
+      if ($null -eq $last) {
+        $eligible += $t
+      } else {
+        $age = (New-TimeSpan -Start $last -End $todayDt).Days
+        if ($age -ge 14) { $eligible += $t }
+      }
     }
-  }
-  if ($eligible.Count -gt 0) {
-    # Weekly rotation: index by ISO week so the same tip does not repeat
-    # within a week.
-    $cal = [System.Globalization.CultureInfo]::InvariantCulture.Calendar
-    $weekRule = [System.Globalization.CalendarWeekRule]::FirstFourDayWeek
-    $week = $cal.GetWeekOfYear($todayDt, $weekRule, [System.DayOfWeek]::Monday)
-    $idx = $week % $eligible.Count
-    Write-Output ""
-    Write-Output ("Tip: " + $eligible[$idx].tip)
+    if ($eligible.Count -gt 0) {
+      # Weekly rotation: index by ISO week so the same tip does not repeat
+      # within a week.
+      $cal = [System.Globalization.CultureInfo]::InvariantCulture.Calendar
+      $weekRule = [System.Globalization.CalendarWeekRule]::FirstFourDayWeek
+      $week = $cal.GetWeekOfYear($todayDt, $weekRule, [System.DayOfWeek]::Monday)
+      $idx = $week % $eligible.Count
+      Write-Output ""
+      Write-Output ("Tip: " + $eligible[$idx].tip)
+    }
   }
 }
 

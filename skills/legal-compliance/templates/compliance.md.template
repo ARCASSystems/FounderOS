@@ -1,0 +1,73 @@
+---
+# Your compliance deadlines tracker. Created by /founder-os:legal-setup.
+# Each entry has: date, what, category, source, notes. The legal-compliance
+# skill reads this file at task time to surface upcoming deadlines, and the
+# SessionStart hook surfaces anything within 30 days.
+#
+# Add deadlines via /founder-os:legal-setup or by editing this file.
+#
+# Categories: tax-filing, license-renewal, visa-renewal, regulatory-report,
+# contract-renewal, audit, other.
+---
+
+# Compliance Deadlines
+
+**Jurisdiction:** {{JURISDICTION}}
+**Fiscal year end:** {{FISCAL_YEAR_END}}
+**Last reviewed:** {{TODAY}}
+
+---
+
+## Upcoming Filings & Renewals
+
+<!-- Format:
+## YYYY-MM-DD - <what is due>
+- Category: <tax-filing | license-renewal | visa-renewal | regulatory-report | contract-renewal | audit | other>
+- Authority: <FTA, MOHRE, IRS, HMRC, etc.>
+- Reference: <license number, TRN, contract id, etc.>
+- Source: <portal URL or path to gazetted requirement>
+- Notes: <optional - prep needed, who handles, last filed>
+- Status: OPEN | DONE | OVERDUE
+-->
+
+## YYYY-MM-DD - [example] Trade license renewal
+- Category: license-renewal
+- Authority: [your DET / DED / Companies House]
+- Reference: [your license number]
+- Source: [your authority's renewal portal URL]
+- Notes: 30-day notice from authority typically lands by email
+- Status: OPEN
+
+## YYYY-MM-DD - [example] VAT return Q1
+- Category: tax-filing
+- Authority: [your tax authority]
+- Reference: [your TRN / VAT number]
+- Source: [filing portal URL]
+- Notes: 28th of the month following quarter end
+- Status: OPEN
+
+---
+
+## Recurring Cadence (no specific date — set reminders)
+
+<!-- Recurring obligations without a fixed annual date. Examples:
+- Corporate tax filing: 9 months after fiscal year end
+- UBO register update: within 15 days of any change
+- Employment contract renewal review: 60 days before any contract anniversary
+-->
+
+- [ ] Corporate tax filing - 9 months after fiscal year end ({{FISCAL_YEAR_END}})
+- [ ] UBO register update - within 15 days of any ownership change
+- [ ] Source freshness review - quarterly (run `/founder-os:legal-update`)
+
+---
+
+## Completed (last 12 months)
+
+<!-- Move entries here from "Upcoming" once filed. Keep for audit trail. -->
+
+---
+
+## Disclaimer
+
+This is your operational tracker, not legal advice. Verify each deadline against the issuing authority's portal before relying on it. The legal-compliance skill flags entries within 30 days at SessionStart but does not file anything for you.

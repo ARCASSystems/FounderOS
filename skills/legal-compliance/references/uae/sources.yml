@@ -1,0 +1,216 @@
+# UAE legal & regulatory sources
+# Primary sources only. Secondary (law firms, Big 4 guides) are interpretation
+# context, not authority - do not list them here.
+#
+# Schema:
+#   <source-key>:
+#     name: human-readable name
+#     url: primary URL
+#     covers: [list of domains this source feeds]
+#     last_checked_on: YYYY-MM-DD (the day a human last verified)
+#     notes: optional - cadence hints, gotchas, sub-portals
+#
+# Update via: /founder-os:legal-update or /founder-os:legal-add-source
+# Anything with last_checked_on >6 months ago will be flagged by the skill
+# before answering, and SessionStart hook surfaces stale sources.
+
+jurisdiction: UAE
+display_name: United Arab Emirates
+last_full_review: 2026-04-25
+
+sources:
+  legislation:
+    name: UAE Federal Legislation Index
+    url: https://legislation.ae
+    covers: [federal-law-text, all-domains]
+    last_checked_on: 2026-04-25
+    notes: Authoritative source for federal decree-laws and cabinet decisions.
+
+  mohre:
+    name: Ministry of Human Resources and Emiratisation (MOHRE)
+    url: https://mohre.gov.ae
+    covers: [employment]
+    last_checked_on: 2026-04-25
+    notes: Federal Decree-Law 33/2021 + 2024 amendments. Verify Emiratisation thresholds annually (reset each calendar year-end).
+
+  nafis:
+    name: Nafis (Emiratisation Programme)
+    url: https://nafis.gov.ae
+    covers: [employment, emiratisation]
+    last_checked_on: 2026-04-25
+
+  fta:
+    name: Federal Tax Authority (FTA)
+    url: https://tax.gov.ae
+    covers: [tax-vat, corporate-tax, excise]
+    last_checked_on: 2026-04-25
+    notes: Re-verify monthly. FTA Cabinet/Ministerial Decisions land continuously.
+
+  emaratax:
+    name: EmaraTax Portal
+    url: https://emaratax.gov.ae
+    covers: [tax-vat, registration, filing]
+    last_checked_on: 2026-04-25
+
+  mof:
+    name: Ministry of Finance
+    url: https://mof.gov.ae
+    covers: [transfer-pricing, beps, international-tax-agreements]
+    last_checked_on: 2026-04-25
+
+  icp:
+    name: Federal Authority for Identity, Citizenship, Customs and Port Security (ICP)
+    url: https://icp.gov.ae
+    covers: [visas-immigration]
+    last_checked_on: 2026-04-25
+    notes: Re-verify quarterly. Visa rules shift frequently.
+
+  gdrfa:
+    name: General Directorate of Residency and Foreigners Affairs (Dubai)
+    url: https://gdrfa.gov.ae
+    covers: [visas-immigration]
+    last_checked_on: 2026-04-25
+
+  golden_visa:
+    name: Golden Visa Portal
+    url: https://u.ae/golden-visa
+    covers: [visas-immigration, golden-visa]
+    last_checked_on: 2026-04-25
+
+  uae_gov_employment:
+    name: u.ae - Employment in the Private Sector
+    url: https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector
+    covers: [employment]
+    last_checked_on: 2026-04-25
+
+  det:
+    name: Dubai Department of Economy and Tourism (DET)
+    url: https://det.gov.ae
+    covers: [company-formation, e-commerce, trade-license]
+    last_checked_on: 2026-04-25
+
+  moec:
+    name: Ministry of Economy
+    url: https://moec.gov.ae
+    covers: [company-formation, ip-trademarks, copyright]
+    last_checked_on: 2026-04-25
+
+  difc:
+    name: Dubai International Financial Centre (DIFC)
+    url: https://difc.ae
+    covers: [difc-all-domains, data-protection, employment, courts]
+    last_checked_on: 2026-04-25
+    notes: DIFC Data Protection Amendment Law No. 1 of 2025 effective 15 Jul 2025. Separate common-law regime from federal UAE.
+
+  adgm:
+    name: Abu Dhabi Global Market (ADGM)
+    url: https://adgm.com
+    covers: [adgm-all-domains, data-protection, employment, courts]
+    last_checked_on: 2026-04-25
+    notes: Separate common-law regime. English law applies directly.
+
+  data_office:
+    name: UAE Data Office
+    url: https://data.gov.ae
+    covers: [data-protection, pdpl]
+    last_checked_on: 2026-04-25
+    notes: Federal PDPL executive regulations still pending as of 2026-04-25.
+
+  consumer_rights:
+    name: Consumer Rights (UAE)
+    url: https://consumerrights.ae
+    covers: [e-commerce, consumer-protection]
+    last_checked_on: 2026-04-25
+
+  dubai_courts:
+    name: Dubai Courts
+    url: https://dc.gov.ae
+    covers: [dispute-resolution, courts]
+    last_checked_on: 2026-04-25
+
+  difc_courts:
+    name: DIFC Courts
+    url: https://difccourts.ae
+    covers: [dispute-resolution, courts, difc]
+    last_checked_on: 2026-04-25
+
+  diac:
+    name: Dubai International Arbitration Centre (DIAC)
+    url: https://diac.ae
+    covers: [arbitration, dispute-resolution]
+    last_checked_on: 2026-04-25
+
+  tdra:
+    name: Telecommunications and Digital Government Regulatory Authority (TDRA)
+    url: https://tdra.gov.ae
+    covers: [industry-specific, technology, telecom]
+    last_checked_on: 2026-04-25
+
+  centralbank:
+    name: Central Bank of the UAE
+    url: https://centralbank.ae
+    covers: [industry-specific, fintech, payments]
+    last_checked_on: 2026-04-25
+
+  khda:
+    name: Knowledge and Human Development Authority (Dubai)
+    url: https://khda.gov.ae
+    covers: [industry-specific, education, training]
+    last_checked_on: 2026-04-25
+
+  dha:
+    name: Dubai Health Authority
+    url: https://dha.gov.ae
+    covers: [industry-specific, healthcare]
+    last_checked_on: 2026-04-25
+
+  doh:
+    name: Department of Health Abu Dhabi
+    url: https://doh.gov.ae
+    covers: [industry-specific, healthcare]
+    last_checked_on: 2026-04-25
+
+  mohap:
+    name: Ministry of Health and Prevention (UAE)
+    url: https://mohap.gov.ae
+    covers: [industry-specific, healthcare]
+    last_checked_on: 2026-04-25
+
+  dm:
+    name: Dubai Municipality
+    url: https://dm.gov.ae
+    covers: [industry-specific, food-safety, e-commerce, real-estate]
+    last_checked_on: 2026-04-25
+
+  esma:
+    name: Emirates Authority for Standardization and Metrology (ESMA)
+    url: https://esma.gov.ae
+    covers: [industry-specific, food-safety, product-standards]
+    last_checked_on: 2026-04-25
+
+  wipo:
+    name: World Intellectual Property Organization (WIPO)
+    url: https://wipo.int
+    covers: [ip-trademarks, madrid-protocol, international-ip]
+    last_checked_on: 2026-04-25
+
+# Free zone portals (verify activity codes and fees directly)
+free_zones:
+  dmcc:
+    url: https://dmcc.ae
+    last_checked_on: 2026-04-25
+  rakez:
+    url: https://rakez.com
+    last_checked_on: 2026-04-25
+  in5:
+    url: https://in5.ae
+    last_checked_on: 2026-04-25
+  ifza:
+    url: https://ifza.com
+    last_checked_on: 2026-04-25
+  afz:
+    url: https://afz.ae
+    last_checked_on: 2026-04-25
+  meydan:
+    url: https://meydanfz.ae
+    last_checked_on: 2026-04-25

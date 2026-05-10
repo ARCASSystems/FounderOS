@@ -1,0 +1,68 @@
+# Sources for <YOUR JURISDICTION>
+#
+# Rename this file to sources.yml inside your jurisdiction folder and start
+# populating. The skill reads this file before answering any question, and
+# uses last_checked_on: to flag stale entries.
+#
+# Schema:
+#   <source-key>:
+#     name: human-readable name
+#     url: primary URL (gazetted PDF, government portal, regulator page)
+#     covers: [list of domains this source feeds]
+#     last_checked_on: YYYY-MM-DD (the day a human last verified)
+#     notes: optional - cadence hints, gotchas, sub-portals
+#
+# Domains (use these tags for `covers:`):
+#   - federal-law-text       (constitutional / primary law)
+#   - company-formation
+#   - employment
+#   - tax-vat                (income/VAT/GST/sales tax/corporate tax)
+#   - visas-immigration
+#   - contracts-commercial
+#   - ip-trademarks
+#   - data-protection
+#   - dispute-resolution
+#   - industry-specific      (any sector-specific regulator)
+#
+# Update via: /founder-os:legal-update or /founder-os:legal-add-source
+# Anything with last_checked_on >6 months ago will be flagged before the
+# skill answers a question that depends on it.
+
+jurisdiction: <YOUR-JURISDICTION>      # e.g., US-Delaware-LLC, UK-Ltd, IN-Karnataka-Pvt-Ltd
+display_name: <Your Country Display Name>
+last_full_review: <YYYY-MM-DD>
+
+sources:
+  # === PRIORITY 1: ADD THESE FIRST ===
+  # tax_authority:
+  #   name: <e.g., Internal Revenue Service / HMRC / IRAS>
+  #   url: <primary URL>
+  #   covers: [tax-vat]
+  #   last_checked_on: <YYYY-MM-DD>
+  #   notes: <cadence hint>
+  #
+  # business_law:
+  #   name: <e.g., Companies Act / Companies House>
+  #   url: <primary URL>
+  #   covers: [company-formation]
+  #   last_checked_on: <YYYY-MM-DD>
+  #
+  # labour_law:
+  #   name: <e.g., Fair Work Commission / Department of Labor>
+  #   url: <primary URL>
+  #   covers: [employment]
+  #   last_checked_on: <YYYY-MM-DD>
+
+  # === PRIORITY 2: ADD AS NEEDED ===
+  # immigration:
+  # contract_law:
+  # ip_authority:
+  # data_protection_authority:
+  # dispute_resolution:
+
+  # === INDUSTRY-SPECIFIC: ADD ONLY THE ONES YOU NEED ===
+  # financial_regulator:
+  # health_authority:
+  # food_safety:
+  # education_regulator:
+  # telecom_regulator:
