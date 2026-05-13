@@ -52,51 +52,44 @@ The OS routes on natural language. Say what you need ("set up my voice profile",
 
 ## Install
 
-Three install paths. Pick the one that matches your stack. Full details in [docs/install.md](docs/install.md).
+Four install paths. Simplest first. Full step-by-step for each in [docs/install.md](docs/install.md).
 
-### Path A - Claude Code plugin (cleanest)
+### One-line curl (simplest)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/install.sh | bash
+```
+
+Downloads FounderOS, copies hooks, and prints the natural-language next step. Requires bash, git, and Python 3.11+. Re-running the same command on an existing install offers an update instead.
+
+**When to choose:** You are on macOS or Linux (or git-bash on Windows), you want one command and you are done.
+
+### Plugin marketplace (cleanest Claude Code experience)
 
 ```
 /plugin marketplace add ARCASSystems/FounderOS
 /plugin install founder-os@founder-os-marketplace
-/founder-os:setup
 ```
 
-Requires Claude Code with a Pro or Max plan. If `/founder-os:setup` is not recognised after install, run `/reload-plugins` (or restart Claude Code) so the plugin namespace activates, then try again. If the plugin install still does not work, fall back to Path B.
+Then say "set up FounderOS" (or run `/founder-os:setup`). If setup is not recognised, run `/reload-plugins` first.
 
-### Path B - Manual git clone (most reliable)
+**When to choose:** You already use Claude Code with a Pro or Max plan and want auto-updates via `/founder-os:update`.
 
-Mac, Linux, or git-bash on Windows:
+### Manual git clone (most reliable)
 
 ```bash
 git clone --depth 1 https://github.com/ARCASSystems/FounderOS.git ~/founder-os
-cd ~/founder-os
 ```
 
-PowerShell on Windows:
+Open Claude Code in the cloned folder, then say "set up FounderOS" (or run `/setup`). Commands use bare names on this path - no `/founder-os:` prefix.
 
-```powershell
-git clone --depth 1 https://github.com/ARCASSystems/FounderOS.git "$HOME\founder-os"
-cd "$HOME\founder-os"
-```
+**When to choose:** The plugin install fails, or you want full control of the local copy and manual `git pull` updates.
 
-Open Claude Code in that folder, then run:
+### Claude Cowork (partial - natural-language only)
 
-```
-/setup
-```
+Open the FounderOS folder in Cowork and attach `CLAUDE.md` as folder instructions. Hooks and slash commands do not fire in Cowork. Use it for drafting and scheduled tasks; return to Claude Code for hooks, cadence refresh, and commits.
 
-> Path B uses bare command names (`/setup`, `/today`, etc.) because the plugin namespace only activates on Path A. See [docs/install.md](docs/install.md) for the exact mapping.
-
-The setup wizard walks through about 15 to 20 prompts across six phases (identity, business, priorities, voice/brand seed, tool stack, file generation) and generates your full operating system locally. 15 to 20 minutes the first time.
-
-### Path C - Cloud Claude (read-only)
-
-Open Claude.ai, attach this repo's README and CLAUDE.md as Project context, and use the safe fallback prompt below. Cloud Claude cannot run slash commands or write to local disk - it's a read-only operating mode until the Notion Starter Kit ships. See [docs/install.md](docs/install.md) for the full instructions.
-
-### Path D - Claude Cowork (desktop, partial)
-
-Cowork can open the FounderOS folder, read `CLAUDE.md` as folder instructions, read `brain/.snapshot.md` if present, and run MCPs at the account level. Hooks (SessionStart brief, Stop revenue-check) and the `/founder-os:*` slash command namespace do not fire on Cowork. Use Cowork for natural-language drafting and scheduled execution against the same folder, and return to Claude Code for hooks, slash commands, commits, and cadence refresh. Full Cowork setup recipe in [docs/install.md](docs/install.md).
+**When to choose:** You use Cowork for day-to-day drafting and want the OS context available there alongside your Claude Code install.
 
 ---
 
@@ -416,6 +409,10 @@ v1.10.0 was the runtime brain context release. A small deterministic snapshot (o
 Full release history in [`CHANGELOG.md`](CHANGELOG.md). Current limits in [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md).
 
 ---
+
+## Maintenance and forking
+
+FounderOS v1.22 is the final feature release from ARCAS Systems. The repo enters maintenance mode: critical-breakage patches only, community forks encouraged. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the issue-triage policy and [`docs/forking.md`](docs/forking.md) for extension points.
 
 ## Contributing and security
 
