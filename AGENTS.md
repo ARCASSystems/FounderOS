@@ -34,7 +34,7 @@ The user's actual operating context (after they run setup) lives in:
 A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` holds behavioral guards that persist across every session in this project.
 
 The system layer (do not edit per-user) lives in:
-- `skills/` - 42 skills, each in its own folder with a `SKILL.md`
+- `skills/` - 44 skills, each in its own folder with a `SKILL.md`
 - `scripts/` - Python helpers (wiki-build, query, brain-snapshot, brain-pass-log, memory-diff)
 - `templates/` - source templates for files the setup wizard generates
 - `.claude/commands/` - 24 slash commands
@@ -55,7 +55,7 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 
 ---
 
-## Slash Commands (24)
+## Slash Commands (26)
 - `/founder-os:menu` - show 5 to 7 capability suggestions tailored to current state.
 - `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files. Run on first install.
 - `/founder-os:voice-interview` - capture how you write into `core/voice-profile.yml`.
@@ -80,6 +80,8 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 - `/capture-meeting <name>` - route a transcript or brain dump into log, clients, and commitments.
 - `/today` - 20-line one-screen view of today.
 - `/next` - one recommended next action across priorities, deals, and cadence.
+- `/founder-os:queue` - manage the execution queue. Say "what's on my plate" or "add to queue: <thing>". ACTIVE capped at 3.
+- `/founder-os:verify` - read-only substrate health check across 8 checks. Say "verify the OS". Never auto-fixes.
 
 ## Substrate (v1.4 + v1.10 + v1.12)
 

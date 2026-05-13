@@ -25,7 +25,7 @@ Three layers, in plain English. Skills read and write across all of them.
 - **Brain layer** - log, flags, patterns, parked decisions, rants, knowledge. The memory that captures what happened, what is stuck, and what is worth reusing.
 - **Wiki layer** - `[[cross-references]]` between files plus a source archive (`raw/`) for articles, transcripts, and anything you want preserved.
 
-Areas for searching across the 42 skills:
+Areas for searching across the 44 skills:
 
 - **Daily ops:** today, weekly-review, priority-triage, brain-log, decision-framework, session-handoff, meeting-prep, knowledge-capture, founder-coaching, unit-economics, strategic-analysis, pre-send-check, sop-writer, forcing-questions, blind-spot-review, ship-deliverable
 - **Voice and brand:** voice-interview, brand-interview, your-voice, your-deliverable-template
@@ -163,8 +163,10 @@ Each row tells you the **outcome** (what you get when it finishes). Detailed rea
 | brain-pass | A synthesised answer across the brain layer with stable-ID citations: Answer, Evidence, Confidence, Gaps. The model IS the retrieval engine. No embeddings, no API call. Read-only. |
 | audit | One composite health report across readiness, wiki state, brain staleness, voice completeness, and quarantine. Read-only. |
 | legal-compliance | Jurisdiction-aware legal reference lookup and compliance guidance from loaded sources. Read-only unless adding sources. |
+| queue | What is moving. Read, add, start, done, and park operations on `cadence/queue.md`. ACTIVE is hard-capped at 3 - starting a fourth item triggers a keep/park/kill decision. Surfaced in the SessionStart brief. |
+| verify | A structured health check across 8 substrate checks: plugin surface, hooks, scripts, MCPs, free-tier floor, wiki, cadence freshness, auto-memory. Each check marked PASS / WARN / FAIL with a one-line reason. Never auto-fixes. Read-only. |
 
-### Slash commands (24)
+### Slash commands (26)
 
 Each row tells you the **outcome** (what you see when it finishes), the natural-language phrase that triggers the same skill, and whether it **writes** anything. Detailed behaviour, sample output, args, and follow-ups live in [`docs/commands.md`](docs/commands.md).
 
@@ -194,6 +196,8 @@ Each row tells you the **outcome** (what you see when it finishes), the natural-
 | `/next` | "what should I focus on next?" | One recommended next action across priorities, deals, and cadence. Not a list, one action. Read-only. |
 | `/pre-meeting <subject>` | "prep me for my call with [name]" | Pass or fail on the pre-meeting gate (capture artifact present, ask defined). Logs an intent entry to `brain/log.md` on pass. |
 | `/capture-meeting <subject>` | "capture this" / "log this" | A routed summary: meeting log entry in `brain/log.md`, updated client status in `context/clients.md`, and any new open commitments. Writes 2 to 3 files. |
+| `/founder-os:queue` | "what's on my plate" / "add to queue: <thing>" | Shows ACTIVE items, adds to BACKLOG, moves items between states. ACTIVE is capped at 3. Starting a fourth triggers a keep/park/kill decision. |
+| `/founder-os:verify` | "verify the OS" / "health check" | A structured health check across 8 substrate checks, each PASS / WARN / FAIL. Never auto-fixes. Read-only. |
 
 ### Templates
 
@@ -245,7 +249,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 Founder OS does not assume your stack. The OS is files and skills. Each skill declares which MCP servers it can use, and degrades gracefully when those MCPs are not available.
 
-Most of the 42 skills work end-to-end with zero MCPs. A few skills, including `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`, function without MCPs but produce better output with the relevant integration connected.
+Most of the 44 skills work end-to-end with zero MCPs. A few skills, including `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`, function without MCPs but produce better output with the relevant integration connected.
 
 The full catalog: [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
@@ -298,24 +302,6 @@ You want a tool you install and forget. This is an operating layer that needs yo
 
 ---
 
-## The repos
-
-Three repos. One architecture. FounderOS is production. The siblings are in development.
-
-| Repo | Status | For | Entry point |
-|---|---|---|---|
-| **FounderOS** (this repo) | Production v1.20.3 | Owners and operators running a business | [github.com/ARCASSystems/FounderOS](https://github.com/ARCASSystems/FounderOS) |
-| **PersonalOS** | In development, ETA late May 2026 | Individuals - career changers, freelancers, side hustlers, learners, creators | [github.com/ARCASSystems/PersonalOS](https://github.com/ARCASSystems/PersonalOS) |
-| **AgentOS** | In development, ETA June 2026 | Builders who want to ship a custom OS to a client or team | [github.com/ARCASSystems/AgentOS](https://github.com/ARCASSystems/AgentOS) |
-
-All three are Claude Code plugins. All three are local-first. FounderOS and PersonalOS are migrations of AgentOS with personal data stripped out. If you want a polished operating layer right now, FounderOS is the one to use. The siblings are previews.
-
-The three repos share one architecture: User OS (Layer 1) / Company OS (Layer 2) / Knowledge Base (Layer 3). FounderOS lives at Layer 1 today. PersonalOS lives at Layer 1 with a personal lens. AgentOS will be the platform a builder ships to a client or team and adds Layer 2 (Company OS) and Layer 3 (Knowledge Base) on top of Layer 1. The deeper architecture write-up will land in the AgentOS repo when AgentOS reaches public preview. Until then, FounderOS is the production layer-1 system on its own.
-
-If you want someone to build and run this for you, that is [ARCAS Systems](https://arcassystems.com).
-
----
-
 ## What it is not
 
 Not a workflow engine. Not a webhook server. Not a cloud tool that stores your data on someone else's servers.
@@ -362,6 +348,7 @@ revenue, or commitments.
 | Install via git clone | See [docs/install.md](docs/install.md) Path B |
 | Set up after install | `/founder-os:setup` (Path A) or `/setup` (Path B) |
 | Check today after setup | `/today` |
+| Verify substrate is healthy | Say "verify the OS" (or run `/founder-os:verify`) |
 | Check OS health | `/founder-os:status` |
 | Update System Layer later | `/founder-os:update check` |
 | Cleanly remove | `/founder-os:uninstall` |
@@ -371,7 +358,20 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.20.3. Public push week of 2026-05-10.
+Version 1.21.0. Public push week of 2026-05-14.
+
+v1.21 closes the gap on what FounderOS shows. A new execution queue (`cadence/queue.md`) surfaces
+what is moving in the first three lines of every session. The queue skill manages five operations -
+read, add, start, done, park - and enforces a 3-item ACTIVE cap that forces a keep/kill decision
+before a fourth thing starts. The queue rolls into the weekly review automatically. A new verify
+skill runs a read-only health check across 8 substrate points (hooks, scripts, wiki integrity,
+cadence freshness, free-tier floor, MCP state, plugin surface, auto-memory) so founders can see
+substrate state without reading individual files. Five writing skills (email-drafter, sop-writer,
+content-repurposer, client-update, proposal-writer) now read `brain/.snapshot.md` at task time,
+completing the snapshot-consumer wiring started in v1.10. A multi-archetype trace pass against two
+non-founder-shaped personas (Maya, B2C meditation app; Dev, ops-not-founder) surfaced 5 gaps, 1
+patched in v1.21 (weekly-review balance check now skips for non-owner operators). 44 skills, 26
+commands, 182 tests.
 
 v1.20.3 deepens the voice profile with anti-examples. The voice interview now asks for contrarian takes, aesthetic crimes, red flags, and 3 to 6 BAD/GOOD writing pairs. The profile stores those under `voice.anti_examples`, and the five voice-coupled writing skills run a final filter that scans for the user's rejected patterns before returning a draft. Trace files show the Marcus pre/post LinkedIn pass on a topic with no prior buyer phrase.
 

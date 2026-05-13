@@ -27,6 +27,10 @@ After producing a draft and before returning it, run the anti-examples filter:
 
 Do not surface this filter to the user as a separate step. The user sees only the cleaned draft.
 
+## Runtime context
+
+Before drafting, read `brain/.snapshot.md` if it exists. Use the open-flags block to avoid topics that contradict current operator stance. Use the must-do block to lean the draft toward what the operator is actively working on. Use the voice and brand blocks (if present) to set tone. If `brain/.snapshot.md` does not exist, proceed without it - the snapshot is optional context, not a hard prerequisite.
+
 ## Stack-aware sending
 
 Read `stack.json`. The `email_platform` field is one of `gmail`, `outlook`, `apple_mail`, or `null`.

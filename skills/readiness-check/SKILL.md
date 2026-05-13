@@ -19,7 +19,7 @@ This skill must:
 
 ## How to score
 
-Five buckets, each scored 0-100. Overall is the weighted average.
+Six buckets, each scored 0-100. Overall is the weighted average.
 
 | Bucket | Weight | What it reads |
 |---|---|---|
@@ -27,7 +27,8 @@ Five buckets, each scored 0-100. Overall is the weighted average.
 | Voice and Brand | 25% | `core/voice-profile.yml`, `core/brand-profile.yml` |
 | Cadence | 20% | `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `cadence/quarterly-sprints.md` |
 | Business Context | 15% | `context/companies.md`, `context/companies/<name>.md` for each declared business |
-| Brain Layer | 15% | `brain/log.md`, `brain/flags.md`, `brain/patterns.md` |
+| Brain Layer | 10% | `brain/log.md`, `brain/flags.md`, `brain/patterns.md` |
+| Queue | 5% | `cadence/queue.md` |
 
 ### Core (25%)
 
@@ -100,7 +101,7 @@ For each declared business, check whether `context/companies/<sanitised-name>.md
 - Bucket score = average across all declared businesses.
 - If `context/companies.md` itself is missing or has no declared businesses, score 0 and label `no businesses declared`.
 
-### Brain Layer (15%)
+### Brain Layer (10%)
 
 Three files:
 
@@ -122,6 +123,18 @@ Three files:
 - 1+ -> 100
 
 Bucket score = average of the three file scores.
+
+### Queue (5%)
+
+Read `cadence/queue.md`:
+
+- File missing -> 0 (`not set up`)
+- ACTIVE > 0 AND DONE entries present in last 7 days -> 100 (`active`)
+- ACTIVE > 0 but no DONE in last 7 days -> 50 (`in progress`)
+- ACTIVE = 0 but BACKLOG has items -> 50 (`backlog only`)
+- All sections empty or file missing -> 0 (`empty`)
+
+DONE entries are lines in the `## DONE` section with a date within the last 7 days.
 
 ## Backlog (from setup wizard)
 
@@ -174,6 +187,10 @@ BRAIN LAYER (<NN>%)
 - log.md entries last 14d: <count>
 - open flags: <count>
 - patterns logged: <count>
+
+QUEUE (<NN>%)
+- active: <count>/3
+- done last 7 days: <count>
 
 BACKLOG (from setup wizard)
 - <item 1>

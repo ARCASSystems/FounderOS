@@ -289,7 +289,8 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── daily-anchors.md         # From templates/cadence/daily-anchors.md
 │   ├── weekly-commitments.md    # Personalized with their current priorities
 │   ├── quarterly-sprints.md     # Personalized with their Q goals
-│   └── annual-targets.md        # Personalized with their year goals
+│   ├── annual-targets.md        # Personalized with their year goals
+│   └── queue.md                 # Copied from templates/cadence/queue.md (no personalization needed)
 ├── context/
 │   ├── priorities.md            # Personalized from 0.4
 │   ├── decisions.md             # From templates/context/decisions.md
@@ -338,6 +339,8 @@ These are not personalized templates. Copy contents exactly. Do not edit. Verify
 **{{TODAY}} substitution.** The `templates/brain/relations.yaml` file contains the literal placeholder `{{TODAY}}`. When copying to `brain/relations.yaml`, replace every occurrence of `{{TODAY}}` with today's date in `YYYY-MM-DD` format (use `date -u +%Y-%m-%d` via Bash to get it).
 
 **{{DATE}} substitution.** The `templates/cadence/daily-anchors.md` file contains the literal placeholder `{{DATE}}` on the `## Today: {{DATE}}` heading. When copying to `cadence/daily-anchors.md`, replace `{{DATE}}` with today's date in `YYYY-MM-DD` format (same source as `{{TODAY}}` above). The SessionStart brief and `/today` command both grep this heading - leaving the placeholder in place would make the very first session report STALE before the founder has done anything.
+
+**Queue template copy.** Copy `templates/cadence/queue.md` to `cadence/queue.md`. No substitutions needed - the template has no placeholders. If `cadence/queue.md` already exists at setup time, do not overwrite it. Log: "queue.md already present, leaving untouched."
 
 **Avatar template copy.** Copy `templates/avatar.md` to `core/avatar.md` and replace `{{FOUNDER_NAME}}` with the founder name captured in Phase 0.1. Do not auto-populate the bracketed sections. The wizard asks the seed questions, then the founder fills or revises those prompts in their first review session.
 

@@ -70,5 +70,35 @@ class WritingSkillAntiExampleFilterTests(unittest.TestCase):
                     self.assertIn(marker, body)
 
 
+SNAPSHOT_SKILLS = [
+    "email-drafter",
+    "sop-writer",
+    "content-repurposer",
+    "client-update",
+    "proposal-writer",
+]
+
+
+class WritingSkillSnapshotReadTests(unittest.TestCase):
+    def test_each_skill_references_snapshot(self):
+        for skill in SNAPSHOT_SKILLS:
+            path = REPO_ROOT / "skills" / skill / "SKILL.md"
+            body = path.read_text(encoding="utf-8")
+            with self.subTest(skill=skill):
+                self.assertIn("brain/.snapshot.md", body)
+                self.assertIn("open-flags", body.lower())
+                self.assertIn("must-do", body.lower())
+
+    def test_each_skill_treats_snapshot_as_optional(self):
+        for skill in SNAPSHOT_SKILLS:
+            path = REPO_ROOT / "skills" / skill / "SKILL.md"
+            body = path.read_text(encoding="utf-8")
+            with self.subTest(skill=skill):
+                self.assertTrue(
+                    "optional" in body.lower() or "if it exists" in body.lower(),
+                    f"{skill}: snapshot must be optional, not required"
+                )
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -28,6 +28,8 @@ After producing a draft and before returning it, run the anti-examples filter:
 
 Do not surface this filter to the user as a separate step. The user sees only the cleaned draft.
 
+Before drafting, read `brain/.snapshot.md` if it exists. Use the open-flags block to avoid topics that contradict current operator stance. Use the must-do block to lean the draft toward what the operator is actively working on. Use the voice and brand blocks (if present) to set tone. If `brain/.snapshot.md` does not exist, proceed without it - the snapshot is optional context, not a hard prerequisite.
+
 If the founder has filled `core/brand-profile.yml`, follow the visual brand for any branded version of the update (PDF, doc, etc.). Plain-text updates do not need brand assets.
 
 If the engagement has a context file under `context/companies/<client>.md` or similar, read it for project specifics, named milestones, and the agreed scope.

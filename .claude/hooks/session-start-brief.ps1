@@ -48,6 +48,29 @@ if (-not (Test-Path (Join-Path $Repo 'core\identity.md'))) {
 
 Write-Output "=== Session brief ($Today) ==="
 
+# --- Active queue items ---
+$Queue = Join-Path $Repo 'cadence\queue.md'
+if (-not (Test-Path $Queue)) {
+  Write-Output 'Active: 0/3 (queue empty - say "add to queue: <thing>" to start)'
+} else {
+  $qLines = Get-Content $Queue
+  $inActive = $false
+  $activeItems = @()
+  foreach ($line in $qLines) {
+    if ($line -match '^## ACTIVE') { $inActive = $true; continue }
+    if ($line -match '^## ' -and $inActive) { break }
+    if ($inActive -and $line -match '^\[') { $activeItems += $line }
+  }
+  if ($activeItems.Count -eq 0) {
+    Write-Output 'Active: 0/3 (queue empty - say "add to queue: <thing>" to start)'
+  } else {
+    Write-Output "Active: $($activeItems.Count)/3"
+    foreach ($item in ($activeItems | Select-Object -First 3)) {
+      Write-Output "  - $item"
+    }
+  }
+}
+
 # --- Open flags ---
 $Flags = Join-Path $Repo 'brain\flags.md'
 if (Test-Path $Flags) {

@@ -8,6 +8,16 @@ If something on this list matters to you, open an issue or email `solutions@arca
 
 ## Shipped
 
+- **v1.21.0** - the queue release. FounderOS now shows what is moving. A new execution queue
+  (`cadence/queue.md`) surfaces ACTIVE items in the first lines of every session brief. The queue
+  skill manages five operations and enforces a 3-item ACTIVE cap - starting a fourth item forces
+  a keep/park/kill decision. A new verify skill runs a read-only health check across 8 substrate
+  checks (plugin surface, hooks, scripts, MCPs, free-tier floor, wiki, cadence, auto-memory),
+  each returning PASS / WARN / FAIL with a one-line reason. Five writing skills (email-drafter,
+  sop-writer, content-repurposer, client-update, proposal-writer) complete snapshot-consumer
+  wiring started in v1.10. A multi-archetype trace pass (Maya - B2C; Dev - ops-not-founder)
+  revealed 5 gaps; 1 patched (weekly-review balance check skips for non-owner operators). 44
+  skills, 26 commands, 182 tests.
 - **v1.20.3** - voice depth release. Voice profiles now capture anti-examples: contrarian takes, aesthetic crimes, red flags, and BAD/GOOD pairs that teach the writing skills what the founder would reject. The voice interview adds Phase 2.5 with Q9 to Q12, `templates/voice-profile.yml.template` stores `voice.anti_examples`, and the five voice-coupled writing skills run a quiet cleanup pass before returning drafts. Trace files show the Marcus pre/post LinkedIn pass on a new topic.
 - **v1.20.2** - quality release for intake-to-output. Setup now stores who the founder sells to, what they sell, and the buyer pain. Voice interview captures buyer language. Brand interview records existing visual proof. `/rant` asks one qualifying question and routes to a decision, draft, plan, log, or capture path. Writing skills stop on empty voice data instead of drafting from defaults. README setup steps use "Say X (or run Y)", `skills/today` covers "what's on for today?", SessionStart Tip use detection is tag-based, and trace files show the LinkedIn output lift.
 - **v1.20.1** - Codex review close. Real fixes against v1.20.0, not cosmetic. The menu skill now has an actual engine (`scripts/menu.py`) that reads state and scores capabilities deterministically, instead of asking the model to do it inline. SessionStart Tip line no longer surfaces on a fresh install with no log history (gated on state-signal AND 14-day age). Setup wizard has new test coverage for the 4 + 4 multi-choice tool-stack and work-style structure. Skill count drift corrected: README, plugin.json, marketplace.json, ROADMAP, CHANGELOG, and `skills/index.md` now read 40 skills (v1.20.0 added `menu` to the filesystem but never bumped the count). Production stamp moved to v1.20.1. 56 tests still pass plus new menu engine, tip gate, and wizard MC structure coverage.

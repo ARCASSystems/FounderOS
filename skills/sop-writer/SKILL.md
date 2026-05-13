@@ -17,6 +17,8 @@ Read three files first so the SOP is specific to the user's stack and voice, not
 2. **`core/identity.md`** for the founder's name and primary business. Use these for the Owner field. Do not invent.
 3. **`core/voice-profile.yml`** via the `your-voice` skill. Apply `voice.rhythm` and `voice.reading_level` to the prose inside steps. SOPs that read at level 12 for an ops-focused founder who speaks at level 8 do not get followed.
 
+Before drafting, read `brain/.snapshot.md` if it exists. Use the open-flags block to avoid topics that contradict current operator stance. Use the must-do block to lean the draft toward what the operator is actively working on. Use the voice and brand blocks (if present) to set tone. If `brain/.snapshot.md` does not exist, proceed without it - the snapshot is optional context, not a hard prerequisite.
+
 ## SOP Structure
 
 ```

@@ -1,6 +1,6 @@
 # Founder OS Skills
 
-42 skills included as of v1.20.3 (the live filesystem count, including `legal-compliance`, `menu`, and `today`). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. v1.9 added hook test coverage and documented the query `--root` flag. v1.10 added the runtime brain context layer (a deterministic snapshot every skill can consume at task time, plus a brain-pass skill that synthesises answers across the brain layer with citations). v1.11 was launch hardening. v1.12 added a hook-only memory-diff helper that flags `clients/<slug>/` folders missing from auto-memory. v1.20.0 was the natural-language routing release plus the new `/founder-os:menu` capability discovery entry. v1.20.2 adds the `today` wrapper skill and corrects this index to the live directory count. v1.20.3 adds anti-example voice depth to the voice interview and five writing skills. The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
+44 skills included as of v1.21.0. v1.21 adds `queue` (execution queue with 3-item ACTIVE cap, surfaced in the SessionStart brief) and `verify` (read-only substrate health check across 8 checks). v1.7 added stable entry IDs, token-aware progressive query, and an opt-in observation log. v1.8 added a query test suite. v1.9 added hook test coverage and documented the query `--root` flag. v1.10 added the runtime brain context layer (a deterministic snapshot every skill can consume at task time, plus a brain-pass skill that synthesises answers across the brain layer with citations). v1.11 was launch hardening. v1.12 added a hook-only memory-diff helper that flags `clients/<slug>/` folders missing from auto-memory. v1.20.0 was the natural-language routing release plus the new `/founder-os:menu` capability discovery entry. v1.20.2 adds the `today` wrapper skill and corrects this index to the live directory count. v1.20.3 adds anti-example voice depth to the voice interview and five writing skills. The setup wizard (`founder-os-setup`) is the entry point. All others activate via `/skill-name`, `/founder-os:<command>`, or are invoked implicitly by roles.
 
 | Skill | Status | Replaces |
 |-------|--------|---------|
@@ -46,10 +46,12 @@
 | [linkedin-post](linkedin-post/SKILL.md) | Ready | Voice-coupled LinkedIn post writer |
 | [client-update](client-update/SKILL.md) | Ready | Voice-coupled client status update writer |
 | [proposal-writer](proposal-writer/SKILL.md) | Ready | Voice and brand-coupled proposal writer. Reads `brain/knowledge/` for past wins. |
+| [queue](queue/SKILL.md) | Ready | Execution queue with 3-item ACTIVE cap. Say "what's on my plate" or "add to queue: <thing>". Surfaced in SessionStart brief. |
+| [verify](verify/SKILL.md) | Ready | Read-only substrate health check across 8 checks. Say "verify the OS". Never auto-fixes. |
 
 ## Commands
 
-This plugin ships 24 slash commands:
+This plugin ships 26 slash commands:
 
 | Command | Purpose |
 |---------|---------|
@@ -77,10 +79,12 @@ This plugin ships 24 slash commands:
 | [/capture-meeting](../.claude/commands/capture-meeting.md) | Routes a transcript or brain dump into brain/log.md, context/clients.md, and open commitments. |
 | [/today](../.claude/commands/today.md) | 20-line one-screen view of today. Anchor, open decisions, active flags, last 3 log entries, next calendar event. |
 | [/next](../.claude/commands/next.md) | One recommended next action across priorities, deals, and cadence. |
+| [/founder-os:queue](../.claude/commands/queue.md) | Manage the execution queue. Say "what's on my plate" or "add to queue: <thing>". ACTIVE is capped at 3. |
+| [/founder-os:verify](../.claude/commands/verify.md) | Read-only substrate health check across 8 checks. Say "verify the OS". Never auto-fixes. |
 
 ## Status
 
-42 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile.
+44 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile.
 
 Release notes:
 

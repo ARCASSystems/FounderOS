@@ -177,6 +177,8 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/capture-meeting <name>` - route a transcript or brain dump into log, clients, and commitments.
 - `/today` - 20-line one-screen view of today.
 - `/next` - one recommended next action across priorities, deals, and cadence.
+- `/founder-os:queue` - manage the execution queue (read, add, start, done, park). Say "what's on my plate" or "add to queue: <thing>".
+- `/founder-os:verify` - read-only substrate health check across 8 checks. Say "verify the OS".
 
 **Hooks** (`.claude/hooks/`)
 - SessionStart brief (v1.4 + v1.12 + v1.15) - surfaces open flags, stale cadence, pending decisions, [FILL] client rows, ACTIVE quarantine entries, Review Due entries (past their `Decay after:` date), `clients/<slug>/` folders without an auto-memory entry, and a final `Observations:` line stating whether `FOUNDER_OS_OBSERVATIONS=1` is set so the silent-disable case is visible. One screen at session open. Registered on the SessionStart event in `.claude/settings.json`. Quietly skips if the repo is not a Founder OS install (no `core/identity.md`).
@@ -193,7 +195,7 @@ If you have not installed the scheduled-tasks MCP, ignore this section. Nothing 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks are bring-your-own.
 
-## Skills (42 included)
+## Skills (44 included)
 
 | Skill | Purpose |
 |-------|---------|
@@ -239,6 +241,8 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 | linkedin-post | Voice-coupled LinkedIn post writer. |
 | client-update | Voice-coupled client status update writer. |
 | proposal-writer | Voice and brand-coupled proposal writer. |
+| queue | Execution queue with 3-item ACTIVE cap. Say "what's on my plate" or run `/founder-os:queue`. |
+| verify | Read-only substrate health check across 8 checks. Say "verify the OS" or run `/founder-os:verify`. |
 
 ## Philosophy
 

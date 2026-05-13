@@ -26,6 +26,28 @@ fi
 
 echo "=== Session brief ($TODAY) ==="
 
+# --- Active queue items ---
+QUEUE="$REPO/cadence/queue.md"
+if [ ! -f "$QUEUE" ]; then
+  echo "Active: 0/3 (queue empty - say \"add to queue: <thing>\" to start)"
+else
+  ACTIVE_LINES=$(awk '
+    /^## ACTIVE/ { in_section=1; next }
+    /^## / { if (in_section) exit }
+    in_section && /^\(none yet\)/ { next }
+    in_section && /^\[/ { print }
+  ' "$QUEUE" 2>/dev/null)
+  ACTIVE_COUNT=$(printf '%s\n' "$ACTIVE_LINES" | grep -c '^\[' 2>/dev/null || echo 0)
+  if [ -z "$ACTIVE_LINES" ] || [ "${ACTIVE_COUNT:-0}" -eq 0 ] 2>/dev/null; then
+    echo "Active: 0/3 (queue empty - say \"add to queue: <thing>\" to start)"
+  else
+    echo "Active: ${ACTIVE_COUNT}/3"
+    printf '%s\n' "$ACTIVE_LINES" | head -3 | while IFS= read -r line; do
+      echo "  - $line"
+    done
+  fi
+fi
+
 # --- Open flags ---
 FLAGS="$REPO/brain/flags.md"
 if [ -f "$FLAGS" ]; then

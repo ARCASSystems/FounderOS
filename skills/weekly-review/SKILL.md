@@ -93,15 +93,38 @@ WAITING ON
 - [Item]: [who/what]
 ```
 
+## Step 4.5: Queue Rolloff and Stuck-Item Review
+
+Before writing the new sprint, read `cadence/queue.md` if it exists.
+
+1. **DONE rolloff.** For every entry in the DONE section with a date older than 7 days,
+   append a one-line summary to `brain/log.md` (use the `#acted` channel), then remove
+   that entry from `cadence/queue.md`. Keep entries from the last 7 days in DONE.
+
+2. **Stuck ACTIVE items.** For every entry in the ACTIVE section with a date older than
+   14 days, surface it inline:
+   "This item has been ACTIVE for N days - is it actually moving, or does it need to
+   go back to BACKLOG?"
+   Wait for the user's answer before proceeding. Move to BACKLOG if they say park or
+   no longer moving.
+
+If `cadence/queue.md` does not exist, skip this step silently.
+
 ## Step 5: Update Files
 
 1. Write the retro into `cadence/weekly-commitments.md` (above the new sprint)
 2. Update `context/priorities.md` This Week section
 3. Update `brain/log.md` with a `#acted` entry noting the sprint roll
 4. If any flags were resolved, update `brain/flags.md`
-5. Commit: "Weekly review: roll sprint to Week of [date]"
+5. Apply any queue changes from Step 4.5 to `cadence/queue.md`
+6. Commit: "Weekly review: roll sprint to Week of [date]"
 
 ## Marketing / Sales / Delivery Balance Check
+
+Skip this check if the operator's `core/identity.md` indicates they are not the business
+owner (phrases like "I report to", "I'm not the founder", "ops manager", "operations manager",
+"team member"). The check is for founders who own both the delivery and the sales function.
+Applying it to an ops-not-founder user would incorrectly flag their work as "too much delivery."
 
 If the founder has no paying clients yet, run this check:
 - Look at the retro: categorize completed work as Marketing (content, brand), Sales (outreach, pipeline, meetings with prospects), or Delivery (building, internal systems, client work)

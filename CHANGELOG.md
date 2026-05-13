@@ -2,6 +2,47 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.21.0 - 2026-05-14
+
+v1.21 closes the gap on what FounderOS shows. The OS now has a visible queue, a substrate health
+check, and five more writing skills that reflect current state instead of starting cold.
+
+### Added - execution queue
+
+- **`cadence/queue.md` template.** Three lifecycle states: ACTIVE (max 3), BACKLOG, DONE. Conventions
+  block with entry shape. Created by the setup wizard from `templates/cadence/queue.md`.
+- **`skills/queue/SKILL.md`.** Five operations: read, add, start, done, park. 3-item ACTIVE gate:
+  starting a fourth item surfaces the three current ACTIVE items and asks which gets paused or killed.
+- **`.claude/commands/queue.md`.** Single command (`/founder-os:queue`). No subcommand files.
+- **SessionStart brief.** ACTIVE queue items now render first after the date header. Missing or empty
+  queue shows: `Active: 0/3 (queue empty - say "add to queue: <thing>" to start)`.
+- **Readiness-check Queue bucket.** 5% weight. Full credit if ACTIVE > 0 and DONE in last 7 days > 0.
+- **Weekly-review queue rolloff.** DONE entries older than 7 days roll to `brain/log.md`. ACTIVE
+  entries older than 14 days surface for a keep/park decision.
+
+### Added - verify health check
+
+- **`skills/verify/SKILL.md`.** Read-only report across 8 substrate checks: plugin surface, hooks,
+  scripts, MCPs, free-tier floor, wiki integrity, cadence staleness, auto-memory presence. Each check
+  returns PASS / WARN / FAIL with a one-line reason. Never auto-fixes.
+- **`.claude/commands/verify.md`.** Thin trigger for the verify skill (`/founder-os:verify`).
+- **README post-install.** "Say 'verify the OS' (or run `/founder-os:verify`)" added near quick-start.
+
+### Changed - five writing skills complete snapshot wiring
+
+`email-drafter`, `sop-writer`, `content-repurposer`, `client-update`, and `proposal-writer` now read
+`brain/.snapshot.md` before drafting. Open-flags block, must-do block, and voice/brand blocks apply
+if the snapshot exists. Snapshot is optional context - skill proceeds without it if missing.
+
+### Added - multi-archetype trace pass
+
+- **`traces/v121-maya.md`.** Full setup + voice + menu + LinkedIn + queue flow against Maya (B2C, Stillpoint meditation app, Toronto).
+- **`traces/v121-dev.md`.** Same flow against Dev (ops-not-founder, Mumbai logistics). LinkedIn replaced by SOP-writer.
+- **`traces/v121-gaps.md`.** 5 gaps surfaced, 1 patched in v1.21 (weekly-review balance check now
+  skips for non-owner operators), 2 deferred to v1.22, 2 accepted.
+
+44 skills, 26 commands, 182 tests.
+
 ## v1.20.3 - 2026-05-10
 
 v1.20.3 adds contrastive voice depth. A founder can now teach the OS what they would never write, not only what they tend to write. The five voice-coupled writing skills use those anti-examples as a quiet final filter before returning drafts.
