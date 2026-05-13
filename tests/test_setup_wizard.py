@@ -86,15 +86,15 @@ class SetupWizardToolStackPhaseTests(unittest.TestCase):
                 self.assertIn(option, self.section)
 
     def test_crm_prompt_with_options(self) -> None:
-        self.assertIn("Where do you track deals or pipeline?", self.section)
-        for option in ("Notion DB", "HubSpot", "Airtable", "spreadsheet", "nothing yet", "skip"):
+        # v1.22 W5/M1: prompt broadened to cover B2C subscriber-list users.
+        self.assertIn("Where do you track customers, subscribers, or your pipeline?", self.section)
+        for option in ("Notion DB", "HubSpot", "Airtable", "subscriber list", "spreadsheet", "nothing yet", "skip"):
             with self.subTest(option=option):
                 self.assertIn(option, self.section)
 
     def test_skip_path_offered_in_every_prompt(self) -> None:
         # Each numbered prompt line must offer "skip" as a terminal option.
-        # Pull the four numbered prompt lines and verify each ends with
-        # "skip" near the line end.
+        # v1.22 W5/M2: Q5 (primary channel) added, so there are now 5 prompts.
         prompt_lines = re.findall(
             r"^\d\. \"[^\"]+\"",
             self.section,
@@ -102,8 +102,8 @@ class SetupWizardToolStackPhaseTests(unittest.TestCase):
         )
         self.assertEqual(
             len(prompt_lines),
-            4,
-            f"Expected exactly 4 numbered MC prompts, found {len(prompt_lines)}",
+            5,
+            f"Expected exactly 5 numbered MC prompts, found {len(prompt_lines)}",
         )
         for line in prompt_lines:
             with self.subTest(line=line):

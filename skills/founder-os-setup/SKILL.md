@@ -53,17 +53,45 @@ Ask: "Let's set up your Founder OS. First - what's your name, and what do you do
 ### 0.2 Business Map
 If they mentioned multiple businesses, ask for each: "For each business, tell me: name, what it does in one sentence, and who else is involved (co-founders, key team members, or just you)."
 
-If they have one business, move to 0.3.
+If they have one business, move to 0.2.1.
+
+### 0.2.1 Your Role
+
+Ask: "What best describes your role?
+1. Founder - you own the business
+2. Operator - you run operations for someone else's business
+3. Team-of-one - solo creator, freelancer, or independent professional (no employees, no investors)
+
+Pick the closest. The OS adapts to your role - it does not assume you are a founder."
+
+Record the answer as `role` internally. Map to a token:
+
+- "1" / "founder" / "own" / "my business" / "I run it" → `founder`
+- "2" / "operator" / "working for" / "reporting to" / "not my company" → `operator`
+- "3" / "freelancer" / "solo" / "creator" / "independent" / "team of one" → `team_of_one`
+- Unclear or no answer → `founder` (safe default)
+
+Store `role:` in `core/identity.md` under a `## Role` field. This value drives downstream question phrasing and the bootloader `{{role_noun}}` substitution in Phase 2.2.
 
 ### 0.2.5 Positioning
 
-Ask three short positioning questions in sequence. One question, one line. Each is skip-able. Wait for the answer before moving to the next unless the founder dumps all three answers at once.
+Ask three short positioning questions in sequence. One question, one line. Each is skip-able. Wait for the answer before moving to the next unless the user dumps all three answers at once.
 
-1. "Who do you sell to in one sentence? You can say skip."
-2. "What do you sell in one sentence? You can say skip."
-3. "What visible pain does your buyer feel before they come to you? You can say skip."
+Use the role captured in Phase 0.2.1 to branch the phrasing of each question:
 
-These answers populate `core/identity.md` under `## Positioning`, which `linkedin-post`, `proposal-writer`, `client-update`, and `business-context-loader` read before drafting. If the founder says "skip", write `[NOT SET]` for that line and continue.
+**Q1 - "Who do you sell to?"**
+- founder / team_of_one: "Who do you sell to in one sentence? You can say skip."
+- operator: "Who does your company sell to in one sentence? You can say skip."
+
+**Q2 - "What do you sell?"**
+- founder / team_of_one: "What do you sell in one sentence? You can say skip."
+- operator: "What does your company sell in one sentence? You can say skip."
+
+**Q3 - "What pain does your buyer feel?"**
+- founder / team_of_one: "What visible pain does your buyer feel before they come to you? You can say skip."
+- operator: "What pain does your company's typical buyer feel before they come to you? You can say skip."
+
+These answers populate `core/identity.md` under `## Positioning`, which `linkedin-post`, `proposal-writer`, `client-update`, and `business-context-loader` read before drafting. If the user says "skip", write `[NOT SET]` for that line and continue.
 
 **Backward compatibility (parse-everything-at-once path).** If the founder answers with all three in one reply ("I sell to UAE SMEs, I sell brand and web projects, they feel embarrassed by a website that no longer matches the business"), parse all three, mark the section answered, and skip the remaining prompts in this phase. Confirm what was captured in one line. Do not re-ask.
 
@@ -84,14 +112,17 @@ Ask four short multi-choice prompts in sequence. One question, one line of optio
 1. "Where do you store written knowledge? Notion / Obsidian / Google Drive / local files only / other / skip."
 2. "What email do you use for work? Gmail / Outlook / Apple Mail / other / none / skip."
 3. "What calendar do you use? Google Calendar / Outlook / Apple Calendar / other / none / skip."
-4. "Where do you track deals or pipeline? Notion DB / HubSpot / Airtable / spreadsheet / nothing yet / skip."
+4. "Where do you track customers, subscribers, or your pipeline? Notion DB / HubSpot / Airtable / subscriber list (Mailchimp, Klaviyo, ConvertKit) / spreadsheet / nothing yet / skip."
+
+5. "What's your main channel for reaching customers or your audience? LinkedIn / Instagram / YouTube / email newsletter / other / skip."
 
 Map each answer to the exact lowercase token from `stack.json`'s `_allowed_values`:
 
 - Knowledge base -> `knowledge_base` (notion / obsidian / google_drive / local). "other" or unrecognised tool -> `null` and log the actual name in the backlog.
 - Email -> `email_platform` (gmail / outlook / apple_mail). "none" or "other" -> `null`.
 - Calendar -> `calendar` (google_calendar / outlook_calendar). Apple Calendar / "other" / "none" -> `null` and log to backlog.
-- CRM or pipeline -> `crm` (notion_db / hubspot / airtable / none). "spreadsheet" -> `null` with a backlog note. "nothing yet" -> `none`.
+- CRM or pipeline -> `crm` (notion_db / hubspot / airtable / none). "spreadsheet" -> `null` with a backlog note. "nothing yet" -> `none`. "subscriber list" or any email marketing platform (Mailchimp, Klaviyo, ConvertKit) -> `crm: null` and log to backlog: "Subscriber platform: <tool_name>. B2C audience tool - not a sales CRM."
+- Primary channel (Q5) -> `primary_channel` (linkedin / instagram / youtube / email_newsletter). "other" -> `null` and log the actual platform name in the backlog. "skip" -> `null`.
 
 "skip" on any prompt records `null` for that field and continues. No "are you sure?" follow-up. No re-ask later in the wizard.
 
@@ -335,6 +366,14 @@ Show the full list of files that will be created. Get approval. Then create them
 - `templates/scripts/memory-diff.py` → `scripts/memory-diff.py` (SessionStart helper that flags `clients/<slug>/` folders without an auto-memory entry)
 
 These are not personalized templates. Copy contents exactly. Do not edit. Verify all five copies exist on disk before continuing. If any are missing the brain-snapshot, brain-pass, wiki-build, or memory-diff helpers will fail silently or hard-error.
+
+**{{role_noun}} substitution.** The `templates/bootloader-claude-md.md` file contains `{{role_noun}}` placeholders in two places. When writing the bootloader CLAUDE.md, substitute based on the role captured in Phase 0.2.1:
+
+- `founder` → replace `{{role_noun}}` with `founder`
+- `operator` → replace `{{role_noun}}` with `operator`
+- `team_of_one` → replace `{{role_noun}}` with `operator` (operator is the generic term for non-owners)
+
+If role was not captured or defaulted, use `founder`.
 
 **{{TODAY}} substitution.** The `templates/brain/relations.yaml` file contains the literal placeholder `{{TODAY}}`. When copying to `brain/relations.yaml`, replace every occurrence of `{{TODAY}}` with today's date in `YYYY-MM-DD` format (use `date -u +%Y-%m-%d` via Bash to get it).
 

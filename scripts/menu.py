@@ -49,6 +49,16 @@ CAPABILITIES = {
         "always_bare": False,
         "phrase": "set up my brand profile",
     },
+    "linkedin-post": {
+        "command": None,
+        "always_bare": False,
+        "phrase": "write a LinkedIn post",
+    },
+    "content-repurposer": {
+        "command": None,
+        "always_bare": False,
+        "phrase": "repurpose this for my main channel",
+    },
     "priority-triage": {
         # Skill exists but no command file. Natural-language only.
         "command": None,
@@ -264,6 +274,21 @@ def priorities_rolled(root: Path) -> int:
     return len(ROLLED_FORWARD.findall(body))
 
 
+def read_primary_channel(root: Path) -> str | None:
+    """Return primary_channel value from stack.json, or None if not set."""
+    import json
+    path = root / "stack.json"
+    body = safe_read(path)
+    if not body:
+        return None
+    try:
+        data = json.loads(body)
+        val = data.get("primary_channel")
+        return val if isinstance(val, str) and val else None
+    except (json.JSONDecodeError, AttributeError):
+        return None
+
+
 def drafts_recent(root: Path, today: date) -> int:
     drafts_dir = root / "drafts"
     if not drafts_dir.is_dir():
@@ -360,6 +385,20 @@ def rule_ingest(state: dict) -> tuple[bool, str]:
     return False, "files a source into raw/ with provenance preserved."
 
 
+def rule_linkedin_post(state: dict) -> tuple[bool, str]:
+    if state["voice"] == "set" and state.get("primary_channel") == "linkedin":
+        return True, "your primary channel is LinkedIn and your voice profile is set - you can create posts in your own voice."
+    return False, "writes LinkedIn posts in your voice once the voice profile is set."
+
+
+def rule_content_repurposer(state: dict) -> tuple[bool, str]:
+    channel = state.get("primary_channel")
+    if state["voice"] == "set" and channel and channel != "linkedin":
+        channel_label = channel.replace("_", " ")
+        return True, f"your primary channel is {channel_label} and your voice profile is set - you can create content in your own voice."
+    return False, "adapts one piece of content across LinkedIn, Instagram, YouTube, email, and more."
+
+
 RULES = [
     ("voice-interview", rule_voice_interview),
     ("brand-interview", rule_brand_interview),
@@ -371,6 +410,8 @@ RULES = [
     ("audit", rule_audit),
     ("today", rule_today),
     ("ingest", rule_ingest),
+    ("linkedin-post", rule_linkedin_post),
+    ("content-repurposer", rule_content_repurposer),
 ]
 
 
@@ -409,6 +450,7 @@ def collect_state(root: Path, today: date) -> dict:
         "brand": profile_status(root, "brand-profile"),
         "priorities_rolled": priorities_rolled(root),
         "drafts_24h": drafts_recent(root, today),
+        "primary_channel": read_primary_channel(root),
     }
 
 

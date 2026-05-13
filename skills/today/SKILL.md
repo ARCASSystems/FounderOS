@@ -1,7 +1,7 @@
 ---
 name: today
 description: >
-  Show the today brief. Say "what's on for today?" (or run /today). Thin skill wrapper for the daily one-screen view.
+  Show today's one-screen brief: anchor task, open flags, last 3 log entries, and next event. Say "what's on for today?" or "what's my day look like" (or run /today).
 mcp_requirements: []
 ---
 

@@ -2,6 +2,26 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.22.0 (in progress) - 2026-05-14
+
+### W2 - Skill catalogue audit
+
+- **`traces/v122-skill-audit.md`** - Full audit table for all 44 skills. Dispositions: 42 KEEP, 2 IMPROVE, 0 ARCHIVE.
+- **`skills/today/SKILL.md`** - Description rewritten to state user-visible output instead of implementation detail.
+- **`skills/approval-gates/SKILL.md`** - Added "Say 'do I need approval for this'" invocation phrase to description.
+- **`skills/_archive/`** - Directory created for future archives. Currently empty.
+
+### W5 - Setup wizard archetype hardening
+
+- **`skills/founder-os-setup/SKILL.md`** - New Phase 0.2.1 role question (founder / operator / team-of-one). Three 0.2.5 positioning questions now branch phrasing by role. CRM question (0.5 Q4) updated for B2C founders - subscriber list option added (M1). New Q5 asks for primary marketing channel and maps to `primary_channel` in `stack.json` (M2).
+- **`templates/bootloader-claude-md.md`** - Two `{{role_noun}}` placeholders replace hardcoded "founder" in role-context sentences. Wizard substitutes at write time based on role answer.
+- **`scripts/menu.py`** - `read_primary_channel()` reads `stack.json`. Two new capabilities (`linkedin-post`, `content-repurposer`) and two new rules fire when voice is set and primary channel is declared. Closes M2: menu now weights the user's declared channel.
+
+### Tests added
+
+- **`tests/test_skill_catalogue.py`** - 5 tests: every index skill has a file, no dead script references, no skeleton markers in live skills, archived skills have required frontmatter, skill count consistent across files.
+- **`tests/test_wizard_archetype.py`** - 6 tests: role question present, three role options documented, operator buyer-question variants, M1 subscriber option, M2 primary channel, bootloader template `{{role_noun}}` substitution.
+
 ## v1.21.0 - 2026-05-14
 
 v1.21 closes the gap on what FounderOS shows. The OS now has a visible queue, a substrate health
