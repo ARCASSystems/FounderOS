@@ -110,6 +110,16 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **When to run.** After adding cross-references in a session. Before `/founder-os:lint`.
 - **Follow-up.** `/founder-os:lint` to verify integrity, then `/founder-os:query` to traverse.
 
+### `/founder-os:observation-rollup`
+
+- **Or say.** "roll up observations" or "compress old logs".
+- **Outcome.** Weekly JSONL observation logs older than 10 days compressed into `brain/observations/_rollups/YYYY-Wnn.md`. Source files deleted only after rollup verified written. Reports counts: rolled, skipped (pending), skipped (already rolled).
+- **Args.** None.
+- **Writes.** `brain/observations/_rollups/YYYY-Wnn.md` per compressed week; removes source `brain/observations/*.jsonl` only after verified write.
+- **Prereqs.** `FOUNDER_OS_OBSERVATIONS=1` was set at some point (no JSONL files otherwise; the command exits cleanly).
+- **When to run.** When the SessionStart brief surfaces "N JSONL files older than 10 days". Safe to run anytime - idempotent.
+- **Follow-up.** None. The rollup file is the durable record.
+
 ---
 
 ## Retrieval and recall

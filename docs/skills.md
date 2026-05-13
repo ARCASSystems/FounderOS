@@ -128,6 +128,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** After adding cross-references in a session. Before `lint`.
 - **Follow-up.** `lint` to verify. `query` to traverse. Slash command: `/founder-os:wiki-build`.
 
+### observation-rollup
+
+- **Say.** "roll up observations" or "compress old logs".
+- **Outcome.** JSONL observation files older than 10 days grouped by ISO week and compressed into `brain/observations/_rollups/YYYY-Wnn.md`. Source JSONL files deleted only after the rollup is verified written. Reports counts: rolled, pending, already rolled.
+- **Reads.** `brain/observations/*.jsonl`.
+- **Writes.** `brain/observations/_rollups/YYYY-Wnn.md` per compressed week. Removes source JSONLs after verified write.
+- **Voice rules.** No.
+- **Prereqs.** `FOUNDER_OS_OBSERVATIONS=1` was set at some point (no JSONL files otherwise; the skill exits cleanly).
+- **When to run.** When the SessionStart brief surfaces "N JSONL files older than 10 days". Safe to run anytime - idempotent.
+- **Follow-up.** None. The rollup file is the durable record. Slash command: `/founder-os:observation-rollup`.
+
 ---
 
 ## Retrieval

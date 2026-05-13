@@ -408,6 +408,27 @@ if (Test-Path $Log) {
 # last line.
 if ($env:FOUNDER_OS_OBSERVATIONS -eq "1") {
     Write-Output "Observations: enabled (writing to brain/observations/<date>.jsonl)"
+    # --- Observation rollup state ---
+    $obsDir = Join-Path $Repo "brain\observations"
+    $rollupDir = Join-Path $obsDir "_rollups"
+    $rollupCount = 0
+    if (Test-Path $rollupDir) {
+        $rollupCount = @(Get-ChildItem -Path $rollupDir -Filter "*.md" -ErrorAction SilentlyContinue).Count
+    }
+    Write-Output "  Rollups: $rollupCount weekly summaries in brain/observations/_rollups/"
+    if (Test-Path $obsDir) {
+        $cutoff = (Get-Date).AddDays(-10).Date
+        try {
+            $stale = @(Get-ChildItem -Path $obsDir -Filter "*.jsonl" -ErrorAction SilentlyContinue |
+                Where-Object {
+                    try { [datetime]::ParseExact($_.BaseName, "yyyy-MM-dd", $null) -lt $cutoff }
+                    catch { $false }
+                }).Count
+            if ($stale -gt 0) {
+                Write-Output "  $stale JSONL files older than 10 days - say 'roll up observations' to compress old logs."
+            }
+        } catch {}
+    }
 } else {
     Write-Output "Observations: disabled (set FOUNDER_OS_OBSERVATIONS=1 to enable)"
 }

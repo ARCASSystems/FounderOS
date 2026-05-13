@@ -9,6 +9,15 @@ permissions:
   issues: write
 
 jobs:
+  test:
+    name: Python test suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run full test suite
+        run: python3 -m unittest discover tests -v
+
   audit:
     name: Leakage & drift scan
     runs-on: ubuntu-latest

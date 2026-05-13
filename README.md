@@ -25,7 +25,7 @@ Three layers, in plain English. Skills read and write across all of them.
 - **Brain layer** - log, flags, patterns, parked decisions, rants, knowledge. The memory that captures what happened, what is stuck, and what is worth reusing.
 - **Wiki layer** - `[[cross-references]]` between files plus a source archive (`raw/`) for articles, transcripts, and anything you want preserved.
 
-Areas for searching across the 44 skills:
+Areas for searching across the 45 skills:
 
 - **Daily ops:** today, weekly-review, priority-triage, brain-log, decision-framework, session-handoff, meeting-prep, knowledge-capture, founder-coaching, unit-economics, strategic-analysis, pre-send-check, sop-writer, forcing-questions, blind-spot-review, ship-deliverable
 - **Voice and brand:** voice-interview, brand-interview, your-voice, your-deliverable-template
@@ -159,7 +159,7 @@ Each row tells you the **outcome** (what you get when it finishes). Detailed rea
 | queue | What is moving. Read, add, start, done, and park operations on `cadence/queue.md`. ACTIVE is hard-capped at 3 - starting a fourth item triggers a keep/park/kill decision. Surfaced in the SessionStart brief. |
 | verify | A structured health check across 8 substrate checks: plugin surface, hooks, scripts, MCPs, free-tier floor, wiki, cadence freshness, auto-memory. Each check marked PASS / WARN / FAIL with a one-line reason. Never auto-fixes. Read-only. |
 
-### Slash commands (26)
+### Slash commands (27)
 
 Each row tells you the **outcome** (what you see when it finishes), the natural-language phrase that triggers the same skill, and whether it **writes** anything. Detailed behaviour, sample output, args, and follow-ups live in [`docs/commands.md`](docs/commands.md).
 
@@ -242,7 +242,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 Founder OS does not assume your stack. The OS is files and skills. Each skill declares which MCP servers it can use, and degrades gracefully when those MCPs are not available.
 
-Most of the 44 skills work end-to-end with zero MCPs. A few skills, including `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`, function without MCPs but produce better output with the relevant integration connected.
+Most of the 45 skills work end-to-end with zero MCPs. A few skills, including `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`, function without MCPs but produce better output with the relevant integration connected.
 
 The full catalog: [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
@@ -351,7 +351,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.21.0. Public push week of 2026-05-14.
+Version 1.22.0. Final release. Public push week of 2026-05-14.
+
+v1.22 is the final release from ARCAS Systems. Install with one command: `curl -fsSL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/install.sh | bash`. The setup wizard now handles three roles - founder, operator, team-of-one - and branches downstream questions and the bootloader CLAUDE.md on the role you declare. Skill catalogue audited: all 44 prior skills validated, 0 archived. Observation logs now have a weekly rollup script (`scripts/observation-rollup.py`) so JSONL files do not grow unbounded. A `<private>` exclusion tag lets you mark any text that should not survive the session - brain-log, dream, knowledge-capture, and rant all honor it. End-to-end critical path tests cover setup wizard, install paths, verify health/broken states, queue 3-cap gate, brain-pass with empty corpus, and wiki-build idempotency. 45 skills, 27 commands, 247 tests.
 
 v1.21 closes the gap on what FounderOS shows. A new execution queue (`cadence/queue.md`) surfaces
 what is moving in the first three lines of every session. The queue skill manages five operations -

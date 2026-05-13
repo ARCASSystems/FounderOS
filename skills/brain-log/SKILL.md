@@ -164,6 +164,10 @@ id: log-YYYY-MM-DD-NNN
 
 Newest entries on top. Keep entries concise - capture the insight, not the full conversation.
 
+## Private tag filter
+
+Before persisting anything to a file, scan the source text for `<private>...</private>` blocks (case-insensitive). Remove every matched block (including the tags) from the text before writing. If the entire input is wrapped in `<private>`, write nothing and report "skipped - content was tagged private."
+
 ## Rules
 
 - Capture the insight, not the conversation. "Realized pricing needs to account for delivery time" not "We were talking about pricing and I mentioned that..."

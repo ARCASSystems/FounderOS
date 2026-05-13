@@ -338,5 +338,77 @@ class SessionStartTipTests(unittest.TestCase):
             self.assertIn("=== end brief ===", output)
 
 
+class SessionStartObservationRollupTests(unittest.TestCase):
+    """Tests for the v1.22 W4 observation-rollup section of the SessionStart brief.
+
+    The hook must:
+      1. Report the current count of weekly rollup summaries.
+      2. Surface a nudge when JSONL files older than 10 days exist AND
+         observations are enabled.
+    Regression target: passing a Git Bash POSIX path (/c/...) to a Windows
+    Python interpreter must still produce correct glob results.
+    """
+
+    def _make_install(self, tmp: Path) -> Path:
+        (tmp / "core").mkdir(parents=True)
+        (tmp / "brain" / "observations" / "_rollups").mkdir(parents=True)
+        (tmp / ".claude" / "hooks").mkdir(parents=True)
+        (tmp / "core" / "identity.md").write_text("# identity\n", encoding="utf-8")
+        target = tmp / ".claude" / "hooks" / "session-start-brief.sh"
+        target.write_bytes(SESSION_START_HOOK.read_bytes())
+        return target
+
+    def _run_hook(self, hook_path: Path) -> str:
+        bash = shutil.which("bash")
+        if not bash:
+            self.skipTest("bash is not on PATH")
+        env = os.environ.copy()
+        env["FOUNDER_OS_OBSERVATIONS"] = "1"
+        result = subprocess.run(
+            [bash, bash_path(bash, hook_path)],
+            text=True,
+            capture_output=True,
+            env=env,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return result.stdout
+
+    def test_rollup_count_reported_when_enabled(self):
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            hook = self._make_install(tmp)
+            # Drop two rollup files so the count is non-zero
+            (tmp / "brain" / "observations" / "_rollups" / "2026-W15.md").write_text("rollup\n")
+            (tmp / "brain" / "observations" / "_rollups" / "2026-W16.md").write_text("rollup\n")
+            out = self._run_hook(hook)
+            self.assertIn("Observations: enabled", out)
+            self.assertIn("Rollups: 2", out)
+
+    def test_stale_jsonl_nudge_fires(self):
+        """Old JSONLs must surface the rollup nudge - regression for Windows path bug."""
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            hook = self._make_install(tmp)
+            from datetime import date, timedelta
+            today = date.today()
+            # 3 files older than 10 days
+            for offset in (15, 20, 30):
+                stale = today - timedelta(days=offset)
+                (tmp / "brain" / "observations" / f"{stale.isoformat()}.jsonl").write_text("{}\n")
+            out = self._run_hook(hook)
+            self.assertIn("older than 10 days", out,
+                          f"Stale-JSONL nudge must fire when observations enabled. Got:\n{out}")
+            self.assertIn("roll up observations", out)
+
+    def test_no_nudge_when_jsonls_are_fresh(self):
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            hook = self._make_install(tmp)
+            from datetime import date
+            (tmp / "brain" / "observations" / f"{date.today().isoformat()}.jsonl").write_text("{}\n")
+            out = self._run_hook(hook)
+            self.assertNotIn("older than 10 days", out)
+
+
 if __name__ == "__main__":
     unittest.main()

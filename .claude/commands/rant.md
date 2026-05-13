@@ -46,6 +46,10 @@ Do not run a multi-turn intake. If the user answers with more context, extract t
 
 6. Confirm in one line: "Captured. <N> rants today. /dream when ready." Do not summarise the rant content.
 
+## Private tag filter
+
+Before persisting anything to a file, scan the source text for `<private>...</private>` blocks (case-insensitive). Remove every matched block (including the tags) from the text before writing. If the entire input is wrapped in `<private>`, write nothing and report "skipped - content was tagged private."
+
 ## Rules
 
 - Do not edit the rant text. Spelling errors, run-on sentences, voice-to-text artifacts stay.

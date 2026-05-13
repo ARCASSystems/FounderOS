@@ -2,7 +2,7 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
-## v1.22.0 (in progress) - 2026-05-14
+## v1.22.0 - 2026-05-14
 
 ### W2 - Skill catalogue audit
 
@@ -17,10 +17,30 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 - **`templates/bootloader-claude-md.md`** - Two `{{role_noun}}` placeholders replace hardcoded "founder" in role-context sentences. Wizard substitutes at write time based on role answer.
 - **`scripts/menu.py`** - `read_primary_channel()` reads `stack.json`. Two new capabilities (`linkedin-post`, `content-repurposer`) and two new rules fire when voice is set and primary channel is declared. Closes M2: menu now weights the user's declared channel.
 
-### Tests added
+### W4 - Observation rollup and `<private>` exclusion tag
+
+- **`scripts/observation-rollup.py`** - Pure stdlib script. Groups `brain/observations/*.jsonl` by ISO week. Weeks with >= 7 days of data that ended >= 3 days ago are compressed into `brain/observations/_rollups/YYYY-Wnn.md`. Source JSONL files deleted only after rollup verified written. Idempotent.
+- **`skills/observation-rollup/SKILL.md`** - Invocation skill for the rollup script. Say "roll up observations" or "compress old logs".
+- **`.claude/commands/observation-rollup.md`** - Slash command shortcut (`/founder-os:observation-rollup`).
+- **`.claude/hooks/session-start-brief.sh` + `.ps1`** - When observations are enabled, SessionStart brief now reports rollup count and surfaces a nudge when JSONL files older than 10 days exist.
+- **`rules/operating-rules.md`** - New file. Documents the `<private>` exclusion tag: any text wrapped in `<private>...</private>` is stripped from persistent writes. Case-insensitive. Applies to brain-log, dream, knowledge-capture, rant, and auto-memory.
+- **`skills/brain-log/SKILL.md`**, **`skills/knowledge-capture/SKILL.md`**, **`.claude/commands/dream.md`**, **`.claude/commands/rant.md`** - Each writing surface now documents the private-tag filter procedure.
+
+### W6 - End-to-end test coverage
+
+- **`tests/test_e2e_critical_paths.py`** - 8 critical path classes: setup wizard documents writes and substitution, install.sh --dry-run runs without error, uninstall.sh --dry-run preserves user data, verify skill documents 8 checks and PASS/FAIL/WARN states, queue 3-cap gate documented and enforced, brain-pass documents empty corpus response, wiki-build idempotency verified by running the script twice.
+- **`.github/workflows/founderos-audit.yml`** - Added `test` job: runs `python3 -m unittest discover tests -v` on every push.
+
+### Tests added (all sessions)
 
 - **`tests/test_skill_catalogue.py`** - 5 tests: every index skill has a file, no dead script references, no skeleton markers in live skills, archived skills have required frontmatter, skill count consistent across files.
 - **`tests/test_wizard_archetype.py`** - 6 tests: role question present, three role options documented, operator buyer-question variants, M1 subscriber option, M2 primary channel, bootloader template `{{role_noun}}` substitution.
+- **`tests/test_observation_rollup.py`** - 4 tests: groups by ISO week, aggregates correctly, idempotent, deletes source only after rollup written.
+- **`tests/test_private_tag.py`** - 10 tests: operating-rules documents tag, case-insensitive spec, named surfaces, each writing surface documents filter phrase, skip case, and tag removal.
+- **`tests/test_e2e_critical_paths.py`** - 28 tests across 8 critical path classes.
+- **`tests/test_session_hooks.py`** - 3 new tests for the W4 rollup section of the SessionStart brief: rollup count reported when enabled, stale-JSONL nudge fires (regression test for Git Bash POSIX path -> Windows Python interpreter), no nudge when JSONLs are fresh.
+
+45 skills, 27 commands, 247 tests.
 
 ## v1.21.0 - 2026-05-14
 

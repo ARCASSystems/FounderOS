@@ -145,6 +145,10 @@ Always ask:
 - Would a specific client benefit from hearing this?
 - Is there a content opportunity here?
 
+## Private tag filter
+
+Before persisting anything to a file, scan the source text for `<private>...</private>` blocks (case-insensitive). Remove every matched block (including the tags) from the text before writing. If the entire input is wrapped in `<private>`, write nothing and report "skipped - content was tagged private."
+
 ## Formatting
 
 - Simple hyphens (-) not em or en dashes

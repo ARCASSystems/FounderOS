@@ -403,6 +403,38 @@ fi
 # last line.
 if [ -n "$FOUNDER_OS_OBSERVATIONS" ] && [ "$FOUNDER_OS_OBSERVATIONS" = "1" ]; then
   echo "Observations: enabled (writing to brain/observations/<date>.jsonl)"
+  # --- Observation rollup state ---
+  OBS_DIR="$REPO/brain/observations"
+  ROLLUP_DIR="$OBS_DIR/_rollups"
+  ROLLUP_COUNT=0
+  if [ -d "$ROLLUP_DIR" ]; then
+    ROLLUP_COUNT=$(ls -1 "$ROLLUP_DIR"/*.md 2>/dev/null | wc -l | tr -d ' ' || echo 0)
+  fi
+  echo "  Rollups: ${ROLLUP_COUNT} weekly summaries in brain/observations/_rollups/"
+  if [ -n "$PYTHON" ] && [ -d "$OBS_DIR" ]; then
+    # On Git Bash/Cygwin/WSL, Python is the Windows binary and does not parse
+    # POSIX paths like /c/Users/...; cygpath converts to Windows form so
+    # pathlib's glob actually finds the files.
+    if command -v cygpath >/dev/null 2>&1; then
+      OBS_PY=$(cygpath -w "$OBS_DIR" 2>/dev/null || echo "$OBS_DIR")
+    else
+      OBS_PY="$OBS_DIR"
+    fi
+    STALE=$($PYTHON -c "
+from datetime import date, timedelta
+from pathlib import Path
+obs = Path(r'''$OBS_PY''')
+cut = date.today() - timedelta(days=10)
+try:
+    n = sum(1 for f in obs.glob('*.jsonl') if date.fromisoformat(f.stem) < cut)
+    print(n)
+except Exception:
+    print(0)
+" 2>/dev/null || echo 0)
+    if [ "${STALE:-0}" -gt 0 ] 2>/dev/null; then
+      echo "  ${STALE} JSONL files older than 10 days - say 'roll up observations' to compress old logs."
+    fi
+  fi
 else
   echo "Observations: disabled (set FOUNDER_OS_OBSERVATIONS=1 to enable)"
 fi

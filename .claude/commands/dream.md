@@ -55,6 +55,10 @@ Process all unprocessed rants in `brain/rants/`. Distil what surfaced. Write a t
 
 6. Output to chat: print only the 5 digest lines exactly as written to log.md. Nothing else. No preamble. No closing summary. The OBSERVED section is written to log.md but is NOT printed to chat.
 
+## Private tag filter
+
+Before persisting anything to a file, scan the source text for `<private>...</private>` blocks (case-insensitive). Remove every matched block (including the tags) from the text before writing. If the entire input is wrapped in `<private>`, write nothing and report "skipped - content was tagged private."
+
 ## Rules
 
 - Hard cap on chat output: 5 lines after the heading line. If 7 patterns surfaced, pick the 3 most load-bearing. The rest are still written into `brain/patterns.md`.
