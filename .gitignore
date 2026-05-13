@@ -64,3 +64,7 @@ audit-*.md
 # Kept locally for reference. Not committed to the public repo.
 # Already-tracked notes (v1.7 review, v1.7 codex findings/verification) stay tracked.
 notes/
+
+# Evaluation traces (synthetic user sessions used during development QA)
+# Dev artifacts - not product content.
+traces/
