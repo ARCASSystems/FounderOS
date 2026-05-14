@@ -417,7 +417,7 @@ Full release history in [`CHANGELOG.md`](CHANGELOG.md). Current limits in [`noti
 
 ## Maintenance and forking
 
-FounderOS v1.22 is the final feature release from ARCAS Systems. The repo enters maintenance mode: critical-breakage patches only, community forks encouraged. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the issue-triage policy and [`docs/forking.md`](docs/forking.md) for extension points.
+FounderOS v1.22 was the final feature release from ARCAS Systems. v1.23 ships review-driven patches only (privacy sweeps, hook fixes, false-positive closures from final-release audits). No new skills, commands, or features land on the upstream after v1.22. The repo is in maintenance mode: critical-breakage patches only, community forks encouraged. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the issue-triage policy and [`docs/forking.md`](docs/forking.md) for extension points.
 
 ## Contributing and security
 
