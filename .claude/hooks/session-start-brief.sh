@@ -38,7 +38,7 @@ fi
 # core/identity.md and would no-op anyway.
 if [ ! -f "$REPO/core/identity.md" ]; then
   if [ -f "$REPO/templates/bootloader-claude-md.md" ] || [ -f "$REPO/.claude/settings.json" ] || [ -f "$REPO/CLAUDE.md" ]; then
-    echo "Welcome to Founder OS. Run /founder-os:setup to get started."
+    echo "Welcome to Founder OS. Say \"set up Founder OS\" to get started."
     echo "(15-20 minutes. The wizard asks who you are, what you run, and what is slowing you down.)"
   fi
   exit 0

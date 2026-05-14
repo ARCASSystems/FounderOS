@@ -59,7 +59,7 @@ if (-not (Test-Path (Join-Path $Repo 'core\identity.md'))) {
     if (Test-Path $m) { $hasMarker = $true; break }
   }
   if ($hasMarker) {
-    Write-Output "Welcome to Founder OS. Run /founder-os:setup to get started."
+    Write-Output 'Welcome to Founder OS. Say "set up Founder OS" to get started.'
     Write-Output "(15-20 minutes. The wizard asks who you are, what you run, and what is slowing you down.)"
   }
   exit 0
