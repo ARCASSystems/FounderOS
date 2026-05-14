@@ -18,13 +18,14 @@ DEFAULT_TARGET="$HOME/.claude/plugins/founder-os"
 HOOKS_TARGET="$HOME/.claude/hooks"
 
 # Hook files that install.sh copies - uninstall removes the same set.
+# Names must match .claude/settings.json registered hooks exactly.
 HOOK_FILES=(
   "session-start-brief.sh"
   "session-start-brief.ps1"
   "session-close-revenue-check.sh"
   "session-close-revenue-check.ps1"
-  "post-tool-use.sh"
-  "post-tool-use.ps1"
+  "post-tool-use-observation.sh"
+  "post-tool-use-observation.ps1"
 )
 
 # User data directories that must never be removed.
@@ -38,9 +39,12 @@ PRESERVED_DIRS=(
   "clients"
 )
 
+# User Layer files. Must mirror the User Layer list in .claude/commands/update.md.
+# If you add a User Layer path there, add it here too or default uninstall will delete it.
 PRESERVED_FILES=(
   "MEMORY.md"
   "CLAUDE.md"
+  "stack.json"
 )
 
 # ---- argument parsing --------------------------------------------------------

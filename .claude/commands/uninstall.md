@@ -8,7 +8,7 @@ allowed-tools: ["Read", "Bash", "Glob"]
 
 Cleanly removes Founder OS from this machine. Two modes:
 
-- **Default** (no argument): de-registers the plugin and removes the System Layer files (skills, commands, hooks, templates). Preserves your personal data: `core/`, `context/`, `cadence/`, `brain/`, `network/`.
+- **Default** (no argument): de-registers the plugin and removes the System Layer files (skills, commands, hooks, templates). Preserves your personal data: `core/`, `context/`, `cadence/`, `brain/`, `network/`, `clients/`, `companies/`, `MEMORY.md`, `CLAUDE.md`, and `stack.json` (local tool bindings).
 - **`--purge`**: also removes your personal data. Irreversible. Asks twice.
 
 Argument: `$ARGUMENTS` - optional. Pass `--purge` (or `purge`) to also delete personal data.
@@ -52,6 +52,11 @@ Personal data (will be PRESERVED):
 - cadence/
 - brain/
 - network/
+- clients/
+- companies/
+- MEMORY.md
+- CLAUDE.md
+- stack.json (local tool bindings - if you reinstall, your tool choices come back)
 
 If you want to also remove personal data, re-run with: /founder-os:uninstall --purge
 
@@ -107,8 +112,10 @@ rm -rf .claude/hooks/
 rm -rf .claude-plugin/
 rm -f .claude/settings.json
 rm -rf docs/
-rm -f VERSION CLAUDE.md AGENTS.md GEMINI.md AVATAR.md README.md LICENSE stack.json
+rm -f VERSION AGENTS.md GEMINI.md AVATAR.md README.md LICENSE
 ```
+
+Do NOT remove `CLAUDE.md` or `stack.json` in default mode - both are User Layer per `/founder-os:update`. Setup writes the founder's tool bindings into `stack.json`; deleting it on default uninstall would lose those choices.
 
 If running in PowerShell on Windows native (no git-bash), use:
 
@@ -116,7 +123,7 @@ If running in PowerShell on Windows native (no git-bash), use:
 Remove-Item -Recurse -Force skills, scripts, templates, rules, docs
 Remove-Item -Recurse -Force .claude/commands, .claude/hooks, .claude-plugin
 Remove-Item -Force .claude/settings.json -ErrorAction SilentlyContinue
-Remove-Item -Force VERSION, CLAUDE.md, AGENTS.md, GEMINI.md, AVATAR.md, README.md, LICENSE, stack.json
+Remove-Item -Force VERSION, AGENTS.md, GEMINI.md, AVATAR.md, README.md, LICENSE
 ```
 
 **Purge mode:** all of the above, plus:
@@ -154,7 +161,7 @@ Plugin path: if you installed via the Claude Code plugin marketplace, also run `
 ## Rules
 
 - Never run a destructive command before the user has confirmed in step 3.
-- In default mode, NEVER touch `core/`, `context/`, `cadence/`, `brain/`, or `network/`.
+- In default mode, NEVER touch the User Layer. Authoritative list lives in `/founder-os:update`. Currently: `core/`, `context/`, `cadence/`, `brain/`, `network/`, `clients/`, `companies/`, `MEMORY.md`, `CLAUDE.md`, `stack.json`. If `update.md` adds a new User Layer path, mirror it here in the same commit or default uninstall will silently delete it.
 - In purge mode, require the literal word `PURGE` in uppercase. No softer confirmations.
 - If any `rm` step fails (permissions, locked file), report the failure on its own line and continue with the next step. Do not abort halfway.
 - This command does not push to any remote. The user is responsible for cleaning up any cloud copies (GitHub forks, Notion mirrors).

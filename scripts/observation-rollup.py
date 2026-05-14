@@ -4,7 +4,9 @@ Compress weekly JSONL observation logs into markdown summaries.
 
 Walks brain/observations/*.jsonl, groups by ISO week, and for each week with
 >= 7 days of data that ended >= 3 days ago writes a markdown rollup to
-brain/observations/_rollups/YYYY-Wnn.md, then deletes the source JSONL files.
+brain/observations/_rollups/YYYY-Wnn.md. By default the source JSONL files
+are MOVED to brain/observations/_archived/YYYY-Wnn/ after a successful
+rollup, not deleted. Pass --delete-sources to remove them instead.
 
 Idempotent: weeks that already have a rollup file are skipped.
 Pure stdlib. No dependencies.
@@ -127,6 +129,11 @@ def main() -> None:
         default=None,
         help="Override the repo root. Defaults to the directory containing brain/observations/ above scripts/.",
     )
+    parser.add_argument(
+        "--delete-sources",
+        action="store_true",
+        help="Delete source JSONL files after rollup instead of archiving them. Default is to MOVE them to brain/observations/_archived/YYYY-Wnn/.",
+    )
     args = parser.parse_args()
 
     today = date.today()
@@ -149,6 +156,7 @@ def main() -> None:
 
     obs_dir = repo / "brain" / "observations"
     rollup_dir = obs_dir / "_rollups"
+    archive_dir = obs_dir / "_archived"
 
     # Collect JSONL files by ISO week. Filenames must be YYYY-MM-DD.jsonl.
     by_week: dict = {}
@@ -185,7 +193,7 @@ def main() -> None:
 
         written = write_rollup(week_key, files, rollup_dir)
 
-        # Delete source files only after verifying the rollup was written.
+        # Only dispose of source files after verifying the rollup was written.
         if not written.exists():
             print(
                 f"ERROR: rollup write failed for {week_key}. Source files preserved.",
@@ -193,14 +201,28 @@ def main() -> None:
             )
             sys.exit(1)
 
-        for f in files:
-            try:
-                f.unlink()
-            except OSError as exc:
-                print(f"WARNING: could not delete {f}: {exc}", file=sys.stderr)
+        if args.delete_sources:
+            for f in files:
+                try:
+                    f.unlink()
+                except OSError as exc:
+                    print(f"WARNING: could not delete {f}: {exc}", file=sys.stderr)
+            disposition = "deleted"
+        else:
+            week_archive = archive_dir / week_key
+            week_archive.mkdir(parents=True, exist_ok=True)
+            for f in files:
+                try:
+                    f.replace(week_archive / f.name)
+                except OSError as exc:
+                    print(
+                        f"WARNING: could not archive {f}: {exc}",
+                        file=sys.stderr,
+                    )
+            disposition = f"archived to {week_archive.relative_to(repo)}"
 
         rolled += 1
-        print(f"Rolled up {week_key} ({len(files)} days -> {written.name})")
+        print(f"Rolled up {week_key} ({len(files)} days -> {written.name}, sources {disposition})")
 
     print(
         f"Done. Rolled: {rolled}, "

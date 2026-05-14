@@ -86,13 +86,15 @@ If update available, add one line: `Run /founder-os:update to install.` Stop.
 
 **If `$ARGUMENTS` is `rollback`:**
 
-Run `git status --porcelain` at the install root. If there are uncommitted changes from something other than a prior update, reply: `Uncommitted changes present. Review with git status before rolling back.` and stop.
+Restore System Layer paths from the most recent backup branch. Backup branches are named `founder-os-update-backup-<ISO-timestamp>` and are created in Step 7 before every update, so a backup exists for any successful update regardless of whether the tree was clean or dirty at update time.
 
-Otherwise, restore from the most recent update stash:
+1. Run `git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/heads/founder-os-update-backup-*` and take the first entry. Call this `BACKUP_REF`.
+2. If no entry is returned, reply: `No prior update backup branch found. Cannot rollback automatically. Use git reflog to find the last good commit manually.` Stop.
+3. For each System Layer path listed in the Layer definitions section above, run `git checkout "$BACKUP_REF" -- <path>` if that path exists on the backup branch. Skip paths that do not exist on the backup (they were not present at update time).
+4. Stage the restored paths and commit with message `chore: rollback System Layer to <BACKUP_REF>`. User Layer paths are not touched.
+5. Reply: `Rolled back System Layer to <BACKUP_REF>. User Layer untouched. The backup branch is kept; delete with: git branch -D <BACKUP_REF> when no longer needed.`
 
-1. Run `git stash list` and find the most recent entry prefixed with `founder-os-update-backup-`.
-2. If found, run `git stash pop <stash-ref>`. Then reply: `Rolled back. Local state restored from <stash-ref>.`
-3. If no backup stash is found, reply: `No prior update backup found. Cannot rollback automatically. Use git reflog to find the last good commit manually.` Stop.
+This restores only System Layer paths. User Layer files modified since the update remain as-is. The backup branch persists until manually deleted, so a rollback can be re-run safely.
 
 **If `$ARGUMENTS` is empty:** proceed to Step 4.
 
@@ -135,10 +137,13 @@ Wait for reply. If not a clear `yes`, reply: `Update dismissed. Run /founder-os:
 
 ### Step 7. Back up current state
 
-Before applying anything, snapshot the System Layer paths so `rollback` works:
+Before applying anything, create a backup branch so `rollback` works on any tree state:
 
-1. `git stash push -m "founder-os-update-backup-<ISO-timestamp>" -- .claude .claude-plugin skills scripts templates notion-package rules docs CLAUDE.md AGENTS.md README.md VERSION`
-2. If the install is not a git repo, reply: `Install is not under git. Initialize with git init and commit current state before updating, so rollback is possible.` Stop.
+1. Run `git rev-parse --is-inside-work-tree` to confirm the install is a git repo. If it is not, reply: `Install is not under git. Initialize with git init and commit current state before updating, so rollback is possible.` Stop.
+2. Generate an ISO timestamp: `BACKUP_REF="founder-os-update-backup-$(date -u +%Y%m%dT%H%M%SZ)"`.
+3. Run `git branch "$BACKUP_REF"`. This creates a branch pointer at the current HEAD without changing the working tree or HEAD. Branch creation works on a clean tree (unlike `git stash push`, which silently no-ops when there are no local changes and was the previous mechanism). The branch captures the entire pre-update state - every System Layer path can be restored later with `git checkout "$BACKUP_REF" -- <path>`.
+4. If branch creation fails because the name already exists (two updates within the same second, very rare), append a `-2` suffix and retry. If it still fails, reply: `Could not create backup branch. Run git branch to inspect, then retry.` Stop.
+5. Report inline: `Backup branch created: <BACKUP_REF>.`
 
 ### Step 8. Apply updates
 
