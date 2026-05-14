@@ -8,7 +8,8 @@
 # context/, brain/, companies/, network/, clients/, MEMORY.md, CLAUDE.md)
 # is NEVER touched. Those files are yours and survive uninstall.
 #
-# Bash-specific syntax (${var,,} lowercase, local) requires bash 4+.
+# Targets bash 3.2+ so the macOS system bash works without brew install bash.
+# Avoid ${var,,} / declare -A / mapfile / readarray (bash 4+ only).
 
 set -euo pipefail
 
@@ -148,7 +149,7 @@ fi
 
 printf 'Proceed with removal? [y/N] '
 read -r answer
-answer="${answer,,}"  # bash 4+ lowercase
+answer=$(printf '%s' "$answer" | tr '[:upper:]' '[:lower:]')
 if [[ "$answer" != "y" && "$answer" != "yes" ]]; then
   info "Cancelled. Nothing was removed."
   exit 0

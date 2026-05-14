@@ -5,11 +5,11 @@
 #   curl -fsSL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/install.sh | bash
 #   bash install.sh [--target <path>] [--dry-run] [--help]
 #
-# Bash-specific syntax is used (not POSIX sh) because:
-#   - Associative arrays and local variables require bash 4+
-#   - String manipulation like ${var,,} (lowercase) is bash-only
-#   - printf '%s\n' patterns assume bash built-ins for portability across macOS/Linux
-# Requires: bash 4+, git, python 3.11+
+# Bash-specific syntax is used (not POSIX sh) but the script targets bash 3.2+
+# so the macOS one-liner works on the system bash. Avoid:
+#   - ${var,,} / ${var^^} (use tr '[:upper:]' '[:lower:]' instead)
+#   - declare -A / mapfile / readarray (bash 4+ only)
+# Requires: bash 3.2+, git, python 3.11+
 
 set -euo pipefail
 
@@ -92,12 +92,15 @@ step "Checking prerequisites"
 check_bash_version() {
   local major
   major="${BASH_VERSINFO[0]:-0}"
-  if [[ "$major" -lt 4 ]]; then
-    err "bash 4 or newer is required (found bash $BASH_VERSION)."
-    info "On macOS, install a newer bash: brew install bash"
+  if [[ "$major" -lt 3 ]]; then
+    err "bash 3.2 or newer is required (found bash $BASH_VERSION)."
     return 1
   fi
-  ok "bash $BASH_VERSION"
+  if [[ "$major" -lt 4 ]]; then
+    info "bash $BASH_VERSION (3.2 mode - works, but bash 4+ recommended)"
+  else
+    ok "bash $BASH_VERSION"
+  fi
 }
 
 check_git() {
@@ -139,6 +142,26 @@ check_bash_version || failed=true
 check_git          || failed=true
 check_python       || failed=true
 
+# In dry-run mode, prereq failures become warnings: the founder still gets the
+# planned-operations preview so they can see what install.sh would do once they
+# install the missing prerequisites. A non-dry-run with failed prereqs still exits.
+if [[ "$DRY_RUN" == true ]]; then
+  echo ""
+  step "Installing FounderOS to $TARGET (dry-run)"
+  dryrun "Would install to: $TARGET"
+  dryrun "Would copy hooks to: $HOOKS_TARGET"
+  dryrun "Source repo: $REPO_URL"
+  echo ""
+  if [[ "$failed" == true ]]; then
+    info "Dry-run complete. One or more prerequisites are missing - install them before running for real."
+  else
+    info "Dry-run complete. No changes were made."
+  fi
+  echo ""
+  info "To run the real install: bash install.sh"
+  exit 0
+fi
+
 if [[ "$failed" == true ]]; then
   echo ""
   err "One or more prerequisites are missing. Fix them and re-run this script."
@@ -149,17 +172,6 @@ fi
 
 step "Installing FounderOS to $TARGET"
 
-if [[ "$DRY_RUN" == true ]]; then
-  dryrun "Would install to: $TARGET"
-  dryrun "Would copy hooks to: $HOOKS_TARGET"
-  dryrun "Source repo: $REPO_URL"
-  echo ""
-  info "Dry run complete. No changes were made."
-  echo ""
-  info "To run the real install: bash install.sh"
-  exit 0
-fi
-
 if [[ -d "$TARGET/.git" ]]; then
   # Existing install - offer update
   local_version="(unknown)"
@@ -169,7 +181,7 @@ if [[ -d "$TARGET/.git" ]]; then
   info "FounderOS is already installed at $TARGET (version: $local_version)."
   printf '  Update to the latest version? [y/N] '
   read -r answer
-  answer="${answer,,}"  # bash lowercase - requires bash 4+
+  answer=$(printf '%s' "$answer" | tr '[:upper:]' '[:lower:]')
   if [[ "$answer" == "y" || "$answer" == "yes" ]]; then
     step "Updating FounderOS"
     git -C "$TARGET" pull --ff-only
