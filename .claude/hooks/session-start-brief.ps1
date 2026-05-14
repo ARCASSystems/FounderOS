@@ -139,6 +139,11 @@ if (Test-Path $Clients) {
   if ($fill -gt 0) { Write-Output "Clients: $fill [FILL] rows awaiting data" }
 }
 
+# $todayDt must be initialized here so the compliance block below can compare
+# deadline dates. Defined after ConvertTo-IsoDate (above) and before first use.
+$todayDt = ConvertTo-IsoDate $Today
+if (-not $todayDt) { $todayDt = Get-Date }
+
 # --- Compliance deadlines (legal-compliance skill) ---
 # Surfaces entries in context/compliance.md within next 30 days or overdue.
 # Quiet exit if file missing - skill is opt-in via /founder-os:legal-setup.
@@ -218,8 +223,6 @@ if (Test-Path $Quarantine) {
 # Scans brain/flags.md, brain/patterns.md, brain/decisions-parked.md for
 # entries with explicit "Decay after:" field that has passed. Supports
 # YYYY-MM-DD or Nd. Convention defined in rules/entry-conventions.md.
-$todayDt = ConvertTo-IsoDate $Today
-if (-not $todayDt) { $todayDt = Get-Date }
 
 function Resolve-EntryAnchorDate {
   param([string[]]$entryLines, [string]$file)

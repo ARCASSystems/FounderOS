@@ -410,5 +410,100 @@ class SessionStartObservationRollupTests(unittest.TestCase):
             self.assertNotIn("older than 10 days", out)
 
 
+class PowerShellComplianceInitOrderTests(unittest.TestCase):
+    """F21 regression: $todayDt must be initialized before the compliance block.
+
+    Before the fix, $todayDt was initialized at the Review Due section (near
+    the bottom of the script) while the compliance block referenced it near
+    the top. PowerShell silently treats uninitialized vars as $null, so the
+    compliance entries never surfaced for Windows users.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.ps = powershell_bin()
+
+    def _skip_if_no_ps(self):
+        if not self.ps:
+            self.skipTest("PowerShell (pwsh/powershell) is not on PATH")
+
+    def _make_ps_install(self, tmp: Path) -> Path:
+        (tmp / "core").mkdir(parents=True)
+        (tmp / "context").mkdir(parents=True)
+        (tmp / "brain").mkdir(parents=True)
+        (tmp / ".claude" / "hooks").mkdir(parents=True)
+        (tmp / "core" / "identity.md").write_text("# identity\n", encoding="utf-8")
+        target = tmp / ".claude" / "hooks" / "session-start-brief.ps1"
+        hook_src = REPO_ROOT / ".claude" / "hooks" / "session-start-brief.ps1"
+        target.write_bytes(hook_src.read_bytes())
+        return target
+
+    def _run_ps_hook(self, hook_path: Path) -> str:
+        result = subprocess.run(
+            [self.ps, "-NoProfile", "-File", str(hook_path)],
+            text=True,
+            capture_output=True,
+        )
+        return result.stdout + result.stderr
+
+    def test_compliance_overdue_surfaces_in_output(self):
+        """An overdue compliance entry must appear in the SessionStart output."""
+        self._skip_if_no_ps()
+        from datetime import date, timedelta
+        today = date.today()
+        overdue_date = (today - timedelta(days=5)).isoformat()
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            hook = self._make_ps_install(tmp)
+            compliance_content = (
+                f"## {overdue_date} - Test overdue filing\n"
+                f"- Status: OPEN\n"
+                f"- Details: This entry is overdue by 5 days.\n"
+            )
+            (tmp / "context" / "compliance.md").write_text(compliance_content, encoding="utf-8")
+            output = self._run_ps_hook(hook)
+            self.assertIn(
+                "OVERDUE",
+                output,
+                f"Overdue compliance entry must surface in output.\nGot:\n{output}",
+            )
+
+    def test_compliance_upcoming_surfaces_in_output(self):
+        """An upcoming compliance entry (due today) must appear in the output."""
+        self._skip_if_no_ps()
+        from datetime import date, timedelta
+        today = date.today()
+        upcoming_date = (today + timedelta(days=10)).isoformat()
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            hook = self._make_ps_install(tmp)
+            compliance_content = (
+                f"## {upcoming_date} - Test upcoming filing\n"
+                f"- Status: OPEN\n"
+                f"- Details: This entry is due in 10 days.\n"
+            )
+            (tmp / "context" / "compliance.md").write_text(compliance_content, encoding="utf-8")
+            output = self._run_ps_hook(hook)
+            self.assertIn(
+                "deadline",
+                output.lower(),
+                f"Upcoming compliance entry (within 30 days) must surface in output.\nGot:\n{output}",
+            )
+
+    def test_no_compliance_output_when_file_missing(self):
+        """When context/compliance.md does not exist, the hook must not error."""
+        self._skip_if_no_ps()
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            hook = self._make_ps_install(tmp)
+            output = self._run_ps_hook(hook)
+            self.assertIn(
+                "=== end brief ===",
+                output,
+                "Hook must complete cleanly even without compliance.md",
+            )
+            self.assertNotIn("OVERDUE", output)
+
+
 if __name__ == "__main__":
     unittest.main()
