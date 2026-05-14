@@ -1,6 +1,6 @@
 # Forking FounderOS
 
-FounderOS v1.22 is feature-complete. If you need something beyond what ships, fork it.
+FounderOS v1.23 is feature-complete. If you need something beyond what ships, fork it.
 
 This guide explains when to fork, what the extension points are, which rules to preserve, and how to keep your fork sync-able with future breakage patches.
 
@@ -44,7 +44,7 @@ You do not need to fork to add your own skills, voice profile, or brand profile.
 
 ## Keeping your fork sync-able with breakage patches
 
-Tag your customizations with `# fork:` comments in skill bodies and hook scripts. When a breakage patch lands on the baseline (`v1.22.1`, for example), you can `git rebase` or cherry-pick against the upstream and your tagged lines make it clear what is yours versus what is system layer.
+Tag your customizations with `# fork:` comments in skill bodies and hook scripts. When a breakage patch lands on the baseline (`v1.23.0`, for example), you can `git rebase` or cherry-pick against the upstream and your tagged lines make it clear what is yours versus what is system layer.
 
 Example in a skill body:
 ```

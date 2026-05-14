@@ -130,7 +130,7 @@ Four hooks ship in `.claude/hooks/`:
 - **PostToolUse observation log (opt-in)** - off by default. Set `FOUNDER_OS_OBSERVATIONS=1` in your shell env to append one JSON line per tool call to `brain/observations/<YYYY-MM-DD>.jsonl`. `/dream` rolls each day into an OBSERVED section.
 - **Session-close revenue check** - warns (does not block) if outreach verbs appear in recent `brain/log.md` without a matching `context/clients.md` update in the same session. Bash and PowerShell variants both ship.
 
-Both fail gracefully. Neither blocks the session.
+Each fails gracefully. None blocks the session.
 
 ---
 

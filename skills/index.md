@@ -107,6 +107,7 @@ Release notes:
 
 - v1.20.3 added anti-example voice depth to the voice interview and five writing skills. No behaviour changes to other skills.
 - v1.21 added `queue` and `verify`.
-- v1.22 added `legal-compliance`, `observation-rollup`, `linkedin-post`, `client-update` voice-coupling depth pass, and closed the final release.
+- v1.22 added `legal-compliance`, `observation-rollup`, `linkedin-post`, `client-update` voice-coupling depth pass, and closed the prior final release.
+- v1.23 closed the capture-path promise from v1.22. A new UserPromptSubmit hook routes user input through four shape detectors (rant, named-entity, status update, preference) and emits capture suggestions Claude honors. Rants are eagerly written to `brain/rants/<date>.md`. SessionStart fires a welcome banner on fresh installs and surfaces unprocessed-rant count. Five operator-vocabulary triggers added to existing skills. No new skills.
 
-All additions across v1.2 through v1.22 are additive. No existing skill behaviour was changed without an explicit version note.
+All additions across v1.2 through v1.23 are additive. No existing skill behaviour was changed without an explicit version note.

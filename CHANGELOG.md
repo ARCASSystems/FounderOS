@@ -38,7 +38,7 @@ Description triggers extended on five skills so users do not need to know OS-int
 
 ### Tests added
 
-- **`tests/test_user_prompt_capture.py`** - 14 tests covering `detect_shape` per fixture (rant, named-entity, status update, preference, none), stop-list filtering, proximity requirement, slash-command bypass, eager-rant frontmatter shape, private-tag filter, idempotent prepend on same-date file, malformed JSON envelope handled silently, no Founder OS install -> exit silently.
+- **`tests/test_user_prompt_capture.py`** - 18 tests covering `detect_shape` per fixture (rant, named-entity, status update, preference, none), stop-list filtering, proximity requirement, slash-command bypass, eager-rant frontmatter shape, private-tag filter, idempotent prepend on same-date file, malformed JSON envelope handled silently, no Founder OS install -> exit silently, named-entity is suggest-only and does not write.
 - **`tests/test_session_hooks.py`** - 2 new tests for the v1.23 welcome banner: fires when `core/identity.md` is missing AND a Founder OS marker is present; does not fire when `core/identity.md` exists.
 - **`tests/test_install_scripts.py`** - assertion updated for the "set up Founder OS" phrase.
 

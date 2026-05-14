@@ -2,9 +2,9 @@
 
 Founder OS is a derived product. The source-of-truth lives in a private repo and ports out to this public one. Issues and PRs are welcome but the bar is high.
 
-## Maintenance posture (after v1.22.0)
+## Maintenance posture (after v1.23.0)
 
-FounderOS v1.22.0 is feature-complete. ARCAS Systems no longer ships new features to this repo.
+FounderOS v1.23.0 is feature-complete. ARCAS Systems no longer ships new features to this repo.
 
 ### Issues we will respond to
 
