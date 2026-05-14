@@ -18,7 +18,7 @@ This command is a thin trigger - the heavy lifting lives in `skills/legal-compli
 
 3. **Run the interview.** Ask ONE question at a time. Wait for the answer before moving on.
 
-### Q1 — Jurisdiction
+### Q1 - Jurisdiction
 
 Ask: "What jurisdiction does your business operate under? Examples: UAE, UAE-DIFC, UAE-ADGM, US-Delaware-LLC, UK-Ltd, IN-Karnataka-Pvt-Ltd, SG-Pte-Ltd, AU-Pty-Ltd. If you operate across multiple, name your primary one - we can add others later."
 
@@ -34,7 +34,7 @@ Check whether `skills/legal-compliance/references/<slug>/` already exists.
 - **UAE-DIFC / UAE-ADGM:** also uses `references/uae/` (each domain file has DIFC/ADGM sections). Note in the response that DIFC/ADGM are separate common-law regimes and the skill flags them on every answer.
 - **Anything else:** the folder does NOT exist. Continue to Q2.
 
-### Q2 — (Non-UAE only) Confirm scaffold creation
+### Q2 - (Non-UAE only) Confirm scaffold creation
 
 If the jurisdiction folder does not exist:
 
@@ -47,7 +47,7 @@ If yes:
 
 If no: tell the user "OK - run `/founder-os:legal-setup` again when you're ready. The skill will refuse to answer legal questions for `<jurisdiction>` until the scaffold exists." and stop.
 
-### Q3 — Write jurisdiction to identity
+### Q3 - Write jurisdiction to identity
 
 Show: "I'll add `jurisdiction: <slug>` to your `core/identity.md`. This tells the legal-compliance skill which folder to load. Proceed? (yes / no)"
 
@@ -59,19 +59,19 @@ If yes:
 
 If no: skip this step but warn that the skill will keep asking for jurisdiction on every invocation until identity is updated.
 
-### Q4 — Fiscal year end
+### Q4 - Fiscal year end
 
 Ask: "When does your fiscal year end? Examples: Dec 31, March 31, May 31. Used to calculate corporate tax and audit deadlines."
 
 Capture as MM-DD format (e.g., `12-31`, `03-31`).
 
-### Q5 — Business structure / license type
+### Q5 - Business structure / license type
 
 Ask: "What's your business structure? Examples: UAE mainland LLC, DMCC FZ-LLC, US Delaware LLC, UK private limited (Ltd), Indian private limited. Drives which obligations apply (Emiratisation, BOI filings, transfer pricing)."
 
 Capture verbatim. Do not try to map to a token.
 
-### Q6 — Active obligations capture
+### Q6 - Active obligations capture
 
 Ask, ONE at a time:
 
@@ -83,7 +83,7 @@ Ask, ONE at a time:
 
 For each "yes" answer: prepare an entry for `context/compliance.md`.
 
-### Q7 — Write context/compliance.md
+### Q7 - Write context/compliance.md
 
 If `context/compliance.md` already exists, read it. Append new entries; do not overwrite existing.
 
@@ -93,7 +93,7 @@ If it does not exist:
 - Populate the "Upcoming Filings & Renewals" block with the entries from Q6
 - Write to `context/compliance.md`
 
-### Q8 — (Non-UAE only) Surface the next step
+### Q8 - (Non-UAE only) Surface the next step
 
 If a non-UAE scaffold was just created, tell the user:
 
@@ -107,7 +107,7 @@ Add each via `/founder-os:legal-add-source <url-or-pdf>`. The skill will tell yo
 
 Until at least one source is loaded, the skill will refuse to answer legal questions for `<slug>` (won't make up law)."
 
-### Q9 — Confirm
+### Q9 - Confirm
 
 Show a one-screen summary:
 

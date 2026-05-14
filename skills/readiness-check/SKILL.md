@@ -1,7 +1,7 @@
 ---
 name: readiness-check
 description: >
-  Score the OS install across five buckets and name the next 3 moves. Trigger on "check my OS readiness", "audit the OS", "how am I doing", "what's my OS state", "readiness check", "how's the system", or "where are the gaps" (or run /founder-os:status). Returns a 0-100% score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Read-only.
+  Score the OS install across five buckets and name the next 3 moves. Trigger on "check my OS readiness", "how am I doing", "what's my OS state", "readiness check", "how's the system", or "where are the gaps" (or run /founder-os:status). For a full composite health report across all five checks, use /founder-os:audit instead. Returns a 0-100% score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Read-only.
 allowed-tools: ["Read", "Glob", "Grep"]
 mcp_requirements: []
 ---

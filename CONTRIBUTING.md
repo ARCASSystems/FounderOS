@@ -26,7 +26,7 @@ If you build something on top of FounderOS, open a discussion thread linking you
 
 ## What we accept
 
-- **Bug reports (preferred):** open an issue with the reproduction steps and the install path you used (A, B, or C from `docs/install.md`).
+- **Bug reports (preferred):** open an issue with the reproduction steps and the install path you used (Path A, B, D, or E from `docs/install.md`).
 - **Documentation fixes:** typo, broken link, unclear instruction. Open a PR.
 - **Skill improvements that are general-purpose.** ARCAS-specific code stays in the private source.
 

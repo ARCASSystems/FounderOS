@@ -121,10 +121,7 @@ If `cadence/queue.md` does not exist, skip this step silently.
 
 ## Marketing / Sales / Delivery Balance Check
 
-Skip this check if the operator's `core/identity.md` indicates they are not the business
-owner (phrases like "I report to", "I'm not the founder", "ops manager", "operations manager",
-"team member"). The check is for founders who own both the delivery and the sales function.
-Applying it to an ops-not-founder user would incorrectly flag their work as "too much delivery."
+Skip this check if `core/identity.md` has `role: operator` or `role: team_of_one`, or if prose indicates they are not the business owner (phrases like "I report to", "I'm not the founder", "ops manager", "operations manager", "team member"). Check the `role:` field first; fall back to the phrase scan only if the field is absent. The check is for business owners who own both the delivery and the sales function. Applying it to an ops-not-founder user would incorrectly flag their work as "too much delivery."
 
 If the founder has no paying clients yet, run this check:
 - Look at the retro: categorize completed work as Marketing (content, brand), Sales (outreach, pipeline, meetings with prospects), or Delivery (building, internal systems, client work)

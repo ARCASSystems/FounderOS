@@ -16,7 +16,7 @@ Read `core/identity.md` for who they are. Your job is to reduce cognitive load w
 
 Every session, the six operating-state files load at boot so behaviour is grounded in current context:
 
-1. `core/identity.md` - who the founder is, how they work
+1. `core/identity.md` - who the person running this OS is and how they work
 2. `context/priorities.md` - what matters this week and quarter
 3. `context/decisions.md` - open, parked, resolved
 4. `context/clients.md` - prospects, active, won
@@ -55,10 +55,10 @@ If you need to check something before answering, check it silently.
 founder-os/
 ├── CLAUDE.md                   # Bootloader (you're reading it)
 ├── core/
-│   ├── identity.md             # Who the founder is, how they work
+│   ├── identity.md             # Who the operator is and how they work
 │   ├── avatar.md               # Behavioural profile, loaded on demand by skills
-│   ├── voice-profile.yml       # Filled by /founder-os:voice-interview
-│   └── brand-profile.yml       # Filled by /founder-os:brand-interview
+│   ├── voice-profile.yml       # Filled by the voice-interview setup step
+│   └── brand-profile.yml       # Filled by the brand-interview setup step
 ├── context/
 │   ├── companies.md            # All companies and projects
 │   ├── clients.md              # Current and potential clients
@@ -106,9 +106,9 @@ Founder OS is built like a personal wiki. Three layers:
 
 Three operations:
 
-- **Ingest** (`/founder-os:ingest <source>`) - process a source into raw/ with provenance, propose wiki updates you approve. Different from knowledge-capture (which organizes takeaways without source preservation).
-- **Lint** (`/founder-os:lint`) - read-only audit. Broken cross-references, orphan pages, stale time-sensitive content, provenance gaps. Never auto-fixes.
-- **Wiki build** (`/founder-os:wiki-build`) - walks the wiki layer, extracts every `[[wikilink]]`, writes them as a machine-readable graph in `brain/relations.yaml` between auto-generated sentinel markers. Hand-curated `relations:` section preserved. Idempotent.
+- **Ingest** - say "ingest this source" to process a source into raw/ with provenance and propose wiki updates you approve. Different from knowledge-capture (which organizes takeaways without source preservation).
+- **Lint** - say "lint the OS" for a read-only audit: broken cross-references, orphan pages, stale time-sensitive content, provenance gaps. Never auto-fixes.
+- **Wiki build** - say "build the wiki graph" to walk the wiki layer, extract every `[[wikilink]]`, and write them as a machine-readable graph in `brain/relations.yaml` between auto-generated sentinel markers. Hand-curated `relations:` section preserved. Idempotent.
 
 Cross-references between wiki files use `[[page-name]]` syntax. Lint catches `[[]]` links pointing to files that don't exist; wiki-build keeps the graph fresh. Existing files that don't use the convention are not retrofitted - the convention applies forward.
 
@@ -118,11 +118,11 @@ All three operations are opt-in. The OS works the same with or without them.
 
 ## Brain substrate
 
-Three additions sit underneath the daily files. None require setup beyond running `/founder-os:setup` once.
+Three additions sit underneath the daily files. None require setup beyond the initial setup wizard.
 
 - **`rules/entry-conventions.md`** - bi-temporal + decay convention for entries in `context/decisions.md`, `context/priorities.md`, and the brain layer. Add `Decay after: 14d` (or a date) to a flag and the SessionStart brief surfaces it for keep/kill review when it expires. Add `Superseded by:` + `Invalidated on:` to a decision instead of overwriting it. Convention is forward-only (no backfill). Scanner only fires on entries with explicit `Decay after:` field.
 - **`system/quarantine.md`** - catch-net for silent hook and scheduled-task failures. Helper functions for PowerShell and bash are in the file. SessionStart counts ACTIVE entries. Hooks fail silently by design; quarantine makes failure visible without blocking the session.
-- **`rules/approval-gates.md`** - explicit list of what auto-runs (brain/log appends, wiki-build, archive moves), what requires explicit yes (identity edits, decision supersession, sends, public pushes), and what is blocked outright (force push, hard reset, AI attribution in commits). Customize to match how the founder wants the OS to behave.
+- **`rules/approval-gates.md`** - explicit list of what auto-runs (brain/log appends, wiki-build, archive moves), what requires explicit yes (identity edits, decision supersession, sends, public pushes), and what is blocked outright (force push, hard reset, AI attribution in commits). Customize to match how the operator wants the OS to behave.
 
 The SessionStart brief (`.claude/hooks/session-start-brief.sh`, registered on `SessionStart` in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.
 

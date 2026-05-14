@@ -36,7 +36,7 @@ Refresh the auto-extracted half of `brain/relations.yaml`. The hand-curated `rel
 ## Rules
 
 - Read-only on source markdown. The script only writes to `brain/relations.yaml`.
-- Wiki-layer scope: `core/`, `context/`, `cadence/`, `brain/`, `network/`, `companies/`. Plugin-internal directories (`.claude/`, `skills/`, `templates/`, `docs/`) and the source archive (`raw/`) are excluded.
+- Wiki-layer scope: `core/`, `context/`, `cadence/`, `brain/`, `network/`, `companies/`, `roles/`, `rules/`. Plugin-internal directories (`.claude/`, `skills/`, `templates/`, `docs/`) and the source archive (`raw/`) are excluded.
 - Wikilinks inside fenced code blocks or inline backtick spans are ignored (so docs that describe the syntax do not pollute the graph).
 - The script is idempotent. Running twice in a row produces no diff.
 - Do not edit the auto-generated block by hand. Edits between `#@@WIKI_LINKS_AUTOGEN_BEGIN@@` and `#@@WIKI_LINKS_AUTOGEN_END@@` are overwritten on next run. Add semantic edges to the hand-curated `relations:` section instead.

@@ -1,5 +1,5 @@
 ---
-description: Check OS readiness. Say "check my OS readiness" or "audit the OS" (or run /founder-os:status). Returns a weighted score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer plus the next 3 high-impact moves. Read-only.
+description: Check OS readiness. Say "check my OS readiness", "what's my OS state", or "readiness check" (or run /founder-os:status). Returns a weighted score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer plus the next 3 high-impact moves. For a full health audit, use /founder-os:audit. Read-only.
 allowed-tools: ["Read", "Glob", "Grep"]
 ---
 

@@ -108,6 +108,24 @@ class ObservationRollupScriptTests(unittest.TestCase):
         # 7 days x 3 entries = 21 total
         self.assertIn("21", rollup_text)
 
+    def test_session_key_accepted(self):
+        """Rollup counts sessions written with the 'session' key (hook format), not only 'session_id'."""
+        week_dates = self._complete_week_dates()
+        for d in week_dates:
+            path = self.obs_dir / f"{d}.jsonl"
+            write_jsonl(path, [
+                {"tool": "Read", "session": "hook-session-X"},
+                {"tool": "Write", "session": "hook-session-Y"},
+            ])
+
+        self.mod.find_repo_root = lambda start: self.tmp
+        self.mod.main()
+
+        rollup_dir = self.obs_dir / "_rollups"
+        rollup_text = next(rollup_dir.glob("*.md")).read_text(encoding="utf-8")
+        self.assertIn("hook-session-X", rollup_text)
+        self.assertIn("hook-session-Y", rollup_text)
+
     def test_script_is_idempotent(self):
         """Running rollup twice on the same data produces no new rollup files."""
         week_dates = self._complete_week_dates()

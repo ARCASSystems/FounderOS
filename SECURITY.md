@@ -12,7 +12,8 @@ We aim to acknowledge within 48 hours and patch within 7 days for high-severity 
 
 ## What is in scope
 
-- Code in `skills/`, `.claude/`, `.github/scripts/`
+- Code in `skills/`, `.claude/`, `.github/scripts/`, `scripts/`
+- `install.sh` and `uninstall.sh`
 - Plugin manifest files (`plugin.json`, `marketplace.json`)
 - Hook scripts and the SessionStart brief
 

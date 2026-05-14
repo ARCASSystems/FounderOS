@@ -26,6 +26,13 @@ The skill reads `core/identity.md` for a `jurisdiction:` field. Examples:
 
 Match the jurisdiction string to a folder under `references/`. If the folder does not exist or is empty, the skill **refuses to answer** and tells the user to run `/founder-os:legal-setup` first. Do not guess. Do not fall back to UAE for non-UAE users.
 
+**UAE variant normalization.** All of the following map to `references/uae/` - the shipped UAE reference set covers mainland, DIFC, and ADGM domains:
+- `UAE`, `uae`, `Dubai`, `UAE-Dubai-Mainland`, `UAE-Abu-Dhabi-Mainland`
+- `UAE-DIFC`, `DIFC`
+- `UAE-ADGM`, `ADGM`
+
+For DIFC and ADGM questions, note in the answer that DIFC and ADGM are separate common-law regimes - the UAE reference set covers them but each domain file flags where rules diverge. Any other jurisdiction string that does not match a loaded folder triggers the refusal.
+
 If `core/identity.md` has no `jurisdiction:` field, ask the user what jurisdiction the question is for and offer to add it to identity. Do not save until they confirm.
 
 ---
@@ -175,7 +182,7 @@ The skill should web-search before giving specific guidance on:
 - **Year-specific compliance targets** (Emiratisation thresholds, GDPR fines, transfer pricing thresholds)
 - **Anything where the loaded reference's `## Last Verified:` is >90 days old**
 
-When web-searching, only cite the approved primary source types above. Update the reference file's `## Last Verified:` and the `sources.yml` `last_checked_on:` after a successful refresh - that closes the loop on the staleness check.
+When web-searching, only cite the approved primary source types above. Report the refreshed information inline in the answer. Do not write to reference files or `sources.yml` during a normal legal Q&A - reference file updates are a separate operation. If the source is stale, tell the user: "This source is out of date. Run `/founder-os:legal-update` to refresh the reference files."
 
 ---
 
