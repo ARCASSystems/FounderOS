@@ -304,6 +304,26 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **When to run.** When you want a clean slate, or when you are switching to a different OS.
 - **Follow-up.** None. Or run `/founder-os:setup` again if you kept your data and want to rebuild the System Layer.
 
+### `/founder-os:queue`
+
+- **Or say.** "what's on my plate" / "add to queue: [thing]" / "start [item]" / "mark done"
+- **Outcome.** Current ACTIVE items (capped at 3), or a state transition confirmation for the named item. Starting a fourth item triggers a keep/park/kill decision.
+- **Args.** Optional operation: `add <item>`, `start <item>`, `done <item>`, `park <item>`.
+- **Writes.** `cadence/queue.md` on state changes.
+- **Prereqs.** `/founder-os:setup` complete.
+- **When to run.** At the start of any session. Use `add to queue` when a new item needs tracking.
+- **Follow-up.** `weekly-review` rolls completed items into `brain/log.md`.
+
+### `/founder-os:verify`
+
+- **Or say.** "verify the OS" / "health check" / "check the substrate"
+- **Outcome.** A structured health report across 8 substrate checks: plugin surface, hooks, scripts, MCPs, free-tier floor, wiki integrity, cadence freshness, auto-memory. Each check reports PASS / WARN / FAIL with a one-line reason. Max 30 lines of output. No emoji.
+- **Args.** None.
+- **Writes.** Nothing. Read-only. Never auto-fixes.
+- **Prereqs.** `/founder-os:setup` complete.
+- **When to run.** After install, after update, or when something feels broken.
+- **Follow-up.** Fix any FAIL items and re-run. WARN items are degraded but not blocking.
+
 ---
 
 ## Notes for command authors

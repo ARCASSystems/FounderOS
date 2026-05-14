@@ -527,6 +527,43 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** Whenever you read or watch something worth preserving with provenance.
 - **Follow-up.** `knowledge-capture` to distil. `wiki-build` to refresh the graph. Slash command: `/founder-os:ingest`.
 
+### queue
+
+- **Say.** "what's on my plate", "add to queue: [thing]", "start [item]", "mark done", or "park [item]".
+- **Outcome.** ACTIVE item list (capped at 3), or state transition confirmation for the named item.
+- **Reads.** `cadence/queue.md`.
+- **Writes.** `cadence/queue.md` on add, start, done, and park operations.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete.
+- **When to run.** At the start of any work session to see what is moving. Use `add to queue` when a new item needs tracking.
+- **Follow-up.** `weekly-review` rolls completed queue items into `brain/log.md`. Slash command: `/founder-os:queue`.
+
+---
+
+### verify
+
+- **Say.** "verify the OS", "run a health check", or "check the substrate".
+- **Outcome.** A structured health report across 8 substrate checks (plugin surface, hooks, scripts, MCPs, free-tier floor, wiki integrity, cadence freshness, auto-memory). Each check reports PASS / WARN / FAIL with a one-line reason.
+- **Reads.** `skills/index.md`, `plugin.json`, `.claude/settings.json`, `scripts/`, `brain/relations.yaml`, `cadence/`, `MEMORY.md`.
+- **Writes.** Nothing. Read-only. Never auto-fixes.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete.
+- **When to run.** After install, after update, or when something feels broken.
+- **Follow-up.** Fix the issues named in FAIL lines, then re-run. WARN lines are degraded but not blocking. Slash command: `/founder-os:verify`.
+
+---
+
+### legal-compliance
+
+- **Say.** "look up [legal topic]", "what do I need to know about [regulation]", or "compliance check for [jurisdiction]".
+- **Outcome.** A jurisdiction-aware legal reference answer grounded in the sources loaded via `/founder-os:legal-setup`. Read-only unless you explicitly add a source.
+- **Reads.** `core/identity.md` (jurisdiction field), `skills/legal-compliance/references/<jurisdiction>/sources.yml`, loaded source files.
+- **Writes.** Nothing during reference lookup. Source additions write `sources.yml` and optional domain stubs (via `/founder-os:legal-add-source`).
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete. Jurisdiction set via `/founder-os:legal-setup`.
+- **When to run.** Before any client contract, when a regulatory deadline surfaces, or when jurisdiction-specific guidance is needed.
+- **Follow-up.** `/founder-os:legal-add-source` to add primary sources. `/founder-os:legal-update` to refresh source freshness.
+
 ---
 
 ## Notes for skill authors

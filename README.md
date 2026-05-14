@@ -95,7 +95,7 @@ Open the FounderOS folder in Cowork and attach `CLAUDE.md` as folder instruction
 
 ## What ships in this repo
 
-### Skills (42)
+### Skills (45)
 
 Skills are grouped by when you will actually reach for them, not by category. If you are still on Day 1, you can ignore the rest.
 
@@ -158,6 +158,8 @@ Each row tells you the **outcome** (what you get when it finishes). Detailed rea
 | legal-compliance | Jurisdiction-aware legal reference lookup and compliance guidance from loaded sources. Read-only unless adding sources. |
 | queue | What is moving. Read, add, start, done, and park operations on `cadence/queue.md`. ACTIVE is hard-capped at 3 - starting a fourth item triggers a keep/park/kill decision. Surfaced in the SessionStart brief. |
 | verify | A structured health check across 8 substrate checks: plugin surface, hooks, scripts, MCPs, free-tier floor, wiki, cadence freshness, auto-memory. Each check marked PASS / WARN / FAIL with a one-line reason. Never auto-fixes. Read-only. |
+| menu | A tailored list of 5 to 7 capabilities scored against your current state, surfaced when you do not know what to ask for. Reads `brain/.snapshot.md` and current context. Read-only. |
+| observation-rollup | Compacts raw JSONL observation files older than 7 days into weekly summaries. Runs automatically via the SessionStart hook. Writes to `brain/observations/_rollups/`. |
 
 ### Slash commands (27)
 
@@ -191,6 +193,7 @@ Each row tells you the **outcome** (what you see when it finishes), the natural-
 | `/capture-meeting <subject>` | "capture this" / "log this" | A routed summary: meeting log entry in `brain/log.md`, updated client status in `context/clients.md`, and any new open commitments. Writes 2 to 3 files. |
 | `/founder-os:queue` | "what's on my plate" / "add to queue: <thing>" | Shows ACTIVE items, adds to BACKLOG, moves items between states. ACTIVE is capped at 3. Starting a fourth triggers a keep/park/kill decision. |
 | `/founder-os:verify` | "verify the OS" / "health check" | A structured health check across 8 substrate checks, each PASS / WARN / FAIL. Never auto-fixes. Read-only. |
+| `/founder-os:observation-rollup` | tool invocation | Compacts raw JSONL observation files older than 7 days into weekly summaries under `brain/observations/_rollups/`. Triggered automatically by the SessionStart hook when FOUNDER_OS_OBSERVATIONS=1. |
 
 ### Templates
 
@@ -199,7 +202,7 @@ The setup wizard writes from `templates/`. After setup, you edit the generated f
 ### Notion package
 
 Scaffold artifacts for users who do not run Claude Code. This path is not live until the public duplicate template ships:
-- Notion duplication template (planned)
+- Notion duplication template (not shipped in v1.22; community forks welcome)
 - System prompt for a Claude Project
 - Quickstart page
 
@@ -287,7 +290,7 @@ You are not installing a template. You are installing an operating layer. It lis
 
 You want a no-code app with a UI. This is files plus skills, not an interface. You operate it through Claude Code.
 
-You need shared state across a team. Founder OS is single-user. The Company OS layer (planned, not shipped) is what handles team coordination.
+You need shared state across a team. Founder OS is single-user. The Company OS layer (not in scope; community forks may extend) is what handles team coordination.
 
 You want push notifications, automated triggers, or anything that fires while you sleep. Founder OS is the thinking layer. n8n, Make, Zapier, or your own scripts handle offline triggers.
 
@@ -318,7 +321,7 @@ If you need crons, webhooks, offline triggers, or anything that fires while you 
 
 ## Cloud Claude (web, desktop, mobile)
 
-The Notion Starter Kit is in development. Until the public duplicate template ships, use the Claude Code path for setup. The system prompt at [`notion-package/system-prompts/founder-os-project-prompt.md`](notion-package/system-prompts/founder-os-project-prompt.md) is available for preview and testing only.
+The Notion Starter Kit was scoped but not shipped in v1.22; community forks welcome. The system prompt at [`notion-package/system-prompts/founder-os-project-prompt.md`](notion-package/system-prompts/founder-os-project-prompt.md) is available for preview and testing only. Use the Claude Code path for the full setup experience.
 
 Slash commands and local file writes only run in Claude Code. Cloud Claude can read this repo's files as context but cannot run `/founder-os:setup` from a checkout.
 
