@@ -127,6 +127,41 @@ class NamedEntityFilterTests(unittest.TestCase):
         prompt = "I had a call with Ahmed about logistics in Sharjah."
         self.assertEqual(UPC.detect_shape(prompt), "named-entity")
 
+    def test_kinship_term_does_not_fire(self):
+        """'I just called Mom yesterday' must not trigger a contact-capture."""
+        for prompt in [
+            "I just called Mom yesterday morning.",
+            "I called Dad to confirm the time.",
+            "I had a call with my Brother about the family business.",
+        ]:
+            self.assertIsNone(
+                UPC.detect_shape(prompt),
+                f"kinship term should not fire: {prompt!r}",
+            )
+
+    def test_department_name_does_not_fire(self):
+        """Common internal-department names must not trigger."""
+        for prompt in [
+            "I spoke to Marketing yesterday about the campaign.",
+            "I called Sales this morning to confirm pricing.",
+            "I had a call with Engineering about the regression.",
+        ]:
+            self.assertIsNone(
+                UPC.detect_shape(prompt),
+                f"department name should not fire: {prompt!r}",
+            )
+
+    def test_holiday_or_occasion_does_not_fire(self):
+        """'We met during Ramadan' is temporal context, not a meeting partner."""
+        for prompt in [
+            "We met during Ramadan last year.",
+            "I called everyone before Christmas to wrap up.",
+        ]:
+            self.assertIsNone(
+                UPC.detect_shape(prompt),
+                f"holiday/occasion should not fire: {prompt!r}",
+            )
+
     def test_name_far_from_verb_does_not_fire(self):
         """A capitalized word that is not near any meeting verb does not fire."""
         # Verb at start, name appears 200+ chars later in unrelated context.

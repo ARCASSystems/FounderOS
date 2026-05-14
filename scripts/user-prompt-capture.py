@@ -118,6 +118,19 @@ NAMED_ENTITY_STOPLIST = frozenset({
     "Also", "Then", "Now", "Here", "There", "Still", "However", "Although",
     "Because", "Since", "While", "When", "Where", "Why", "What", "Who",
     "Whose", "Which", "How", "Therefore", "Otherwise", "Meanwhile",
+    # Kinship terms - capitalized when used as names ("called Mom")
+    "Mom", "Dad", "Mum", "Mother", "Father", "Brother", "Sister",
+    "Wife", "Husband", "Son", "Daughter", "Uncle", "Aunt", "Cousin",
+    "Grandma", "Grandpa", "Grandmother", "Grandfather",
+    # Internal departments / functions - common business prose
+    "Marketing", "Sales", "Engineering", "Finance", "Operations",
+    "Legal", "Product", "Design", "Support", "Customer",
+    # Religious / cultural occasions - appear near "met" / "called" in
+    # temporal context, not as meeting partners
+    "Christmas", "Easter", "Ramadan", "Eid", "Diwali", "Hanukkah",
+    "Passover", "Thanksgiving", "Halloween",
+    # Corporate suffixes that match the regex (must have 2+ lowercase)
+    "Inc",
 })
 
 # A capitalized candidate counts as a "real name" if it appears within this

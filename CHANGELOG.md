@@ -31,18 +31,18 @@ Description triggers extended on five skills so users do not need to know OS-int
 
 ### Polish
 
-- **`scripts/user-prompt-capture.py`** - named-entity detection now requires (a) the candidate not to be in a stop-list of common title-case nouns (months, days, tech brands, AI brands, founder-stack tool names, sentence-start verbs) and (b) the candidate to appear within 80 characters of the meeting verb. Stops prompts like "I just called Python from my bash script" or "I had a call with Notion's API team" from firing a capture suggestion.
+- **`scripts/user-prompt-capture.py`** - named-entity detection now requires (a) the candidate not to be in a stop-list of common title-case nouns (months, days, tech brands, AI brands, founder-stack tool names, sentence-start verbs, kinship terms, internal departments, religious and cultural occasions) and (b) the candidate to appear within 80 characters of the meeting verb. Stops prompts like "I just called Python from my bash script", "I had a call with Notion's API team", "I called Mom yesterday", and "I spoke to Marketing this morning" from firing a capture suggestion.
 - **Install phrase consistency.** `install.sh`, `README.md`, and `docs/install.md` now use "set up Founder OS" (two words), matching the documented trigger in `skills/founder-os-setup/SKILL.md`. The one-word variant "set up FounderOS" was untriggered.
 - **`docs/install.md`** - curl-install path no longer claims hooks "fire on every session." New "How hooks fire on Path E" section explains that Path E hooks fire only when Claude Code is opened in the cloned folder; use Path A for hooks that activate everywhere.
 - **CLAUDE.md, AGENTS.md, docs/tools-and-mcps.md** - skill and command counts caught up to current state (45 skills, 27 commands; `observation-rollup` row added to CLAUDE.md skill table; UserPromptSubmit hook listed in AGENTS.md hooks section).
 
 ### Tests added
 
-- **`tests/test_user_prompt_capture.py`** - 18 tests covering `detect_shape` per fixture (rant, named-entity, status update, preference, none), stop-list filtering, proximity requirement, slash-command bypass, eager-rant frontmatter shape, private-tag filter, idempotent prepend on same-date file, malformed JSON envelope handled silently, no Founder OS install -> exit silently, named-entity is suggest-only and does not write.
+- **`tests/test_user_prompt_capture.py`** - 21 tests covering `detect_shape` per fixture (rant, named-entity, status update, preference, none), stop-list filtering across 5 categories (tech brands, days/months, kinship terms, internal departments, religious/cultural occasions), proximity requirement, slash-command bypass, eager-rant frontmatter shape, private-tag filter, idempotent prepend on same-date file, malformed JSON envelope handled silently, no Founder OS install -> exit silently, named-entity is suggest-only and does not write.
 - **`tests/test_session_hooks.py`** - 2 new tests for the v1.23 welcome banner: fires when `core/identity.md` is missing AND a Founder OS marker is present; does not fire when `core/identity.md` exists.
 - **`tests/test_install_scripts.py`** - assertion updated for the "set up Founder OS" phrase.
 
-45 skills, 27 commands, 294 tests (11 platform-skipped).
+45 skills, 27 commands, 297 tests (11 platform-skipped).
 
 ## v1.22.0 - 2026-05-14
 
