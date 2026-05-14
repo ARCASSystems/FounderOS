@@ -30,7 +30,7 @@ You can also do it manually: copy this `_template/` folder to `references/<your-
 
 ## Step 2: Add at least 3 priority sources
 
-These three sources unlock most legal questions. Add them first.
+These three sources cover most legal questions. Add them first.
 
 1. **Tax authority** — your country's IRS / HMRC / FBR / IRAS / ATO equivalent. Add the URL of their main legal/regulations page.
 2. **Business law / Companies act** — your gazetted Companies Act or equivalent. PDF URL or government portal page.

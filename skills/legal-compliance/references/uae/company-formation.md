@@ -1,6 +1,6 @@
 # UAE Company Formation & Licensing
 
-**Last verified: 2026-04-25** (header refresh only — substantive 2025-2026 amendments not deeply audited at this refresh). Free zone landscape continues to evolve quarterly; QFZP framework received major updates in 2025 (see `tax-vat.md` for MD 229/230/84). Always web search det.gov.ae, moec.gov.ae, and the specific free zone portal before quoting fees, license categories, or activity codes — these change without notice.
+**Last verified: 2026-04-25** (header refresh only — substantive 2025-2026 amendments not deeply audited at this refresh). Free zone offerings continue to evolve quarterly; QFZP framework received major updates in 2025 (see `tax-vat.md` for MD 229/230/84). Always web search det.gov.ae, moec.gov.ae, and the specific free zone portal before quoting fees, license categories, or activity codes — these change without notice.
 
 ## Table of Contents
 1. [Quick Decision Framework](#quick-decision-framework)

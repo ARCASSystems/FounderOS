@@ -38,7 +38,7 @@ Ship only after the expanded critical patch set below. The repo is close, but a 
 ### Finding 4 - Public repo still leaks private-review names
 
 - **Claim:** The required private-context sweep has non-zero tracked matches.
-- **Evidence:** `rg -n "Alistair|Aranha|2547468" notes traces --hidden` returns `traces/v121-maya.md:6` and `notes/v1.7-codex-findings.md:39` with `Alistair`.
+- **Evidence:** `rg -n "[REDACTED]|Aranha|2547468" notes traces --hidden` returns `traces/v121-maya.md:6` and `notes/v1.7-codex-findings.md:39` with a private name.
 - **Impact:** No leakage of private or personal context. The brief says each match is critical regardless of size.
 - **Fix:** Redact the names or remove the tracked trace/note artifacts from the public release. Re-run the full private-name regex against tracked files before tagging.
 

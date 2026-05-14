@@ -18,6 +18,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from tests.test_session_hooks import bash_path
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -76,7 +78,7 @@ class InstallShSmokeTests(unittest.TestCase):
 
     def _run_dry(self):
         result = subprocess.run(
-            [self.bash, str(self.script), "--dry-run"],
+            [self.bash, bash_path(self.bash, self.script), "--dry-run"],
             capture_output=True,
             text=True,
             cwd=str(REPO_ROOT),

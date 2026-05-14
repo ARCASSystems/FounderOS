@@ -3,10 +3,13 @@ Static tests for install.sh and uninstall.sh.
 Checks shell syntax, content guards, and natural-language surface requirements.
 End-to-end execution tests live in tests/test_e2e_critical_paths.py (Session 3 / W6).
 """
+import shutil
 import subprocess
 import sys
 import unittest
 from pathlib import Path
+
+from tests.test_session_hooks import bash_path
 
 REPO_ROOT = Path(__file__).parent.parent
 INSTALL_SH = REPO_ROOT / "install.sh"
@@ -26,6 +29,7 @@ def _bash_available() -> bool:
 
 
 BASH_AVAILABLE = _bash_available()
+BASH_BIN = shutil.which("bash") or "bash"
 require_bash = unittest.skipUnless(BASH_AVAILABLE, "bash not available in this environment")
 
 
@@ -35,7 +39,7 @@ class InstallShellSyntaxTests(unittest.TestCase):
     @require_bash
     def test_install_sh_parses(self):
         result = subprocess.run(
-            ["bash", "-n", str(INSTALL_SH)],
+            [BASH_BIN, "-n", bash_path(BASH_BIN, INSTALL_SH)],
             capture_output=True,
             timeout=10,
         )
@@ -48,7 +52,7 @@ class InstallShellSyntaxTests(unittest.TestCase):
     @require_bash
     def test_uninstall_sh_parses(self):
         result = subprocess.run(
-            ["bash", "-n", str(UNINSTALL_SH)],
+            [BASH_BIN, "-n", bash_path(BASH_BIN, UNINSTALL_SH)],
             capture_output=True,
             timeout=10,
         )

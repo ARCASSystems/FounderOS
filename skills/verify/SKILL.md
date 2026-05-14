@@ -158,9 +158,9 @@ Plain text. Maximum 30 lines including the header. Exactly this shape:
 FounderOS v<version> - health check
 <YYYY-MM-DD HH:MM>
 
-[PASS] Plugin surface (44 skills / 26 commands, counts agree)
+[PASS] Plugin surface (45 skills / 27 commands, counts agree)
 [WARN] Hooks installed (SessionStart present, PostToolUse not enabled)
-[PASS] Scripts present (5/5 compile cleanly)
+[PASS] Scripts present (7/7 compile cleanly)
 [PASS] MCP availability (3 configured: Notion, Gmail, Calendar)
 [PASS] Free-tier floor preserved (no core script requires paid keys)
 [PASS] Wiki integrity (0 issues)

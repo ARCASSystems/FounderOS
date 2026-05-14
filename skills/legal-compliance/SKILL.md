@@ -64,7 +64,7 @@ For any legal question:
 9. **Set escalation level.**
    - 🟢 **Green** - confident guidance from public law, standard procedure
    - 🟡 **Amber** - rule is clear but specific circumstances could change outcome; recommend professional review
-   - 🔴 **Red** - active litigation, regulatory investigation, criminal matter, complex cross-border; explain landscape, do not advise
+   - 🔴 **Red** - active litigation, regulatory investigation, criminal matter, complex cross-border; explain the situation, do not advise
 10. **Include a brief, natural disclaimer.** Not a wall. Adapt the phrasing:
     > "This is general guidance based on publicly available <jurisdiction> law as of the date noted. For decisions with significant financial or legal consequences, confirm with a qualified <jurisdiction> lawyer."
 

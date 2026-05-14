@@ -128,7 +128,7 @@ Each row tells you the **outcome** (what you get when it finishes). Detailed rea
 | your-deliverable-template | A branded document (proposal, deck, one-pager) inheriting colors, fonts, and logo from your brand profile. Writes to `drafts/` or `exports/`. |
 | pre-send-check | A pass or fail verdict across voice, source truth, anti-AI scan, and personalization. Names every issue. Nothing ships if anything fails. Read-only. |
 | session-handoff | A handoff file naming what you did, what is open, and what the next operator needs to know. Writes to `drafts/handoffs/` or a named path. |
-| forcing-questions | Six yes/no answers and a verdict on whether to start, kill, or postpone the initiative. Catches vague done states, phantom users, scope creep, false urgency. Read-only. |
+| forcing-questions | Six yes/no answers and a verdict on whether to start, kill, or postpone the initiative. Catches vague done states, phantom users, scope creep, false urgency. Read-only during the question loop; writes to priorities, log, and parked decisions after explicit confirmation. |
 | blind-spot-review | A second-pass review across legal, contracts, data, timing, relationships, upside, and walkaway risk. Names risks before pre-send. Read-only. |
 | ship-deliverable | One pass-or-fail composite across template fit, anti-AI scan, blind-spot evidence, and pre-send-check. Final gate. Read-only. |
 
@@ -178,7 +178,7 @@ Each row tells you the **outcome** (what you see when it finishes), the natural-
 | `/founder-os:query <question>` | "find the file about [topic]" | The top 3 to 5 OS nodes that match your question, each with a stable ID and the path that reached it. `--mode timeline --anchor <slug>` returns entries within 7 days of an anchor. `--mode full --ids <a,b,c>` returns full bodies. Read-only. |
 | `/founder-os:brain-pass "<question>"` | "what do I know about [topic]" | A synthesised answer with stable-ID citations: Answer, Evidence, Confidence, Gaps. Use when a question spans multiple brain files. Read-only. |
 | `/founder-os:audit` | "audit the OS" | One composite health report covering readiness, wiki integrity, brain staleness, voice completeness, and quarantine state. Read-only. |
-| `/founder-os:forcing-questions <initiative>` | "I'm thinking of starting [X]" | Six yes/no answers plus a scope-creep verdict on whether to start, kill, or postpone the initiative. Read-only. |
+| `/founder-os:forcing-questions <initiative>` | "I'm thinking of starting [X]" | Six yes/no answers plus a scope-creep verdict on whether to start, kill, or postpone the initiative. Read-only during the question loop; writes to priorities, log, and parked decisions after explicit confirmation. |
 | `/founder-os:ship-deliverable <path>` | "is this ready to send" | A pass or fail verdict across template fit, anti-AI scan, blind-spot review, and pre-send checks. Names every issue. Nothing ships if anything fails. Read-only. |
 | `/founder-os:legal-setup` | "set up my legal context" | A jurisdiction setup flow for the legal reference layer. Writes `jurisdiction:` and `context/compliance.md` when approved. |
 | `/founder-os:legal-add-source <source>` | "add this legal source" | Registers a URL or PDF against your jurisdiction's legal source set. Writes `sources.yml` and optional domain stubs. |
@@ -354,7 +354,7 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.22.0. Final release. Public push week of 2026-05-14.
+Version 1.22.1. Final release. Public push week of 2026-05-14.
 
 v1.22 is the final release from ARCAS Systems. Install with one command: `curl -fsSL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/install.sh | bash`. The setup wizard now handles three roles - founder, operator, team-of-one - and branches downstream questions and the bootloader CLAUDE.md on the role you declare. Skill catalogue audited: all 44 prior skills validated, 0 archived. Observation logs now have a weekly rollup script (`scripts/observation-rollup.py`) so JSONL files do not grow unbounded. A `<private>` exclusion tag lets you mark any text that should not survive the session - brain-log, dream, knowledge-capture, and rant all honor it. End-to-end critical path tests cover setup wizard, install paths, verify health/broken states, queue 3-cap gate, brain-pass with empty corpus, and wiki-build idempotency. 45 skills, 27 commands, 247 tests.
 

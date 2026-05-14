@@ -364,6 +364,9 @@ class SessionStartObservationRollupTests(unittest.TestCase):
             self.skipTest("bash is not on PATH")
         env = os.environ.copy()
         env["FOUNDER_OS_OBSERVATIONS"] = "1"
+        if os.name == "nt":
+            existing = env.get("WSLENV", "")
+            env["WSLENV"] = "FOUNDER_OS_OBSERVATIONS" + (":" + existing if existing else "")
         result = subprocess.run(
             [bash, bash_path(bash, hook_path)],
             text=True,

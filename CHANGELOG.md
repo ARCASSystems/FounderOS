@@ -313,7 +313,7 @@ Third-review patch. The v1.19.1 release closed the v1.19.0 review's findings, bu
 ### Notes
 
 - 52 tests now pass on git-bash (was 51). One new test for the quoted-target escape round-trip.
-- WSL bash verification: confirmed clean by the v1.19.1 review pass. The reviewer ran the suite under a `bash` that resolved to `C:\Windows\system32\bash.exe`, got 51/51 OK, and reported the converted hook path as `/mnt/c/arcas_dev/ARCAS/founder-os/.claude/hooks/session-start-brief.sh`. v1.19.2 keeps that path and adds the round-trip fix on top, so 52/52 should pass on WSL too.
+- WSL bash verification: confirmed clean by the v1.19.1 review pass. The reviewer ran the suite under a `bash` that resolved to `C:\Windows\system32\bash.exe`, got 51/51 OK, and reported the converted hook path as `/mnt/c/path/to/founder-os/.claude/hooks/session-start-brief.sh`. v1.19.2 keeps that path and adds the round-trip fix on top, so 52/52 should pass on WSL too.
 - No new skills, no new commands. 39 skills, 20 commands. Same surface as v1.19.1.
 - Free-tier accessibility floor preserved.
 
