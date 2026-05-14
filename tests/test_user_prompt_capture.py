@@ -85,7 +85,7 @@ class DetectShapeTests(unittest.TestCase):
         )
 
     def test_named_entity_with_meeting_verb_returns_named_entity(self):
-        prompt = "I had a call with Aqsa this morning about the new role."
+        prompt = "I had a call with Priya this morning about the new role."
         self.assertEqual(UPC.detect_shape(prompt), "named-entity")
 
     def test_long_first_person_dump_returns_rant(self):
