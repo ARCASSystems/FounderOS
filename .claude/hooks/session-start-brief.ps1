@@ -41,8 +41,27 @@ function ConvertTo-IsoDate {
   }
 }
 
-# Quiet exit if the user's repo is not a Founder OS install.
+# Fresh-install welcome. If core/identity.md is missing but other Founder OS
+# markers exist (the templates directory, the bootloader, or a Founder OS
+# settings.json), the user has installed the plugin or cloned the repo but
+# has not run setup. Surface a one-line nudge so the experience is not
+# silence. Without this banner the new-user path is: open Claude Code, see
+# nothing, close. Then exit 0 - the brief sections below require
+# core/identity.md and would no-op anyway.
 if (-not (Test-Path (Join-Path $Repo 'core\identity.md'))) {
+  $markers = @(
+    (Join-Path $Repo 'templates\bootloader-claude-md.md'),
+    (Join-Path $Repo '.claude\settings.json'),
+    (Join-Path $Repo 'CLAUDE.md')
+  )
+  $hasMarker = $false
+  foreach ($m in $markers) {
+    if (Test-Path $m) { $hasMarker = $true; break }
+  }
+  if ($hasMarker) {
+    Write-Output "Welcome to Founder OS. Run /founder-os:setup to get started."
+    Write-Output "(15-20 minutes. The wizard asks who you are, what you run, and what is slowing you down.)"
+  }
   exit 0
 }
 
@@ -144,6 +163,27 @@ $Clients = Join-Path $Repo 'context\clients.md'
 if (Test-Path $Clients) {
   $fill = (Get-Content $Clients | Select-String -Pattern '\[FILL\]').Count
   if ($fill -gt 0) { Write-Output "Clients: $fill [FILL] rows awaiting data" }
+}
+
+# --- Unprocessed rants ---
+# Surfaces the rant-to-action gap. Without this line, rants captured via
+# /rant sit in brain/rants/ until the user remembers /dream exists (15-25%
+# of users, per pre-v1.23 review). Count rant entries (not files) where
+# the frontmatter line `processed: false` is present.
+$RantsDir = Join-Path $Repo 'brain\rants'
+if (Test-Path $RantsDir) {
+  $unproc = 0
+  foreach ($file in (Get-ChildItem -Path $RantsDir -Filter '*.md' -ErrorAction SilentlyContinue)) {
+    $matches = (Get-Content $file.FullName -ErrorAction SilentlyContinue) | Select-String -Pattern '^processed:\s*false\s*$'
+    if ($matches) { $unproc += $matches.Count }
+  }
+  if ($unproc -gt 0) {
+    if ($unproc -ge 3) {
+      Write-Output "Unprocessed rants: $unproc - say `"process my rants`" or run /founder-os:dream. They go stale at 30 days."
+    } else {
+      Write-Output "Unprocessed rants: $unproc (say `"process my rants`" or run /founder-os:dream to distil them)"
+    }
+  }
 }
 
 # $todayDt must be initialized here so the compliance block below can compare

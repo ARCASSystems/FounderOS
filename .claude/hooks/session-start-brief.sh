@@ -29,8 +29,20 @@ else
   PYTHON=""
 fi
 
-# Quiet exit if the user's repo is not a Founder OS install.
-[ ! -f "$REPO/core/identity.md" ] && exit 0
+# Fresh-install welcome. If core/identity.md is missing but other Founder OS
+# markers exist (the hooks directory itself, the bootloader template, or a
+# Founder OS settings.json), the user has installed the plugin or cloned the
+# repo but has not run setup. Surface a one-line nudge so the experience is
+# not silence. Without this banner the new-user path is: open Claude Code,
+# see nothing, close. Then exit 0 - the brief sections below require
+# core/identity.md and would no-op anyway.
+if [ ! -f "$REPO/core/identity.md" ]; then
+  if [ -f "$REPO/templates/bootloader-claude-md.md" ] || [ -f "$REPO/.claude/settings.json" ] || [ -f "$REPO/CLAUDE.md" ]; then
+    echo "Welcome to Founder OS. Run /founder-os:setup to get started."
+    echo "(15-20 minutes. The wizard asks who you are, what you run, and what is slowing you down.)"
+  fi
+  exit 0
+fi
 
 echo "=== Session brief ($TODAY) ==="
 
@@ -130,6 +142,23 @@ if [ -f "$CLIENTS" ]; then
   FILL=$(grep -c "\[FILL\]" "$CLIENTS" 2>/dev/null)
   if [ -n "$FILL" ] && [ "$FILL" -gt 0 ] 2>/dev/null; then
     echo "Clients: $FILL [FILL] rows awaiting data"
+  fi
+fi
+
+# --- Unprocessed rants ---
+# Surfaces the rant-to-action gap. Without this line, rants captured via
+# /rant sit in brain/rants/ until the user remembers /dream exists (15-25%
+# of users, per pre-v1.23 review). Count rant entries (not files) where
+# the frontmatter line `processed: false` is present.
+RANTS_DIR="$REPO/brain/rants"
+if [ -d "$RANTS_DIR" ]; then
+  UNPROC=$(grep -h "^processed:[[:space:]]*false" "$RANTS_DIR"/*.md 2>/dev/null | wc -l | tr -d ' ')
+  if [ -n "$UNPROC" ] && [ "$UNPROC" -gt 0 ] 2>/dev/null; then
+    if [ "$UNPROC" -ge 3 ] 2>/dev/null; then
+      echo "Unprocessed rants: $UNPROC - say \"process my rants\" or run /founder-os:dream. They go stale at 30 days."
+    else
+      echo "Unprocessed rants: $UNPROC (say \"process my rants\" or run /founder-os:dream to distil them)"
+    fi
   fi
 fi
 

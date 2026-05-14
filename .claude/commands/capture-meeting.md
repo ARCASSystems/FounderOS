@@ -1,5 +1,5 @@
 ---
-description: Capture a meeting. Say "capture this" or "log this" (or run /capture-meeting <name>). Routes a transcript or brain dump into brain/log.md + context/clients.md + open commitments.
+description: Capture a meeting or inbound touch from a named person. Say "capture this", "log this", "I had a call with <name>", "I spoke to <name>", "I got a reply from <name>", "heard back from <name>", "they replied", or "<name> responded" (or run /capture-meeting <name>). Routes a transcript or brain dump into brain/log.md + context/clients.md + open commitments. Also fires on phrases that name a new prospect: "add a client", "add a customer", "new lead", "new prospect" - capture intent without a meeting still updates context/clients.md.
 argument-hint: <person or meeting name>
 ---
 

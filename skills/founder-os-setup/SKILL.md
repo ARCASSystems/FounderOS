@@ -526,6 +526,17 @@ When you render the orientation block below, substitute every `<prefix>` literal
 
 Then start using it. You do not need to memorize commands - just talk to Claude.
 
+**Your words map to OS files. Use whichever you prefer.**
+
+- "my journal", "diary", "notes to self" → `brain/log.md` (the brain log)
+- "my schedule", "this week's plan", "what I'm working on this week" → `cadence/weekly-commitments.md` (the weekly sprint)
+- "my goals", "what matters this quarter" → `context/priorities.md`
+- "my customers", "prospects", "leads" → `context/clients.md`
+- "rants", "dumps", "vents" → `brain/rants/`
+- "ideas to follow up on" → `brain/flags.md` (the open-loop flag channel)
+
+You never need to use the OS terms. Say what feels natural.
+
 **Daily:** Open Claude Code in your Founder OS folder. Ask "what's on for today?" (or run `/today`) for a one-screen view, or ask "what should I focus on next?" (or run `/next`) for one recommended action.
 
 **Weekly:** Say "run my weekly review." Claude rolls the sprint, does the retro, and sets the next week.
@@ -533,6 +544,8 @@ Then start using it. You do not need to memorize commands - just talk to Claude.
 **When overwhelmed:** Say "I'm overwhelmed" or "what should I focus on" - Claude triages your priorities.
 
 **When you learn something:** Say "capture this" or "log this" - goes into your brain system.
+
+**When you've been dumping rants:** Say "process my rants" (or run `<prefix>dream`). The OS distils your rants into patterns, flags, parked decisions, and one recommended action. The SessionStart brief will also nudge you when 3 or more rants pile up.
 
 **Before meetings:** Say "prep me for my call with [name]" - Claude builds a brief.
 

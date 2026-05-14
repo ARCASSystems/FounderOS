@@ -1,7 +1,7 @@
 ---
 name: priority-triage
 description: >
-  Cut through overwhelm to ONE thing to do next. Trigger on "I'm overwhelmed", "what should I focus on", "what should I focus on next", "too many things", "I don't know where to start", "help me prioritize", "what matters most", "I'm stuck", "I can't decide what to work on", "everything feels urgent", or any signal the founder needs help cutting through noise. Returns one recommendation, not a list.
+  Cut through overwhelm to ONE thing to do next. Trigger on "I'm overwhelmed", "what should I focus on", "what should I focus on next", "too many things", "I don't know where to start", "help me prioritize", "what matters most", "I'm stuck", "I can't decide what to work on", "everything feels urgent", or any signal the founder needs help cutting through noise. Also fires on user-vocabulary equivalents: "my goals", "what are my goals", "show my goals", "review my goals" - context/priorities.md holds the goals. Returns one recommendation, not a list.
 mcp_requirements: []
 ---
 
