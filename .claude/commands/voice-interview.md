@@ -16,7 +16,8 @@ Entry point for the voice interview. Triggers the `voice-interview` skill, which
 3. Check whether `core/voice-profile.yml` exists.
 
    - If it does NOT exist, copy the template from `templates/voice-profile.yml.template` to `core/voice-profile.yml` (placeholders intact) before invoking the skill, so the skill can fill it in place.
-   - If it exists and contains real values (not `[CHOOSE: ...]`, `[YOUR ...]`, or `[example: ...]` placeholders), ask the founder, as a single message:
+   - If it exists, scan its content for placeholder markers: `[CHOOSE:`, `[YOUR `, `[example:`, `[NOT SET]`. If ALL voice fields still contain these markers (no field has been replaced with a real value), the profile is placeholder-only - proceed directly into the interview without asking for confirmation.
+   - If at least one field has been filled with a real value (no longer a placeholder), ask the founder, as a single message:
 
      ```
      Voice profile already filled. Re-run the interview and overwrite? (yes / no)

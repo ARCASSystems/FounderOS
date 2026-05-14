@@ -35,6 +35,8 @@ For DIFC and ADGM questions, note in the answer that DIFC and ADGM are separate 
 
 If `core/identity.md` has no `jurisdiction:` field, ask the user what jurisdiction the question is for and offer to add it to identity. Do not save until they confirm.
 
+When answering with a jurisdiction provided in-conversation (not yet set in `core/identity.md`), prefix the response header with **[UNCONFIRMED JURISDICTION]** and add one line at the end: "To activate deadline tracking and SessionStart reminders, run `/founder-os:legal-setup` to wire your jurisdiction permanently."
+
 ---
 
 ## How This Skill Knows the Date

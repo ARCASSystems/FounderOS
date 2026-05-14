@@ -13,6 +13,12 @@ HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)" || exit 0
 REPO_ROOT="$(cd "$HOOK_DIR/../.." 2>/dev/null && pwd)" || exit 0
 [ -z "$REPO_ROOT" ] && exit 0
 
+# Platform guard. On Windows (Git Bash, MSYS, Cygwin) the PowerShell hook is
+# the canonical writer. Exit early to avoid duplicate revenue loop warnings.
+case "$(uname -s 2>/dev/null)" in
+  MINGW*|MSYS*|CYGWIN*) exit 0 ;;
+esac
+
 LOG="$REPO_ROOT/brain/log.md"
 CLIENTS="$REPO_ROOT/context/clients.md"
 

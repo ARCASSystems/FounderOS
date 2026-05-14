@@ -8,13 +8,13 @@ mcp_requirements: []
 
 # LinkedIn Post
 
-You are writing LinkedIn posts for the founder whose voice profile lives in `core/voice-profile.yml`. Every post must apply that profile (via the `your-voice` skill rules) AND pass the universal anti-AI self-check at the bottom of this file.
+You are writing LinkedIn posts for the founder whose voice profile lives in `core/voice-profile.yml`. Every post must apply that profile. Before drafting, read `skills/your-voice/SKILL.md` and apply its universal rules in full. Then pass the LinkedIn-specific self-check at the bottom of this file.
 
 ## Before you write
 
 Before producing output, read `core/voice-profile.yml`. If the file is missing OR contains template defaults (lines starting with `{{`, values like `<your tone here>`, `[CHOOSE`, `[example:`, or `[NOT SET]`), STOP and tell the user:
 
-> Your voice profile is empty. Run `/founder-os:voice-interview` first, or this output will sound like Claude defaults rather than you. Want me to run the interview now, or proceed with defaults anyway?
+> Your voice profile is empty. Say "set up my voice profile" to run the interview first, or this output will sound like Claude defaults rather than you. Want me to start the interview now, or proceed with defaults anyway?
 
 If the user chooses to proceed with defaults, draft the post using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the post is voice-coupled.
 
@@ -32,11 +32,11 @@ Do not surface this filter to the user as a separate step. The user sees only th
 
 Before producing output, read `brain/.snapshot.md` if it exists.
 
-If the snapshot is missing, run:
+If `brain/.snapshot.md` does not exist: check whether `scripts/brain-snapshot.py` exists. If it does, run:
 
     python scripts/brain-snapshot.py --write
 
-Then read it. If the snapshot script is also missing (older install), proceed using only the profile files. Do not block.
+Then read `brain/.snapshot.md`. If neither the snapshot nor the script exists (older install), proceed using only the profile files. Do not block.
 
 The snapshot tells you what flags are open, what the user is working on this week, and what the latest staleness state is. Apply this context to your output where it is relevant. Do not surface every snapshot field in every output - use judgment. For LinkedIn, open flags often hint at honest, post-worthy tension the founder is sitting with right now, and recent decisions are usually richer post material than abstract theory.
 
@@ -48,7 +48,9 @@ Use `core/identity.md` `## Positioning` to understand who the founder sells to, 
 
 ## Brain pass (auto)
 
-Before drafting, invoke the `brain-pass` skill (`skills/brain-pass/SKILL.md`) with this question:
+Before invoking brain-pass, check whether `brain/log.md` contains at least one dated entry (a line matching `^### \d{4}-\d{2}-\d{2}`). If the log has no dated entries (fresh install with template-only content), skip brain-pass entirely and proceed directly to drafting. This prevents a fresh-install user's first post request from triggering a "no content found" search loop.
+
+If dated log entries exist, invoke the `brain-pass` skill (`skills/brain-pass/SKILL.md`) with this question:
 
 > What has the user posted on LinkedIn recently? What themes are stale? What recent decisions or knowledge entries would make a fresh post?
 
@@ -187,8 +189,10 @@ Format the prompt reveal as a P.P.S. with the prompt in a JSON code block. Close
 
 ## Before Finalizing
 
+The list below extends `skills/your-voice/SKILL.md`. When updating either file, update both to keep them in sync.
+
 Run the full anti-AI self-check:
-1. Banned phrases? Kill them. (See `your-voice` SKILL.md for the universal banned phrase list.)
+1. Banned phrases? Kill them. (Read `skills/your-voice/SKILL.md` for the universal banned phrase list and apply its rules in full.)
 2. Banned words? Replace with simpler ones.
 3. Em dashes? Replace with simple hyphens. Max two per post.
 4. Rule of three? Break the pattern unless the voice profile explicitly enables triplets.

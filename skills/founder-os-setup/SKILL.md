@@ -522,6 +522,8 @@ When you render the orientation block below, substitute every `<prefix>` literal
 
 **Step 3 - Check readiness.** Say "check my OS readiness" (or run `<prefix>status`). Returns a 0-100% score across Core, Voice and Brand, Cadence, Business Context, and Brain Layer. Names the next 3 high-impact moves.
 
+**Optional - Legal compliance.** If your business has regulatory, tax, or employment compliance requirements, say "set up legal compliance" (or run `<prefix>legal-setup`). This activates jurisdiction-aware legal guidance and deadline tracking in the SessionStart brief. ~5 minutes.
+
 Then start using it. You do not need to memorize commands - just talk to Claude.
 
 **Daily:** Open Claude Code in your Founder OS folder. Ask "what's on for today?" (or run `/today`) for a one-screen view, or ask "what should I focus on next?" (or run `/next`) for one recommended action.

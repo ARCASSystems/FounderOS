@@ -13,7 +13,7 @@ You take one piece of content and transform it for multiple channels while keepi
 
 Before producing output, read `core/voice-profile.yml`. If the file is missing OR contains template defaults (lines starting with `{{`, values like `<your tone here>`, `[CHOOSE`, `[example:`, or `[NOT SET]`), STOP and tell the user:
 
-> Your voice profile is empty. Run `/founder-os:voice-interview` first, or this output will sound like Claude defaults rather than you. Want me to run the interview now, or proceed with defaults anyway?
+> Your voice profile is empty. Say "set up my voice profile" to run the interview first, or this output will sound like Claude defaults rather than you. Want me to start the interview now, or proceed with defaults anyway?
 
 If the user chooses to proceed with defaults, repurpose the content using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the outputs are voice-coupled.
 

@@ -125,11 +125,18 @@ if (Test-Path $Weekly) {
 }
 
 # --- Pending decisions ---
+# Count only ### headings under the ## Pending section to exclude Resolved/Parked.
 $Dec = Join-Path $Repo 'context\decisions.md'
 if (Test-Path $Dec) {
   $dc = Get-Content $Dec
-  $pending = ($dc | Select-String -Pattern '^### ').Count
-  Write-Output "Decisions: $pending tracked"
+  $pending = 0
+  $inPending = $false
+  foreach ($line in $dc) {
+    if ($line -match '^## Pending') { $inPending = $true; continue }
+    if ($line -match '^## ' -and $inPending) { break }
+    if ($inPending -and $line -match '^### ') { $pending++ }
+  }
+  Write-Output "Decisions: $pending pending"
 }
 
 # --- Clients [FILL] ---

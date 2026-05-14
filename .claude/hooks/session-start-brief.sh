@@ -10,6 +10,14 @@ set +e
 HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)" || exit 0
 REPO="$(cd "$HOOK_DIR/../.." 2>/dev/null && pwd)" || exit 0
 [ -z "$REPO" ] && exit 0
+
+# Platform guard. On Windows (Git Bash, MSYS, Cygwin) the PowerShell hook is
+# the canonical writer. Without this guard both hooks fire and the brief prints
+# twice on every session start.
+case "$(uname -s 2>/dev/null)" in
+  MINGW*|MSYS*|CYGWIN*) exit 0 ;;
+esac
+
 TODAY="$(date +%Y-%m-%d)"
 
 # Resolve python interpreter once. Many Linux/macOS systems ship `python3` only.
@@ -104,10 +112,16 @@ if [ -f "$WEEKLY" ]; then
 fi
 
 # --- Pending decisions ---
+# Count only ### headings under the ## Pending section to exclude Resolved/Parked.
 DEC="$REPO/context/decisions.md"
 if [ -f "$DEC" ]; then
-  PENDING=$(grep -cE "^### " "$DEC" 2>/dev/null)
-  echo "Decisions: $PENDING tracked"
+  PENDING=$(awk '
+    /^## Pending/ { in_pending=1; next }
+    /^## /        { if (in_pending) exit }
+    in_pending && /^### / { count++ }
+    END { print count+0 }
+  ' "$DEC" 2>/dev/null)
+  echo "Decisions: ${PENDING:-0} pending"
 fi
 
 # --- [FILL] rows in clients ---
