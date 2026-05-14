@@ -100,3 +100,5 @@ Do not invoke other skills. Do not write to any file. /next is read-only - the f
 - No em dashes or en dashes. Hyphens with spaces.
 - This command works only inside a FounderOS install. If `.claude-plugin/plugin.json` is missing, reply: `Not a FounderOS install. Re-run from the FounderOS root directory.`
 - If the brain layer doesn't exist (older version of FounderOS without brain/), fall back to recommending purely from priorities + clients + cadence. Do not require brain/.
+
+<!-- private-tag: not applicable: updates structured deal-stage fields; not user-provided speech content -->

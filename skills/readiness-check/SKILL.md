@@ -234,3 +234,5 @@ If `context/companies.md` exists but the format is unrecognisable as either head
 4. No em dashes or en dashes in the output.
 5. Output is a single fenced block. No prose before or after.
 6. The output fits in under 50 lines.
+
+<!-- private-tag: not applicable: readiness-check is read-only; context/ reference describes files being read, not written -->

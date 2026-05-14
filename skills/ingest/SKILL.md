@@ -163,3 +163,5 @@ NEXT: Run /founder-os:lint anytime to audit cross-references.
 - **WebFetch fails.** Ask user to paste the content. Do not make up content.
 - **Source has no extractable structure** (e.g., a tweet, a one-line note). Filing to raw/ is still valuable. Output proposal: `No clear wiki updates from this source. Filed for reference.`
 - **User says "yes" to a category but the target file is missing.** Create the target file first, then write the update. Mention the file creation in the summary.
+
+<!-- private-tag: not applicable: ingest writes raw source provenance and structured wiki updates; sources are URLs or files, not private speech -->

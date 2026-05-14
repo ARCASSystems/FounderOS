@@ -38,7 +38,7 @@ The argument passed is the person or meeting name: `$ARGUMENTS`.
 
    Then re-present the two questions. Loop until both answers are concrete. Do not proceed otherwise.
 
-5. Once both answers are concrete, append this exact block to `brain/log.md` (use the Edit or Write tool - read the file first, then append at the end). Use the current real date and time. If `brain/log.md` does not exist, create it.
+5. Once both answers are concrete, apply the private-tag filter then write: scan the answers for `<private>...</private>` blocks (case-insensitive). Remove every matched block (including the tags) from the text before writing. If the entire input is wrapped in `<private>`, write nothing and report "skipped - content was tagged private." Then append this exact block to `brain/log.md` (use the Edit or Write tool - read the file first, then append at the end). Use the current real date and time. If `brain/log.md` does not exist, create it.
 
    ```
    ### YYYY-MM-DD HH:MM Pre-meeting: <person>

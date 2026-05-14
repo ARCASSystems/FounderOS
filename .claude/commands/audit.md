@@ -22,3 +22,5 @@ Run the audit skill at `skills/audit/SKILL.md` end to end.
 - No raw sub-check dumps in the final output.
 - No em dashes or en dashes.
 - No banned words.
+
+<!-- private-tag: not applicable: audit reads and reports; any brain/ reference is to files being read, not user-speech writes -->

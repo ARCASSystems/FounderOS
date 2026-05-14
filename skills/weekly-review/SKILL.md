@@ -137,3 +137,5 @@ If the founder has no paying clients yet, run this check:
 - Name the pattern. Founders often can't see their own avoidance patterns.
 - Keep the sprint tight. Three Must Dos is plenty. More than that is a wish list.
 - If something has rolled 3+ weeks, recommend killing it unless the user defends it.
+
+<!-- private-tag: not applicable: writes structured sprint summary to brain/log.md; not user-provided speech content -->

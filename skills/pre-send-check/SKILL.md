@@ -133,3 +133,5 @@ VERDICT: SHIP / HOLD
 - If the deliverable passes all seven, list the cross-references the founder must update after sending so the revenue loop stays honest.
 - Never invoke other skills mid-check. The gate runs inline. If the founder needs a rewrite, that is a separate request after the gate.
 - If the founder skips the gate and ships anyway, note it in the running log with a STALL flag so the pattern is visible.
+
+<!-- private-tag: not applicable: pre-send-check is read-only; context/ reference describes files being verified, not written -->

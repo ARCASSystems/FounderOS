@@ -36,6 +36,8 @@ Argument: `$ARGUMENTS` (the person or meeting name).
    - **Pain surfaced** (what they named as broken)
    - **Signal quality** (did something ICP-worthy surface)
 
+**Private-tag filter (mandatory before any write).** Before persisting anything to a file, scan the source text for `<private>...</private>` blocks (case-insensitive). Remove every matched block (including the tags) from the text before writing. If the entire input is wrapped in `<private>`, write nothing and report "skipped - content was tagged private."
+
 6. Produce four updates:
 
    **a. Append to `brain/log.md`** (at the top, below the header - newest on top). Format:

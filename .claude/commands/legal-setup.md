@@ -135,3 +135,5 @@ The SessionStart hook will surface any compliance.md deadline within 30 days.
 - If the user says "skip" on any question, leave that field empty and continue. Do not push back.
 - Never invent jurisdiction-specific law during setup. If asked "what are my obligations?", reply: "I'll know once we load your jurisdiction's sources. Add them via `/founder-os:legal-add-source` and I can advise."
 - No em dashes or en dashes anywhere in output.
+
+<!-- private-tag: not applicable: writes structured compliance scaffolding from a template; not user-provided speech content -->

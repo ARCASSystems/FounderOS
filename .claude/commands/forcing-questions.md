@@ -22,3 +22,5 @@ Run the forcing-questions skill at `skills/forcing-questions/SKILL.md` end to en
 - No em dashes or en dashes.
 - No banned words.
 - Do not add extra questions.
+
+<!-- private-tag: not applicable: writes structured verdict data after confirmed user approval; not user-provided speech content -->

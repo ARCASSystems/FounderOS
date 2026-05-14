@@ -120,3 +120,5 @@ The model running this skill IS the retrieval engine. The skill instructs it to 
 - No em dashes or en dashes. Simple hyphens with spaces.
 - No banned words (delve, robust, seamless, leverage, comprehensive, holistic, transformative, streamline, optimize, utilize, facilitate, unlock, navigate figurative, ecosystem figurative, landscape figurative, unpack, deep-dive).
 - Read-only on the brain. Never edit a brain file as a side effect of a pass.
+
+<!-- private-tag: not applicable: brain-pass appends structured telemetry (opt-in JSONL), not user-provided speech content -->

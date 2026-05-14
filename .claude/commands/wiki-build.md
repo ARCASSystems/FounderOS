@@ -53,3 +53,5 @@ Not on a cron. Auto-running on session start would add latency for marginal valu
 
 - No em dashes or en dashes. Hyphens only.
 - No commentary outside what the procedure says to output.
+
+<!-- private-tag: not applicable: writes brain/relations.yaml from extracted wikilinks (structured graph data, not user-provided speech) -->

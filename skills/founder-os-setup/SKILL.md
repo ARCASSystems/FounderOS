@@ -254,7 +254,7 @@ Steps:
 
 2. If the target file already exists, read it. If it has any real content (not just template scaffolding), do not overwrite. Add a note to the setup backlog: "Auto-memory file already exists at <path>. Skipped templating to preserve existing entries."
 
-3. If the target file does not exist or only contains placeholders, copy `templates/memory/MEMORY.md` verbatim to the target path. Create parent directories as needed.
+3. If the target file does not exist or only contains placeholders, copy `templates/memory/MEMORY.md` verbatim to the target path. Create parent directories as needed. Before persisting anything to a file, scan the source text for `<private>...</private>` blocks (case-insensitive). Remove every matched block (including the tags) from the text before writing. If the entire input is wrapped in `<private>`, write nothing and report "skipped - content was tagged private."
 
 4. Confirm to the user: "Wrote auto-memory template to `<path>`. Add behavioral guards as Claude needs corrections - they persist across every future session in this folder."
 

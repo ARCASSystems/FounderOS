@@ -80,3 +80,5 @@ Brand is incomplete if:
 - Read-only unless the user approves wiki-build.
 - The composite report is the only output.
 - No em dashes, no en dashes, no banned words.
+
+<!-- private-tag: not applicable: audit reads and reports; any brain/ reference is to files being read, not user-speech writes -->
