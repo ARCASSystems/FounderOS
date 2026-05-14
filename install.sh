@@ -36,7 +36,7 @@ Options:
   --dry-run        Print what would happen without making any changes
   --help           Show this help
 
-After install, say "set up FounderOS" (or run /founder-os:setup) to personalise the OS.
+After install, say "set up Founder OS" (or run /founder-os:setup) to personalise the OS.
 EOF
   exit 0
 }
@@ -225,7 +225,7 @@ echo ""
 echo "  Location: $TARGET"
 echo ""
 echo "  Next step:"
-echo "  Say \"set up FounderOS\" (or run /founder-os:setup)"
+echo "  Say \"set up Founder OS\" (or run /founder-os:setup)"
 echo ""
 echo "  That wizard builds your identity, priorities, and"
 echo "  cadence files - takes 15 to 20 minutes the first time."

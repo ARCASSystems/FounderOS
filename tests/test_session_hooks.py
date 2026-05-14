@@ -550,5 +550,77 @@ class PowerShellComplianceInitOrderTests(unittest.TestCase):
             self.assertNotIn("OVERDUE", output)
 
 
+class WelcomeBannerTests(unittest.TestCase):
+    """Tests for the v1.23 SessionStart welcome banner.
+
+    The banner fires when core/identity.md is missing AND a Founder OS
+    marker is present (one of: templates/bootloader-claude-md.md,
+    .claude/settings.json, or CLAUDE.md). Closes the silent-Day-0 failure
+    where a fresh install saw nothing on first session open.
+    """
+
+    def _make_pre_setup_install(self, tmp: Path, marker: str) -> Path:
+        """Build a layout that looks like a fresh install pre-setup.
+
+        Marker selects which Founder OS signal exists:
+          - "claude_md": CLAUDE.md at repo root
+          - "bootloader": templates/bootloader-claude-md.md
+          - "settings_json": .claude/settings.json
+        """
+        (tmp / ".claude" / "hooks").mkdir(parents=True)
+        if marker == "claude_md":
+            (tmp / "CLAUDE.md").write_text("# Founder OS\n", encoding="utf-8")
+        elif marker == "bootloader":
+            (tmp / "templates").mkdir()
+            (tmp / "templates" / "bootloader-claude-md.md").write_text(
+                "# bootloader\n", encoding="utf-8"
+            )
+        elif marker == "settings_json":
+            (tmp / ".claude" / "settings.json").write_text("{}", encoding="utf-8")
+        target = tmp / ".claude" / "hooks" / "session-start-brief.sh"
+        target.write_bytes(SESSION_START_HOOK.read_bytes())
+        return target
+
+    def _run_hook(self, hook_path: Path) -> str:
+        bash = shutil.which("bash")
+        if not bash:
+            self.skipTest("bash is not on PATH")
+        if _bash_is_mingw_or_msys():
+            self.skipTest(
+                "bash hook intentionally muted on MINGW/MSYS - PowerShell variant covers"
+            )
+        result = subprocess.run(
+            [bash, bash_path(bash, hook_path)],
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return result.stdout
+
+    def test_banner_fires_when_identity_missing_and_claude_md_present(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            hook = self._make_pre_setup_install(Path(tmp), "claude_md")
+            out = self._run_hook(hook)
+            self.assertIn("Welcome to Founder OS", out)
+            self.assertIn("set up Founder OS", out)
+            self.assertNotIn("=== end brief ===", out)
+
+    def test_banner_does_not_fire_when_identity_present(self):
+        """When core/identity.md exists, the banner block must be skipped."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "core").mkdir()
+            (root / "core" / "identity.md").write_text("# identity\n", encoding="utf-8")
+            (root / "brain").mkdir()
+            (root / "brain" / "log.md").write_text("# Brain log\n", encoding="utf-8")
+            (root / "CLAUDE.md").write_text("# Founder OS\n", encoding="utf-8")
+            (root / ".claude" / "hooks").mkdir(parents=True)
+            target = root / ".claude" / "hooks" / "session-start-brief.sh"
+            target.write_bytes(SESSION_START_HOOK.read_bytes())
+            out = self._run_hook(target)
+            self.assertNotIn("Welcome to Founder OS", out)
+            self.assertIn("=== end brief ===", out)
+
+
 if __name__ == "__main__":
     unittest.main()

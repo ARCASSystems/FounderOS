@@ -2,6 +2,48 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.23.0 - 2026-05-15
+
+The capture-path release. v1.22 framed FounderOS as "the memory that captures what happens" but the bootloader still told Claude not to write unless asked, and there was no hook on user input. A fresh-eyes review caught the gap. v1.23 closes it.
+
+### Added - natural-language capture path
+
+- **`.claude/hooks/user-prompt-capture.sh` + `.ps1` + `scripts/user-prompt-capture.py`** - new UserPromptSubmit hook wired in `.claude/settings.json`. Classifies every prompt against four shapes: rant (long, first-person, not a question), named-entity (capitalized name near a meeting verb), status update (first-person + completion verb), preference utterance ("from now on" / "I prefer" / "always X" / "stop doing Y"). Emits a `[capture-suggestion]` system note Claude honors before responding. Free-tier accessible. Stdlib regex only. No LLM call.
+- **Eager rant capture.** Rants are written to `brain/rants/<date>.md` immediately with `processed: false` and `mode: unknown`, so the text is safe on disk even if the user walks away before answering the routing question. `<private>...</private>` blocks are stripped before writing. Closes the v1.22 silent-loss path where wall-of-text rants without `/rant` evaporated.
+- **`templates/bootloader-claude-md.md`** - capture-routing block added at the top of operating rules. Lists the four signal shapes and how to honor them. Bootloader installs as the user's CLAUDE.md, so this routing reaches every new install.
+- **`.claude/commands/rant.md`** - inverted from qualify-first to capture-first. Step 1 unconditionally writes to `brain/rants/`; Step 2 offers routing; Step 3 acts on the answer if given. If the user walks away, the rant is already saved.
+
+### Added - discoverability
+
+- **SessionStart welcome banner.** When `core/identity.md` is missing and a Founder OS marker is present, the brief prints a banner pointing the user to natural-language setup. Bash and PowerShell variants both ship. Stops the silent Day-0 failure where a fresh install saw nothing on first session open.
+- **Unprocessed-rant count in SessionStart.** Always-on line in the brief when rants with `processed: false` exist. Prompts `/dream` when N >= 3. Closes the v1.22 gap where rants accumulated indefinitely until `/audit` flagged them at 30 days.
+- **`scripts/menu.py`** - new `dream` capability surfaces in the capability menu only when unprocessed rants exist.
+
+### Added - operator vocabulary
+
+Description triggers extended on five skills so users do not need to know OS-internal names to be routed:
+
+- **`skills/brain-log/SKILL.md`** - now recognizes "journal entry", "note to self", "diary", "log to journal", "I decided", "I made a decision", "decision: <text>".
+- **`skills/weekly-review/SKILL.md`** - "my schedule", "this week's plan", "what am I working on this week".
+- **`skills/priority-triage/SKILL.md`** - "my goals", "what are my goals", "show my goals".
+- **`.claude/commands/capture-meeting.md`** - "I had a call with", "I spoke to", "I got a reply from", "heard back from", "they replied".
+- **`templates/bootloader-claude-md.md`** + **`skills/founder-os-setup/SKILL.md`** - vocabulary map ("journal" -> brain-log, "schedule" -> cadence, "customers" -> clients, "goals" -> priorities) lands in both the bootloader and the setup orientation.
+
+### Polish
+
+- **`scripts/user-prompt-capture.py`** - named-entity detection now requires (a) the candidate not to be in a stop-list of common title-case nouns (months, days, tech brands, AI brands, founder-stack tool names, sentence-start verbs) and (b) the candidate to appear within 80 characters of the meeting verb. Stops prompts like "I just called Python from my bash script" or "I had a call with Notion's API team" from firing a capture suggestion.
+- **Install phrase consistency.** `install.sh`, `README.md`, and `docs/install.md` now use "set up Founder OS" (two words), matching the documented trigger in `skills/founder-os-setup/SKILL.md`. The one-word variant "set up FounderOS" was untriggered.
+- **`docs/install.md`** - curl-install path no longer claims hooks "fire on every session." New "How hooks fire on Path E" section explains that Path E hooks fire only when Claude Code is opened in the cloned folder; use Path A for hooks that activate everywhere.
+- **CLAUDE.md, AGENTS.md, docs/tools-and-mcps.md** - skill and command counts caught up to current state (45 skills, 27 commands; `observation-rollup` row added to CLAUDE.md skill table; UserPromptSubmit hook listed in AGENTS.md hooks section).
+
+### Tests added
+
+- **`tests/test_user_prompt_capture.py`** - 14 tests covering `detect_shape` per fixture (rant, named-entity, status update, preference, none), stop-list filtering, proximity requirement, slash-command bypass, eager-rant frontmatter shape, private-tag filter, idempotent prepend on same-date file, malformed JSON envelope handled silently, no Founder OS install -> exit silently.
+- **`tests/test_session_hooks.py`** - 2 new tests for the v1.23 welcome banner: fires when `core/identity.md` is missing AND a Founder OS marker is present; does not fire when `core/identity.md` exists.
+- **`tests/test_install_scripts.py`** - assertion updated for the "set up Founder OS" phrase.
+
+45 skills, 27 commands, 294 tests (11 platform-skipped).
+
 ## v1.22.0 - 2026-05-14
 
 ### W2 - Skill catalogue audit

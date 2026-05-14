@@ -89,7 +89,7 @@ class InstallContentTests(unittest.TestCase):
     def test_install_sh_prints_natural_language_next_step(self):
         """Script must end with a 'Say ...' natural-language instruction."""
         self.assertIn("Say", self.install_text)
-        self.assertIn("set up FounderOS", self.install_text)
+        self.assertIn("set up Founder OS", self.install_text)
 
     def test_install_sh_has_dry_run_flag(self):
         """Script must support --dry-run for W6 smoke tests."""

@@ -34,11 +34,11 @@ The user's actual operating context (after they run setup) lives in:
 A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` holds behavioral guards that persist across every session in this project.
 
 The system layer (do not edit per-user) lives in:
-- `skills/` - 44 skills, each in its own folder with a `SKILL.md`
-- `scripts/` - Python helpers (wiki-build, query, brain-snapshot, brain-pass-log, memory-diff)
+- `skills/` - 45 skills, each in its own folder with a `SKILL.md`
+- `scripts/` - Python helpers (wiki-build, query, brain-snapshot, brain-pass-log, memory-diff, menu, observation-rollup, user-prompt-capture)
 - `templates/` - source templates for files the setup wizard generates
-- `.claude/commands/` - 24 slash commands
-- `.claude/hooks/` - SessionStart brief, session-close revenue check, opt-in PostToolUse observation log
+- `.claude/commands/` - 27 slash commands
+- `.claude/hooks/` - SessionStart brief, session-close revenue check, opt-in PostToolUse observation log, UserPromptSubmit capture (v1.23)
 - `rules/` - behavioural rules including writing-style, commit-naming, approval-gates
 - `system/` - quarantine catch-net for silent hook failures
 
@@ -55,7 +55,7 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 
 ---
 
-## Slash Commands (26)
+## Slash Commands (27)
 - `/founder-os:menu` - show 5 to 7 capability suggestions tailored to current state.
 - `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files. Run on first install.
 - `/founder-os:voice-interview` - capture how you write into `core/voice-profile.yml`.
@@ -82,6 +82,7 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 - `/next` - one recommended next action across priorities, deals, and cadence.
 - `/founder-os:queue` - manage the execution queue. Say "what's on my plate" or "add to queue: <thing>". ACTIVE capped at 3.
 - `/founder-os:verify` - read-only substrate health check across 8 checks. Say "verify the OS". Never auto-fixes.
+- `/founder-os:observation-rollup` - compress old `brain/observations/*.jsonl` files into weekly markdown rollups. Say "roll up observations".
 
 ## Substrate (v1.4 + v1.10 + v1.12)
 
@@ -122,9 +123,10 @@ Cross-references between wiki files use `[[page-name]]` syntax.
 
 ## Hooks
 
-Three hooks ship in `.claude/hooks/`:
+Four hooks ship in `.claude/hooks/`:
 
-- **SessionStart brief** - surfaces open flags, stale cadence, decisions count, `[FILL]` client rows, ACTIVE quarantine entries, entries past their `Decay after:` date, `clients/<slug>/` folders without an auto-memory entry (v1.12), and a final `Observations:` line stating whether `FOUNDER_OS_OBSERVATIONS=1` is set so the silent-disable case is visible (v1.15). Reads `core/identity.md` and quietly skips if the repo is not a Founder OS install. Bash and PowerShell variants both ship.
+- **SessionStart brief** - surfaces open flags, stale cadence, decisions count, `[FILL]` client rows, ACTIVE quarantine entries, entries past their `Decay after:` date, `clients/<slug>/` folders without an auto-memory entry (v1.12), unprocessed-rant count (v1.23), and a final `Observations:` line stating whether `FOUNDER_OS_OBSERVATIONS=1` is set so the silent-disable case is visible (v1.15). On a fresh install missing `core/identity.md` it emits a welcome banner pointing to natural-language setup (v1.23). Bash and PowerShell variants both ship.
+- **UserPromptSubmit capture (v1.23)** - reads the user's prompt before Claude responds. Classifies into four shapes (rant, named-entity mention, status update, preference utterance) and emits a `[capture-suggestion]` system note for Claude to honor. Rants are eagerly captured to `brain/rants/<date>.md` so the text is safe on disk even if the user walks away. Free-tier accessible. Stdlib regex only. No LLM call.
 - **PostToolUse observation log (opt-in)** - off by default. Set `FOUNDER_OS_OBSERVATIONS=1` in your shell env to append one JSON line per tool call to `brain/observations/<YYYY-MM-DD>.jsonl`. `/dream` rolls each day into an OBSERVED section.
 - **Session-close revenue check** - warns (does not block) if outreach verbs appear in recent `brain/log.md` without a matching `context/clients.md` update in the same session. Bash and PowerShell variants both ship.
 

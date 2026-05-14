@@ -196,7 +196,7 @@ If you have not installed the scheduled-tasks MCP, ignore this section. Nothing 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks are bring-your-own.
 
-## Skills (44 included)
+## Skills (45 included)
 
 | Skill | Purpose |
 |-------|---------|
@@ -244,6 +244,7 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 | proposal-writer | Voice and brand-coupled proposal writer. |
 | queue | Execution queue with 3-item ACTIVE cap. Say "what's on my plate" or run `/founder-os:queue`. |
 | verify | Read-only substrate health check across 8 checks. Say "verify the OS" or run `/founder-os:verify`. |
+| observation-rollup | Compresses old `brain/observations/*.jsonl` into weekly markdown rollups. Say "roll up observations" or run `/founder-os:observation-rollup`. |
 
 ## Philosophy
 

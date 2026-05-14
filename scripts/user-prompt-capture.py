@@ -61,10 +61,14 @@ EMOTIONAL_VERBS = re.compile(
 )
 
 # Named-entity mention with a meeting verb. Requires:
-# - Capitalized name (single Capitalized word, common-name heuristic)
-# - A meeting/contact verb in the same prompt
-# Conservative: we don't try to extract the name perfectly; we just signal
-# "looks like a contact event happened, propose capture."
+# - Capitalized word that is NOT a common title-case noun (months, days,
+#   tech brands, etc - see NAMED_ENTITY_STOPLIST below)
+# - A meeting/contact verb within PROXIMITY_CHARS of the candidate name
+# Two-token discipline: the bare regex match \b([A-Z][a-z]{2,})\b fires on
+# every title-case word in the language. Without the stop-list + proximity
+# requirement, prompts like "I just called Python from my bash script" or
+# "I had a call with Notion's API team" would trigger a suggestion - the
+# kind of false positive that trains the user to ignore the hook.
 NAMED_ENTITY = re.compile(r"\b([A-Z][a-z]{2,})\b")
 MEETING_VERBS = re.compile(
     r"\b(met with|met|called|spoke (to|with)|spoken (to|with)|"
@@ -74,6 +78,52 @@ MEETING_VERBS = re.compile(
     r"introduced to|connected with)\b",
     re.IGNORECASE,
 )
+
+# Words to ignore when looking for a person's name. Common title-case nouns
+# that frequently appear near meeting verbs in developer-founder speech but
+# are not people. Keep tight - over-stopping kills real captures.
+NAMED_ENTITY_STOPLIST = frozenset({
+    # Days
+    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+    # Months
+    "January", "February", "March", "April", "June",
+    "July", "August", "September", "October", "November", "December",
+    # Temporal pronouns / sentence starters
+    "Today", "Tomorrow", "Yesterday", "Tonight", "Morning", "Afternoon",
+    "Evening", "Last", "Next", "This", "That",
+    # Tech / languages / runtimes
+    "Python", "Ruby", "Java", "Javascript", "Typescript", "Bash", "Powershell",
+    "Node", "React", "Vue", "Angular", "Django", "Rails", "Express",
+    # AI / model brands
+    "Claude", "Anthropic", "Openai", "Chatgpt", "Gpt", "Gemini", "Llama",
+    "Mistral", "Cohere", "Copilot",
+    # Major platforms
+    "Google", "Apple", "Microsoft", "Amazon", "Meta", "Facebook", "Twitter",
+    "Linkedin", "Youtube", "Tiktok", "Instagram", "Whatsapp", "Telegram",
+    "Discord", "Slack", "Zoom", "Teams", "Reddit", "Medium", "Substack",
+    # Founder-stack brands
+    "Notion", "Linear", "Asana", "Trello", "Airtable", "Coda", "Obsidian",
+    "Github", "Gitlab", "Bitbucket", "Figma", "Canva", "Gamma", "Vercel",
+    "Supabase", "Firebase", "Stripe", "Hubspot", "Salesforce", "Calendly",
+    "Loom", "Granola", "Apollo", "Hunter", "Instantly", "Outreach",
+    # Office suite
+    "Outlook", "Gmail", "Excel", "Word", "Powerpoint", "Docs", "Sheets",
+    "Drive", "Onedrive", "Dropbox",
+    # Common verbs that capitalize at sentence start
+    "Just", "Finally", "Maybe", "Probably", "Actually", "Honestly", "Basically",
+    # Common determiners and quantifiers that show up sentence-initial
+    "Some", "Many", "Few", "Several", "Various", "Most", "All", "Both",
+    "Either", "Neither", "Each", "Every", "Other", "Another", "Such",
+    # Common connectives that show up sentence-initial
+    "Also", "Then", "Now", "Here", "There", "Still", "However", "Although",
+    "Because", "Since", "While", "When", "Where", "Why", "What", "Who",
+    "Whose", "Which", "How", "Therefore", "Otherwise", "Meanwhile",
+})
+
+# A capitalized candidate counts as a "real name" if it appears within this
+# many characters of a meeting-verb match. Tighter = fewer false positives;
+# looser = catches names mentioned earlier or later in the sentence.
+NAMED_ENTITY_PROXIMITY_CHARS = 80
 
 # Status update: first-person + completion verb.
 STATUS_UPDATE = re.compile(
@@ -115,6 +165,33 @@ PRIVATE_BLOCK = re.compile(r"<private>.*?</private>", re.IGNORECASE | re.DOTALL)
 # Detection.
 # ---------------------------------------------------------------------------
 
+def has_named_entity_near_meeting_verb(prompt: str) -> bool:
+    """Return True iff the prompt contains at least one capitalized word that
+    looks like a person's name, within NAMED_ENTITY_PROXIMITY_CHARS of a
+    meeting/contact verb.
+
+    Filters out common title-case nouns via NAMED_ENTITY_STOPLIST (months,
+    days, tech brands, sentence-start verbs). This is the two-token
+    discipline: a real name has a verb near it; a common title-case noun
+    might be anywhere in the prompt and is not necessarily a captureable
+    contact event.
+    """
+    verb_matches = list(MEETING_VERBS.finditer(prompt))
+    if not verb_matches:
+        return False
+
+    for name_match in NAMED_ENTITY.finditer(prompt):
+        candidate = name_match.group(1)
+        if candidate in NAMED_ENTITY_STOPLIST:
+            continue
+        name_pos = name_match.start()
+        for verb_match in verb_matches:
+            verb_pos = verb_match.start()
+            if abs(name_pos - verb_pos) <= NAMED_ENTITY_PROXIMITY_CHARS:
+                return True
+    return False
+
+
 def detect_shape(prompt: str) -> str | None:
     """Return one of: rant, named-entity, status-update, preference, or None.
 
@@ -132,7 +209,7 @@ def detect_shape(prompt: str) -> str | None:
     if STATUS_UPDATE.search(prompt):
         return "status-update"
 
-    if MEETING_VERBS.search(prompt) and NAMED_ENTITY.search(prompt):
+    if has_named_entity_near_meeting_verb(prompt):
         return "named-entity"
 
     # Rant heuristic. Long, first-person, not a question. Emotional verbs

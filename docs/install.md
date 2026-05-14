@@ -24,10 +24,12 @@ The installer:
 
 1. Checks that bash, git, and Python 3.11+ are present. If any are missing, it prints install instructions for that specific tool and exits.
 2. Clones FounderOS to `~/.claude/plugins/founder-os/` (override with `--target <path>`).
-3. Copies hook files to `~/.claude/hooks/` so the SessionStart brief and Stop revenue-check fire on every session.
+3. Copies hook files to `~/.claude/hooks/` as a backup location. (Hooks register through the plugin's own `.claude/settings.json` - see "How hooks fire" below.)
 4. Prints a one-screen confirmation and the natural-language next step.
 
 If FounderOS is already installed, re-running the same command asks whether to update instead of cloning again.
+
+**How hooks fire on Path E.** Claude Code discovers hooks through a `.claude/settings.json` file in the working directory. The curl install lands one inside `~/.claude/plugins/founder-os/`, so the SessionStart brief and Stop revenue-check fire when you open Claude Code IN that folder. If you open Claude Code in a different project folder, those hooks do not fire there. To get hooks across every project, use Path A (Claude Code plugin) - the plugin namespace activates the hooks globally.
 
 **Pros**
 - One command, no decisions.
@@ -37,6 +39,7 @@ If FounderOS is already installed, re-running the same command asks whether to u
 **Cons**
 - Requires bash. On Windows, install git-bash first.
 - The install script requires internet access for the initial clone.
+- Hooks fire only when Claude Code is opened in the cloned folder. Use Path A for hooks that activate everywhere.
 
 **Verify the install:** Say "verify the OS" (or run `/founder-os:verify`).
 
@@ -92,7 +95,7 @@ git clone --depth 1 https://github.com/ARCASSystems/FounderOS.git "$HOME\founder
 cd "$HOME\founder-os"
 ```
 
-Open Claude Code in that folder, then say "set up FounderOS" (or run `/setup`).
+Open Claude Code in that folder, then say "set up Founder OS" (or run `/setup`).
 
 > **Note:** Commands in the manual clone path use bare names (`/setup`, `/status`, `/today`, etc.) because the plugin namespace is not active. The plugin install path (Path A) uses the `/founder-os:` prefix. The commands are identical underneath.
 
@@ -106,7 +109,7 @@ Open Claude Code in that folder, then say "set up FounderOS" (or run `/setup`).
 - Updates are manual via `git pull`.
 - Commands use bare names, not the `/founder-os:` namespace.
 
-**Verifying it worked:** From the Claude Code session opened in the cloned folder, say "set up FounderOS" (or run `/setup`). The setup wizard should start its questions. If the slash command does not appear, confirm Claude Code's working directory is the FounderOS root (the folder containing `CLAUDE.md` and `.claude-plugin/`).
+**Verifying it worked:** From the Claude Code session opened in the cloned folder, say "set up Founder OS" (or run `/setup`). The setup wizard should start its questions. If the slash command does not appear, confirm Claude Code's working directory is the FounderOS root (the folder containing `CLAUDE.md` and `.claude-plugin/`).
 
 **Verify the install:** Say "verify the OS" (or run `/verify`).
 
@@ -157,7 +160,7 @@ You can switch paths anytime. The OS is your files - they are the same regardles
 
 All paths converge on the same six files. Whichever path you picked, the next steps are the same. You can run the slash command or ask Claude in plain English - both work.
 
-1. **Start the wizard.** Say "set up FounderOS" (or run `/founder-os:setup` on Path A, `/setup` on Path B). Path D: skip until you have set up locally.
+1. **Start the wizard.** Say "set up Founder OS" (or run `/founder-os:setup` on Path A, `/setup` on Path B). Path D: skip until you have set up locally.
 2. **Add your voice.** Say "set up my voice profile" (or run `/founder-os:voice-interview` on Path A, `/voice-interview` on Path B). Captures how you write so every writing skill sounds like you.
 3. **Add your brand.** Say "set up my brand profile" (or run `/founder-os:brand-interview` on Path A, `/brand-interview` on Path B). Captures colors, fonts, logo so every branded deliverable looks like you.
 4. **See your day.** Ask "what's on for today?" (or run `/today`). Ask "what should I focus on next?" (or run `/next`).

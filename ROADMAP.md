@@ -1,6 +1,6 @@
 # Roadmap
 
-FounderOS is feature-complete as of v1.22.0. This file is a stable handoff. It records what shipped, what we deliberately did not build, and where to take FounderOS if you want to extend it.
+FounderOS is feature-complete as of v1.23.0. This file is a stable handoff. It records what shipped, what we deliberately did not build, and where to take FounderOS if you want to extend it.
 
 The repo no longer accepts new feature requests through issues. Critical-breakage patches may ship. Community forks are encouraged. See `CONTRIBUTING.md` for the issue-triage policy and `docs/forking.md` for extension points.
 
@@ -8,6 +8,7 @@ The repo no longer accepts new feature requests through issues. Critical-breakag
 
 ## Shipped
 
+- **v1.23.0** - the capture-path release. v1.22 framed FounderOS as "the memory that captures what happens" but the bootloader still told Claude not to write unless asked, and there was no hook on user input. v1.23 closes the gap. A new UserPromptSubmit hook reads every prompt and classifies it as a rant, a named-entity mention near a meeting verb, a status update, or a preference utterance - emitting a capture suggestion before Claude responds. Rants are eagerly written to `brain/rants/<date>.md` so the text is safe on disk even if the user walks away. SessionStart now surfaces unprocessed-rant count and prints a welcome banner on fresh installs missing `core/identity.md`. Five operator-vocabulary phrases ("journal", "schedule", "goals", "customers", "I decided") route into the right skill without the user knowing OS-internal names. Named-entity detection has a stop-list plus a proximity rule so common title-case nouns ("Python", "Notion", "Monday") do not falsely trigger capture suggestions. Install phrase aligned to "set up Founder OS" across `install.sh`, `README.md`, and `docs/install.md`. 45 skills, 27 commands, 294 tests.
 - **v1.22.0** - the final release. One-line curl install (`install.sh` + `uninstall.sh`), new `docs/forking.md` and maintenance posture in `CONTRIBUTING.md`, ROADMAP rewritten as a stable handoff, skill catalogue audited and half-built skills archived, setup wizard hardened for three archetypes (B2B founder, B2C founder, daily-ops operator), opt-in observation rollup script + `<private>` exclusion tag for writing skills, end-to-end test coverage on all critical paths. 45 skills, 27 commands, full test suite.
 - **v1.21.0** - the queue release. FounderOS now shows what is moving. A new execution queue
   (`cadence/queue.md`) surfaces ACTIVE items in the first lines of every session brief. The queue

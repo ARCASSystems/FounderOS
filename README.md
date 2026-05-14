@@ -71,7 +71,7 @@ Downloads FounderOS, copies hooks, and prints the natural-language next step. Re
 /plugin install founder-os@founder-os-marketplace
 ```
 
-Then say "set up FounderOS" (or run `/founder-os:setup`). If setup is not recognised, run `/reload-plugins` first.
+Then say "set up Founder OS" (or run `/founder-os:setup`). If setup is not recognised, run `/reload-plugins` first.
 
 **When to choose:** You already use Claude Code with a Pro or Max plan and want auto-updates via `/founder-os:update`.
 
@@ -81,7 +81,7 @@ Then say "set up FounderOS" (or run `/founder-os:setup`). If setup is not recogn
 git clone --depth 1 https://github.com/ARCASSystems/FounderOS.git ~/founder-os
 ```
 
-Open Claude Code in the cloned folder, then say "set up FounderOS" (or run `/setup`). Commands use bare names on this path - no `/founder-os:` prefix.
+Open Claude Code in the cloned folder, then say "set up Founder OS" (or run `/setup`). Commands use bare names on this path - no `/founder-os:` prefix.
 
 **When to choose:** The plugin install fails, or you want full control of the local copy and manual `git pull` updates.
 
@@ -354,9 +354,9 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.22.1. Final release. Public push week of 2026-05-14.
+Version 1.23.0. Final release. Public push week of 2026-05-15.
 
-v1.22 is the final release from ARCAS Systems. Install with one command: `curl -fsSL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/install.sh | bash`. The setup wizard now handles three roles - founder, operator, team-of-one - and branches downstream questions and the bootloader CLAUDE.md on the role you declare. Skill catalogue audited: all 44 prior skills validated, 0 archived. Observation logs now have a weekly rollup script (`scripts/observation-rollup.py`) so JSONL files do not grow unbounded. A `<private>` exclusion tag lets you mark any text that should not survive the session - brain-log, dream, knowledge-capture, and rant all honor it. End-to-end critical path tests cover setup wizard, install paths, verify health/broken states, queue 3-cap gate, brain-pass with empty corpus, and wiki-build idempotency. 45 skills, 27 commands, 247 tests.
+v1.23 closes the central promise from v1.22. A new UserPromptSubmit hook now classifies every prompt against four shapes - rant, named-entity near a meeting verb, status update, preference utterance - and emits a capture suggestion Claude honors before responding. Rants are eagerly written to `brain/rants/<date>.md` so the text is safe on disk even if you walk away mid-thought. SessionStart prints a welcome banner on fresh installs missing `core/identity.md`, surfaces unprocessed-rant count, and nudges `/dream` when rants accumulate. Five operator-vocabulary phrases ("journal", "schedule", "goals", "customers", "I decided") route into the right skill without you knowing the OS-internal name. Named-entity detection filters common title-case nouns and requires the candidate to sit within 80 characters of the meeting verb, so prompts like "I just called Python from my bash script" do not falsely fire. v1.22's full feature set is intact: three-role setup wizard, `<private>` exclusion tag, weekly observation rollup, end-to-end critical path tests. 45 skills, 27 commands, 294 tests.
 
 v1.21 closes the gap on what FounderOS shows. A new execution queue (`cadence/queue.md`) surfaces
 what is moving in the first three lines of every session. The queue skill manages five operations -

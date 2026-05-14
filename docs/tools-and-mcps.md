@@ -2,7 +2,7 @@
 
 Founder OS does not assume your stack. The OS is a set of files and skills. Each skill declares which Model Context Protocol (MCP) servers it can use, and degrades gracefully when those MCPs are not available.
 
-You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run most of the 39 skills end-to-end. The four skills that produce noticeably better output with the relevant MCP connected are `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`. They still function without one, but with reduced context.
+You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run most of the 45 skills end-to-end. The four skills that produce noticeably better output with the relevant MCP connected are `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`. They still function without one, but with reduced context.
 
 This doc covers three things: which MCPs activate which skills, which editors and surfaces (Obsidian, Claude Cowork, claude-mem) pair well with the OS, and what works under each surface.
 
