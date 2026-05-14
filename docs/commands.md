@@ -221,7 +221,7 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **Or say.** "I'm thinking of starting [X]" / "should I do this"
 - **Outcome.** Six yes/no answers (vague done state, phantom user, scope creep, false urgency, sunk-cost trap, opportunity cost) plus a verdict: start, kill, postpone, or scope down.
 - **Args.** Initiative name or one-line description.
-- **Writes.** Read-only. Optional log entry to `brain/log.md` if you ask for one.
+- **Writes.** Read-only during the question loop. On GREEN verdict: asks confirmation, then writes to `context/priorities.md` and `brain/log.md`. On PARK verdict: asks confirmation, then writes to `brain/decisions-parked.md`. Each write requires an explicit yes before it lands.
 - **Prereqs.** `/founder-os:setup` complete.
 - **When to run.** Before starting any new initiative, or when scope is creeping mid-task.
 - **Follow-up.** If the verdict is start, document the initiative in `context/priorities.md`. If kill or postpone, log it.

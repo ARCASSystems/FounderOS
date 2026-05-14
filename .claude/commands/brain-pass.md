@@ -1,7 +1,7 @@
 ---
 description: Synthesise an answer across the brain. Say "what do I know about [topic]" or "synthesise across the brain" (or run /founder-os:brain-pass "<question>"). Returns Answer / Evidence / Confidence / Gaps with stable-ID citations. Use when a question spans multiple brain files.
 argument-hint: "<question>"
-allowed-tools: ["Read", "Grep", "Glob"]
+allowed-tools: ["Read", "Grep", "Glob", "Bash"]
 ---
 
 # Founder OS brain pass

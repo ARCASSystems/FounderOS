@@ -73,11 +73,11 @@ After the founder answers, score the initiative.
 | Internal urgency | Q5 only references anxiety, restlessness, fear, or curiosity | AMBER - park or run a tiny test |
 | Vague proof | Q6 cannot be checked without asking the founder how it feels | AMBER - choose a visible signal |
 
-If 0 RED and 0 AMBER: GREEN. Capture the initiative in `context/priorities.md` and add a `#building` entry to `brain/log.md`.
+If 0 RED and 0 AMBER: GREEN. Ask the founder: "Capture this initiative in `context/priorities.md` and log to `brain/log.md`? (yes / no)". If yes, write both files. If no, stop - reads only.
 
 If 1+ AMBER and 0 RED: PROCEED WITH CAUTION. Recommend a one-week trial with a hard kill date.
 
-If 1+ RED: PARK. Write a parked decision to `brain/decisions-parked.md` with the failed answers as the reason.
+If 1+ RED: PARK. Ask the founder: "Write a parked decision to `brain/decisions-parked.md` with the failed answers as the reason? (yes / no)". If yes, write the file. If no, stop - reads only.
 
 ## Output Format
 
@@ -99,7 +99,8 @@ Next action: <one specific next step>
 
 ## Rules
 
-- Read-only until the verdict is rendered.
+- Read-only during the question loop (until verdict is rendered).
+- Verdict writes (priorities.md, log.md, decisions-parked.md) are gated on a yes/no confirmation. Never auto-write without asking.
 - Never lower the bar because the founder pushes back.
 - Do not skip a question.
 - No em dashes, no en dashes, no banned words.
