@@ -15,6 +15,7 @@
   "prospecting_db": null,
   "video_tool": null,
   "booking": null,
+  "primary_channel": null,
 
   "_allowed_values": {
     "knowledge_base": ["notion", "obsidian", "google_drive", "local"],
@@ -28,7 +29,8 @@
     "server": ["hostinger", "digitalocean", "render", "none"],
     "prospecting_db": ["apollo", "sales_nav", "linkedin", "none"],
     "video_tool": ["loom", "zoom", "none"],
-    "booking": ["cal_com", "calendly", "none"]
+    "booking": ["cal_com", "calendly", "none"],
+    "primary_channel": ["linkedin", "instagram", "youtube", "email_newsletter"]
   },
 
   "_notes": "Null means unset. Run /founder-os:setup to populate this file with your actual tool stack, or edit values directly."

@@ -315,7 +315,9 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── query.py                 # From templates/scripts/query.py (plain-file graph query)
 │   ├── brain-snapshot.py        # From templates/scripts/brain-snapshot.py (writes brain/.snapshot.md - runtime context for output skills)
 │   ├── brain-pass-log.py        # From templates/scripts/brain-pass-log.py (opt-in JSONL telemetry for /founder-os:brain-pass)
-│   └── memory-diff.py           # From templates/scripts/memory-diff.py (SessionStart helper - flags clients/ folders without an auto-memory entry)
+│   ├── memory-diff.py           # From templates/scripts/memory-diff.py (SessionStart helper - flags clients/ folders without an auto-memory entry)
+│   ├── menu.py                  # From templates/scripts/menu.py (context-aware action surface for /founder-os:menu)
+│   └── observation-rollup.py    # From templates/scripts/observation-rollup.py (daily observation compaction for /founder-os:observation-rollup)
 ├── cadence/
 │   ├── daily-anchors.md         # From templates/cadence/daily-anchors.md
 │   ├── weekly-commitments.md    # Personalized with their current priorities
@@ -357,15 +359,17 @@ Show the full list of files that will be created. Get approval. Then create them
 
 **Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, and post-tool-use observation hook live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Find the plugin install path (same as where templates live), then copy all six hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
-**Scripts copy step (mandatory).** Copy all five Python helpers from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
+**Scripts copy step (mandatory).** Copy all seven Python helpers from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
 
 - `templates/scripts/wiki-build.py` → `scripts/wiki-build.py` (used by `/founder-os:wiki-build`)
 - `templates/scripts/query.py` → `scripts/query.py` (used by `/founder-os:query`)
 - `templates/scripts/brain-snapshot.py` → `scripts/brain-snapshot.py` (writes `brain/.snapshot.md`, read at task time by nine output-producing skills)
 - `templates/scripts/brain-pass-log.py` → `scripts/brain-pass-log.py` (opt-in JSONL telemetry for `/founder-os:brain-pass`)
 - `templates/scripts/memory-diff.py` → `scripts/memory-diff.py` (SessionStart helper that flags `clients/<slug>/` folders without an auto-memory entry)
+- `templates/scripts/menu.py` → `scripts/menu.py` (used by `/founder-os:menu` to surface context-aware actions)
+- `templates/scripts/observation-rollup.py` → `scripts/observation-rollup.py` (used by `/founder-os:observation-rollup` to compact daily observations)
 
-These are not personalized templates. Copy contents exactly. Do not edit. Verify all five copies exist on disk before continuing. If any are missing the brain-snapshot, brain-pass, wiki-build, or memory-diff helpers will fail silently or hard-error.
+These are not personalized templates. Copy contents exactly. Do not edit. Verify all seven copies exist on disk before continuing. If any are missing the brain-snapshot, brain-pass, wiki-build, menu, or observation-rollup helpers will fail silently or hard-error.
 
 **{{role_noun}} substitution.** The `templates/bootloader-claude-md.md` file contains `{{role_noun}}` placeholders in two places. When writing the bootloader CLAUDE.md, substitute based on the role captured in Phase 0.2.1:
 
@@ -464,7 +468,7 @@ If they don't have a task yet (no active clients, pre-revenue, just starting), s
 
 ### 5.0 Write Tool Stack to stack.json
 
-Take the tool-stack answers captured in Phase 0.5 (knowledge base, email, calendar, automation, CRM, file storage, meeting notes, voice input, server, prospecting DB, video tool, booking) and write them to `stack.json` at the Founder OS root.
+Take the tool-stack answers captured in Phase 0.5 (knowledge base, email, calendar, automation, CRM, file storage, meeting notes, voice input, server, prospecting DB, video tool, booking, primary channel) and write them to `stack.json` at the Founder OS root.
 
 Steps:
 1. Read the existing `stack.json`. Preserve the `_description`, `_wizard_version`, `_allowed_values`, and `_notes` fields.

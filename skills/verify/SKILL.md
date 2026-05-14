@@ -61,19 +61,21 @@ Note: if MCPs are not configured or settings.json is not readable, report `[WARN
 
 ### Check 3 - Scripts present
 
-Check that all five core Python helper scripts exist and parse cleanly:
+Check that all seven core Python helper scripts exist and parse cleanly:
 
 - `scripts/query.py`
 - `scripts/brain-snapshot.py`
 - `scripts/wiki-build.py`
 - `scripts/memory-diff.py`
 - `scripts/brain-pass-log.py`
+- `scripts/menu.py`
+- `scripts/observation-rollup.py`
 
 For each, run: `python -m py_compile scripts/<name>.py` (or `python3 -m py_compile`).
 
 Outcome:
-- All five present and compile -> `[PASS] Scripts present (5/5 compile cleanly)`
-- Some missing or compile errors -> `[FAIL] Scripts present (<N>/5 - list the failing ones)`
+- All seven present and compile -> `[PASS] Scripts present (7/7 compile cleanly)`
+- Some missing or compile errors -> `[FAIL] Scripts present (<N>/7 - list the failing ones)`
 
 ### Check 4 - MCP availability
 

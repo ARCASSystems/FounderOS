@@ -123,5 +123,44 @@ class InstallContentTests(unittest.TestCase):
         self.assertIn("preserved", self.uninstall_text.lower())
 
 
+class TemplateScriptPresenceTests(unittest.TestCase):
+    """Assert that all seven helper scripts have a templates/scripts/ mirror."""
+
+    def _template_path(self, name: str) -> Path:
+        return REPO_ROOT / "templates" / "scripts" / name
+
+    def test_menu_py_template_exists(self):
+        path = self._template_path("menu.py")
+        self.assertTrue(
+            path.exists(),
+            "templates/scripts/menu.py is missing - setup cannot copy it to the founder's scripts/",
+        )
+
+    def test_observation_rollup_py_template_exists(self):
+        path = self._template_path("observation-rollup.py")
+        self.assertTrue(
+            path.exists(),
+            "templates/scripts/observation-rollup.py is missing - setup cannot copy it to the founder's scripts/",
+        )
+
+    def test_all_seven_template_scripts_exist(self):
+        required = [
+            "wiki-build.py",
+            "query.py",
+            "brain-snapshot.py",
+            "brain-pass-log.py",
+            "memory-diff.py",
+            "menu.py",
+            "observation-rollup.py",
+        ]
+        for name in required:
+            with self.subTest(script=name):
+                path = self._template_path(name)
+                self.assertTrue(
+                    path.exists(),
+                    f"templates/scripts/{name} is missing",
+                )
+
+
 if __name__ == "__main__":
     unittest.main()

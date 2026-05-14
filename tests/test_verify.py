@@ -64,7 +64,10 @@ class VerifySkillTests(unittest.TestCase):
         self.assertIn('wiki-build.py', self.body)
         self.assertIn('query.py', self.body)
         self.assertIn('memory-diff.py', self.body)
+        self.assertIn('menu.py', self.body)
+        self.assertIn('observation-rollup.py', self.body)
         self.assertIn('py_compile', self.body)
+        self.assertIn('7/7', self.body)
 
     def test_check_4_mcp_documented(self):
         self.assertIn('MCP availability', self.body)

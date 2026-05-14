@@ -20,6 +20,7 @@ silently passing on file existence.
 
 from __future__ import annotations
 
+import json
 import re
 import unittest
 from pathlib import Path
@@ -27,6 +28,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SETUP_SKILL = REPO_ROOT / "skills" / "founder-os-setup" / "SKILL.md"
+STACK_JSON = REPO_ROOT / "stack.json"
 
 
 def _extract_section(body: str, start_header: str, next_header_pattern: str) -> str:
@@ -312,6 +314,49 @@ class SetupWizardWorkStylePhaseTests(unittest.TestCase):
         self.assertIn("**Communication style:**", self.section)
         self.assertIn("core/identity.md", self.section)
         self.assertIn("rules/operating-rules.md", self.section)
+
+
+class StackJsonPrimaryChannelTests(unittest.TestCase):
+    """stack.json must include primary_channel and its allowed values."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        with STACK_JSON.open(encoding="utf-8") as f:
+            cls.data = json.load(f)
+
+    def test_stack_json_parses(self) -> None:
+        self.assertIsInstance(self.data, dict)
+
+    def test_primary_channel_field_present(self) -> None:
+        self.assertIn(
+            "primary_channel",
+            self.data,
+            "stack.json is missing the primary_channel field",
+        )
+
+    def test_primary_channel_in_allowed_values(self) -> None:
+        allowed = self.data.get("_allowed_values", {})
+        self.assertIn(
+            "primary_channel",
+            allowed,
+            "stack.json _allowed_values is missing primary_channel",
+        )
+
+    def test_primary_channel_allowed_values_non_empty(self) -> None:
+        allowed = self.data.get("_allowed_values", {}).get("primary_channel", [])
+        self.assertGreater(
+            len(allowed),
+            0,
+            "stack.json _allowed_values.primary_channel must be a non-empty list",
+        )
+
+    def test_primary_channel_allowed_values_includes_linkedin(self) -> None:
+        allowed = self.data.get("_allowed_values", {}).get("primary_channel", [])
+        self.assertIn("linkedin", allowed)
+
+    def test_wizard_maps_primary_channel(self) -> None:
+        body = SETUP_SKILL.read_text(encoding="utf-8")
+        self.assertIn("primary_channel", body)
 
 
 class SetupWizardProseHygieneTests(unittest.TestCase):
