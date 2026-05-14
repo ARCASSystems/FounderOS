@@ -7,3 +7,10 @@ edges:
     to: brain/flags.md
   - from: brain/flags.md
     to: context/priorities.md
+
+#@@WIKI_LINKS_AUTOGEN_BEGIN@@ - do not edit; overwritten by scripts/wiki-build.py
+# Last build: 2026-05-14
+# Total: 0 links across 0 source files
+wiki_links:
+  []
+#@@WIKI_LINKS_AUTOGEN_END@@
