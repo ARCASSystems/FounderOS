@@ -1,5 +1,5 @@
 """
-FounderOS integrity audit — runs on every push via GitHub Actions.
+FounderOS integrity audit - runs on every push via GitHub Actions.
 Scans for leakage patterns and high-impact path drift.
 Writes /tmp/audit_findings.json and sets the has_findings GHA output.
 """
@@ -20,7 +20,7 @@ HIGH_IMPACT_PATHS = [".claude-plugin/", "LICENSE", "README.md"]
 INCLUDE_GLOBS = ["*.md", "*.json", "*.sh", "*.yaml", "*.yml", "*.txt"]
 EXCLUDED_DIRS = {".git", ".github"}
 
-# Empty-tree SHA — used when HEAD has no parent (first commit)
+# Empty-tree SHA - used when HEAD has no parent (first commit)
 EMPTY_TREE = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
 
 
@@ -110,7 +110,7 @@ def get_changed_files() -> list[str]:
     if result.returncode == 0:
         return [f for f in result.stdout.strip().splitlines() if f]
 
-    # First commit — diff against empty tree
+    # First commit - diff against empty tree
     result = subprocess.run(
         ["git", "diff", "--name-only", EMPTY_TREE, "HEAD"],
         capture_output=True, text=True,

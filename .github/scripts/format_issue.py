@@ -29,7 +29,7 @@ SEVERITY = {
 
 HINT = {
     "pii_names": "Personal names / private event names in a public repo. Remove or replace with generic placeholders.",
-    "internal_ids": "Private Notion collection IDs or internal UUIDs. Delete the line entirely — do not replace.",
+    "internal_ids": "Private Notion collection IDs or internal UUIDs. Delete the line entirely - do not replace.",
     "internal_codenames": "Internal codenames leaking publicly. Replace with `FounderOS`.",
     "old_namespace": "Deprecated `/personal-os:` namespace. Replace with `/founder-os:`.",
     "stale_version": "Stale `1.0.1` version string or `15 skills` count. Update to match VERSION file.",
@@ -60,7 +60,7 @@ def main() -> None:
             sev = SEVERITY.get(f["check"], "MEDIUM")
             hint = HINT.get(f["check"], "Review and remove flagged content.")
             lines.append(f"")
-            lines.append(f"### `{f['check']}` — {sev} · {f['count']} match(es)")
+            lines.append(f"### `{f['check']}` - {sev} · {f['count']} match(es)")
             lines.append(f"Pattern: `{f['pattern']}`")
             lines.append(f"What to do: {hint}")
             lines.append(f"")
@@ -73,7 +73,7 @@ def main() -> None:
     if high_impact:
         lines.append("")
         lines.append("## High-impact path changes")
-        lines.append("These paths were modified — verify the change was intentional:")
+        lines.append("These paths were modified - verify the change was intentional:")
         for p in high_impact:
             lines.append(f"- `{p}`")
 
@@ -87,7 +87,7 @@ def main() -> None:
     for p in high_impact:
         lines.append(f"- [ ] Verify `{p}` change is intentional")
     lines += [
-        "- [ ] Re-run `python3 .github/scripts/audit.py` locally — confirm zero findings",
+        "- [ ] Re-run `python3 .github/scripts/audit.py` locally - confirm zero findings",
         "- [ ] Commit, push, close this issue",
         "",
         "*Detection by `.github/scripts/audit.py` · Maintainer fix procedure in `.github/scripts/fix-audit.md`*",

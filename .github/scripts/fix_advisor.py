@@ -39,27 +39,27 @@ def fix_recommendation_path() -> Path:
 # Per-check remediation playbook - keeps the prompt grounded without hallucinating steps.
 FIX_PLAYBOOK: dict[str, str] = {
     "pii_names": (
-        "CRITICAL — personal names or private event names in a public repo. "
+        "CRITICAL - personal names or private event names in a public repo. "
         "Find every match, delete the line or replace with a generic placeholder. "
         "Check all .md and .json files. Run `git grep` to confirm zero hits before pushing."
     ),
     "internal_codenames": (
-        "HIGH — internal codenames are leaking. Replace every occurrence of "
+        "HIGH - internal codenames are leaking. Replace every occurrence of "
         "the matched private codename terms with `FounderOS` (the public product name). "
         "Use the exact matches from the audit issue body; do not keep the private terms in docs, scripts, or examples."
     ),
     "internal_ids": (
-        "CRITICAL — private Notion collection IDs or internal UUIDs are exposed. "
+        "CRITICAL - private Notion collection IDs or internal UUIDs are exposed. "
         "These can be used to access private workspaces. Remove the entire line for each match. "
-        "Do not replace with a placeholder — omit entirely."
+        "Do not replace with a placeholder - omit entirely."
     ),
     "old_namespace": (
-        "MEDIUM — deprecated '/personal-os:' command namespace is present. "
+        "MEDIUM - deprecated '/personal-os:' command namespace is present. "
         "Replace all occurrences with '/founder-os:' to match the v1.1.0 public naming. "
         "Run: `grep -rl '/personal-os:' . | xargs sed -i 's|/personal-os:|/founder-os:|g'`"
     ),
     "stale_version": (
-        "MEDIUM — stale references ('15 skills' or version '1.0.1') found. "
+        "MEDIUM - stale references ('15 skills' or version '1.0.1') found. "
         "Update skill count by running `ls skills/ | wc -l` and replacing the number. "
         "Update version strings to match the current value in the VERSION file."
     ),
@@ -72,12 +72,12 @@ GitHub issue body in markdown so the repo owner knows exactly what to fix and ho
 
 Rules:
 - Severity order: CRITICAL (PII, private IDs) > HIGH (internal codenames) > MEDIUM (stale refs, namespaces)
-- Name the exact files and line numbers from the findings — do not be vague
+- Name the exact files and line numbers from the findings - do not be vague
 - Provide copy-paste shell commands wherever possible
 - For high-impact path changes (LICENSE, README, .claude-plugin/), note what to verify, not what to delete
 - End with a markdown checkbox checklist the author can tick off as they fix each item
 - Total length: under 450 words
-- No preamble — start directly with the severity breakdown"""
+- No preamble - start directly with the severity breakdown"""
 
 
 def build_user_prompt(findings: dict) -> str:
@@ -91,7 +91,7 @@ def build_user_prompt(findings: dict) -> str:
 
     for f in findings.get("leakage_findings", []):
         playbook = FIX_PLAYBOOK.get(f["check"], "Review and remove flagged content.")
-        lines.append(f"\n### {f['check']} — {f['count']} match(es)")
+        lines.append(f"\n### {f['check']} - {f['count']} match(es)")
         lines.append(f"Pattern: `{f['pattern']}`")
         lines.append("Sample matches (first 5):")
         for m in f["matches"][:5]:
@@ -155,7 +155,7 @@ def main() -> None:
     short_sha = findings["commit"][:8]
 
     body = f"""\
-## FounderOS Integrity Audit — Automated Flag
+## FounderOS Integrity Audit - Automated Flag
 
 > Triggered by push `{short_sha}` · actor **{findings['actor']}** · ref `{findings['ref']}`
 > Opened automatically by `.github/workflows/founderos-audit.yml`. Close when all fixes are merged.

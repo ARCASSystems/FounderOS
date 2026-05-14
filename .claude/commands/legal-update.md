@@ -23,15 +23,15 @@ Quarterly refresh of the loaded jurisdiction's source set. Walks each source, pr
 ```
 Source freshness audit for <jurisdiction> as of <today>:
 
-Stale (>6 months — refresh now):
+Stale (>6 months - refresh now):
   - <source-key>: <name>, last checked <date>, <N> days ago
   - ...
 
-Warming (3-6 months — refresh recommended):
+Warming (3-6 months - refresh recommended):
   - <source-key>: <name>, last checked <date>
   - ...
 
-Fresh (<3 months — no action):
+Fresh (<3 months - no action):
   - <source-key>: <name>, last checked <date>
   - ...
 ```
@@ -43,7 +43,7 @@ Fresh (<3 months — no action):
    - **mark-checked-no-changes:** update `last_checked_on:` to today's date without web-fetching. Use when the user has already verified the source themselves.
    - **drop-source:** the source is no longer authoritative. Remove the entry from `sources.yml` after a confirmation prompt: "Drop `<source-key>` permanently? Will not auto-restore. (yes / no)"
 
-7. **Repeat for warming sources** if the user wants to be thorough. Ask once: "Also refresh the 3-6 month sources? (yes / no — only stale by default)".
+7. **Repeat for warming sources** if the user wants to be thorough. Ask once: "Also refresh the 3-6 month sources? (yes / no - only stale by default)".
 
 8. **Update `last_full_review:`** in the top of `sources.yml` to today's date.
 
