@@ -555,7 +555,7 @@ You never need to use the OS terms. Say what feels natural.
 
 **End of every session:** Claude commits changes. Your repo is your memory.
 
-**To audit anytime:** Say "audit the OS" (or run `<prefix>status`) for a one-screen state view.
+**To audit anytime:** Say "audit the OS" (or run `<prefix>audit`) for the composite health report across readiness, lint, wiki, brain staleness, and voice.
 
 **To remove cleanly:** Say "uninstall Founder OS" (or run `<prefix>uninstall`). Default preserves your data; add --purge to wipe everything.
 

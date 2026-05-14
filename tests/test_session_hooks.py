@@ -64,6 +64,36 @@ def powershell_bin() -> str | None:
     return shutil.which("pwsh") or shutil.which("powershell")
 
 
+def _bash_is_mingw_or_msys() -> bool:
+    """Probe bash for its uname -s output.
+
+    The bash session-start hook exits early on MINGW*/MSYS*/CYGWIN* by design
+    because the PowerShell variant is the canonical writer on Windows. When the
+    bash hook is muted by the platform guard, tip-and-brief assertions made
+    against bash stdout cannot pass. Skip the bash-hook-output suite in that
+    environment; the PowerShell parse smoke-test still covers the .ps1 variant.
+    """
+    bash = shutil.which("bash")
+    if not bash:
+        return False
+    try:
+        result = subprocess.run(
+            [bash, "-c", "uname -s"],
+            text=True,
+            capture_output=True,
+            timeout=5,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    if result.returncode != 0:
+        return False
+    name = result.stdout.strip().upper()
+    return name.startswith(("MINGW", "MSYS", "CYGWIN"))
+
+
+BASH_HOOK_MUTED_BY_PLATFORM_GUARD = _bash_is_mingw_or_msys()
+
+
 def powershell_single_quote(value: str) -> str:
     return "'" + value.replace("'", "''") + "'"
 
@@ -112,6 +142,12 @@ class SessionHookSmokeTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
+@unittest.skipIf(
+    BASH_HOOK_MUTED_BY_PLATFORM_GUARD,
+    "bash session-start hook exits early on MINGW/MSYS/CYGWIN by design "
+    "(PowerShell .ps1 is the canonical writer on Windows). Tip-output "
+    "assertions need a bash where the platform guard does not fire.",
+)
 class SessionStartTipTests(unittest.TestCase):
     """Tests for the v1.20 SessionStart Tip line.
 
@@ -338,6 +374,12 @@ class SessionStartTipTests(unittest.TestCase):
             self.assertIn("=== end brief ===", output)
 
 
+@unittest.skipIf(
+    BASH_HOOK_MUTED_BY_PLATFORM_GUARD,
+    "bash session-start hook exits early on MINGW/MSYS/CYGWIN by design "
+    "(PowerShell .ps1 is the canonical writer on Windows). Rollup-output "
+    "assertions need a bash where the platform guard does not fire.",
+)
 class SessionStartObservationRollupTests(unittest.TestCase):
     """Tests for the v1.22 W4 observation-rollup section of the SessionStart brief.
 

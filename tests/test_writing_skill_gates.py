@@ -12,9 +12,10 @@ WRITING_SKILLS = {
 }
 
 GATE_MESSAGE = (
-    "Your voice profile is empty. Run `/founder-os:voice-interview` first, "
-    "or this output will sound like Claude defaults rather than you. Want me "
-    "to run the interview now, or proceed with defaults anyway?"
+    'Your voice profile is empty. Say "set up my voice profile" to run the '
+    "interview first, or this output will sound like Claude defaults rather "
+    "than you. Want me to start the interview now, or proceed with defaults "
+    "anyway?"
 )
 
 

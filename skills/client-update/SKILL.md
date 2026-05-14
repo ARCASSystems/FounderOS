@@ -14,7 +14,7 @@ Writes client-facing communications. Updates build trust through transparency, n
 
 Before producing output, read `core/voice-profile.yml`. If the file is missing OR contains template defaults (lines starting with `{{`, values like `<your tone here>`, `[CHOOSE`, `[example:`, or `[NOT SET]`), STOP and tell the user:
 
-> Your voice profile is empty. Run `/founder-os:voice-interview` first, or this output will sound like Claude defaults rather than you. Want me to run the interview now, or proceed with defaults anyway?
+> Your voice profile is empty. Say "set up my voice profile" to run the interview first, or this output will sound like Claude defaults rather than you. Want me to start the interview now, or proceed with defaults anyway?
 
 If the user chooses to proceed with defaults, write the update using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the update is voice-coupled.
 
