@@ -11,6 +11,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -21,6 +22,39 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = REPO_ROOT / "scripts" / "user-prompt-capture.py"
+HOOK_BASH = REPO_ROOT / ".claude" / "hooks" / "user-prompt-capture.sh"
+HOOK_POWERSHELL = REPO_ROOT / ".claude" / "hooks" / "user-prompt-capture.ps1"
+
+
+def _powershell_bin() -> str | None:
+    return shutil.which("pwsh") or shutil.which("powershell")
+
+
+def _bash_is_windows_shell() -> bool:
+    """Probe bash for MINGW*/MSYS*/CYGWIN* uname.
+
+    The bash wrapper exits 0 immediately on Windows shells (the PowerShell
+    variant is canonical there). Invocation tests need to know whether to
+    expect output or a silent platform-guard exit.
+    """
+    bash = shutil.which("bash")
+    if not bash:
+        return False
+    try:
+        result = subprocess.run(
+            [bash, "-c", "uname -s"],
+            text=True,
+            capture_output=True,
+            timeout=5,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    if result.returncode != 0:
+        return False
+    return result.stdout.strip().upper().startswith(("MINGW", "MSYS", "CYGWIN"))
+
+
+BASH_WRAPPER_MUTED = _bash_is_windows_shell()
 
 
 def _load_module():
@@ -172,6 +206,55 @@ class NamedEntityFilterTests(unittest.TestCase):
         # "called" near the start, "Stephen" far away, no other valid name nearby.
         self.assertIsNone(UPC.detect_shape(prompt))
 
+    def test_sentence_initial_verb_not_treated_as_name(self):
+        """A capitalized meeting verb at sentence start (Called/Met/Spoke/
+        Emailed/Messaged) overlaps the meeting-verb match on the same span.
+        The candidate IS the verb, not a person name. Overlap rejection
+        must skip these candidates."""
+        for prompt in [
+            "Called Mom yesterday.",
+            "Called Engineering this morning.",
+            "Met Finance about the budget.",
+            "Spoke to Legal about the contract.",
+            "Emailed Support about the bug.",
+            "Messaged Product about the spec.",
+        ]:
+            self.assertIsNone(
+                UPC.detect_shape(prompt),
+                f"sentence-initial capitalized verb should not fire: {prompt!r}",
+            )
+
+    def test_may_is_treated_as_month(self):
+        """'May' as a month name must not fire as a person mention."""
+        prompt = "I met in May to discuss the offer."
+        self.assertIsNone(UPC.detect_shape(prompt))
+
+    def test_camelcase_brand_does_not_fire(self):
+        """CamelCase brands ('GitHub', 'OpenAI', 'YouTube') must capture as
+        a single token and resolve against the case-insensitive stop-list."""
+        for prompt in [
+            "I had a call with GitHub about repo limits.",
+            "I emailed OpenAI about their API.",
+            "I had a call with YouTube about my channel.",
+        ]:
+            self.assertIsNone(
+                UPC.detect_shape(prompt),
+                f"CamelCase brand should not fire: {prompt!r}",
+            )
+
+    def test_all_caps_acronym_does_not_fire(self):
+        """All-caps acronyms (API, USA, UAE, JSON) are structurally excluded
+        from candidate names by the regex's mandatory-lowercase lookahead."""
+        for prompt in [
+            "I had a call with JSON about parsing.",
+            "I emailed about the API endpoint.",
+            "I called my contact at the UAE office.",
+        ]:
+            self.assertIsNone(
+                UPC.detect_shape(prompt),
+                f"all-caps acronym should not fire: {prompt!r}",
+            )
+
 
 # ---------------------------------------------------------------------------
 # End-to-end script behaviour
@@ -234,6 +317,11 @@ class CaptureScriptE2ETests(unittest.TestCase):
             self.assertIn("mode: unknown", text)
             self.assertIn("source: user-prompt-capture-hook", text)
             self.assertIn("rant-eager-captured", result.stdout)
+            # The note must reference the rant via a repo-relative path. An
+            # absolute path leaks the operator's local filesystem layout
+            # into model context on every rant.
+            self.assertIn("brain/rants/", result.stdout)
+            self.assertNotIn(str(repo), result.stdout)
 
     def test_rant_prepend_preserves_prior_entry(self):
         """A second rant on the same date prepends, keeping the first body."""
@@ -285,6 +373,121 @@ class CaptureScriptE2ETests(unittest.TestCase):
             self.assertFalse(
                 (repo / "brain" / "rants" / f"{today}.md").exists(),
                 "named-entity should not eager-write to rants",
+            )
+
+
+# ---------------------------------------------------------------------------
+# Hook wrapper coverage (.sh + .ps1).
+#
+# settings.json wires the UserPromptSubmit hook through these wrappers, not
+# through python directly. Prior coverage only invoked the .py file, so a
+# wrapper that failed to forward stdin or resolve the repo root would ship
+# unnoticed.
+# ---------------------------------------------------------------------------
+
+
+class WrapperParseTests(unittest.TestCase):
+    def test_bash_wrapper_exists_and_parses(self) -> None:
+        self.assertTrue(HOOK_BASH.exists(), f"missing wrapper: {HOOK_BASH}")
+        bash = shutil.which("bash")
+        if not bash:
+            self.skipTest("bash is not on PATH")
+        result = subprocess.run(
+            [bash, "-n", str(HOOK_BASH)],
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_powershell_wrapper_exists_and_parses(self) -> None:
+        self.assertTrue(
+            HOOK_POWERSHELL.exists(), f"missing wrapper: {HOOK_POWERSHELL}"
+        )
+        ps = _powershell_bin()
+        if not ps:
+            self.skipTest("PowerShell is not on PATH")
+        # Parse-only check via [scriptblock]::Create. Errors return non-zero.
+        check = (
+            "$null = [System.Management.Automation.Language.Parser]::ParseFile("
+            f"'{HOOK_POWERSHELL.as_posix()}', [ref]$null, [ref]$null)"
+        )
+        result = subprocess.run(
+            [ps, "-NoProfile", "-NonInteractive", "-Command", check],
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+
+class WrapperInvocationTests(unittest.TestCase):
+    """End-to-end smoke: pipe a rant body through the wrapper and verify
+    the rant is written via the python script the wrapper invokes."""
+
+    def _rant_body(self) -> str:
+        return (
+            "I am drowning in context switches. Every time I try to ship one "
+            "thing another one falls behind. I am exhausted and I don't know "
+            "how to keep this pace. " * 6
+        )
+
+    def test_bash_wrapper_invocation(self) -> None:
+        bash = shutil.which("bash")
+        if not bash:
+            self.skipTest("bash is not on PATH")
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = _make_install(Path(tmp))
+            env = os.environ.copy()
+            env["CLAUDE_PROJECT_DIR"] = str(repo)
+            result = subprocess.run(
+                [bash, str(HOOK_BASH)],
+                input=json.dumps({"prompt": self._rant_body()}),
+                text=True,
+                capture_output=True,
+                env=env,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            if BASH_WRAPPER_MUTED:
+                # Platform guard fires on git-bash / WSL on Windows shells.
+                self.assertEqual(result.stdout.strip(), "")
+                return
+            self.assertIn("rant-eager-captured", result.stdout)
+            self.assertIn("brain/rants/", result.stdout)
+            self.assertNotIn(str(repo), result.stdout)
+            today = datetime.now().strftime("%Y-%m-%d")
+            self.assertTrue(
+                (repo / "brain" / "rants" / f"{today}.md").exists(),
+                "wrapper should write rant file via the python script",
+            )
+
+    def test_powershell_wrapper_invocation(self) -> None:
+        ps = _powershell_bin()
+        if not ps:
+            self.skipTest("PowerShell is not on PATH")
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = _make_install(Path(tmp))
+            env = os.environ.copy()
+            env["CLAUDE_PROJECT_DIR"] = str(repo)
+            result = subprocess.run(
+                [
+                    ps,
+                    "-NoProfile",
+                    "-NonInteractive",
+                    "-File",
+                    str(HOOK_POWERSHELL),
+                ],
+                input=json.dumps({"prompt": self._rant_body()}),
+                text=True,
+                capture_output=True,
+                env=env,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("rant-eager-captured", result.stdout)
+            self.assertIn("brain/rants/", result.stdout)
+            self.assertNotIn(str(repo), result.stdout)
+            today = datetime.now().strftime("%Y-%m-%d")
+            self.assertTrue(
+                (repo / "brain" / "rants" / f"{today}.md").exists(),
+                "wrapper should write rant file via the python script",
             )
 
 

@@ -64,12 +64,24 @@ EMOTIONAL_VERBS = re.compile(
 # - Capitalized word that is NOT a common title-case noun (months, days,
 #   tech brands, etc - see NAMED_ENTITY_STOPLIST below)
 # - A meeting/contact verb within PROXIMITY_CHARS of the candidate name
-# Two-token discipline: the bare regex match \b([A-Z][a-z]{2,})\b fires on
-# every title-case word in the language. Without the stop-list + proximity
-# requirement, prompts like "I just called Python from my bash script" or
-# "I had a call with Notion's API team" would trigger a suggestion - the
-# kind of false positive that trains the user to ignore the hook.
-NAMED_ENTITY = re.compile(r"\b([A-Z][a-z]{2,})\b")
+# - Candidate span must not overlap a meeting-verb span (a sentence that
+#   starts with "Called Mom" matches the verb regex AND the candidate
+#   regex on the same characters; without the overlap check, the
+#   capitalized verb is treated as a person name).
+# Two-token discipline: the bare regex match fires on every title-case word
+# in the language. Without the stop-list + proximity + overlap requirements,
+# prompts like "I just called Python from my bash script" or "Called Mom"
+# would trigger a suggestion - the kind of false positive that trains the
+# user to ignore the hook.
+#
+# Regex shape: cap letter + 2+ letters, with a lookahead that requires at
+# least one lowercase letter somewhere in the token. The lookahead lets
+# CamelCase brands ("GitHub", "OpenAI", "YouTube") capture as a single
+# token (instead of splitting at the second uppercase and leaving an
+# unmatched "Git" / "Open" / "You" prefix) while structurally excluding
+# all-caps acronyms ("API", "USA", "UAE", "JSON") - those are almost
+# never person names and otherwise flooded the candidate set.
+NAMED_ENTITY = re.compile(r"\b([A-Z](?=[a-zA-Z]*[a-z])[a-zA-Z]{2,})\b")
 MEETING_VERBS = re.compile(
     r"\b(met with|met|called|spoke (to|with)|spoken (to|with)|"
     r"emailed|messaged|texted|DM'?d|whatsapped|"
@@ -86,7 +98,7 @@ NAMED_ENTITY_STOPLIST = frozenset({
     # Days
     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
     # Months
-    "January", "February", "March", "April", "June",
+    "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
     # Temporal pronouns / sentence starters
     "Today", "Tomorrow", "Yesterday", "Tonight", "Morning", "Afternoon",
@@ -132,6 +144,11 @@ NAMED_ENTITY_STOPLIST = frozenset({
     # Corporate suffixes that match the regex (must have 2+ lowercase)
     "Inc",
 })
+
+# Pre-lowercased view of the stop-list for case-insensitive comparison.
+# The regex captures CamelCase tokens whose lowercase form might match a
+# title-case stop-list entry ("GitHub" -> "github" matches "Github").
+NAMED_ENTITY_STOPLIST_LOWER = frozenset(w.lower() for w in NAMED_ENTITY_STOPLIST)
 
 # A capitalized candidate counts as a "real name" if it appears within this
 # many characters of a meeting-verb match. Tighter = fewer false positives;
@@ -183,11 +200,14 @@ def has_named_entity_near_meeting_verb(prompt: str) -> bool:
     looks like a person's name, within NAMED_ENTITY_PROXIMITY_CHARS of a
     meeting/contact verb.
 
-    Filters out common title-case nouns via NAMED_ENTITY_STOPLIST (months,
-    days, tech brands, sentence-start verbs). This is the two-token
-    discipline: a real name has a verb near it; a common title-case noun
-    might be anywhere in the prompt and is not necessarily a captureable
-    contact event.
+    Filters applied (in order):
+    1. Stop-list match (case-insensitive): months, days, brands, kinship,
+       departments, occasions.
+    2. Overlap rejection: if the candidate span overlaps a meeting-verb
+       span, the candidate IS the verb capitalized at sentence start
+       ("Called Mom", "Met Finance", "Spoke to Legal"). Reject.
+    3. Proximity: the candidate must be within
+       NAMED_ENTITY_PROXIMITY_CHARS of at least one non-overlapping verb.
     """
     verb_matches = list(MEETING_VERBS.finditer(prompt))
     if not verb_matches:
@@ -195,12 +215,19 @@ def has_named_entity_near_meeting_verb(prompt: str) -> bool:
 
     for name_match in NAMED_ENTITY.finditer(prompt):
         candidate = name_match.group(1)
-        if candidate in NAMED_ENTITY_STOPLIST:
+        if candidate.lower() in NAMED_ENTITY_STOPLIST_LOWER:
             continue
-        name_pos = name_match.start()
+        name_start = name_match.start()
+        name_end = name_match.end()
+        # Reject candidates whose span overlaps any meeting-verb span; that
+        # candidate is a capitalized verb at sentence start, not a name.
+        if any(
+            name_start < vm.end() and vm.start() < name_end
+            for vm in verb_matches
+        ):
+            continue
         for verb_match in verb_matches:
-            verb_pos = verb_match.start()
-            if abs(name_pos - verb_pos) <= NAMED_ENTITY_PROXIMITY_CHARS:
+            if abs(name_start - verb_match.start()) <= NAMED_ENTITY_PROXIMITY_CHARS:
                 return True
     return False
 
@@ -302,11 +329,22 @@ def eager_capture_rant(repo: Path, prompt: str) -> Path | None:
 # Note rendering. The strings here are what Claude sees as added context.
 # ---------------------------------------------------------------------------
 
-def render_note(shape: str, capture_path: Path | None) -> str:
-    """Return the system-note text for the detected shape."""
+def render_note(shape: str, capture_path: Path | None, repo: Path | None = None) -> str:
+    """Return the system-note text for the detected shape.
+
+    `repo` is used to compute a repo-relative display path for the rant
+    capture. Without it, the note would leak the operator's absolute local
+    filesystem path into model context on every rant.
+    """
     if shape == "rant":
         if capture_path:
-            rel = capture_path.as_posix()
+            if repo is not None:
+                try:
+                    rel = capture_path.relative_to(repo).as_posix()
+                except ValueError:
+                    rel = capture_path.name
+            else:
+                rel = capture_path.name
             return (
                 "[capture-suggestion: rant-eager-captured]\n"
                 f"The user's prompt looks like a rant. It has been eagerly written to {rel} "
@@ -421,7 +459,7 @@ def main() -> int:
     if shape == "rant":
         capture_path = eager_capture_rant(repo, prompt)
 
-    note = render_note(shape, capture_path)
+    note = render_note(shape, capture_path, repo)
     if note:
         print(note)
 
