@@ -70,6 +70,9 @@ notes/
 # v1202/v1203 traces are intermediate working notes - not product artifacts.
 traces/v1202-*.md
 traces/v1203-*.md
+# Internal Codex review briefs - prep scaffolding, not product artifacts.
+# Contain private context (names, local paths) by design. Never commit.
+traces/v122-codex-final-review-brief.md
 
 # Agent runner scratch directory (dev tooling, not product code)
 .agents/
