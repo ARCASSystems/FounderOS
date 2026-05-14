@@ -321,8 +321,8 @@ Create the full folder structure. Read each template before generating the perso
 ├── cadence/
 │   ├── daily-anchors.md         # From templates/cadence/daily-anchors.md
 │   ├── weekly-commitments.md    # Personalized with their current priorities
-│   ├── quarterly-sprints.md     # Personalized with their Q goals
-│   ├── annual-targets.md        # Personalized with their year goals
+│   ├── quarterly-sprints.md     # Shipped with [NOT SET] placeholders - founder fills in during first quarterly review
+│   ├── annual-targets.md        # Shipped with [NOT SET] placeholders - founder fills in during first annual planning session
 │   └── queue.md                 # Copied from templates/cadence/queue.md (no personalization needed)
 ├── context/
 │   ├── priorities.md            # Personalized from 0.4

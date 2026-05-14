@@ -1,7 +1,7 @@
 # Quarterly Sprints
 
-**Quarter:** {{QUARTER}} (e.g. Q2 2026)
-**Dates:** {{START_DATE}} - {{END_DATE}}
+**Quarter:** [NOT SET] (e.g. Q2 2026)
+**Dates:** [NOT SET] - [NOT SET]
 
 ---
 
@@ -9,9 +9,9 @@
 
 What does a successful quarter look like? Max 3 goals.
 
-1. {{GOAL_1}}
-2. {{GOAL_2}}
-3. {{GOAL_3}}
+1. [NOT SET]
+2. [NOT SET]
+3. [NOT SET]
 
 ---
 
@@ -21,8 +21,8 @@ What numbers prove the goals were hit?
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| {{METRIC_1}} | {{TARGET}} | - | - |
-| {{METRIC_2}} | {{TARGET}} | - | - |
+| [NOT SET] | [NOT SET] | - | - |
+| [NOT SET] | [NOT SET] | - | - |
 
 ---
 
@@ -30,31 +30,31 @@ What numbers prove the goals were hit?
 
 Things that limit what's possible (travel, events, other commitments).
 
-- {{CONSTRAINT_1}}
-- {{CONSTRAINT_2}}
+- [NOT SET]
+- [NOT SET]
 
 ---
 
 ## Sprint Review Cadence
 
-- **Weekly check-in:** Every {{DAY}} - update weekly-commitments.md against quarterly goals
-- **Midpoint review:** {{MIDPOINT_DATE}} - are the goals still the right goals?
-- **End of quarter:** {{END_DATE}} - full retro, set next quarter's goals
+- **Weekly check-in:** Every [NOT SET] - update weekly-commitments.md against quarterly goals
+- **Midpoint review:** [NOT SET] - are the goals still the right goals?
+- **End of quarter:** [NOT SET] - full retro, set next quarter's goals
 
 ---
 
 ## Mid-Quarter Review
 
-**Date reviewed:** {{REVIEW_DATE}}
-**On track:** {{ON_TRACK_GOALS}}
-**Off track:** {{OFF_TRACK_GOALS}}
-**Adjustments:** {{ADJUSTMENTS}}
+**Date reviewed:** [NOT SET]
+**On track:** [NOT SET]
+**Off track:** [NOT SET]
+**Adjustments:** [NOT SET]
 
 ---
 
 ## End of Quarter Retro
 
-**What shipped:** {{SHIPPED}}
-**What didn't:** {{DIDNT_SHIP}}
-**Why:** {{REASON}}
-**Carry to next quarter:** {{CARRY_FORWARD}}
+**What shipped:** [NOT SET]
+**What didn't:** [NOT SET]
+**Why:** [NOT SET]
+**Carry to next quarter:** [NOT SET]

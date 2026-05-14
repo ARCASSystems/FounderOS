@@ -1,6 +1,6 @@
 # Annual Targets
 
-**Year:** {{YEAR}}
+**Year:** [NOT SET]
 
 ---
 
@@ -8,9 +8,9 @@
 
 What are the 3 things that, if they work, make the year a success?
 
-1. {{BET_1}}
-2. {{BET_2}}
-3. {{BET_3}}
+1. [NOT SET]
+2. [NOT SET]
+3. [NOT SET]
 
 ---
 
@@ -18,8 +18,8 @@ What are the 3 things that, if they work, make the year a success?
 
 | Business | Target | Current | Notes |
 |---------|--------|---------|-------|
-| {{BUSINESS_1}} | {{TARGET}} | - | |
-| {{BUSINESS_2}} | {{TARGET}} | - | |
+| [NOT SET] | [NOT SET] | - | |
+| [NOT SET] | [NOT SET] | - | |
 
 ---
 
@@ -27,8 +27,8 @@ What are the 3 things that, if they work, make the year a success?
 
 | Tier | Offer | Price | Target volume |
 |------|-------|-------|--------------|
-| {{TIER_1}} | {{OFFER}} | {{PRICE}} | {{VOLUME}} |
-| {{TIER_2}} | {{OFFER}} | {{PRICE}} | {{VOLUME}} |
+| [NOT SET] | [NOT SET] | [NOT SET] | [NOT SET] |
+| [NOT SET] | [NOT SET] | [NOT SET] | [NOT SET] |
 
 ---
 
@@ -36,8 +36,8 @@ What are the 3 things that, if they work, make the year a success?
 
 Beyond revenue - what does success look like for the founder as a person?
 
-- {{PERSONAL_TARGET_1}}
-- {{PERSONAL_TARGET_2}}
+- [NOT SET]
+- [NOT SET]
 
 ---
 
@@ -54,8 +54,8 @@ Beyond revenue - what does success look like for the founder as a person?
 
 ## Year-End Check
 
-**Date reviewed:** {{REVIEW_DATE}}
-**Bets that paid off:** {{WINS}}
-**Bets that didn't:** {{MISSES}}
-**Biggest lesson:** {{LESSON}}
-**What carries into next year:** {{CARRY_FORWARD}}
+**Date reviewed:** [NOT SET]
+**Bets that paid off:** [NOT SET]
+**Bets that didn't:** [NOT SET]
+**Biggest lesson:** [NOT SET]
+**What carries into next year:** [NOT SET]

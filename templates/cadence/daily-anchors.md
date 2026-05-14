@@ -11,9 +11,9 @@
 
 ## Today: {{DATE}}
 
-**Anchor:** {{ANCHOR_TASK}}
-**Immovable commitments today:** {{COMMITMENTS}}
-**Adjusted deep work window:** {{DEEP_WORK_WINDOW}}
+**Anchor:** [NOT SET]
+**Immovable commitments today:** [NOT SET]
+**Adjusted deep work window:** [NOT SET]
 
 > The heading line above MUST stay in `## Today: YYYY-MM-DD` form. The SessionStart brief and `/today` command both grep for it. Roll the date forward each morning.
 

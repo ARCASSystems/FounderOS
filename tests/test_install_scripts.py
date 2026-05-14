@@ -123,6 +123,51 @@ class InstallContentTests(unittest.TestCase):
         self.assertIn("preserved", self.uninstall_text.lower())
 
 
+class CadenceTemplatePlaceholderTests(unittest.TestCase):
+    """Cadence templates must not ship raw {{PLACEHOLDER}} tokens.
+
+    {{DATE}} in daily-anchors.md is the sole exception - the setup wizard
+    substitutes it with today's date at install time (see setup SKILL.md).
+    All other {{...}} tokens must be replaced with [NOT SET] so founders do
+    not see broken-looking files on first run.
+    """
+
+    CADENCE_FILES = [
+        "templates/cadence/daily-anchors.md",
+        "templates/cadence/quarterly-sprints.md",
+        "templates/cadence/annual-targets.md",
+    ]
+
+    def _read(self, rel_path: str) -> str:
+        return (REPO_ROOT / rel_path).read_text(encoding="utf-8")
+
+    def test_no_raw_placeholders_in_daily_anchors(self):
+        content = self._read("templates/cadence/daily-anchors.md")
+        # Strip the one legitimate setup-time substitution variable
+        content_without_date = content.replace("{{DATE}}", "")
+        self.assertNotIn(
+            "{{",
+            content_without_date,
+            "templates/cadence/daily-anchors.md contains raw {{PLACEHOLDER}} tokens other than {{DATE}}",
+        )
+
+    def test_no_raw_placeholders_in_quarterly_sprints(self):
+        content = self._read("templates/cadence/quarterly-sprints.md")
+        self.assertNotIn(
+            "{{",
+            content,
+            "templates/cadence/quarterly-sprints.md contains raw {{PLACEHOLDER}} tokens",
+        )
+
+    def test_no_raw_placeholders_in_annual_targets(self):
+        content = self._read("templates/cadence/annual-targets.md")
+        self.assertNotIn(
+            "{{",
+            content,
+            "templates/cadence/annual-targets.md contains raw {{PLACEHOLDER}} tokens",
+        )
+
+
 class TemplateScriptPresenceTests(unittest.TestCase):
     """Assert that all seven helper scripts have a templates/scripts/ mirror."""
 
