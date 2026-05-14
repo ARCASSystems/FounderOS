@@ -1,6 +1,6 @@
 # UAE Quick Reference
 
-**Last Verified: 2026-04-25**
+**Last Verified: 2026-05-14**
 
 Most-asked questions, answered directly. The skill checks here first before loading a full domain file.
 
@@ -20,12 +20,15 @@ Most-asked questions, answered directly. The skill checks here first before load
 ## VAT
 
 - **Mandatory registration threshold:** AED 375,000 taxable supplies (trailing 12 months)
-- **Voluntary registration threshold:** AED 187,500
+- **Voluntary registration threshold:** AED 187,500 - or any amount if you are a start-up with no current turnover
 - **Standard rate:** 5%
 - **Filing:** Quarterly (default); monthly if revenue > AED 150M
 - **Due:** 28th of the month following the tax period
+- **Q1 2026 return deadline:** June 1, 2026 (FTA announcement, verified 2026-05-14)
 - **Late filing penalty:** AED 1,000 first offense, AED 2,000 repeated within 24 months
 - **Records retention:** 5 years (Arabic or English)
+- **File via:** EmaraTax (emaratax.gov.ae) - UAEPass login required
+- **TRN verification:** tax.gov.ae
 
 ## Corporate Tax
 
@@ -87,4 +90,4 @@ Most-asked questions, answered directly. The skill checks here first before load
 
 ## Disclaimer
 
-General guidance based on publicly available UAE law as of 2026-04-25. For decisions with significant financial or legal consequences, confirm with a qualified UAE lawyer or registered tax agent.
+General guidance based on publicly available UAE law as of 2026-05-14. Sources: mof.gov.ae, tax.gov.ae, emaratax.gov.ae. For decisions with significant financial or legal consequences, confirm with a qualified UAE lawyer or registered tax agent.

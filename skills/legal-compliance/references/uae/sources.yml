@@ -16,7 +16,7 @@
 
 jurisdiction: UAE
 display_name: United Arab Emirates
-last_full_review: 2026-04-25
+last_full_review: 2026-05-14
 
 sources:
   legislation:
@@ -43,20 +43,50 @@ sources:
     name: Federal Tax Authority (FTA)
     url: https://tax.gov.ae
     covers: [tax-vat, corporate-tax, excise]
-    last_checked_on: 2026-04-25
-    notes: Re-verify monthly. FTA Cabinet/Ministerial Decisions land continuously.
+    last_checked_on: 2026-05-14
+    notes: Re-verify monthly. FTA Cabinet/Ministerial Decisions land continuously. Phone 800 82923, info@tax.gov.ae.
+
+  fta_vat_page:
+    name: FTA - VAT Overview
+    url: https://tax.gov.ae/en/taxes/Vat.aspx
+    covers: [tax-vat]
+    last_checked_on: 2026-05-14
+    notes: FTA VAT landing page. Current deadline notices posted here. Q1 2026 return deadline June 1 2026 noted on 2026-05-14.
+
+  fta_vat_guides:
+    name: FTA - VAT Guides, References and Public Clarifications
+    url: https://tax.gov.ae/en/taxes/Vat/guides.references.aspx
+    covers: [tax-vat]
+    last_checked_on: 2026-05-14
+    notes: 196 documents as of 2026-05-14. Check monthly for new clarifications. Key recent: VATGRH1 (Apr 2026), VATGPM1 (Jan 2026), VAT Admin Exceptions (Dec 2025), VATP044 (May 2025).
 
   emaratax:
     name: EmaraTax Portal
     url: https://emaratax.gov.ae
     covers: [tax-vat, registration, filing]
-    last_checked_on: 2026-04-25
+    last_checked_on: 2026-05-14
+    notes: Primary filing and registration platform. UAEPass login mandatory. All VAT returns, CT registration, and payments go through here.
 
   mof:
     name: Ministry of Finance
     url: https://mof.gov.ae
-    covers: [transfer-pricing, beps, international-tax-agreements]
-    last_checked_on: 2026-04-25
+    covers: [transfer-pricing, beps, international-tax-agreements, tax-vat]
+    last_checked_on: 2026-05-14
+    notes: taxenquiries@mof.gov.ae for VAT queries. Also holds tax classification request (ATTR) service.
+
+  mof_vat_page:
+    name: MOF - Value Added Tax
+    url: https://mof.gov.ae/en/public-finance/tax/value-added-tax-vat/
+    covers: [tax-vat]
+    last_checked_on: 2026-05-14
+    notes: MOF VAT overview with registration thresholds, rate categories, and zero-rated/exempt sector list. Start-up voluntary registration provision confirmed here.
+
+  uae_legislation_vat:
+    name: UAE Federal Legislation - Federal Decree-Law No. 8 of 2017 (VAT)
+    url: https://uaelegislation.gov.ae/en/legislations/1227
+    covers: [tax-vat]
+    last_checked_on: 2026-05-14
+    notes: Primary legislation text. Page returned 403 on 2026-05-14 - try direct access or use legislation.ae as fallback. Key law for VAT authority.
 
   icp:
     name: Federal Authority for Identity, Citizenship, Customs and Port Security (ICP)

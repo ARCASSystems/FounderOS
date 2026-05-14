@@ -1,6 +1,6 @@
 # UAE Tax, VAT & FTA Compliance
 
-**Last verified: 2026-04-25** against tax.gov.ae and Ministry of Finance Decisions index. This is the canonical UAE tax reference for the Founder OS legal-compliance skill.
+**Last verified: 2026-05-14** against tax.gov.ae, mof.gov.ae, and Ministry of Finance Decisions index. Sources: FTA VAT page, FTA Guides index (196 documents), MOF VAT page. This is the canonical UAE tax reference for the Founder OS legal-compliance skill.
 
 **Material changes since March 2026 baseline:**
 - **Ministerial Decision No. 229 of 2025** (Aug 28, 2025) — third-generation Free Zone tax framework; expanded QFZP qualifying activities, treasury services scope expanded, commodity-trading Quoted Price requirement.
@@ -9,6 +9,11 @@
 - **Cabinet Decision No. 55 of 2025** — exempts certain persons (qualifying public benefit entities, qualifying investment funds in defined cases) from CT.
 - **Transfer pricing disclosure thresholds (per MD 97/2023):** related-party schedule when intra-group transactions >AED 40M; itemized category disclosures for transactions >AED 4M.
 - **Small Business Relief NOT extended** beyond 31 Dec 2026 as of verification date.
+- **VATP044 (May 27, 2025)** — FTA Public Clarification on concerned services: output tax accounting, invoicing, and input tax recovery for service providers.
+- **VAT Administrative Exceptions Guide (Dec 5, 2025)** — circumstances where standard VAT procedures receive administrative relief.
+- **Profit Margin Scheme Guide VATGPM1 (Jan 5, 2026)** — profit margin valuation methodology for specific transactions.
+- **VATGRH1 (Apr 10, 2026)** — VAT refund guide for UAE nationals building new residences.
+- **Q1 2026 VAT return filing deadline: June 1, 2026** (FTA announcement as of 2026-05-14).
 
 Re-verify monthly. FTA cabinet/ministerial decisions land continuously.
 
@@ -46,9 +51,10 @@ Re-verify monthly. FTA cabinet/ministerial decisions land continuously.
 | Taxable supplies exceeded AED 375K in past 12 months | Mandatory | Register within 30 days |
 | Expected to exceed AED 375K in next 30 days | Mandatory | Register before exceeding |
 | Taxable supplies or expenses exceeded AED 187,500 | Voluntary | May register |
+| Start-up (no current turnover) | No threshold | Voluntary registration available |
 | Below AED 187,500 | Cannot register | Wait |
 
-Register with FTA at tax.gov.ae. FTA issues TRN (Tax Registration Number). Timeline: ~20 business days. Tax groups: related entities can form a single taxable person for VAT.
+Register via EmaraTax (emaratax.gov.ae) using UAEPass login. FTA issues TRN (Tax Registration Number). Timeline: ~20 business days. Tax groups: related entities can form a single taxable person for VAT. TRN verification available at tax.gov.ae.
 
 ### Rates
 
@@ -153,6 +159,30 @@ Cabinet Decision 100/2023. Related party and connected person transactions must 
 ## DIFC and ADGM Tax Considerations
 
 DIFC and ADGM entities are subject to UAE corporate tax like other free zone entities. They may qualify for QFZP status on qualifying income. However, their separate legal systems mean: different audit requirements, different regulatory reporting, and specific guidance from DFSA/FSRA on financial reporting. Web search difc.ae and adgm.com for current tax guidance specific to these zones.
+
+## Filing Infrastructure
+
+All UAE tax filings go through **EmaraTax** (emaratax.gov.ae). UAEPass login is mandatory for all FTA e-services.
+
+| Platform | Purpose | URL |
+|---|---|---|
+| EmaraTax | VAT returns, CT registration, payments | emaratax.gov.ae |
+| FTA main | Guides, public clarifications, TRN verification | tax.gov.ae |
+| MOF | Legislation, policy, international tax agreements | mof.gov.ae |
+
+**FTA contacts:** Phone 800 82923 - Email info@tax.gov.ae - Offices in Abu Dhabi and Dubai (DIFC).
+**MOF VAT contact:** taxenquiries@mof.gov.ae
+
+**Official guides index:** tax.gov.ae/en/taxes/Vat/guides.references.aspx (196 documents as of 2026-05-14). Key guides to know:
+- VATGRH1 — VAT refund for UAE nationals building residences (Apr 2026)
+- VATGPM1 — Profit Margin Scheme (Jan 2026)
+- VAT Administrative Exceptions Guide (Dec 2025)
+- VATP044 — Concerned services: output tax, invoicing, input recovery (May 2025)
+- TPGPC1 — Private clarifications framework (Jul 2025)
+
+**Physical support:** Tas'heel Centers for in-person assistance. Registered Tax Agents for professional help with complex filings.
+
+---
 
 ## Escalation
 
