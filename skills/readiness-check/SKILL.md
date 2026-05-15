@@ -6,6 +6,8 @@ allowed-tools: ["Read", "Glob", "Grep"]
 mcp_requirements: []
 ---
 
+> **Command:** `/founder-os:status` (plugin install) or `/status` (git clone install). This folder is named `readiness-check` to describe what it does; the command is `status` because it's the natural founder-facing name.
+
 # Readiness Check
 
 Read-only audit of the Founder OS install. Returns a weighted score and the next 3 moves.
