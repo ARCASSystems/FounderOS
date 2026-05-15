@@ -356,9 +356,11 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.23.0. Final release. Public push week of 2026-05-15.
+Version 1.24.0. Public release.
 
-v1.23 closes the central promise from v1.22. A new UserPromptSubmit hook now classifies every prompt against four shapes - rant, named-entity near a meeting verb, status update, preference utterance - and emits a capture suggestion Claude honors before responding. Rants are eagerly written to `brain/rants/<date>.md` so the text is safe on disk even if you walk away mid-thought. SessionStart prints a welcome banner on fresh installs missing `core/identity.md`, surfaces unprocessed-rant count, and nudges `/dream` when rants accumulate. Five operator-vocabulary phrases ("journal", "schedule", "goals", "customers", "I decided") route into the right skill without you knowing the OS-internal name. Named-entity detection filters common title-case nouns and requires the candidate to sit within 80 characters of the meeting verb, so prompts like "I just called Python from my bash script" do not falsely fire. v1.22's full feature set is intact: three-role setup wizard, `<private>` exclusion tag, weekly observation rollup, end-to-end critical path tests. 45 skills, 27 commands, 335 tests.
+v1.24 makes writing and reasoning skills fail visibly when their data is not set up. Three Python preflight scripts run before any voice-coupled output (`check-voice-ready.py` for LinkedIn, email, client update, proposal, content repurpose), before reasoning skills that need your real situation (`check-identity-ready.py` for weekly review, decision framework, meeting prep, strategic analysis), and before log-based reasoning (`check-log-has-history.py` for brain-pass and LinkedIn's brain context). When a gate fails, the skill stops and surfaces the one-line reason. You can say "proceed anyway" and get a draft that is labelled as running without your data. The label is the point. Run `/founder-os:verify` to see every skill mapped to its gate type. `docs/calibrating-your-os.md` covers the reliability ceiling and a five-step trace recipe if you want to test a specific skill yourself. 45 skills, 27 commands, 335 tests.
+
+v1.23 closes the central promise from v1.22. A new UserPromptSubmit hook now classifies every prompt against four shapes - rant, named-entity near a meeting verb, status update, preference utterance - and emits a capture suggestion Claude honors before responding. Rants are eagerly written to `brain/rants/<date>.md` so the text is safe on disk even if you walk away mid-thought. SessionStart prints a welcome banner on fresh installs missing `core/identity.md`, surfaces unprocessed-rant count, and nudges `/dream` when rants accumulate. Five operator-vocabulary phrases ("journal", "schedule", "goals", "customers", "I decided") route into the right skill without you knowing the OS-internal name. Named-entity detection filters common title-case nouns and requires the candidate to sit within 80 characters of the meeting verb, so prompts like "I just called Python from my bash script" do not falsely fire. v1.22's full feature set is intact: three-role setup wizard, `<private>` exclusion tag, weekly observation rollup, end-to-end critical path tests.
 
 v1.21 closes the gap on what FounderOS shows. A new execution queue (`cadence/queue.md`) surfaces
 what is moving in the first three lines of every session. The queue skill manages five operations -
@@ -417,9 +419,11 @@ Full release history in [`CHANGELOG.md`](CHANGELOG.md). Current limits in [`noti
 
 ---
 
-## Maintenance and forking
+## Release cadence and forking
 
-FounderOS v1.22 was the final feature release from ARCAS Systems. v1.23 ships review-driven patches only (privacy sweeps, hook fixes, false-positive closures from final-release audits). No new skills, commands, or features land on the upstream after v1.22. The repo is in maintenance mode: critical-breakage patches only, community forks encouraged. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the issue-triage policy and [`docs/forking.md`](docs/forking.md) for extension points.
+FounderOS ships in deliberate increments. Each release closes a specific gap that the previous one made visible. v1.21 added the visible queue and health check. v1.22 added the privacy tag and observation rollup. v1.23 added the natural-language capture path. v1.24 added Python preflight gates so writing and reasoning skills fail visibly when their data is not set up, rather than producing generic output silently. New releases land when there is a real gap worth closing — not on a calendar.
+
+Community forks are encouraged. If you build something on top of FounderOS, open a discussion thread linking your fork. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for what we accept and [`docs/forking.md`](docs/forking.md) for extension points.
 
 ## Contributing and security
 

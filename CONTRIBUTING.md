@@ -2,22 +2,22 @@
 
 Founder OS is a derived product. The source-of-truth lives in a private repo and ports out to this public one. Issues and PRs are welcome but the bar is high.
 
-## Maintenance posture (after v1.23.0)
+## Release posture
 
-FounderOS v1.23.0 is feature-complete. ARCAS Systems no longer ships new features to this repo.
+FounderOS ships in deliberate increments. Each release closes a gap the previous one made visible. New features land when there is a real gap worth closing — not on a calendar. The upstream private repo holds the source of truth and ports out manually.
 
 ### Issues we will respond to
 
-- **Critical install breakage** on macOS, Linux, or Windows
-- **Critical hook breakage** (SessionStart, PostToolUse, Stop)
+- **Install breakage** on macOS, Linux, or Windows
+- **Hook breakage** (SessionStart, PostToolUse, Stop)
 - **Security issues** (report per SECURITY.md, not as a public issue)
 - **Documentation that contradicts the code**
+- **Skill gaps** that affect general operators, not ARCAS-specific delivery
 
-### Issues we will close without action
+### Issues we will be slow on
 
-- **Feature requests.** See ROADMAP.md for what we deliberately did not build. If you need a new feature, fork.
-- **Skill suggestions.** Add the skill in your fork. If it is broadly useful, open a PR.
-- **Integration requests** for paid services, hosted databases, or proprietary platforms. Out of scope.
+- **Feature requests outside the ROADMAP scope.** See ROADMAP.md for the direction. If your idea fits, open an issue. If it does not, fork.
+- **Vendor-specific integrations** beyond the existing MCP set.
 - **Usage questions** that the README, docs/, or skill bodies already answer.
 
 ### Community forks are encouraged
