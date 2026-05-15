@@ -1,5 +1,7 @@
 # Founder OS
 
+![tests](https://github.com/ARCASSystems/FounderOS/actions/workflows/test.yml/badge.svg)
+
 The operating layer for the person running the business. Six files run your company. Claude reads them every session.
 
 Owned by you. Runs locally in Claude Code. Talk to it.
