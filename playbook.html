@@ -377,6 +377,52 @@ button#nav-toggle{
 }
 .nav-group:first-child{padding-top:4px;margin-top:0}
 #nav a{padding:7px 20px 7px 28px}
+</style><style>
+/* Prevent horizontal overflow at every viewport */
+html,body{overflow-x:hidden}
+#main{overflow-x:hidden}
+/* Grid items never shrink below 0 (prevents bleed) */
+.parts-grid>*,.fail-grid>*,.tool-body>*,.cta-steps>*{min-width:0}
+/* Slightly more breathing room inside part cards */
+.part-card{padding:28px 22px}
+/* Stats strip: tighter on medium */
+.stat-num{font-size:2.2rem}
+/* Spacing: section headings breathe more */
+h2{margin-bottom:24px}
+/* Day timeline: line always behind nodes */
+.timeline::before{z-index:0}
+.day-num{z-index:1;position:relative}
+/* Tool card body text size */
+.tool-list{line-height:1.6}
+/* Tuesday timestamps less heavy */
+.tuesday-card .ts{opacity:.85}
+/* Callout max-width */
+.callout,.callout-purple,.callout-magenta{max-width:var(--content-max)}
+/* Stats strip responsive */
+@media(max-width:900px){
+  .stats-strip{grid-template-columns:repeat(2,1fr)}
+  .stat-item:nth-child(2){border-right:none}
+}
+/* Medium viewport: sidebar + content area ~ 600-900px */
+@media(max-width:1100px) and (min-width:769px){
+  .parts-grid{grid-template-columns:1fr 1fr}
+  .fail-grid{grid-template-columns:1fr 1fr}
+  .tool-body{grid-template-columns:1fr}
+  .tool-col:first-child{border-right:none;border-bottom:1px solid var(--gray-mid)}
+  .cta-steps{gap:14px}
+  .cta-step{width:165px}
+}
+</style>
+<style>
+.six-files{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:28px 0}
+.file-tile{
+  border:1px solid var(--gray-mid);border-radius:6px;padding:14px 10px;
+  text-align:center;border-top:3px solid var(--purple);
+}
+.file-tile svg{width:20px;height:20px;display:block;margin:0 auto 8px;stroke:var(--purple)}
+.file-tile p{font-size:11px;color:var(--gray-text);margin:0;line-height:1.4}
+@media(max-width:900px){.six-files{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:540px){.six-files{grid-template-columns:repeat(2,1fr)}}
 </style></head>
 <body>
 
@@ -468,6 +514,37 @@ button#nav-toggle{
   <p>Every decision goes through you. Every client question. Every invoice. Every hire. Every piece of work that leaves the door.</p>
   <p>You built it this way - not on purpose, but because you were the best person for every job when the business was small. And now the business grew around you. And now you can't leave.</p>
   <p>Not for a week. Barely for a day.</p>
+
+  <svg viewBox="0 0 580 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:580px;margin:32px 0 28px;display:block">
+    <defs>
+      <marker id="bn-arr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+        <path d="M0,0 L0,7 L7,3.5 z" fill="#041E37" opacity=".5"/>
+      </marker>
+      <marker id="bn-out" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+        <path d="M0,0 L0,7 L7,3.5 z" fill="#8234EA"/>
+      </marker>
+    </defs>
+    <!-- Input labels -->
+    <text x="8" y="38"  font-family="-apple-system,sans-serif" font-size="11" fill="#6B7280">Client questions</text>
+    <text x="8" y="73"  font-family="-apple-system,sans-serif" font-size="11" fill="#6B7280">Hiring decisions</text>
+    <text x="8" y="108" font-family="-apple-system,sans-serif" font-size="11" fill="#6B7280">Deal approvals</text>
+    <text x="8" y="143" font-family="-apple-system,sans-serif" font-size="11" fill="#6B7280">Quality checks</text>
+    <text x="8" y="178" font-family="-apple-system,sans-serif" font-size="11" fill="#6B7280">Invoice sign-offs</text>
+    <!-- Converging lines to "You" node -->
+    <line x1="112" y1="34"  x2="242" y2="98" stroke="#041E37" stroke-width="1" opacity=".3" marker-end="url(#bn-arr)"/>
+    <line x1="112" y1="69"  x2="245" y2="98" stroke="#041E37" stroke-width="1" opacity=".3" marker-end="url(#bn-arr)"/>
+    <line x1="112" y1="104" x2="247" y2="100" stroke="#041E37" stroke-width="1" opacity=".3" marker-end="url(#bn-arr)"/>
+    <line x1="112" y1="139" x2="245" y2="103" stroke="#041E37" stroke-width="1" opacity=".3" marker-end="url(#bn-arr)"/>
+    <line x1="112" y1="174" x2="242" y2="105" stroke="#041E37" stroke-width="1" opacity=".3" marker-end="url(#bn-arr)"/>
+    <!-- You circle -->
+    <circle cx="274" cy="100" r="28" fill="rgba(247,8,114,.08)" stroke="#F70872" stroke-width="2"/>
+    <text x="274" y="97"  text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#F70872">You</text>
+    <text x="274" y="111" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9"  fill="rgba(247,8,114,.7)">bottleneck</text>
+    <!-- Output arrow — thin, constrained -->
+    <line x1="303" y1="100" x2="400" y2="100" stroke="#8234EA" stroke-width="2" marker-end="url(#bn-out)"/>
+    <text x="412" y="96"  font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#8234EA">Nothing</text>
+    <text x="412" y="111" font-family="-apple-system,sans-serif" font-size="11" fill="#6B7280">moves without you.</text>
+  </svg>
   <div class="callout-purple">
     <strong>This isn't a productivity problem. It's a context problem.</strong> The business runs because you hold everything in your head. Your standards. Your relationships. Your instincts about what to pursue. Nobody else has that. And because nobody else has it, nothing runs without you.
   </div>
@@ -483,6 +560,15 @@ button#nav-toggle{
   <div class="callout">
     <strong>Six files. That's the whole brain.</strong>
     <p style="margin-top:12px">Who you are &nbsp;·&nbsp; What you're focused on right now &nbsp;·&nbsp; Open decisions &nbsp;·&nbsp; Your active clients &nbsp;·&nbsp; What's on for today &nbsp;·&nbsp; What this week needs</p>
+  </div>
+
+  <div class="six-files">
+    <div class="file-tile"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg><p>identity.md</p></div>
+    <div class="file-tile"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg><p>priorities.md</p></div>
+    <div class="file-tile"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg><p>decisions.md</p></div>
+    <div class="file-tile"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg><p>clients.md</p></div>
+    <div class="file-tile"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg><p>daily&#8209;anchors.md</p></div>
+    <div class="file-tile"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg><p>weekly&#8209;commit.md</p></div>
   </div>
   <p>From those six files, 45 skills come alive. Skills that prep you for meetings, draft emails in your voice, log what happened, flag what you're avoiding, help you decide when you're stuck. You don't command them. You talk. They fire.</p>
   <p>And once a week, the whole thing resets. You run the retro. You roll what's done. You park what's not. And you start Monday knowing exactly what matters.</p>
