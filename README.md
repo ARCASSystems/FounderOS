@@ -206,7 +206,7 @@ The setup wizard writes from `templates/`. After setup, you edit the generated f
 ### Notion package
 
 Scaffold artifacts for users who do not run Claude Code. This path is not live until the public duplicate template ships:
-- Notion duplication template (not shipped in v1.22; community forks welcome)
+- Notion duplication template (not yet shipped; community forks welcome)
 - System prompt for a Claude Project
 - Quickstart page
 
@@ -325,7 +325,7 @@ If you need crons, webhooks, offline triggers, or anything that fires while you 
 
 ## Cloud Claude (web, desktop, mobile)
 
-The Notion Starter Kit was scoped but not shipped in v1.22; community forks welcome. The system prompt at [`notion-package/system-prompts/founder-os-project-prompt.md`](notion-package/system-prompts/founder-os-project-prompt.md) is available for preview and testing only. Use the Claude Code path for the full setup experience.
+The Notion Starter Kit was scoped but is not yet shipped; community forks welcome. The system prompt at [`notion-package/system-prompts/founder-os-project-prompt.md`](notion-package/system-prompts/founder-os-project-prompt.md) is available for preview and testing only. Use the Claude Code path for the full setup experience.
 
 Slash commands and local file writes only run in Claude Code. Cloud Claude can read this repo's files as context but cannot run `/founder-os:setup` from a checkout.
 
@@ -360,7 +360,7 @@ revenue, or commitments.
 
 Version 1.24.0. Public release.
 
-v1.24 makes writing and reasoning skills fail visibly when their data is not set up. Three Python preflight scripts run before any voice-coupled output (`check-voice-ready.py` for LinkedIn, email, client update, proposal, content repurpose), before reasoning skills that need your real situation (`check-identity-ready.py` for weekly review, decision framework, meeting prep, strategic analysis), and before log-based reasoning (`check-log-has-history.py` for brain-pass and LinkedIn's brain context). When a gate fails, the skill stops and surfaces the one-line reason. You can say "proceed anyway" and get a draft that is labelled as running without your data. The label is the point. Run `/founder-os:verify` to see every skill mapped to its gate type. `docs/calibrating-your-os.md` covers the reliability ceiling and a five-step trace recipe if you want to test a specific skill yourself. 45 skills, 27 commands, 335 tests.
+v1.24 makes writing and reasoning skills fail visibly when their data is not set up. Three Python preflight scripts run before any voice-coupled output (`check-voice-ready.py` for LinkedIn, email, client update, proposal, content repurpose), before reasoning skills that need your real situation (`check-identity-ready.py` for weekly review, decision framework, meeting prep, strategic analysis), and before log-based reasoning (`check-log-has-history.py` for brain-pass and LinkedIn's brain context). When a gate fails, the skill stops and surfaces the one-line reason. You can say "proceed anyway" and get a draft that is labelled as running without your data. The label is the point. Run `/founder-os:verify` to see every skill mapped to its gate type. `docs/calibrating-your-os.md` covers the reliability ceiling and a five-step trace recipe if you want to test a specific skill yourself. 45 skills, 27 commands, 337 tests.
 
 v1.23 closes the central promise from v1.22. A new UserPromptSubmit hook now classifies every prompt against four shapes - rant, named-entity near a meeting verb, status update, preference utterance - and emits a capture suggestion Claude honors before responding. Rants are eagerly written to `brain/rants/<date>.md` so the text is safe on disk even if you walk away mid-thought. SessionStart prints a welcome banner on fresh installs missing `core/identity.md`, surfaces unprocessed-rant count, and nudges `/dream` when rants accumulate. Five operator-vocabulary phrases ("journal", "schedule", "goals", "customers", "I decided") route into the right skill without you knowing the OS-internal name. Named-entity detection filters common title-case nouns and requires the candidate to sit within 80 characters of the meeting verb, so prompts like "I just called Python from my bash script" do not falsely fire. v1.22's full feature set is intact: three-role setup wizard, `<private>` exclusion tag, weekly observation rollup, end-to-end critical path tests.
 

@@ -14,7 +14,7 @@ import argparse
 from pathlib import Path
 
 
-TEMPLATE_MARKERS = ("[FILL]", "[NOT SET]")
+BLOCKING_MARKERS = ("[FILL]",)
 
 
 def check(root: Path) -> tuple[int, str]:
@@ -31,9 +31,9 @@ def check(root: Path) -> tuple[int, str]:
 
     if "{{" in text:
         return 1, "core/identity.md still has {{template}} markers. Run /founder-os:setup first."
-    for marker in TEMPLATE_MARKERS:
+    for marker in BLOCKING_MARKERS:
         if marker in text:
-            return 1, f"core/identity.md still has template defaults ({marker}). Run /founder-os:setup first."
+            return 1, f"core/identity.md still has unfilled fields ({marker}). Run /founder-os:setup first."
 
     return 0, "core/identity.md is ready."
 

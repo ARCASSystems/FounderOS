@@ -44,6 +44,35 @@ class CheckIdentityReadyTests(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("setup", result.stdout.lower())
 
+    def test_not_set_marker_exits_0(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+            write_identity(
+                tmp_root,
+                "# core/identity.md\n\n## Basics\n\n"
+                "**Name:** Jane Doe\n"
+                "**Role:** Founder\n"
+                "**Location:** London\n\n"
+                "## Positioning\n\n"
+                "- one-line: [NOT SET]\n",
+            )
+            result = run(tmp_root)
+            self.assertEqual(result.returncode, 0, msg=result.stdout)
+            self.assertIn("ready", result.stdout.lower())
+
+    def test_fill_marker_exits_1(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+            write_identity(
+                tmp_root,
+                "# core/identity.md\n\n## Basics\n\n"
+                "**Name:** [FILL]\n"
+                "**Role:** Founder\n",
+            )
+            result = run(tmp_root)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("setup", result.stdout.lower())
+
     def test_real_content_exits_0(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             tmp_root = Path(tmp)
