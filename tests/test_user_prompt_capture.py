@@ -361,8 +361,8 @@ class ThreeSignalArchitectureTests(unittest.TestCase):
         self.assertEqual(UPC.detect_shape(prompt), "named-entity")
 
     def test_got_reply_from_fires(self) -> None:
-        """A: got a reply from; B: Bilal; C: I — all three fire."""
-        prompt = "I got a reply from Bilal this morning."
+        """A: got a reply from; B: Lina; C: I — all three fire."""
+        prompt = "I got a reply from Lina this morning."
         self.assertEqual(UPC.detect_shape(prompt), "named-entity")
 
 
@@ -496,6 +496,10 @@ class CaptureScriptE2ETests(unittest.TestCase):
 # ---------------------------------------------------------------------------
 
 
+@unittest.skipIf(
+    BASH_IS_WSL,
+    "WSL bash cannot read Windows-mounted paths; bash -n still requires file access",
+)
 class WrapperParseTests(unittest.TestCase):
     def test_bash_wrapper_exists_and_parses(self) -> None:
         self.assertTrue(HOOK_BASH.exists(), f"missing wrapper: {HOOK_BASH}")

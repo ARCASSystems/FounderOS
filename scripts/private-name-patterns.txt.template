@@ -3,8 +3,8 @@
 # This file is gitignored once filled in; only the .template is tracked.
 #
 # Add patterns for names that must not appear in commits. Examples:
-#   \bAqsa\b
-#   \bPriya\b
-#   \bBilal\b
+#   \bFirstname\b
+#   \bLastname\b
 #
+# Replace Firstname/Lastname with the actual names you want to protect.
 # Add more lines below as needed.

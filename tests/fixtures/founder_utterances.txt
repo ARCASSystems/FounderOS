@@ -1,13 +1,13 @@
 I had a call with Ahmed about the new logistics contract. # shape: named-entity
 I spoke to Sarah about the Sharjah office expansion. # shape: named-entity
-I got a reply from Bilal this morning about the proposal. # shape: named-entity
+I got a reply from Lina this morning about the proposal. # shape: named-entity
 I met with Omar yesterday to go over the Q2 numbers. # shape: named-entity
 I heard back from Maya about the partnership terms. # shape: named-entity
 I got introduced to James by a mutual contact last week and we had a good conversation. # shape: named-entity
 I had a coffee with Ravi to discuss the product roadmap. # shape: named-entity
 I caught up with Anna about the onboarding timeline. # shape: named-entity
 I had a meeting with Hassan about visa processing delays. # shape: named-entity
-I jumped on a call with Priya about the data migration. # shape: named-entity
+I jumped on a call with Maya about the data migration. # shape: named-entity
 I replied to Daniel about the contract extension. # shape: named-entity
 I connected with Layla about the Riyadh expansion. # shape: named-entity
 I had a drink with Khalid and we talked about the raise. # shape: named-entity
