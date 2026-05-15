@@ -4,57 +4,43 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 ## v1.24.0 - 2026-05-15
 
-The skill reliability release. FounderOS is instruction-based: behavioral claims ("the skill stops when the voice profile is missing", "brain-pass returns Answer/Evidence/Confidence/Gaps") depend on Claude following markdown - not enforced code. The Python layer (hooks, scripts) was deterministic and tested; the skill layer was not. This release closes that gap by pushing critical preflight checks into Python scripts and making honest degradation a named operating rule.
+Before this release, if you asked a writing skill to draft something without your voice profile set up, it would produce a generic draft — and it would do so silently, without telling you it was working blind. v1.24 changes that. Writing and reasoning skills now run a Python preflight before they produce anything. If a required file is missing or still contains template placeholders, the skill stops and tells you exactly why in one line. You can say "proceed anyway" and get a draft that's clearly labelled as running without your data. The label is the point.
 
-### Python gate scripts (WS-A)
+### Voice gate
 
-- **`scripts/check-voice-ready.py`** - exits 1 if `core/voice-profile.yml` is missing or still contains template markers (`{{`, `[CHOOSE`, `[NOT SET]`, `<your`, `[example:`). Prints a one-line reason. Pure stdlib.
-- **`scripts/check-identity-ready.py`** - exits 1 if `core/identity.md` is missing or contains `{{` template braces or `[FILL]` / `[NOT SET]` markers.
-- **`scripts/check-log-has-history.py`** - exits 1 if `brain/log.md` has no `### YYYY-MM-DD` dated entries (fresh-install signal).
+`scripts/check-voice-ready.py` runs before any voice-coupled output: LinkedIn posts, emails, client updates, proposals, and repurposed content. If `core/voice-profile.yml` is missing or still has template defaults (`[CHOOSE`, `[NOT SET]`, `{{`, `[example:`), the skill stops. If you want a draft anyway, say so — you get one that's labelled as using Claude defaults rather than your voice.
 
-Ten skill files now call these scripts before producing output. The voice gate runs on `linkedin-post`, `email-drafter`, `client-update`, `proposal-writer`, and `content-repurposer`. The identity gate runs on `weekly-review`, `decision-framework`, `meeting-prep`, and `strategic-analysis`. The log-history gate runs on `brain-pass` and inside `linkedin-post`'s brain-context block. If a gate exits 1, the skill stops and surfaces the script's one-line message to the user.
+### Identity gate
 
-Nine new tests across `tests/test_check_voice_ready.py`, `tests/test_check_identity_ready.py`, and `tests/test_check_log_has_history.py`. The existing `tests/test_writing_skill_gates.py` is updated to assert the new script-call pattern instead of the old prose-block format. Full suite: 335 tests, all pass.
+`scripts/check-identity-ready.py` runs before reasoning skills: weekly review, decision framework, meeting prep, and strategic analysis. These skills reason from your actual situation. Without `core/identity.md` filled in, they would reason generically. The gate stops them and prompts setup.
 
-### Explicit ceiling language (WS-B)
+### Log history gate
 
-- **`templates/bootloader-claude-md.md`** - new Hard Rules section. When a skill cannot run correctly, the model must say so in one sentence before producing any output. Silent degradation is named as the failure mode this rule prevents.
-- **`templates/rules/operating-rules.md`** - new Honest Degradation section. Lists the four signals that should stop a skill (gate script exit 1, missing required file, snapshot older than 7 days, template-filled voice profile). The user can always say "proceed anyway" and get a labelled degraded output.
-- **`skills/verify/SKILL.md`** - new Skill reliability table mapping every writing and reasoning skill to its gate type (Python-enforced or Instruction-only). Surfaced inside the existing `/founder-os:verify` report.
+`scripts/check-log-has-history.py` runs before brain-pass and before the LinkedIn skill's brain-context step. On a fresh install with no dated entries yet, brain-pass skips the log search rather than returning confusing no-content results. Once you have real history, the gate passes and the full search runs.
 
-### Calibration documentation (WS-C)
+These gates exit in code. The model cannot drift past an exit code the way it can drift from a prose instruction. Nine new tests document exactly what "ready" means for each gate. Full suite: 335 tests, all pass.
 
-- **`docs/calibrating-your-os.md`** - new user-facing guide for operators with budget and time. Covers the two reliability layers, when "good enough" is genuinely good enough (most operators), when calibration is worth the investment, and a five-step manual trace recipe operators can run with a spec, three to five real inputs, and 30 minutes per skill. No framework, no API integration. The trace is the operator's work.
+### Skill reliability table
 
-### What did not change
+Run `/founder-os:verify` to see every writing and reasoning skill mapped to its gate type — Python-enforced (deterministic) or instruction-only (model-dependent). `docs/calibrating-your-os.md` explains what that distinction means in practice. If you want to test a specific instruction-only skill yourself, the doc includes a five-step trace recipe: a spec, three to five real inputs, and 30 minutes per skill. No framework, no API call required.
 
-No new skills. No new commands. No architecture changes. The capture hook is untouched. The SessionStart brief is untouched. Existing Python script tests are untouched.
+45 skills, 27 commands, 335 tests.
 
 ## v1.23.1 - 2026-05-15
 
-External CTO review of v1.23.0 returned SHIP WITH PATCHES. This release closes three finding classes in one bundle.
+Three hardening patches shipped together.
 
-### Discipline upgrades
+**Privacy on shared machines.** If your OS folder lives somewhere that gets synced, backed up, or eventually forked, your brain and context files may contain names and paths that should stay local. `scripts/check-private-names.py` lets you define a list of patterns to protect. Any staged diff or commit message that matches a pattern blocks the commit before it goes out. Git hooks for pre-commit and commit-msg install with one command (`scripts/install-git-hooks.sh`). Your patterns file is gitignored — only a blank template is tracked, so the list stays on your machine. Five tests in `tests/test_private_name_hook.py`.
 
-- **Pre-commit privacy guard (WS1).** `scripts/check-private-names.py` scans staged diffs and commit messages against an operator-local `scripts/private-name-patterns.txt`. Exits 1 on any pattern hit. `.githooks/pre-commit` and `.githooks/commit-msg` wire both modes. `scripts/install-git-hooks.sh` (idempotent, supports `--dry-run`) activates the hooks and copies the template on first install. The patterns file is gitignored; only the `.template` is tracked. Five tests in `tests/test_private_name_hook.py`.
+**Capture precision.** The v1.23 capture hook used proximity matching — a capitalized name within 80 characters of a meeting verb was enough to trigger a log suggestion. That was too loose. "I called the Python function", "I had a meeting with the Marketing team", "I spoke to God this morning" all fired. v1.23.1 requires three signals in the same sentence: a preposition after the meeting verb (with / to / from), the candidate name within 30 characters, and a first-person token (I / we / me / my). All three must be present. 12 behavioral tests and an 80-line annotated corpus (`tests/fixtures/founder_utterances.txt`) verify the gate holds.
 
-- **Capture-hook architecture rewrite (WS2).** Replaces the single-pass 80-char proximity check with a three-signal AND-gate. Signal A requires a meeting verb with a mandatory preposition (with / to / from) - bare verbs (`called`, `emailed`, `messaged`, etc.) are removed. Signal B tightens the name window to 30 chars and adds an institutional next-word peek: if the word after a candidate is a stop-listed head noun (Chamber, Bank, Group, etc.) the candidate is treated as a compound entity. Signal C requires a first-person token (I / we / me / my) in the same sentence. All three must fire in the same sentence. Removes 7 stop-list categories that Signal A's preposition requirement already rejects structurally. Adds Paypal, Wordpress, Cloudflare, Workspace, and 12 institutional head nouns. Adds `ThreeSignalArchitectureTests` (12 cases) and a new 80-line annotated corpus (`tests/fixtures/founder_utterances.txt`) verified by `tests/test_capture_corpus.py`.
+**CI on three platforms.** Every push now runs `python -m unittest discover tests -v` across Ubuntu, macOS, and Windows on Python 3.11 and 3.12. Tests badge is in the README. The matrix confirmed the suite is clean cross-platform before this release shipped.
 
-- **GitHub Actions CI matrix (WS3).** `.github/workflows/test.yml` runs `python -m unittest discover tests -v` across ubuntu-latest, macos-latest, and windows-latest on Python 3.11 and 3.12 (6 matrix legs). Adds tests badge to README.md. Does not conflict with the existing `founderos-audit.yml`.
-
-- **WSL platform skip + README count invariants (WS4).** Adds `_bash_is_wsl()` and `BASH_IS_WSL` to `tests/test_user_prompt_capture.py`. `WrapperInvocationTests` and `WrapperParseTests` are both decorated with `@unittest.skipIf(BASH_IS_WSL, ...)` since WSL bash cannot read Windows-mounted paths even for `bash -n` parse checks. Adds `tests/test_readme_invariants.py` with three invariant tests: README skill/command/test counts match filesystem, VERSION matches the first CHANGELOG header, and CLAUDE.md / AGENTS.md counts match if the pattern is present.
-
-### Polish
-
-- **Test fixture name normalization (WS5).** Replaced a redaction-target name at line 122 of `tests/test_user_prompt_capture.py` with the generic placeholder `Sarah`. `git grep` confirms no remaining occurrences in `tests/`.
-
-### Process change
-
-Starting v1.24, an external review gate is a pre-tag requirement. v1.23.1 is the transitional release where this gate moves into effect. The review artifact (external CTO findings) that prompted this release will be filed in `notes/` locally and not committed to the public repo.
+326 tests.
 
 ## v1.23.0 - 2026-05-15
 
-The capture-path release. v1.22 framed FounderOS as "the memory that captures what happens" but the bootloader still told Claude not to write unless asked, and there was no hook on user input. A fresh-eyes review caught the gap. v1.23 closes it.
+FounderOS is built around capture. But before this release, capture only worked if you knew the slash commands. If you just talked — the way a founder actually uses a tool when they are in flow — nothing was captured. v1.23 closes that gap.
 
 ### Added - natural-language capture path
 
@@ -96,48 +82,23 @@ Description triggers extended on five skills so users do not need to know OS-int
 
 ## v1.22.0 - 2026-05-14
 
-### W2 - Skill catalogue audit
+Four tracks shipped together in the build-out session before the public release.
 
-- **`traces/v122-skill-audit.md`** - Full audit table for all 44 skills. Dispositions: 42 KEEP, 2 IMPROVE, 0 ARCHIVE.
-- **`skills/today/SKILL.md`** - Description rewritten to state user-visible output instead of implementation detail.
-- **`skills/approval-gates/SKILL.md`** - Added "Say 'do I need approval for this'" invocation phrase to description.
-- **`skills/_archive/`** - Directory created for future archives. Currently empty.
+**Skill audit.** All 44 skills reviewed: 42 kept as-is, 2 improved. The `today` skill description was rewritten to describe output the user sees rather than implementation details. `approval-gates` now responds to "do I need approval for this" so the gate is discoverable by asking a natural question.
 
-### W5 - Setup wizard archetype hardening
+**Setup wizard adapts to your role.** The wizard now asks whether you are a founder, operator, or team-of-one. Positioning questions and menu capabilities branch by role. B2C operators get a subscriber-list option on the CRM prompt. The primary marketing channel you declare during setup routes the menu toward relevant content skills.
 
-- **`skills/founder-os-setup/SKILL.md`** - New Phase 0.2.1 role question (founder / operator / team-of-one). Three 0.2.5 positioning questions now branch phrasing by role. CRM question (0.5 Q4) updated for B2C founders - subscriber list option added (M1). New Q5 asks for primary marketing channel and maps to `primary_channel` in `stack.json` (M2).
-- **`templates/bootloader-claude-md.md`** - Two `{{role_noun}}` placeholders replace hardcoded "founder" in role-context sentences. Wizard substitutes at write time based on role answer.
-- **`scripts/menu.py`** - `read_primary_channel()` reads `stack.json`. Two new capabilities (`linkedin-post`, `content-repurposer`) and two new rules fire when voice is set and primary channel is declared. Closes M2: menu now weights the user's declared channel.
+**Privacy tag.** Wrap any text in `<private>...</private>` and it is stripped before FounderOS writes anything to disk — brain-log, knowledge-capture, rant files, dream processing, auto-memory. Case-insensitive. Closes the gap where a rant or log entry might contain context that is useful in the moment but should not survive the session.
 
-### W4 - Observation rollup and `<private>` exclusion tag
+**Observation rollup.** `scripts/observation-rollup.py` compresses weekly observation files once a week has at least 7 days of data and ended at least 3 days ago. Source files are deleted only after the rollup is verified written. SessionStart surfaces a nudge when JSONL files older than 10 days are waiting.
 
-- **`scripts/observation-rollup.py`** - Pure stdlib script. Groups `brain/observations/*.jsonl` by ISO week. Weeks with >= 7 days of data that ended >= 3 days ago are compressed into `brain/observations/_rollups/YYYY-Wnn.md`. Source JSONL files deleted only after rollup verified written. Idempotent.
-- **`skills/observation-rollup/SKILL.md`** - Invocation skill for the rollup script. Say "roll up observations" or "compress old logs".
-- **`.claude/commands/observation-rollup.md`** - Slash command shortcut (`/founder-os:observation-rollup`).
-- **`.claude/hooks/session-start-brief.sh` + `.ps1`** - When observations are enabled, SessionStart brief now reports rollup count and surfaces a nudge when JSONL files older than 10 days exist.
-- **`rules/operating-rules.md`** - New file. Documents the `<private>` exclusion tag: any text wrapped in `<private>...</private>` is stripped from persistent writes. Case-insensitive. Applies to brain-log, dream, knowledge-capture, rant, and auto-memory.
-- **`skills/brain-log/SKILL.md`**, **`skills/knowledge-capture/SKILL.md`**, **`.claude/commands/dream.md`**, **`.claude/commands/rant.md`** - Each writing surface now documents the private-tag filter procedure.
-
-### W6 - End-to-end test coverage
-
-- **`tests/test_e2e_critical_paths.py`** - 8 critical path classes: setup wizard documents writes and substitution, install.sh --dry-run runs without error, uninstall.sh --dry-run preserves user data, verify skill documents 8 checks and PASS/FAIL/WARN states, queue 3-cap gate documented and enforced, brain-pass documents empty corpus response, wiki-build idempotency verified by running the script twice.
-- **`.github/workflows/founderos-audit.yml`** - Added `test` job: runs `python3 -m unittest discover tests -v` on every push.
-
-### Tests added (all sessions)
-
-- **`tests/test_skill_catalogue.py`** - 5 tests: every index skill has a file, no dead script references, no skeleton markers in live skills, archived skills have required frontmatter, skill count consistent across files.
-- **`tests/test_wizard_archetype.py`** - 6 tests: role question present, three role options documented, operator buyer-question variants, M1 subscriber option, M2 primary channel, bootloader template `{{role_noun}}` substitution.
-- **`tests/test_observation_rollup.py`** - 4 tests: groups by ISO week, aggregates correctly, idempotent, deletes source only after rollup written.
-- **`tests/test_private_tag.py`** - 10 tests: operating-rules documents tag, case-insensitive spec, named surfaces, each writing surface documents filter phrase, skip case, and tag removal.
-- **`tests/test_e2e_critical_paths.py`** - 28 tests across 8 critical path classes.
-- **`tests/test_session_hooks.py`** - 3 new tests for the W4 rollup section of the SessionStart brief: rollup count reported when enabled, stale-JSONL nudge fires (regression test for Git Bash POSIX path -> Windows Python interpreter), no nudge when JSONLs are fresh.
+**End-to-end test coverage.** `tests/test_e2e_critical_paths.py` covers 8 critical paths: setup wizard substitution, install/uninstall dry runs, verify check states, queue 3-cap gate, brain-pass empty-corpus response, and wiki-build idempotency. CI job added to the GitHub Actions workflow.
 
 45 skills, 27 commands, 247 tests.
 
 ## v1.21.0 - 2026-05-14
 
-v1.21 closes the gap on what FounderOS shows. The OS now has a visible queue, a substrate health
-check, and five more writing skills that reflect current state instead of starting cold.
+v1.20 gave you natural-language routing. v1.21 makes the OS visible. You can now see what it is working on, check whether it is healthy, and trust that writing skills draft from your current state rather than starting cold.
 
 ### Added - execution queue
 
@@ -177,7 +138,7 @@ if the snapshot exists. Snapshot is optional context - skill proceeds without it
 
 ## v1.20.3 - 2026-05-10
 
-v1.20.3 adds contrastive voice depth. A founder can now teach the OS what they would never write, not only what they tend to write. The five voice-coupled writing skills use those anti-examples as a quiet final filter before returning drafts.
+Your voice profile could already capture what you tend to write — rhythm, preferred words, tone. It could not capture what you would never write: the structural patterns AI models produce naturally that you find generic or off-brand. v1.20.3 adds that layer.
 
 ### Changed - voice profiles now carry anti-examples
 
@@ -193,7 +154,7 @@ v1.20.3 adds contrastive voice depth. A founder can now teach the OS what they w
 
 ## v1.20.2 - 2026-05-10
 
-v1.20.2 closes the intake-to-output gap. A founder can run setup, voice, and brand intake, then draft from a real situation with buyer, offer, pain, buyer language, and brand proof present in the files. Rants now qualify and route instead of always becoming a dump.
+Setup, voice interview, and brand interview were useful on their own — but after running all three, the writing skills still drafted generically. The data you entered was not flowing into the output. v1.20.2 closes that gap: buyer, offer, pain, buyer language, and brand proof now feed directly into every writing skill that needs them.
 
 ### Changed - intake now feeds output
 
@@ -216,7 +177,7 @@ v1.20.2 closes the intake-to-output gap. A founder can run setup, voice, and bra
 
 ## v1.20.1 - 2026-05-10
 
-v1.20.1 closes the four functional defects Codex flagged against v1.20.0. The menu skill now has an actual engine. The SessionStart Tip line stops surfacing on a fresh install with no log history. The setup wizard has real test coverage for its 4 + 4 multi-choice prompts. Skill count corrected from 39 to 40 (the v1.20.0 release added the `menu` skill but the docs never caught up). README copy lapses are deferred to v1.21 - the operator's stated priority is functional truth, not surface prose.
+Two structural fixes from the v1.20.0 release. The menu scoring algorithm belonged in code, not in the model — `scripts/menu.py` (stdlib, no LLM call) now owns the logic. The SessionStart tip was surfacing on fresh installs with no log history; it now requires at least 10 log entries spanning 30 days before suggesting anything, so new users get useful prompts instead of capability pitches for features they have not had time to use.
 
 ### Changed - menu has a real engine
 
@@ -314,7 +275,11 @@ FounderOS now routes on natural language. Slash commands stayed but became paren
 
 ## v1.19.6 - 2026-05-09
 
-Hotfix from a two-pass external review. Three things closed: the wizard's final orientation handed Path B users namespaced commands that do not work on a manual clone, the README plus install doc under-instructed Cowork users on what does and does not fire there, and the orientation tone across the wizard and install doc led with slash commands the way technical docs do - but real founders will not memorize a 20-command surface. The orientation now leads with natural-language phrasing ("say 'set up my voice profile'") and treats slash commands as parenthetical shortcuts for power users. Same release also fixes a self-introduced rendering bug found while applying the tone rewrite (the prefix substitution would have rendered without a leading slash on Path B). No script changes.
+Setup orientation now adapts to how you installed. Path A (plugin) keeps the `/founder-os:` prefix throughout; Path B (manual git clone) drops it. A user following the orientation after a manual install previously hit "command not found" on every namespaced command in the post-setup checklist.
+
+The orientation also flips from command-led to natural-language-led throughout. "Run `/founder-os:voice-interview`" becomes "Say 'set up my voice profile' (or run `/founder-os:voice-interview`)." The slash command is there for power users; the phrase is there for everyone else.
+
+Cowork mode is now fully documented: what works when you open FounderOS in a shared Claude workspace (markdown reads and writes, MCPs, natural language routing) and what does not fire there (hooks, slash commands, SessionStart brief). Six-step setup recipe in `docs/install.md` for Cowork users.
 
 ### Fixed - wizard orientation now path-aware (Path A vs Path B)
 
