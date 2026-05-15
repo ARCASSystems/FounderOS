@@ -2,6 +2,28 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.23.1 - 2026-05-15
+
+External CTO review of v1.23.0 returned SHIP WITH PATCHES. This release closes three finding classes in one bundle.
+
+### Discipline upgrades
+
+- **Pre-commit privacy guard (WS1).** `scripts/check-private-names.py` scans staged diffs and commit messages against an operator-local `scripts/private-name-patterns.txt`. Exits 1 on any pattern hit. `.githooks/pre-commit` and `.githooks/commit-msg` wire both modes. `scripts/install-git-hooks.sh` (idempotent, supports `--dry-run`) activates the hooks and copies the template on first install. The patterns file is gitignored; only the `.template` is tracked. Five tests in `tests/test_private_name_hook.py`.
+
+- **Capture-hook architecture rewrite (WS2).** Replaces the single-pass 80-char proximity check with a three-signal AND-gate. Signal A requires a meeting verb with a mandatory preposition (with / to / from) - bare verbs (`called`, `emailed`, `messaged`, etc.) are removed. Signal B tightens the name window to 30 chars and adds an institutional next-word peek: if the word after a candidate is a stop-listed head noun (Chamber, Bank, Group, etc.) the candidate is treated as a compound entity. Signal C requires a first-person token (I / we / me / my) in the same sentence. All three must fire in the same sentence. Removes 7 stop-list categories that Signal A's preposition requirement already rejects structurally. Adds Paypal, Wordpress, Cloudflare, Workspace, and 12 institutional head nouns. Adds `ThreeSignalArchitectureTests` (12 cases) and a new 80-line annotated corpus (`tests/fixtures/founder_utterances.txt`) verified by `tests/test_capture_corpus.py`.
+
+- **GitHub Actions CI matrix (WS3).** `.github/workflows/test.yml` runs `python -m unittest discover tests -v` across ubuntu-latest, macos-latest, and windows-latest on Python 3.11 and 3.12 (6 matrix legs). Adds tests badge to README.md. Does not conflict with the existing `founderos-audit.yml`.
+
+- **WSL platform skip + README count invariants (WS4).** Adds `_bash_is_wsl()` and `BASH_IS_WSL` to `tests/test_user_prompt_capture.py`. `WrapperInvocationTests` is decorated with `@unittest.skipIf(BASH_IS_WSL, ...)` since WSL bash cannot reliably reach Windows-mounted paths. `WrapperParseTests` (`bash -n` only) is not affected. Adds `tests/test_readme_invariants.py` with three invariant tests: README skill/command/test counts match filesystem, VERSION matches the first CHANGELOG header, and CLAUDE.md / AGENTS.md counts match if the pattern is present.
+
+### Polish
+
+- **Test fixture name normalization (WS5).** Replaced a redaction-target name at line 122 of `tests/test_user_prompt_capture.py` with the generic placeholder `Sarah`. `git grep` confirms no remaining occurrences in `tests/`.
+
+### Process change
+
+Starting v1.24, an external review gate is a pre-tag requirement. v1.23.1 is the transitional release where this gate moves into effect. The review artifact (external CTO findings) that prompted this release will be filed in `notes/` locally and not committed to the public repo.
+
 ## v1.23.0 - 2026-05-15
 
 The capture-path release. v1.22 framed FounderOS as "the memory that captures what happens" but the bootloader still told Claude not to write unless asked, and there was no hook on user input. A fresh-eyes review caught the gap. v1.23 closes it.
