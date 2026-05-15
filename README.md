@@ -6,6 +6,8 @@ The operating layer for the person running the business. Six files run your comp
 
 Owned by you. Runs locally in Claude Code. Talk to it.
 
+**New here? Read the playbook first - [playbook.html](playbook.html).** It explains the problem, the three parts, how to start, and what not to do. 15 minutes. Opens in any browser.
+
 **Setup ladder (40 min total, do in this order):**
 
 1. **Install** - pick an [install path](#install) below (5 min). Run `./scripts/install-git-hooks.sh` to activate the privacy pre-commit hook (operator-only).

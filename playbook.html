@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Founder OS Playbook — ARCAS Systems</title>
+<style>
+:root {
+  --navy: #041E37;
+  --purple: #8234EA;
+  --magenta: #F70872;
+  --mint: #35D39A;
+  --orange: #FB610E;
+  --gray-light: #F8F8FA;
+  --gray-mid: #E8E8EE;
+  --gray-text: #6B7280;
+  --body-text: #1A2840;
+  --sidebar-w: 256px;
+  --content-max: 740px;
+  --radius: 8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  background:#fff;color:var(--body-text);line-height:1.75;
+  display:flex;min-height:100vh;
+}
+
+/* ── Sidebar ── */
+#sidebar{
+  width:var(--sidebar-w);min-width:var(--sidebar-w);
+  background:var(--navy);position:fixed;top:0;left:0;
+  height:100vh;overflow-y:auto;z-index:100;
+  display:flex;flex-direction:column;
+  transition:transform .25s ease;
+}
+#sidebar-brand{
+  padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;gap:10px;
+}
+#sidebar-brand img{width:32px;height:32px;object-fit:contain}
+#sidebar-brand-text{display:flex;flex-direction:column}
+#sidebar-brand-text .co{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+#sidebar-brand-text .doc{font-size:12px;color:rgba(255,255,255,.85);font-weight:500;margin-top:1px}
+#nav{padding:12px 0 32px;flex:1}
+#nav a{
+  display:block;padding:8px 20px;font-size:13px;color:rgba(255,255,255,.6);
+  text-decoration:none;border-left:3px solid transparent;
+  transition:color .15s,border-color .15s,background .15s;
+  line-height:1.4;
+}
+#nav a:hover{color:#fff;background:rgba(255,255,255,.06)}
+#nav a.active{color:#fff;border-left-color:var(--purple);background:rgba(130,52,234,.15)}
+#nav .nav-num{font-size:10px;color:rgba(255,255,255,.3);margin-right:4px}
+#sidebar-footer{
+  padding:16px 20px;border-top:1px solid rgba(255,255,255,.1);
+  font-size:11px;color:rgba(255,255,255,.3);line-height:1.5;
+}
+
+/* ── Mobile toggle ── */
+#nav-toggle{
+  display:none;position:fixed;top:16px;left:16px;z-index:200;
+  background:var(--navy);border:none;border-radius:6px;
+  padding:8px 10px;cursor:pointer;color:#fff;font-size:18px;line-height:1;
+}
+
+/* ── Progress bar ── */
+#progress{
+  position:fixed;top:0;left:var(--sidebar-w);right:0;height:2px;
+  background:var(--gray-mid);z-index:90;
+}
+#progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--purple),var(--magenta));
+  width:0%;transition:width .1s;
+}
+
+/* ── Main ── */
+#main{
+  margin-left:var(--sidebar-w);flex:1;
+  max-width:calc(var(--sidebar-w) + var(--content-max) + 120px);
+}
+
+/* ── Sections ── */
+.section{padding:72px 60px;border-bottom:1px solid var(--gray-mid)}
+.section:nth-child(even){background:var(--gray-light)}
+.section.dark{background:var(--navy);color:#fff;border-color:rgba(255,255,255,.1)}
+.section.hero{background:var(--navy);color:#fff;padding:96px 60px 80px;border:none}
+
+/* ── Typography ── */
+h1{font-size:2.4rem;font-weight:700;line-height:1.2;letter-spacing:-.02em;color:#fff;margin-bottom:16px}
+h2{font-size:1.5rem;font-weight:700;color:var(--purple);margin-bottom:20px;line-height:1.3;letter-spacing:-.01em}
+.dark h2{color:var(--mint)}
+h3{font-size:1.05rem;font-weight:600;color:var(--body-text);margin:28px 0 8px}
+.dark h3{color:#fff}
+p{margin-bottom:16px;max-width:var(--content-max)}
+p:last-child{margin-bottom:0}
+strong{font-weight:600}
+a{color:var(--purple);text-decoration:none}
+a:hover{text-decoration:underline}
+.dark a{color:var(--mint)}
+.hero-sub{font-size:1.15rem;color:rgba(255,255,255,.7);max-width:560px;margin-bottom:32px;line-height:1.6}
+.hero-tag{
+  display:inline-block;background:rgba(130,52,234,.3);color:var(--mint);
+  font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;margin-bottom:20px;
+}
+.gh-link{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.1);color:#fff;padding:10px 20px;
+  border-radius:6px;font-size:14px;font-weight:500;text-decoration:none;
+  border:1px solid rgba(255,255,255,.2);transition:background .15s;margin-top:8px;
+}
+.gh-link:hover{background:rgba(255,255,255,.18);text-decoration:none}
+
+/* ── Callout boxes ── */
+.callout{
+  background:var(--navy);color:#fff;border-radius:var(--radius);
+  padding:24px 28px;margin:28px 0;
+}
+.callout p{color:rgba(255,255,255,.85)}
+.callout p:last-child{margin-bottom:0}
+.callout strong{color:var(--mint)}
+.callout-purple{
+  border-left:4px solid var(--purple);background:rgba(130,52,234,.07);
+  border-radius:0 var(--radius) var(--radius) 0;padding:20px 24px;margin:24px 0;
+}
+.callout-magenta{
+  border-left:4px solid var(--magenta);background:#fff9fb;
+  border-radius:0 var(--radius) var(--radius) 0;padding:20px 24px;margin:24px 0;
+}
+
+/* ── Three parts diagram ── */
+.parts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:32px 0}
+.part-card{
+  border-radius:var(--radius);padding:24px 20px;text-align:center;
+  border:1px solid var(--gray-mid);
+}
+.part-card.brain{border-top:4px solid var(--purple)}
+.part-card.hands{border-top:4px solid var(--magenta)}
+.part-card.heart{border-top:4px solid var(--navy)}
+.part-icon{font-size:32px;margin-bottom:12px}
+.part-card h3{font-size:1rem;margin:0 0 8px;text-align:center}
+.part-card p{font-size:14px;color:var(--gray-text);margin:0;text-align:left}
+
+/* ── Seven days timeline ── */
+.timeline{margin:36px 0;position:relative}
+.timeline::before{
+  content:'';position:absolute;left:24px;top:28px;bottom:28px;
+  width:2px;background:var(--gray-mid);
+}
+.day{
+  display:flex;gap:20px;margin-bottom:8px;cursor:pointer;
+  position:relative;
+}
+.day-num{
+  width:48px;height:48px;min-width:48px;border-radius:50%;
+  background:var(--gray-mid);display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;color:var(--gray-text);z-index:1;
+  transition:background .2s,color .2s;flex-shrink:0;
+  border:2px solid #fff;
+}
+.day.active .day-num,.day:hover .day-num{background:var(--purple);color:#fff}
+.day-content{flex:1;padding:10px 0}
+.day-title{font-weight:600;font-size:15px;color:var(--body-text);line-height:1.4}
+.day-detail{
+  font-size:14px;color:var(--gray-text);margin-top:6px;
+  max-height:0;overflow:hidden;transition:max-height .3s ease,opacity .3s;
+  opacity:0;
+}
+.day.active .day-detail{max-height:120px;opacity:1}
+.day-time{font-size:12px;color:var(--purple);font-weight:600;margin-top:4px}
+
+/* ── Tool cards ── */
+.tool-card{
+  border:1px solid var(--gray-mid);border-radius:var(--radius);
+  overflow:hidden;margin:24px 0;
+}
+.tool-header{
+  padding:20px 24px;border-bottom:1px solid var(--gray-mid);
+  display:flex;align-items:flex-start;gap:16px;
+}
+.tool-icon{
+  width:44px;height:44px;border-radius:8px;display:flex;
+  align-items:center;justify-content:center;font-size:20px;flex-shrink:0;
+}
+.tool-name{font-weight:700;font-size:16px;margin-bottom:2px}
+.tool-name a{color:var(--body-text)}
+.tool-sub{font-size:13px;color:var(--gray-text)}
+.tool-body{display:grid;grid-template-columns:1fr 1fr}
+.tool-col{padding:20px 24px}
+.tool-col:first-child{border-right:1px solid var(--gray-mid)}
+.tool-col-label{
+  font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:12px;
+}
+.tool-col:first-child .tool-col-label{color:var(--purple)}
+.tool-col:last-child .tool-col-label{color:var(--gray-text)}
+.tool-list{list-style:none;font-size:14px;line-height:1.5}
+.tool-list li{padding:4px 0;padding-left:18px;position:relative;color:var(--body-text)}
+.tool-list li::before{content:'→';position:absolute;left:0;color:var(--gray-text);font-size:12px;top:5px}
+.tool-col:first-child .tool-list li::before{color:var(--purple)}
+
+/* ── Obsidian graph SVG ── */
+.obs-wrap{
+  background:var(--navy);border-radius:var(--radius);
+  padding:32px;margin:28px 0;text-align:center;
+}
+.obs-label{color:rgba(255,255,255,.5);font-size:12px;margin-top:12px}
+
+/* ── Context bar ── */
+.ctx-wrap{margin:28px 0}
+.ctx-bar{
+  height:48px;border-radius:6px;overflow:hidden;display:flex;
+  border:1px solid var(--gray-mid);
+}
+.ctx-seg{
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;color:#fff;
+}
+.ctx-seg.files{background:var(--purple);flex:1.2}
+.ctx-seg.skill{background:var(--magenta);flex:.8}
+.ctx-seg.work{background:#3A526A;flex:3}
+.ctx-seg.out{background:rgba(0,0,0,.15);flex:.8;color:rgba(255,255,255,.5)}
+.ctx-labels{display:flex;font-size:12px;color:var(--gray-text);margin-top:8px}
+.ctx-labels span{text-align:center}
+.ctx-labels span:nth-child(1){flex:1.2}
+.ctx-labels span:nth-child(2){flex:.8}
+.ctx-labels span:nth-child(3){flex:3}
+.ctx-labels span:nth-child(4){flex:.8}
+
+/* ── Failure mode cards ── */
+.fail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+.fail-card{
+  border:1px solid var(--gray-mid);border-radius:var(--radius);padding:20px;
+  border-top:3px solid var(--magenta);
+}
+.fail-card h4{font-size:14px;font-weight:700;margin-bottom:8px;color:var(--body-text)}
+.fail-fix{font-size:13px;color:var(--gray-text);margin-top:8px;padding-top:8px;border-top:1px solid var(--gray-mid)}
+.fail-fix strong{color:var(--purple);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+
+/* ── Final CTA ── */
+.one-thing{
+  text-align:center;padding:80px 60px;background:var(--navy);color:#fff;
+}
+.one-thing h2{color:var(--mint);font-size:2rem;margin-bottom:16px}
+.one-thing p{color:rgba(255,255,255,.8);margin:0 auto 24px;max-width:480px}
+.one-thing .big{
+  font-size:3.5rem;font-weight:800;color:#fff;letter-spacing:-.04em;
+  margin:32px 0;
+}
+
+/* ── Closing sig ── */
+.closing{
+  padding:48px 60px;text-align:right;background:var(--gray-light);
+  border-top:1px solid var(--gray-mid);
+}
+.closing p:first-child{font-size:14px;font-weight:700;color:var(--navy)}
+.closing p:last-child{font-size:14px;font-weight:700;color:var(--magenta)}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  #sidebar{transform:translateX(-100%)}
+  #sidebar.open{transform:translateX(0)}
+  #nav-toggle{display:block}
+  #main{margin-left:0}
+  #progress{left:0}
+  .section{padding:48px 24px}
+  .hero{padding:72px 24px 56px}
+  .parts-grid{grid-template-columns:1fr}
+  .tool-body{grid-template-columns:1fr}
+  .tool-col:first-child{border-right:none;border-bottom:1px solid var(--gray-mid)}
+  .fail-grid{grid-template-columns:1fr}
+  h1{font-size:1.8rem}
+  h2{font-size:1.25rem}
+  .one-thing{padding:56px 24px}
+  .one-thing .big{font-size:2.5rem}
+  .closing{padding:40px 24px}
+  .timeline::before{display:none}
+}
+
+/* ── v2 visual enhancements ── */
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--gray-mid);background:#fff}
+.stat-item{padding:30px 16px;border-right:1px solid var(--gray-mid);text-align:center}
+.stat-item:last-child{border-right:none}
+.stat-num{font-size:2.5rem;font-weight:800;color:var(--purple);letter-spacing:-.04em;line-height:1;display:block;margin-bottom:4px}
+.stat-num.mag{color:var(--magenta)}
+.stat-num.dim{color:var(--navy);font-size:2rem}
+.stat-label{font-size:12px;color:var(--gray-text);letter-spacing:.02em}
+
+.pullquote{font-size:1.25rem;font-weight:700;color:var(--purple);border-left:4px solid var(--purple);padding:16px 24px;margin:32px 0;background:rgba(130,52,234,.04);border-radius:0 8px 8px 0;max-width:580px}
+
+.tuesday-card{background:var(--gray-light);border-left:4px solid var(--purple);border-radius:0 8px 8px 0;padding:32px 36px;margin:28px 0}
+.tuesday-card .ts{font-size:11px;font-weight:700;color:var(--purple);letter-spacing:.1em;text-transform:uppercase;margin:20px 0 10px;display:block}
+.tuesday-card .ts:first-child{margin-top:0}
+.tuesday-card p{font-size:15px;margin-bottom:12px;color:var(--body-text)}
+.tuesday-card p:last-child{margin-bottom:0}
+.logblock{background:var(--navy);border-radius:6px;padding:14px 18px;margin:14px 0}
+.logblock p{font-size:13px;color:rgba(255,255,255,.8);margin-bottom:5px;font-family:ui-monospace,monospace}
+.logblock p:last-child{margin-bottom:0}
+
+.cta-next{background:linear-gradient(135deg,var(--navy) 0%,#0d2d4a 100%);color:#fff;padding:72px 60px;text-align:center}
+.cta-next h2{color:var(--mint);font-size:1.9rem;margin-bottom:12px}
+.cta-next .sub{color:rgba(255,255,255,.7);margin:0 auto 40px;max-width:480px;font-size:17px}
+.cta-steps{display:flex;justify-content:center;gap:20px;margin:32px 0;flex-wrap:wrap}
+.cta-step{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:20px 22px;text-align:left;width:192px}
+.cta-step-num{font-size:11px;color:var(--mint);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.cta-step p{font-size:13px;color:rgba(255,255,255,.85);margin:0;line-height:1.55}
+.install-btn{display:inline-block;background:var(--orange);color:#fff;padding:14px 36px;border-radius:6px;font-size:15px;font-weight:600;text-decoration:none;margin-top:16px;transition:background .15s,transform .1s}
+.install-btn:hover{background:#e5550d;text-decoration:none;color:#fff;transform:translateY(-1px)}
+
+.cost-card{background:var(--navy);border-radius:8px;padding:32px 36px;margin:28px 0;color:#fff}
+.cost-rows{list-style:none;margin:0}
+.cost-rows li{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:14px;color:rgba(255,255,255,.85)}
+.cost-rows li:last-child{border-bottom:none}
+.badge{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-left:12px}
+.badge.free{background:rgba(53,211,154,.2);color:var(--mint)}
+.badge.paid{background:rgba(251,97,14,.2);color:var(--orange)}
+
+@keyframes ctx-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.ctx-wrap{animation:ctx-enter .6s ease-out .2s both}
+
+@media(max-width:768px){
+  .stats-strip{grid-template-columns:repeat(2,1fr)}
+  .cta-next{padding:56px 24px}
+  .cta-steps{flex-direction:column;align-items:center}
+  .cta-step{width:100%;max-width:300px}
+  .tuesday-card{padding:24px 20px}
+}
+</style>
+</head>
+<body>
+
+<button id="nav-toggle" onclick="toggleNav()" aria-label="Open navigation">☰</button>
+
+<aside id="sidebar">
+  <div id="sidebar-brand">
+    <img src="data:image/png;base64,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" alt="ARCAS">
+    <div id="sidebar-brand-text">
+      <span class="co">ARCAS Systems</span>
+      <span class="doc">Founder OS Playbook</span>
+    </div>
+  </div>
+  <nav id="nav">
+    <a href="#hero"><span class="nav-num">00</span> Start here</a>
+    <a href="#problem"><span class="nav-num">01</span> The problem</a>
+    <a href="#what"><span class="nav-num">02</span> What this is</a>
+    <a href="#parts"><span class="nav-num">03</span> Brain. Hands. Heartbeat.</a>
+    <a href="#human"><span class="nav-num">04</span> The human part</a>
+    <a href="#sevendays"><span class="nav-num">05</span> Seven days</a>
+    <a href="#language"><span class="nav-num">06</span> The language of AI</a>
+    <a href="#memory"><span class="nav-num">07</span> Files are the memory</a>
+    <a href="#meetings"><span class="nav-num">08</span> Capture meetings</a>
+    <a href="#rants"><span class="nav-num">09</span> Rants</a>
+    <a href="#voice"><span class="nav-num">10</span> Talk to your system</a>
+    <a href="#plan"><span class="nav-num">11</span> Plan before you type</a>
+    <a href="#context"><span class="nav-num">12</span> Context and tokens</a>
+    <a href="#team"><span class="nav-num">13</span> Working with a team</a>
+    <a href="#privacy"><span class="nav-num">14</span> What not to put in</a>
+    <a href="#wrong"><span class="nav-num">15</span> When AI gets it wrong</a>
+    <a href="#fails"><span class="nav-num">16</span> What can go wrong</a>
+    <a href="#onething"><span class="nav-num">17</span> The one thing</a>
+    <a href="#tuesday"><span class="nav-num">06</span> Day 30 in real life</a>
+    <a href="#costs"><span class="nav-num">17</span> What it costs</a>
+    <a href="#next"><span class="nav-num">18</span> Next steps</a>
+    <a href="#tools"><span class="nav-num">19</span> Tools</a>
+  </nav>
+  <div id="sidebar-footer">
+    People first.<br>Systems second.<br>AI where it earns the right.
+  </div>
+</aside>
+
+<div id="progress"><div id="progress-fill"></div></div>
+
+<main id="main">
+
+<!-- HERO -->
+<section class="section hero" id="hero">
+  <div class="hero-tag">Founder OS</div>
+  <h1>The Playbook</h1>
+  <p class="hero-sub">This is not a setup guide. This is the why. Read it before you install anything. It takes 15 minutes and will save you a week of trying things that don't work.</p>
+  <a class="gh-link" href="https://github.com/ARCASSystems/FounderOS" target="_blank">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+    github.com/ARCASSystems/FounderOS
+  </a>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <span class="stat-num">6</span>
+    <span class="stat-label">operating files</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num mag">45</span>
+    <span class="stat-label">skills</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">35</span>
+    <span class="stat-label">min to set up</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num dim">Any</span>
+    <span class="stat-label">AI model works</span>
+  </div>
+</div>
+
+<!-- THE PROBLEM -->
+<section class="section" id="problem">
+  <h2>The problem</h2>
+  <p>You're running alone. Or close to it.</p>
+  <p>Every decision goes through you. Every client question. Every invoice. Every hire. Every piece of work that leaves the door.</p>
+  <p>You built it this way - not on purpose, but because you were the best person for every job when the business was small. And now the business grew around you. And now you can't leave.</p>
+  <p>Not for a week. Barely for a day.</p>
+  <div class="callout-purple">
+    <strong>This isn't a productivity problem. It's a context problem.</strong> The business runs because you hold everything in your head. Your standards. Your relationships. Your instincts about what to pursue. Nobody else has that. And because nobody else has it, nothing runs without you.
+  </div>
+  <p>The tools haven't helped. You've tried Notion. Trello. Monday. Asana. The problem was never the tool. The problem is that every tool required you to maintain it. Another inbox. Another place to check. Another thing that goes stale when you get busy.</p>
+  <p>So you stop using it. And the cycle repeats.</p>
+  <p>Here's what's actually happening. Every time you open a new tool, you're creating a second brain. And a second brain competes with the first one. You spend more energy tracking two systems than either system is saving you.</p>
+</section>
+
+<!-- WHAT THIS IS -->
+<section class="section" id="what">
+  <h2>What this is</h2>
+  <p>Founder OS is an operating layer. Not a tool you open and close. A layer that lives where you already work - in Claude Code - and reads a small set of files every time you start a session.</p>
+  <div class="callout">
+    <strong>Six files. That's the whole brain.</strong>
+    <p style="margin-top:12px">Who you are &nbsp;·&nbsp; What you're focused on right now &nbsp;·&nbsp; Open decisions &nbsp;·&nbsp; Your active clients &nbsp;·&nbsp; What's on for today &nbsp;·&nbsp; What this week needs</p>
+  </div>
+  <p>From those six files, 45 skills come alive. Skills that prep you for meetings, draft emails in your voice, log what happened, flag what you're avoiding, help you decide when you're stuck. You don't command them. You talk. They fire.</p>
+  <p>And once a week, the whole thing resets. You run the retro. You roll what's done. You park what's not. And you start Monday knowing exactly what matters.</p>
+</section>
+
+<!-- THREE PARTS -->
+<section class="section" id="parts">
+  <h2>Three parts</h2>
+  <p>Hold it in your head as three things.</p>
+
+  <!-- SVG: Three Parts -->
+  <svg viewBox="0 0 520 296" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;margin:28px auto 32px;display:block">
+    <defs>
+      <marker id="ap" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#8234EA"/></marker>
+      <marker id="am" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#F70872"/></marker>
+      <marker id="an" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="#041E37"/></marker>
+    </defs>
+    <!-- Cycle arcs -->
+    <path d="M216 94 Q152 168 152 214" stroke="#8234EA" stroke-width="2" fill="none" stroke-dasharray="6,3" marker-end="url(#ap)"/>
+    <path d="M188 250 Q260 280 332 250" stroke="#F70872" stroke-width="2" fill="none" stroke-dasharray="6,3" marker-end="url(#am)"/>
+    <path d="M368 214 Q368 168 304 94" stroke="#041E37" stroke-width="2" fill="none" stroke-dasharray="6,3" marker-end="url(#an)"/>
+    <!-- Arc labels -->
+    <text x="144" y="162" text-anchor="end" font-family="-apple-system,sans-serif" font-size="9" fill="#8234EA" font-weight="600">reads context</text>
+    <text x="260" y="282" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#F70872" font-weight="600">logs &amp; updates</text>
+    <text x="378" y="162" text-anchor="start" font-family="-apple-system,sans-serif" font-size="9" fill="#041E37" font-weight="600">surfaces &amp; resets</text>
+    <!-- Brain — top centre -->
+    <circle cx="260" cy="60" r="54" fill="rgba(130,52,234,.1)" stroke="#8234EA" stroke-width="2.5"/>
+    <text x="260" y="47" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="22">&#x1F9E0;</text>
+    <text x="260" y="68" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#8234EA">The Brain</text>
+    <text x="260" y="84" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">6 operating files</text>
+    <!-- Hands — bottom left -->
+    <circle cx="130" cy="238" r="54" fill="rgba(247,8,114,.07)" stroke="#F70872" stroke-width="2.5"/>
+    <text x="130" y="225" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="22">&#x2699;&#xFE0F;</text>
+    <text x="130" y="246" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#F70872">The Hands</text>
+    <text x="130" y="262" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">45 skills</text>
+    <!-- Heartbeat — bottom right -->
+    <circle cx="390" cy="238" r="54" fill="rgba(4,30,55,.07)" stroke="#041E37" stroke-width="2.5"/>
+    <text x="390" y="225" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="22">&#x1F493;</text>
+    <text x="390" y="246" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#041E37">The Heartbeat</text>
+    <text x="390" y="262" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">Daily + weekly cadence</text>
+  </svg>
+
+
+  <div class="parts-grid">
+    <div class="part-card brain">
+      <div class="part-icon">🧠</div>
+      <h3>The Brain</h3>
+      <p>Your six operating files. Identity. Priorities. Decisions. Clients. Daily anchors. Weekly commitments. What's true right now - not last quarter. Biased towards today, always. The brain needs feeding: three lines every time something real happens.</p>
+    </div>
+    <div class="part-card hands">
+      <div class="part-icon">⚙️</div>
+      <h3>The Hands</h3>
+      <p>45 skills. Write the email. Prep the brief. Draft the proposal. Log the decision. Post on LinkedIn. Each skill reads the brain and produces output that sounds like you. You don't memorize commands. You say what you need. The right skill fires.</p>
+    </div>
+    <div class="part-card heart">
+      <div class="part-icon">💓</div>
+      <h3>The Heartbeat</h3>
+      <p>Cadence. A daily anchor in the morning. A weekly retro on Sunday or Monday. Two moments where the system surfaces what's stale, ignored, or parked too long. Without the heartbeat, the brain goes stale and the hands stop firing clean output.</p>
+    </div>
+  </div>
+</section>
+
+<!-- THE HUMAN PART -->
+<section class="section" id="human">
+  <h2>The human part</h2>
+  <p>The OS exists so you can be more present with the people around you.</p>
+  <p>Your clients don't want to talk to a system. They want to talk to you. The OS handles the overhead - the prep, the follow-up, the logging, the context building - so that when you're in the room with someone, you're actually in the room. Not scrambling to remember what you agreed on last time. Not drafting the follow-up in your head while they're still talking.</p>
+  <div class="callout-magenta">
+    <strong>The brain layer is about you, not about automation.</strong> Every decision you log, every flag you track, every rant you capture - a human ran through all of that. The AI does the formatting. The judgment is yours.
+  </div>
+  <p>The skills write in your voice because your relationships are built on your voice. When a client gets an email, it should sound like you wrote it. Because you did. The AI just typed it.</p>
+  <p>Don't outsource the thinking. The system is not designed for you to stop thinking. It's designed to clear enough space that you can think better.</p>
+</section>
+
+<!-- SEVEN DAYS -->
+<section class="section" id="sevendays">
+  <h2>Seven days, not seven hours</h2>
+  <p>Don't try to do this in one afternoon. The pattern that kills every system: you try to install it all at once. Your brain glazes over. By Tuesday you've stopped.</p>
+  <p>Here's what the first seven days look like instead. Click each day to expand.</p>
+
+  <div class="timeline" id="timeline">
+    <div class="day" onclick="toggleDay(0)">
+      <div class="day-num">1</div>
+      <div class="day-content">
+        <div class="day-title">Install and your first six files</div>
+        <div class="day-time">35 minutes</div>
+        <div class="day-detail">Run the setup wizard. Answer the prompts. The system generates your identity file, priorities, cadence, brain layer. Don't add anything extra. This step alone unlocks daily ops, meeting prep, decision logging, and knowledge capture.</div>
+      </div>
+    </div>
+    <div class="day" onclick="toggleDay(1)">
+      <div class="day-num">2</div>
+      <div class="day-content">
+        <div class="day-title">Your voice and your brand</div>
+        <div class="day-time">20 minutes</div>
+        <div class="day-detail">Run the voice interview. Run the brand interview. From this point, every writing skill produces output that sounds like you - not like AI wrote it. This is the step most people skip and then wonder why their emails feel off.</div>
+      </div>
+    </div>
+    <div class="day" onclick="toggleDay(2)">
+      <div class="day-num">3</div>
+      <div class="day-content">
+        <div class="day-title">Log one real thing</div>
+        <div class="day-time">5 minutes</div>
+        <div class="day-detail">Something actually happened today. A decision. A conversation that changed something. A deal that moved. Log it. Three lines in brain/log.md. That's the muscle you're building. The first log entry is the hardest. After that it's a habit.</div>
+      </div>
+    </div>
+    <div class="day" onclick="toggleDay(3)">
+      <div class="day-num">4</div>
+      <div class="day-content">
+        <div class="day-title">Run your first rant</div>
+        <div class="day-time">10 minutes</div>
+        <div class="day-detail">Day 4 is when you first dump an unstructured thought into the system. No editing. No structure. Use /rant. Just talk. This is how you start capturing what's actually in your head, not just the cleaned-up version.</div>
+      </div>
+    </div>
+    <div class="day" onclick="toggleDay(4)">
+      <div class="day-num">5</div>
+      <div class="day-content">
+        <div class="day-title">Use one skill on real work</div>
+        <div class="day-time">15 minutes</div>
+        <div class="day-detail">Not a test. Something you actually need. A meeting prep. An email draft. A LinkedIn post. Let the skill read your brain and produce output. See what comes back. Adjust one thing. This is how the system starts feeling useful, not just set up.</div>
+      </div>
+    </div>
+    <div class="day" onclick="toggleDay(5)">
+      <div class="day-num">6</div>
+      <div class="day-content">
+        <div class="day-title">Process the rant</div>
+        <div class="day-time">10 minutes</div>
+        <div class="day-detail">Run /dream on what you captured on Day 4. The skill turns your raw thinking into flags, patterns, and parked decisions. This is how the brain learns what you care about. The rant was raw material. Dream gives it shape.</div>
+      </div>
+    </div>
+    <div class="day" onclick="toggleDay(6)">
+      <div class="day-num">7</div>
+      <div class="day-content">
+        <div class="day-title">Run the weekly retro</div>
+        <div class="day-time">20 minutes</div>
+        <div class="day-detail">Look at what you said the week would be. What actually happened. What moves forward. What gets killed. What decision you've been avoiding. This is the heartbeat. Once it's running, it runs. Put it in your calendar. Sunday at 9pm or Monday at 8am.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout-purple">
+    <strong>Perfect doesn't ship. Working compounds.</strong> By the end of seven days, you have a working system. That's the goal - not a complete one.
+  </div>
+</section>
+
+<!-- A REAL TUESDAY -->
+<section class="section" id="tuesday">
+  <h2>What day 30 looks like</h2>
+  <p>This is a real session. Not a demo. This is what the system looks like when it's working.</p>
+
+  <div class="tuesday-card">
+    <span class="ts">8:52 am</span>
+    <p>You open Claude Code. The session brief appears before you've finished your coffee. Two flags open from last week. One decision overdue since yesterday. The Ahmed proposal has been sitting for three days.</p>
+    <p>You didn't read any file to find this. The system read them.</p>
+
+    <span class="ts">9:06 am &mdash; prep for the 10am call</span>
+    <p>You type: "prep me for my 10am with Ahmed."</p>
+    <p>Four minutes later you have a brief. It knows Ahmed runs a 22-person firm in Abu Dhabi. It knows what you discussed on the last call. The staffing model question he was wrestling with. What you said you'd follow up on. The two things he flagged as blockers.</p>
+    <p>You wrote none of this today. You logged it three weeks ago. Three lines. After a different call.</p>
+
+    <span class="ts">11:02 am &mdash; after the call</span>
+    <p>You type three sentences.</p>
+    <div class="logblock">
+      <p>Ahmed confirmed budget. Moving to proposal stage.</p>
+      <p>Wants phased rollout, not all at once.</p>
+      <p>Proposal due Thursday.</p>
+    </div>
+    <p>That's it. Next time you open Claude Code, those three sentences shape every skill that touches Ahmed. The proposal skill knows about the phased rollout. The client update skill knows Thursday. You don't explain again.</p>
+
+    <span class="ts">End of day</span>
+    <p>Eleven minutes of admin across the whole day. Two at the start. Four on the prep. Five on the capture. The system didn't replace the call. It didn't make the decisions for you. It just meant you showed up knowing what mattered, and left without anything slipping through.</p>
+    <p style="font-weight:600;color:var(--purple)">Day 90 looks exactly the same. The output is sharper because the context is richer.</p>
+  </div>
+</section>
+
+<!-- LANGUAGE OF AI -->
+<section class="section" id="language">
+  <h2>The language of AI</h2>
+  <p>AI is trained on the world. That means it's trained on articles, books, code repositories, documentation, forum threads, emails. Almost all of it is structured text. And the most common structure across all of that text is Markdown.</p>
+  <p>Markdown is the language AI is best at reading. Headers, bullet points, bold text, numbered lists - these give the model clear signals about what matters, what's a heading, what's a list. When you write a wall of unstructured text, the model reads it like a wall. When you write with structure, it works with structure.</p>
+
+  <!-- Markdown → AI diagram -->
+  <svg viewBox="0 0 600 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;margin:24px 0;display:block">
+    <!-- File box -->
+    <rect x="10" y="20" width="150" height="60" rx="6" fill="rgba(130,52,234,.08)" stroke="#8234EA" stroke-width="1.5"/>
+    <text x="85" y="44" text-anchor="middle" font-family="monospace" font-size="11" fill="#8234EA"># priorities.md</text>
+    <text x="85" y="60" text-anchor="middle" font-family="monospace" font-size="9" fill="#6B7280">## This week</text>
+    <text x="85" y="73" text-anchor="middle" font-family="monospace" font-size="9" fill="#6B7280">- Close Aparna deal</text>
+    <!-- Arrow 1 -->
+    <path d="M163 50 L210 50" stroke="#8234EA" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+    <!-- AI brain -->
+    <rect x="213" y="15" width="110" height="70" rx="6" fill="var(--navy)"/>
+    <text x="268" y="47" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="18" fill="#fff">🤖</text>
+    <text x="268" y="66" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="rgba(255,255,255,.6)">AI model</text>
+    <!-- Arrow 2 -->
+    <path d="M327 50 L374 50" stroke="#F70872" stroke-width="1.5" fill="none" marker-end="url(#arr2)"/>
+    <!-- Output box -->
+    <rect x="377" y="20" width="210" height="60" rx="6" fill="rgba(247,8,114,.07)" stroke="#F70872" stroke-width="1.5"/>
+    <text x="482" y="44" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#F70872" font-weight="600">Output in your voice</text>
+    <text x="482" y="60" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#6B7280">Ready to send to Aparna</text>
+    <text x="482" y="73" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#6B7280">by Thursday</text>
+    <defs>
+      <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#8234EA"/></marker>
+      <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#F70872"/></marker>
+    </defs>
+  </svg>
+
+  <p>This is why every file in the OS is a <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">.md</code> file. Not because it looks nice in a text editor. Because Markdown is the format that gives the model the clearest signal about what matters.</p>
+
+  <p>The model is trained on the world. It doesn't know your world until you build the files. Every piece of context you add - a new client, a decision, a standard you hold - the model gets more specific. The output gets more useful. As the models improve, that context compounds. Same honest files, better model, better output. You don't start over when there's a new model. Your files stay.</p>
+
+  <!-- Obsidian Graph -->
+  <div class="obs-wrap">
+    <svg viewBox="0 0 500 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px;display:block;margin:0 auto">
+      <!-- Connection lines -->
+      <line x1="250" y1="130" x2="130" y2="60" stroke="rgba(130,52,234,.4)" stroke-width="1.5"/>
+      <line x1="250" y1="130" x2="370" y2="60" stroke="rgba(247,8,114,.4)" stroke-width="1.5"/>
+      <line x1="250" y1="130" x2="90" y2="190" stroke="rgba(53,211,154,.4)" stroke-width="1.5"/>
+      <line x1="250" y1="130" x2="410" y2="190" stroke="rgba(53,211,154,.4)" stroke-width="1.5"/>
+      <line x1="250" y1="130" x2="250" y2="220" stroke="rgba(130,52,234,.3)" stroke-width="1.5"/>
+      <line x1="130" y1="60" x2="370" y2="60" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+      <line x1="90" y1="190" x2="410" y2="190" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+      <!-- Center node (identity) -->
+      <circle cx="250" cy="130" r="22" fill="#8234EA"/>
+      <text x="250" y="125" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="#fff" font-weight="600">identity</text>
+      <text x="250" y="136" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="rgba(255,255,255,.7)">.md</text>
+      <!-- priorities -->
+      <circle cx="130" cy="60" r="18" fill="rgba(130,52,234,.6)" stroke="#8234EA" stroke-width="1"/>
+      <text x="130" y="56" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#fff" font-weight="600">priorities</text>
+      <text x="130" y="67" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="rgba(255,255,255,.7)">.md</text>
+      <!-- decisions -->
+      <circle cx="370" cy="60" r="18" fill="rgba(247,8,114,.5)" stroke="#F70872" stroke-width="1"/>
+      <text x="370" y="56" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#fff" font-weight="600">decisions</text>
+      <text x="370" y="67" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="rgba(255,255,255,.7)">.md</text>
+      <!-- clients -->
+      <circle cx="90" cy="190" r="18" fill="rgba(53,211,154,.4)" stroke="#35D39A" stroke-width="1"/>
+      <text x="90" y="186" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#fff" font-weight="600">clients</text>
+      <text x="90" y="197" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="rgba(255,255,255,.7)">.md</text>
+      <!-- weekly -->
+      <circle cx="410" cy="190" r="18" fill="rgba(53,211,154,.4)" stroke="#35D39A" stroke-width="1"/>
+      <text x="410" y="183" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#fff" font-weight="600">weekly</text>
+      <text x="410" y="194" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="rgba(255,255,255,.7)">commit</text>
+      <text x="410" y="203" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="rgba(255,255,255,.7)">.md</text>
+      <!-- daily -->
+      <circle cx="250" cy="220" r="16" fill="rgba(130,52,234,.4)" stroke="#8234EA" stroke-width="1"/>
+      <text x="250" y="216" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#fff" font-weight="600">daily</text>
+      <text x="250" y="227" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="rgba(255,255,255,.7)">anchors.md</text>
+    </svg>
+    <p class="obs-label">Your brain files as a graph view - how Obsidian renders the connections between your markdown files. Every line is a [[wikilink]].</p>
+  </div>
+
+  <p>Obsidian (free) can open your OS folder directly and show you this graph view. You see the connections between your files. You see how the AI reads your context as a network, not a folder of documents. It makes the structure tangible and helps you understand why adding one file in the right place can improve the output of six different skills at once.</p>
+</section>
+
+<!-- FILES ARE MEMORY -->
+<section class="section" id="memory">
+  <h2>Your files are the memory, not the session</h2>
+  <p>Every AI session starts fresh. The model doesn't remember what you said last Tuesday. When you close the window, that conversation is gone.</p>
+  <p>This is why people get frustrated with AI assistants. They re-explain everything every time. They spend five minutes catching the AI up on what it forgot.</p>
+
+  <!-- Session vs Files diagram -->
+  <svg viewBox="0 0 580 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:580px;margin:24px 0;display:block">
+    <!-- Left: session memory -->
+    <rect x="10" y="10" width="260" height="120" rx="8" fill="rgba(247,8,114,.06)" stroke="#F70872" stroke-width="1.5" stroke-dasharray="5,3"/>
+    <text x="140" y="35" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="600" fill="#F70872">Session memory</text>
+    <text x="140" y="58" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">You talk to Claude →</text>
+    <text x="140" y="75" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">context builds →</text>
+    <text x="140" y="92" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">window closes →</text>
+    <text x="140" y="112" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#F70872">GONE</text>
+    <!-- Right: file memory -->
+    <rect x="310" y="10" width="260" height="120" rx="8" fill="rgba(130,52,234,.07)" stroke="#8234EA" stroke-width="1.5"/>
+    <text x="440" y="35" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="600" fill="#8234EA">File memory (this OS)</text>
+    <text x="440" y="58" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">Files live on your machine →</text>
+    <text x="440" y="75" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">model reads them every session →</text>
+    <text x="440" y="92" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">window closes →</text>
+    <text x="440" y="112" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#8234EA">FILES STILL THERE ✓</text>
+  </svg>
+
+  <div class="callout-magenta"><strong>If you've tried AI assistants before and they didn't stick, here's exactly why.</strong> Every session started from scratch. The AI had no memory of your business, your standards, or your relationships. It wasn't the AI that failed. It was the missing context layer. That's what this OS provides.</div>
+  <p>Founder OS solves this by making context live in files, not in the session. The model reads the files every session. Fresh read, same truth. You don't re-explain. The files explain.</p>
+  <p>And because the context is in files, you're not locked to any one tool. Claude Code today, Codex tomorrow - they both read the same six files. The OS ships with an <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">AGENTS.md</code> file for exactly this reason. Non-Claude agents pick up the same operating rules.</p>
+  <div class="callout-purple">
+    <strong>Local-first means: the data lives on your machine.</strong> Not on a company's server. Not in someone's cloud. Plain markdown. Any text editor reads it. Any AI can load it. You own it.
+  </div>
+</section>
+
+<!-- CAPTURE MEETINGS -->
+<section class="section" id="meetings">
+  <h2>Capture meetings before you forget them</h2>
+  <p>Meetings are where decisions are made. Where commitments are given. Where relationships shift. But if you don't capture them, they might as well not have happened. You walk out with three important things in your head. By the next meeting you remember one.</p>
+
+  <div class="tool-card">
+    <div class="tool-header">
+      <div class="tool-icon" style="background:rgba(53,211,154,.15)">📋</div>
+      <div>
+        <div class="tool-name"><a href="https://granola.so" target="_blank">Granola</a> &mdash; granola.so</div>
+        <div class="tool-sub">Free meeting capture and transcription for Mac</div>
+      </div>
+    </div>
+    <div class="tool-body">
+      <div class="tool-col">
+        <div class="tool-col-label">With Granola</div>
+        <ul class="tool-list">
+          <li>Meetings are transcribed automatically in the background</li>
+          <li>After the call, paste the summary into /capture-meeting</li>
+          <li>The OS pulls decisions, commitments, and client signals into the right files</li>
+          <li>You show up to the next call knowing exactly what was agreed</li>
+          <li>Nothing slips through from a conversation you had weeks ago</li>
+        </ul>
+      </div>
+      <div class="tool-col">
+        <div class="tool-col-label">Without it</div>
+        <ul class="tool-list">
+          <li>You take notes manually during the call</li>
+          <li>Most people take partial notes, or none</li>
+          <li>The OS captures what you remember - not what was said</li>
+          <li>The gap between intent and record grows over time</li>
+          <li>Still workable - just less complete</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p>Set Granola running before you start the call. Let it work in the background. Review the summary before you close the laptop. Then run /capture-meeting. That's the whole loop.</p>
+</section>
+
+<!-- RANTS -->
+<section class="section" id="rants">
+  <h2>Rants</h2>
+  <p>Humans don't think in bullet points. We think in rants.</p>
+  <p>A rant is an unstructured voice dump of what's in your head. No format. No cleanup. You don't need to know what you're trying to say before you say it. You just start talking.</p>
+
+  <!-- Rant flow -->
+  <svg viewBox="0 0 560 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;margin:24px 0;display:block">
+    <rect x="0" y="15" width="110" height="50" rx="6" fill="rgba(130,52,234,.1)" stroke="#8234EA" stroke-width="1.5"/>
+    <text x="55" y="38" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#8234EA">/rant</text>
+    <text x="55" y="54" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#6B7280">Raw thinking</text>
+    <path d="M113 40 L150 40" stroke="#8234EA" stroke-width="1.5" fill="none" marker-end="url(#a1)"/>
+    <rect x="153" y="15" width="130" height="50" rx="6" fill="var(--gray-light)" stroke="var(--gray-mid)" stroke-width="1.5"/>
+    <text x="218" y="38" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#6B7280">brain/rants/</text>
+    <text x="218" y="54" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#6B7280">Stored raw</text>
+    <path d="M286 40 L323 40" stroke="#6B7280" stroke-width="1.5" fill="none" marker-end="url(#a2)"/>
+    <rect x="326" y="15" width="110" height="50" rx="6" fill="rgba(247,8,114,.08)" stroke="#F70872" stroke-width="1.5"/>
+    <text x="381" y="38" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#F70872">/dream</text>
+    <text x="381" y="54" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#6B7280">Distilled</text>
+    <path d="M439 40 L476 40" stroke="#F70872" stroke-width="1.5" fill="none" marker-end="url(#a3)"/>
+    <rect x="479" y="10" width="78" height="60" rx="6" fill="var(--navy)"/>
+    <text x="518" y="32" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="rgba(255,255,255,.7)">Flags</text>
+    <text x="518" y="47" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="rgba(255,255,255,.7)">Patterns</text>
+    <text x="518" y="62" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="rgba(255,255,255,.7)">Decisions</text>
+    <defs>
+      <marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#8234EA"/></marker>
+      <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#6B7280"/></marker>
+      <marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#F70872"/></marker>
+    </defs>
+  </svg>
+
+  <p>The <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">/rant</code> command opens a capture. You dump. The system takes it raw and stores it in <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">brain/rants/</code>. Later, you run <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">/dream</code>. The dream skill reads the rant and distills it: patterns noticed, flags worth tracking, decisions you were circling, open questions.</p>
+  <p>Rant captures the mess. Dream gives it shape.</p>
+  <div class="callout-purple">
+    Most of your best thinking happens while you're walking, driving, or half-asleep. Not when you're sitting in front of a keyboard. Rants capture the real version of your thinking - not the cleaned-up one you'd type.
+  </div>
+</section>
+
+<!-- TALK TO YOUR SYSTEM -->
+<section class="section" id="voice">
+  <h2>Talk to your system</h2>
+  <p>If you're going to rant, use your voice. The friction of typing is exactly what kills the habit. When the gap between thought and capture is too big, you let thoughts go.</p>
+
+  <div class="tool-card">
+    <div class="tool-header">
+      <div class="tool-icon" style="background:rgba(130,52,234,.1)">🎙️</div>
+      <div>
+        <div class="tool-name"><a href="https://wisprflow.ai" target="_blank">Wispr Flow</a> &mdash; wisprflow.ai</div>
+        <div class="tool-sub">Voice dictation that types anywhere on screen. Mac and Windows.</div>
+      </div>
+    </div>
+    <div class="tool-body">
+      <div class="tool-col">
+        <div class="tool-col-label">With Wispr Flow</div>
+        <ul class="tool-list">
+          <li>You talk, it types directly into any field on screen</li>
+          <li>No switching apps, no copy-paste</li>
+          <li>The habit of logging becomes easy</li>
+          <li>Rants feel natural - same as thinking out loud</li>
+          <li>Longer, richer prompts with less effort</li>
+        </ul>
+      </div>
+      <div class="tool-col">
+        <div class="tool-col-label">Without it</div>
+        <ul class="tool-list">
+          <li>You type everything - which is fine</li>
+          <li>Most people start here</li>
+          <li>Phone voice memo + paste works as a substitute</li>
+          <li>macOS Dictation or Windows Speech Recognition work too</li>
+          <li>Some thoughts won't make it in - the habit is harder to build</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p>Talk to the system like you're thinking out loud. Then look at what came out. Edit it if you want. Paste it in. Speak, look back, refine. That process is how you get better prompts without spending 20 minutes composing a perfect question.</p>
+  <p class="pullquote">The best prompts are the honest ones.</p>
+</section>
+
+<!-- PLAN BEFORE YOU TYPE -->
+<section class="section" id="plan">
+  <h2>Plan before you type</h2>
+  <p>Most people open a chat window and start typing whatever's on their mind. They get halfway through, realise they haven't been clear, add more context, and end up with a 300-word prompt the model has to untangle before it can help.</p>
+  <p>The output reflects the input. A tangled prompt produces a tangled answer.</p>
+  <div class="callout">
+    <strong>Before you paste anything into the chat, spend 60 seconds:</strong>
+    <p style="margin-top:12px">1. What is the actual problem I'm trying to solve?<br>2. What do I already know about it?<br>3. What does a good answer look like?</p>
+  </div>
+  <p>That's it. One minute. Write those three things as bullet points at the top of your prompt. Then ask.</p>
+  <div class="callout-purple">
+    <strong>One hour understanding the problem, ten minutes getting AI to help you solve it.</strong> Not the other way around. This is also why rants exist. The rant is where you do your thinking. By the time you write the prompt, you're asking a specific question - not dumping the whole mess and hoping AI sorts it out.
+  </div>
+</section>
+
+<!-- CONTEXT AND TOKENS -->
+<section class="section" id="context">
+  <h2>Context, tokens, and why your files stay lean</h2>
+  <p>Every AI model has a context window - its short-term memory. Everything that goes into a session: every file the OS loads, every message you send, every response you receive. When the window fills, the oldest content falls out.</p>
+  <p>This is context decay. Long AI sessions get worse over time, not better. By hour two, the model has forgotten what you said in the first ten minutes.</p>
+
+  <div class="ctx-wrap">
+    <div class="ctx-bar">
+      <div class="ctx-seg files">6 Files</div>
+      <div class="ctx-seg skill">Skill</div>
+      <div class="ctx-seg work">← Available for actual work →</div>
+      <div class="ctx-seg out">Overflow</div>
+    </div>
+    <div class="ctx-labels">
+      <span>Loaded at boot</span>
+      <span>On demand</span>
+      <span>The real work happens here</span>
+      <span>Falls out</span>
+    </div>
+  </div>
+
+  <p>The OS is designed to fight this. Six files at boot, not sixty. Every file stays lean on purpose. <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">brain/log.md</code> has a 300-line cap. When it fills, the OS archives older entries and starts fresh. Skills load additional files only when a task needs them.</p>
+  <p>This matters practically: a lean context means faster sessions, less drift, and more accurate output. The model isn't splitting attention across fifty files of old information.</p>
+  <div class="callout-magenta">
+    <strong>For long working sessions:</strong> start a fresh session after two hours. The files hold the context. The session doesn't need to. This is also why the weekly retro exists - archiving what's done clears space in the brain for what's current.
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section" id="team">
+  <h2>Working with a team</h2>
+  <p>If you have people around you, the OS adapts. But the setup changes.</p>
+  <p>The OS as described here is personal. The files hold your thinking, your relationships, your unfiltered decisions. That's not something you share wholesale.</p>
+  <div class="callout-purple">
+    <strong>What you share with a team is outputs, not brains.</strong>
+  </div>
+  <p>When a skill produces a proposal, a meeting summary, an SOP, or a client update - that's a clean deliverable. It's ready to share. The OS has a pre-send check (<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">/ship-deliverable</code>) that runs before anything goes to a client. It verifies the output matches your voice, your standards, and the facts in your files.</p>
+  <p>For team members who want their own OS: they install separately. Same structure, different truth. Two operating layers that communicate through deliverables, not through shared files. Each person holds their own context. The outputs connect the work.</p>
+</section>
+
+<!-- PRIVACY -->
+<section class="section" id="privacy">
+  <h2>What not to put in</h2>
+  <p>The OS is local. The files live on your machine. But they're also in git, and they sync to GitHub if you push. Know what that means.</p>
+  <h3>Goes in</h3>
+  <p>Priorities, clients, decisions, notes, flags, contact names, general business context. The brain should hold enough for the AI to be genuinely useful.</p>
+  <h3>Stays out</h3>
+  <p>Passwords. API keys. Bank details. Full government ID numbers. Anything a third party sent you in confidence. Legal advice you haven't reviewed. Anything you wouldn't want in a public document if the repo leaked.</p>
+  <div class="callout-magenta">
+    The system has a privacy pre-commit hook. Anything you wrap in <code style="background:rgba(247,8,114,.1);padding:2px 6px;border-radius:4px;font-size:13px">&lt;private&gt;</code> tags gets stripped before it pushes to GitHub. Use it for anything borderline. But the cleaner practice is to not put sensitive data in the files at all.
+  </div>
+  <div class="callout-magenta"><strong>On data:</strong> your files live on your machine. When you run a session, the OS includes them in your conversation context. That context is processed by your AI provider during the session &mdash; check their privacy policy before adding sensitive business information to prompts.</div>
+  <p>The OS is a thinking layer, not a data warehouse. It should hold enough context to be useful and nothing that creates risk if it ends up somewhere unexpected.</p>
+</section>
+
+<!-- WHEN AI GETS IT WRONG -->
+<section class="section" id="wrong">
+  <h2>When AI gets it wrong</h2>
+  <p>It will. Plan for it.</p>
+  <p>The model is trained on the world. When it doesn't have enough context about your specific situation, it fills the gap with educated guesses. Confident ones. Sometimes wrong ones.</p>
+  <div class="callout-purple">
+    <strong>When output feels generic:</strong> the input was generic. Feed the brain more.<br><br>
+    <strong>When output feels confidently wrong:</strong> push back. Ask the model to show its reasoning. A good model will revise with reasons. A bad one will just agree.
+  </div>
+  <p>This is the trap. The model will agree with you if you push. It adapts to your framing. That's useful when refining output. It's dangerous when you want honest analysis. If you go in wanting validation, the system will validate you.</p>
+  <p>The <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">forcing-questions</code> skill exists for this reason. It asks six questions that have a real chance of killing the idea. That's the point. Better to kill a bad idea in six questions than spend three weeks building it with AI helping you go faster.</p>
+  <p><strong>Don't ship AI output you haven't read.</strong> Every deliverable that leaves your machine has your name on it. The pre-send check (<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">/ship-deliverable</code>) is the built-in gate before anything goes to a client.</p>
+</section>
+
+<!-- WHAT CAN GO WRONG -->
+<section class="section" id="fails">
+  <h2>What can go wrong</h2>
+  <p>Honest list. These are the failure modes.</p>
+  <div class="fail-grid">
+    <div class="fail-card">
+      <h4>You stop logging</h4>
+      <p style="font-size:14px;color:var(--gray-text)">The system goes stale. Stale context produces generic output. Generic output feels like AI, not like an assistant that knows you. You stop trusting it.</p>
+      <div class="fail-fix"><strong>Fix</strong> &nbsp; Three lines per day. Doesn't have to be more.</div>
+    </div>
+    <div class="fail-card">
+      <h4>You fill everything in Week 1</h4>
+      <p style="font-size:14px;color:var(--gray-text)">You read the docs. You see 45 skills and 27 commands and a whole brain layer to build. You try to set it all up before you use any of it.</p>
+      <div class="fail-fix"><strong>Fix</strong> &nbsp; Use before you optimise. Day 1 through 7. In order.</div>
+    </div>
+    <div class="fail-card">
+      <h4>You forget the cadence</h4>
+      <p style="font-size:14px;color:var(--gray-text)">You skip the retro. Then again. Flags pile up. The system starts feeling like something you're behind on. You avoid opening it.</p>
+      <div class="fail-fix"><strong>Fix</strong> &nbsp; Put the weekly retro in your calendar. Sunday at 9pm or Monday at 8am. 20 minutes.</div>
+    </div>
+    <div class="fail-card">
+      <h4>You treat it like a chatbot</h4>
+      <p style="font-size:14px;color:var(--gray-text)">You ask it questions without feeding it context. You expect generic AI output. You get generic AI output.</p>
+      <div class="fail-fix"><strong>Fix</strong> &nbsp; Quality in, quality out. Feed the brain. Use the skills.</div>
+    </div>
+    <div class="fail-card">
+      <h4>You wait for perfect</h4>
+      <p style="font-size:14px;color:var(--gray-text)">You want every file filled perfectly before you run a real skill on a real piece of work. The bar keeps moving.</p>
+      <div class="fail-fix"><strong>Fix</strong> &nbsp; It will never be perfect. It will be yours. Run the skill. Use the output. Adjust.</div>
+    </div>
+    <div class="fail-card">
+      <h4>The context window drifts</h4>
+      <p style="font-size:14px;color:var(--gray-text)">Long sessions on complex topics produce worse output at hour two than minute ten. You don't notice because you're in the flow.</p>
+      <div class="fail-fix"><strong>Fix</strong> &nbsp; Start a fresh session after two hours. The files hold context. The session doesn't need to.</div>
+    </div>
+  </div>
+</section>
+
+<!-- THE ONE THING -->
+<div class="one-thing" id="onething">
+  <h2>The one thing</h2>
+  <p>If you take nothing else from this playbook:</p>
+  <div class="big">Log what happens.</div>
+  <p>Not in a diary. Not in paragraphs. Three lines in <code style="background:rgba(255,255,255,.1);padding:2px 8px;border-radius:4px;font-size:14px">brain/log.md</code> every time something real happens. A decision made. A meeting that shifted things. A deal that moved.</p>
+  <p>The system compounds from that. Skills get sharper. Stall detection gets accurate. Output starts sounding like something an assistant who's been with you for a year would say.</p>
+  <p style="font-size:1.1rem;color:rgba(255,255,255,.9);margin-top:24px">That's the whole game. Not the 45 skills. Not the 27 commands. The log.</p>
+</div>
+
+<!-- COSTS -->
+<section class="section" id="costs">
+  <h2>What it costs</h2>
+  <p>One AI subscription. That's it. Everything else is free.</p>
+
+  <div class="cost-card">
+    <ul class="cost-rows">
+      <li>Founder OS (this repo) <span class="badge free">Free</span></li>
+      <li>Claude Code (the interface) <span class="badge free">Free</span></li>
+      <li>AI subscription &mdash; Claude, OpenAI, or Google <span class="badge paid">$20 &ndash; 100 / month</span></li>
+    </ul>
+    <p style="margin-top:20px;font-size:13px;color:rgba(255,255,255,.5)">Any plan with 100K+ context tokens works. Free tiers usually don't have enough context &mdash; you'll get worse output and sessions that cut off early. A paid plan is the only real requirement.</p>
+  </div>
+
+  <p>If you're starting fresh: Claude Pro or Max is the most tested path for this OS. But if you already pay for Copilot, Gemini Pro, or GPT-4, try those first. The OS files travel with you. You're not locked in.</p>
+  <p>The subscription is replaceable. The files are yours.</p>
+</section>
+
+<!-- TOOLS -->
+<section class="section" id="tools">
+  <h2>Tools referenced in this playbook</h2>
+
+  <div class="tool-card">
+    <div class="tool-header">
+      <div class="tool-icon" style="background:rgba(130,52,234,.1)">🧩</div>
+      <div>
+        <div class="tool-name"><a href="https://github.com/ARCASSystems/FounderOS" target="_blank">Founder OS</a> &mdash; github.com/ARCASSystems/FounderOS</div>
+        <div class="tool-sub">Free and open source. The OS this playbook is for.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-header">
+      <div class="tool-icon" style="background:rgba(53,211,154,.12)">📋</div>
+      <div>
+        <div class="tool-name"><a href="https://granola.so" target="_blank">Granola</a> &mdash; granola.so</div>
+        <div class="tool-sub">Free meeting capture and transcription for Mac</div>
+      </div>
+    </div>
+    <div class="tool-body">
+      <div class="tool-col">
+        <div class="tool-col-label">With Granola</div>
+        <ul class="tool-list">
+          <li>Automatic transcription in the background</li>
+          <li>/capture-meeting gets complete context, not just what you remember</li>
+          <li>Nothing slips through after a call</li>
+        </ul>
+      </div>
+      <div class="tool-col">
+        <div class="tool-col-label">Without it</div>
+        <ul class="tool-list">
+          <li>Manual notes, usually incomplete</li>
+          <li>OS captures what you remember</li>
+          <li>Still functional - gap grows over time</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-header">
+      <div class="tool-icon" style="background:rgba(130,52,234,.1)">🎙️</div>
+      <div>
+        <div class="tool-name"><a href="https://wisprflow.ai" target="_blank">Wispr Flow</a> &mdash; wisprflow.ai</div>
+        <div class="tool-sub">Voice dictation that types anywhere on screen</div>
+      </div>
+    </div>
+    <div class="tool-body">
+      <div class="tool-col">
+        <div class="tool-col-label">With Wispr Flow</div>
+        <ul class="tool-list">
+          <li>Talk anywhere on screen, zero friction</li>
+          <li>Rants become natural</li>
+          <li>Longer, richer prompts with less effort</li>
+        </ul>
+      </div>
+      <div class="tool-col">
+        <div class="tool-col-label">Without it</div>
+        <ul class="tool-list">
+          <li>Type everything - totally fine to start</li>
+          <li>Phone voice memo + paste works</li>
+          <li>macOS Dictation or Windows Speech Recognition are free alternatives</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-header">
+      <div class="tool-icon" style="background:rgba(4,30,55,.08)">🔮</div>
+      <div>
+        <div class="tool-name"><a href="https://obsidian.md" target="_blank">Obsidian</a> &mdash; obsidian.md</div>
+        <div class="tool-sub">Free markdown editor with graph view. Opens your OS folder directly.</div>
+      </div>
+    </div>
+    <div class="tool-body">
+      <div class="tool-col">
+        <div class="tool-col-label">With Obsidian</div>
+        <ul class="tool-list">
+          <li>Graph view shows how your files connect</li>
+          <li>Browse and edit OS files in a clean UI</li>
+          <li>The wiki layer becomes tangible, not just theoretical</li>
+        </ul>
+      </div>
+      <div class="tool-col">
+        <div class="tool-col-label">Without it</div>
+        <ul class="tool-list">
+          <li>Use VS Code, TextEdit, or any text editor</li>
+          <li>OS works exactly the same</li>
+          <li>You just don't see the visual graph</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-header">
+      <div class="tool-icon" style="background:rgba(247,8,114,.08)">🤖</div>
+      <div>
+        <div class="tool-name"><a href="https://claude.ai/code" target="_blank">Claude Code</a> &mdash; claude.ai/code</div>
+        <div class="tool-sub">The AI interface this OS is built for. Also compatible with Codex, Gemini CLI, and Cursor.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA NEXT STEPS -->
+<div class="cta-next" id="next">
+  <h2>You've read the playbook.</h2>
+  <p class="sub">Here's what to do in the next 10 minutes.</p>
+  <div class="cta-steps">
+    <div class="cta-step">
+      <div class="cta-step-num">Step 1</div>
+      <p>Go to the GitHub repo and pick your install path &mdash; the one-line curl is fastest</p>
+    </div>
+    <div class="cta-step">
+      <div class="cta-step-num">Step 2</div>
+      <p>Open Claude Code and run the setup wizard &mdash; about 15 questions, 15 minutes</p>
+    </div>
+    <div class="cta-step">
+      <div class="cta-step-num">Step 3</div>
+      <p>Follow the seven-day ladder &mdash; don't skip ahead, don't rush it</p>
+    </div>
+    <div class="cta-step">
+      <div class="cta-step-num">Day 7</div>
+      <p>Come back here, run the weekly retro, see what compounded</p>
+    </div>
+  </div>
+  <a class="install-btn" href="https://github.com/ARCASSystems/FounderOS" target="_blank">Install Founder OS &rarr;</a>
+</div>
+
+<!-- CLOSING SIGNATURE -->
+<div class="closing">
+  <p>People don't fail processes.</p>
+  <p>Processes fail people.</p>
+</div>
+
+</main>
+
+<script>
+// Navigation active state
+const sections = document.querySelectorAll('section[id], div[id]');
+const navLinks = document.querySelectorAll('#nav a');
+const progressFill = document.getElementById('progress-fill');
+
+function onScroll() {
+  const scrollY = window.scrollY;
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  progressFill.style.width = (scrollY / docH * 100) + '%';
+
+  let current = '';
+  sections.forEach(s => {
+    if (scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+}
+window.addEventListener('scroll', onScroll, {passive: true});
+onScroll();
+
+// Mobile nav
+function toggleNav() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+document.getElementById('main').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.remove('open');
+});
+
+// Seven day timeline
+function toggleDay(idx) {
+  const days = document.querySelectorAll('.day');
+  days[idx].classList.toggle('active');
+}
+// Open day 1 by default
+document.querySelector('.day').classList.add('active');
+</script>
+</body>
+</html>
