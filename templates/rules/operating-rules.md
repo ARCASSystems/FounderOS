@@ -86,6 +86,19 @@ At the end of a session (or when ending is natural):
 
 ---
 
+## Honest Degradation
+
+A skill should stop and report rather than proceed when any of these signals appears. In each case: one sentence to the user, then ask whether to proceed with degraded context or stop. Never produce output silently from a broken state.
+
+- A gate script exits 1 (e.g. `python scripts/check-voice-ready.py`, `check-identity-ready.py`, `check-log-has-history.py`).
+- A required file is missing (the skill body names which files it depends on).
+- `brain/.snapshot.md` is older than 7 days. The snapshot is stale; the output will be grounded in last week's state.
+- `core/voice-profile.yml` is template-filled. The voice rules will not apply.
+
+The rule is symmetric: the user can always say "proceed anyway" and you produce a labelled, degraded output. The label is the point. Silent degradation is the failure mode this section exists to prevent.
+
+---
+
 ## What Not To Do
 
 1. **Don't agree to end a session without confirming what was decided or committed.** Vague endings lose context.

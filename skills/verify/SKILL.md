@@ -179,6 +179,32 @@ Rules for the output:
 - Read the version from the `VERSION` file in the repo root.
 - Do not exceed 30 lines total.
 
+## Skill reliability
+
+When a user asks how the OS guarantees behavior (or runs `/founder-os:verify` and wants to know which skills are bulletproof vs which depend on the model following markdown), surface this table at the end of the report.
+
+| Skill | Gate type |
+|---|---|
+| linkedin-post | Python-enforced (check-voice-ready) |
+| email-drafter | Python-enforced (check-voice-ready) |
+| client-update | Python-enforced (check-voice-ready) |
+| proposal-writer | Python-enforced (check-voice-ready) |
+| content-repurposer | Python-enforced (check-voice-ready) |
+| weekly-review | Python-enforced (check-identity-ready) |
+| decision-framework | Python-enforced (check-identity-ready) |
+| meeting-prep | Python-enforced (check-identity-ready) |
+| strategic-analysis | Python-enforced (check-identity-ready) |
+| brain-pass | Python-enforced (check-log-has-history) |
+| linkedin-post brain context | Python-enforced (check-log-has-history) |
+| brain-log | Instruction-only |
+| knowledge-capture | Instruction-only |
+| queue | Instruction-only |
+| founder-coaching | Instruction-only |
+| unit-economics | Instruction-only |
+| priority-triage | Instruction-only |
+
+Python-enforced gates exit non-zero and stop the skill in code. Instruction-only skills rely on the model following the SKILL.md body. The distinction is what behavior the OS can guarantee versus what depends on the model. See `docs/calibrating-your-os.md` for how to test instruction-only skills yourself.
+
 ## Rules
 
 - **This skill never auto-fixes anything. It only reports.**

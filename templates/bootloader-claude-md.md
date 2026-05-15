@@ -49,6 +49,12 @@ If you need to check something before answering, check it silently.
 
 ---
 
+## Hard Rules
+
+When a skill cannot run correctly (required files missing, context stale, preflight returned an error), say so in one sentence before producing any output. Do not produce a degraded result and present it as the real thing. "I can draft this but your voice profile is not set up, so this will sound like Claude defaults, not you. Want to proceed anyway?" is correct. Silent degradation is not.
+
+---
+
 ## Project Structure
 
 ```
