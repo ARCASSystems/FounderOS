@@ -1,0 +1,80 @@
+I had a call with Ahmed about the new logistics contract. # shape: named-entity
+I spoke to Sarah about the Sharjah office expansion. # shape: named-entity
+I got a reply from Bilal this morning about the proposal. # shape: named-entity
+I met with Omar yesterday to go over the Q2 numbers. # shape: named-entity
+I heard back from Maya about the partnership terms. # shape: named-entity
+I got introduced to James by a mutual contact last week and we had a good conversation. # shape: named-entity
+I had a coffee with Ravi to discuss the product roadmap. # shape: named-entity
+I caught up with Anna about the onboarding timeline. # shape: named-entity
+I had a meeting with Hassan about visa processing delays. # shape: named-entity
+I jumped on a call with Priya about the data migration. # shape: named-entity
+I replied to Daniel about the contract extension. # shape: named-entity
+I connected with Layla about the Riyadh expansion. # shape: named-entity
+I had a drink with Khalid and we talked about the raise. # shape: named-entity
+I spoke with Mira about the performance review process. # shape: named-entity
+I had a conversation with Tariq about the new hire timeline. # shape: named-entity
+I met with Chen about the supply chain bottleneck. # shape: named-entity
+I got a reply from Noor about the brand guidelines. # shape: named-entity
+I had a chat with Ali about the pricing model revision. # shape: named-entity
+I caught up with Saira about the training programme. # shape: named-entity
+I heard back from Jamil about the regulatory approval. # shape: named-entity
+I had a call with Faisal about the investor deck. # shape: named-entity
+I jumped on a call with Reem about the launch date. # shape: named-entity
+I spoke to Yusuf about the equity structure. # shape: named-entity
+I got introduced to Zara by a common connection and she seemed like a strong fit. # shape: named-entity
+I had a meeting with Ayaan about the customer success process. # shape: named-entity
+I had a call with Notion about their API rate limits. # shape: none
+I spoke to Marketing this morning about the campaign brief. # shape: none
+I met during Ramadan with the full team at our offsite. # shape: none
+I had a call with GitHub about the repo permissions. # shape: none
+I spoke to Engineering about the regression in the pipeline. # shape: none
+I had a call with Google about the account migration. # shape: none
+I heard back from Stripe about the payout delay. # shape: none
+I had a call with Salesforce about the CRM licence. # shape: none
+I spoke to Legal about the contract terms. # shape: none
+I connected with Slack support about the webhook issue. # shape: none
+I had a chat with Finance about the Q2 budget allocation. # shape: none
+I replied to Calendly support about the booking link. # shape: none
+I got a reply from Supabase about the RLS policy. # shape: none
+I had a call with Vercel about the deployment pipeline. # shape: none
+I spoke with Claude about the prompt caching approach. # shape: none
+I had a meeting with Design about the onboarding flow mockups. # shape: none
+I had a call with WordPress support about the plugin conflict. # shape: none
+I spoke to Sales about the Q3 pipeline forecast. # shape: none
+I had a call with PayPal customer service about the refund. # shape: none
+I got a reply from CloudFlare about the WAF rules. # shape: none
+I had a call with Dubai Chamber about membership fees. # shape: none
+I spoke to Mom about the family event this weekend. # shape: none
+I had a coffee with Zoom support about the webinar licence. # shape: none
+I connected with Hubspot about the CRM onboarding. # shape: none
+I had a call with Figma about the enterprise pricing. # shape: none
+I am so tired of this nonsense. Every single day I sit down and try to make progress on the real work and something blocks me before I can get any traction. I cannot keep working like this. I am frustrated and exhausted and I feel like I am moving backward. Every time I think I have a handle on things, three new fires start and I end up spending my whole day in reactive mode. I start my morning with a clear intention and by noon I have abandoned it completely because something more urgent appeared. I know that some of this is structural, that I have not built the right systems around my time, but knowing that does not make the exhaustion go away. I need to either change how I structure my weeks or accept that this level of chaos is going to keep grinding me down until I have nothing left to give. I cannot keep going like this and expecting different results. # shape: rant
+I am beyond frustrated right now and I do not even know where to start unpacking it. The whole week has been a disaster from beginning to end. First the deployment broke in a way nobody anticipated and I spent two days firefighting it. Then a client escalated something that should have been handled at a lower level but landed on my plate anyway. Then I missed two important calls because I was still dealing with the first two fires. I am drowning in context switches and I cannot find any clear air to focus on something meaningful for longer than twenty minutes. I have been in pure reactive mode for ten days in a row and I am sick of it. Something has to change structurally and I do not know where to start because every time I try to zoom out and think, something else explodes and I am back in the weeds immediately. I am exhausted. # shape: rant
+I feel stuck and I genuinely do not know how to get unstuck. I have been staring at the same decision for two weeks now and every time I sit down to think it through I end up going in circles and arriving back at the same unresolved tension. The uncertainty is not just unpleasant, it is actively killing my ability to move forward on anything else because every adjacent decision depends on this one being resolved first. I am frustrated with myself for not being able to just commit and move forward. Every day I delay costs me something real and I know that. I keep telling myself I need more information but I think I already have enough information and I am just scared to close off the other options. Indecision is also a decision and it is currently the worst one available to me. I need to choose something this week even if it turns out to be wrong. # shape: rant
+I am overwhelmed by how much is sitting on my plate right now and I have nobody to blame for that except myself. I am running three separate workstreams in parallel, none of them are properly resourced, and I am the critical dependency in all three of them. I know at a logical level that this is a systems problem and not a time problem, that adding more hours will not fix it, but knowing that does not make it easier to actually change the structure while I am still running everything. I am burnt out and I need to either delegate meaningfully, drop something from the list entirely, or find more capacity. The problem is I do not know which one is right. Every time I try to delegate something it falls through a crack and I end up doing it anyway. Every time I think about dropping something I worry about the cost of that choice. I am stuck in all three options simultaneously. # shape: rant
+I am losing confidence in this whole approach and I am genuinely not sure whether I should be or whether I am just in a low-energy moment and letting my anxiety do the thinking. I built this system based on assumptions that made complete sense six months ago but the market has moved in ways I did not anticipate and now I am not sure whether to push through and see if the core thesis still holds, or pivot before I burn more runway on something that may not work. I have no clean data either way. I am confused and anxious and I am spending way too much time in my head cycling through the same arguments instead of shipping and learning from real feedback. I need a reset and I need outside perspective. The problem is getting a reset takes time and energy that I currently do not have. I know I need to talk to more customers but I keep finding reasons not to because I am scared of what they might say. # shape: rant
+I have been avoiding this conversation for three weeks now and I know it and I keep letting myself get away with it. My co-founder and I are not aligned on where the company needs to go and every meeting we have ends in the same polite stalemate where we both agree to think about it more and then nothing changes. I am the one who needs to push for real clarity here because I have stronger convictions about the direction than I am letting on, but I keep finding reasons to delay. I know what I want to say and I also know exactly why I am not saying it. I am scared of the conflict and I am scared of what it might break. But sitting in this ambiguity is not protecting anything. It is just slowing everything down and making both of us less effective. A direct conversation with real tension in it is better than three more weeks of polite stalemate. I need to have it this week. # shape: rant
+I am the bottleneck in my own sales process and I have been for months and I have not fixed it. Every deal we close is there because I got personally involved at some point in the cycle. That is not scalable and I knew it was a problem when I was building it this way but I kept telling myself I would fix it after the next deal closed. There is always another deal and I never fix it. Every time I try to hand something off properly a detail falls through a crack and the deal stalls and I end up reinserted into the process anyway. I built a system that requires me and I do not know how to step back from it without stalling the revenue while I rebuild it. I am frustrated with myself for letting it get to this point. I need to treat this as a crisis because it is one even if the numbers look fine on the surface right now. The pipeline looks healthy but it is secretly dependent on me in a way that is not visible until I disappear. # shape: rant
+I spent the entire week firefighting and I have nothing meaningful to show for it by Friday. No strategic work completed, nothing shipped, no planned client progress. Just reactive email and context switches and being pulled into things that should not require my involvement at all. This has been the pattern for three weeks in a row now and I can feel myself getting slower and more anxious with each one. My energy is all going into keeping existing things from breaking rather than building anything new or moving toward the goals I set for this quarter. I need to change something structural about how my week is set up. The problem is that to redesign my own operating system I need a clear day with no interruptions and I have not had one of those in a month. I keep using my busyness as the reason I cannot fix the thing that is making me busy. I am aware this is a trap and I am still in it. # shape: rant
+I said yes to too many things in April without thinking through what it would actually cost me in May and now I am paying for that. Three proposals I need to close, two internal projects I need to finish, one hiring process I need to run, and a partnership I have not had time to follow up on properly. I am doing none of them well because I am spread too thin across all of them. I keep starting work on one thing and then stopping when something more urgent appears on another. The answer is obviously to drop something and focus but every one of those commitments feels like it will cost me something real if I deprioritise it. I am paralysed by the fear of leaving value on the table and that paralysis is currently ensuring that I leave all of it on the table. I need to make a hard decision about what gets cut this week or I will end up shipping nothing and closing nothing by the end of the month. # shape: rant
+I have been telling myself for two months that I will sort out the cash flow model when things settle down. They have not settled down and I am no longer confident they will. I have no clear picture of our actual runway right now because I keep relying on my gut and rough mental math rather than sitting down with the real numbers. I know this is a problem. I know that a founder who does not know their numbers is making decisions with missing information at exactly the moment when accurate information matters most. But I am scared of what the model will actually show me and that fear has been enough to keep me from opening the spreadsheet for eight weeks. Every week I avoid it is another week of compounding uncertainty. I need to stop treating this as a task I will do when I feel ready and start treating it as the single most important thing I can do today. I am doing it now. # shape: rant
+I just shipped the new onboarding flow to production. # shape: status-update
+I finally sent the investor update after three weeks of drafting. # shape: status-update
+I just closed the deal with the logistics client. # shape: status-update
+I finished the SOP for the sales handoff process today. # shape: status-update
+I just deployed the Supabase migration to production. # shape: status-update
+I finally launched the waitlist page after two weeks of delay. # shape: status-update
+I just signed the lease for the new office space. # shape: status-update
+I finished the brand guidelines document this morning. # shape: status-update
+I just wrapped up the quarterly board report. # shape: status-update
+I finally merged the authentication PR into main. # shape: status-update
+From now on never add trailing commas to my CSV exports. # shape: preference
+Going forward always format dates as DD-MM-YYYY in any output. # shape: preference
+I prefer you never summarise what I just said back to me. # shape: preference
+Stop asking me to confirm before logging a meeting to clients.md. # shape: preference
+I want you to always start proposals with the problem statement, not a greeting. # shape: preference
+What is the best way to set up RLS on a Supabase table? # shape: none
+How do I run this migration without locking the table? # shape: none
+Can you review this proposal before I send it? # shape: none
+What should I prioritise this week given the pipeline? # shape: none
+Is this a good time to hire a second salesperson? # shape: none

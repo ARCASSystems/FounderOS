@@ -257,6 +257,89 @@ class NamedEntityFilterTests(unittest.TestCase):
 
 
 # ---------------------------------------------------------------------------
+# Three-signal architecture tests (v1.23.1 AND-gate)
+# ---------------------------------------------------------------------------
+
+
+class ThreeSignalArchitectureTests(unittest.TestCase):
+    """Validates the v1.23.1 three-signal AND-gate (A: preposition-mandatory
+    verb, B: tight 30-char name coupling, C: first-person token).
+
+    Test #6 (Dubai Chamber) is a known architectural gap: the architecture
+    cannot reliably distinguish a city+institutional-noun compound from a
+    person's first+last name without NER. It is handled by stop-listing
+    institutional head nouns and applying a next-word peek. The test asserts
+    None and documents the gap explicitly so future reviewers understand the
+    trade-off.
+    """
+
+    def test_bare_called_no_preposition_does_not_fire(self) -> None:
+        """Signal A fails: `called` alone has no preposition anchor."""
+        prompt = "I just called Python from my bash script and it worked."
+        self.assertIsNone(UPC.detect_shape(prompt))
+
+    def test_brand_stop_listed_does_not_fire(self) -> None:
+        """A+B+C all fire but stop-list catches Notion."""
+        prompt = "I had a call with Notion about their API limits."
+        self.assertIsNone(UPC.detect_shape(prompt))
+
+    def test_bare_called_kinship_does_not_fire(self) -> None:
+        """Signal A fails: `called` alone, no preposition."""
+        prompt = "I called Mom yesterday morning."
+        self.assertIsNone(UPC.detect_shape(prompt))
+
+    def test_department_stop_listed_does_not_fire(self) -> None:
+        """A+B+C fire; stop-list catches Marketing."""
+        prompt = "I spoke to Marketing this morning about the campaign."
+        self.assertIsNone(UPC.detect_shape(prompt))
+
+    def test_temporal_preposition_not_meeting_verb(self) -> None:
+        """Signal A fails: `during` is not in the with/to/from verb set."""
+        prompt = "We met during Ramadan last year."
+        self.assertIsNone(UPC.detect_shape(prompt))
+
+    def test_institutional_compound_does_not_fire(self) -> None:
+        """Known gap: 'Dubai Chamber' is a compound institutional name.
+
+        The architecture handles this via next-word peek: 'Chamber' is
+        stop-listed as an institutional head noun, so 'Dubai' is rejected
+        when 'Chamber' immediately follows it. This does not require NER.
+        """
+        prompt = "I had a call with Dubai Chamber about membership."
+        self.assertIsNone(UPC.detect_shape(prompt))
+
+    def test_wordpress_stop_listed_does_not_fire(self) -> None:
+        """A+B+C fire; stop-list catches Wordpress."""
+        prompt = "I had a call with WordPress support yesterday."
+        self.assertIsNone(UPC.detect_shape(prompt))
+
+    def test_cloudflare_stop_listed_does_not_fire(self) -> None:
+        """A+B+C fire; stop-list catches Cloudflare."""
+        prompt = "I had a call with CloudFlare last week."
+        self.assertIsNone(UPC.detect_shape(prompt))
+
+    def test_paypal_stop_listed_does_not_fire(self) -> None:
+        """A+B+C fire; stop-list catches Paypal."""
+        prompt = "I had a call with PayPal customer service."
+        self.assertIsNone(UPC.detect_shape(prompt))
+
+    def test_generic_name_ahmed_fires(self) -> None:
+        """A+B+C fire; Ahmed not in stop-list."""
+        prompt = "I had a call with Ahmed yesterday."
+        self.assertEqual(UPC.detect_shape(prompt), "named-entity")
+
+    def test_generic_name_sarah_spoke_to_fires(self) -> None:
+        """A+B+C fire; Sarah not in stop-list."""
+        prompt = "I spoke to Sarah about the Sharjah office."
+        self.assertEqual(UPC.detect_shape(prompt), "named-entity")
+
+    def test_got_reply_from_fires(self) -> None:
+        """A: got a reply from; B: Bilal; C: I — all three fire."""
+        prompt = "I got a reply from Bilal this morning."
+        self.assertEqual(UPC.detect_shape(prompt), "named-entity")
+
+
+# ---------------------------------------------------------------------------
 # End-to-end script behaviour
 # ---------------------------------------------------------------------------
 

@@ -60,49 +60,61 @@ EMOTIONAL_VERBS = re.compile(
     re.IGNORECASE,
 )
 
-# Named-entity mention with a meeting verb. Requires:
-# - Capitalized word that is NOT a common title-case noun (months, days,
-#   tech brands, etc - see NAMED_ENTITY_STOPLIST below)
-# - A meeting/contact verb within PROXIMITY_CHARS of the candidate name
-# - Candidate span must not overlap a meeting-verb span (a sentence that
-#   starts with "Called Mom" matches the verb regex AND the candidate
-#   regex on the same characters; without the overlap check, the
-#   capitalized verb is treated as a person name).
-# Two-token discipline: the bare regex match fires on every title-case word
-# in the language. Without the stop-list + proximity + overlap requirements,
-# prompts like "I just called Python from my bash script" or "Called Mom"
-# would trigger a suggestion - the kind of false positive that trains the
-# user to ignore the hook.
+# Named-entity mention: three-signal AND-gate (v1.23.1).
+#
+# Signal A: meeting verb with mandatory preposition. The preposition (with /
+# to / from) is required — bare verbs like "called", "met", "emailed" fire
+# too widely without an anchor.
+#
+# Signal B: capitalized-name-immediately-after. Within 0-30 characters of
+# the Signal A match end, NAMED_ENTITY must match a non-stop-listed token.
+# Tight coupling (30 chars vs prior 80) reduces compound-noun and far-field
+# false positives.
+#
+# Signal C: first-person agent. The same sentence must contain a first-person
+# token from FIRST_PERSON_TOKEN. Eliminates sentence-initial bare-verb false
+# positives like "Spoke to Legal" which cannot have a first-person anchor.
+#
+# Trigger condition: all three signals present in the same sentence
+# (split on [.!?\n]+). Any absent signal → return False.
 #
 # Regex shape: cap letter + 2+ letters, with a lookahead that requires at
 # least one lowercase letter somewhere in the token. The lookahead lets
 # CamelCase brands ("GitHub", "OpenAI", "YouTube") capture as a single
-# token (instead of splitting at the second uppercase and leaving an
-# unmatched "Git" / "Open" / "You" prefix) while structurally excluding
-# all-caps acronyms ("API", "USA", "UAE", "JSON") - those are almost
-# never person names and otherwise flooded the candidate set.
+# token while structurally excluding all-caps acronyms ("API", "USA", "UAE",
+# "JSON") - those are almost never person names.
 NAMED_ENTITY = re.compile(r"\b([A-Z](?=[a-zA-Z]*[a-z])[a-zA-Z]{2,})\b")
+
 MEETING_VERBS = re.compile(
-    r"\b(met with|met|called|spoke (to|with)|spoken (to|with)|"
-    r"emailed|messaged|texted|DM'?d|whatsapped|"
-    r"had a call with|got a reply from|heard back from|"
-    r"replied to|jumped on a call with|caught up with|"
-    r"introduced to|connected with)\b",
+    r"\b("
+    r"had a (?:call|chat|meeting|coffee|drink|conversation) with|"
+    r"met with|"
+    r"spoke (?:to|with)|"
+    r"spoken (?:to|with)|"
+    r"caught up with|"
+    r"jumped on a call with|"
+    r"got a reply from|"
+    r"heard back from|"
+    r"replied to|"
+    r"introduced to|"
+    r"connected with"
+    r")\b",
     re.IGNORECASE,
 )
+
+# First-person tokens for Signal C.
+FIRST_PERSON_TOKEN = re.compile(r"\b(I|I've|I'd|I'm|we|We|me|my|My)\b")
 
 # Words to ignore when looking for a person's name. Common title-case nouns
 # that frequently appear near meeting verbs in developer-founder speech but
 # are not people. Keep tight - over-stopping kills real captures.
+#
+# v1.23.1: removed 7 categories that Signal A's mandatory-preposition
+# requirement already rejects structurally (Days, Months, Temporal pronouns,
+# Sentence-initial verbs, Determiners/quantifiers, Connectives,
+# Religious/cultural occasions). Added 3 brand entries and 12 institutional
+# head nouns for compound-name detection via the next-word peek in Signal B.
 NAMED_ENTITY_STOPLIST = frozenset({
-    # Days
-    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
-    # Months
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
-    # Temporal pronouns / sentence starters
-    "Today", "Tomorrow", "Yesterday", "Tonight", "Morning", "Afternoon",
-    "Evening", "Last", "Next", "This", "That",
     # Tech / languages / runtimes
     "Python", "Ruby", "Java", "Javascript", "Typescript", "Bash", "Powershell",
     "Node", "React", "Vue", "Angular", "Django", "Rails", "Express",
@@ -113,23 +125,16 @@ NAMED_ENTITY_STOPLIST = frozenset({
     "Google", "Apple", "Microsoft", "Amazon", "Meta", "Facebook", "Twitter",
     "Linkedin", "Youtube", "Tiktok", "Instagram", "Whatsapp", "Telegram",
     "Discord", "Slack", "Zoom", "Teams", "Reddit", "Medium", "Substack",
+    "Cloudflare",
     # Founder-stack brands
     "Notion", "Linear", "Asana", "Trello", "Airtable", "Coda", "Obsidian",
     "Github", "Gitlab", "Bitbucket", "Figma", "Canva", "Gamma", "Vercel",
     "Supabase", "Firebase", "Stripe", "Hubspot", "Salesforce", "Calendly",
     "Loom", "Granola", "Apollo", "Hunter", "Instantly", "Outreach",
+    "Wordpress", "Paypal",
     # Office suite
     "Outlook", "Gmail", "Excel", "Word", "Powerpoint", "Docs", "Sheets",
-    "Drive", "Onedrive", "Dropbox",
-    # Common verbs that capitalize at sentence start
-    "Just", "Finally", "Maybe", "Probably", "Actually", "Honestly", "Basically",
-    # Common determiners and quantifiers that show up sentence-initial
-    "Some", "Many", "Few", "Several", "Various", "Most", "All", "Both",
-    "Either", "Neither", "Each", "Every", "Other", "Another", "Such",
-    # Common connectives that show up sentence-initial
-    "Also", "Then", "Now", "Here", "There", "Still", "However", "Although",
-    "Because", "Since", "While", "When", "Where", "Why", "What", "Who",
-    "Whose", "Which", "How", "Therefore", "Otherwise", "Meanwhile",
+    "Drive", "Onedrive", "Dropbox", "Workspace",
     # Kinship terms - capitalized when used as names ("called Mom")
     "Mom", "Dad", "Mum", "Mother", "Father", "Brother", "Sister",
     "Wife", "Husband", "Son", "Daughter", "Uncle", "Aunt", "Cousin",
@@ -137,23 +142,17 @@ NAMED_ENTITY_STOPLIST = frozenset({
     # Internal departments / functions - common business prose
     "Marketing", "Sales", "Engineering", "Finance", "Operations",
     "Legal", "Product", "Design", "Support", "Customer",
-    # Religious / cultural occasions - appear near "met" / "called" in
-    # temporal context, not as meeting partners
-    "Christmas", "Easter", "Ramadan", "Eid", "Diwali", "Hanukkah",
-    "Passover", "Thanksgiving", "Halloween",
-    # Corporate suffixes that match the regex (must have 2+ lowercase)
+    # Corporate suffixes that match the regex
     "Inc",
+    # Institutional head nouns - second-token compound detection
+    # (e.g. "Dubai Chamber": "Chamber" is stop-listed so the next-word peek
+    # rejects "Dubai" as a person-name candidate)
+    "Chamber", "Office", "Authority", "Council", "Bank", "University",
+    "Hospital", "Group", "Holdings", "Ltd", "Llc", "Co",
 })
 
 # Pre-lowercased view of the stop-list for case-insensitive comparison.
-# The regex captures CamelCase tokens whose lowercase form might match a
-# title-case stop-list entry ("GitHub" -> "github" matches "Github").
 NAMED_ENTITY_STOPLIST_LOWER = frozenset(w.lower() for w in NAMED_ENTITY_STOPLIST)
-
-# A capitalized candidate counts as a "real name" if it appears within this
-# many characters of a meeting-verb match. Tighter = fewer false positives;
-# looser = catches names mentioned earlier or later in the sentence.
-NAMED_ENTITY_PROXIMITY_CHARS = 80
 
 # Status update: first-person + completion verb.
 STATUS_UPDATE = re.compile(
@@ -196,38 +195,65 @@ PRIVATE_BLOCK = re.compile(r"<private>.*?</private>", re.IGNORECASE | re.DOTALL)
 # ---------------------------------------------------------------------------
 
 def has_named_entity_near_meeting_verb(prompt: str) -> bool:
-    """Return True iff the prompt contains at least one capitalized word that
-    looks like a person's name, within NAMED_ENTITY_PROXIMITY_CHARS of a
-    meeting/contact verb.
+    """Return True iff the prompt contains a sentence with all three signals:
 
-    Filters applied (in order):
-    1. Stop-list match (case-insensitive): months, days, brands, kinship,
-       departments, occasions.
-    2. Overlap rejection: if the candidate span overlaps a meeting-verb
-       span, the candidate IS the verb capitalized at sentence start
-       ("Called Mom", "Met Finance", "Spoke to Legal"). Reject.
-    3. Proximity: the candidate must be within
-       NAMED_ENTITY_PROXIMITY_CHARS of at least one non-overlapping verb.
+    A) A meeting verb with a mandatory preposition (with / to / from).
+    B) A non-stop-listed capitalized name within 30 chars of the verb end.
+       Additional next-word peek: if the word immediately following the
+       candidate is an institutional head noun (Chamber, Bank, Group, etc.)
+       the candidate is treated as part of a compound institutional name and
+       rejected.
+    C) A first-person token (I / I've / I'd / I'm / we / me / my) in the
+       same sentence.
+
+    Sentences are split on [.!?\\n]+. All three signals must be present in
+    the same sentence; any absent signal causes the sentence to be skipped.
     """
-    verb_matches = list(MEETING_VERBS.finditer(prompt))
-    if not verb_matches:
-        return False
+    for sentence in re.split(r"[.!?\n]+", prompt):
+        sentence = sentence.strip()
+        if not sentence:
+            continue
 
-    for name_match in NAMED_ENTITY.finditer(prompt):
-        candidate = name_match.group(1)
-        if candidate.lower() in NAMED_ENTITY_STOPLIST_LOWER:
+        # Signal A: meeting verb with mandatory preposition.
+        verb_matches = list(MEETING_VERBS.finditer(sentence))
+        if not verb_matches:
             continue
-        name_start = name_match.start()
-        name_end = name_match.end()
-        # Reject candidates whose span overlaps any meeting-verb span; that
-        # candidate is a capitalized verb at sentence start, not a name.
-        if any(
-            name_start < vm.end() and vm.start() < name_end
-            for vm in verb_matches
-        ):
+
+        # Signal C: first-person token in the same sentence.
+        if not FIRST_PERSON_TOKEN.search(sentence):
             continue
+
+        # Signal B: capitalized name within 30 chars of any verb match end.
         for verb_match in verb_matches:
-            if abs(name_start - verb_match.start()) <= NAMED_ENTITY_PROXIMITY_CHARS:
+            verb_end = verb_match.end()
+            window = sentence[verb_end : verb_end + 30]
+
+            for name_match in NAMED_ENTITY.finditer(window):
+                candidate = name_match.group(1)
+
+                # Stop-list filter (case-insensitive).
+                if candidate.lower() in NAMED_ENTITY_STOPLIST_LOWER:
+                    continue
+
+                abs_start = verb_end + name_match.start()
+
+                # Sentence-start rejection: skip if immediately preceded by
+                # sentence-ending punctuation (safety guard for edge cases).
+                if abs_start > 0 and sentence[abs_start - 1] in ".!?\n":
+                    continue
+
+                # Institutional compound detection: peek at the next word.
+                # If it is in the stop-list (Chamber, Bank, Group, etc.) this
+                # candidate is the first token of a compound entity name, not
+                # a person. Reject.
+                rest = window[name_match.end():]
+                next_word_m = re.match(r"[ \t]+([A-Za-z]+)", rest)
+                if (
+                    next_word_m
+                    and next_word_m.group(1).lower() in NAMED_ENTITY_STOPLIST_LOWER
+                ):
+                    continue
+
                 return True
     return False
 
