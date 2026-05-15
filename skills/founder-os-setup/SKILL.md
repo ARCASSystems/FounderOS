@@ -37,7 +37,12 @@ Founders don't answer questions like a form. They ramble, go on tangents, answer
 
 Read the templates directory that comes with this plugin. These templates define the structure of every file you'll create. Read each template before generating the personalized version.
 
-Templates location: find the plugin install path, then look in `templates/`.
+Templates location by install method:
+- **Plugin install** (Claude Code marketplace): `templates/` inside the plugin's installed folder. Confirm by checking for `.claude-plugin/marketplace.json` in the same parent.
+- **Git clone** (`git clone https://github.com/ARCASSystems/FounderOS`): `templates/` at the repo root.
+- **Curl install**: `templates/` at the install root (the folder named in the curl recipe).
+
+If the exact path is uncertain, run a Glob for `**/templates/identity.md` and use the parent directory. The templates folder always contains: `identity.md`, `bootloader-claude-md.md`, `global-claude-md.md`, `company-claude-md.md`, `project-claude-md.md`, `voice-profile.yml.template`, `brand-profile.yml.template`, and the subfolders `brain/`, `cadence/`, `context/`, `roles/`, `rules/`, `scripts/`, `network/`, `memory/`, `raw/`, `system/`. Use that file list to verify you found the right folder before reading.
 
 If the user passed "reset": scan for an existing Founder OS folder, confirm they want to reconfigure, then re-run discovery.
 
