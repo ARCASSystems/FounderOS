@@ -11,7 +11,7 @@ mcp_requirements: []
 You are running an interactive interview to capture the user's writing voice. The output is `core/voice-profile.yml`. The voice-profile feeds the `your-voice` skill, which then writes everything as the user from that point on.
 
 <HARD-GATE>
-Do not generate `core/voice-profile.yml` until you have collected at least 2 reference samples AND walked the shaping questions, including buyer-language questions and anti-example questions. Samples are the ground truth. If the user refuses to paste samples, ask them to write 2 short pieces in the chat right now (a 2-sentence work email and a LinkedIn-style hook). Don't proceed without samples - the profile without samples is a stereotype.
+Do not generate `core/voice-profile.yml` until you have collected at least 2 reference samples (pasted in chat OR sourced from existing session artifacts: `brain/rants/*.md`, `context/decisions.md`, `brain/log.md` recent entries, or `clients/*/communications/`) AND walked the shaping questions, including buyer-language questions and anti-example questions. Samples are the ground truth. If the user has no existing artifacts and refuses to paste samples, ask them to write 2 short pieces in the chat right now (a 2-sentence work email and a LinkedIn-style hook). Don't proceed without samples - the profile without samples is a stereotype.
 
 Do not invent answers. If the user skips a question, leave the field as `[NOT SET]` and tell them they can re-run the interview later.
 </HARD-GATE>
@@ -39,6 +39,27 @@ Wait for confirmation.
 ---
 
 ## Phase 1 - Samples (the ground truth)
+
+### Pre-step: Scan for existing artifacts
+
+Before asking for fresh samples, run a quick scan for writing the user has already produced in this OS:
+
+- `brain/rants/*.md` (raw voice rants from `/rant` captures)
+- `brain/log.md` (recent #written or #drafted entries from the last 30 days)
+- `context/decisions.md` (decision rationales the user has authored)
+- `clients/*/communications/*.md` (email drafts and outbound messages)
+
+If 2 or more candidates are found, present them as:
+
+> I found writing on your system from <list 2-3 candidates with source + first 60 chars>. Should I use the first two as your reference samples? Or would you rather paste fresh ones?
+
+If the user says yes, count those as samples 1 and 2 and skip ahead to "After samples are captured" further down this Phase. If they want fresh, fall through to the paste flow.
+
+If fewer than 2 candidates exist (typical for a fresh install), skip this pre-step and go straight to the paste flow.
+
+Never use session-sourced samples without the user's explicit yes. The samples drive the voice profile - silent capture would feel surveillance-y.
+
+### Paste flow
 
 Ask:
 
