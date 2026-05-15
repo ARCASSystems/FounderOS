@@ -6,18 +6,32 @@ The operating layer for the person running the business. Six files run your comp
 
 Owned by you. Runs locally in Claude Code. Talk to it.
 
-**New here? Read the playbook first - [playbook.html](playbook.html).** It explains the problem, the three parts, how to start, and what not to do. 15 minutes. Opens in any browser.
+---
 
-**Setup ladder (40 min total, do in this order):**
+**New here? [Read the playbook first](playbook.html)** - explains the problem, the three parts, how to start, and what not to do. 15 minutes. Opens in any browser.
 
-1. **Install** - pick an [install path](#install) below (5 min). Run `./scripts/install-git-hooks.sh` to activate the privacy pre-commit hook (operator-only).
-2. **Say "set up Founder OS"** (or run `/founder-os:setup`) - the wizard builds your operating layer from your answers (15 min)
-3. **Say "set up my voice profile"** (or run `/founder-os:voice-interview`) - so every writing skill sounds like you, not Claude (10 min)
-4. **Say "set up my brand profile"** (or run `/founder-os:brand-interview`) - so every deliverable looks like you (10 min)
+**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip)** - or install via one-line curl, plugin marketplace, or git clone. See [Install](#install) below.
 
-After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-screen view of today, and `/next` recommends one action. Full first-day path in [docs/first-day.md](docs/first-day.md). Full per-command reference in [docs/commands.md](docs/commands.md). Full per-skill reference (outcome, reads, writes, voice rules, prereqs, follow-ups) in [docs/skills.md](docs/skills.md).
+---
 
-> **Path B users (manual git clone):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/today`, etc. The plugin namespace only activates on Path A. See [docs/install.md](docs/install.md) for the exact commands per path.
+## Who this is for
+
+You run the business or run a P&L inside one. Owner, operator, agency lead, consultancy head, head of department. If the buck stops with you, this is for you.
+
+You are sharp but your day is chopped into thirty-minute pieces. You have tried productivity templates that promised the world and quietly stopped getting opened by week three.
+
+You are not installing a template. You are installing an operating layer. It listens, routes, forgets nothing, and pushes back when you are about to ship something half-baked.
+
+---
+
+## What makes this different
+
+- **Stall detection built in.** The system watches for rolling items and forces keep/kill/escalate decisions. Every retro.
+- **Revenue loop enforcement.** Every outreach or content action must log same-session. Catches the gap between "I'll do X" and "I did X."
+- **Role as router.** COO, BD, CMO, Chief of Staff are behavioural modes, not personas. The right mode activates based on what you are actually doing.
+- **Plan A defines Plan B.** This product is a derivative of an actual founder's daily use. Features graduate from personal use into the product only after surviving contact with live P&L.
+- **Talk to it.** Built around dictation. Claude Code's built-in dictation is the primary input. Wispr Flow is an optional power-user upgrade. Claude Code is desktop-only today. There is no native mobile execution surface.
+- **Decay-driven keep/kill.** Set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires. The OS does not auto-kill, you decide.
 
 ---
 
@@ -29,15 +43,6 @@ Three layers, in plain English. Skills read and write across all of them.
 - **Brain layer** - log, flags, patterns, parked decisions, rants, knowledge. The memory that captures what happened, what is stuck, and what is worth reusing.
 - **Wiki layer** - `[[cross-references]]` between files plus a source archive (`raw/`) for articles, transcripts, and anything you want preserved.
 
-Areas for searching across the 45 skills:
-
-- **Daily ops:** today, weekly-review, priority-triage, brain-log, decision-framework, session-handoff, meeting-prep, knowledge-capture, founder-coaching, unit-economics, strategic-analysis, pre-send-check, sop-writer, forcing-questions, blind-spot-review, ship-deliverable
-- **Voice and brand:** voice-interview, brand-interview, your-voice, your-deliverable-template
-- **Voice-coupled writers:** linkedin-post, client-update, proposal-writer, email-drafter, content-repurposer
-- **Setup and audit:** founder-os-setup, readiness-check, business-context-loader, query, audit
-- **Wiki and safety layer:** ingest, lint, wiki-build, approval-gates, handoff-protocol, context-persistence, data-security, bottleneck-diagnostic
-- **As-needed (not daily, high value when needed):** legal-compliance
-
 **Four roles as behavioural modes:** COO (default), BD, CMO, Chief of Staff. Claude switches mode based on what you are actually doing.
 
 A **SessionStart brief** runs on every Claude Code session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up. You do not need to think about it. The brief, the Stop hook, and slash commands are Claude Code-only - on Cowork or Cloud Claude they do not fire. Details under [Substrate details](#substrate-details) below if curious. Surface-by-surface compatibility table in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
@@ -45,6 +50,31 @@ A **SessionStart brief** runs on every Claude Code session open and surfaces sta
 **The legal layer (as-needed, not daily).** Most founders won't open this every day. But when a question lands - "can I let someone go", "what's our VAT obligation", "is this NDA enforceable", or you have a meeting with a lawyer next week and need to ask the right questions - the OS already knows your jurisdiction, holds the gazetted source documents, and surfaces compliance deadlines on its own. UAE founders get a full reference set out of the box (10 domain files covering company formation, employment, tax, visas, contracts, IP, data protection, dispute resolution, and industry permits, with 27 primary government sources tracked for freshness). Founders elsewhere run `/founder-os:legal-setup`, name their jurisdiction, and load their own gazetted sources via `/founder-os:legal-add-source <url-or-pdf>`. The skill never invents law - it quotes from sources you've loaded and tells you when a source is missing. SessionStart surfaces anything in `context/compliance.md` that's overdue or due within 30 days, so a license renewal, VAT return, or visa expiry doesn't slip past you. Details below under [Legal layer](#legal-layer).
 
 **The capture-and-cite loop.** `/rant` qualifies a raw thought dump with one question, then routes it to a decision, draft, plan, log, or capture path. `/dream` distils captured rants into patterns, flags, parked decisions, and needs. Every new brain entry gets a stable `<channel>-YYYY-MM-DD-NNN` ID stamped at write time. The dream digest cites those IDs in one line each instead of restating content. `knowledge-capture` writes distilled takeaways from books, calls, and articles into `brain/knowledge/` with the same ID convention so proposal-writer and strategic-analysis can read them back. Optional: opt in to a tool-call observation log with `FOUNDER_OS_OBSERVATIONS=1` and `/dream` rolls each day's activity into an OBSERVED section.
+
+---
+
+## What it costs
+
+One AI subscription. Everything else is free.
+
+- **Founder OS** (this repo) - free, MIT licence
+- **Claude Code** (the interface) - free to install
+- **AI subscription** - Claude, OpenAI, or Google. Any plan with 100K+ context tokens. Most paid plans are $20-100/month.
+
+Free tiers usually don't have enough context for this to work well. A paid AI subscription is the only real cost. If you already pay for Copilot, Gemini Pro, or GPT-4, try those first. The files travel with you. You are not locked in.
+
+---
+
+## Before you install
+
+You need four things:
+
+- **Claude Code** - free. Download at [claude.ai/code](https://claude.ai/code). Desktop app for Mac and Windows.
+- **A paid AI subscription** - Claude Pro, Claude Max, or equivalent. Free tiers lack sufficient context.
+- **Git** - version 2.x or later. Run `git --version` to check.
+- **Python 3.11+** - for the runtime scripts. Run `python3 --version` to check.
+
+That is it. No database. No server. No Notion account required.
 
 ---
 
@@ -94,6 +124,19 @@ Open Claude Code in the cloned folder, then say "set up Founder OS" (or run `/se
 Open the FounderOS folder in Cowork and attach `CLAUDE.md` as folder instructions. Hooks and slash commands do not fire in Cowork. Use it for drafting and scheduled tasks; return to Claude Code for hooks, cadence refresh, and commits.
 
 **When to choose:** You use Cowork for day-to-day drafting and want the OS context available there alongside your Claude Code install.
+
+---
+
+## Setup ladder (40 min total, do in this order)
+
+1. **Install** - pick an [install path](#install) above (5 min). Run `./scripts/install-git-hooks.sh` to activate the privacy pre-commit hook (operator-only).
+2. **Say "set up Founder OS"** (or run `/founder-os:setup`) - the wizard builds your operating layer from your answers (15 min)
+3. **Say "set up my voice profile"** (or run `/founder-os:voice-interview`) - so every writing skill sounds like you, not Claude (10 min)
+4. **Say "set up my brand profile"** (or run `/founder-os:brand-interview`) - so every deliverable looks like you (10 min)
+
+After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-screen view of today, and `/next` recommends one action. Full first-day path in [docs/first-day.md](docs/first-day.md). Full per-command reference in [docs/commands.md](docs/commands.md). Full per-skill reference (outcome, reads, writes, voice rules, prereqs, follow-ups) in [docs/skills.md](docs/skills.md).
+
+> **Path B users (manual git clone):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/today`, etc. The plugin namespace only activates on Path A. See [docs/install.md](docs/install.md) for the exact commands per path.
 
 ---
 
@@ -233,7 +276,7 @@ Until at least those three load, the skill **refuses to answer** legal questions
 **What you actually get when the skill is loaded:**
 
 - Plain-language answers grounded in your loaded sources, with citation
-- Escalation level on every response: 🟢 confident / 🟡 confirm with a lawyer / 🔴 lawyer required
+- Escalation level on every response: confident / confirm with a lawyer / lawyer required
 - Source freshness check: the skill flags the answer if a source hasn't been verified in 6+ months
 - A list of right-question prompts before any meeting with a legal consultant - so you go in with the actual questions instead of the lawyer asking what you're asking about
 
@@ -263,33 +306,6 @@ Nothing in the OS hard-fails on a missing MCP. It tells you what it can't do and
 
 ---
 
-## Substrate details
-
-Background plumbing the wizard sets up. You do not need to read this to use the system. The wizard handles all of it. Here for the curious.
-
-- **Decay-aware brain layer.** Set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires.
-- **Stable entry IDs.** Every new brain entry (log, pattern, flag, parked, need, know) is stamped with a `<channel>-YYYY-MM-DD-NNN` ID at write time. Skills cite IDs in summaries instead of restating content.
-- **Token-aware progressive query.** `scripts/query.py` and `/founder-os:query` operate in three modes: `index` for top hits, `timeline` for entries within a 7-day window of an anchor file or ID, `full` for the body of specific IDs. Pure markdown plus stdlib, no vector DB.
-- **Opt-in observation log.** Set `FOUNDER_OS_OBSERVATIONS=1` to enable a `PostToolUse` hook that appends one line per tool call to `brain/observations/<date>.jsonl`. `/dream` rolls each day's activity into an OBSERVED section. Off by default.
-- **`system/quarantine.md`** is a catch-net so failing hooks and scheduled tasks stop being silent.
-- **Approval gate matrix** at `rules/approval-gates.md` tells the OS what to auto-run, what to ask about, and what to refuse outright.
-- **`brain/relations.yaml`** is a hand-curated graph of edges between files, plus auto-extracted `[[wikilinks]]` refreshed by `/founder-os:wiki-build`.
-- **Auto-memory layer.** Claude Code reads `~/.claude/projects/<slug>/memory/MEMORY.md` automatically at session start. The wizard seeds it so behavioral guards persist across sessions.
-
-Full convention spec in `rules/entry-conventions.md` (generated by setup).
-
----
-
-## Who this is for
-
-You run the business or run a P&L inside one. Owner, operator, agency lead, consultancy head, head of department. If the buck stops with you, this is for you.
-
-You are sharp but your day is chopped into thirty-minute pieces. You have tried productivity templates that promised the world and quietly stopped getting opened by week three.
-
-You are not installing a template. You are installing an operating layer. It listens, routes, forgets nothing, and pushes back when you are about to ship something half-baked.
-
----
-
 ## Who this is NOT for
 
 You want a no-code app with a UI. This is files plus skills, not an interface. You operate it through Claude Code.
@@ -312,14 +328,20 @@ If you need crons, webhooks, offline triggers, or anything that fires while you 
 
 ---
 
-## What makes this different
+## Substrate details
 
-- **Stall detection built in.** The system watches for rolling items and forces keep/kill/escalate decisions. Every retro.
-- **Revenue loop enforcement.** Every outreach or content action must log same-session. Catches the gap between "I'll do X" and "I did X."
-- **Role as router.** COO, BD, CMO, Chief of Staff are behavioural modes, not personas. The right mode activates based on what you are actually doing.
-- **Plan A defines Plan B.** This product is a derivative of an actual founder's daily use. Features graduate from personal use into the product only after surviving contact with live P&L.
-- **Talk to it.** Built around dictation. Claude Code's built-in dictation is the primary input. Wispr Flow is an optional power-user upgrade. Claude Code is desktop-only today. There is no native mobile execution surface.
-- **Decay-driven keep/kill.** Set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires. The OS does not auto-kill, you decide.
+Background plumbing the wizard sets up. You do not need to read this to use the system. The wizard handles all of it. Here for the curious.
+
+- **Decay-aware brain layer.** Set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires.
+- **Stable entry IDs.** Every new brain entry (log, pattern, flag, parked, need, know) is stamped with a `<channel>-YYYY-MM-DD-NNN` ID at write time. Skills cite IDs in summaries instead of restating content.
+- **Token-aware progressive query.** `scripts/query.py` and `/founder-os:query` operate in three modes: `index` for top hits, `timeline` for entries within a 7-day window of an anchor file or ID, `full` for the body of specific IDs. Pure markdown plus stdlib, no vector DB.
+- **Opt-in observation log.** Set `FOUNDER_OS_OBSERVATIONS=1` to enable a `PostToolUse` hook that appends one line per tool call to `brain/observations/<date>.jsonl`. `/dream` rolls each day's activity into an OBSERVED section. Off by default.
+- **`system/quarantine.md`** is a catch-net so failing hooks and scheduled tasks stop being silent.
+- **Approval gate matrix** at `rules/approval-gates.md` tells the OS what to auto-run, what to ask about, and what to refuse outright.
+- **`brain/relations.yaml`** is a hand-curated graph of edges between files, plus auto-extracted `[[wikilinks]]` refreshed by `/founder-os:wiki-build`.
+- **Auto-memory layer.** Claude Code reads `~/.claude/projects/<slug>/memory/MEMORY.md` automatically at session start. The wizard seeds it so behavioral guards persist across sessions.
+
+Full convention spec in `rules/entry-conventions.md` (generated by setup).
 
 ---
 
@@ -358,72 +380,15 @@ revenue, or commitments.
 
 ## Status
 
-Version 1.24.0. Public release.
+Version 1.24.0. Public release. 45 skills, 27 commands, 337 tests.
 
-v1.24 makes writing and reasoning skills fail visibly when their data is not set up. Three Python preflight scripts run before any voice-coupled output (`check-voice-ready.py` for LinkedIn, email, client update, proposal, content repurpose), before reasoning skills that need your real situation (`check-identity-ready.py` for weekly review, decision framework, meeting prep, strategic analysis), and before log-based reasoning (`check-log-has-history.py` for brain-pass and LinkedIn's brain context). When a gate fails, the skill stops and surfaces the one-line reason. You can say "proceed anyway" and get a draft that is labelled as running without your data. The label is the point. Run `/founder-os:verify` to see every skill mapped to its gate type. `docs/calibrating-your-os.md` covers the reliability ceiling and a five-step trace recipe if you want to test a specific skill yourself. 45 skills, 27 commands, 337 tests.
-
-v1.23 closes the central promise from v1.22. A new UserPromptSubmit hook now classifies every prompt against four shapes - rant, named-entity near a meeting verb, status update, preference utterance - and emits a capture suggestion Claude honors before responding. Rants are eagerly written to `brain/rants/<date>.md` so the text is safe on disk even if you walk away mid-thought. SessionStart prints a welcome banner on fresh installs missing `core/identity.md`, surfaces unprocessed-rant count, and nudges `/dream` when rants accumulate. Five operator-vocabulary phrases ("journal", "schedule", "goals", "customers", "I decided") route into the right skill without you knowing the OS-internal name. Named-entity detection filters common title-case nouns and requires the candidate to sit within 80 characters of the meeting verb, so prompts like "I just called Python from my bash script" do not falsely fire. v1.22's full feature set is intact: three-role setup wizard, `<private>` exclusion tag, weekly observation rollup, end-to-end critical path tests.
-
-v1.21 closes the gap on what FounderOS shows. A new execution queue (`cadence/queue.md`) surfaces
-what is moving in the first three lines of every session. The queue skill manages five operations -
-read, add, start, done, park - and enforces a 3-item ACTIVE cap that forces a keep/kill decision
-before a fourth thing starts. The queue rolls into the weekly review automatically. A new verify
-skill runs a read-only health check across 8 substrate points (hooks, scripts, wiki integrity,
-cadence freshness, free-tier floor, MCP state, plugin surface, auto-memory) so founders can see
-substrate state without reading individual files. Five writing skills (email-drafter, sop-writer,
-content-repurposer, client-update, proposal-writer) now read `brain/.snapshot.md` at task time,
-completing the snapshot-consumer wiring started in v1.10. A multi-archetype trace pass against two
-non-founder-shaped personas (Maya, B2C meditation app; Dev, ops-not-founder) surfaced 5 gaps, 1
-patched in v1.21 (weekly-review balance check now skips for non-owner operators). 44 skills, 26
-commands, 182 tests.
-
-v1.20.3 deepens the voice profile with anti-examples. The voice interview now asks for contrarian takes, aesthetic crimes, red flags, and 3 to 6 BAD/GOOD writing pairs. The profile stores those under `voice.anti_examples`, and the five voice-coupled writing skills run a final filter that scans for the user's rejected patterns before returning a draft. Trace files show the Marcus pre/post LinkedIn pass on a topic with no prior buyer phrase.
-
-v1.20.2 closes the intake-to-output loop. The setup wizard now captures positioning, the voice interview captures buyer language, and the brand interview records existing visual proof so first drafts have the buyer, offer, pain, and brand references they need. `/rant` now asks one qualifying question and routes to a decision, draft, plan, log, or capture path instead of always writing a dump. The writing skills stop when voice data is empty instead of quietly drafting from defaults. The README setup ladder is natural-language-first, `skills/today` covers "what's on for today?", and SessionStart Tip detection now counts explicit action tags instead of planning mentions.
-
-v1.20.1 closes Codex CTO findings against v1.20.0. Real fixes, not cosmetic. The menu skill now has an actual engine: `scripts/menu.py` reads state and scores capabilities deterministically instead of asking the model to do it inline. The SessionStart Tip line no longer surfaces on a fresh install with no log history. The setup wizard now has test coverage for the 4 + 4 multi-choice tool-stack and work-style prompts. Skill count corrected from 39 to 40 across README, manifests, ROADMAP, CHANGELOG, and `skills/index.md` (the v1.20.0 release added the `menu` skill but the docs never caught up). 56 tests still pass plus new coverage for menu engine, tip gate, and wizard MC structure.
-
-v1.20.0 is the discoverability release. FounderOS now routes on natural language. Slash commands stayed but became parenthetical shortcuts. Every command and skill description leads with the natural-language phrasing the founder would actually say in chat. A new `/founder-os:menu` (say "show me what you can do") returns 5 to 7 capability suggestions tailored to your current state, scored against `brain/.snapshot.md`, this week's commitments, the last 7 days of `brain/log.md`, and the presence of voice and brand profiles. README adds a third "Or say…" column to the slash command table and a new "How to use it - talk to Claude" section near the top. The release also closes two pass-1 findings deferred from v1.19.6: `scripts/query.py` now returns a no-positive-match block instead of graph-popular junk on a zero-score query, includes rants when the question contains "rant", "dump", "avoidance", "vent", or "raw", and applies stop-word filtering, light stemming, and a recency bonus; the setup wizard's tool-stack and work-style questions are now 4 + 4 short multi-choice prompts instead of two long open-ended walls. 21 commands now (added `menu`). 56 tests still pass plus new tests for menu, tip, query scoring, and the MC wizard.
-
-v1.19.6 was a hotfix from a two-pass external review. Three things closed. The setup wizard's final orientation now detects whether the user installed via Path A (plugin namespace) or Path B (manual git clone) and renders the right command form for the path they used. Before this patch, a Path B user reading the post-setup checklist would have hit "command not found" on every namespaced command. The same review found a self-introduced prefix rendering bug that would have rendered Path B commands without a leading slash; fixed in the same release. Separately, the README's SessionStart claim was qualified to "every Claude Code session open" (it does not fire on Cowork or Cloud Claude), a Path D Cowork section was added to the README, and `docs/install.md` gained a full Cowork mode setup recipe plus `/today` and `/next` in the After-install checklist. Finally, the orientation tone across the wizard and install doc was flipped from slash-command-led to natural-language-led: real users do not memorize a 20-command surface, and Cowork mode does not fire slash commands at all, so the orientation now leads with "say 'set up my voice profile'" and treats slash commands as parenthetical shortcuts. No script changes; 56 tests still pass.
-
-v1.19.5 was a maintainability cleanup. The v1.19.4 narrative described the parser as using a "single shared helper" for both flat and nested quoted-value handling, but the nested branch still had the unescape logic inlined. Behavior was identical, but the duplication was a future-drift trap of the same kind that produced earlier review findings. The nested branch now routes through the same `unquote()` helper. No behavior change; 56 tests still pass.
-
-v1.19.4 closes one follow-up from a fifth review pass. The quote-aware unescape introduced in v1.19.2 and narrowed in v1.19.3 was only applied to the nested `wiki_links:` list path. The flat curated path (`source: "..."` / `target: "..."` / `from: '...'` / `to: '...'`) was still using the older "strip outer quotes only" logic, so a flat double-quoted value with an inner `\"` parsed as `foo\"bar` instead of `foo"bar`. Both paths now share a single `unquote` helper that strips outer quotes and reverses only the matching escape. Three new tests cover the flat-path round-trip in both quote shapes plus the literal-backslash preservation case. 39 skills, 20 commands, 56 tests.
-
-v1.19.3 closes two follow-ups from a fourth review pass. The v1.19.2 escape-unescape fix was applied symmetrically to both quote characters, which over-applied: a hand-written single-quoted YAML target like `'foo\"bar'` would have parsed as `foo"bar`, losing the literal backslash that belongs to the user's content. The unescape is now quote-char-aware (only `\"` inside `"..."`, only `\'` inside `'...'`). And the ROADMAP `v1.19.0` shipped bullet still summarised "Six fixes" and credited v1.19.0 with the `WSLENV/p` fix; CHANGELOG and README had been corrected, ROADMAP had not. Now matches. One new test locks the single-quote round-trip in. 39 skills, 20 commands, 53 tests.
-
-v1.19.2 closes three follow-ups from a third review pass. The v1.19.1 narrative reintroduced the previous reviewer's tool name while explaining its earlier removal (cleaned up). The v1.19.0 narrative still summarised the WSL fix as if it had landed in v1.19.0 (it didn't fully land until v1.19.1, now reflected). And `parse_edges()` was reading `\"` literally inside a quoted target instead of unescaping it back to `"` (the wiki-build serializer escapes the quote on output, so the round-trip was asymmetric for any target containing a literal double-quote). One new test covers the escape round-trip. 39 skills, 20 commands, 52 tests.
-
-v1.19.1 is a follow-up patch from a second review pass over v1.19.0. Four real fixes: the WSL test path-conversion hardened (the v1.19 fallback returned the cwd `.` because `TARGET_PATH` did not propagate into WSL bash without `WSLENV/p`; the probe now sets `WSLENV` and validates the result), `candidate_files()` now walks every prefix in `INCLUDE_PREFIXES` so cadence files, `context/clients.md`, and `core/*.md` can surface as query results (the v1.19 widening only added `roles/` and `rules/`), `parse_edges()` keeps quoted targets that happen to start with `source:` / `target:` (the new state machine was treating them as record boundaries and dropping the edge), and parked-decision decay prose now matches the hook's actual behavior (the hook does not evaluate trigger conditions; parked decisions surface manually during the Chief of Staff scan unless the operator sets an explicit `Decay after:` line). Also: tool-branding attribution removed from the v1.19 narrative per `rules/commit-naming.md:11`. Three new tests cover the quoted-target edge case and the wider candidate scope. 39 skills, 20 commands, 51 tests.
-
-v1.19.0 closes an external review pass on v1.15.0. Five user-visible fixes plus an attempted WSL bash test fix that did not fully land. Search now reads the wiki connections you build between files (the parser was silently dropping every auto-generated edge during traversal). Search now covers your role and rule files (v1.14 added them to the wiki graph; this release catches up the search side). Fresh installs run clean again (lint stopped flagging the seeded parked-decisions example as a "stale entry" warning). The manual-clone install gets correct command guidance on Day 1 (`docs/first-day.md` now carries a Path B note at the top; before, you would hit "command not found" on the first command). And the plugin marketplace shows the right version (the manifests had been stamped at v1.13.0 since that release, even after v1.14-v1.18 shipped). The WSL test path conversion got an attempted fix (a `wslpath` probe added on top of `cygpath`) but the path argument did not propagate into WSL bash, so the probe still returned the cwd and the suite still failed there; v1.19.1 closes the gap with `WSLENV/p` and result validation. Plus three smaller doc-and-surface fixes. Five new tests cover the search/wiki connection logic. 39 skills, 20 commands, 48 tests.
-
-v1.18.0 closes the third layer of doc drift. v1.16 caught the root-level docs and v1.17 caught the first-day/bootloader inventory. v1.18 catches the per-skill and per-command reference docs (`docs/skills.md` and `docs/commands.md`), which described the lint outcome with the pre-v1.15 surface (no decay-gap, no log-cap, ambiguous slugs only listed candidates instead of naming the deterministic pick). Both reference files now describe what `/founder-os:lint` actually prints. No code changes. 39 skills, 20 commands, 43 tests.
-
-v1.17.0 closes the second layer of doc drift caught in the v1.16 sync. `docs/first-day.md` had a "What SessionStart shows you (v1.4)" section listing the brief's surfaces - the inventory was frozen at v1.4 and missed two items added since: the `clients/<slug>/` auto-memory diff (v1.12) and the `Observations:` line (v1.15). `templates/bootloader-claude-md.md` (the file every fresh `/founder-os:setup` writes as the user's CLAUDE.md) had the same stale inventory. A new user reading first-day.md or their newly-installed CLAUDE.md would see fewer brief surfaces than the hooks actually print. Both files now name all nine surfaces. No code changes. 39 skills, 20 commands, 43 tests.
-
-v1.16.0 is the docs-sync release. README, ROADMAP, CLAUDE.md, and AGENTS.md were claiming v1.13 surface state after v1.14 and v1.15 had already shipped. New users cloning the repo would see version drift in the first thirty seconds. v1.16 catches the docs up: README "Production" stamp now reads v1.16.0, the Status section names v1.14 + v1.15 prose, ROADMAP Shipped list extends to v1.15, and the SessionStart-brief inventory in CLAUDE.md and AGENTS.md names the new `Observations:` line. No code changes. 39 skills, 20 commands, 43 tests.
-
-v1.15.0 is the wiki-hardening Phase 2 release. After v1.14 closed four wiki-integrity issues, the same audit surfaced five more places where the OS quietly degrades without telling the user. Lint now flags entries that lack `Decay after:` (silent decay miss across flags, patterns, and parked decisions), `brain/log.md` past its 300-line cap, and names the deterministic pick on ambiguous bare slugs (resolution order is `INCLUDE_PREFIXES` then alphabetical, first match wins). SessionStart brief now surfaces `FOUNDER_OS_OBSERVATIONS` state on every open so the silent-disable case is visible. `docs/tools-and-mcps.md` Obsidian section names the day-0 empty-graph expectation and the bare-slug ambiguity rule. 39 skills, 20 commands, 43 tests. No script changes; lint and doc surfaces only.
-
-v1.14.0 is the wiki integrity release. An audit prompted by an Obsidian-vault user question surfaced four issues that quietly degrade the memory and operational layer: cross-references inside `roles/` and `rules/` were silently dropped from `brain/relations.yaml`, `[[file]]` and `[[file.md]]` produced two unrelated graph nodes, lint flagged most seeded root files as orphans on a fresh install, and one stale-content rule named a field that no template uses. All four closed. 39 skills, 20 commands, 43 tests. No new skills, no new commands.
-
-v1.13.0 is the install-ergonomics and hardening release. A full audit caught a handful of walls a first-time user would hit cold from the README. Path B told users to run `/founder-os:setup` when the bare command for a manual clone is `/setup`. Path A had no signal that `/reload-plugins` is sometimes needed before the namespace activates. `CLAUDE.md` referenced a `/loop weekly` command and a `skill-creator` skill that do not ship. The v1.12 memory-diff hook used `python` only and silently no-op'd on macOS PowerShell. The setup wizard was shipping the un-refactored template copy of `wiki-build.py` over the fixed one. `/founder-os:query` interpolated user input into a shell line, which would execute `;`, `|`, backticks, and `$(...)`. v1.13 closes all of those, plus a set of cross-platform fixes in the audit scripts, the bash hook, and the tests. No new skills, no new commands. 39 skills, 20 commands, 43 tests - same surface, install paths that actually work.
-
-v1.12.0 closes a cross-session memory gap. When a cloud Claude session, a parallel local session, or a teammate creates a new `clients/<slug>/` folder with intel and prep, the next local session boots blind to it because `MEMORY.md` does not auto-populate from filesystem changes. A new helper at `scripts/memory-diff.py` (template-mirrored to `templates/scripts/memory-diff.py`) runs from the SessionStart hook on every session open. It walks `clients/<slug>/`, checks each slug against your auto-memory index and per-file `project_*.md` entries, and prints any uncovered slugs with a one-line nudge to write a memory entry. Stdlib only. Free-tier accessible. Hook-only feature - no new skill, no new command. Setup wizard now copies five Python helpers (was four) so fresh installs get the helper out of the box. 39 skills, 20 commands, 43 tests (nine new memory-diff tests) - no surface change beyond the helper itself.
-
-v1.11.0 was the launch-hardening release. v1.10 shipped the runtime brain context, but a few install-time gaps quietly broke the marquee feature for fresh users. v1.11 closes those gaps. The setup wizard now copies all four runtime helpers (was two) so brain-snapshot and brain-pass actually work after Path A install. `/founder-os:wiki-build` now runs on a fresh clone (the script was missing). `/founder-os:update` and `/founder-os:uninstall` now cover scripts, rules, docs, and AGENTS.md (previously omitted, so updates would silently miss new code). PowerShell hooks fixed for non-English Windows locales. Bash hooks gained exit guards on path resolution. New `.gitattributes` enforces LF on shell and Python so Windows clones don't break Bash hooks with CRLF. CLAUDE.md and AGENTS.md catch up to the v1.10 surface (39 skills, 20 commands, brain-pass / brain-snapshot rows). README mobile and kill-criteria claims corrected. End-to-end audit pass on leaks, code, docs, install flow, and skill integrity. No new surface. Just the finish.
-
-v1.10.0 was the runtime brain context release. A small deterministic snapshot (open flags, this week's must-do, recent decisions, voice and brand fields, staleness) regenerates on demand at `brain/.snapshot.md`. Nine output-producing skills (meeting-prep, weekly-review, strategic-analysis, decision-framework, founder-coaching, knowledge-capture, unit-economics, priority-triage, brain-log) read it at task time so output reflects current state instead of starting cold. A `brain-pass` skill (`/founder-os:brain-pass "<question>"`) synthesises answers across the brain layer with stable-ID citations - no embeddings, no API call, free-tier accessible. `meeting-prep` and `linkedin-post` auto-invoke brain-pass before producing output.
-
-Full release history in [`CHANGELOG.md`](CHANGELOG.md). Current limits in [`notion-package/pages/05-current-limits.md`](notion-package/pages/05-current-limits.md).
+v1.24 adds Python preflight gates so writing and reasoning skills fail visibly when their data is not set up, rather than producing generic output silently. Full release history in [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
 ## Release cadence and forking
 
-FounderOS ships in deliberate increments. Each release closes a specific gap that the previous one made visible. v1.21 added the visible queue and health check. v1.22 added the privacy tag and observation rollup. v1.23 added the natural-language capture path. v1.24 added Python preflight gates so writing and reasoning skills fail visibly when their data is not set up, rather than producing generic output silently. New releases land when there is a real gap worth closing — not on a calendar.
+FounderOS ships in deliberate increments. Each release closes a specific gap that the previous one made visible. v1.21 added the visible queue and health check. v1.22 added the privacy tag and observation rollup. v1.23 added the natural-language capture path. v1.24 added Python preflight gates so writing and reasoning skills fail visibly when their data is not set up, rather than producing generic output silently. New releases land when there is a real gap worth closing, not on a calendar.
 
 Community forks are encouraged. If you build something on top of FounderOS, open a discussion thread linking your fork. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for what we accept and [`docs/forking.md`](docs/forking.md) for extension points.
 
@@ -434,8 +399,10 @@ Community forks are encouraged. If you build something on top of FounderOS, open
 
 ## License
 
-MIT. Copyright (c) 2026 ARCAS Systems. See [`LICENSE`](LICENSE).
+MIT. Copyright (c) 2026 ARCAS Systems. See [LICENSE](LICENSE).
 
 ---
+
+People first. Systems second. AI where it earns the right.
 
 Built by [ARCAS Systems](https://arcassystems.com).
