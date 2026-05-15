@@ -2,6 +2,34 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.24.0 - 2026-05-15
+
+The skill reliability release. FounderOS is instruction-based: behavioral claims ("the skill stops when the voice profile is missing", "brain-pass returns Answer/Evidence/Confidence/Gaps") depend on Claude following markdown - not enforced code. The Python layer (hooks, scripts) was deterministic and tested; the skill layer was not. This release closes that gap by pushing critical preflight checks into Python scripts and making honest degradation a named operating rule.
+
+### Python gate scripts (WS-A)
+
+- **`scripts/check-voice-ready.py`** - exits 1 if `core/voice-profile.yml` is missing or still contains template markers (`{{`, `[CHOOSE`, `[NOT SET]`, `<your`, `[example:`). Prints a one-line reason. Pure stdlib.
+- **`scripts/check-identity-ready.py`** - exits 1 if `core/identity.md` is missing or contains `{{` template braces or `[FILL]` / `[NOT SET]` markers.
+- **`scripts/check-log-has-history.py`** - exits 1 if `brain/log.md` has no `### YYYY-MM-DD` dated entries (fresh-install signal).
+
+Ten skill files now call these scripts before producing output. The voice gate runs on `linkedin-post`, `email-drafter`, `client-update`, `proposal-writer`, and `content-repurposer`. The identity gate runs on `weekly-review`, `decision-framework`, `meeting-prep`, and `strategic-analysis`. The log-history gate runs on `brain-pass` and inside `linkedin-post`'s brain-context block. If a gate exits 1, the skill stops and surfaces the script's one-line message to the user.
+
+Nine new tests across `tests/test_check_voice_ready.py`, `tests/test_check_identity_ready.py`, and `tests/test_check_log_has_history.py`. The existing `tests/test_writing_skill_gates.py` is updated to assert the new script-call pattern instead of the old prose-block format. Full suite: 335 tests, all pass.
+
+### Explicit ceiling language (WS-B)
+
+- **`templates/bootloader-claude-md.md`** - new Hard Rules section. When a skill cannot run correctly, the model must say so in one sentence before producing any output. Silent degradation is named as the failure mode this rule prevents.
+- **`templates/rules/operating-rules.md`** - new Honest Degradation section. Lists the four signals that should stop a skill (gate script exit 1, missing required file, snapshot older than 7 days, template-filled voice profile). The user can always say "proceed anyway" and get a labelled degraded output.
+- **`skills/verify/SKILL.md`** - new Skill reliability table mapping every writing and reasoning skill to its gate type (Python-enforced or Instruction-only). Surfaced inside the existing `/founder-os:verify` report.
+
+### Calibration documentation (WS-C)
+
+- **`docs/calibrating-your-os.md`** - new user-facing guide for operators with budget and time. Covers the two reliability layers, when "good enough" is genuinely good enough (most operators), when calibration is worth the investment, and a five-step manual trace recipe operators can run with a spec, three to five real inputs, and 30 minutes per skill. No framework, no API integration. The trace is the operator's work.
+
+### What did not change
+
+No new skills. No new commands. No architecture changes. The capture hook is untouched. The SessionStart brief is untouched. Existing Python script tests are untouched.
+
 ## v1.23.1 - 2026-05-15
 
 External CTO review of v1.23.0 returned SHIP WITH PATCHES. This release closes three finding classes in one bundle.
