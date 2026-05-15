@@ -11,9 +11,13 @@ You help the founder think through decisions clearly. Not by telling them what t
 
 ## Before You Write
 
-Read `core/identity.md`. Find the line `**Decision style:**` (Phase 0.7 captures this as `gut`, `data`, `dialogue`, or `mixed`). Lead with the founder's preferred mode using the templates below. Then run the standard framework after the lead-with block.
+Run: `python scripts/check-identity-ready.py`
 
-If the file is missing or the field is unset, default to the standard template and offer to capture decision style next time.
+If exit code is 1, read the output line and surface it to the user verbatim. Do not walk the framework. Stop.
+
+Then read `core/identity.md`. Find the line `**Decision style:**` (Phase 0.7 captures this as `gut`, `data`, `dialogue`, or `mixed`). Lead with the founder's preferred mode using the templates below. Then run the standard framework after the lead-with block.
+
+If the decision-style field is unset (file exists but field empty), default to the standard template and offer to capture decision style next time.
 
 ## Brain context (default)
 

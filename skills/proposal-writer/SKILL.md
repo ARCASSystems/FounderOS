@@ -12,13 +12,15 @@ You are writing a proposal for the founder. The proposal must reflect their voic
 
 ## Before producing output
 
-Read in this order:
+Before writing, run: `python scripts/check-voice-ready.py`
 
-1. `core/voice-profile.yml` - the founder's voice rules. If the file is missing OR contains template defaults (lines starting with `{{`, values like `<your tone here>`, `[CHOOSE`, `[example:`, or `[NOT SET]`), STOP and tell the user:
+If exit code is 1, read the output line and surface it to the user verbatim. Do not produce any draft. Stop.
 
-   > Your voice profile is empty. Say "set up my voice profile" to run the interview first, or this output will sound like Claude defaults rather than you. Want me to start the interview now, or proceed with defaults anyway?
+If the user explicitly chooses to proceed with defaults after seeing that message, write with the universal anti-AI baseline and clearly label that the voice profile was not applied.
 
-   If the user chooses to proceed with defaults, write with the universal anti-AI baseline and clearly label that the voice profile was not applied.
+Then read in this order:
+
+1. `core/voice-profile.yml` - the founder's voice rules, now confirmed ready.
 2. `core/brand-profile.yml` - if present, governs any branded version of this proposal (PDF, DOCX). For plain-text proposals, this is optional.
 3. `context/companies/<client>.md` if a relevant context file exists - prior research, scope conversations, the prospect's stated pain.
 4. Any prior scoping notes the user points you at.

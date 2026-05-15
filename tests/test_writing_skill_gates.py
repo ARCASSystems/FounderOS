@@ -11,31 +11,23 @@ WRITING_SKILLS = {
     "content-repurposer": REPO_ROOT / "skills" / "content-repurposer" / "SKILL.md",
 }
 
-GATE_MESSAGE = (
-    'Your voice profile is empty. Say "set up my voice profile" to run the '
-    "interview first, or this output will sound like Claude defaults rather "
-    "than you. Want me to start the interview now, or proceed with defaults "
-    "anyway?"
-)
+GATE_SCRIPT_CALL = "python scripts/check-voice-ready.py"
 
 
 class WritingSkillVoiceGateTests(unittest.TestCase):
-    def test_each_writing_skill_stops_on_empty_voice_profile(self) -> None:
+    def test_each_writing_skill_calls_voice_ready_script(self) -> None:
         for name, path in WRITING_SKILLS.items():
             with self.subTest(skill=name):
                 body = path.read_text(encoding="utf-8")
-                self.assertIn("Before producing output", body)
-                self.assertIn("core/voice-profile.yml", body)
-                self.assertIn("STOP", body)
-                self.assertIn(GATE_MESSAGE, body)
+                self.assertIn(GATE_SCRIPT_CALL, body)
+                self.assertIn("exit code is 1", body)
+                self.assertIn("Stop", body)
 
-    def test_each_gate_detects_template_defaults(self) -> None:
-        markers = ("{{", "<your tone here>", "[CHOOSE", "[example:", "[NOT SET]")
+    def test_each_skill_still_reads_voice_profile_after_gate(self) -> None:
         for name, path in WRITING_SKILLS.items():
             with self.subTest(skill=name):
                 body = path.read_text(encoding="utf-8")
-                for marker in markers:
-                    self.assertIn(marker, body)
+                self.assertIn("core/voice-profile.yml", body)
 
 
 class WritingSkillAntiExampleFilterTests(unittest.TestCase):

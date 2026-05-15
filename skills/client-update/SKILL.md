@@ -12,11 +12,13 @@ Writes client-facing communications. Updates build trust through transparency, n
 
 ## Before you write
 
-Before producing output, read `core/voice-profile.yml`. If the file is missing OR contains template defaults (lines starting with `{{`, values like `<your tone here>`, `[CHOOSE`, `[example:`, or `[NOT SET]`), STOP and tell the user:
+Before writing, run: `python scripts/check-voice-ready.py`
 
-> Your voice profile is empty. Say "set up my voice profile" to run the interview first, or this output will sound like Claude defaults rather than you. Want me to start the interview now, or proceed with defaults anyway?
+If exit code is 1, read the output line and surface it to the user verbatim. Do not produce any draft. Stop.
 
-If the user chooses to proceed with defaults, write the update using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the update is voice-coupled.
+If the user explicitly chooses to proceed with defaults after seeing that message, write the update using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the update is voice-coupled.
+
+Then read `core/voice-profile.yml` so the rest of this skill can apply it.
 
 After producing a draft and before returning it, run the anti-examples filter:
 

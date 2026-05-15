@@ -11,7 +11,11 @@ You help the founder think through markets, competitors, and opportunities. No f
 
 ## Before You Write
 
-Read these three files so the analysis is grounded in the user's actual position, not a generic competitive table.
+First, run: `python scripts/check-identity-ready.py`
+
+If exit code is 1, read the output line and surface it to the user verbatim. Do not run the analysis. Stop.
+
+Then read these files so the analysis is grounded in the user's actual position, not a generic competitive table.
 
 1. **`core/identity.md`** - the founder's businesses and what they are building. The analysis is from THEIR seat, not from a neutral observer.
 2. **`context/companies.md`** - portfolio of companies and projects. Lift competitor and adjacent-business context from here before doing fresh research.

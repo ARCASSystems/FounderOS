@@ -12,11 +12,13 @@ You are writing LinkedIn posts for the founder whose voice profile lives in `cor
 
 ## Before you write
 
-Before producing output, read `core/voice-profile.yml`. If the file is missing OR contains template defaults (lines starting with `{{`, values like `<your tone here>`, `[CHOOSE`, `[example:`, or `[NOT SET]`), STOP and tell the user:
+Before writing, run: `python scripts/check-voice-ready.py`
 
-> Your voice profile is empty. Say "set up my voice profile" to run the interview first, or this output will sound like Claude defaults rather than you. Want me to start the interview now, or proceed with defaults anyway?
+If exit code is 1, read the output line and surface it to the user verbatim. Do not produce any draft. Stop.
 
-If the user chooses to proceed with defaults, draft the post using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the post is voice-coupled.
+If the user explicitly chooses to proceed with defaults after seeing that message, draft the post using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the post is voice-coupled.
+
+Then read `core/voice-profile.yml` so the rest of this skill can apply it.
 
 After producing a draft and before returning it, run the anti-examples filter:
 
@@ -48,9 +50,11 @@ Use `core/identity.md` `## Positioning` to understand who the founder sells to, 
 
 ## Brain pass (auto)
 
-Before invoking brain-pass, check whether `brain/log.md` contains at least one dated entry (a line matching `^### \d{4}-\d{2}-\d{2}`). If the log has no dated entries (fresh install with template-only content), skip brain-pass entirely and proceed directly to drafting. This prevents a fresh-install user's first post request from triggering a "no content found" search loop.
+Before invoking brain-pass, run: `python scripts/check-log-has-history.py`
 
-If dated log entries exist, invoke the `brain-pass` skill (`skills/brain-pass/SKILL.md`) with this question:
+If exit code is 1, skip brain-pass entirely and proceed directly to drafting. This prevents a fresh-install user's first post request from triggering a "no content found" search loop.
+
+If exit code is 0, invoke the `brain-pass` skill (`skills/brain-pass/SKILL.md`) with this question:
 
 > What has the user posted on LinkedIn recently? What themes are stale? What recent decisions or knowledge entries would make a fresh post?
 

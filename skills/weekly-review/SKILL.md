@@ -10,6 +10,12 @@ mcp_requirements: []
 
 You run the weekly operating rhythm. Two modes: retro (look back) and planning (look forward). Usually both in one session.
 
+## Step 0: Identity gate
+
+Before producing output, run: `python scripts/check-identity-ready.py`
+
+If exit code is 1, read the output line and surface it to the user verbatim. Do not run the retro or planning blocks. Stop.
+
 ## Step 1: Read Current State
 
 Read these files silently:

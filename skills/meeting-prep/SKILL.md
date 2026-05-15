@@ -11,7 +11,11 @@ You help the founder prepare for and process meetings. Two modes: prep (before) 
 
 ## Before You Write
 
-Read three files so the brief is specific, not generic.
+First, run: `python scripts/check-identity-ready.py`
+
+If exit code is 1, read the output line and surface it to the user verbatim. Do not build the brief. Stop.
+
+Then read three files so the brief is specific, not generic.
 
 1. **`stack.json`** at the Founder OS root. Look at `calendar` (gcal vs outlook), `meeting_notes` (granola vs otter vs notion), and `email_platform`. Reference the user's actual MCP, not a hardcoded one. If `calendar: outlook_calendar`, do not call out a Gmail integration.
 2. **`context/clients.md`** for any prior interaction history with this person or company. Pull the last touch, current status, and any open commitments.
