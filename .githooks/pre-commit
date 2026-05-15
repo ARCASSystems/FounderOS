@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+set -e
+python "$(git rev-parse --show-toplevel)/scripts/check-private-names.py" --staged

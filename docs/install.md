@@ -161,6 +161,7 @@ You can switch paths anytime. The OS is your files - they are the same regardles
 All paths converge on the same six files. Whichever path you picked, the next steps are the same. You can run the slash command or ask Claude in plain English - both work.
 
 1. **Start the wizard.** Say "set up Founder OS" (or run `/founder-os:setup` on Path A, `/setup` on Path B). Path D: skip until you have set up locally.
+   Run `./scripts/install-git-hooks.sh` to activate the privacy pre-commit hook (operator-only).
 2. **Add your voice.** Say "set up my voice profile" (or run `/founder-os:voice-interview` on Path A, `/voice-interview` on Path B). Captures how you write so every writing skill sounds like you.
 3. **Add your brand.** Say "set up my brand profile" (or run `/founder-os:brand-interview` on Path A, `/brand-interview` on Path B). Captures colors, fonts, logo so every branded deliverable looks like you.
 4. **See your day.** Ask "what's on for today?" (or run `/today`). Ask "what should I focus on next?" (or run `/next`).

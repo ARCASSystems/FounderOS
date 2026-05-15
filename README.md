@@ -6,7 +6,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 **Setup ladder (40 min total, do in this order):**
 
-1. **Install** - pick an [install path](#install) below (5 min)
+1. **Install** - pick an [install path](#install) below (5 min). Run `./scripts/install-git-hooks.sh` to activate the privacy pre-commit hook (operator-only).
 2. **Say "set up Founder OS"** (or run `/founder-os:setup`) - the wizard builds your operating layer from your answers (15 min)
 3. **Say "set up my voice profile"** (or run `/founder-os:voice-interview`) - so every writing skill sounds like you, not Claude (10 min)
 4. **Say "set up my brand profile"** (or run `/founder-os:brand-interview`) - so every deliverable looks like you (10 min)

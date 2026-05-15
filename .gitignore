@@ -82,3 +82,6 @@ traces/v122-codex-final-review-brief.md
 
 # Agent runner scratch directory (dev tooling, not product code)
 .agents/
+
+# Operator-local private-name patterns for pre-commit hook (gitignored; template is tracked)
+scripts/private-name-patterns.txt

@@ -1,0 +1,10 @@
+# Private-name patterns. One regex per line. Lines starting with # are comments.
+# The hook scans staged diffs and commit messages against this file.
+# This file is gitignored once filled in; only the .template is tracked.
+#
+# Add patterns for names that must not appear in commits. Examples:
+#   \bAqsa\b
+#   \bPriya\b
+#   \bBilal\b
+#
+# Add more lines below as needed.
