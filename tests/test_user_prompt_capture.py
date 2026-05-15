@@ -57,6 +57,33 @@ def _bash_is_windows_shell() -> bool:
 BASH_WRAPPER_MUTED = _bash_is_windows_shell()
 
 
+def _bash_is_wsl() -> bool:
+    """Probe bash for the WSL kernel marker.
+
+    WSL2 bash uname -r contains 'microsoft' in the kernel version string.
+    WSL bash cannot read Windows-mounted paths reliably during these
+    wrapper tests, so the affected cases are skipped on WSL.
+    """
+    bash = shutil.which("bash")
+    if not bash:
+        return False
+    try:
+        result = subprocess.run(
+            [bash, "-c", "uname -r"],
+            text=True,
+            capture_output=True,
+            timeout=5,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    if result.returncode != 0:
+        return False
+    return "microsoft" in result.stdout.lower()
+
+
+BASH_IS_WSL = _bash_is_wsl()
+
+
 def _load_module():
     spec = importlib.util.spec_from_file_location("user_prompt_capture", SCRIPT)
     assert spec is not None and spec.loader is not None, "could not load capture script"
@@ -502,6 +529,10 @@ class WrapperParseTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
 
 
+@unittest.skipIf(
+    BASH_IS_WSL,
+    "WSL bash cannot reach Windows paths; production uses Git Bash MINGW",
+)
 class WrapperInvocationTests(unittest.TestCase):
     """End-to-end smoke: pipe a rant body through the wrapper and verify
     the rant is written via the python script the wrapper invokes."""
