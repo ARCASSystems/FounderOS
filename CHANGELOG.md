@@ -14,7 +14,7 @@ External CTO review of v1.23.0 returned SHIP WITH PATCHES. This release closes t
 
 - **GitHub Actions CI matrix (WS3).** `.github/workflows/test.yml` runs `python -m unittest discover tests -v` across ubuntu-latest, macos-latest, and windows-latest on Python 3.11 and 3.12 (6 matrix legs). Adds tests badge to README.md. Does not conflict with the existing `founderos-audit.yml`.
 
-- **WSL platform skip + README count invariants (WS4).** Adds `_bash_is_wsl()` and `BASH_IS_WSL` to `tests/test_user_prompt_capture.py`. `WrapperInvocationTests` is decorated with `@unittest.skipIf(BASH_IS_WSL, ...)` since WSL bash cannot reliably reach Windows-mounted paths. `WrapperParseTests` (`bash -n` only) is not affected. Adds `tests/test_readme_invariants.py` with three invariant tests: README skill/command/test counts match filesystem, VERSION matches the first CHANGELOG header, and CLAUDE.md / AGENTS.md counts match if the pattern is present.
+- **WSL platform skip + README count invariants (WS4).** Adds `_bash_is_wsl()` and `BASH_IS_WSL` to `tests/test_user_prompt_capture.py`. `WrapperInvocationTests` and `WrapperParseTests` are both decorated with `@unittest.skipIf(BASH_IS_WSL, ...)` since WSL bash cannot read Windows-mounted paths even for `bash -n` parse checks. Adds `tests/test_readme_invariants.py` with three invariant tests: README skill/command/test counts match filesystem, VERSION matches the first CHANGELOG header, and CLAUDE.md / AGENTS.md counts match if the pattern is present.
 
 ### Polish
 
