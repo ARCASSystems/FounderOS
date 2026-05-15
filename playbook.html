@@ -329,10 +329,58 @@ a:hover{text-decoration:underline}
   .tuesday-card{padding:24px 20px}
 }
 </style>
-</head>
+<style>
+/* desktop: fill real estate */
+#main{max-width:none}
+.section,.section.dark{padding:64px max(40px,calc(50% - 430px))}
+.section.hero{padding:96px max(40px,calc(50% - 430px)) 80px}
+.one-thing{padding:80px max(40px,calc(50% - 430px))}
+.cta-next{padding:72px max(40px,calc(50% - 430px))}
+.closing{padding:48px max(40px,calc(50% - 430px))}
+/* svg icons in cards */
+.part-icon{line-height:1}
+.part-icon svg{width:28px;height:28px;display:block;margin:0 auto 12px}
+.tool-icon svg{width:22px;height:22px;display:block}
+/* mobile top bar */
+#mobile-bar{
+  display:none;position:fixed;top:0;left:0;right:0;height:52px;
+  background:var(--navy);z-index:95;align-items:center;
+  padding:0 12px;gap:10px;border-bottom:1px solid rgba(255,255,255,.1)
+}
+#mobile-bar-title{font-size:13px;font-weight:600;color:rgba(255,255,255,.7);flex:1}
+button#nav-toggle{
+  position:static;background:transparent;border:none;
+  padding:8px;color:rgba(255,255,255,.8);font-size:18px;
+  cursor:pointer;display:flex;align-items:center;line-height:1
+}
+@media(max-width:768px){
+  #mobile-bar{display:flex}
+  #main{margin-left:0;margin-top:52px}
+  #progress{left:0;top:52px}
+  #sidebar{top:0}
+  .section,.section.dark{padding:48px 20px}
+  .section.hero{padding:64px 20px 48px}
+  .one-thing{padding:56px 20px}
+  .cta-next{padding:56px 20px}
+  .closing{padding:40px 20px}
+  .one-thing .big{font-size:2.2rem}
+  h1{font-size:1.9rem}
+  .pullquote{font-size:1.1rem;padding:12px 18px}
+  .tuesday-card{padding:24px 18px}
+  .stats-strip{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+<style>
+.nav-group{
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);padding:16px 20px 4px;margin-top:4px;
+}
+.nav-group:first-child{padding-top:4px;margin-top:0}
+#nav a{padding:7px 20px 7px 28px}
+</style></head>
 <body>
 
-<button id="nav-toggle" onclick="toggleNav()" aria-label="Open navigation">☰</button>
+<div id="mobile-bar"><button id="nav-toggle" onclick="toggleNav()" aria-label="Menu">&#9776;</button><span id="mobile-bar-title">Founder OS &mdash; Playbook</span></div>
 
 <aside id="sidebar">
   <div id="sidebar-brand">
@@ -343,28 +391,35 @@ a:hover{text-decoration:underline}
     </div>
   </div>
   <nav id="nav">
-    <a href="#hero"><span class="nav-num">00</span> Start here</a>
-    <a href="#problem"><span class="nav-num">01</span> The problem</a>
-    <a href="#what"><span class="nav-num">02</span> What this is</a>
-    <a href="#parts"><span class="nav-num">03</span> Brain. Hands. Heartbeat.</a>
-    <a href="#human"><span class="nav-num">04</span> The human part</a>
-    <a href="#sevendays"><span class="nav-num">05</span> Seven days</a>
-    <a href="#language"><span class="nav-num">06</span> The language of AI</a>
-    <a href="#memory"><span class="nav-num">07</span> Files are the memory</a>
-    <a href="#meetings"><span class="nav-num">08</span> Capture meetings</a>
-    <a href="#rants"><span class="nav-num">09</span> Rants</a>
-    <a href="#voice"><span class="nav-num">10</span> Talk to your system</a>
-    <a href="#plan"><span class="nav-num">11</span> Plan before you type</a>
-    <a href="#context"><span class="nav-num">12</span> Context and tokens</a>
-    <a href="#team"><span class="nav-num">13</span> Working with a team</a>
-    <a href="#privacy"><span class="nav-num">14</span> What not to put in</a>
-    <a href="#wrong"><span class="nav-num">15</span> When AI gets it wrong</a>
-    <a href="#fails"><span class="nav-num">16</span> What can go wrong</a>
-    <a href="#onething"><span class="nav-num">17</span> The one thing</a>
-    <a href="#tuesday"><span class="nav-num">06</span> Day 30 in real life</a>
-    <a href="#costs"><span class="nav-num">17</span> What it costs</a>
-    <a href="#next"><span class="nav-num">18</span> Next steps</a>
-    <a href="#tools"><span class="nav-num">19</span> Tools</a>
+    <div class="nav-group">The problem</div>
+    <a href="#hero">Start here</a>
+    <a href="#problem">Why systems fail</a>
+    <a href="#what">What this is</a>
+    <div class="nav-group">The system</div>
+    <a href="#parts">Brain. Hands. Heartbeat.</a>
+    <a href="#human">The human part</a>
+    <a href="#tuesday">Day 30 in real life</a>
+    <div class="nav-group">Getting started</div>
+    <a href="#sevendays">Seven days</a>
+    <a href="#language">The language of AI</a>
+    <a href="#memory">Files are the memory</a>
+    <div class="nav-group">Daily tools</div>
+    <a href="#meetings">Capture meetings</a>
+    <a href="#rants">Rants</a>
+    <a href="#voice">Talk to your system</a>
+    <div class="nav-group">Working with AI</div>
+    <a href="#plan">Plan before you type</a>
+    <a href="#context">Context and tokens</a>
+    <a href="#wrong">When AI gets it wrong</a>
+    <div class="nav-group">Realities</div>
+    <a href="#team">Working with a team</a>
+    <a href="#privacy">What not to put in</a>
+    <a href="#fails">What can go wrong</a>
+    <a href="#costs">What it costs</a>
+    <div class="nav-group">Ship it</div>
+    <a href="#onething">The one thing</a>
+    <a href="#next">Next steps</a>
+    <a href="#tools">Tools</a>
   </nav>
   <div id="sidebar-footer">
     People first.<br>Systems second.<br>AI where it earns the right.
@@ -455,17 +510,17 @@ a:hover{text-decoration:underline}
     <text x="378" y="162" text-anchor="start" font-family="-apple-system,sans-serif" font-size="9" fill="#041E37" font-weight="600">surfaces &amp; resets</text>
     <!-- Brain — top centre -->
     <circle cx="260" cy="60" r="54" fill="rgba(130,52,234,.1)" stroke="#8234EA" stroke-width="2.5"/>
-    <text x="260" y="47" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="22">&#x1F9E0;</text>
+    <line x1="249" y1="48" x2="271" y2="48" stroke="#8234EA" stroke-width="2" stroke-linecap="round"/><line x1="249" y1="55" x2="271" y2="55" stroke="#8234EA" stroke-width="2" stroke-linecap="round"/><line x1="249" y1="62" x2="263" y2="62" stroke="#8234EA" stroke-width="2" stroke-linecap="round"/>
     <text x="260" y="68" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#8234EA">The Brain</text>
     <text x="260" y="84" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">6 operating files</text>
     <!-- Hands — bottom left -->
     <circle cx="130" cy="238" r="54" fill="rgba(247,8,114,.07)" stroke="#F70872" stroke-width="2.5"/>
-    <text x="130" y="225" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="22">&#x2699;&#xFE0F;</text>
+    <circle cx="130" cy="225" r="5" fill="none" stroke="#F70872" stroke-width="2"/><circle cx="130" cy="225" r="10" fill="none" stroke="#F70872" stroke-width="2" stroke-dasharray="4,3"/>
     <text x="130" y="246" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#F70872">The Hands</text>
     <text x="130" y="262" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">45 skills</text>
     <!-- Heartbeat — bottom right -->
     <circle cx="390" cy="238" r="54" fill="rgba(4,30,55,.07)" stroke="#041E37" stroke-width="2.5"/>
-    <text x="390" y="225" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="22">&#x1F493;</text>
+    <path d="M379,225 L384,225 L386,216 L390,234 L393,220 L395,225 L401,225" fill="none" stroke="#041E37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     <text x="390" y="246" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#041E37">The Heartbeat</text>
     <text x="390" y="262" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">Daily + weekly cadence</text>
   </svg>
@@ -473,17 +528,17 @@ a:hover{text-decoration:underline}
 
   <div class="parts-grid">
     <div class="part-card brain">
-      <div class="part-icon">🧠</div>
+      <div class="part-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#8234EA" stroke-width="1.6" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/></svg></div>
       <h3>The Brain</h3>
       <p>Your six operating files. Identity. Priorities. Decisions. Clients. Daily anchors. Weekly commitments. What's true right now - not last quarter. Biased towards today, always. The brain needs feeding: three lines every time something real happens.</p>
     </div>
     <div class="part-card hands">
-      <div class="part-icon">⚙️</div>
+      <div class="part-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#F70872" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></div>
       <h3>The Hands</h3>
       <p>45 skills. Write the email. Prep the brief. Draft the proposal. Log the decision. Post on LinkedIn. Each skill reads the brain and produces output that sounds like you. You don't memorize commands. You say what you need. The right skill fires.</p>
     </div>
     <div class="part-card heart">
-      <div class="part-icon">💓</div>
+      <div class="part-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#041E37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,12 7,12 9,4 12,20 15,9 17,12 22,12"/></svg></div>
       <h3>The Heartbeat</h3>
       <p>Cadence. A daily anchor in the morning. A weekly retro on Sunday or Monday. Two moments where the system surfaces what's stale, ignored, or parked too long. Without the heartbeat, the brain goes stale and the hands stop firing clean output.</p>
     </div>
@@ -619,7 +674,7 @@ a:hover{text-decoration:underline}
     <path d="M163 50 L210 50" stroke="#8234EA" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
     <!-- AI brain -->
     <rect x="213" y="15" width="110" height="70" rx="6" fill="var(--navy)"/>
-    <text x="268" y="47" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="18" fill="#fff">🤖</text>
+    <line x1="261" y1="44" x2="275" y2="44" stroke="rgba(255,255,255,.75)" stroke-width="1.5" stroke-linecap="round"/><line x1="268" y1="37" x2="268" y2="51" stroke="rgba(255,255,255,.75)" stroke-width="1.5" stroke-linecap="round"/><line x1="263" y1="39" x2="273" y2="49" stroke="rgba(255,255,255,.75)" stroke-width="1.5" stroke-linecap="round"/><line x1="273" y1="39" x2="263" y2="49" stroke="rgba(255,255,255,.75)" stroke-width="1.5" stroke-linecap="round"/>
     <text x="268" y="66" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="rgba(255,255,255,.6)">AI model</text>
     <!-- Arrow 2 -->
     <path d="M327 50 L374 50" stroke="#F70872" stroke-width="1.5" fill="none" marker-end="url(#arr2)"/>
@@ -720,7 +775,7 @@ a:hover{text-decoration:underline}
 
   <div class="tool-card">
     <div class="tool-header">
-      <div class="tool-icon" style="background:rgba(53,211,154,.15)">📋</div>
+      <div class="tool-icon" style="background:rgba(53,211,154,.15)";color:#35D39A"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg></div>
       <div>
         <div class="tool-name"><a href="https://granola.so" target="_blank">Granola</a> &mdash; granola.so</div>
         <div class="tool-sub">Free meeting capture and transcription for Mac</div>
@@ -798,7 +853,7 @@ a:hover{text-decoration:underline}
 
   <div class="tool-card">
     <div class="tool-header">
-      <div class="tool-icon" style="background:rgba(130,52,234,.1)">🎙️</div>
+      <div class="tool-icon" style="background:rgba(130,52,234,.1)";color:#8234EA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></div>
       <div>
         <div class="tool-name"><a href="https://wisprflow.ai" target="_blank">Wispr Flow</a> &mdash; wisprflow.ai</div>
         <div class="tool-sub">Voice dictation that types anywhere on screen. Mac and Windows.</div>
@@ -988,7 +1043,7 @@ a:hover{text-decoration:underline}
 
   <div class="tool-card">
     <div class="tool-header">
-      <div class="tool-icon" style="background:rgba(130,52,234,.1)">🧩</div>
+      <div class="tool-icon" style="background:rgba(130,52,234,.1)";color:#8234EA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
       <div>
         <div class="tool-name"><a href="https://github.com/ARCASSystems/FounderOS" target="_blank">Founder OS</a> &mdash; github.com/ARCASSystems/FounderOS</div>
         <div class="tool-sub">Free and open source. The OS this playbook is for.</div>
@@ -998,7 +1053,7 @@ a:hover{text-decoration:underline}
 
   <div class="tool-card">
     <div class="tool-header">
-      <div class="tool-icon" style="background:rgba(53,211,154,.12)">📋</div>
+      <div class="tool-icon" style="background:rgba(53,211,154,.12)";color:#35D39A"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg></div>
       <div>
         <div class="tool-name"><a href="https://granola.so" target="_blank">Granola</a> &mdash; granola.so</div>
         <div class="tool-sub">Free meeting capture and transcription for Mac</div>
@@ -1026,7 +1081,7 @@ a:hover{text-decoration:underline}
 
   <div class="tool-card">
     <div class="tool-header">
-      <div class="tool-icon" style="background:rgba(130,52,234,.1)">🎙️</div>
+      <div class="tool-icon" style="background:rgba(130,52,234,.1)";color:#8234EA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></div>
       <div>
         <div class="tool-name"><a href="https://wisprflow.ai" target="_blank">Wispr Flow</a> &mdash; wisprflow.ai</div>
         <div class="tool-sub">Voice dictation that types anywhere on screen</div>
@@ -1054,7 +1109,7 @@ a:hover{text-decoration:underline}
 
   <div class="tool-card">
     <div class="tool-header">
-      <div class="tool-icon" style="background:rgba(4,30,55,.08)">🔮</div>
+      <div class="tool-icon" style="background:rgba(4,30,55,.08)";color:#041E37"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M2 9h20"/><path d="M6 3l4 6m4 0 4-6"/></svg></div>
       <div>
         <div class="tool-name"><a href="https://obsidian.md" target="_blank">Obsidian</a> &mdash; obsidian.md</div>
         <div class="tool-sub">Free markdown editor with graph view. Opens your OS folder directly.</div>
@@ -1082,7 +1137,7 @@ a:hover{text-decoration:underline}
 
   <div class="tool-card">
     <div class="tool-header">
-      <div class="tool-icon" style="background:rgba(247,8,114,.08)">🤖</div>
+      <div class="tool-icon" style="background:rgba(247,8,114,.08)";color:#F70872"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="8,10 12,14 8,18"/><line x1="13" y1="18" x2="17" y2="18"/></svg></div>
       <div>
         <div class="tool-name"><a href="https://claude.ai/code" target="_blank">Claude Code</a> &mdash; claude.ai/code</div>
         <div class="tool-sub">The AI interface this OS is built for. Also compatible with Codex, Gemini CLI, and Cursor.</div>
