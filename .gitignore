@@ -68,6 +68,9 @@ audit-*.md
 # Already-tracked notes (v1.7 review, v1.7 codex findings/verification) stay tracked.
 notes/
 
+# Execution plans (internal release scaffolding - Codex reads locally, never commits)
+plans/
+
 # Evaluation traces (synthetic user sessions used during development QA)
 # v1.21 traces committed as product evidence of multi-archetype coverage.
 # v1202/v1203 traces are intermediate working notes - not product artifacts.
