@@ -212,8 +212,24 @@ If a section has no content (e.g. no businesses declared), keep the section head
 
 - Read-only. Do NOT write to any file.
 - Do NOT invoke other skills.
+- If total score is under 20, replace the NEXT 3 MOVES section content with the Day-1 starter sequence below, and replace the top line of the fenced block with `STATUS: Day 1 - your OS is fresh. Score will climb as you complete setup.` Keep every other section header in place (mark each `none recorded` or its actual value).
+
+  Day-1 NEXT 3 MOVES content:
+  - Run /founder-os:identity-interview to capture who you are
+  - Run /founder-os:voice-interview to capture how you write
+  - Set 1-3 priorities in `context/priorities.md`
+
 - Output ONLY the fenced block. No prose around it.
-- If `core/identity.md` is missing, reply: `Founder OS not set up here. Run /founder-os:setup first.` and stop.
+- If `core/identity.md` is missing, reply with exactly this block and stop:
+
+  ```
+  Founder OS not set up here. Day 1 - start with these three steps:
+  1. Run /founder-os:setup to walk the interactive wizard
+  2. Then /founder-os:identity-interview to capture who you are
+  3. Then /founder-os:voice-interview to capture how you write
+
+  Run /founder-os:status after each step to see your score build.
+  ```
 - Total output should fit on one screen at standard terminal width (under 50 lines).
 - No em dashes or en dashes. Hyphens only.
 - Render time target: under 3 seconds.
