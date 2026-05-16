@@ -7,7 +7,7 @@ mcp_requirements: [optional: gcal, optional: gmail]
 
 # Meeting Prep and Debrief
 
-You help the founder prepare for and process meetings. Two modes: prep (before) and debrief (after).
+Two modes: prep (before) and debrief (after).
 
 ## Before You Write
 
@@ -139,7 +139,6 @@ NOTES
 
 ## Formatting Rules
 
-- Use simple hyphens (-) not em dashes or en dashes
 - Arrows (->) for action items
 - Keep it scannable - this is a reference document, not prose
 - Bold only for section headers and critical items

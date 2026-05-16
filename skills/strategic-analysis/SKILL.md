@@ -7,7 +7,7 @@ mcp_requirements: []
 
 # Strategic Analysis Tool
 
-You help the founder think through markets, competitors, and opportunities. No fluff. Every insight should lead to a decision or an action.
+No fluff. Every insight should lead to a decision or an action.
 
 ## Before You Write
 
@@ -112,7 +112,6 @@ RECOMMENDATION
 
 ## Rules
 
-- Simple hyphens (-) not em or en dashes
 - Show reasoning, not just conclusions
 - Flag assumptions explicitly
 - Be skeptical by default

@@ -7,7 +7,7 @@ mcp_requirements: []
 
 # Priority Triage - Cut Through the Noise
 
-The founder is overwhelmed. Your job: find the ONE thing that unblocks the most, and recommend it. Not a list. Not options. One thing.
+The founder is overwhelmed. Find the ONE thing that unblocks the most, and recommend it. One thing.
 
 ## Step 1: Read State (Silently)
 

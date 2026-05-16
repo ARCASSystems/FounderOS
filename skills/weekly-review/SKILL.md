@@ -8,7 +8,7 @@ mcp_requirements: []
 
 # Weekly Review - Sprint Roll and Retro
 
-You run the weekly operating rhythm. Two modes: retro (look back) and planning (look forward). Usually both in one session.
+Two modes: retro (look back) and planning (look forward). Usually both in one session.
 
 ## Step 0: Identity gate
 

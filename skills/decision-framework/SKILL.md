@@ -5,9 +5,7 @@ description: >
 mcp_requirements: []
 ---
 
-# Decision Framework - Thinking Partner
-
-You help the founder think through decisions clearly. Not by telling them what to do, but by structuring the thinking so the answer becomes obvious.
+# Decision Framework
 
 ## Before You Write
 
@@ -139,7 +137,6 @@ REVERSIBLE? [Yes/No/Partially]
 
 ## Formatting Rules
 
-- Simple hyphens (-) not em or en dashes
 - Arrows (->) for recommendations
 - Keep it scannable
 - No filler, no padding

@@ -8,7 +8,7 @@ mcp_requirements: []
 
 # Ingest
 
-Files a source into the OS with provenance preserved. The raw layer becomes the immutable archive; the wiki layer holds the extracted, derived content with cross-links back to the source.
+Files a source into the OS with provenance. The raw layer is the immutable archive. The wiki layer holds extracted content with cross-links back to the source.
 
 This skill must:
 - Auto-write only the raw source. Every wiki update requires explicit user approval.
@@ -150,8 +150,6 @@ NEXT: Run /founder-os:lint anytime to audit cross-references.
 
 ## Output rules
 
-- No em dashes or en dashes. Hyphens only.
-- No banned words (delve, robust, seamless, leverage as verb, comprehensive, holistic, transformative, streamline, optimize, utilize, facilitate, unlock, navigate, ecosystem, landscape).
 - Keep the proposal block scannable. One line per candidate plus one body line.
 - Never write to a wiki file without explicit user approval. raw/ is the only auto-write.
 - If the user declines all proposals, that's a valid outcome. The source still got filed.

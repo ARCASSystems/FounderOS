@@ -8,7 +8,7 @@ mcp_requirements: []
 
 # Business Context Loader
 
-This skill turns a business-context file into something you can actually use. It scans state, reports gaps, picks the next question, and suggests an action based on what's already filled.
+Scans state, reports gaps, picks the next question, and suggests an action based on what's already filled.
 
 The companion file is `templates/business-context.template.md` (the schema). Filled instances live at `companies/<slug>-business.md`.
 
@@ -135,7 +135,6 @@ Walk the stale sections one by one with this opener: "Section <N> on <topic> was
 
 ## Output rules
 
-- No em dashes, no en dashes. Hyphens with spaces.
 - Plain language. The user is not a strategist.
 - The opening report block (Step 2) is the most-read part of this skill. Keep it tight.
 - Never narrate "I'll now scan the file" - just scan it and report.
