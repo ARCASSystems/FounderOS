@@ -47,6 +47,3 @@ The script:
 - Trigger phrases the operator already uses ("set up my voice profile", "set up my brand profile", "what should I focus on next", "what's on for today?", "audit the OS") appear in the script's rendered rows when the corresponding capability surfaces. The script handles this; the skill does not.
 - If `scripts/menu.py` is missing on this install, surface that to the user and stop. Do not fall back to a model-side menu (that would re-introduce the v1.20.0 defect this skill was rewritten to fix).
 
-## Tests
-
-Behavioural tests live at `tests/test_menu.py`. They run the script against fixture roots (zero-state, populated, missing snapshot) and assert on stdout. The skill itself is verified by `SkillFileSurface` in the same test file: the SKILL.md must reference `scripts/menu.py` and must not delegate scoring to the model.

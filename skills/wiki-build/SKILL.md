@@ -77,8 +77,6 @@ Wiki-build keeps the graph fresh. Lint audits the graph. Run wiki-build before l
 
 ## Voice
 
-- No em dashes or en dashes. Hyphens only.
 - No commentary outside the output block.
-- No banned words (delve, robust, seamless, leverage as verb, comprehensive, holistic, transformative, streamline, optimize, utilize, facilitate, unlock, navigate, ecosystem, landscape).
 
 <!-- private-tag: not applicable: writes brain/relations.yaml from extracted wikilinks (structured graph data, not user-provided speech) -->

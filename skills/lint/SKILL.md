@@ -165,8 +165,6 @@ Clean across all checks. Nothing to address.
 
 ## Output rules
 
-- No em dashes or en dashes. Hyphens only.
-- No banned words.
 - Read-only. Never modify any file. If you find something that obviously should be fixed, name it under NEXT 3 MOVES, do not edit.
 - One finding per line. No paragraphs.
 - File:line references where possible. File-only references where line is not meaningful (orphans, stale headers).

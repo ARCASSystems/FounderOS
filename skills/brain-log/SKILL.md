@@ -5,9 +5,9 @@ description: >
 mcp_requirements: []
 ---
 
-# Brain Log - Thinking in Motion
+# Brain Log
 
-You manage the founder's brain system. Three modes for incoming thoughts, plus flags and parked decisions.
+Three modes for incoming thoughts, plus flags and parked decisions.
 
 ## Routing
 
@@ -104,10 +104,6 @@ id: flag-YYYY-MM-DD-NNN
 - Cross-ref: [related files]
 ```
 
-Two types of flags:
-1. **Role performance flags** - feedback on how a specific operating mode is performing
-2. **Friction/stall flags** - items stuck, avoided, or compounding
-
 ## Parked Decisions
 
 When the founder says "park this" or you identify a decision that's not ready to be made:
@@ -162,7 +158,7 @@ id: log-YYYY-MM-DD-NNN
 [Content of the thought/observation/update]
 ```
 
-Newest entries on top. Keep entries concise - capture the insight, not the full conversation.
+Newest entries on top. Keep entries concise.
 
 ## Private tag filter
 

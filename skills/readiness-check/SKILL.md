@@ -233,7 +233,6 @@ If a section has no content (e.g. no businesses declared), keep the section head
   Run /founder-os:status after each step to see your score build.
   ```
 - Total output should fit on one screen at standard terminal width (under 50 lines).
-- No em dashes or en dashes. Hyphens only.
 - Render time target: under 3 seconds.
 
 ## Failure handling

@@ -8,7 +8,7 @@ mcp_requirements: []
 
 # Brain Pass
 
-The brain pass is where the model's reasoning meets the user's stored memory. The user asks a question. You pick the relevant files, scan them, and return a synthesised answer with entry-ID citations - not a list of matches.
+The user asks a question. You pick the relevant files, scan them, and return a synthesised answer with entry-ID citations - not a list of matches.
 
 ## When to use
 
@@ -108,21 +108,8 @@ Pass the values you used when synthesising. If `FOUNDER_OS_OBSERVATIONS` is not 
 
 The line appends to `brain/observations/<YYYY-MM-DD>.jsonl` next to the existing PostToolUse observation log. `/dream` rolls it into the OBSERVED section so the user sees patterns over time (which questions repeat, which return low confidence, which surface large Gaps).
 
-## Why this works inside Claude Code (or any model surface)
-
-The model running this skill IS the retrieval engine. The skill instructs it to read the right files, reason, and synthesise. There is no API call, no vector index, no paid tier. The free-tier accessibility floor is preserved. On Claude Code, Codex, or any other model surface that can read local files, this skill produces the same shape of output - performance varies, but the contract stays the same.
-
-## What this is NOT
-
-- Not embeddings. Vector search is parked until and unless this skill is proven slow or shallow.
-- Not a daemon. The pass runs only when invoked.
-- Not a substitute for `query.py` for known-ID lookups.
-- Not auto-fired on every skill invocation. A skill consumes brain-pass only when its instructions explicitly call for it.
-
 ## Rules
 
-- No em dashes or en dashes. Simple hyphens with spaces.
-- No banned words (delve, robust, seamless, leverage, comprehensive, holistic, transformative, streamline, optimize, utilize, facilitate, unlock, navigate figurative, ecosystem figurative, landscape figurative, unpack, deep-dive).
 - Read-only on the brain. Never edit a brain file as a side effect of a pass.
 
 <!-- private-tag: not applicable: brain-pass appends structured telemetry (opt-in JSONL), not user-provided speech content -->

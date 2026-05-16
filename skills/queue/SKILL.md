@@ -11,21 +11,7 @@ mcp_requirements: []
 
 # Queue
 
-Manage the work in motion. The queue lives at `cadence/queue.md`. Three lifecycle states:
-ACTIVE, BACKLOG, DONE.
-
-## Natural-language phrases that invoke this skill
-
-- "what's on my plate"
-- "what's moving"
-- "show me the queue"
-- "add to queue: <text>"
-- "start <description-or-id>"
-- "done with <description-or-id>"
-- "park <description-or-id>"
-
-Say any of these in chat and the queue skill fires. The slash command `/founder-os:queue`
-is a shortcut that passes your arguments to this skill.
+The queue lives at `cadence/queue.md`. Three lifecycle states: ACTIVE, BACKLOG, DONE.
 
 ## What it reads
 
@@ -97,10 +83,7 @@ Confirm with one line: `Parked: <short description>. Back in BACKLOG.`
 
 ## The 3-item rule is a feature, not a limit
 
-ACTIVE matches actual human capacity for parallel work. Three is not an arbitrary ceiling -
-it is the number where context-switching cost exceeds progress made. The gate forces a
-decision that would otherwise drift: something on the list is not actually moving, and
-this is the moment to name it.
+ACTIVE matches actual human capacity for parallel work. The gate forces a decision that would otherwise drift.
 
 ## Where the queue surfaces elsewhere
 
@@ -120,4 +103,3 @@ this is the moment to name it.
 - If `cadence/queue.md` is missing, create it from `templates/cadence/queue.md` first.
 - If the user's request matches multiple operations (e.g. "add and start this now"),
   execute add first, then start (which will trigger the 3-item gate if needed).
-- No em dashes or en dashes. Hyphens only.

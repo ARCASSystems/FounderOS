@@ -135,9 +135,3 @@ FULL: id1, id2
 - No external dependencies. Pure Python stdlib.
 - No embeddings or graph database in v1.7.
 - `index` mode output stays under ~500 tokens total even with a corpus of 1000 markdown files (10-hit cap, 200-char context).
-- Token approximation is naive (length / 4), no `tiktoken`.
-- No em dashes, no en dashes, no banned words.
-
-## Later Path
-
-Embedding retrieval and graph databases are out of scope for this release. See the public ROADMAP at `https://github.com/ARCASSystems/FounderOS/blob/main/ROADMAP.md` for community discussion.
