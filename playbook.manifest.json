@@ -1,0 +1,63 @@
+{
+  "version": "1.24.0",
+  "skill_count": 45,
+  "command_count": 27,
+  "test_count": 354,
+  "operating_files": 6,
+  "setup_minutes": 35,
+  "subscription_cost_band": "$20 &ndash; 100 / month",
+  "free_tier_warning": "Any plan with 100K+ context tokens works. Free tiers usually don't have enough context &mdash; you'll get worse output and sessions that cut off early. A paid plan is the only real requirement.",
+  "github_url": "https://github.com/ARCASSystems/FounderOS",
+  "stats_strip": [
+    {"num": "6", "label": "operating files", "tone": "default"},
+    {"num": "45", "label": "skills", "tone": "magenta"},
+    {"num": "35", "label": "min to set up", "tone": "default"},
+    {"num": "Any", "label": "AI model works", "tone": "dim"}
+  ],
+  "seven_days": [
+    {"day": 1, "title": "Install and your first six files", "time_min": 35, "detail": "Run the setup wizard. Answer the prompts. The system generates your identity file, priorities, cadence, brain layer. Don't add anything extra. This step alone unlocks daily ops, meeting prep, decision logging, and knowledge capture."},
+    {"day": 2, "title": "Your voice and your brand", "time_min": 20, "detail": "Run the voice interview. Run the brand interview. From this point, every writing skill produces output that sounds like you - not like AI wrote it. This is the step most people skip and then wonder why their emails feel off."},
+    {"day": 3, "title": "Log one real thing", "time_min": 5, "detail": "Something actually happened today. A decision. A conversation that changed something. A deal that moved. Log it. Three lines in brain/log.md. That's the muscle you're building. The first log entry is the hardest. After that it's a habit."},
+    {"day": 4, "title": "Run your first rant", "time_min": 10, "detail": "Day 4 is when you first dump an unstructured thought into the system. No editing. No structure. Use /rant. Just talk. This is how you start capturing what's actually in your head, not just the cleaned-up version."},
+    {"day": 5, "title": "Use one skill on real work", "time_min": 15, "detail": "Not a test. Something you actually need. A meeting prep. An email draft. A LinkedIn post. Let the skill read your brain and produce output. See what comes back. Adjust one thing. This is how the system starts feeling useful, not just set up."},
+    {"day": 6, "title": "Process the rant", "time_min": 10, "detail": "Run /dream on what you captured on Day 4. The skill turns your raw thinking into flags, patterns, and parked decisions. This is how the brain learns what you care about. The rant was raw material. Dream gives it shape."},
+    {"day": 7, "title": "Run the weekly retro", "time_min": 20, "detail": "Look at what you said the week would be. What actually happened. What moves forward. What gets killed. What decision you've been avoiding. This is the heartbeat. Once it's running, it runs. Put it in your calendar. Sunday at 9pm or Monday at 8am."}
+  ],
+  "tune_skills_first_table": [
+    {
+      "focus": "Client emails this week",
+      "tune_first": ["voice-interview", "email-drafter", "your-voice"],
+      "why_different": "Reads your voice profile so emails sound like you. Pulls client context from clients.md so you don't re-explain who they are or what was last agreed. Anti-AI filter catches generic phrasing before send."
+    },
+    {
+      "focus": "Writing an SOP",
+      "tune_first": ["sop-writer", "voice-interview"],
+      "why_different": "Captures how you describe a process verbally (rant-style), not how you'd format it from scratch. Produces a doc a junior team member could follow without asking you a single follow-up question."
+    },
+    {
+      "focus": "A new proposal",
+      "tune_first": ["brand-interview", "proposal-writer", "your-deliverable-template"],
+      "why_different": "Inherits your brand colours, fonts, and logo. Reads positioning and buyer language captured during voice interview. The output looks like your proposal, not a generic AI document."
+    },
+    {
+      "focus": "LinkedIn content rhythm",
+      "tune_first": ["voice-interview", "linkedin-post", "content-repurposer"],
+      "why_different": "Hooks tested against the LinkedIn 'see more' cutoff. Anti-AI rules applied. content-repurposer takes one piece and adapts it across formats so you don't write five things."
+    },
+    {
+      "focus": "Meeting prep and capture",
+      "tune_first": ["meeting-prep", "capture-meeting", "knowledge-capture"],
+      "why_different": "meeting-prep reads client history and prior commitments. /capture-meeting routes the post-call summary into log.md, clients.md, and open commitments so nothing slips. knowledge-capture stores reusable patterns with stable IDs."
+    },
+    {
+      "focus": "Decision overload",
+      "tune_first": ["decision-framework", "forcing-questions", "brain-pass"],
+      "why_different": "decision-framework forces criteria and kill criteria before options. forcing-questions runs six questions that have a real chance of killing a bad idea. brain-pass cites evidence across your brain layer instead of giving you a generic answer."
+    },
+    {
+      "focus": "Daily ops triage",
+      "tune_first": ["today", "priority-triage", "weekly-review"],
+      "why_different": "today gives a 20-line one-screen view. priority-triage forces a top-three with everything else explicitly cut. weekly-review keeps the cadence honest."
+    }
+  ]
+}
