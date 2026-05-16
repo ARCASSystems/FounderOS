@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Founder OS Skills - ARCAS Systems</title>
+<style>
+:root{
+  --navy:#041E37;--purple:#8234EA;--magenta:#F70872;--mint:#35D39A;
+  --gray-light:#F8F8FA;--gray-mid:#E8E8EE;--gray-text:#6B7280;
+  --body-text:#1A2840;--content-max:760px;--radius:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  background:#fff;color:var(--body-text);line-height:1.65;
+}
+a{color:var(--purple);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.92em;color:var(--purple);font-family:ui-monospace,monospace}
+
+.hero{background:var(--navy);color:#fff;padding:64px max(40px,calc(50% - 460px));}
+.hero-tag{display:inline-block;background:rgba(130,52,234,.3);color:var(--mint);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:18px}
+.hero h1{font-size:2.2rem;font-weight:700;line-height:1.2;letter-spacing:-.02em;margin-bottom:14px}
+.hero p{color:rgba(255,255,255,.78);max-width:640px;font-size:1.05rem;margin-bottom:10px}
+.hero a.back{color:var(--mint);font-size:13px;margin-top:14px;display:inline-block}
+
+.body{padding:48px max(40px,calc(50% - 460px));}
+h2{font-size:1.3rem;font-weight:700;color:var(--purple);margin:36px 0 16px;letter-spacing:-.01em}
+h2:first-child{margin-top:0}
+
+.toc{column-count:3;column-gap:24px;margin:8px 0 32px;list-style:none;font-size:13px;line-height:1.9}
+.toc li{break-inside:avoid}
+.toc code{font-size:12px;padding:1px 5px}
+
+.callout{background:var(--gray-light);border-left:4px solid var(--purple);border-radius:0 var(--radius) var(--radius) 0;padding:18px 22px;margin:24px 0;font-size:14px;color:var(--body-text);max-width:var(--content-max)}
+.callout strong{color:var(--purple)}
+
+.sk-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:18px;max-width:var(--content-max)}
+.sk-card{border:1px solid var(--gray-mid);border-radius:var(--radius);padding:18px 22px;border-left:4px solid var(--purple);background:#fff}
+.sk-name{font-size:1rem;font-weight:700;margin-bottom:6px;color:var(--body-text)}
+.sk-name a{color:var(--body-text)}
+.sk-name a:hover{color:var(--purple)}
+.sk-name code{background:none;color:var(--body-text);padding:0;font-size:1rem}
+.sk-summary{font-size:14px;color:var(--body-text);line-height:1.6;margin-bottom:8px}
+.sk-meta{font-size:12px;color:var(--gray-text);margin:0}
+.sk-meta a{color:var(--purple)}
+
+.closing{background:var(--gray-light);padding:36px max(40px,calc(50% - 460px));border-top:1px solid var(--gray-mid);text-align:right}
+.closing p{font-size:14px;font-weight:700;color:var(--navy);margin:0}
+.closing p.last{color:var(--magenta);margin-top:4px}
+
+@media(max-width:780px){
+  .hero{padding:48px 22px}
+  .body{padding:36px 22px}
+  .closing{padding:32px 22px}
+  .toc{column-count:2}
+  .hero h1{font-size:1.7rem}
+}
+@media(max-width:520px){
+  .toc{column-count:1}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-tag">Founder OS</div>
+  <h1>All 45 skills</h1>
+  <p>The playbook covers what the OS does and where to start. This page lists every skill the OS ships with - what it does and where to read its source. Browse the list, or jump to any skill from the index.</p>
+  <p><a class="back" href="founder-os-playbook.html">&larr; back to the playbook</a></p>
+</header>
+
+<main class="body">
+
+  <h2>What you are looking at</h2>
+  <p style="max-width:var(--content-max);font-size:15px">Each entry below is a skill that ships with the public Founder OS repo. Click any skill to read its <code>SKILL.md</code> on GitHub - that file holds the exact instructions the AI follows when the skill fires. You can tune any skill by editing its file directly.</p>
+  <div class="callout"><strong>How to enhance a skill:</strong> most skills read from one or more files in <code>core/</code>, <code>context/</code>, or <code>brain/</code>. The way to make a skill produce sharper output is to make the files it reads sharper. Voice-coupled skills (email-drafter, linkedin-post, proposal-writer) get sharper when you re-run the voice interview after a real writing sample. Brand-coupled skills (proposal-writer, your-deliverable-template) get sharper after the brand interview. Brain-coupled skills (meeting-prep, brain-pass, strategic-analysis) get sharper as the brain layer fills with real entries.</p></div>
+
+  <h2>Index</h2>
+  <ol class="toc">
+  <li><a href="#sk-approval-gates"><code>approval-gates</code></a></li>
+  <li><a href="#sk-audit"><code>audit</code></a></li>
+  <li><a href="#sk-blind-spot-review"><code>blind-spot-review</code></a></li>
+  <li><a href="#sk-bottleneck-diagnostic"><code>bottleneck-diagnostic</code></a></li>
+  <li><a href="#sk-brain-log"><code>brain-log</code></a></li>
+  <li><a href="#sk-brain-pass"><code>brain-pass</code></a></li>
+  <li><a href="#sk-brain-snapshot"><code>brain-snapshot</code></a></li>
+  <li><a href="#sk-brand-interview"><code>brand-interview</code></a></li>
+  <li><a href="#sk-business-context-loader"><code>business-context-loader</code></a></li>
+  <li><a href="#sk-client-update"><code>client-update</code></a></li>
+  <li><a href="#sk-content-repurposer"><code>content-repurposer</code></a></li>
+  <li><a href="#sk-context-persistence"><code>context-persistence</code></a></li>
+  <li><a href="#sk-data-security"><code>data-security</code></a></li>
+  <li><a href="#sk-decision-framework"><code>decision-framework</code></a></li>
+  <li><a href="#sk-email-drafter"><code>email-drafter</code></a></li>
+  <li><a href="#sk-forcing-questions"><code>forcing-questions</code></a></li>
+  <li><a href="#sk-founder-coaching"><code>founder-coaching</code></a></li>
+  <li><a href="#sk-founder-os-setup"><code>founder-os-setup</code></a></li>
+  <li><a href="#sk-handoff-protocol"><code>handoff-protocol</code></a></li>
+  <li><a href="#sk-ingest"><code>ingest</code></a></li>
+  <li><a href="#sk-knowledge-capture"><code>knowledge-capture</code></a></li>
+  <li><a href="#sk-legal-compliance"><code>legal-compliance</code></a></li>
+  <li><a href="#sk-linkedin-post"><code>linkedin-post</code></a></li>
+  <li><a href="#sk-lint"><code>lint</code></a></li>
+  <li><a href="#sk-meeting-prep"><code>meeting-prep</code></a></li>
+  <li><a href="#sk-menu"><code>menu</code></a></li>
+  <li><a href="#sk-observation-rollup"><code>observation-rollup</code></a></li>
+  <li><a href="#sk-pre-send-check"><code>pre-send-check</code></a></li>
+  <li><a href="#sk-priority-triage"><code>priority-triage</code></a></li>
+  <li><a href="#sk-proposal-writer"><code>proposal-writer</code></a></li>
+  <li><a href="#sk-query"><code>query</code></a></li>
+  <li><a href="#sk-queue"><code>queue</code></a></li>
+  <li><a href="#sk-readiness-check"><code>readiness-check</code></a></li>
+  <li><a href="#sk-session-handoff"><code>session-handoff</code></a></li>
+  <li><a href="#sk-ship-deliverable"><code>ship-deliverable</code></a></li>
+  <li><a href="#sk-sop-writer"><code>sop-writer</code></a></li>
+  <li><a href="#sk-strategic-analysis"><code>strategic-analysis</code></a></li>
+  <li><a href="#sk-today"><code>today</code></a></li>
+  <li><a href="#sk-unit-economics"><code>unit-economics</code></a></li>
+  <li><a href="#sk-verify"><code>verify</code></a></li>
+  <li><a href="#sk-voice-interview"><code>voice-interview</code></a></li>
+  <li><a href="#sk-weekly-review"><code>weekly-review</code></a></li>
+  <li><a href="#sk-wiki-build"><code>wiki-build</code></a></li>
+  <li><a href="#sk-your-deliverable-template"><code>your-deliverable-template</code></a></li>
+  <li><a href="#sk-your-voice"><code>your-voice</code></a></li>
+  </ol>
+
+  <h2>The skills</h2>
+  <div class="sk-grid">
+  <article class="sk-card" id="sk-approval-gates">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/approval-gates/SKILL.md" target="_blank"><code>approval-gates</code></a></h3>
+    <p class="sk-summary">Check whether an action needs approval before doing it.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/approval-gates/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-audit">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/audit/SKILL.md" target="_blank"><code>audit</code></a></h3>
+    <p class="sk-summary">Audit the OS in one composite report.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/audit/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-blind-spot-review">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/blind-spot-review/SKILL.md" target="_blank"><code>blind-spot-review</code></a></h3>
+    <p class="sk-summary">Pressure-test a draft for blind spots before pre-send review.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/blind-spot-review/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-bottleneck-diagnostic">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/bottleneck-diagnostic/SKILL.md" target="_blank"><code>bottleneck-diagnostic</code></a></h3>
+    <p class="sk-summary">Find the real bottleneck in the business.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/bottleneck-diagnostic/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-brain-log">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/brain-log/SKILL.md" target="_blank"><code>brain-log</code></a></h3>
+    <p class="sk-summary">Capture a thought, flag, or decision into the brain system.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/brain-log/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-brain-pass">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/brain-pass/SKILL.md" target="_blank"><code>brain-pass</code></a></h3>
+    <p class="sk-summary">Synthesise an answer across the brain layer.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/brain-pass/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-brain-snapshot">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/brain-snapshot/SKILL.md" target="_blank"><code>brain-snapshot</code></a></h3>
+    <p class="sk-summary">Refresh the runtime context payload other skills read at task time.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/brain-snapshot/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-brand-interview">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/brand-interview/SKILL.md" target="_blank"><code>brand-interview</code></a></h3>
+    <p class="sk-summary">Set up the visual brand profile.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/brand-interview/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-business-context-loader">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/business-context-loader/SKILL.md" target="_blank"><code>business-context-loader</code></a></h3>
+    <p class="sk-summary"><em>No description yet.</em></p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/business-context-loader/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-client-update">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/client-update/SKILL.md" target="_blank"><code>client-update</code></a></h3>
+    <p class="sk-summary">Write a client-facing status update or milestone report.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/client-update/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-content-repurposer">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/content-repurposer/SKILL.md" target="_blank"><code>content-repurposer</code></a></h3>
+    <p class="sk-summary">Reformat one piece of content across many channels.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/content-repurposer/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-context-persistence">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/context-persistence/SKILL.md" target="_blank"><code>context-persistence</code></a></h3>
+    <p class="sk-summary">Pull what we already know about a topic before re-explaining.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/context-persistence/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-data-security">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/data-security/SKILL.md" target="_blank"><code>data-security</code></a></h3>
+    <p class="sk-summary">Check whether data is safe to share with an external tool.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/data-security/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-decision-framework">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/decision-framework/SKILL.md" target="_blank"><code>decision-framework</code></a></h3>
+    <p class="sk-summary">Walk through a structured decision when the founder is stuck.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/decision-framework/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-email-drafter">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/email-drafter/SKILL.md" target="_blank"><code>email-drafter</code></a></h3>
+    <p class="sk-summary">Draft an email in the founder&#x27;s voice.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/email-drafter/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-forcing-questions">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/forcing-questions/SKILL.md" target="_blank"><code>forcing-questions</code></a></h3>
+    <p class="sk-summary">Pressure-test a new initiative before starting it.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/forcing-questions/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-founder-coaching">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/founder-coaching/SKILL.md" target="_blank"><code>founder-coaching</code></a></h3>
+    <p class="sk-summary">Coach a founder through their state and capacity.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/founder-coaching/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-founder-os-setup">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/founder-os-setup/SKILL.md" target="_blank"><code>founder-os-setup</code></a></h3>
+    <p class="sk-summary">Set up Founder OS from scratch.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/founder-os-setup/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-handoff-protocol">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/handoff-protocol/SKILL.md" target="_blank"><code>handoff-protocol</code></a></h3>
+    <p class="sk-summary">Build a handoff doc when work moves to someone else.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/handoff-protocol/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-ingest">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/ingest/SKILL.md" target="_blank"><code>ingest</code></a></h3>
+    <p class="sk-summary">File a source (URL, file path, or pasted text) into raw/ with provenance preserved.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/ingest/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-knowledge-capture">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/knowledge-capture/SKILL.md" target="_blank"><code>knowledge-capture</code></a></h3>
+    <p class="sk-summary">Capture takeaways from a book, podcast, article, or conversation.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/knowledge-capture/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-legal-compliance">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/legal-compliance/SKILL.md" target="_blank"><code>legal-compliance</code></a></h3>
+    <p class="sk-summary">Jurisdiction-aware legal, regulatory, and compliance skill for founders.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/legal-compliance/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-linkedin-post">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/linkedin-post/SKILL.md" target="_blank"><code>linkedin-post</code></a></h3>
+    <p class="sk-summary">Write a LinkedIn post in the founder&#x27;s voice.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/linkedin-post/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-lint">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/lint/SKILL.md" target="_blank"><code>lint</code></a></h3>
+    <p class="sk-summary">Audit the wiki for integrity issues.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/lint/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-meeting-prep">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/meeting-prep/SKILL.md" target="_blank"><code>meeting-prep</code></a></h3>
+    <p class="sk-summary">Prep for a meeting or debrief one after.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/meeting-prep/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-menu">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/menu/SKILL.md" target="_blank"><code>menu</code></a></h3>
+    <p class="sk-summary">Show what FounderOS can do right now.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/menu/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-observation-rollup">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/observation-rollup/SKILL.md" target="_blank"><code>observation-rollup</code></a></h3>
+    <p class="sk-summary">Roll up weekly observation logs.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/observation-rollup/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-pre-send-check">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/pre-send-check/SKILL.md" target="_blank"><code>pre-send-check</code></a></h3>
+    <p class="sk-summary">Run a pre-send gate before any deliverable goes out.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/pre-send-check/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-priority-triage">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/priority-triage/SKILL.md" target="_blank"><code>priority-triage</code></a></h3>
+    <p class="sk-summary">Cut through overwhelm to ONE thing to do next.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/priority-triage/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-proposal-writer">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/proposal-writer/SKILL.md" target="_blank"><code>proposal-writer</code></a></h3>
+    <p class="sk-summary">Write a consulting or service proposal.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/proposal-writer/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-query">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/query/SKILL.md" target="_blank"><code>query</code></a></h3>
+    <p class="sk-summary">Search across the OS with a multi-hop query.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/query/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-queue">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/queue/SKILL.md" target="_blank"><code>queue</code></a></h3>
+    <p class="sk-summary">Manage the work queue.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/queue/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-readiness-check">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/readiness-check/SKILL.md" target="_blank"><code>readiness-check</code></a></h3>
+    <p class="sk-summary">Score the OS install across five buckets and name the next 3 moves.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/readiness-check/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-session-handoff">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/session-handoff/SKILL.md" target="_blank"><code>session-handoff</code></a></h3>
+    <p class="sk-summary">Package this session for a fresh chat.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/session-handoff/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-ship-deliverable">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/ship-deliverable/SKILL.md" target="_blank"><code>ship-deliverable</code></a></h3>
+    <p class="sk-summary">Run the final ship gate before any external deliverable goes out.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/ship-deliverable/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-sop-writer">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/sop-writer/SKILL.md" target="_blank"><code>sop-writer</code></a></h3>
+    <p class="sk-summary">Write a delegation-ready SOP.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/sop-writer/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-strategic-analysis">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/strategic-analysis/SKILL.md" target="_blank"><code>strategic-analysis</code></a></h3>
+    <p class="sk-summary">Run a strategic analysis: competitive map, market sizing, opportunity, or business model.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/strategic-analysis/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-today">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/today/SKILL.md" target="_blank"><code>today</code></a></h3>
+    <p class="sk-summary">Show today&#x27;s one-screen brief: anchor task, open flags, last 3 log entries, and next event.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/today/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-unit-economics">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/unit-economics/SKILL.md" target="_blank"><code>unit-economics</code></a></h3>
+    <p class="sk-summary">Run business math: unit economics, pricing, CAC, LTV, margins, break-even.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/unit-economics/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-verify">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/verify/SKILL.md" target="_blank"><code>verify</code></a></h3>
+    <p class="sk-summary">Check that Founder OS is healthy.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/verify/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-voice-interview">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/voice-interview/SKILL.md" target="_blank"><code>voice-interview</code></a></h3>
+    <p class="sk-summary">Set up the writing-voice profile.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/voice-interview/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-weekly-review">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/weekly-review/SKILL.md" target="_blank"><code>weekly-review</code></a></h3>
+    <p class="sk-summary">Run the weekly review and roll the sprint.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/weekly-review/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-wiki-build">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/wiki-build/SKILL.md" target="_blank"><code>wiki-build</code></a></h3>
+    <p class="sk-summary">Rebuild the wiki graph from extracted [[wikilinks]].</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/wiki-build/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-your-deliverable-template">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/your-deliverable-template/SKILL.md" target="_blank"><code>your-deliverable-template</code></a></h3>
+    <p class="sk-summary">Build a branded document inheriting the founder&#x27;s colors, fonts, and logo.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/your-deliverable-template/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  <article class="sk-card" id="sk-your-voice">
+    <h3 class="sk-name"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/your-voice/SKILL.md" target="_blank"><code>your-voice</code></a></h3>
+    <p class="sk-summary">Apply the founder&#x27;s writing voice to any text.</p>
+    <p class="sk-meta"><a href="https://github.com/ARCASSystems/FounderOS/blob/main/skills/your-voice/SKILL.md" target="_blank">Read SKILL.md &rarr;</a></p>
+  </article>
+  </div>
+
+</main>
+
+<footer class="closing">
+  <p>People don't fail processes.</p>
+  <p class="last">Processes fail people.</p>
+</footer>
+
+</body>
+</html>
