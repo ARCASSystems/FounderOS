@@ -57,6 +57,29 @@ class CheckVoiceReadyTests(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("template", result.stdout.lower())
 
+    def test_not_set_marker_exits_0(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+            write_voice(
+                tmp_root,
+                "voice:\n"
+                "  rhythm: \"short_hits\"\n"
+                "  opening_style: \"punch\"\n"
+                "  closing_style: \"weight\"\n"
+                "  signoff_phrase: \"[NOT SET]\"\n"
+                "  contractions: \"sometimes\"\n"
+                "  reading_level: 8\n"
+                "  preferred_words:\n"
+                "    - \"ship\"\n"
+                "  banned_words:\n"
+                "    - \"synergy\"\n"
+                "  buyer_language:\n"
+                "    first_sentence: \"[NOT SET]\"\n",
+            )
+            result = run(tmp_root)
+            self.assertEqual(result.returncode, 0, msg=result.stdout)
+            self.assertIn("ready", result.stdout.lower())
+
     def test_filled_profile_exits_0(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             tmp_root = Path(tmp)

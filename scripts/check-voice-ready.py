@@ -13,7 +13,7 @@ import argparse
 from pathlib import Path
 
 
-TEMPLATE_MARKERS = ("[CHOOSE", "[NOT SET]", "<your", "[example:", "[YOUR ")
+TEMPLATE_MARKERS = ("[CHOOSE", "<your", "[example:", "[YOUR ")
 
 
 def check(root: Path) -> tuple[int, str]:
