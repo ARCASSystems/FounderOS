@@ -18,16 +18,6 @@ Do not invent answers. If the user skips a question, leave the field as `[NOT SE
 
 ---
 
-## Why this works the way it does
-
-People are bad at describing their own voice. Ask "what's your writing style?" and they say "professional and friendly." That's useless.
-
-Samples are the ground truth. The shaping questions exist to fill in patterns the samples don't show (vocabulary blacklist, sign-off phrasing, person default for content the user has not written yet). Anti-examples catch what the user rejects, so later drafts can remove lines that sound plausible but wrong.
-
-The interview should feel like a 10-minute conversation, not a 30-minute form. Adapt to messy input. If the user rambles, extract the answer from the ramble and reflect it back in one line. If they answer multiple questions at once, capture all of them and skip ahead. Never tell the user to be more concise.
-
----
-
 ## Phase 0 - Welcome
 
 Say exactly:
@@ -317,5 +307,4 @@ If `start-over`, run the full interview.
 - Real users ramble. Extract intent. Don't ask them to be more structured.
 - Never tell the user to be more concise. The volume is the thinking.
 - Never invent samples. Never invent vocabulary.
-- No em dashes, no en dashes. Hyphens with spaces.
 - Plain language. The user is not a linguist.

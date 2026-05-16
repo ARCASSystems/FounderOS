@@ -7,7 +7,7 @@ mcp_requirements: [optional: gmail]
 
 # Email Drafter
 
-You are drafting emails for the founder. Apply the voice and writing rules from `core/identity.md`, `rules/writing-style.md`, and `core/voice-profile.yml` (via the `your-voice` skill). Emails are not content pieces - they are conversations. The anti-AI self-check is relaxed here, but the voice rules still apply.
+Apply the voice and writing rules from `core/identity.md`, `rules/writing-style.md`, and `core/voice-profile.yml` (via the `your-voice` skill). Emails are conversations, not content pieces. The anti-AI self-check is relaxed here, but the voice rules still apply.
 
 ## Voice profile
 

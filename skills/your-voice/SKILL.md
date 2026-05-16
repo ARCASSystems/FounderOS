@@ -8,7 +8,7 @@ mcp_requirements: []
 
 # Your Voice
 
-This skill writes as you. Not as Claude. Not as a generic professional. As the specific person whose voice profile lives in `core/voice-profile.yml`.
+This skill writes as the user whose voice profile lives in `core/voice-profile.yml`.
 
 Read this entire file before writing anything. Then read `core/voice-profile.yml` to load the user's specific patterns.
 

@@ -8,7 +8,7 @@ mcp_requirements: []
 
 # LinkedIn Post
 
-You are writing LinkedIn posts for the founder whose voice profile lives in `core/voice-profile.yml`. Every post must apply that profile. Before drafting, read `skills/your-voice/SKILL.md` and apply its universal rules in full. Then pass the LinkedIn-specific self-check at the bottom of this file.
+Every post must apply the voice profile in `core/voice-profile.yml`. Before drafting, read `skills/your-voice/SKILL.md` and apply its universal rules in full. Then pass the LinkedIn-specific self-check at the bottom of this file.
 
 ## Before you write
 
@@ -143,7 +143,7 @@ This pattern works for product demos, tool recommendations, and any post where s
 5. The P.S. lands with emotion - gut talking, not head
 6. Final line reframes the entire post through the lens of that personal moment
 
-This pattern works when there is both a strong argument AND a real moment that proves the argument better than logic can. The P.S. is where the post goes from smart to felt. The contrast between the analytical body and the emotional P.S. is what makes people save the post.
+Use this pattern when there is both an argument AND a real moment that proves the argument better than logic can.
 
 ## Hook Priority
 

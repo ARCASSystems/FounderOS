@@ -579,5 +579,3 @@ Show any skipped or deferred items from the setup. Save them to `core/setup-back
 Templates are structural guides, not copy-paste sources. When you read a template, understand its structure and sections, then generate a personalized version using the founder's discovery answers.
 
 Adapt phrasing to match the founder's communication style from 0.7. Skip sections that don't apply (e.g., if they have no team, skip team-related sections in operating rules). Add context-specific content where the template has placeholders.
-
-The goal: every file should feel like it was written FOR this specific founder, not generated from a form.

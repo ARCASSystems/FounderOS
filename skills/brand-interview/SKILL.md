@@ -18,14 +18,6 @@ Do not invent values. If the user skips a question, leave the field as `[NOT SET
 
 ---
 
-## Why this works the way it does
-
-A brand profile is two things: a recognition pattern (the user's identity) and a constraint set (the rules that keep outputs consistent). Most people don't have either. They have a logo, maybe a color or two they like, and a vague font preference.
-
-The interview's job is to take whatever the user has, fill the gaps with smart defaults, and produce a profile that's good enough to ship a CV today. The profile evolves as the user uses it.
-
----
-
 ## Phase 0 - Welcome and detect starting point
 
 Say exactly:
@@ -260,5 +252,4 @@ If `start-over`, run the full interview from Path detection.
 - Real users don't know branding terms. "Primary color" is fine, "tertiary palette" is not.
 - When suggesting defaults (Path C mood-based), show the hex codes so the user can visualize.
 - Never tell the user to be more concise. The volume is the thinking.
-- No em dashes, no en dashes. Hyphens with spaces.
 - Plain language. The user is not a designer.

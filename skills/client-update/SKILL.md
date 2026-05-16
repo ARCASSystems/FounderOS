@@ -8,7 +8,7 @@ mcp_requirements: []
 
 # Client Update
 
-Writes client-facing communications. Updates build trust through transparency, not polish.
+Updates build trust through transparency, not polish.
 
 ## Before you write
 

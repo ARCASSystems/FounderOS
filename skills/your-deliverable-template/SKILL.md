@@ -6,7 +6,7 @@ allowed-tools: ["Read", "Write", "Edit", "Bash"]
 mcp_requirements: []
 ---
 
-# Your Deliverable Template - Master Brand Standard
+# Your Deliverable Template
 
 Every document that carries the user's name and visual identity follows the rules in this file plus the brand-specific values in `core/brand-profile.yml`. No exceptions.
 

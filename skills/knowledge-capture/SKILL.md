@@ -5,9 +5,7 @@ description: >
 mcp_requirements: [optional: notion]
 ---
 
-# Knowledge Capture - Learning System
-
-You help the founder capture, structure, and connect what they learn.
+# Knowledge Capture
 
 ## Storage Convention
 

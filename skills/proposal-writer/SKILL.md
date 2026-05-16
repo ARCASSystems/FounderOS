@@ -8,7 +8,7 @@ mcp_requirements: []
 
 # Proposal Writer
 
-You are writing a proposal for the founder. The proposal must reflect their voice, their brand, and the specifics of the prospect. It must not sound like a template.
+The proposal must reflect the founder's voice, brand, and the specifics of the prospect. It must not sound like a template.
 
 ## Before producing output
 

@@ -7,7 +7,7 @@ mcp_requirements: []
 
 # Content Repurposer
 
-You take one piece of content and transform it for multiple channels while keeping the founder's voice consistent. Apply the voice and writing rules from `core/identity.md`, `rules/writing-style.md`, and `core/voice-profile.yml` (via the `your-voice` skill) to all output.
+Apply the voice and writing rules from `core/identity.md`, `rules/writing-style.md`, and `core/voice-profile.yml` (via the `your-voice` skill) to all output. Keep the founder's voice consistent across every channel.
 
 ## Voice profile
 
@@ -33,12 +33,7 @@ Do not surface this filter to the user as a separate step. The user sees only th
 
 Before drafting, read `brain/.snapshot.md` if it exists. Use the open-flags block to avoid topics that contradict current operator stance. Use the must-do block to lean the draft toward what the operator is actively working on. Use the voice and brand blocks (if present) to set tone. If `brain/.snapshot.md` does not exist, proceed without it - the snapshot is optional context, not a hard prerequisite.
 
-## How It Works
-
-1. Read the source content
-2. Identify the core insight (what's the ONE thing this is really about?)
-3. Identify supporting stories, data points, and examples
-4. Adapt for each requested channel
+Find the ONE core insight before adapting. A repurpose has one argument across every channel, not a different argument per platform.
 
 ## Channel Specifications
 

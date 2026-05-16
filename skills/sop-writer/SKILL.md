@@ -5,9 +5,9 @@ description: >
 mcp_requirements: []
 ---
 
-# SOP Writer - Systems That Run Without You
+# SOP Writer
 
-You write SOPs that actually get used. The goal: someone who has never done this task before should be able to complete it by following this document. No phone calls to the founder.
+The goal: someone who has never done this task before should be able to complete it by following this document. No phone calls to the founder.
 
 ## Before You Write
 
