@@ -85,6 +85,7 @@ def main():
         "{{subscription_cost_band}}": manifest["subscription_cost_band"],
         "{{free_tier_warning}}": manifest["free_tier_warning"],
         "{{github_url}}": manifest["github_url"],
+        "{{download_zip_url}}": manifest.get("download_zip_url", manifest["github_url"]),
         "{{stats_strip_html}}": render_stats_strip(manifest["stats_strip"]),
         "{{seven_days_html}}": render_seven_days(manifest["seven_days"]),
         "{{tune_first_html}}": render_tune_first(manifest.get("tune_skills_first_table")),

@@ -8,6 +8,7 @@
   "subscription_cost_band": "$20 - 100 / month",
   "free_tier_warning": "Any plan with 100K+ context tokens works. Free tiers usually don't have enough context. You'll get worse output and sessions that cut off early. A paid plan is the only real requirement.",
   "github_url": "https://github.com/ARCASSystems/FounderOS",
+  "download_zip_url": "https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip",
   "stats_strip": [
     {"num": "6", "label": "operating files", "tone": "default"},
     {"num": "45", "label": "skills", "tone": "magenta"},
