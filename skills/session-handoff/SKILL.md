@@ -7,7 +7,7 @@ mcp_requirements: [optional: notion]
 
 # Session Handoff
 
-You package conversation context for transfer between Claude sessions. The goal: the receiving session picks up without re-explaining anything, regardless of whether it has installed skills, memory, or prior context.
+The goal: the receiving session picks up without re-explaining anything, regardless of whether it has installed skills, memory, or prior context.
 
 ---
 
@@ -151,7 +151,7 @@ You are continuing work on [project]. Here is the full context you need.
 
 These are non-negotiable:
 
-1. **Directives, not transcripts.** A fresh Claude doesn't know who "you" is. Write "The commission structure uses accelerating tiers" not "You said you wanted accelerating tiers."
+1. **Directives, not transcripts.** The receiving session has no context for "you". Write "The commission structure uses accelerating tiers" not "You said you wanted accelerating tiers."
 
 2. **Confirmed vs. unconfirmed separation.** The single most common handoff failure is the next session treating a suggestion as a decision. If it wasn't explicitly confirmed, it goes in Open Items.
 

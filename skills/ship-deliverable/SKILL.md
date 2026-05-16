@@ -7,7 +7,7 @@ mcp_requirements: []
 
 # Ship Deliverable
 
-This is the final gate before a proposal, brief, report, deck, page, or client note leaves the machine. It composes the checks that are easy to skip under deadline pressure and reports every failure in one pass.
+Composes the checks that are easy to skip under deadline pressure and reports every failure in one pass.
 
 ## Input
 
@@ -82,4 +82,3 @@ If not ready, list every fix grouped by link. Do not edit the deliverable.
 - Run all four links every time.
 - If any link fails, verdict is `FIX THEN RETRY`.
 - A human can override, but the override and failed links must be logged to `brain/log.md`.
-- No em dashes, no en dashes, no banned words.

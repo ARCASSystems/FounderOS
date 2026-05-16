@@ -7,7 +7,7 @@ mcp_requirements: []
 
 # Data Security
 
-This skill decides what data can go to which tool. It blocks unsafe movement before the data leaves the user's control.
+Block unsafe data movement before it leaves the user's control.
 
 ## When To Run
 
@@ -78,4 +78,3 @@ Do not silently redact and proceed. Show what type of information must be remove
 - Client-sensitive and regulated data never go to unknown tools.
 - Per-client restrictions override the generic matrix.
 - A one-time exception needs explicit human approval and a log entry.
-- No em dashes, no en dashes, no banned words.

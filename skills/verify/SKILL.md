@@ -12,19 +12,6 @@ mcp_requirements: []
 
 Read-only health check across 8 substrate checks. Returns one screen. Never auto-fixes.
 
-**This skill never auto-fixes anything. It only reports.**
-
-## Natural-language phrases that invoke this skill
-
-- "verify the OS"
-- "health check"
-- "is the OS working"
-- "check my setup"
-- "run a health check"
-
-Say any of these and the verify skill fires. The slash command `/founder-os:verify`
-is a shortcut.
-
 ## The eight checks
 
 Run all eight checks. Each produces one of: `[PASS]`, `[WARN]`, or `[FAIL]`.
@@ -215,4 +202,3 @@ Python-enforced gates exit non-zero and stop the skill in code. Instruction-only
   The distinction matters so founders can prioritize. A `[FAIL]` means something that
   would produce an error or wrong output in normal use. A `[WARN]` means something
   suboptimal that degrades gracefully.
-- No em dashes or en dashes. Hyphens only.

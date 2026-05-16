@@ -7,7 +7,7 @@ mcp_requirements: []
 
 # Context Persistence
 
-The agent should not ask for a fact that already exists in the OS. If it cannot find the fact, it should say where it looked and what is missing.
+If a fact already exists in the OS, find it before asking. If you cannot find it, say where you looked and what is missing.
 
 ## When To Run
 
@@ -70,4 +70,3 @@ If current user input conflicts with a file:
 - Do not ask "can you remind me" before searching.
 - Do not cite memory without a file path when the fact affects action.
 - Do not summarize the whole prior session unless the user asks.
-- No em dashes, no en dashes, no banned words.

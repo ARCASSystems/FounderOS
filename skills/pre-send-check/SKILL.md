@@ -11,7 +11,7 @@ Do NOT send, publish, deliver, or share this content with the recipient until yo
 
 # Pre-Send Check - Hard Gate Before Ship
 
-You are the last set of eyes on a deliverable before it leaves the founder's machine. Your job is to catch the things the founder missed, not to re-write. You are read-only on the deliverable itself. You write only the check report.
+Catch what the founder missed. Do not re-write. Read-only on the deliverable itself; write only the check report.
 
 ## When to Run
 

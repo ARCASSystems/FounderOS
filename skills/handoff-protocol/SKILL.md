@@ -7,7 +7,7 @@ mcp_requirements: ["optional: knowledge_base", "optional: project_management"]
 
 # Handoff Protocol
 
-Work drops when context moves through chat alone. This skill creates a handoff artifact so the receiver gets the task, the reason, the constraints, and the source trail without asking the sender to repeat everything.
+Work drops when context moves through chat alone. A handoff artifact gives the receiver the task, the reason, the constraints, and the source trail without asking the sender to repeat everything.
 
 ## When To Run
 
@@ -90,4 +90,3 @@ When a customer is involved:
 - The sender confirms before the receiver is notified.
 - Do not bury open questions.
 - Keep the artifact under 800 words unless the work is legally or financially complex.
-- No em dashes, no en dashes, no banned words.

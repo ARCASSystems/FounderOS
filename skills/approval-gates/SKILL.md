@@ -7,8 +7,6 @@ mcp_requirements: []
 
 # Approval Gates
 
-Approval gates prevent two opposite failures: asking for permission on trivial work, and taking actions that should never happen without a human yes.
-
 ## Pre-Read
 
 Read `rules/approval-gates.md`. If the installed OS has no customized copy, read `templates/rules/approval-gates.md` as the fallback.
@@ -69,4 +67,3 @@ If the user rejects the action, log only if the decision affects future behavior
 - Do not auto-approve because a similar action happened before.
 - Do not ask for approval on actions clearly below threshold.
 - Do not proceed silently on partial approval.
-- No em dashes, no en dashes, no banned words.
