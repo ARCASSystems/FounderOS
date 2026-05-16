@@ -5,8 +5,8 @@
   "test_count": 354,
   "operating_files": 6,
   "setup_minutes": 35,
-  "subscription_cost_band": "$20 &ndash; 100 / month",
-  "free_tier_warning": "Any plan with 100K+ context tokens works. Free tiers usually don't have enough context &mdash; you'll get worse output and sessions that cut off early. A paid plan is the only real requirement.",
+  "subscription_cost_band": "$20 - 100 / month",
+  "free_tier_warning": "Any plan with 100K+ context tokens works. Free tiers usually don't have enough context. You'll get worse output and sessions that cut off early. A paid plan is the only real requirement.",
   "github_url": "https://github.com/ARCASSystems/FounderOS",
   "stats_strip": [
     {"num": "6", "label": "operating files", "tone": "default"},
@@ -15,7 +15,7 @@
     {"num": "Any", "label": "AI model works", "tone": "dim"}
   ],
   "seven_days": [
-    {"day": 1, "title": "Install and your first six files", "time_min": 35, "detail": "Run the setup wizard. Answer the prompts. The system generates your identity file, priorities, cadence, brain layer. Don't add anything extra. This step alone unlocks daily ops, meeting prep, decision logging, and knowledge capture."},
+    {"day": 1, "title": "Install and your first six files", "time_min": 35, "detail": "Run the setup wizard. Answer the prompts. The system generates your identity file, priorities, cadence, brain layer. Don't add anything extra. This step alone gets daily ops, meeting prep, decision logging, and knowledge capture working."},
     {"day": 2, "title": "Your voice and your brand", "time_min": 20, "detail": "Run the voice interview. Run the brand interview. From this point, every writing skill produces output that sounds like you - not like AI wrote it. This is the step most people skip and then wonder why their emails feel off."},
     {"day": 3, "title": "Log one real thing", "time_min": 5, "detail": "Something actually happened today. A decision. A conversation that changed something. A deal that moved. Log it. Three lines in brain/log.md. That's the muscle you're building. The first log entry is the hardest. After that it's a habit."},
     {"day": 4, "title": "Run your first rant", "time_min": 10, "detail": "Day 4 is when you first dump an unstructured thought into the system. No editing. No structure. Use /rant. Just talk. This is how you start capturing what's actually in your head, not just the cleaned-up version."},
