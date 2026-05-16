@@ -837,8 +837,8 @@ code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.9
 <!-- LANGUAGE OF AI -->
 <section class="section" id="language">
   <h2>The language of AI</h2>
-  <p>AI is trained on the world. That means it's trained on articles, books, code repositories, documentation, forum threads, emails. Almost all of it is structured text. And the most common structure across all of that text is Markdown.</p>
-  <p>Markdown is the language AI is best at reading. Headers, bullet points, bold text, numbered lists - these give the model clear signals about what matters, what's a heading, what's a list. When you write a wall of unstructured text, the model reads it like a wall. When you write with structure, it works with structure.</p>
+  <p>AI is trained on the world's text - articles, books, code, documentation, threads, emails. Almost all of it is structured. And the most common structure is Markdown.</p>
+  <p>Markdown is the format AI reads best. Headers, bullet points, bold text, numbered lists give the model clear signals about what matters. Write a wall of unstructured text, the model reads a wall. Write with structure, it works with structure.</p>
 
   <!-- Markdown → AI diagram -->
   <svg viewBox="0 0 600 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;margin:24px 0;display:block">
@@ -866,7 +866,7 @@ code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.9
     </defs>
   </svg>
 
-  <p>This is why every file in the OS is a <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">.md</code> file. Not because it looks nice in a text editor. Because Markdown is the format that gives the model the clearest signal about what matters.</p>
+  <p>This is why every file in the OS is a <code>.md</code> file. Not because it looks nice in a text editor. Because Markdown is the format that gives the model the clearest signal about what matters.</p>
 
   <p>The model is trained on the world. It doesn't know your world until you build the files. Every piece of context you add - a new client, a decision, a standard you hold - the model gets more specific. The output gets more useful. As the models improve, that context compounds. Same honest files, better model, better output. You don't start over when there's a new model. Your files stay.</p>
 
@@ -954,7 +954,7 @@ code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.9
 
   <div class="callout-magenta"><strong>If you've tried AI assistants before and they didn't stick, here's exactly why.</strong> Every session started from scratch. The AI had no memory of your business, your standards, or your relationships. It wasn't the AI that failed. It was the missing context layer. That's what this OS provides.</div>
   <p>Founder OS solves this by making context live in files, not in the session. The model reads the files every session. Fresh read, same truth. You don't re-explain. The files explain.</p>
-  <p>And because the context is in files, you're not locked to any one tool. Claude Code today, Codex tomorrow - they both read the same six files. The OS ships with an <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">AGENTS.md</code> file for exactly this reason. Non-Claude agents pick up the same operating rules.</p>
+  <p>And because the context is in files, you're not locked to any one tool. Claude Code today, Codex tomorrow - they both read the same six files. The OS ships with an <code>AGENTS.md</code> file for exactly this reason. Non-Claude agents pick up the same operating rules.</p>
   <div class="callout-purple">
     <strong>Local-first means: the data lives on your machine.</strong> Not on a company's server. Not in someone's cloud. Plain markdown. Any text editor reads it. Any AI can load it. You own it.
   </div>
@@ -1016,7 +1016,7 @@ code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.9
     </defs>
   </svg>
 
-  <p>The <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">/rant</code> command opens a capture. You dump. The system takes it raw and stores it in <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">brain/rants/</code>. Later, you run <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">/dream</code>. The dream skill reads the rant and distills it: patterns noticed, flags worth tracking, decisions you were circling, open questions.</p>
+  <p>The <code>/rant</code> command opens a capture. You dump. The system takes it raw and stores it in <code>brain/rants/</code>. Later, you run <code>/dream</code>. The dream skill reads the rant and distills it: patterns noticed, flags worth tracking, decisions you were circling, open questions.</p>
   <p>Rant captures the mess. Dream gives it shape.</p>
   <p>Dream's output is also a prompt you can paste into another chat. If you're going to do the heavy work in a different tool - Cloud Claude on your phone, ChatGPT, Gemini, anything - the rant-to-dream loop is how you arrive at a prompt that already knows your context.</p>
   <div class="callout-purple">
@@ -1134,8 +1134,8 @@ code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.9
   <div class="callout-purple">
     <strong>What you share with a team is outputs, not brains.</strong>
   </div>
-  <p>When a skill produces a proposal, a meeting summary, an SOP, or a client update - that's a clean deliverable. It's ready to share. The OS has a pre-send check (<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">/ship-deliverable</code>) that runs before anything goes to a client. It verifies the output matches your voice, your standards, and the facts in your files.</p>
-  <p>For team members who want their own OS: they install separately. Same structure, different truth. Two operating layers that communicate through deliverables, not through shared files. Each person holds their own context. The outputs connect the work.</p>
+  <p>When a skill produces a proposal, a meeting summary, an SOP, or a client update - that's a clean deliverable. It's ready to share. The OS has a pre-send check (<code>/ship-deliverable</code>) that runs before anything goes to a client. It verifies the output matches your voice, your standards, and the facts in your files.</p>
+  <p>For team members who want their own OS, they install separately. Same structure, different truth. Two operating layers that communicate through deliverables, not through shared files. Each person holds their own context. The outputs connect the work.</p>
 </section>
 
 <!-- PRIVACY -->
@@ -1163,8 +1163,8 @@ code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.9
     <strong>When output feels confidently wrong:</strong> push back. Ask the model to show its reasoning. A good model will revise with reasons. A bad one will just agree.
   </div>
   <p>This is the trap. The model will agree with you if you push. It adapts to your framing. That's useful when refining output. It's dangerous when you want honest analysis. If you go in wanting validation, the system will validate you.</p>
-  <p>The <code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">forcing-questions</code> skill exists for this reason. It asks six questions that have a real chance of killing the idea. That's the point. Better to kill a bad idea in six questions than spend three weeks building it with AI helping you go faster.</p>
-  <p><strong>Don't ship AI output you haven't read.</strong> Every deliverable that leaves your machine has your name on it. The pre-send check (<code style="background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:13px">/ship-deliverable</code>) is the built-in gate before anything goes to a client.</p>
+  <p>The <code>forcing-questions</code> skill exists for this reason. It asks six questions that have a real chance of killing the idea. That's the point. Better to kill a bad idea in six questions than spend three weeks building it with AI helping you go faster.</p>
+  <p><strong>Don't ship AI output you haven't read.</strong> Every deliverable that leaves your machine has your name on it. The pre-send check (<code>/ship-deliverable</code>) is the built-in gate before anything goes to a client.</p>
 </section>
 
 <!-- WHAT CAN GO WRONG -->
