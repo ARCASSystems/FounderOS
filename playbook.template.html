@@ -952,11 +952,68 @@ code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.9
 <section class="section" id="cloud-claude">
   <h2>Skills work in Cloud Claude too</h2>
   <p>Skills are markdown files. They are instructions Claude follows. That means they are not Claude Code-specific.</p>
-  <p>Claude.ai (web, desktop, mobile) reads skills natively. Tune your voice-interview, email-drafter, or proposal-writer skill in your local repo, then paste those same skill files into a Claude.ai project. The output is the same.</p>
+  <p>Claude.ai (web, desktop, mobile) reads skills natively. Tune your voice-interview, email-drafter, or proposal-writer skill in your local repo, then drop those same skill files into a Claude.ai project. The output is the same.</p>
+
+  <!-- Two-panel: blank Cloud Claude vs Cloud Claude with FounderOS folder dropped in -->
+  <svg viewBox="0 0 620 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:620px;margin:24px 0 12px;display:block">
+    <defs>
+      <marker id="cc-arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#35D39A"/></marker>
+    </defs>
+    <!-- LEFT panel: empty Cloud Claude -->
+    <rect x="10" y="10" width="280" height="190" rx="8" fill="#fff" stroke="#E8E8EE" stroke-width="1.5"/>
+    <rect x="10" y="10" width="280" height="26" rx="8" fill="#F8F8FA" stroke="#E8E8EE" stroke-width="1.5"/>
+    <circle cx="24" cy="23" r="3.5" fill="#F70872" opacity=".6"/>
+    <circle cx="36" cy="23" r="3.5" fill="#FB610E" opacity=".6"/>
+    <circle cx="48" cy="23" r="3.5" fill="#35D39A" opacity=".6"/>
+    <text x="150" y="27" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">claude.ai - new chat</text>
+    <!-- Empty middle area -->
+    <text x="150" y="115" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#9CA3AF">No skills loaded</text>
+    <!-- Input box -->
+    <rect x="26" y="165" width="248" height="24" rx="12" fill="#F8F8FA" stroke="#E8E8EE" stroke-width="1"/>
+    <text x="38" y="180" font-family="-apple-system,sans-serif" font-size="10" fill="#9CA3AF">Type a message...</text>
+    <!-- Caption -->
+    <text x="150" y="225" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#6B7280">Cloud Claude. Generic.</text>
+
+    <!-- Arrow between panels -->
+    <line x1="295" y1="105" x2="315" y2="105" stroke="#35D39A" stroke-width="2" marker-end="url(#cc-arr)"/>
+
+    <!-- RIGHT panel: Cloud Claude with FounderOS folder dropped in and "start" typed -->
+    <rect x="320" y="10" width="290" height="190" rx="8" fill="#fff" stroke="#8234EA" stroke-width="1.5"/>
+    <rect x="320" y="10" width="290" height="26" rx="8" fill="#F8F8FA" stroke="#8234EA" stroke-width="1.5"/>
+    <circle cx="334" cy="23" r="3.5" fill="#F70872" opacity=".6"/>
+    <circle cx="346" cy="23" r="3.5" fill="#FB610E" opacity=".6"/>
+    <circle cx="358" cy="23" r="3.5" fill="#35D39A" opacity=".6"/>
+    <text x="465" y="27" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#6B7280">claude.ai - FounderOS project</text>
+    <!-- Folder pill (dragged in) -->
+    <g transform="translate(336,52)">
+      <rect x="0" y="0" width="118" height="28" rx="14" fill="rgba(130,52,234,.12)" stroke="#8234EA" stroke-width="1.2"/>
+      <path d="M10 9 L18 9 L20 12 L34 12 L34 22 L10 22 Z" fill="#8234EA" opacity=".75"/>
+      <text x="42" y="19" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#8234EA">FounderOS</text>
+      <text x="103" y="19" font-family="-apple-system,sans-serif" font-size="11" fill="#8234EA">+</text>
+    </g>
+    <text x="465" y="68" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#6B7280">dragged into the project</text>
+    <!-- User chat bubble: "start" -->
+    <rect x="430" y="100" width="170" height="32" rx="16" fill="rgba(53,211,154,.15)" stroke="#35D39A" stroke-width="1.2"/>
+    <text x="514" y="120" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12" font-weight="700" fill="#1A2840">start</text>
+    <!-- Response indicator -->
+    <rect x="330" y="142" width="190" height="20" rx="10" fill="rgba(247,8,114,.08)" stroke="#F70872" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="425" y="156" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#F70872">Brief, queue, flags, anchor...</text>
+    <!-- Input box -->
+    <rect x="336" y="170" width="258" height="22" rx="11" fill="#F8F8FA" stroke="#E8E8EE" stroke-width="1"/>
+    <text x="348" y="184" font-family="-apple-system,sans-serif" font-size="10" fill="#9CA3AF">Type a message...</text>
+    <!-- Caption -->
+    <text x="465" y="225" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#8234EA">Cloud Claude + your skills. Specialised.</text>
+  </svg>
+
+  <div class="callout">
+    <p>Cloud chat alone is the receptionist - it answers, logs somewhere, polite, doesn't know your context. Drop your skills folder in and type <code>start</code> - it becomes a personal executive assistant. Tune the voice and brand files - it becomes a specialist that can actually do the task. Same chat. Different context.</p>
+  </div>
+
+  <p>Three concrete moves you'll use this for:</p>
   <ul class="cc-list">
-    <li><strong>Drafting an email on your phone.</strong> Open Claude.ai mobile, paste in your voice profile and email-drafter skill, get the same output your laptop would.</li>
-    <li><strong>In a meeting on a different machine.</strong> Cloud Claude with your skills pasted in matches what your local OS would produce.</li>
-    <li><strong>Sharing one skill with a team member.</strong> They paste it into their Claude Project, no install required, same behaviour.</li>
+    <li><strong>Drafting an email on your phone.</strong> Open Claude.ai mobile, drop in your voice profile and email-drafter skill, get the same output your laptop would.</li>
+    <li><strong>In a meeting on a different machine.</strong> Cloud Claude with your skills loaded matches what your local OS would produce.</li>
+    <li><strong>Sharing one skill with a team member.</strong> They drop it into their Claude Project, no install required, same behaviour.</li>
   </ul>
   <p>Skills are portable. Your repo is the source of truth, but the skills travel with you.</p>
   <div class="callout-purple">
