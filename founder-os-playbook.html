@@ -424,6 +424,12 @@ h2{margin-bottom:24px}
 @media(max-width:900px){.six-files{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:540px){.six-files{grid-template-columns:repeat(2,1fr)}}
 
+/* cloud claude list */
+.cc-list{list-style:none;margin:16px 0 24px;max-width:var(--content-max)}
+.cc-list li{padding:10px 0 10px 22px;position:relative;font-size:15px;line-height:1.6}
+.cc-list li::before{content:'';position:absolute;left:0;top:18px;width:10px;height:10px;border-radius:50%;background:var(--purple)}
+.cc-list li strong{color:var(--body-text)}
+
 /* tune-first cards */
 .tf-grid{display:grid;grid-template-columns:1fr;gap:14px;margin:28px 0;max-width:var(--content-max)}
 .tf-card{
@@ -469,6 +475,7 @@ h2{margin-bottom:24px}
     <a href="#meetings">Capture meetings</a>
     <a href="#rants">Rants</a>
     <a href="#voice">Talk to your system</a>
+    <a href="#cloud-claude">Skills in Cloud Claude</a>
     <div class="nav-group">Working with AI</div>
     <a href="#plan">Plan before you type</a>
     <a href="#context">Context and tokens</a>
@@ -1033,6 +1040,23 @@ h2{margin-bottom:24px}
 
   <p>Talk to the system like you're thinking out loud. Then look at what came out. Edit it if you want. Paste it in. Speak, look back, refine. That process is how you get better prompts without spending 20 minutes composing a perfect question.</p>
   <p class="pullquote">The best prompts are the honest ones.</p>
+</section>
+
+<!-- CLOUD CLAUDE -->
+<section class="section" id="cloud-claude">
+  <h2>Skills work in Cloud Claude too</h2>
+  <p>Skills are markdown files. They are instructions Claude follows. That means they are not Claude Code-specific.</p>
+  <p>Claude.ai (web, desktop, mobile) reads skills natively. Tune your voice-interview, email-drafter, or proposal-writer skill in your local repo, then paste those same skill files into a Claude.ai project. The output is the same.</p>
+  <p>Why this matters:</p>
+  <ul class="cc-list">
+    <li><strong>On the phone, need to draft an email.</strong> Open Claude.ai mobile, your voice profile and email-drafter skill produce the same output as your laptop would.</li>
+    <li><strong>In a meeting on a different machine.</strong> Cloud Claude with your skills pasted in matches what your local OS would produce.</li>
+    <li><strong>Sharing one skill with a team member.</strong> They paste it into their Claude Project, no install required, they get the same behaviour.</li>
+  </ul>
+  <p>Skills are portable. Your repo is the source of truth, but the skills travel with you.</p>
+  <div class="callout-purple">
+    <strong>What stays local:</strong> hooks, scheduled tasks, file writes, and the session-start brief are Claude Code-only. Skills work everywhere. The rest of the OS runs on your machine.
+  </div>
 </section>
 
 <!-- PLAN BEFORE YOU TYPE -->
