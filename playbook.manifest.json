@@ -27,37 +27,37 @@
     {
       "focus": "Client emails this week",
       "tune_first": ["voice-interview", "email-drafter", "your-voice"],
-      "why_different": "Reads your voice profile so emails sound like you. Pulls client context from clients.md so you don't re-explain who they are or what was last agreed. Anti-AI filter catches generic phrasing before send."
+      "why_different": "Reads your voice profile so emails sound like you, not like AI. Runs an anti-AI filter against your captured anti-patterns before returning a draft, so generic phrasing gets caught before send. Leans on your brain snapshot so the draft matches what you're actually working on this week."
     },
     {
       "focus": "Writing an SOP",
       "tune_first": ["sop-writer", "voice-interview"],
-      "why_different": "Captures how you describe a process verbally (rant-style), not how you'd format it from scratch. Produces a doc a junior team member could follow without asking you a single follow-up question."
+      "why_different": "Reads your stack file so 'CRM' becomes the tool you actually use, not a placeholder. Inherits your voice rhythm so steps don't read like a corporate template. Owner and tools fields stay populated so a delegated reader can act without coming back to ask."
     },
     {
       "focus": "A new proposal",
       "tune_first": ["brand-interview", "proposal-writer", "your-deliverable-template"],
-      "why_different": "Inherits your brand colours, fonts, and logo. Reads positioning and buyer language captured during voice interview. The output looks like your proposal, not a generic AI document."
+      "why_different": "Inherits the colours, fonts, and logo you set during the brand interview. Applies your voice profile so the prose doesn't read like AI. Reads the existing client context file so you don't re-explain who they are or what was last agreed."
     },
     {
       "focus": "LinkedIn content rhythm",
       "tune_first": ["voice-interview", "linkedin-post", "content-repurposer"],
-      "why_different": "Hooks tested against the LinkedIn 'see more' cutoff. Anti-AI rules applied. content-repurposer takes one piece and adapts it across formats so you don't write five things."
+      "why_different": "Treats the first two lines as a unit because that's the 'see more' cutoff on mobile. Anti-AI filter applies to every draft. content-repurposer takes one piece and adapts it across LinkedIn, email, and other formats so you don't write five things."
     },
     {
       "focus": "Meeting prep and capture",
       "tune_first": ["meeting-prep", "capture-meeting", "knowledge-capture"],
-      "why_different": "meeting-prep reads client history and prior commitments. /capture-meeting routes the post-call summary into log.md, clients.md, and open commitments so nothing slips. knowledge-capture stores reusable patterns with stable IDs."
+      "why_different": "meeting-prep pulls client history and prior commitments before the call. /capture-meeting routes the post-call dump into log.md, clients.md, and open commitments in one step. knowledge-capture writes takeaways with stable IDs so you can cite them later."
     },
     {
       "focus": "Decision overload",
       "tune_first": ["decision-framework", "forcing-questions", "brain-pass"],
-      "why_different": "decision-framework forces criteria and kill criteria before options. forcing-questions runs six questions that have a real chance of killing a bad idea. brain-pass cites evidence across your brain layer instead of giving you a generic answer."
+      "why_different": "decision-framework adapts to whether you decide by gut, data, or dialogue and runs the right template. forcing-questions runs six fixed questions that test done state, smallest ship, replacement cost, urgency, and proof. brain-pass synthesises across your log, decisions, flags, and patterns so the answer cites your own evidence."
     },
     {
       "focus": "Daily ops triage",
       "tune_first": ["today", "priority-triage", "weekly-review"],
-      "why_different": "today gives a 20-line one-screen view. priority-triage forces a top-three with everything else explicitly cut. weekly-review keeps the cadence honest."
+      "why_different": "today gives a 20-line one-screen view: anchor task, open flags, last three log entries, next event. priority-triage cuts to ONE thing, not a list. weekly-review keeps the cadence honest so flags don't pile up."
     }
   ]
 }

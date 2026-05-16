@@ -423,6 +423,21 @@ h2{margin-bottom:24px}
 .file-tile p{font-size:11px;color:var(--gray-text);margin:0;line-height:1.4}
 @media(max-width:900px){.six-files{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:540px){.six-files{grid-template-columns:repeat(2,1fr)}}
+
+/* tune-first cards */
+.tf-grid{display:grid;grid-template-columns:1fr;gap:14px;margin:28px 0;max-width:var(--content-max)}
+.tf-card{
+  border:1px solid var(--gray-mid);border-radius:var(--radius);
+  padding:20px 24px;border-left:4px solid var(--purple);background:#fff;
+}
+.tf-focus{font-weight:700;font-size:15px;color:var(--body-text);margin-bottom:10px}
+.tf-chain{font-size:12px;color:var(--gray-text);margin-bottom:12px;line-height:1.8}
+.tf-code{background:var(--gray-light);padding:2px 8px;border-radius:4px;font-size:12px;color:var(--purple);font-family:ui-monospace,monospace;white-space:nowrap}
+.tf-why{font-size:14px;color:var(--body-text);line-height:1.65}
+@media(max-width:540px){
+  .tf-card{padding:18px 18px}
+  .tf-chain{font-size:11px}
+}
 </style></head>
 <body>
 
@@ -443,6 +458,7 @@ h2{margin-bottom:24px}
     <a href="#what">What this is</a>
     <div class="nav-group">The system</div>
     <a href="#parts">Brain. Hands. Heartbeat.</a>
+    <a href="#tune-first">Where to start</a>
     <a href="#human">The human part</a>
     <a href="#tuesday">Day 30 in real life</a>
     <div class="nav-group">Getting started</div>
@@ -613,6 +629,18 @@ h2{margin-bottom:24px}
       <h3>The Heartbeat</h3>
       <p>Cadence. A daily anchor in the morning. A weekly retro on Sunday or Monday. Two moments where the system surfaces what's stale, ignored, or parked too long. Without the heartbeat, the brain goes stale and the hands stop firing clean output.</p>
     </div>
+  </div>
+</section>
+
+<!-- TUNE FIRST -->
+<section class="section" id="tune-first">
+  <h2>Where to start: tune three skills first</h2>
+  <p>Forty-five skills is too many to set up cold. Pick three that match what you actually ship in the next seven days. Tune those. Ignore the rest until you need them. This is the difference between people who use the OS daily by week two and people who give up because they tried to perfect everything.</p>
+  <div class="tf-grid">
+{{tune_first_html}}
+  </div>
+  <div class="callout-purple">
+    You'll add more skills as you need them. The OS does not punish you for ignoring 42 of them on day one. Start where the work is.
   </div>
 </section>
 
