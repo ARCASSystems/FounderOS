@@ -3,6 +3,10 @@ name: FounderOS Integrity Audit
 on:
   push:
     branches: ["**"]
+  schedule:
+    # Weekly digest: Monday 06:00 UTC (~10:00 Dubai). One issue per week max.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -11,6 +15,7 @@ permissions:
 jobs:
   test:
     name: Python test suite
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,28 +24,27 @@ jobs:
         run: python3 -m unittest discover tests -v
 
   audit:
-    name: Leakage & drift scan
+    name: Leakage & drift scan (weekly digest)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0  # full history so --since can walk 7 days of commits
 
-      - name: Run audit scan
+      - name: Run weekly audit scan
         id: scan
-        run: python3 .github/scripts/audit.py
+        run: python3 .github/scripts/audit.py --since "7 days ago"
         env:
-          GITHUB_SHA: ${{ github.sha }}
-          GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_REF: ${{ github.ref }}
           FOUNDEROS_PRIVATE_AUDIT_PATTERNS: ${{ secrets.FOUNDEROS_PRIVATE_AUDIT_PATTERNS }}
 
-      - name: File GitHub issue
+      - name: File weekly digest issue
         if: steps.scan.outputs.has_findings == 'true'
         run: |
-          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-8)
+          WEEK=$(date -u +%Y-%m-%d)
           python3 .github/scripts/format_issue.py | gh issue create \
-            --title "[Audit] Integrity flags · ${SHORT_SHA} (${{ github.ref_name }})" \
+            --title "[Audit] Weekly digest · week of ${WEEK}" \
             --body-file -
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

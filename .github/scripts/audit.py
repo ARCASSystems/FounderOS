@@ -1,8 +1,16 @@
 """
-FounderOS integrity audit - runs on every push via GitHub Actions.
-Scans for leakage patterns and high-impact path drift.
-Writes /tmp/audit_findings.json and sets the has_findings GHA output.
+FounderOS integrity audit.
+
+Two run modes:
+- Default: scan HEAD~1..HEAD diff. Used by local `python3 audit.py` runs
+  (per `.github/scripts/fix-audit.md`) and as a fallback.
+- `--since <git-date>`: scan all commits in the given window. Used by the
+  weekly digest cron job in `.github/workflows/founderos-audit.yml`.
+
+Always runs the leakage-pattern scan against the current working tree.
+Writes findings JSON and sets the has_findings GHA output.
 """
+import argparse
 import json
 import os
 import re
@@ -118,6 +126,20 @@ def get_changed_files() -> list[str]:
     return [f for f in result.stdout.strip().splitlines() if f] if result.returncode == 0 else []
 
 
+def get_changed_files_since(since: str) -> tuple[list[str], int]:
+    """Return (unique changed file paths, commit count) in the window."""
+    result = subprocess.run(
+        ["git", "log", f"--since={since}", "--name-only", "--pretty=format:%H"],
+        capture_output=True, text=True,
+    )
+    if result.returncode != 0:
+        return [], 0
+    lines = [line for line in result.stdout.splitlines() if line]
+    commits = [line for line in lines if re.fullmatch(r"[0-9a-f]{40}", line)]
+    files = sorted({line for line in lines if line and not re.fullmatch(r"[0-9a-f]{40}", line)})
+    return files, len(commits)
+
+
 def set_gha_output(key: str, value: str) -> None:
     github_output = os.environ.get("GITHUB_OUTPUT", "")
     if github_output:
@@ -137,6 +159,18 @@ def findings_path() -> Path:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="FounderOS integrity audit.")
+    parser.add_argument(
+        "--since",
+        default=None,
+        help=(
+            "git-date window (e.g. '7 days ago'). Scans all commits in the "
+            "window for high-impact path changes. Without this flag, scans "
+            "HEAD~1..HEAD only."
+        ),
+    )
+    args = parser.parse_args()
+
     root = repo_root()
     leakage_findings = []
     for label, pattern in [*LEAKAGE_PATTERNS, *load_private_patterns()]:
@@ -144,7 +178,13 @@ def main() -> None:
         if result:
             leakage_findings.append(result)
 
-    changed_files = get_changed_files()
+    if args.since:
+        changed_files, commit_count = get_changed_files_since(args.since)
+        scan_window = {"since": args.since, "commits_scanned": commit_count}
+    else:
+        changed_files = get_changed_files()
+        scan_window = None
+
     touched_high_impact = [
         p for p in HIGH_IMPACT_PATHS
         if any(f == p or f.startswith(p) for f in changed_files)
@@ -156,6 +196,7 @@ def main() -> None:
         "commit": os.environ.get("GITHUB_SHA", "unknown"),
         "actor": os.environ.get("GITHUB_ACTOR", "unknown"),
         "ref": os.environ.get("GITHUB_REF", "unknown"),
+        "scan_window": scan_window,
         "changed_files": changed_files,
         "touched_high_impact": touched_high_impact,
         "leakage_findings": leakage_findings,
@@ -168,9 +209,10 @@ def main() -> None:
     set_gha_output("has_findings", "true" if has_findings else "false")
 
     if has_findings:
+        window_note = f" (window: {args.since})" if args.since else ""
         print(
             f"::warning::Audit flagged {len(leakage_findings)} leakage pattern(s) "
-            f"and {len(touched_high_impact)} high-impact path change(s)"
+            f"and {len(touched_high_impact)} high-impact path change(s){window_note}"
         )
         for f in leakage_findings:
             print(f"  - {f['check']}: {f['count']} match(es)")

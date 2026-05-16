@@ -38,12 +38,24 @@ HINT = {
 
 def main() -> None:
     findings = json.loads(findings_path().read_text())
-    short_sha = findings["commit"][:8]
+    scan_window = findings.get("scan_window")
 
     lines = [
         f"## FounderOS Integrity Audit",
         f"",
-        f"> Commit `{short_sha}` · actor **{findings['actor']}** · ref `{findings['ref']}`",
+    ]
+    if scan_window:
+        since = scan_window.get("since", "unknown window")
+        commits = scan_window.get("commits_scanned", 0)
+        lines.append(
+            f"> Weekly digest · window: {since} · {commits} commit(s) scanned · ref `{findings['ref']}`"
+        )
+    else:
+        short_sha = findings["commit"][:8]
+        lines.append(
+            f"> Commit `{short_sha}` · actor **{findings['actor']}** · ref `{findings['ref']}`"
+        )
+    lines += [
         f"> Opened automatically by `.github/workflows/founderos-audit.yml`.",
         f"> Maintainer fix procedure: `.github/scripts/fix-audit.md`.",
         f"",

@@ -266,7 +266,7 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.24.0. Public release. 45 skills, 27 commands, 355 tests.
+Version 1.24.0. Public release. 45 skills, 27 commands, 358 tests.
 
 v1.24 adds Python preflight gates so writing and reasoning skills fail visibly when their data is not set up, rather than producing generic output silently. Full release history in [CHANGELOG.md](CHANGELOG.md).
 
