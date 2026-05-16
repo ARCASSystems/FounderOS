@@ -444,6 +444,22 @@ h2{margin-bottom:24px}
   .tf-card{padding:18px 18px}
   .tf-chain{font-size:11px}
 }
+
+/* inline code default */
+code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.92em;color:var(--purple);font-family:ui-monospace,monospace}
+.dark code,.callout code{background:rgba(255,255,255,.1);color:#fff}
+
+/* tool-why rows (advocacy framing) */
+.tool-why{padding:8px 0}
+.tw-row{display:grid;grid-template-columns:180px 1fr;gap:18px;padding:14px 24px;border-bottom:1px solid var(--gray-mid);align-items:baseline}
+.tw-row:last-child{border-bottom:none}
+.tw-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--purple)}
+.tw-row.alt .tw-label{color:var(--gray-text)}
+.tw-text{font-size:14px;color:var(--body-text);line-height:1.6}
+@media(max-width:640px){
+  .tw-row{grid-template-columns:1fr;gap:4px;padding:12px 18px}
+  .tw-label{font-size:10px}
+}
 </style></head>
 <body>
 
@@ -560,7 +576,7 @@ h2{margin-bottom:24px}
 <!-- WHAT THIS IS -->
 <section class="section" id="what">
   <h2>What this is</h2>
-  <p>Founder OS is an operating layer. Not a tool you open and close. A layer that lives where you already work - in <a href="https://claude.ai/code" target="_blank">Claude Code</a> - and reads a small set of files every time you start a session.</p>
+  <p>Founder OS is an operating layer. Not a tool you open and close. A layer that lives where you already work - in <a href="https://claude.ai/code" target="_blank">Claude Code</a> - and reads a small set of files every time you start a session. We picked Claude Code because the skills system is native and the file-watching happens automatically. <a href="https://github.com/openai/codex" target="_blank">Codex</a>, <a href="https://www.cursor.com/" target="_blank">Cursor</a>, and any agent that reads <code>AGENTS.md</code> work too. We are not selling Claude Code. We picked one to write the playbook against.</p>
   <div class="callout">
     <strong>Six files. That's the whole brain.</strong>
     <p style="margin-top:12px">Who you are &nbsp;·&nbsp; What you're focused on right now &nbsp;·&nbsp; Open decisions &nbsp;·&nbsp; Your active clients &nbsp;·&nbsp; What's on for today &nbsp;·&nbsp; What this week needs</p>
@@ -771,7 +787,22 @@ h2{margin-bottom:24px}
     <p class="obs-label">Your brain files as a graph view - how Obsidian renders the connections between your markdown files. Every line is a [[wikilink]].</p>
   </div>
 
-  <p><a href="https://obsidian.md/" target="_blank">Obsidian</a> (free) can open your OS folder directly and show you this graph view. You see the connections between your files. You see how the AI reads your context as a network, not a folder of documents. It makes the structure tangible and helps you understand why adding one file in the right place can improve the output of six different skills at once.</p>
+  <div class="tool-card">
+    <div class="tool-header">
+      <div class="tool-icon" style="background:rgba(130,52,234,.1);color:#8234EA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><line x1="7.5" y1="7.5" x2="10.5" y2="16.5"/><line x1="16.5" y1="7.5" x2="13.5" y2="16.5"/><line x1="8" y1="6" x2="16" y2="6"/></svg></div>
+      <div>
+        <div class="tool-name"><a href="https://obsidian.md/" target="_blank">Obsidian</a> - obsidian.md</div>
+        <div class="tool-sub">Markdown editor with graph view. Mac, Windows, Linux, iPhone, Android. Free for personal use.</div>
+      </div>
+    </div>
+    <div class="tool-why">
+      <div class="tw-row"><span class="tw-label">The job</span><span class="tw-text">Read your OS files as a connected graph, not a folder of documents.</span></div>
+      <div class="tw-row"><span class="tw-label">Why this matters even without AI</span><span class="tw-text">Markdown is easier to navigate when you can see how files link to each other. You spot orphans, dense clusters, and missing connections at a glance.</span></div>
+      <div class="tw-row"><span class="tw-label">Why it compounds with the OS</span><span class="tw-text">The OS uses <code>[[wikilinks]]</code> between brain files. Obsidian renders them as a graph. Adding one well-placed file improves the output of six different skills at once - the graph view is how you see that.</span></div>
+      <div class="tw-row"><span class="tw-label">Why we picked this one</span><span class="tw-text">Obsidian opens your repo folder directly. No import. No conversion. Your files stay where they are.</span></div>
+      <div class="tw-row alt"><span class="tw-label">You can pick another</span><span class="tw-text">Logseq, VS Code with a markdown extension, or any text editor reads the same files. The graph view is the differentiator.</span></div>
+    </div>
+  </div>
 </section>
 
 <!-- FILES ARE MEMORY -->
@@ -819,31 +850,16 @@ h2{margin-bottom:24px}
         <div class="tool-sub">AI notepad for back-to-back meetings. Mac, Windows, and iPhone. Freemium.</div>
       </div>
     </div>
-    <div class="tool-body">
-      <div class="tool-col">
-        <div class="tool-col-label">With Granola</div>
-        <ul class="tool-list">
-          <li>Meetings are transcribed automatically in the background</li>
-          <li>After the call, paste the summary into /capture-meeting</li>
-          <li>The OS pulls decisions, commitments, and client signals into the right files</li>
-          <li>You show up to the next call knowing exactly what was agreed</li>
-          <li>Nothing slips through from a conversation you had weeks ago</li>
-        </ul>
-      </div>
-      <div class="tool-col">
-        <div class="tool-col-label">Without it</div>
-        <ul class="tool-list">
-          <li>You take notes manually during the call</li>
-          <li>Most people take partial notes, or none</li>
-          <li>The OS captures what you remember - not what was said</li>
-          <li>The gap between intent and record grows over time</li>
-          <li>Still workable - just less complete</li>
-        </ul>
-      </div>
+    <div class="tool-why">
+      <div class="tw-row"><span class="tw-label">The job</span><span class="tw-text">Capture what was said in a meeting without having to retype it after.</span></div>
+      <div class="tw-row"><span class="tw-label">Why this matters even without AI</span><span class="tw-text">You stop losing 20 minutes after every call writing up notes. The transcript is on disk. You can find it later. That alone is the value.</span></div>
+      <div class="tw-row"><span class="tw-label">Why it compounds with the OS</span><span class="tw-text">Paste the summary into <code>/capture-meeting</code>. The OS routes decisions into <code>clients.md</code>, commitments into the log, and follow-ups into open work. You walk into the next call already prepped.</span></div>
+      <div class="tw-row"><span class="tw-label">Why we picked this one</span><span class="tw-text">Granola transcribes computer audio directly. No bot joining the call. No third party in the meeting. Works for back-to-back calls without setup.</span></div>
+      <div class="tw-row alt"><span class="tw-label">You can pick another</span><span class="tw-text">Otter, Fireflies, Tactiq, and Fathom all do this. We are not selling Granola. The point is that a transcriber exists at all.</span></div>
     </div>
   </div>
 
-  <p>Set Granola running before you start the call. Let it work in the background. Review the summary before you close the laptop. Then run /capture-meeting. That's the whole loop.</p>
+  <p>Set the transcriber running before you start the call. Let it work in the background. Review the summary before you close the laptop. Then run <code>/capture-meeting</code>. That's the whole loop.</p>
 </section>
 
 <!-- RANTS -->
@@ -900,31 +916,16 @@ h2{margin-bottom:24px}
         <div class="tool-sub">Voice dictation that types anywhere on screen. Mac, Windows, iPhone, and Android. Free trial, then paid.</div>
       </div>
     </div>
-    <div class="tool-body">
-      <div class="tool-col">
-        <div class="tool-col-label">With Wispr Flow</div>
-        <ul class="tool-list">
-          <li>You talk, it types directly into any field on screen</li>
-          <li>No switching apps, no copy-paste</li>
-          <li>The habit of logging becomes easy</li>
-          <li>Rants feel natural - same as thinking out loud</li>
-          <li>Longer, richer prompts with less effort</li>
-        </ul>
-      </div>
-      <div class="tool-col">
-        <div class="tool-col-label">Without it</div>
-        <ul class="tool-list">
-          <li>You type everything - which is fine</li>
-          <li>Most people start here</li>
-          <li>Phone voice memo + paste works as a substitute</li>
-          <li>macOS Dictation or Windows Speech Recognition work too</li>
-          <li>Some thoughts won't make it in - the habit is harder to build</li>
-        </ul>
-      </div>
+    <div class="tool-why">
+      <div class="tw-row"><span class="tw-label">The job</span><span class="tw-text">Speak instead of typing. Anywhere on screen.</span></div>
+      <div class="tw-row"><span class="tw-label">Why this matters even without AI</span><span class="tw-text">You speak more of what you actually think than you type. Typing edits as you go. Voice does not. Your unfiltered thinking gets captured before you tidy it.</span></div>
+      <div class="tw-row"><span class="tw-label">Why it compounds with the OS</span><span class="tw-text">Rants are how the OS captures the messy version of your thinking. Voice is what makes rants real. A typed rant is a draft. A spoken one is the truth.</span></div>
+      <div class="tw-row"><span class="tw-label">Why we picked this one</span><span class="tw-text">Wispr Flow types straight into any field on any app. No copy-paste. The friction between thinking and capture drops to zero.</span></div>
+      <div class="tw-row alt"><span class="tw-label">You can pick another</span><span class="tw-text">macOS Dictation and Windows Speech Recognition are free and built in. Phone voice memos plus paste also work. The point is voice, not the tool.</span></div>
     </div>
   </div>
 
-  <p>Talk to the system like you're thinking out loud. Then look at what came out. Edit it if you want. Paste it in. Speak, look back, refine. That process is how you get better prompts without spending 20 minutes composing a perfect question.</p>
+  <p>Talk to the system like you're thinking out loud. Look at what came out. Edit it if you want. Paste it in. Speak, look back, refine. That process is how you get better prompts without spending 20 minutes composing a perfect question.</p>
   <p class="pullquote">The best prompts are the honest ones.</p>
 </section>
 
