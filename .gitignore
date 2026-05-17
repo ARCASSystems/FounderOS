@@ -68,6 +68,15 @@ audit-*.md
 # Already-tracked notes (v1.7 review, v1.7 codex findings/verification) stay tracked.
 notes/
 
+# Public playbook build/workbench artifacts.
+# The public repo should ship founder-os-playbook.html only; these are generated
+# from the private OS maintenance flow and stay local when present.
+skills.html
+playbook.html
+playbook.template.html
+playbook.manifest.json
+scripts/screenshot-playbook.py
+
 # Execution plans (internal release scaffolding - Codex reads locally, never commits)
 plans/
 
