@@ -1,6 +1,8 @@
 ---
 name: query
 description: Search across the OS with a multi-hop query. Say "what blocks <priority>", "what connects to <client>", "what history explains <decision>", or "search the OS for <topic>" (or run /founder-os:query). Traverses `brain/relations.yaml` plus core operating files. Three modes (index, timeline, full) for progressive disclosure.
+why: "Retrieves OS nodes across files without loading everything into context - start broad with index mode, then drill into the specific entries that matter."
+enhance: "Run wiki-build to populate brain/relations.yaml before querying - the graph edges improve candidate ranking and the timeline mode relies on the graph to find connected entries."
 allowed-tools: ["Read", "Bash"]
 mcp_requirements: []
 ---

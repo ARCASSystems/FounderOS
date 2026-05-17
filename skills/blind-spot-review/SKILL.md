@@ -1,6 +1,8 @@
 ---
 name: blind-spot-review
 description: Pressure-test a draft for blind spots before pre-send review. Say "find blind spots", "what am I missing", or "review for risk". Runs nine fixed review categories covering evidence, risk, timing, relationships, data, upside, and walkaway planning. Read-only.
+why: "Catches the assumptions and missing context that first-draft writers always miss - the categories no one thinks to check until after a deal falls apart."
+enhance: "Provide the source material the draft was built from - the review is weakest when run on a deliverable alone and sharpest when it can compare draft claims against meeting notes or brief."
 allowed-tools: ["Read", "Write"]
 mcp_requirements: []
 ---

@@ -1,6 +1,8 @@
 ---
 name: forcing-questions
 description: Pressure-test a new initiative before starting it. Say "should I start this", "is this worth doing", "force me to think this through", or "run forcing questions" (or run /founder-os:forcing-questions). Fires when the founder is about to start something new, expand scope mid-task, or invest time in a fresh idea. Runs six fixed questions that test done state, user pain, smallest ship, replacement cost, urgency, and proof.
+why: "Stops new initiatives from starting before the problem, smallest version, and proof are clear - most wasted build time begins with an idea that cannot answer these six questions."
+enhance: "Keep context/priorities.md current so the skill can compare this initiative against what is already in flight and surface real conflicts rather than generic caution."
 allowed-tools: ["Read", "Write", "Edit"]
 mcp_requirements: []
 ---

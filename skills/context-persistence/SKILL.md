@@ -1,6 +1,8 @@
 ---
 name: context-persistence
 description: Pull what we already know about a topic before re-explaining. Say "what do we know about <topic>", "give me the prior context", or "remind me where we left off". Fires at session start, after a gap, or when the founder references prior context. Prevents the agent from stating facts without source paths.
+why: "Prevents the OS from asking you to repeat context it already has - skills should read your files before asking you a question whose answer is already written down."
+enhance: "Keep context/clients.md and context/decisions.md updated after every interaction - the more accurate these files are, the less the OS needs to ask you."
 allowed-tools: ["Read", "Grep", "Glob"]
 mcp_requirements: []
 ---

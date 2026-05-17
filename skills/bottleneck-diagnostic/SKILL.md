@@ -1,6 +1,8 @@
 ---
 name: bottleneck-diagnostic
 description: Find the real bottleneck in the business. Say "what's blocking me", "why does everything route through me", "can the business run without me", or "where am I the bottleneck". Scores founder dependency across five practical dimensions and names the highest-impact thing to shed.
+why: "Names the one dimension where your presence is most costly so you can stop guessing and start shedding the right role first."
+enhance: "Answer all five dimension questions honestly in self-assessment mode - the score is only as accurate as the examples you give for each dimension."
 allowed-tools: ["Read", "Write"]
 mcp_requirements: []
 ---

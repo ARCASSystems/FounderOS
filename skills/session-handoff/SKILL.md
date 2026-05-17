@@ -2,6 +2,8 @@
 name: session-handoff
 description: >
   Package this session for a fresh chat. Trigger on "summarize this for a new session", "hand this off", "session summary", "transfer this context", "continue this in a new chat", "build a handoff", "wrap this up for next time", "create a prompt for a fresh session", "context transfer", "prepare for handoff", "we've gone deep, let's start fresh", "package this up", or any reference to transferring conversation context to a new session or a different user's Claude. Also fires when Claude detects the conversation is very long and the user mentions starting fresh, continuing later, or sharing context with someone else. Do NOT trigger for simple conversation summaries, meeting prep, or document creation tasks.
+why: "Makes work transferable to a new session or another person without losing the reasoning behind decisions - context in chat alone is gone the moment the session ends."
+enhance: "Be explicit about handoff type (A/B/C) at the start - the skill strips internal strategy and inlines skill-dependent knowledge differently for each type, and guessing wrong produces a document that leaks or lacks context."
 mcp_requirements: [optional: notion]
 ---
 

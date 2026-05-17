@@ -2,6 +2,8 @@
 name: brain-pass
 description: >
   Synthesise an answer across the brain layer. Say "what did I decide about X", "what have I been avoiding", "what do I know about Y", "give me the brain on this" (or run `/founder-os:brain-pass "<question>"`). Use when a question needs reasoning across log, knowledge, decisions, flags, patterns, and needs-input - not a raw text match. The skill preflights through `scripts/query.py` to pick the candidate files, then synthesises across them. The model running this skill IS the retrieval engine. No embeddings, no API call, no paid tier required.
+why: "Synthesises an answer from across your brain files with citations rather than asking you to remember what you already logged or decided."
+enhance: "Fill brain/log.md consistently with dated entries - the pass is only as good as the history it can reason across; sparse logs return low-confidence answers."
 allowed-tools: ["Read", "Grep", "Glob", "Bash"]
 mcp_requirements: []
 ---

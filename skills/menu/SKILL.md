@@ -2,6 +2,8 @@
 name: menu
 description: >
   Show what FounderOS can do right now. Say "show me what you can do", "what can FounderOS do", "what should I try next", or "what's relevant right now" (or run /founder-os:menu). Returns 5 to 7 capability suggestions tailored to current state. Reads `brain/.snapshot.md`, open flags, this week's must-do, the last 7 days of `brain/log.md`, and the presence of `core/voice-profile.yml` and `core/brand-profile.yml`. Free-tier accessible - no LLM call inside the algorithm.
+why: "Shows what the OS can do right now based on your actual state - a static skill list tells you what exists; menu tells you what is relevant today."
+enhance: "Fill cadence/weekly-commitments.md and keep brain/flags.md current - menu scores suggestions against your must-do list and open flags, so empty cadence files produce a generic starter list."
 allowed-tools: ["Bash", "Read"]
 mcp_requirements: []
 ---

@@ -3,6 +3,8 @@ name: founder-os-setup
 description: >
   Set up Founder OS from scratch. Say "set up Founder OS", "run the setup wizard", or "install Founder OS" (or run /founder-os:setup). Walks the founder through identity, tool stack, work style, brain system, cadence, roles, and the first project as an interactive wizard. Pass "reset" to reconfigure an existing setup.
 argument-hint: "[reset] - run with 'reset' to reconfigure an existing setup"
+why: "Creates the full operating environment in one guided session so skills have the files they need to produce personalized output from day one instead of returning generic defaults."
+enhance: "Answer the positioning questions in Phase 0.2.5 as specifically as possible - who you sell to, what you sell, and the buyer pain feed directly into proposal-writer, linkedin-post, and client-update."
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep"]
 mcp_requirements: []
 ---

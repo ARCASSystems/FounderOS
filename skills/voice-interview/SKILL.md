@@ -2,6 +2,8 @@
 name: voice-interview
 description: >
   Set up the writing-voice profile. Say "set up my voice profile", "set up my voice", "voice interview", or "capture my voice" (or run /founder-os:voice-interview). Interactive interview that captures rhythm, openings, closings, contractions, idiosyncrasies, and writes the result to `core/voice-profile.yml`. Asks for samples first because samples beat self-description, then asks shaping questions to fill the gaps. Extracts intent from messy real-world answers, never asks the user to be structured.
+why: "Builds the voice profile that gates every writing skill - without it linkedin-post, email-drafter, proposal-writer, and client-update all produce generic output that does not sound like you."
+enhance: "Paste at least three real samples you have already written before answering shaping questions - samples are the ground truth and override the rules when they conflict, so more specific samples mean a sharper profile."
 allowed-tools: ["Read", "Write", "Edit"]
 mcp_requirements: []
 ---

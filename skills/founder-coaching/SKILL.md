@@ -2,6 +2,8 @@
 name: founder-coaching
 description: >
   Coach a founder through their state and capacity. Trigger on "check in on", "prep a coaching session", "do a founder review", "map someone's roles", "time audit", "energy check", "identity mapping", "founder diagnostic", "capacity review", "how is [person] doing", "wartime or peacetime", "is this founder in warzone", or any reference to coaching, mentoring, or diagnosing a founder's state, capacity, role overload, or operational zone. Also fires when the user describes a founder (including themselves) who is stuck, stretched, burning out, overwhelmed, avoiding hard work, confusing busy with productive, or trapped in too many roles. Covers check-in prep, session capture, state diagnosis, bias challenging, and role mapping. Works for self-coaching and for coaching clients.
+why: "Diagnoses where a founder's time and energy is actually going versus where it should go - the session structure and bias toolkit surface what self-reflection alone misses."
+enhance: "Run prior session captures in brain/log.md before a coaching session so the skill can reference what the founder committed to last time and surface unresolved patterns."
 mcp_requirements: []
 ---
 

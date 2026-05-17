@@ -2,6 +2,8 @@
 name: your-deliverable-template
 description: >
   Build a branded document inheriting the founder's colors, fonts, and logo. Say "make a CV", "write a proposal", "build a pitch deck", "create a one-pager", "branded doc", "in my brand", or "use my colors". Master template for ALL personal-branded documents (CV, cover letter, proposal, pitch deck, one-pager, portfolio, PDF, DOCX, PPTX, HTML). Reads `core/brand-profile.yml`. If in doubt about whether a document should be branded, it should be branded.
+why: "Ensures every document that carries your name inherits your visual identity rather than defaulting to generic black-and-white formatting that does not represent you."
+enhance: "Place logo files at the paths recorded in core/brand-profile.yml before generating any HTML or PDF - the skill checks for real files and stops rather than silently substituting a placeholder."
 allowed-tools: ["Read", "Write", "Edit", "Bash"]
 mcp_requirements: []
 ---

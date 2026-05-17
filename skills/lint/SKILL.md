@@ -2,6 +2,8 @@
 name: lint
 description: >
   Audit the wiki for integrity issues. Say "lint the wiki", "check wiki integrity", "find broken links", "what's stale", or "what's drifted" (or run /founder-os:lint). Five checks: broken cross-references, orphan pages, stale time-sensitive content, provenance gaps, and contradictions. Read-only - findings are advisory. Run before a weekly review.
+why: "Surfaces broken cross-references and stale content that silently mislead skills - a wiki that points to missing files or a decisions list that contradicts the sprint is worse than no wiki."
+enhance: "Run wiki-build first to refresh brain/relations.yaml so lint has an up-to-date graph to check against - lint on a stale graph produces false orphan counts."
 allowed-tools: ["Read", "Glob", "Grep"]
 mcp_requirements: []
 ---

@@ -1,6 +1,8 @@
 ---
 name: handoff-protocol
 description: Build a handoff doc when work moves to someone else. Say "hand this off to <person>", "build a handoff", "delegate this", or "package this for the next person". Creates a structured artifact with ownership, done state, deadline, constraints, open questions, and source links.
+why: "Turns a verbal delegation into a structured artifact the receiver can act on without a follow-up call - context dropped in chat alone disappears."
+enhance: "Provide all nine required fields explicitly, especially the definition of done and known constraints - the artifact is only as useful as the specificity of what you give it."
 allowed-tools: ["Read", "Write"]
 mcp_requirements: ["optional: knowledge_base", "optional: project_management"]
 ---

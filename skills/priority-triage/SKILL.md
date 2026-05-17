@@ -2,6 +2,8 @@
 name: priority-triage
 description: >
   Cut through overwhelm to ONE thing to do next. Trigger on "I'm overwhelmed", "what should I focus on", "what should I focus on next", "too many things", "I don't know where to start", "help me prioritize", "what matters most", "I'm stuck", "I can't decide what to work on", "everything feels urgent", or any signal the founder needs help cutting through noise. Also fires on user-vocabulary equivalents: "my goals", "what are my goals", "show my goals", "review my goals" - context/priorities.md holds the goals. Returns one recommendation, not a list.
+why: "Cuts a long open list down to one actionable task by running four filters - the founder who is overwhelmed needs a decision, not another framework to think through."
+enhance: "Keep brain/flags.md updated with stall patterns and cadence/weekly-commitments.md current - triage is sharpest when it can see which items have already rolled multiple weeks."
 mcp_requirements: []
 ---
 

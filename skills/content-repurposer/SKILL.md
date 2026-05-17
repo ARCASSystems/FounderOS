@@ -2,6 +2,8 @@
 name: content-repurposer
 description: >
   Reformat one piece of content across many channels. Trigger on "repurpose this", "turn this into", "adapt this for", "convert this to", "make versions of this for", or any variation. Also fires when the user shares content and wants it reformatted for different platforms. Works across LinkedIn, YouTube, Instagram, email newsletters, website copy, Twitter/X, and internal docs. Reads `core/voice-profile.yml` and applies the founder's voice.
+why: "Multiplies one piece of thinking across multiple channels without re-writing from scratch for each - saves hours on content execution."
+enhance: "Fill core/voice-profile.yml before repurposing - without it the output adapts format but loses your voice, which is what makes the same insight work across platforms."
 mcp_requirements: []
 ---
 

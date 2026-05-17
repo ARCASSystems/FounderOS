@@ -1,6 +1,8 @@
 ---
 name: ship-deliverable
 description: Run the final ship gate before any external deliverable goes out. Say "ship this", "is this ready to ship", "final gate", or "run the ship checks" (or run /founder-os:ship-deliverable). Composes template fit, anti-AI scan, blind-spot evidence check, and pre-send-check in one report. Read-only.
+why: "Composes four checks that are easy to skip individually under deadline pressure into one pass so nothing ships with an AI phrase, missing asset, or unreviewed blind spot."
+enhance: "Run blind-spot-review before calling ship-deliverable - Link 3 (blind-spot evidence check) will fail if no review artifact exists, and you will have to run it separately anyway."
 allowed-tools: ["Read", "Grep"]
 mcp_requirements: []
 ---

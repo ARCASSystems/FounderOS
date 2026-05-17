@@ -2,6 +2,8 @@
 name: brand-interview
 description: >
   Set up the visual brand profile. Say "set up my brand profile", "set up my brand", "brand interview", or "capture my brand" (or run /founder-os:brand-interview). Interactive interview that captures colors, fonts, logos, footer text, and writes the result to `core/brand-profile.yml`. Adapts to existing brand kit, partial brand, or starting from zero. Extracts intent from messy input, never asks the user to be more structured.
+why: "Creates the visual identity file that every branded document inherits - without it proposals, CVs, and decks default to generic styling that does not look like you."
+enhance: "Have your logo file and hex codes ready before starting - the interview can suggest defaults but real brand assets in core/brand-assets/ are what make output look professional."
 allowed-tools: ["Read", "Write", "Edit", "Bash"]
 mcp_requirements: []
 ---

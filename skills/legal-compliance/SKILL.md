@@ -3,6 +3,8 @@ name: legal-compliance
 description: >
   Jurisdiction-aware legal, regulatory, and compliance skill for founders. Ships with a complete UAE reference set as the worked example. Non-UAE founders wire in their own jurisdiction's source documents (PDFs, government URLs, gazetted acts) at setup, and the skill answers from those instead. Trigger on: legal question, regulation, hire/fire, termination, contract, NDA, trademark, IP, privacy, data protection, tax filing, VAT, corporate tax, license renewal, visa, work permit, dispute, court, arbitration, compliance deadline, or any situation with legal implications. Always grounds answers in loaded reference docs - never invents law.
 argument-hint: "<question | situation>"
+why: "Grounds legal guidance in loaded reference documents rather than model memory - a jurisdiction without loaded files gets a refusal rather than a hallucinated answer."
+enhance: "Run /founder-os:legal-setup to populate your jurisdiction folder and context/compliance.md with your own deadlines - the skill is only as accurate as the reference docs wired in."
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep", "WebFetch", "WebSearch"]
 ---
 

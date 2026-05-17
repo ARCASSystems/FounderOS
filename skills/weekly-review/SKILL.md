@@ -2,6 +2,8 @@
 name: weekly-review
 description: >
   Run the weekly review and roll the sprint. Trigger on "run my weekly review", "weekly review", "weekly retro", "roll the sprint", "what happened this week", "plan next week", "Friday review", "Monday planning", "weekly planning", "sprint review", or any reference to reviewing the past week or planning the next one. Also fires on user-vocabulary equivalents: "my schedule", "my schedule is stale", "this week's plan", "what am I working on this week", "show me this week", "what's on for this week" - the weekly commitments file is the operator's schedule. Also fires on Fridays when the user opens a session in the Founder OS root.
+why: "Keeps the sprint honest by forcing a decision on stalled items instead of letting them roll week to week - the pattern block names avoidance directly."
+enhance: "Fill brain/log.md throughout the week with real events - the retro reads from this directly, so more entries means a sharper pattern read and a more honest retro."
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob"]
 mcp_requirements: []
 ---

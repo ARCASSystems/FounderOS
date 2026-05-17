@@ -5,6 +5,8 @@ description: >
   "add to queue: <thing>", "start <description>", "done with <description>", or "park
   <description>" (or run /founder-os:queue). Reads cadence/queue.md. The ACTIVE section
   is capped at 3 items - the skill enforces this gate before starting new work.
+why: "Enforces a hard cap of three active items so work in progress reflects actual human capacity rather than an aspirational list that never clears."
+enhance: "Use the start operation consistently rather than just reading the queue - the 3-item gate only forces the right decisions when you route new work through start instead of adding directly to ACTIVE."
 allowed-tools: ["Read", "Edit", "Write", "Glob"]
 mcp_requirements: []
 ---

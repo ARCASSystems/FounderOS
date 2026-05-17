@@ -2,6 +2,8 @@
 name: brain-log
 description: >
   Capture a thought, flag, or decision into the brain system. Trigger on "capture this", "log this", "flag this", "park this decision", "note this", "remember this", "save this thought", "brain dump", "I had an idea", "something to track", or any variation. Also fires on user-vocabulary equivalents: "journal entry", "note to self", "diary", "log to journal", "add to my journal", "write in my journal" - the brain log is the journal. Also fires on post-hoc decision phrasing: "I decided", "I made a decision", "decision: <text>" - route into context/decisions.md Resolved section, not just brain/log.md. Also fires when the user shares an observation that should be recorded but does not need immediate action. Three modes: log, cross-reference, or act.
+why: "Keeps thoughts, decisions, and flags from living only in your head - a running log is how the OS learns what is actually happening in your week."
+enhance: "Log in Mode B or C when you can - thoughts cross-referenced to a client, decision, or priority are far more useful to skills like weekly-review and brain-pass than standalone entries."
 mcp_requirements: []
 ---
 

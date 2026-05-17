@@ -2,6 +2,8 @@
 name: knowledge-capture
 description: >
   Capture takeaways from a book, podcast, article, or conversation. Trigger on "capture this", "log this", "capture notes from", "what I learned from", "book notes for", "takeaways from", "save this insight", "I just read", "I just listened to", "key points from", or any variation of knowledge capture and learning extraction. Also fires when the user shares raw notes or highlights and wants them organized.
+why: "Turns a book, podcast, or conversation into a retrievable note that skills like proposal-writer and strategic-analysis can cite - learning that stays in your head does not improve your output."
+enhance: "Always fill the Apply To sections with real business context - notes with no application mapping are rarely surfaced by brain-pass or strategic-analysis when you need them."
 mcp_requirements: [optional: notion]
 ---
 

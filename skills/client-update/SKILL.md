@@ -2,6 +2,8 @@
 name: client-update
 description: >
   Write a client-facing status update or milestone report. Trigger on "update the client", "write a status update", "project update", "send a progress report", "milestone update", "weekly update for", or any variation of client-facing project communication. Also fires when the user describes project progress and needs it packaged for a client. Reads `core/voice-profile.yml` and writes in the founder's voice.
+why: "Keeps clients informed without the founder writing from scratch each time - consistent format builds trust and prevents the relationship from going silent."
+enhance: "Fill core/voice-profile.yml first so the update sounds like you, and keep context/clients.md current with milestone notes so the skill has real project specifics to draw on."
 allowed-tools: ["Read", "Write", "Edit"]
 mcp_requirements: []
 ---

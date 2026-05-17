@@ -1,6 +1,8 @@
 ---
 name: approval-gates
 description: Check whether an action needs approval before doing it. Say "do I need approval for this" or "should I ask first". Triggers when you are about to send, publish, pay, sign, delete, or push something public. Reads `rules/approval-gates.md` and classifies the action as auto-runnable, ask-first, or refused. Other skills call this internally.
+why: "Prevents irreversible or public actions from happening silently - sends, pushes, deletes, and payments need a human yes first."
+enhance: "Fill rules/approval-gates.md with your own thresholds - the default table is a fallback; your custom gates are what actually protect your workflow."
 allowed-tools: ["Read", "Write"]
 mcp_requirements: []
 ---

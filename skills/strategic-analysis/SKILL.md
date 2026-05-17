@@ -2,6 +2,8 @@
 name: strategic-analysis
 description: >
   Run a strategic analysis: competitive map, market sizing, opportunity, or business model. Trigger on "analyze this market", "competitor map", "evaluate this opportunity", "market research", "SWOT", "who are the competitors", "market sizing", "TAM SAM SOM", or any variation of strategic business analysis. Also fires when the user describes a business opportunity or competitor and wants structured thinking.
+why: "Grounds competitive and market analysis in your actual position and prior knowledge rather than producing a generic table that ignores what you already know or have decided."
+enhance: "Populate brain/knowledge/ with notes from books and conversations about the market and competitors - the skill reads matching topics by name and uses them as prior evidence in the analysis."
 mcp_requirements: []
 ---
 

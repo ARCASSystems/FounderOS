@@ -4,6 +4,8 @@ description: >
   Check that Founder OS is healthy. Say "verify the OS", "health check", "is the OS working",
   "check my setup" (or run /founder-os:verify). Returns a structured report across 8 substrate
   checks, each marked PASS / WARN / FAIL with a one-line reason. Read-only. Never auto-fixes.
+why: "Checks that the OS substrate is actually wired up correctly rather than just declaring setup done - hooks, scripts, and counts that disagree silently break skills."
+enhance: "Run after every setup or update to catch wiring issues early - a FAIL on scripts or hooks means several skills will behave incorrectly on every subsequent run."
 allowed-tools: ["Read", "Glob", "Grep", "Bash"]
 mcp_requirements: []
 ---

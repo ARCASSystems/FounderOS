@@ -2,6 +2,8 @@
 name: decision-framework
 description: >
   Walk through a structured decision when the founder is stuck. Trigger phrases: "help me decide", "should I", "what would you do", "weigh these options", "pros and cons", "I'm stuck between", "I can't decide", "trade-offs", "which option", or any situation where the user is evaluating alternatives. Covers business decisions, personal decisions, and strategic choices.
+why: "Breaks the loop of going around the same decision repeatedly by structuring what you are actually choosing and what each option costs."
+enhance: "Fill core/identity.md Decision style field (gut/data/dialogue/mixed) so the skill leads with your preferred mode - a mismatched opener means you disengage before the analysis starts."
 mcp_requirements: []
 ---
 

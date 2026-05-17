@@ -2,6 +2,8 @@
 name: proposal-writer
 description: >
   Write a consulting or service proposal. Trigger on "write a proposal", "create a quote", "draft a SOW", "scope of work", "put together a proposal", "pricing for", "engagement letter", or any variation of creating business proposals, quotes, scoping documents, or service agreements. Also fires when the user describes a potential client engagement and needs it formalized. Reads `core/voice-profile.yml`, `core/brand-profile.yml`, and any relevant `context/companies/<client>.md`.
+why: "Builds proposals that reflect the specific prospect's situation rather than a generic template - a proposal that mirrors the client's own words wins more than one that describes the service."
+enhance: "Fill context/clients.md with scoping notes before running - the more prospect-specific context you provide, the stronger the Situation section, which is where most proposals lose."
 allowed-tools: ["Read", "Write", "Edit"]
 mcp_requirements: []
 ---
