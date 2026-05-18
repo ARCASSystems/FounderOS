@@ -17,7 +17,6 @@ set -euo pipefail
 
 REPO_URL="https://github.com/ARCASSystems/FounderOS.git"
 DEFAULT_TARGET="$HOME/.claude/plugins/founder-os"
-HOOKS_TARGET="$HOME/.claude/hooks"
 
 # ---- argument parsing --------------------------------------------------------
 
@@ -149,7 +148,6 @@ if [[ "$DRY_RUN" == true ]]; then
   echo ""
   step "Installing FounderOS to $TARGET (dry-run)"
   dryrun "Would install to: $TARGET"
-  dryrun "Would copy hooks to: $HOOKS_TARGET"
   dryrun "Source repo: $REPO_URL"
   echo ""
   if [[ "$failed" == true ]]; then
@@ -198,23 +196,6 @@ else
   ok "Cloned to $TARGET"
 fi
 
-# ---- copy hooks --------------------------------------------------------------
-
-step "Wiring hooks to $HOOKS_TARGET"
-
-mkdir -p "$HOOKS_TARGET"
-
-hooks_src="$TARGET/.claude/hooks"
-if [[ -d "$hooks_src" ]]; then
-  for hook_file in "$hooks_src"/*.sh "$hooks_src"/*.ps1; do
-    [[ -f "$hook_file" ]] || continue
-    run cp "$hook_file" "$HOOKS_TARGET/"
-    ok "Copied $(basename "$hook_file")"
-  done
-else
-  info "No hook files found at $hooks_src - skipping hook copy."
-fi
-
 # ---- done --------------------------------------------------------------------
 
 echo ""
@@ -224,11 +205,15 @@ echo "======================================================"
 echo ""
 echo "  Location: $TARGET"
 echo ""
-echo "  Next step:"
-echo "  Say \"set up Founder OS\" (or run /founder-os:setup)"
+echo "  Open Claude Code INSIDE that folder to use Founder OS."
+echo "  Hooks and slash commands only activate when Claude Code"
+echo "  is opened in the install directory (see docs/install.md"
+echo "  Path E for detail; use Path A plugin install for global"
+echo "  activation across every project folder)."
 echo ""
-echo "  That wizard builds your identity, priorities, and"
-echo "  cadence files - takes 15 to 20 minutes the first time."
+echo "  Next step:"
+echo "  cd $TARGET && claude"
+echo "  Then Say \"set up Founder OS\" (or run /founder-os:setup)."
 echo ""
 echo "  Full docs: $TARGET/docs/first-day.md"
 echo "======================================================"

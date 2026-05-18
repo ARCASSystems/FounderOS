@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Client Update
 
+<!-- private-tag: not applicable: writes client-facing deliverable drafts, not user speech to brain/context state files -->
+
 Updates build trust through transparency, not polish.
 
 ## Before you write
