@@ -38,6 +38,23 @@ If you need to check something before answering, check it silently.
 
 ---
 
+## First-time setup routing
+
+If `core/identity.md` is missing, the operator has installed Founder OS but has not yet run the setup wizard. The OS cannot reason from their actual situation until that file exists.
+
+Treat any of these phrasings as "run the setup wizard" when `core/identity.md` is absent:
+
+- "set up Founder OS" / "install Founder OS" / "set up my second brain"
+- "help me set up my second brain" / "help me onboard" / "onboard me"
+- "what do I do" / "where do I start" / "how does this work"
+- "I'm new" / "get me started" / "run the setup wizard"
+
+When any of those arrives AND `core/identity.md` is absent, route to the `founder-os-setup` skill. Do not improvise an answer, do not produce generic advice, do not stall on clarifying questions - the wizard handles all of that.
+
+When `core/identity.md` already exists, the same phrasings mean something different (e.g. "what do I do" is a triage question, not a setup ask). Route them as normal OS queries instead.
+
+---
+
 ## Communication Rules
 
 - Direct. No filler. No "Great question!" No "I'd be happy to help."

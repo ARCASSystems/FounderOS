@@ -2,6 +2,24 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.25.1 - 2026-05-18
+
+The setup wizard now fires on the phrasings a non-technical user would actually try first. v1.25.0 added the brand voice layer; v1.25.1 closes the trigger-surface gap so the founder does not have to know the magic phrase "set up Founder OS" to start.
+
+### Expanded onboarding triggers
+
+`.claude/commands/setup.md` and `skills/founder-os-setup/SKILL.md` descriptions now match: "set up my second brain", "help me set up my second brain", "help me onboard", "onboard me", "what do I do", "where do I start", "how does this work", "I'm new", "get me started" - alongside the original "set up Founder OS" / "install Founder OS" / "run the setup wizard".
+
+### Welcome banner shows the alternative phrasings
+
+The SessionStart brief on a fresh install (no `core/identity.md`) now lists three alternatives so the user sees their own words reflected back instead of having to guess. Both bash and PowerShell hook variants updated for parity.
+
+### Bootloader teaches first-time routing
+
+`templates/bootloader-claude-md.md` gets a new `## First-time setup routing` section. When `core/identity.md` is absent AND the user uses any of the trigger phrasings, route to the `founder-os-setup` skill without improvising. When `core/identity.md` exists, the same phrasings route as normal OS queries.
+
+45 skills, 27 commands, 358 tests pass.
+
 ## v1.25.0 - 2026-05-18
 
 The brand voice layer. Before this release, every voice-coupled writing skill assumed a single voice - the operator's. That works for an individual founder writing their own LinkedIn posts and emails. It breaks for an operator who runs an ecosystem of brands: a marketing manager managing several group brands, a founder with a personal voice that is not the brand voice, an agency where each client has its own brand register. v1.25 introduces a second voice layer that lives independently of the operator's personal voice. Writing skills route to the right one based on what the task asks for.
