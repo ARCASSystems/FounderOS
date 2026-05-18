@@ -124,11 +124,12 @@ a:hover{text-decoration:underline}
 }
 .gh-link{
   display:inline-flex;align-items:center;gap:8px;
-  background:rgba(255,255,255,.1);color:#fff;padding:10px 20px;
-  border-radius:6px;font-size:14px;font-weight:500;text-decoration:none;
-  border:1px solid rgba(255,255,255,.2);transition:background .15s;margin-top:8px;
+  background:#fff;color:var(--magenta);padding:12px 24px;
+  border-radius:999px;font-size:14px;font-weight:700;text-decoration:none;
+  border:1px solid rgba(255,255,255,.72);transition:transform .16s ease,box-shadow .16s ease,color .16s ease;margin-top:8px;
+  box-shadow:0 18px 40px rgba(0,0,0,.18);
 }
-.gh-link:hover{background:rgba(255,255,255,.18);text-decoration:none}
+.gh-link:hover{color:var(--purple);text-decoration:none;transform:translateY(-1px);box-shadow:0 22px 48px rgba(0,0,0,.22)}
 
 /* ── Callout boxes ── */
 .callout{
@@ -771,7 +772,7 @@ code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.9
     <circle cx="190" cy="318" r="64" fill="rgba(247,8,114,.07)" stroke="#F70872" stroke-width="3"/>
     <circle cx="190" cy="291" r="6" fill="none" stroke="#F70872" stroke-width="2.4"/><circle cx="190" cy="291" r="13" fill="none" stroke="#F70872" stroke-width="2.4" stroke-dasharray="5,4"/>
     <text x="190" y="336" text-anchor="middle" font-family="Google Sans Flex 24" font-size="15" font-weight="700" fill="#F70872">The Hands</text>
-    <text x="190" y="356" text-anchor="middle" font-family="Google Sans Flex 24" font-size="12" fill="#6B7280">45 skills</text>
+    <text x="190" y="356" text-anchor="middle" font-family="Google Sans Flex 24" font-size="12" fill="#6B7280">48 skills</text>
     <!-- Heartbeat - bottom right -->
     <circle cx="570" cy="318" r="64" fill="rgba(4,30,55,.07)" stroke="#041E37" stroke-width="3"/>
     <path d="M554,291 L562,291 L565,278 L571,305 L576,284 L580,291 L588,291" fill="none" stroke="#041E37" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
