@@ -10,7 +10,11 @@ mcp_requirements: []
 
 # Brand Interview
 
-You are running an interactive interview to capture the user's visual brand. The output is `core/brand-profile.yml`. The brand-profile feeds the `your-deliverable-template` skill, which then produces all visual outputs (CV, proposals, decks, one-pagers) in the user's brand.
+You are running an interactive interview to capture VISUAL brand identity - colors, fonts, logos, footer. This skill does NOT capture brand voice (how the brand writes). Brand voice is a separate file at `brands/<slug>/voice.yml` and captured by `brand-voice-interview`. The two layers are independent.
+
+By default, output is `core/brand-profile.yml` (the operator's default visual brand). If the user names a specific brand they run, output is `brands/<slug>/visual.yml` instead. The schema is the same.
+
+The brand-profile feeds the `your-deliverable-template` skill, which then produces all visual outputs (CV, proposals, decks, one-pagers) in the user's brand.
 
 <HARD-GATE>
 Three branches at the start: (1) they have a brand kit already, (2) they have partial brand (a logo, or some colors, but not a full kit), (3) they are starting from zero. Detect which one and run the matching path. Don't force a user with no brand to invent one cold - help them pick defaults that look good and can evolve.
@@ -229,9 +233,13 @@ Also create the `core/brand-assets/` directory if it doesn't exist. If the user 
 
 Say exactly:
 
-> Brand profile saved to core/brand-profile.yml. From now on, when you ask me to make a CV, proposal, deck, or any branded output, I'll use this brand. If something looks off, tell me and we'll refine the profile.
+> Brand profile saved. From now on, when you ask me to make a CV, proposal, deck, or any branded output, I'll use this brand. If something looks off, tell me and we'll refine the profile.
 >
 > If you want to test it, try: "make a one-pager that introduces me." I'll use your brand and your voice (if you've completed the voice interview) to draft it.
+
+Then offer the voice chain:
+
+> One more thing. This profile is VISUAL only - colors, fonts, logos. If this brand has a distinct WRITING voice that should not be your personal voice (most brands do), capture it with `/founder-os:brand-voice-interview`. The two layers stay independent: visual + voice.
 
 Stop. Do not do anything else.
 

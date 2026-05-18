@@ -11,15 +11,20 @@ mcp_requirements: [optional: gmail]
 
 Apply the voice and writing rules from `core/identity.md`, `rules/writing-style.md`, and `core/voice-profile.yml` (via the `your-voice` skill). Emails are conversations, not content pieces. The anti-AI self-check is relaxed here, but the voice rules still apply.
 
+## Voice routing (operator or brand?)
+
+Apply the routing rules in `skills/your-voice/SKILL.md` "Voice routing - operator or brand?" section. Default to operator voice for personal emails. If the user names a brand they run (e.g. "draft an email from `<brand>` to a customer"), use brand voice from `brands/<slug>/voice.yml`.
+
 ## Voice profile
 
-Before writing, run: `python scripts/check-voice-ready.py`
+If using operator voice, run: `python scripts/check-voice-ready.py`
+If using brand voice, run: `python scripts/check-brand-voice-ready.py --brand <slug>`
 
 If exit code is 1, read the output line and surface it to the user verbatim. Do not produce any draft. Stop.
 
 If the user explicitly chooses to proceed with defaults after seeing that message, draft the email using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the email is voice-coupled.
 
-Then read `core/voice-profile.yml` so the rest of this skill can apply it.
+Then read the chosen voice profile so the rest of this skill can apply it.
 
 After producing a draft and before returning it, run the anti-examples filter:
 

@@ -2,6 +2,74 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.25.0 - 2026-05-18
+
+The brand voice layer. Before this release, every voice-coupled writing skill assumed a single voice - the operator's. That works for an individual founder writing their own LinkedIn posts and emails. It breaks for an operator who runs an ecosystem of brands: a marketing manager managing several group brands, a founder with a personal voice that is not the brand voice, an agency where each client has its own brand register. v1.25 introduces a second voice layer that lives independently of the operator's personal voice. Writing skills route to the right one based on what the task asks for.
+
+### Brand voice layer
+
+New directory: `brands/<slug>/`. One folder per brand the operator runs. Each holds three files:
+
+- `voice.yml` - how the brand writes. Same structure as operator voice (rhythm, opening style, banned words, anti-example pairs, samples), plus a `register` field (`plain-direct` / `measured-elegant` / `corporate-restrained` / `friendly-casual`) and a `speaker` field (`brand` / `founder-led` / `spokesperson-led`).
+- `positioning.yml` - who the brand serves, what it sells, ICP, audience pain language, proof points, refused promises, regulatory forbidden claims, channel mix.
+- `visual.yml` - per-brand visual identity (colors, fonts, logos). Same schema as the existing `core/brand-profile.yml`, scoped to one brand. Includes a new `ai_humans_allowed` flag for brands that forbid AI-rendered people in creative.
+
+Captured via `/founder-os:brand-voice-interview`. One run per brand. Backward-compatible: if `brands/` does not exist, every existing skill behaves exactly as it did in v1.24.
+
+### Three new skills
+
+- **`brand-voice-interview`** - interactive interview that walks brand positioning first, then brand voice (samples first, shaping questions after). Captures both voice and positioning so campaign-from-theme and review-responder have what they need. Offers to chain into `brand-interview` for visual identity at the end.
+
+- **`campaign-from-theme`** - turns one theme into a sequenced marketing campaign. Refuses to produce content until the operator answers five gate questions: speaker (operator or brand), objective (awareness / consideration / conversion / retention / advocacy), audience segment AND temperature (cold / warm / customer), channel-fit logic, and success metric. Output is a brief with sequencing rationale and 3 to 7 content drafts. The gate is the value - it forces audience and objective clarity that industry-standard generators skip.
+
+- **`review-responder`** - drafts replies to incoming customer messages: Google reviews, Trustpilot, Instagram DMs, WhatsApp inquiries, customer emails, Facebook comments. Asks whose voice (operator or brand), what channel (sets length budget and formality), and what posture (warm thank-you, careful negative, factual answer, soft sell, de-escalation, reactivation). Outputs a draft in the right voice with public-reply awareness for review platforms.
+
+### Voice routing in existing writing skills
+
+Five skills now route between operator and brand voice based on task context:
+
+- `linkedin-post`
+- `email-drafter`
+- `client-update`
+- `content-repurposer`
+- `proposal-writer`
+
+Routing rules live in `your-voice/SKILL.md` and apply across all five. The decision is made by signal order: explicit brand mention in the user's request, explicit personal mention, channel-implies-brand, otherwise ask. Operators with one brand and a brand-oriented task get the brand voice picked silently with a one-line preamble in the output. Operators with multiple brands always get asked.
+
+### Anti-AI baseline with brand registers
+
+The universal anti-AI baseline (no em dashes, no rule-of-three, no negation-contrast, no banned phrases like "in a world where") remains the hard floor. Brand register relaxes a small set of allowances on top:
+
+- `plain-direct` - no changes. Universal baseline applies as written.
+- `measured-elegant` - allows craft vocabulary (considered, heritage, tailored) if in preferred_words. Slightly longer rhythm allowed.
+- `corporate-restrained` - allows hedging language and formal sign-offs. Contractions usually off.
+- `friendly-casual` - allows contractions always, one exclamation mark per piece, first-name greetings.
+
+The banned-phrase list does not change per register. Registers add small allowances, never remove the floor.
+
+### Brand-aware channel selection
+
+`content-repurposer` now reads brand positioning when brand voice is loaded. Suggests only channels in `positioning.channels.primary` + `secondary`. Excludes `channels.off_limits` (e.g. a premium brand that refuses TikTok). Surfaces conflicts when the user asks for an off-limits channel.
+
+### Three new templates
+
+- `templates/brand-voice.yml.template`
+- `templates/brand-positioning.yml.template`
+- `templates/brand-visual.yml.template`
+
+### Two new helper scripts
+
+- `scripts/list-brands.py` - discovers brands under `brands/<slug>/`, reports each with voice + positioning readiness status. Used by writing skills to know what brands exist. Exits 0 with no output if no brands set up, so old skills behave unchanged.
+- `scripts/check-brand-voice-ready.py` - mirror of `check-voice-ready.py` scoped to a single brand by slug. Used by writing skills before producing brand-coupled output.
+
+### Three new commands
+
+- `/founder-os:brand-voice-interview`
+- `/founder-os:campaign-from-theme`
+- `/founder-os:review-responder`
+
+Skill count rises from 45 to 48. Command count rises from 27 to 30.
+
 ## v1.24.1 - 2026-05-18
 
 Three end-to-end gaps that would have surfaced on a fresh clone. None changed visible behavior on existing installs. All three close paths where a new user would have hit a silent half-result and not known why.

@@ -1,0 +1,81 @@
+# TEMPLATE - brand positioning, audience, ICP, promise. One per brand.
+# Lives at brands/<slug>/positioning.yml. Created by /founder-os:brand-voice-interview.
+# Read by campaign-from-theme, review-responder, content-repurposer.
+# Tells writing skills WHO the brand serves, WHAT pain they feel, and HOW to talk about the offer.
+
+brand:
+  slug: "[lowercase-kebab-slug]"
+  display_name: "[BRAND NAME]"
+  one_line: "[one sentence the brand would use to describe itself]"
+  founded: "[year, optional]"
+  archetype: "[CHOOSE: hero | sage | creator | caregiver | explorer | ruler | jester | lover | everyman | outlaw | innocent | magician]"
+  # If you do not know archetype theory, leave [NOT SET]. The skill picks based on samples.
+
+offer:
+  # What the brand sells. Plain words, not marketing.
+  primary: "[one sentence: what people pay for]"
+  price_band: "[entry price to top price, in local currency]"
+  delivery: "[in-store | online | hybrid | service-based | subscription | other]"
+
+audience:
+  # The actual buyer, not the demographic the brand wishes it had.
+  primary_segment: "[example: men 30-55 in UAE who need a suit for a milestone event]"
+  geography: "[where the brand actually serves customers]"
+
+  # ICP - one paragraph describing the ideal buyer in plain words.
+  icp_description: |
+    [Paste a paragraph describing the person who buys from you most often.
+    Include their context, what triggered the purchase, what they were worried about,
+    and what made them choose you over alternatives. Use real buyer language, not segments.]
+
+  # Adjacent segments the brand can also serve, ranked.
+  secondary_segments:
+    - "[example: women buying gifts for the primary segment]"
+    - "[example: corporate accounts gifting senior staff]"
+
+  # What the audience cares about beyond the product. Used for content ideation.
+  values:
+    - "[example: heritage and provenance]"
+    - "[example: time to look right]"
+
+promise:
+  # What the brand promises the buyer.
+  primary: "[one sentence promise, not a tagline]"
+  proof_points:
+    - "[example: 40 years of bespoke tailoring]"
+    - "[example: 7-day turnaround on alterations]"
+
+  # What the brand will NOT promise. Forces honesty in copy.
+  refuses_to_promise:
+    - "[example: fastest delivery in the market]"
+    - "[example: lowest price]"
+
+competitors:
+  # Who the buyer compares the brand against. Used for differentiation in copy.
+  direct:
+    - name: "[competitor brand]"
+      delta: "[one line on how you differ]"
+
+  indirect:
+    - name: "[alternative the buyer might choose instead of buying at all]"
+      delta: "[why your offer beats not-buying]"
+
+regulatory:
+  # Claims the brand cannot legally make in its jurisdiction. Used by review-responder
+  # and campaign-from-theme to avoid generating non-compliant copy.
+  forbidden_claims:
+    - "[example: medical efficacy claims (cosmetic regulation)]"
+    - "[example: guaranteed returns (financial regulation)]"
+
+channels:
+  # Where the brand actually publishes. Drives channel-fit in campaign-from-theme.
+  primary:
+    - "[example: instagram]"
+    - "[example: whatsapp]"
+  secondary:
+    - "[example: google_business_profile]"
+
+  # Channels the brand will NOT use. Saves campaign skill from suggesting them.
+  off_limits:
+    - "[example: tiktok]"
+    - "[example: paid ads]"

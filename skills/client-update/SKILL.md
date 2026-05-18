@@ -14,15 +14,20 @@ mcp_requirements: []
 
 Updates build trust through transparency, not polish.
 
+## Voice routing (operator or brand?)
+
+Apply the routing rules in `skills/your-voice/SKILL.md`. Default to operator voice. If the update is going out from a brand the operator runs (e.g. an agency client update where the agency is the brand), use brand voice from `brands/<slug>/voice.yml`.
+
 ## Before you write
 
-Before writing, run: `python scripts/check-voice-ready.py`
+If using operator voice, run: `python scripts/check-voice-ready.py`
+If using brand voice, run: `python scripts/check-brand-voice-ready.py --brand <slug>`
 
 If exit code is 1, read the output line and surface it to the user verbatim. Do not produce any draft. Stop.
 
 If the user explicitly chooses to proceed with defaults after seeing that message, write the update using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the update is voice-coupled.
 
-Then read `core/voice-profile.yml` so the rest of this skill can apply it.
+Then read the chosen voice profile so the rest of this skill can apply it.
 
 After producing a draft and before returning it, run the anti-examples filter:
 

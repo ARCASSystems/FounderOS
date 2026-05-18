@@ -12,15 +12,26 @@ mcp_requirements: []
 
 Every post must apply the voice profile in `core/voice-profile.yml`. Before drafting, read `skills/your-voice/SKILL.md` and apply its universal rules in full. Then pass the LinkedIn-specific self-check at the bottom of this file.
 
+## Voice routing (operator or brand?)
+
+Before any gate or draft, decide which voice this post uses. Apply the routing rules in `skills/your-voice/SKILL.md` "Voice routing - operator or brand?" section.
+
+- If the user asked for a personal LinkedIn post (default for this skill), use operator voice from `core/voice-profile.yml`.
+- If the user named a brand they run (e.g. "post for `<brand>` on LinkedIn"), use brand voice from `brands/<slug>/voice.yml`.
+
+If `brands/` does not exist or has no entries, this section is a no-op and the skill proceeds as today.
+
 ## Before you write
 
-Before writing, run: `python scripts/check-voice-ready.py`
+If using operator voice, run: `python scripts/check-voice-ready.py`
+
+If using brand voice, run: `python scripts/check-brand-voice-ready.py --brand <slug>`
 
 If exit code is 1, read the output line and surface it to the user verbatim. Do not produce any draft. Stop.
 
 If the user explicitly chooses to proceed with defaults after seeing that message, draft the post using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the post is voice-coupled.
 
-Then read `core/voice-profile.yml` so the rest of this skill can apply it.
+Then read the chosen voice profile (`core/voice-profile.yml` for operator, `brands/<slug>/voice.yml` + `brands/<slug>/positioning.yml` for brand) so the rest of this skill can apply it.
 
 After producing a draft and before returning it, run the anti-examples filter:
 

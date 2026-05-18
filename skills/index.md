@@ -1,6 +1,6 @@
 # Founder OS Skills
 
-45 skills as of v1.24.0. v1.24 adds Python preflight gates to 10 writing and reasoning skills (no new skills, hardened existing ones). v1.23 added the natural-language capture path (no new skills, new hook + bootloader rewrite). v1.22 added `observation-rollup` (weekly JSONL compression) and `legal-compliance` (jurisdiction-aware legal reference). v1.21 added `queue` (execution queue with 3-item ACTIVE cap) and `verify` (read-only health check across 8 substrate points). v1.20.0 was the natural-language routing release plus `/founder-os:menu`. v1.20.2 added the `today` wrapper skill. v1.20.3 added anti-example voice depth. v1.10 added the runtime brain context layer plus brain-pass. The setup wizard (`founder-os-setup`) is the entry point. All others activate via natural language phrasing or via `/founder-os:<command>`.
+48 skills as of v1.25.0. v1.25 adds the brand voice layer: an operator can now run a multi-brand ecosystem with separate voice + positioning per brand, distinct from the operator's personal voice. Three new skills (`brand-voice-interview`, `campaign-from-theme`, `review-responder`) and voice-routing across the five voice-coupled writing skills. v1.24 adds Python preflight gates to 10 writing and reasoning skills (no new skills, hardened existing ones). v1.23 added the natural-language capture path (no new skills, new hook + bootloader rewrite). v1.22 added `observation-rollup` (weekly JSONL compression) and `legal-compliance` (jurisdiction-aware legal reference). v1.21 added `queue` (execution queue with 3-item ACTIVE cap) and `verify` (read-only health check across 8 substrate points). v1.20.0 was the natural-language routing release plus `/founder-os:menu`. v1.20.2 added the `today` wrapper skill. v1.20.3 added anti-example voice depth. v1.10 added the runtime brain context layer plus brain-pass. The setup wizard (`founder-os-setup`) is the entry point. All others activate via natural language phrasing or via `/founder-os:<command>`.
 
 | Skill | Status | Replaces |
 |-------|--------|---------|
@@ -41,7 +41,10 @@
 | [your-voice](your-voice/SKILL.md) | Ready | Generic AI tone for all written output |
 | [your-deliverable-template](your-deliverable-template/SKILL.md) | Ready | Canva templates, generic CV/deck builders |
 | [voice-interview](voice-interview/SKILL.md) | Ready | Captures user's writing voice into core/voice-profile.yml |
-| [brand-interview](brand-interview/SKILL.md) | Ready | Captures user's visual brand into core/brand-profile.yml |
+| [brand-interview](brand-interview/SKILL.md) | Ready | Captures user's visual brand into core/brand-profile.yml or brands/<slug>/visual.yml |
+| [brand-voice-interview](brand-voice-interview/SKILL.md) | Ready | Captures a brand's voice and positioning into brands/<slug>/voice.yml + positioning.yml. One run per brand. Separate from voice-interview which captures operator voice. |
+| [campaign-from-theme](campaign-from-theme/SKILL.md) | Ready | Turns a theme into a funnel-gated marketing campaign. Refuses to draft until speaker, objective, audience temperature, channels, and success metric are all answered. |
+| [review-responder](review-responder/SKILL.md) | Ready | Drafts replies to incoming customer reviews, DMs, WhatsApp, emails. Asks whose voice (operator or brand) and applies channel + posture constraints. |
 | [business-context-loader](business-context-loader/SKILL.md) | Ready | Per-company context file scanner and gap router |
 | [linkedin-post](linkedin-post/SKILL.md) | Ready | Voice-coupled LinkedIn post writer |
 | [client-update](client-update/SKILL.md) | Ready | Voice-coupled client status update writer |
@@ -52,7 +55,7 @@
 
 ## Commands
 
-This plugin ships 27 slash commands:
+This plugin ships 30 slash commands:
 
 | Command | Purpose |
 |---------|---------|
@@ -60,6 +63,9 @@ This plugin ships 27 slash commands:
 | [/founder-os:setup](../.claude/commands/setup.md) | Run the Founder OS setup wizard. Generates identity, priorities, decisions, cadence, and brain files from a guided interview. |
 | [/founder-os:voice-interview](../.claude/commands/voice-interview.md) | Capture how you write into `core/voice-profile.yml`. Activates the voice-coupled writing skills. |
 | [/founder-os:brand-interview](../.claude/commands/brand-interview.md) | Capture your visual identity into `core/brand-profile.yml`. Activates branded outputs. |
+| [/founder-os:brand-voice-interview](../.claude/commands/brand-voice-interview.md) | Capture a brand's voice and positioning. One run per brand. Different from voice-interview (operator personal voice). |
+| [/founder-os:campaign-from-theme](../.claude/commands/campaign-from-theme.md) | Turn one theme into a funnel-gated marketing campaign. Five gate questions before any draft. |
+| [/founder-os:review-responder](../.claude/commands/review-responder.md) | Draft replies to incoming customer messages (reviews, DMs, WhatsApp, emails). Asks whose voice, then drafts with channel + posture constraints. |
 | [/founder-os:status](../.claude/commands/status.md) | Read-only OS readiness check. Returns a weighted score and the next 3 high-impact moves. |
 | [/founder-os:ingest](../.claude/commands/ingest.md) | File a source (URL, file path, or pasted text) into `raw/` with provenance. Propose wiki updates you approve. |
 | [/founder-os:lint](../.claude/commands/lint.md) | Read-only wiki audit. Cross-references, orphans, stale content, provenance, possible contradictions. |
@@ -86,7 +92,7 @@ This plugin ships 27 slash commands:
 
 ## Status
 
-45 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile.
+48 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile. Operators running multiple brands capture each brand voice separately via `brand-voice-interview`.
 
 Release notes:
 
@@ -110,5 +116,6 @@ Release notes:
 - v1.22 added `legal-compliance`, `observation-rollup`, `linkedin-post`, and a `client-update` voice-coupling depth pass.
 - v1.23 closed the capture-path promise from v1.22. A new UserPromptSubmit hook routes user input through four shape detectors (rant, named-entity, status update, preference) and emits capture suggestions Claude honors. Rants are eagerly written to `brain/rants/<date>.md`. SessionStart fires a welcome banner on fresh installs and surfaces unprocessed-rant count. Five operator-vocabulary triggers added to existing skills. No new skills.
 - v1.24 added Python preflight gates to ten existing skills (five voice-coupled writing skills, four reasoning skills, brain-pass). When a required file is missing or template-filled, the gate exits in code and the skill stops with a one-line reason instead of producing silently-generic output. No new skills.
+- v1.25 added the brand voice layer. Three new skills (`brand-voice-interview`, `campaign-from-theme`, `review-responder`). New `brands/<slug>/` directory holds per-brand voice + positioning + visual files. Five voice-coupled writing skills (linkedin-post, email-drafter, client-update, content-repurposer, proposal-writer) now route between operator voice and brand voice based on task context. Backward-compatible: operators without `brands/` set up see no behavior change. Operators with one or many brands get voice-correct output without manual switching. Anti-AI baseline adapts by brand register (plain-direct, measured-elegant, corporate-restrained, friendly-casual). Universal banned-phrase list and hard floor unchanged.
 
 All additions across v1.2 through v1.24 are additive. No existing skill behaviour was changed without an explicit version note.

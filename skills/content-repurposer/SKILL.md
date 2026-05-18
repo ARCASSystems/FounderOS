@@ -11,15 +11,27 @@ mcp_requirements: []
 
 Apply the voice and writing rules from `core/identity.md`, `rules/writing-style.md`, and `core/voice-profile.yml` (via the `your-voice` skill) to all output. Keep the founder's voice consistent across every channel.
 
-## Voice profile
+## Voice routing (operator or brand?)
 
-Before writing, run: `python scripts/check-voice-ready.py`
+Before any gate or draft, apply the routing rules in `skills/your-voice/SKILL.md` "Voice routing - operator or brand?" section.
+
+- Default to operator voice from `core/voice-profile.yml`.
+- If the user named a brand they run, or if the source content is brand-owned, use brand voice from `brands/<slug>/voice.yml`.
+- For multi-channel repurposing, the SAME voice applies to every channel adaptation. Do not mix voices across the output.
+
+If `brands/` does not exist or has no entries, this section is a no-op.
+
+## Voice profile readiness
+
+If using operator voice, run: `python scripts/check-voice-ready.py`
+
+If using brand voice, run: `python scripts/check-brand-voice-ready.py --brand <slug>`
 
 If exit code is 1, read the output line and surface it to the user verbatim. Do not produce any draft. Stop.
 
 If the user explicitly chooses to proceed with defaults after seeing that message, repurpose the content using the universal anti-AI baseline from `your-voice` and clearly label that the voice profile was not applied. Do not pretend the outputs are voice-coupled.
 
-Then read `core/voice-profile.yml` so the rest of this skill can apply it.
+Then read the chosen voice profile so the rest of this skill can apply it.
 
 After producing a draft and before returning it, run the anti-examples filter:
 
@@ -36,6 +48,16 @@ Do not surface this filter to the user as a separate step. The user sees only th
 Before drafting, read `brain/.snapshot.md` if it exists. Use the open-flags block to avoid topics that contradict current operator stance. Use the must-do block to lean the draft toward what the operator is actively working on. Use the voice and brand blocks (if present) to set tone. If `brain/.snapshot.md` does not exist, proceed without it - the snapshot is optional context, not a hard prerequisite.
 
 Find the ONE core insight before adapting. A repurpose has one argument across every channel, not a different argument per platform.
+
+## Channel selection (brand-aware)
+
+If brand voice is loaded, read `brands/<slug>/positioning.yml`. Filter the channel list:
+
+- Include channels in `positioning.channels.primary` and `positioning.channels.secondary`.
+- Exclude channels in `positioning.channels.off_limits` - never suggest these.
+- If the user explicitly asks for a channel that is off-limits, surface the conflict: "Positioning says `<channel>` is off-limits for `<brand>`. Want me to override for this piece, or skip that channel?"
+
+If operator voice is loaded (no brand), include all channels by default but lean toward channels the operator has used recently per `brain/log.md` if that signal is available.
 
 ## Channel Specifications
 

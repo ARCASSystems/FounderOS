@@ -12,9 +12,14 @@ mcp_requirements: []
 
 The proposal must reflect the founder's voice, brand, and the specifics of the prospect. It must not sound like a template.
 
+## Voice routing (operator or brand?)
+
+Apply the routing rules in `skills/your-voice/SKILL.md`. Default to operator voice for personal proposals. If the proposal is FROM a brand the operator runs (e.g. an agency, a productized service), use brand voice from `brands/<slug>/voice.yml` and brand visual from `brands/<slug>/visual.yml` if present.
+
 ## Before producing output
 
-Before writing, run: `python scripts/check-voice-ready.py`
+If using operator voice, run: `python scripts/check-voice-ready.py`
+If using brand voice, run: `python scripts/check-brand-voice-ready.py --brand <slug>`
 
 If exit code is 1, read the output line and surface it to the user verbatim. Do not produce any draft. Stop.
 
@@ -22,8 +27,8 @@ If the user explicitly chooses to proceed with defaults after seeing that messag
 
 Then read in this order:
 
-1. `core/voice-profile.yml` - the founder's voice rules, now confirmed ready.
-2. `core/brand-profile.yml` - if present, governs any branded version of this proposal (PDF, DOCX). For plain-text proposals, this is optional.
+1. The chosen voice profile (operator: `core/voice-profile.yml`. Brand: `brands/<slug>/voice.yml` + `brands/<slug>/positioning.yml`).
+2. The chosen visual brand (operator default: `core/brand-profile.yml`. Brand: `brands/<slug>/visual.yml` if present). Governs any branded version of this proposal (PDF, DOCX). For plain-text proposals, this is optional.
 3. `context/companies/<client>.md` if a relevant context file exists - prior research, scope conversations, the prospect's stated pain.
 4. Any prior scoping notes the user points you at.
 5. `brain/knowledge/` - topic notes relevant to the deal type, buyer pain, industry, proof points, or prior wins. Read frontmatter and top headings first. Do not hard-parse full bodies unless the user asks.

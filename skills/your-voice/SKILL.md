@@ -10,15 +10,67 @@ mcp_requirements: []
 
 # Your Voice
 
-This skill writes as the user whose voice profile lives in `core/voice-profile.yml`.
+This skill writes in the right voice for the task. There are two voice layers:
 
-Read this entire file before writing anything. Then read `core/voice-profile.yml` to load the user's specific patterns.
+- **Operator voice** at `core/voice-profile.yml` - how the user writes as a person. Default for personal output (personal LinkedIn, your CV, emails from you).
+- **Brand voice** at `brands/<slug>/voice.yml` - how a brand the operator runs writes. Used when output represents a brand (brand social, customer comms, ads, customer-service replies, brand-published content).
 
-If the profile file is missing or still contains the template placeholders (the `[BRACKETED]` values), do not stop. Generate the requested output using the universal anti-AI baseline below as the voice rules, and prepend a one-line warning to the output:
+An operator can have one or many brands. The two layers are independent. If `brands/` does not exist, this skill behaves exactly as it did before the brand layer existed - operator voice only.
 
-> Voice profile not set up. Output uses anti-AI baseline only and will sound generic. Run `/founder-os:setup` and complete the voice interview, or edit `core/voice-profile.yml` to make outputs sound like you.
+Read this entire file before writing anything. Then load the right voice profile per the routing below.
+
+If the active profile is missing or still contains the template placeholders (the `[BRACKETED]` values), do not stop. Generate the requested output using the universal anti-AI baseline below as the voice rules, and prepend a one-line warning to the output:
+
+> Voice profile not set up. Output uses anti-AI baseline only and will sound generic. Run `/founder-os:setup` and complete the voice interview, or edit the relevant voice profile to make outputs sound like you.
 
 The warning is a comment to the user, not part of the deliverable. Place it above the output, separated by a blank line.
+
+---
+
+## Voice routing - operator or brand?
+
+Before loading any profile, decide which voice this output should use.
+
+### Step 1 - Check if brands are set up
+
+Run: `python scripts/list-brands.py`
+
+If the script exits 0 with no output, OR the script does not exist, OR the `brands/` directory does not exist: skip to operator voice. No routing decision needed.
+
+If the script lists 1+ brands: continue.
+
+### Step 2 - Infer the speaker from task context
+
+Look at how the user phrased the task. Apply these signals in order:
+
+1. **Explicit brand mention** - the user said "for `<brand>`", "as `<brand>`", "in `<brand>`'s voice", or named a brand display_name that matches a slug. Use that brand's voice.
+2. **Explicit personal mention** - the user said "for me", "my personal", "in my voice", "for my LinkedIn", "for my CV". Use operator voice.
+3. **Channel implies brand** - "Instagram caption" + user runs a brand with instagram in `channels.primary` = likely brand voice. "My LinkedIn" = operator. "Customer reply" = brand if a brand owns the customer channel.
+4. **Ambiguous** - ask once: "Whose voice for this? (you / `<brand 1>` / `<brand 2>` / ...)"
+
+If only one brand is set up and the task is clearly brand-oriented (customer reply, brand social, ad copy), it is safe to pick that brand without asking - but still mention which voice was chosen in the output preamble so the user can correct.
+
+If multiple brands are set up and the task could plausibly belong to any of them, ALWAYS ask. Do not guess.
+
+### Step 3 - Load the chosen profile
+
+- Operator: read `core/voice-profile.yml`. Run `python scripts/check-voice-ready.py` first.
+- Brand: read `brands/<slug>/voice.yml` and `brands/<slug>/positioning.yml`. Run `python scripts/check-brand-voice-ready.py --brand <slug>` first.
+
+If the readiness check fails, surface the message verbatim and ask the user to either fix it or proceed with the anti-AI baseline only (clearly labelled).
+
+### Step 4 - Apply register adjustments (brand voice only)
+
+Brand voice profiles include a `register` field. Operator voice has an implicit register of `plain-direct` and does not need this step.
+
+Register controls which sub-rules of the universal anti-AI baseline are relaxed for the brand. The hard floor (banned phrases, no em dashes, no rule-of-three by default) still applies. What changes is small.
+
+- `plain-direct` - no changes. Universal baseline applies as written.
+- `measured-elegant` - allows "considered", "heritage", "tailored", "craft", "elegance", "refined" if they appear in `preferred_words`. Allows slightly longer sentence rhythm (long_builders default). Closings can use weight rather than just hand.
+- `corporate-restrained` - allows hedging language ("we believe", "we expect", "subject to"). Allows formal sign-offs and third-person reference to the brand. Contractions usually off.
+- `friendly-casual` - allows contractions always. Allows one exclamation mark per piece. Allows starting with "Hey" or first-name greeting.
+
+Register is NOT a license to ignore the universal banned-phrase list. It is a small set of allowances on the otherwise-strict baseline.
 
 ---
 

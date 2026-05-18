@@ -20,11 +20,30 @@ Do not invent answers. If the user skips a question, leave the field as `[NOT SE
 
 ---
 
-## Phase 0 - Welcome
+## Phase 0 - Clarify: operator voice, not brand voice
+
+Before starting, confirm scope. This skill captures the OPERATOR's personal voice. A brand the operator runs has a separate voice that lives under `brands/<slug>/voice.yml` and is captured by `brand-voice-interview`.
 
 Say exactly:
 
-> Voice interview. About 10 minutes. The output is a voice profile file that will write everything as you from now on - emails, posts, scripts, cover letters, whatever you generate later. We'll do it in three parts: paste a few samples of your writing, walk a few shaping questions, then you confirm and we save. Ready?
+> Quick check. There are two voice layers in this OS:
+>
+> 1. **Your personal voice** - how YOU write as a person. Personal LinkedIn, your CV, emails from you, anything where your name is on the output. This is what we are about to capture.
+> 2. **A brand voice** - how a brand you run writes. Customer comms, brand social, ads. Captured separately with `/founder-os:brand-voice-interview`.
+>
+> If you are running a founder-led brand the two overlap, but the brand voice should still be captured separately so it survives after employees other than you start writing for the brand.
+>
+> Is this for you personally, or for a brand you run? (personal / brand)
+
+If they say "brand", stop and dispatch to `brand-voice-interview` instead.
+
+If they say "personal" or "both", continue with this skill for personal voice. (If "both", note at the end that they should also run brand-voice-interview separately.)
+
+## Phase 0.5 - Welcome
+
+Say exactly:
+
+> Voice interview. About 10 minutes. The output is your personal voice profile - it will write everything as you from now on: emails, posts, scripts, cover letters, whatever you generate. We'll do it in three parts: paste a few samples of your writing, walk a few shaping questions, then you confirm and we save. Ready?
 
 Wait for confirmation.
 
@@ -287,6 +306,8 @@ If a field is not set, write `"[NOT SET]"` for strings, `0` for numbers, or `[]`
 Say exactly:
 
 > Voice profile saved to core/voice-profile.yml. From now on, anything I generate for you will use this voice - emails, posts, scripts, cover letters, whatever. If something I write doesn't sound like you, tell me and we'll refine the profile.
+>
+> One more note: this is your PERSONAL voice. If you run a brand (or multiple brands), they have their own voice that should be captured separately. Run `/founder-os:brand-voice-interview` when you are ready. The two layers stay independent and writing skills route to the right one based on what you ask for.
 
 Stop. Do not do anything else.
 

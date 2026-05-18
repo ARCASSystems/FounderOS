@@ -1,0 +1,85 @@
+# TEMPLATE - brand voice profile. One per brand the operator runs.
+# Lives at brands/<slug>/voice.yml. Created by /founder-os:brand-voice-interview.
+# Different from core/voice-profile.yml: that file captures how YOU write as a person.
+# This file captures how a BRAND you operate writes. They are not the same voice.
+# When you write a personal LinkedIn post, the operator voice applies.
+# When you write a brand caption, ad, or customer reply, the brand voice applies.
+
+brand:
+  slug: "[lowercase-kebab-slug, matches the folder name]"
+  display_name: "[BRAND NAME as written on packaging, web, social]"
+  speaker: "[brand | founder-led | spokesperson-led]"
+  # brand: the brand speaks. No named author. (Apple, Coca-Cola, Suit Carriage)
+  # founder-led: the founder's name attaches to brand voice. (Patagonia, Spanx)
+  # spokesperson-led: a specific person fronts the brand (Group MD, head of marketing).
+
+voice:
+  # The register sets the tone floor. Anti-AI rules adapt per register.
+  # plain-direct       : founder-to-founder, short hits, no decoration. (default)
+  # measured-elegant   : premium brand, considered, allows craft vocabulary.
+  # corporate-restrained: B2B exec, formal, allows hedging and qualifiers.
+  # friendly-casual    : retail/consumer, warm, contractions always on.
+  register: "[CHOOSE: plain-direct | measured-elegant | corporate-restrained | friendly-casual]"
+
+  rhythm: "[CHOOSE: short_hits | long_builders | mixed | verse_like]"
+  opening_style: "[CHOOSE: punch | confession | question | observation | story | list]"
+  closing_style: "[CHOOSE: weight | hand | question | signoff]"
+  signoff_phrase: "[brand sign-off, e.g. The Suit Carriage Team, or empty]"
+  person_default: "[CHOOSE: first | second | mixed | third]"
+  # third = the brand refers to itself by name. Common for premium and corporate.
+  contractions: "[CHOOSE: always | sometimes | never]"
+  hedging: "[CHOOSE: frequent | occasional | rare]"
+  reading_level: 8
+
+  # Words the brand uses naturally. These can include craft/industry vocabulary.
+  preferred_words:
+    - "[example: considered]"
+    - "[example: tailored]"
+    - "[example: heritage]"
+
+  # Words the brand never uses. Adds to universal blacklist.
+  # Universal blacklist still applies and cannot be removed.
+  banned_words:
+    - "[example: cheap]"
+    - "[example: fast-fashion]"
+
+  # Brand idiosyncrasies. Things grammar-check would correct but the brand keeps.
+  idiosyncrasies:
+    - "[example: uses lowercase exclusively]"
+    - "[example: never uses exclamation marks]"
+
+  # The buyer's words for the brand's offer, not the marketing version.
+  buyer_language:
+    first_sentence: "[what a buyer says when they describe wanting your offer]"
+    phrases:
+      - "[example: I want something that lasts]"
+      - "[example: I have a wedding in three weeks]"
+
+  # What the brand would never write. Generic-brand patterns it actively rejects.
+  anti_examples:
+    pairs:
+      - bad: "[example: Crafted with passion, designed for excellence.]"
+        good: "[example: A jacket from this cloth lasts ten years if you let it.]"
+        rule: "[example: No empty craft adjectives. Name the durable thing.]"
+    aesthetic_crimes:
+      - "[example: stacked adjectives with no noun behind them]"
+    red_flags:
+      - "[example: any sentence that could appear in any brand's bio]"
+
+  # Reference samples - 3 to 5 pieces of writing already published BY THE BRAND
+  # (or written by the operator in this brand's voice). These are ground truth.
+  samples:
+    - title: "[short title for sample 1]"
+      context: "[Instagram caption | website hero | newsletter | DM reply | etc.]"
+      text: |
+        [paste the full piece here]
+
+    - title: "[short title for sample 2]"
+      context: "[where it was published]"
+      text: |
+        [paste the full piece here]
+
+    - title: "[short title for sample 3]"
+      context: "[where it was published]"
+      text: |
+        [paste the full piece here]
