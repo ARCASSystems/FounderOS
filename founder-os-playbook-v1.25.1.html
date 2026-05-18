@@ -307,8 +307,8 @@ a:hover{text-decoration:underline}
 .cta-step{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:20px 22px;text-align:left;width:192px}
 .cta-step-num{font-size:11px;color:var(--mint);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
 .cta-step p{font-size:13px;color:rgba(255,255,255,.85);margin:0;line-height:1.55}
-.install-btn{display:inline-block;background:#fff;color:var(--magenta);padding:15px 36px;border-radius:999px;font-size:15px;font-weight:800;text-decoration:none;margin-top:16px;transition:color .16s ease,transform .16s ease,box-shadow .16s ease;box-shadow:0 18px 42px rgba(0,0,0,.2)}
-.install-btn:hover{color:var(--purple);text-decoration:none;transform:translateY(-1px);box-shadow:0 24px 54px rgba(0,0,0,.24)}
+.install-btn{display:inline-block;background:#fff;color:var(--magenta);border:2px solid var(--magenta);padding:14px 40px;border-radius:50px;font-size:15px;font-weight:700;text-decoration:none;margin-top:16px;transition:background .15s,color .15s,transform .1s}
+.install-btn:hover{background:var(--magenta);color:#fff;text-decoration:none;transform:translateY(-1px)}
 .support-line{margin:32px auto 0;max-width:480px;padding:18px 24px;background:rgba(53,211,154,.08);border:1px solid rgba(53,211,154,.25);border-radius:8px}
 .support-line p{margin:0;font-size:14px;color:rgba(255,255,255,.85)}
 .support-line p a{color:var(--mint);font-weight:600;text-decoration:underline}
@@ -477,28 +477,19 @@ h2{margin-bottom:24px}
   .tf-chain{font-size:11px}
 }
 
-/* skills accordion */
-.skill-list{margin:24px 0 8px;max-width:var(--content-max)}
-.skill-row{border:1px solid var(--gray-mid);border-radius:var(--radius);margin-bottom:6px;background:#fff;overflow:hidden;transition:border-color .15s}
-.skill-row[open]{border-left:3px solid var(--purple)}
-.skill-row summary{padding:12px 18px;cursor:pointer;list-style:none;display:flex;align-items:baseline;gap:14px;user-select:none}
-.skill-row summary::-webkit-details-marker{display:none}
-.skill-row summary::after{content:'+';margin-left:auto;color:var(--gray-text);font-size:18px;font-weight:400;line-height:1}
-.skill-row[open] summary::after{content:'\2212';color:var(--purple)}
-.skill-row summary:hover{background:var(--gray-light)}
-.skill-name{font-size:13px;font-weight:700;font-family:ui-monospace,monospace;color:var(--body-text);background:none;padding:0;flex-shrink:0;min-width:185px}
-.skill-sum{font-size:13px;color:var(--gray-text);line-height:1.5}
-.skill-body{padding:8px 22px 16px 22px;border-top:1px solid var(--gray-mid);background:var(--gray-light)}
-.skill-why,.skill-enhance{font-size:13px;line-height:1.55;margin:8px 0;color:var(--body-text)}
-.skill-why strong{color:var(--purple);font-weight:700}
-.skill-enhance strong{color:var(--navy);font-weight:700}
-.skill-meta{font-size:12px;margin-top:8px}
-.skill-meta a{color:var(--purple)}
-@media(max-width:560px){
-  .skill-row summary{flex-direction:column;align-items:flex-start;gap:4px;padding:12px 14px}
-  .skill-name{min-width:0}
-  .skill-body{padding:8px 14px 14px 14px}
-}
+/* skills grid */
+.skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:24px 0;max-width:var(--content-max)}
+.sk-item{border:1px solid var(--gray-mid);border-radius:var(--radius);padding:14px 18px;border-left:3px solid var(--purple);background:#fff}
+.sk-item-name{font-weight:700;font-size:13px;margin-bottom:4px}
+.sk-item-name a{color:var(--body-text);text-decoration:none}
+.sk-item-name a:hover{color:var(--purple)}
+.sk-item-name code{background:none;padding:0;font-size:13px;font-family:ui-monospace,monospace;color:var(--body-text)}
+.sk-item-desc{font-size:12px;color:var(--gray-text);line-height:1.5;margin-bottom:4px}
+.sk-item-why{font-size:12px;color:var(--body-text);line-height:1.5;margin-bottom:2px}
+.sk-item-why strong{color:var(--purple);font-weight:600}
+.sk-item-enhance{font-size:11px;color:var(--gray-text);line-height:1.4}
+.sk-item-enhance strong{color:var(--navy);font-weight:600}
+@media(max-width:640px){.skills-grid{grid-template-columns:1fr}}
 
 /* inline code default */
 code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.92em;color:var(--purple);font-family:ui-monospace,monospace}
@@ -811,391 +802,294 @@ code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.9
 <section class="section" id="skills">
   <h2>All 48 skills</h2>
   <p>Every skill below fires from a plain-language request - no commands to memorize. Click a name to read the exact instructions it follows on GitHub.</p>
-  <div class="skill-list">
-    <details class="skill-row">
-      <summary><code class="skill-name">approval-gates</code><span class="skill-sum">Check whether an action needs approval before doing it.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Prevents irreversible or public actions from happening silently - sends, pushes, deletes, and payments need a human yes first.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Fill rules/approval-gates.md with your own thresholds - the default table is a fallback; your custom gates are what actually protect your workflow.</p>
-        <p class="skill-meta"><a href="skills.html#sk-approval-gates">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">audit</code><span class="skill-sum">Audit the OS in one composite report.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Gives you one honest number for OS health so you know what to fix instead of guessing which layer is causing bad output.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Run after a sprint roll so cadence files are fresh - stale daily-anchors and empty brain log are the two checks most likely to drag your score down.</p>
-        <p class="skill-meta"><a href="skills.html#sk-audit">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">blind-spot-review</code><span class="skill-sum">Pressure-test a draft for blind spots before pre-send review.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Catches the assumptions and missing context that first-draft writers always miss - the categories no one thinks to check until after a deal falls apart.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Provide the source material the draft was built from - the review is weakest when run on a deliverable alone and sharpest when it can compare draft claims against meeting notes or brief.</p>
-        <p class="skill-meta"><a href="skills.html#sk-blind-spot-review">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">bottleneck-diagnostic</code><span class="skill-sum">Find the real bottleneck in the business.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Names the one dimension where your presence is most costly so you can stop guessing and start shedding the right role first.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Answer all five dimension questions honestly in self-assessment mode - the score is only as accurate as the examples you give for each dimension.</p>
-        <p class="skill-meta"><a href="skills.html#sk-bottleneck-diagnostic">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">brain-log</code><span class="skill-sum">Capture a thought, flag, or decision into the brain system.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Keeps thoughts, decisions, and flags from living only in your head - a running log is how the OS learns what is actually happening in your week.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Log in Mode B or C when you can - thoughts cross-referenced to a client, decision, or priority are far more useful to skills like weekly-review and brain-pass than standalone entries.</p>
-        <p class="skill-meta"><a href="skills.html#sk-brain-log">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">brain-pass</code><span class="skill-sum">Synthesise an answer across the brain layer.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Synthesises an answer from across your brain files with citations rather than asking you to remember what you already logged or decided.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Fill brain/log.md consistently with dated entries - the pass is only as good as the history it can reason across; sparse logs return low-confidence answers.</p>
-        <p class="skill-meta"><a href="skills.html#sk-brain-pass">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">brain-snapshot</code><span class="skill-sum">Refresh the runtime context payload other skills read at task time.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Gives output-producing skills a cheap read of what is true right now - without it each skill starts cold and ignores open flags or this week&#x27;s commitments.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Re-run after any weekly review, flag update, or major decision so the snapshot reflects current state - stale snapshots silently skew every skill that reads them.</p>
-        <p class="skill-meta"><a href="skills.html#sk-brain-snapshot">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">brand-interview</code><span class="skill-sum">Set up the visual brand profile.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Creates the visual identity file that every branded document inherits - without it proposals, CVs, and decks default to generic styling that does not look like you.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Have your logo file and hex codes ready before starting - the interview can suggest defaults but real brand assets in core/brand-assets/ are what make output look professional.</p>
-        <p class="skill-meta"><a href="skills.html#sk-brand-interview">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">brand-voice-interview</code><span class="skill-sum">Capture a brand&#x27;s writing voice and positioning.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> An operator can run multiple brands. The operator&#x27;s personal voice and a brand&#x27;s voice are not the same. Without a brand voice layer, every output sounds like the operator, which is wrong for any branded communication (customer comms, brand social, customer service, ads). Brand voice is the file every brand-coupled writing skill reads.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Capture brand voice AFTER you have 3 to 5 real brand samples - existing captions, product copy, customer emails the brand has actually sent. The samples are the ground truth. A brand voice profile without samples is a stereotype.</p>
-        <p class="skill-meta"><a href="skills.html#sk-brand-voice-interview">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">business-context-loader</code><span class="skill-sum">Load the founder's business context (ICP, offer, pricing) into the session.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Fills in the ICP, offer, and pricing context that proposal-writer and strategic-analysis need - without it those skills produce generic output not tied to your actual business.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Walk sections 1-7 in order at least once per business; ICP and offer (sections 4 and 5) have the highest downstream impact on any output skill that reads this file.</p>
-        <p class="skill-meta"><a href="skills.html#sk-business-context-loader">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">campaign-from-theme</code><span class="skill-sum">Turn one theme into a structured marketing campaign.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Industry-standard campaign generators output a calendar without knowing who the campaign is for, where the audience is in the funnel, or why one piece comes before another. That produces slop that the operator has to throw away. The gate is the value - it forces audience and objective clarity before any draft, which is what makes the output usable on first attempt.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Run brand-voice-interview for the relevant brand first - a campaign in operator voice for a brand the operator runs will sound off-brand. The skill works either way but produces sharper output when the brand layer is captured.</p>
-        <p class="skill-meta"><a href="skills.html#sk-campaign-from-theme">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">client-update</code><span class="skill-sum">Write a client-facing status update or milestone report.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Keeps clients informed without the founder writing from scratch each time - consistent format builds trust and prevents the relationship from going silent.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Fill core/voice-profile.yml first so the update sounds like you, and keep context/clients.md current with milestone notes so the skill has real project specifics to draw on.</p>
-        <p class="skill-meta"><a href="skills.html#sk-client-update">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">content-repurposer</code><span class="skill-sum">Reformat one piece of content across many channels.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Multiplies one piece of thinking across multiple channels without re-writing from scratch for each - saves hours on content execution.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Fill core/voice-profile.yml before repurposing - without it the output adapts format but loses your voice, which is what makes the same insight work across platforms.</p>
-        <p class="skill-meta"><a href="skills.html#sk-content-repurposer">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">context-persistence</code><span class="skill-sum">Pull what we already know about a topic before re-explaining.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Prevents the OS from asking you to repeat context it already has - skills should read your files before asking you a question whose answer is already written down.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Keep context/clients.md and context/decisions.md updated after every interaction - the more accurate these files are, the less the OS needs to ask you.</p>
-        <p class="skill-meta"><a href="skills.html#sk-context-persistence">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">data-security</code><span class="skill-sum">Check whether data is safe to share with an external tool.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Stops client and sensitive data from moving to tools that were not approved - a single paste to the wrong AI can breach client trust and violate data agreements.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Fill rules/data-handling.md with your own per-tool decisions and any client-specific restrictions from context/clients.md - the fallback matrix is generic and may be too permissive for your situation.</p>
-        <p class="skill-meta"><a href="skills.html#sk-data-security">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">decision-framework</code><span class="skill-sum">Walk through a structured decision when the founder is stuck.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Breaks the loop of going around the same decision repeatedly by structuring what you are actually choosing and what each option costs.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Fill core/identity.md Decision style field (gut/data/dialogue/mixed) so the skill leads with your preferred mode - a mismatched opener means you disengage before the analysis starts.</p>
-        <p class="skill-meta"><a href="skills.html#sk-decision-framework">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">email-drafter</code><span class="skill-sum">Draft an email in the founder&#x27;s voice.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Writes emails that sound like you sent them instead of like a marketing tool did - especially useful for cold outreach and difficult conversations where tone matters.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Fill core/voice-profile.yml and set stack.json email_platform so the skill mirrors your actual send environment and applies your exact voice rules to every draft.</p>
-        <p class="skill-meta"><a href="skills.html#sk-email-drafter">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">forcing-questions</code><span class="skill-sum">Pressure-test a new initiative before starting it.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Stops new initiatives from starting before the problem, smallest version, and proof are clear - most wasted build time begins with an idea that cannot answer these six questions.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Keep context/priorities.md current so the skill can compare this initiative against what is already in flight and surface real conflicts rather than generic caution.</p>
-        <p class="skill-meta"><a href="skills.html#sk-forcing-questions">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">founder-coaching</code><span class="skill-sum">Coach a founder through their state and capacity.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Diagnoses where a founder&#x27;s time and energy is actually going versus where it should go - the session structure and bias toolkit surface what self-reflection alone misses.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Run prior session captures in brain/log.md before a coaching session so the skill can reference what the founder committed to last time and surface unresolved patterns.</p>
-        <p class="skill-meta"><a href="skills.html#sk-founder-coaching">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">founder-os-setup</code><span class="skill-sum">Set up Founder OS from scratch.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Creates the full operating environment in one guided session so skills have the files they need to produce personalized output from day one instead of returning generic defaults.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Answer the positioning questions in Phase 0.2.5 as specifically as possible - who you sell to, what you sell, and the buyer pain feed directly into proposal-writer, linkedin-post, and client-update.</p>
-        <p class="skill-meta"><a href="skills.html#sk-founder-os-setup">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">handoff-protocol</code><span class="skill-sum">Build a handoff doc when work moves to someone else.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Turns a verbal delegation into a structured artifact the receiver can act on without a follow-up call - context dropped in chat alone disappears.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Provide all nine required fields explicitly, especially the definition of done and known constraints - the artifact is only as useful as the specificity of what you give it.</p>
-        <p class="skill-meta"><a href="skills.html#sk-handoff-protocol">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">ingest</code><span class="skill-sum">File a source (URL, file path, or pasted text) into raw/ with provenance preserved.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Preserves a source with provenance intact so you can cite where an idea came from months later - knowledge-capture organises takeaways but ingest keeps the original.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Approve 2 to 4 wiki updates per ingest rather than all or none - selectively cross-referencing sources into decisions.md and brain/patterns.md builds a connected knowledge graph over time.</p>
-        <p class="skill-meta"><a href="skills.html#sk-ingest">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">knowledge-capture</code><span class="skill-sum">Capture takeaways from a book, podcast, article, or conversation.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Turns a book, podcast, or conversation into a retrievable note that skills like proposal-writer and strategic-analysis can cite - learning that stays in your head does not improve your output.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Always fill the Apply To sections with real business context - notes with no application mapping are rarely surfaced by brain-pass or strategic-analysis when you need them.</p>
-        <p class="skill-meta"><a href="skills.html#sk-knowledge-capture">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">legal-compliance</code><span class="skill-sum">Jurisdiction-aware legal, regulatory, and compliance skill for founders.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Grounds legal guidance in loaded reference documents rather than model memory - a jurisdiction without loaded files gets a refusal rather than a hallucinated answer.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Run /founder-os:legal-setup to populate your jurisdiction folder and context/compliance.md with your own deadlines - the skill is only as accurate as the reference docs wired in.</p>
-        <p class="skill-meta"><a href="skills.html#sk-legal-compliance">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">linkedin-post</code><span class="skill-sum">Write a LinkedIn post in the founder&#x27;s voice.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Produces posts that sound like you wrote them rather than like a content tool did - voice profile plus brain context means the post is grounded in your actual situation this week.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Fill brain/log.md regularly so brain-pass can suggest angles you have not posted recently and flag theme repetition before you draft - a rich log means fresher, non-repetitive content.</p>
-        <p class="skill-meta"><a href="skills.html#sk-linkedin-post">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">lint</code><span class="skill-sum">Audit the wiki for integrity issues.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Surfaces broken cross-references and stale content that silently mislead skills - a wiki that points to missing files or a decisions list that contradicts the sprint is worse than no wiki.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Run wiki-build first to refresh brain/relations.yaml so lint has an up-to-date graph to check against - lint on a stale graph produces false orphan counts.</p>
-        <p class="skill-meta"><a href="skills.html#sk-lint">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">meeting-prep</code><span class="skill-sum">Prep for a meeting or debrief one after.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Builds a specific brief from your own prior context rather than a generic one - knowing what you already committed to and what is unresolved with this person is what makes the meeting productive.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Keep context/clients.md updated after each touchpoint so brain-pass can surface real prior commitments - a brief built from stale client data will miss the most important watch-for items.</p>
-        <p class="skill-meta"><a href="skills.html#sk-meeting-prep">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">menu</code><span class="skill-sum">Show what FounderOS can do right now.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Shows what the OS can do right now based on your actual state - a static skill list tells you what exists; menu tells you what is relevant today.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Fill cadence/weekly-commitments.md and keep brain/flags.md current - menu scores suggestions against your must-do list and open flags, so empty cadence files produce a generic starter list.</p>
-        <p class="skill-meta"><a href="skills.html#sk-menu">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">observation-rollup</code><span class="skill-sum">Roll up weekly observation logs.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Prevents the brain/observations/ folder from accumulating thousands of raw JSONL lines by compressing old weeks into readable summaries you can actually review.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Set FOUNDER_OS_OBSERVATIONS=1 in your shell to generate JSONL files in the first place - the rollup has nothing to process if observation logging is off.</p>
-        <p class="skill-meta"><a href="skills.html#sk-observation-rollup">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">pre-send-check</code><span class="skill-sum">Run a pre-send gate before any deliverable goes out.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Forces a structured check before anything goes out so token-replacement misses, broken links, and voice inconsistencies are caught rather than sent to clients.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Always provide the source of truth the deliverable was built from - Check 2 (source-truth match) is the most failure-prone check and only works when the skill can compare the draft against real source material.</p>
-        <p class="skill-meta"><a href="skills.html#sk-pre-send-check">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">priority-triage</code><span class="skill-sum">Cut through overwhelm to ONE thing to do next.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Cuts a long open list down to one actionable task by running four filters - the founder who is overwhelmed needs a decision, not another framework to think through.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Keep brain/flags.md updated with stall patterns and cadence/weekly-commitments.md current - triage is sharpest when it can see which items have already rolled multiple weeks.</p>
-        <p class="skill-meta"><a href="skills.html#sk-priority-triage">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">proposal-writer</code><span class="skill-sum">Write a consulting or service proposal.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Builds proposals that reflect the specific prospect&#x27;s situation rather than a generic template - a proposal that mirrors the client&#x27;s own words wins more than one that describes the service.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Fill context/clients.md with scoping notes before running - the more prospect-specific context you provide, the stronger the Situation section, which is where most proposals lose.</p>
-        <p class="skill-meta"><a href="skills.html#sk-proposal-writer">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">query</code><span class="skill-sum">Search across the OS with a multi-hop query.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Retrieves OS nodes across files without loading everything into context - start broad with index mode, then drill into the specific entries that matter.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Run wiki-build to populate brain/relations.yaml before querying - the graph edges improve candidate ranking and the timeline mode relies on the graph to find connected entries.</p>
-        <p class="skill-meta"><a href="skills.html#sk-query">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">queue</code><span class="skill-sum">Manage the work queue.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Enforces a hard cap of three active items so work in progress reflects actual human capacity rather than an aspirational list that never clears.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Use the start operation consistently rather than just reading the queue - the 3-item gate only forces the right decisions when you route new work through start instead of adding directly to ACTIVE.</p>
-        <p class="skill-meta"><a href="skills.html#sk-queue">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">readiness-check</code><span class="skill-sum">Score the OS install across five buckets and name the next 3 moves.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Shows exactly which files and buckets are holding your score down so you can fix the right things rather than assuming setup is done when it is not.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Run voice-interview and brand-interview first - Voice and Brand carries 25% weight each and is the single fastest way to move the score once Core files exist.</p>
-        <p class="skill-meta"><a href="skills.html#sk-readiness-check">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">review-responder</code><span class="skill-sum">Draft replies to incoming customer messages, reviews, DMs, and inquiries.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Incoming customer messages are daily, often time-sensitive, and reveal as much about the brand as outbound marketing does. A reply in the wrong voice (operator personal voice instead of brand voice, generic AI voice instead of either) erodes trust. This skill makes the right-voice reply the default rather than the careful effort.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Run brand-voice-interview for the brand whose channel the message came from - replies in the wrong brand voice are more damaging than no reply because they signal the brand is inconsistent.</p>
-        <p class="skill-meta"><a href="skills.html#sk-review-responder">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">session-handoff</code><span class="skill-sum">Package this session for a fresh chat.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Makes work transferable to a new session or another person without losing the reasoning behind decisions - context in chat alone is gone the moment the session ends.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Be explicit about handoff type (A/B/C) at the start - the skill strips internal strategy and inlines skill-dependent knowledge differently for each type, and guessing wrong produces a document that leaks or lacks context.</p>
-        <p class="skill-meta"><a href="skills.html#sk-session-handoff">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">ship-deliverable</code><span class="skill-sum">Run the final ship gate before any external deliverable goes out.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Composes four checks that are easy to skip individually under deadline pressure into one pass so nothing ships with an AI phrase, missing asset, or unreviewed blind spot.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Run blind-spot-review before calling ship-deliverable - Link 3 (blind-spot evidence check) will fail if no review artifact exists, and you will have to run it separately anyway.</p>
-        <p class="skill-meta"><a href="skills.html#sk-ship-deliverable">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">sop-writer</code><span class="skill-sum">Write a delegation-ready SOP.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Documents a process so it can run without the founder in the room - the goal is a document a smart person who has never done this task can follow to completion.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Fill stack.json with your actual tools before running so TOOLS NEEDED names your real CRM, automation platform, and email client rather than generic labels the delegate cannot look up.</p>
-        <p class="skill-meta"><a href="skills.html#sk-sop-writer">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">strategic-analysis</code><span class="skill-sum">Run a strategic analysis: competitive map, market sizing, opportunity, or business model.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Grounds competitive and market analysis in your actual position and prior knowledge rather than producing a generic table that ignores what you already know or have decided.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Populate brain/knowledge/ with notes from books and conversations about the market and competitors - the skill reads matching topics by name and uses them as prior evidence in the analysis.</p>
-        <p class="skill-meta"><a href="skills.html#sk-strategic-analysis">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">today</code><span class="skill-sum">Show today&#x27;s one-screen brief: anchor task, open flags, last 3 log entries, and next event.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Gives you a one-screen brief of what matters today without loading every context file - anchor, flags, recent log, and next calendar event in under 20 lines.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Keep cadence/daily-anchors.md rolled to today and log at least one entry to brain/log.md during the day - a stale anchor and empty log make the brief generic rather than specific.</p>
-        <p class="skill-meta"><a href="skills.html#sk-today">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">unit-economics</code><span class="skill-sum">Run business math: unit economics, pricing, CAC, LTV, margins, break-even.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Runs business math in a structured format that shows assumptions and scenarios rather than a single number that can be misread without context.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Give real numbers rather than ranges when you can - the skill flags assumptions that could change the answer, but it cannot flag the ones you did not provide.</p>
-        <p class="skill-meta"><a href="skills.html#sk-unit-economics">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">verify</code><span class="skill-sum">Check that Founder OS is healthy.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Checks that the OS substrate is actually wired up correctly rather than just declaring setup done - hooks, scripts, and counts that disagree silently break skills.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Run after every setup or update to catch wiring issues early - a FAIL on scripts or hooks means several skills will behave incorrectly on every subsequent run.</p>
-        <p class="skill-meta"><a href="skills.html#sk-verify">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">voice-interview</code><span class="skill-sum">Set up the writing-voice profile.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Builds the voice profile that gates every writing skill - without it linkedin-post, email-drafter, proposal-writer, and client-update all produce generic output that does not sound like you.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Paste at least three real samples you have already written before answering shaping questions - samples are the ground truth and override the rules when they conflict, so more specific samples mean a sharper profile.</p>
-        <p class="skill-meta"><a href="skills.html#sk-voice-interview">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">weekly-review</code><span class="skill-sum">Run the weekly review and roll the sprint.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Keeps the sprint honest by forcing a decision on stalled items instead of letting them roll week to week - the pattern block names avoidance directly.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Fill brain/log.md throughout the week with real events - the retro reads from this directly, so more entries means a sharper pattern read and a more honest retro.</p>
-        <p class="skill-meta"><a href="skills.html#sk-weekly-review">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">wiki-build</code><span class="skill-sum">Rebuild the wiki graph from extracted [[wikilinks]].</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Keeps the wiki graph current after a session that added cross-references so lint and query have accurate edges to work with - without it the graph drifts from the actual files.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Run after any session that adds or changes [[wikilinks]] in operating files - the script is idempotent so running it twice does no harm; the cost of a stale graph is broken lint results.</p>
-        <p class="skill-meta"><a href="skills.html#sk-wiki-build">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">your-deliverable-template</code><span class="skill-sum">Build a branded document inheriting the founder&#x27;s colors, fonts, and logo.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Ensures every document that carries your name inherits your visual identity rather than defaulting to generic black-and-white formatting that does not represent you.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Place logo files at the paths recorded in core/brand-profile.yml before generating any HTML or PDF - the skill checks for real files and stops rather than silently substituting a placeholder.</p>
-        <p class="skill-meta"><a href="skills.html#sk-your-deliverable-template">Read full skill &rarr;</a></p>
-      </div>
-    </details>
-    <details class="skill-row">
-      <summary><code class="skill-name">your-voice</code><span class="skill-sum">Apply the founder&#x27;s writing voice to any text.</span></summary>
-      <div class="skill-body">
-        <p class="skill-why"><strong>Why:</strong> Applies the captured voice profile to any text so every output sounds like you rather than like a language model - it is the layer that makes personalization real rather than cosmetic.</p>
-        <p class="skill-enhance"><strong>Enhance:</strong> Add anti-example pairs to core/voice-profile.yml over time by flagging outputs that do not sound like you - each pair tightens the profile and reduces future corrections.</p>
-        <p class="skill-meta"><a href="skills.html#sk-your-voice">Read full skill &rarr;</a></p>
-      </div>
-    </details>
+  <div class="skills-grid">
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-approval-gates"><code>approval-gates</code></a></div>
+    <div class="sk-item-desc">Check whether an action needs approval before doing it.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Prevents irreversible or public actions from happening silently - sends, pushes, deletes, and payments need a human yes first.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Fill rules/approval-gates.md with your own thresholds - the default table is a fallback; your custom gates are what actually protect your workflow.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-audit"><code>audit</code></a></div>
+    <div class="sk-item-desc">Audit the OS in one composite report.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Gives you one honest number for OS health so you know what to fix instead of guessing which layer is causing bad output.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Run after a sprint roll so cadence files are fresh - stale daily-anchors and empty brain log are the two checks most likely to drag your score down.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-blind-spot-review"><code>blind-spot-review</code></a></div>
+    <div class="sk-item-desc">Pressure-test a draft for blind spots before pre-send review.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Catches the assumptions and missing context that first-draft writers always miss - the categories no one thinks to check until after a deal falls apart.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Provide the source material the draft was built from - the review is weakest when run on a deliverable alone and sharpest when it can compare draft claims against meeting notes or brief.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-bottleneck-diagnostic"><code>bottleneck-diagnostic</code></a></div>
+    <div class="sk-item-desc">Find the real bottleneck in the business.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Names the one dimension where your presence is most costly so you can stop guessing and start shedding the right role first.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Answer all five dimension questions honestly in self-assessment mode - the score is only as accurate as the examples you give for each dimension.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-brain-log"><code>brain-log</code></a></div>
+    <div class="sk-item-desc">Capture a thought, flag, or decision into the brain system.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Keeps thoughts, decisions, and flags from living only in your head - a running log is how the OS learns what is actually happening in your week.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Log in Mode B or C when you can - thoughts cross-referenced to a client, decision, or priority are far more useful to skills like weekly-review and brain-pass than standalone entries.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-brain-pass"><code>brain-pass</code></a></div>
+    <div class="sk-item-desc">Synthesise an answer across the brain layer.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Synthesises an answer from across your brain files with citations rather than asking you to remember what you already logged or decided.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Fill brain/log.md consistently with dated entries - the pass is only as good as the history it can reason across; sparse logs return low-confidence answers.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-brain-snapshot"><code>brain-snapshot</code></a></div>
+    <div class="sk-item-desc">Refresh the runtime context payload other skills read at task time.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Gives output-producing skills a cheap read of what is true right now - without it each skill starts cold and ignores open flags or this week&#x27;s commitments.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Re-run after any weekly review, flag update, or major decision so the snapshot reflects current state - stale snapshots silently skew every skill that reads them.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-brand-interview"><code>brand-interview</code></a></div>
+    <div class="sk-item-desc">Set up the visual brand profile.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Creates the visual identity file that every branded document inherits - without it proposals, CVs, and decks default to generic styling that does not look like you.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Have your logo file and hex codes ready before starting - the interview can suggest defaults but real brand assets in core/brand-assets/ are what make output look professional.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-brand-voice-interview"><code>brand-voice-interview</code></a></div>
+    <div class="sk-item-desc">Capture a brand&#x27;s writing voice and positioning.</div>
+    <div class="sk-item-why"><strong>Why:</strong> An operator can run multiple brands. The operator&#x27;s personal voice and a brand&#x27;s voice are not the same. Without a brand voice layer, every output sounds like the operator, which is wrong for any branded communication (customer comms, brand social, customer service, ads). Brand voice is the file every brand-coupled writing skill reads.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Capture brand voice AFTER you have 3 to 5 real brand samples - existing captions, product copy, customer emails the brand has actually sent. The samples are the ground truth. A brand voice profile without samples is a stereotype.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-business-context-loader"><code>business-context-loader</code></a></div>
+    <div class="sk-item-why"><strong>Why:</strong> Fills in the ICP, offer, and pricing context that proposal-writer and strategic-analysis need - without it those skills produce generic output not tied to your actual business.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Walk sections 1-7 in order at least once per business; ICP and offer (sections 4 and 5) have the highest downstream impact on any output skill that reads this file.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-campaign-from-theme"><code>campaign-from-theme</code></a></div>
+    <div class="sk-item-desc">Turn one theme into a structured marketing campaign.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Industry-standard campaign generators output a calendar without knowing who the campaign is for, where the audience is in the funnel, or why one piece comes before another. That produces slop that the operator has to throw away. The gate is the value - it forces audience and objective clarity before any draft, which is what makes the output usable on first attempt.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Run brand-voice-interview for the relevant brand first - a campaign in operator voice for a brand the operator runs will sound off-brand. The skill works either way but produces sharper output when the brand layer is captured.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-client-update"><code>client-update</code></a></div>
+    <div class="sk-item-desc">Write a client-facing status update or milestone report.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Keeps clients informed without the founder writing from scratch each time - consistent format builds trust and prevents the relationship from going silent.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Fill core/voice-profile.yml first so the update sounds like you, and keep context/clients.md current with milestone notes so the skill has real project specifics to draw on.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-content-repurposer"><code>content-repurposer</code></a></div>
+    <div class="sk-item-desc">Reformat one piece of content across many channels.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Multiplies one piece of thinking across multiple channels without re-writing from scratch for each - saves hours on content execution.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Fill core/voice-profile.yml before repurposing - without it the output adapts format but loses your voice, which is what makes the same insight work across platforms.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-context-persistence"><code>context-persistence</code></a></div>
+    <div class="sk-item-desc">Pull what we already know about a topic before re-explaining.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Prevents the OS from asking you to repeat context it already has - skills should read your files before asking you a question whose answer is already written down.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Keep context/clients.md and context/decisions.md updated after every interaction - the more accurate these files are, the less the OS needs to ask you.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-data-security"><code>data-security</code></a></div>
+    <div class="sk-item-desc">Check whether data is safe to share with an external tool.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Stops client and sensitive data from moving to tools that were not approved - a single paste to the wrong AI can breach client trust and violate data agreements.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Fill rules/data-handling.md with your own per-tool decisions and any client-specific restrictions from context/clients.md - the fallback matrix is generic and may be too permissive for your situation.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-decision-framework"><code>decision-framework</code></a></div>
+    <div class="sk-item-desc">Walk through a structured decision when the founder is stuck.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Breaks the loop of going around the same decision repeatedly by structuring what you are actually choosing and what each option costs.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Fill core/identity.md Decision style field (gut/data/dialogue/mixed) so the skill leads with your preferred mode - a mismatched opener means you disengage before the analysis starts.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-email-drafter"><code>email-drafter</code></a></div>
+    <div class="sk-item-desc">Draft an email in the founder&#x27;s voice.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Writes emails that sound like you sent them instead of like a marketing tool did - especially useful for cold outreach and difficult conversations where tone matters.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Fill core/voice-profile.yml and set stack.json email_platform so the skill mirrors your actual send environment and applies your exact voice rules to every draft.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-forcing-questions"><code>forcing-questions</code></a></div>
+    <div class="sk-item-desc">Pressure-test a new initiative before starting it.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Stops new initiatives from starting before the problem, smallest version, and proof are clear - most wasted build time begins with an idea that cannot answer these six questions.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Keep context/priorities.md current so the skill can compare this initiative against what is already in flight and surface real conflicts rather than generic caution.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-founder-coaching"><code>founder-coaching</code></a></div>
+    <div class="sk-item-desc">Coach a founder through their state and capacity.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Diagnoses where a founder&#x27;s time and energy is actually going versus where it should go - the session structure and bias toolkit surface what self-reflection alone misses.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Run prior session captures in brain/log.md before a coaching session so the skill can reference what the founder committed to last time and surface unresolved patterns.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-founder-os-setup"><code>founder-os-setup</code></a></div>
+    <div class="sk-item-desc">Set up Founder OS from scratch.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Creates the full operating environment in one guided session so skills have the files they need to produce personalized output from day one instead of returning generic defaults.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Answer the positioning questions in Phase 0.2.5 as specifically as possible - who you sell to, what you sell, and the buyer pain feed directly into proposal-writer, linkedin-post, and client-update.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-handoff-protocol"><code>handoff-protocol</code></a></div>
+    <div class="sk-item-desc">Build a handoff doc when work moves to someone else.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Turns a verbal delegation into a structured artifact the receiver can act on without a follow-up call - context dropped in chat alone disappears.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Provide all nine required fields explicitly, especially the definition of done and known constraints - the artifact is only as useful as the specificity of what you give it.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-ingest"><code>ingest</code></a></div>
+    <div class="sk-item-desc">File a source (URL, file path, or pasted text) into raw/ with provenance preserved.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Preserves a source with provenance intact so you can cite where an idea came from months later - knowledge-capture organises takeaways but ingest keeps the original.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Approve 2 to 4 wiki updates per ingest rather than all or none - selectively cross-referencing sources into decisions.md and brain/patterns.md builds a connected knowledge graph over time.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-knowledge-capture"><code>knowledge-capture</code></a></div>
+    <div class="sk-item-desc">Capture takeaways from a book, podcast, article, or conversation.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Turns a book, podcast, or conversation into a retrievable note that skills like proposal-writer and strategic-analysis can cite - learning that stays in your head does not improve your output.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Always fill the Apply To sections with real business context - notes with no application mapping are rarely surfaced by brain-pass or strategic-analysis when you need them.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-legal-compliance"><code>legal-compliance</code></a></div>
+    <div class="sk-item-desc">Jurisdiction-aware legal, regulatory, and compliance skill for founders.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Grounds legal guidance in loaded reference documents rather than model memory - a jurisdiction without loaded files gets a refusal rather than a hallucinated answer.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Run /founder-os:legal-setup to populate your jurisdiction folder and context/compliance.md with your own deadlines - the skill is only as accurate as the reference docs wired in.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-linkedin-post"><code>linkedin-post</code></a></div>
+    <div class="sk-item-desc">Write a LinkedIn post in the founder&#x27;s voice.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Produces posts that sound like you wrote them rather than like a content tool did - voice profile plus brain context means the post is grounded in your actual situation this week.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Fill brain/log.md regularly so brain-pass can suggest angles you have not posted recently and flag theme repetition before you draft - a rich log means fresher, non-repetitive content.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-lint"><code>lint</code></a></div>
+    <div class="sk-item-desc">Audit the wiki for integrity issues.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Surfaces broken cross-references and stale content that silently mislead skills - a wiki that points to missing files or a decisions list that contradicts the sprint is worse than no wiki.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Run wiki-build first to refresh brain/relations.yaml so lint has an up-to-date graph to check against - lint on a stale graph produces false orphan counts.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-meeting-prep"><code>meeting-prep</code></a></div>
+    <div class="sk-item-desc">Prep for a meeting or debrief one after.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Builds a specific brief from your own prior context rather than a generic one - knowing what you already committed to and what is unresolved with this person is what makes the meeting productive.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Keep context/clients.md updated after each touchpoint so brain-pass can surface real prior commitments - a brief built from stale client data will miss the most important watch-for items.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-menu"><code>menu</code></a></div>
+    <div class="sk-item-desc">Show what FounderOS can do right now.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Shows what the OS can do right now based on your actual state - a static skill list tells you what exists; menu tells you what is relevant today.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Fill cadence/weekly-commitments.md and keep brain/flags.md current - menu scores suggestions against your must-do list and open flags, so empty cadence files produce a generic starter list.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-observation-rollup"><code>observation-rollup</code></a></div>
+    <div class="sk-item-desc">Roll up weekly observation logs.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Prevents the brain/observations/ folder from accumulating thousands of raw JSONL lines by compressing old weeks into readable summaries you can actually review.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Set FOUNDER_OS_OBSERVATIONS=1 in your shell to generate JSONL files in the first place - the rollup has nothing to process if observation logging is off.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-pre-send-check"><code>pre-send-check</code></a></div>
+    <div class="sk-item-desc">Run a pre-send gate before any deliverable goes out.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Forces a structured check before anything goes out so token-replacement misses, broken links, and voice inconsistencies are caught rather than sent to clients.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Always provide the source of truth the deliverable was built from - Check 2 (source-truth match) is the most failure-prone check and only works when the skill can compare the draft against real source material.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-priority-triage"><code>priority-triage</code></a></div>
+    <div class="sk-item-desc">Cut through overwhelm to ONE thing to do next.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Cuts a long open list down to one actionable task by running four filters - the founder who is overwhelmed needs a decision, not another framework to think through.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Keep brain/flags.md updated with stall patterns and cadence/weekly-commitments.md current - triage is sharpest when it can see which items have already rolled multiple weeks.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-proposal-writer"><code>proposal-writer</code></a></div>
+    <div class="sk-item-desc">Write a consulting or service proposal.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Builds proposals that reflect the specific prospect&#x27;s situation rather than a generic template - a proposal that mirrors the client&#x27;s own words wins more than one that describes the service.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Fill context/clients.md with scoping notes before running - the more prospect-specific context you provide, the stronger the Situation section, which is where most proposals lose.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-query"><code>query</code></a></div>
+    <div class="sk-item-desc">Search across the OS with a multi-hop query.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Retrieves OS nodes across files without loading everything into context - start broad with index mode, then drill into the specific entries that matter.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Run wiki-build to populate brain/relations.yaml before querying - the graph edges improve candidate ranking and the timeline mode relies on the graph to find connected entries.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-queue"><code>queue</code></a></div>
+    <div class="sk-item-desc">Manage the work queue.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Enforces a hard cap of three active items so work in progress reflects actual human capacity rather than an aspirational list that never clears.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Use the start operation consistently rather than just reading the queue - the 3-item gate only forces the right decisions when you route new work through start instead of adding directly to ACTIVE.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-readiness-check"><code>readiness-check</code></a></div>
+    <div class="sk-item-desc">Score the OS install across five buckets and name the next 3 moves.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Shows exactly which files and buckets are holding your score down so you can fix the right things rather than assuming setup is done when it is not.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Run voice-interview and brand-interview first - Voice and Brand carries 25% weight each and is the single fastest way to move the score once Core files exist.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-review-responder"><code>review-responder</code></a></div>
+    <div class="sk-item-desc">Draft replies to incoming customer messages, reviews, DMs, and inquiries.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Incoming customer messages are daily, often time-sensitive, and reveal as much about the brand as outbound marketing does. A reply in the wrong voice (operator personal voice instead of brand voice, generic AI voice instead of either) erodes trust. This skill makes the right-voice reply the default rather than the careful effort.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Run brand-voice-interview for the brand whose channel the message came from - replies in the wrong brand voice are more damaging than no reply because they signal the brand is inconsistent.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-session-handoff"><code>session-handoff</code></a></div>
+    <div class="sk-item-desc">Package this session for a fresh chat.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Makes work transferable to a new session or another person without losing the reasoning behind decisions - context in chat alone is gone the moment the session ends.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Be explicit about handoff type (A/B/C) at the start - the skill strips internal strategy and inlines skill-dependent knowledge differently for each type, and guessing wrong produces a document that leaks or lacks context.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-ship-deliverable"><code>ship-deliverable</code></a></div>
+    <div class="sk-item-desc">Run the final ship gate before any external deliverable goes out.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Composes four checks that are easy to skip individually under deadline pressure into one pass so nothing ships with an AI phrase, missing asset, or unreviewed blind spot.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Run blind-spot-review before calling ship-deliverable - Link 3 (blind-spot evidence check) will fail if no review artifact exists, and you will have to run it separately anyway.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-sop-writer"><code>sop-writer</code></a></div>
+    <div class="sk-item-desc">Write a delegation-ready SOP.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Documents a process so it can run without the founder in the room - the goal is a document a smart person who has never done this task can follow to completion.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Fill stack.json with your actual tools before running so TOOLS NEEDED names your real CRM, automation platform, and email client rather than generic labels the delegate cannot look up.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-strategic-analysis"><code>strategic-analysis</code></a></div>
+    <div class="sk-item-desc">Run a strategic analysis: competitive map, market sizing, opportunity, or business model.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Grounds competitive and market analysis in your actual position and prior knowledge rather than producing a generic table that ignores what you already know or have decided.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Populate brain/knowledge/ with notes from books and conversations about the market and competitors - the skill reads matching topics by name and uses them as prior evidence in the analysis.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-today"><code>today</code></a></div>
+    <div class="sk-item-desc">Show today&#x27;s one-screen brief: anchor task, open flags, last 3 log entries, and next event.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Gives you a one-screen brief of what matters today without loading every context file - anchor, flags, recent log, and next calendar event in under 20 lines.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Keep cadence/daily-anchors.md rolled to today and log at least one entry to brain/log.md during the day - a stale anchor and empty log make the brief generic rather than specific.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-unit-economics"><code>unit-economics</code></a></div>
+    <div class="sk-item-desc">Run business math: unit economics, pricing, CAC, LTV, margins, break-even.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Runs business math in a structured format that shows assumptions and scenarios rather than a single number that can be misread without context.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Give real numbers rather than ranges when you can - the skill flags assumptions that could change the answer, but it cannot flag the ones you did not provide.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-verify"><code>verify</code></a></div>
+    <div class="sk-item-desc">Check that Founder OS is healthy.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Checks that the OS substrate is actually wired up correctly rather than just declaring setup done - hooks, scripts, and counts that disagree silently break skills.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Run after every setup or update to catch wiring issues early - a FAIL on scripts or hooks means several skills will behave incorrectly on every subsequent run.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-voice-interview"><code>voice-interview</code></a></div>
+    <div class="sk-item-desc">Set up the writing-voice profile.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Builds the voice profile that gates every writing skill - without it linkedin-post, email-drafter, proposal-writer, and client-update all produce generic output that does not sound like you.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Paste at least three real samples you have already written before answering shaping questions - samples are the ground truth and override the rules when they conflict, so more specific samples mean a sharper profile.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-weekly-review"><code>weekly-review</code></a></div>
+    <div class="sk-item-desc">Run the weekly review and roll the sprint.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Keeps the sprint honest by forcing a decision on stalled items instead of letting them roll week to week - the pattern block names avoidance directly.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Fill brain/log.md throughout the week with real events - the retro reads from this directly, so more entries means a sharper pattern read and a more honest retro.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-wiki-build"><code>wiki-build</code></a></div>
+    <div class="sk-item-desc">Rebuild the wiki graph from extracted [[wikilinks]].</div>
+    <div class="sk-item-why"><strong>Why:</strong> Keeps the wiki graph current after a session that added cross-references so lint and query have accurate edges to work with - without it the graph drifts from the actual files.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Run after any session that adds or changes [[wikilinks]] in operating files - the script is idempotent so running it twice does no harm; the cost of a stale graph is broken lint results.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-your-deliverable-template"><code>your-deliverable-template</code></a></div>
+    <div class="sk-item-desc">Build a branded document inheriting the founder&#x27;s colors, fonts, and logo.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Ensures every document that carries your name inherits your visual identity rather than defaulting to generic black-and-white formatting that does not represent you.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Place logo files at the paths recorded in core/brand-profile.yml before generating any HTML or PDF - the skill checks for real files and stops rather than silently substituting a placeholder.</div>
+  </div>
+  <div class="sk-item">
+    <div class="sk-item-name"><a href="skills.html#sk-your-voice"><code>your-voice</code></a></div>
+    <div class="sk-item-desc">Apply the founder&#x27;s writing voice to any text.</div>
+    <div class="sk-item-why"><strong>Why:</strong> Applies the captured voice profile to any text so every output sounds like you rather than like a language model - it is the layer that makes personalization real rather than cosmetic.</div>
+    <div class="sk-item-enhance"><strong>Enhance:</strong> Add anti-example pairs to core/voice-profile.yml over time by flagging outputs that do not sound like you - each pair tightens the profile and reduces future corrections.</div>
+  </div>
   </div>
 </section>
 
@@ -1232,10 +1126,10 @@ code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.9
     </div>
 
     <div class="tcat">
-      <div class="tcat-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#E01E5A" d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.522h2.52v2.522zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.522 2.527 2.527 0 0 1 2.521 2.522v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313z"/><path fill="#36C5F0" d="M8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312z"/><path fill="#2EB67D" d="M18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312z"/><path fill="#ECB22E" d="M15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg></div>
+      <div class="tcat-icon"><svg viewBox="0 0 24 24" fill="#25D366" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></div>
       <div class="tcat-name">Communication</div>
       <p class="tcat-why">One channel for your team and clients. Skills read context, draft updates; sending stays manual unless you explicitly authorize it.</p>
-      <div class="tcat-brand">Slack <span class="tcat-alt">- or Telegram (easy API). WhatsApp works too, but only via the Business API.</span></div>
+      <div class="tcat-brand">WhatsApp <span class="tcat-alt">- or Slack, Teams, Discord</span></div>
     </div>
 
     <div class="tcat">
@@ -1254,7 +1148,7 @@ code{background:var(--gray-light);padding:2px 6px;border-radius:4px;font-size:.9
   </div>
 
   <div class="callout-purple">
-    <strong>We don't pick favorites.</strong> Notion or Coda. Slack or Telegram. Google or Microsoft. Connect whichever you already use. The skill connects, not the other way around. The OS adapts to your stack, not the reverse.
+    <strong>We don't pick favorites.</strong> Notion or Coda. Slack or WhatsApp. Google or Microsoft. Connect whichever you already use. The skill connects, not the other way around. The OS adapts to your stack, not the reverse.
   </div>
 
   <p style="font-size:14px;color:var(--gray-text);margin-top:18px">Connections happen via Claude Code <a href="https://www.anthropic.com/news/model-context-protocol" target="_blank">MCPs</a> - one-time per tool. Nothing routes through ARCAS. You own the auth. You own the data.</p>

@@ -18,7 +18,7 @@ The SessionStart brief on a fresh install (no `core/identity.md`) now lists thre
 
 `templates/bootloader-claude-md.md` gets a new `## First-time setup routing` section. When `core/identity.md` is absent AND the user uses any of the trigger phrasings, route to the `founder-os-setup` skill without improvising. When `core/identity.md` exists, the same phrasings route as normal OS queries.
 
-45 skills, 27 commands, 358 tests pass.
+48 skills, 30 commands, 358 tests pass.
 
 ## v1.25.0 - 2026-05-18
 
