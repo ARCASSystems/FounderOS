@@ -94,3 +94,10 @@ traces/v122-codex-final-review-brief.md
 
 # Operator-local private-name patterns for pre-commit hook (gitignored; template is tracked)
 scripts/private-name-patterns.txt
+
+# Public-facing roadmap removed from the public repo on 2026-05-18.
+# CHANGELOG.md is now the single source of truth for what shipped; release notes
+# and "what we deliberately did not build" rationale live in CHANGELOG.md and
+# docs/forking.md respectively. Keep the file gitignored so a re-created local
+# ROADMAP.md does not accidentally land back in the public repo.
+ROADMAP.md

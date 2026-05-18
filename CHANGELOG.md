@@ -2,6 +2,28 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.24.1 - 2026-05-18
+
+Three end-to-end gaps that would have surfaced on a fresh clone. None changed visible behavior on existing installs. All three close paths where a new user would have hit a silent half-result and not known why.
+
+### Setup wizard ships a valid weekly heading
+
+`templates/cadence/weekly-commitments.md` has a `## Week of {{WEEK_START_DATE}}` heading that the SessionStart brief greps for and `/founder-os:verify` Check 7 validates. The setup wizard had explicit substitution rules for `{{role_noun}}`, `{{TODAY}}`, and `{{DATE}}` but missed `{{WEEK_START_DATE}}`. Without the rule, the literal placeholder stayed in the file and the weekly cadence line silently disappeared from every session brief on Day 1. v1.24.1 adds the missing rule in Phase 2.2 and tells the wizard to replace residual `{{...}}` markers in the weekly file with `[NOT SET]` so a half-substituted template never ships.
+
+### Curl installer no longer copies hooks to a useless location
+
+`install.sh` was copying hook files to `~/.claude/hooks/` after the clone. From that location the hooks resolved their repo path as `$HOME` and silently no-opped, and they were not registered in any `~/.claude/settings.json` so nothing fired them anyway. `docs/install.md` already documented that curl-install (Path E) hooks only fire when Claude Code is opened in the install directory, so the global copy was dead code that misled users. v1.24.1 removes the hook-copy block and the orphaned `HOOKS_TARGET` constant, then updates the "Next step" message to `cd $TARGET && claude` followed by `Say "set up Founder OS"`. `docs/install.md` step 3 was also stale on this behavior and is now aligned.
+
+### Discovery test no longer false-positives on client-update
+
+The `<private>` discovery test in `tests/test_private_tag.py` matches any skill that uses an update or write verb within 80 characters of `brain/`, `context/`, `MEMORY.md`, or `stack.json`. `skills/client-update/SKILL.md` matched the regex but writes client-facing deliverable drafts, not user speech to state files. The test docstring already supported an exemption marker for structured or computed writes. v1.24.1 adds the exemption to client-update so the full suite is clean.
+
+### ROADMAP removed from the public repo
+
+`ROADMAP.md` was a drift target. Historical release counts had already been mechanically patched with current counts at least once. CHANGELOG.md is now the single source of truth for what shipped, and `docs/forking.md` covers extension points. The file is gitignored so a re-created local copy does not accidentally land back in the public repo.
+
+45 skills, 27 commands, 358 tests pass.
+
 ## v1.24.0 - 2026-05-15
 
 Before this release, if you asked a writing skill to draft something without your voice profile set up, it would produce a generic draft — and it would do so silently, without telling you it was working blind. v1.24 changes that. Writing and reasoning skills now run a Python preflight before they produce anything. If a required file is missing or still contains template placeholders, the skill stops and tells you exactly why in one line. You can say "proceed anyway" and get a draft that's clearly labelled as running without your data. The label is the point.

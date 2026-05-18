@@ -24,8 +24,7 @@ The installer:
 
 1. Checks that bash, git, and Python 3.11+ are present. If any are missing, it prints install instructions for that specific tool and exits.
 2. Clones FounderOS to `~/.claude/plugins/founder-os/` (override with `--target <path>`).
-3. Copies hook files to `~/.claude/hooks/` as a backup location. (Hooks register through the plugin's own `.claude/settings.json` - see "How hooks fire" below.)
-4. Prints a one-screen confirmation and the natural-language next step.
+3. Prints a one-screen confirmation with the next step (`cd` into the install directory, open Claude Code, say "set up Founder OS"). Hooks register through the plugin's own `.claude/settings.json` inside the install directory - see "How hooks fire on Path E" below.
 
 If FounderOS is already installed, re-running the same command asks whether to update instead of cloning again.
 
