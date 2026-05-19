@@ -98,7 +98,11 @@ $Flags = Join-Path $Repo 'brain\flags.md'
 if (Test-Path $Flags) {
   $content = Get-Content $Flags
   $openCount = ($content | Select-String -Pattern 'Status:\s*\**OPEN').Count
-  $week3Count = ($content | Select-String -Pattern 'Severity (Week 3|at resolution: Week 3)').Count
+  # Match any line that has both Severity context AND a Week number >= 3.
+  # Covers "Severity Week 3", "Severity: Week 3", "Severity at resolution:
+  # Week 3", "Severity frozen at Week 3", "Severity bumped... Week 3", and
+  # Week 10+.
+  $week3Count = ($content | Select-String -Pattern 'Severity.*Week ([3-9]|[1-9][0-9]+)').Count
   Write-Output "Flags: $openCount OPEN, $week3Count Week 3+"
   $lastHeader = $null; $n = 0
   foreach ($line in $content) {

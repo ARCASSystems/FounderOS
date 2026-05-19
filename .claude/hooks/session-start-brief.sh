@@ -75,7 +75,11 @@ fi
 FLAGS="$REPO/brain/flags.md"
 if [ -f "$FLAGS" ]; then
   OPEN_COUNT=$(grep -cE "Status:[[:space:]]*\**OPEN" "$FLAGS" 2>/dev/null)
-  WEEK3_COUNT=$(grep -cE "Severity (Week 3|at resolution: Week 3)" "$FLAGS" 2>/dev/null)
+  # Match any line that has both Severity context AND a Week number >= 3.
+  # Covers "Severity Week 3", "Severity: Week 3", "Severity at resolution:
+  # Week 3", "Severity frozen at Week 3", "Severity bumped... Week 3", and
+  # Week 10+. The .* is line-bounded so won't false-positive across lines.
+  WEEK3_COUNT=$(grep -cE "Severity.*Week ([3-9]|[1-9][0-9]+)" "$FLAGS" 2>/dev/null)
   echo "Flags: ${OPEN_COUNT:-0} OPEN, ${WEEK3_COUNT:-0} Week 3+"
   awk '
     /^##+[[:space:]]/ { last_header=$0 }
