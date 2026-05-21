@@ -5,10 +5,18 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from collections import Counter, defaultdict, deque
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Iterable
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _common import (  # noqa: E402
+    WIKI_LAYER_EXCLUDED_PARTS,
+    normalize_wikilink_target,
+    wiki_layer_files,
+)
 
 EDGE_TYPES = {"from", "to", "source", "target"}
 DEFAULT_FILES = [
@@ -21,32 +29,6 @@ DEFAULT_FILES = [
     "brain/flags.md",
     "brain/relations.yaml",
 ]
-# Wiki-layer scope. Must match scripts/wiki-build.py:INCLUDE_PREFIXES so a node
-# the persisted graph references can also surface as a query candidate. Drift
-# between these two lists means a query can miss content the graph already
-# knows about. Update both files together if you change scope.
-INCLUDE_PREFIXES = (
-    "core",
-    "context",
-    "cadence",
-    "brain",
-    "network",
-    "companies",
-    "roles",
-    "rules",
-)
-EXCLUDED_PARTS = {
-    ".git",
-    ".claude",
-    "skills",
-    "docs",
-    "raw",
-    "node_modules",
-    "archive",
-    "transcripts",
-    "rants",
-    "tests",
-}
 
 # Stop words filtered out of question tokens. Hardcoded so the query layer
 # stays stdlib-only. Free-tier accessibility floor: no NLTK, no PyStemmer.
@@ -68,10 +50,6 @@ MIN_STEM_LENGTH = 4
 # raw query string before tokenization so the suffix stripping in stemming
 # does not erase the cue. Case-insensitive.
 RANT_TRIGGERS = ("rant", "dump", "avoidance", "vent", "raw")
-
-# Rant keywords expand INCLUDE_PREFIXES to add brain/rants/. Default scope
-# excludes rants.
-RANT_PREFIX = "brain/rants"
 
 # Recency bonus: files modified within this window get a score boost so a
 # fresh entry can beat an older equivalent.
@@ -139,51 +117,43 @@ def rel(path: Path, root: Path) -> str:
         return path.as_posix()
 
 
-def should_scan(path: Path, root: Path, include_rants: bool = False) -> bool:
-    try:
-        parts = set(path.relative_to(root).parts)
-    except ValueError:
-        return False
-    excluded = EXCLUDED_PARTS - {"rants"} if include_rants else EXCLUDED_PARTS
-    if parts & excluded:
-        return False
-    return path.suffix.lower() in {".md", ".yaml", ".yml"}
-
-
 def all_markdown_files(root: Path, include_rants: bool = False) -> list[Path]:
-    """All in-scope markdown/yaml files under root, used by timeline and full modes."""
-    return sorted(
-        p for p in root.rglob("*")
-        if p.is_file() and should_scan(p, root, include_rants=include_rants)
-    )
+    """All in-scope markdown/yaml files under root, used by timeline and full modes.
+
+    Broader than wiki_layer_files: includes top-level files (e.g. CLAUDE.md)
+    and .yaml/.yml so timeline output can surface them. Excluded-parts set is
+    sourced from _common so this stays in lockstep with the wiki-layer walk.
+    """
+    excluded = WIKI_LAYER_EXCLUDED_PARTS - {"rants"} if include_rants else WIKI_LAYER_EXCLUDED_PARTS
+    out: list[Path] = []
+    for p in root.rglob("*"):
+        if not p.is_file():
+            continue
+        if p.suffix.lower() not in {".md", ".yaml", ".yml"}:
+            continue
+        try:
+            parts = set(p.relative_to(root).parts)
+        except ValueError:
+            continue
+        if parts & excluded:
+            continue
+        out.append(p)
+    return sorted(out)
 
 
 def candidate_files(root: Path, include_rants: bool = False) -> list[Path]:
-    """All in-scope wiki-layer files. Walks every prefix in INCLUDE_PREFIXES so
-    a node the persisted graph references can also surface as a query
-    candidate. DEFAULT_FILES are listed first so the canonical seeded files
-    lead the index. Falls back to all in-scope markdown if neither survives.
+    """All in-scope wiki-layer files. Walks every wiki-layer prefix via
+    _common.wiki_layer_files so a node the persisted graph references can
+    also surface as a query candidate. DEFAULT_FILES are listed first so the
+    canonical seeded files lead the index. Falls back to all in-scope
+    markdown if neither survives.
 
     When include_rants is True, brain/rants/ is added to the walked set so
     rant entries can surface for rant-keyword queries. Default keeps rants
     out of the index per the original scope.
     """
     specific = [root / p for p in DEFAULT_FILES if (root / p).exists()]
-    extra: list[Path] = []
-    for prefix in INCLUDE_PREFIXES:
-        folder = root / prefix
-        if folder.exists():
-            extra.extend(
-                p for p in folder.rglob("*.md")
-                if should_scan(p, root, include_rants=include_rants)
-            )
-    if include_rants:
-        rant_folder = root / RANT_PREFIX
-        if rant_folder.exists():
-            extra.extend(
-                p for p in rant_folder.rglob("*.md")
-                if should_scan(p, root, include_rants=True)
-            )
+    extra = wiki_layer_files(root, include_rants=include_rants)
     combined = sorted(set(specific + extra))
     if combined:
         return combined
@@ -400,9 +370,9 @@ def parse_edges(relations_text: str) -> list[tuple[str, str]]:
 def wikilink_edges(files: Iterable[Path], root: Path) -> list[tuple[str, str]]:
     """Extract [[wikilinks]] and produce (source, target) edges.
 
-    Targets are normalized (trailing .md stripped, backslashes converted) so
-    edges agree with the persisted graph in brain/relations.yaml. See
-    scripts/wiki-build.py:normalize_target.
+    Targets are normalized via _common.normalize_wikilink_target so edges
+    agree with the persisted graph in brain/relations.yaml (wiki-build uses
+    the same helper).
     """
     edges: list[tuple[str, str]] = []
     pattern = re.compile(r"\[\[([^\]|#]+)(?:#[^\]|]+)?(?:\|[^\]]+)?\]\]")
@@ -410,9 +380,7 @@ def wikilink_edges(files: Iterable[Path], root: Path) -> list[tuple[str, str]]:
         text = safe_read(path)
         source = rel(path, root)
         for target in pattern.findall(text):
-            normalized = target.replace('\\', '/').strip()
-            if normalized.endswith('.md'):
-                normalized = normalized[:-3]
+            normalized = normalize_wikilink_target(target)
             if normalized:
                 edges.append((source, normalized))
     return edges

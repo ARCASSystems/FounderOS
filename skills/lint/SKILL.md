@@ -26,7 +26,7 @@ If `core/identity.md` does not exist, stop with: `Founder OS not set up here. Ru
 
 ## Scope
 
-The wiki layer is the directories listed in `scripts/wiki-build.py:INCLUDE_PREFIXES`. That file is the canonical source of truth. Currently: `core/`, `context/`, `cadence/`, `brain/` (including `brain/knowledge/`), `network/`, `companies/`, `roles/`, `rules/`. Keep this prose list in sync with the script when prefixes change.
+The wiki layer is the directories listed in `scripts/_common.py:WIKI_LAYER_PREFIXES`. That module is the canonical source of truth, shared by `scripts/wiki-build.py` and `scripts/query.py` so the on-disk graph and the in-memory graph cannot drift.
 
 Skill files (`skills/`), templates (`templates/`), commands (`.claude/commands/`), hooks (`.claude/hooks/`), docs (`docs/`), and root metadata (`README.md`, `CLAUDE.md`, `VERSION`, etc.) are NOT scanned. Raw layer (`raw/`) is scanned only for provenance gaps (Check 4).
 
@@ -36,7 +36,7 @@ Scan all wiki files for `[[link]]` patterns. For each:
 
 - If the link points to an existing file, OK.
 - If the link points to a missing file, flag.
-- If the link uses an ambiguous slug that matches multiple files, flag with all candidates AND name the deterministic pick. Resolution order: scan directories in the order listed in `scripts/wiki-build.py:INCLUDE_PREFIXES`, then alphabetical within the first matching directory. The first match wins. Format the output as `[[slug]] -> ambiguous: <candidate list>; would resolve to <first match>`.
+- If the link uses an ambiguous slug that matches multiple files, flag with all candidates AND name the deterministic pick. Resolution order: scan directories in the order listed in `scripts/_common.py:WIKI_LAYER_PREFIXES`, then alphabetical within the first matching directory. The first match wins. Format the output as `[[slug]] -> ambiguous: <candidate list>; would resolve to <first match>`.
 
 `[[link]]` syntax accepts: `[[file.md]]`, `[[path/to/file.md]]`, `[[page-name]]` (resolves to first match across the wiki).
 

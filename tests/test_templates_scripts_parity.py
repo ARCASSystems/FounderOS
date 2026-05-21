@@ -2,8 +2,9 @@
 Byte-parity test for templates/scripts/ vs scripts/.
 
 Every .py file in templates/scripts/ that has a matching name in scripts/
-must be byte-identical, with one whitelisted exception: wiki-build.py line 36,
-which is the parity comment that intentionally cross-references the other file.
+must be byte-identical. After v1.27 F38 consolidated the wiki-layer walk
+into scripts/_common.py, no per-script parity comment is needed and the
+allow-list is empty - strict byte equality applies.
 
 When this test fails, the diff is printed in the failure message so the drift
 is obvious. Fresh-install bugs in v1.25.2 traced back to silent drift between
@@ -17,12 +18,8 @@ REPO_ROOT = Path(__file__).parent.parent
 LIVE_DIR = REPO_ROOT / "scripts"
 TEMPLATE_DIR = REPO_ROOT / "templates" / "scripts"
 
-# wiki-build.py line 36 is the parity comment that points at the OTHER file
-# (live points at template, template points at live). This is the only allowed
-# difference between any live/template script pair.
-ALLOWED_LINE_DIFFS = {
-    "wiki-build.py": {36},
-}
+# Strict byte equality. No exceptions after v1.27 F38.
+ALLOWED_LINE_DIFFS: dict[str, set[int]] = {}
 
 
 class TemplateScriptsParityTests(unittest.TestCase):
@@ -88,6 +85,7 @@ class TemplateScriptsParityTests(unittest.TestCase):
         must be mirrored in templates/scripts/. Hard-coded list because not every
         script in scripts/ is part of the fresh-install payload (some are repo-internal)."""
         required_in_template = {
+            "_common.py",
             "brain-pass-log.py",
             "brain-snapshot.py",
             "check-brand-voice-ready.py",

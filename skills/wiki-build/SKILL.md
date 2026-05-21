@@ -29,18 +29,7 @@ If `scripts/wiki-build.py` does not exist, stop with: `Wiki-build script not fou
 
 ## Scope
 
-Scans these directories for `[[wikilinks]]`:
-
-- `core/`
-- `context/`
-- `cadence/`
-- `brain/`
-- `network/`
-- `companies/`
-- `roles/`
-- `rules/`
-
-Excluded: plugin-internal (`.claude/`, `skills/`, `templates/`, `docs/`), source archive (`raw/`), brain archive (`brain/archive/`), transient brain (`brain/transcripts/`, `brain/rants/`), `.git/`, `node_modules/`.
+Wiki-layer scope is defined by `scripts/_common.py:WIKI_LAYER_PREFIXES` and `WIKI_LAYER_EXCLUDED_PARTS`. See that module for the canonical list. Both `scripts/wiki-build.py` and `scripts/query.py` import from `_common.py` so the on-disk graph and the in-memory graph cannot drift.
 
 Wikilinks inside fenced code blocks (` ``` `) and inline backtick spans (`` ` ``) are ignored. This means documentation that describes the wikilink syntax does not pollute the graph.
 
