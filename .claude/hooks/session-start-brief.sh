@@ -51,6 +51,28 @@ fi
 
 echo "=== Session brief ($TODAY) ==="
 
+# --- Consolidated Python pass ---
+# Previously this script spawned Python up to 8 times (date math, compliance,
+# decay scan x3, tip rotation, observations stale count). Each spawn costs
+# ~250ms on Windows. Now one Python process emits all sections in a single
+# pass; bash parses the @@SECTION markers below.
+BRIEF_PY="$HOOK_DIR/session_start_brief.py"
+PY_PAYLOAD=""
+if [ -n "$PYTHON" ] && [ -f "$BRIEF_PY" ]; then
+  PY_PAYLOAD=$("$PYTHON" "$BRIEF_PY" "$REPO" "$TODAY" 2>/dev/null)
+fi
+
+# Extract a single section's body from PY_PAYLOAD. Sections are delimited by
+# @@SECTION:<name> and @@END. Missing section = empty string (matches the
+# quiet-exit semantics of the old heredocs).
+get_section() {
+  printf '%s\n' "$PY_PAYLOAD" | awk -v name="$1" '
+    $0 == "@@SECTION:" name { capture=1; next }
+    capture && $0 == "@@END" { capture=0; exit }
+    capture { print }
+  '
+}
+
 # --- Active queue items ---
 QUEUE="$REPO/cadence/queue.md"
 if [ ! -f "$QUEUE" ]; then
@@ -95,41 +117,46 @@ if [ -f "$FLAGS" ]; then
 fi
 
 # --- Daily cadence staleness ---
-DAILY="$REPO/cadence/daily-anchors.md"
-if [ -f "$DAILY" ]; then
-  DAILY_DATE=$(grep -m1 -oE '^## Today: [0-9]{4}-[0-9]{2}-[0-9]{2}' "$DAILY" | awk '{print $3}')
+# Backed by the consolidated Python pass above; falls back to a locale-safe
+# string comparison when Python is unavailable.
+DAILY_LINE=$(get_section daily)
+if [ -n "$DAILY_LINE" ]; then
+  case "$DAILY_LINE" in
+    STALE\|*)
+      DAILY_DATE=$(printf '%s' "$DAILY_LINE" | awk -F'|' '{print $2}')
+      echo "Daily: STALE (anchor dated $DAILY_DATE, today is $TODAY) - refresh before planning"
+      ;;
+    CURRENT\|*)
+      DAILY_DATE=$(printf '%s' "$DAILY_LINE" | awk -F'|' '{print $2}')
+      echo "Daily: current ($DAILY_DATE)"
+      ;;
+  esac
+elif [ -f "$REPO/cadence/daily-anchors.md" ]; then
+  # Python-absent fallback. ISO-8601 string compare under LC_ALL=C is byte-stable.
+  DAILY_DATE=$(grep -m1 -oE '^## Today: [0-9]{4}-[0-9]{2}-[0-9]{2}' "$REPO/cadence/daily-anchors.md" | awk '{print $3}')
   if [ -n "$DAILY_DATE" ]; then
-    if [ -n "$PYTHON" ]; then
-      # Delegate the comparison to Python so collation order is locale-stable.
-      DAILY_DELTA=$($PYTHON -c "from datetime import date; a=date.fromisoformat('$DAILY_DATE'); b=date.fromisoformat('$TODAY'); print((b-a).days)" 2>/dev/null)
-      if [ -n "$DAILY_DELTA" ] && [ "$DAILY_DELTA" -gt 0 ] 2>/dev/null; then
-        echo "Daily: STALE (anchor dated $DAILY_DATE, today is $TODAY) - refresh before planning"
-      else
-        echo "Daily: current ($DAILY_DATE)"
-      fi
+    if LC_ALL=C [ "$DAILY_DATE" \< "$TODAY" ]; then
+      echo "Daily: STALE (anchor dated $DAILY_DATE, today is $TODAY) - refresh before planning"
     else
-      # Python absent. ISO-8601 string compare under LC_ALL=C is byte-stable.
-      if LC_ALL=C [ "$DAILY_DATE" \< "$TODAY" ]; then
-        echo "Daily: STALE (anchor dated $DAILY_DATE, today is $TODAY) - refresh before planning"
-      else
-        echo "Daily: current ($DAILY_DATE)"
-      fi
+      echo "Daily: current ($DAILY_DATE)"
     fi
   fi
 fi
 
 # --- Weekly cadence staleness ---
-WEEKLY="$REPO/cadence/weekly-commitments.md"
-if [ -f "$WEEKLY" ]; then
-  WEEK_DATE=$(grep -m1 -oE '^## Week of [0-9]{4}-[0-9]{2}-[0-9]{2}' "$WEEKLY" | awk '{print $4}')
-  if [ -n "$WEEK_DATE" ] && [ -n "$PYTHON" ]; then
-    AGE=$($PYTHON -c "from datetime import date; a=date.fromisoformat('$WEEK_DATE'); b=date.fromisoformat('$TODAY'); print((b-a).days)" 2>/dev/null)
-    if [ -n "$AGE" ] && [ "$AGE" -gt 6 ] 2>/dev/null; then
+WEEKLY_LINE=$(get_section weekly)
+if [ -n "$WEEKLY_LINE" ]; then
+  case "$WEEKLY_LINE" in
+    STALE\|*)
+      WEEK_DATE=$(printf '%s' "$WEEKLY_LINE" | awk -F'|' '{print $2}')
+      AGE=$(printf '%s' "$WEEKLY_LINE" | awk -F'|' '{print $3}')
       echo "Weekly: STALE (week of $WEEK_DATE, $AGE days old) - run retro before planning"
-    else
+      ;;
+    CURRENT\|*)
+      WEEK_DATE=$(printf '%s' "$WEEKLY_LINE" | awk -F'|' '{print $2}')
       echo "Weekly: current (week of $WEEK_DATE)"
-    fi
-  fi
+      ;;
+  esac
 fi
 
 # --- Pending decisions ---
@@ -173,73 +200,22 @@ fi
 
 # --- Compliance deadlines (legal-compliance skill) ---
 # Surfaces entries in context/compliance.md with a date within the next 30 days
-# OR overdue. Format expected: "## YYYY-MM-DD - <description>" headings.
-# Quiet exit if file missing - skill is opt-in via /founder-os:legal-setup.
-COMPLIANCE="$REPO/context/compliance.md"
-if [ -f "$COMPLIANCE" ] && [ -n "$PYTHON" ]; then
-  COMPLIANCE_HITS=$($PYTHON - "$COMPLIANCE" "$TODAY" <<'PYEOF' 2>/dev/null
-import sys, re
-from datetime import date
-path, today_str = sys.argv[1], sys.argv[2]
-today = date.fromisoformat(today_str)
-upcoming = []
-overdue = []
-try:
-    with open(path, encoding='utf-8') as f:
-        lines = f.read().splitlines()
-except Exception:
-    sys.exit(0)
-heading_re = re.compile(r'^##\s+(\d{4}-\d{2}-\d{2})\s*[-:]\s*(.+?)\s*$')
-status_re = re.compile(r'^\s*-\s*Status:\s*(\w+)', re.IGNORECASE)
-i = 0
-while i < len(lines):
-    m = heading_re.match(lines[i])
-    if not m:
-        i += 1
-        continue
-    deadline = date.fromisoformat(m.group(1))
-    desc = m.group(2)
-    status = 'OPEN'
-    j = i + 1
-    while j < len(lines) and not lines[j].startswith('## '):
-        sm = status_re.match(lines[j])
-        if sm:
-            status = sm.group(1).upper()
-            break
-        j += 1
-    if status == 'DONE':
-        i = j
-        continue
-    delta = (deadline - today).days
-    if delta < 0:
-        overdue.append((deadline, desc, abs(delta)))
-    elif delta <= 30:
-        upcoming.append((deadline, desc, delta))
-    i = j
-if overdue:
-    print(f'OVERDUE|{len(overdue)}')
-    for d, desc, days_past in sorted(overdue)[:3]:
-        print(f'  {d} - {desc} (overdue {days_past}d)')
-if upcoming:
-    print(f'UPCOMING|{len(upcoming)}')
-    for d, desc, days_to in sorted(upcoming)[:3]:
-        print(f'  {d} - {desc} (in {days_to}d)')
-PYEOF
-  )
-  if [ -n "$COMPLIANCE_HITS" ]; then
-    echo ""
-    OVERDUE_LINE=$(printf '%s\n' "$COMPLIANCE_HITS" | grep '^OVERDUE|' || true)
-    UPCOMING_LINE=$(printf '%s\n' "$COMPLIANCE_HITS" | grep '^UPCOMING|' || true)
-    if [ -n "$OVERDUE_LINE" ]; then
-      OVERDUE_COUNT=$(printf '%s' "$OVERDUE_LINE" | cut -d'|' -f2)
-      echo "Compliance: $OVERDUE_COUNT OVERDUE deadline(s) - file or escalate today"
-      printf '%s\n' "$COMPLIANCE_HITS" | grep -A100 '^OVERDUE|' | grep -v '^OVERDUE|' | grep -v '^UPCOMING|' | head -3
-    fi
-    if [ -n "$UPCOMING_LINE" ]; then
-      UPCOMING_COUNT=$(printf '%s' "$UPCOMING_LINE" | cut -d'|' -f2)
-      echo "Compliance: $UPCOMING_COUNT deadline(s) within 30 days"
-      printf '%s\n' "$COMPLIANCE_HITS" | grep -A100 '^UPCOMING|' | grep -v '^UPCOMING|' | grep -v '^OVERDUE|' | head -3
-    fi
+# OR overdue. Quiet exit if file missing - skill is opt-in via
+# /founder-os:legal-setup. Backed by the consolidated Python pass above.
+COMPLIANCE_HITS=$(get_section compliance)
+if [ -n "$COMPLIANCE_HITS" ]; then
+  echo ""
+  OVERDUE_LINE=$(printf '%s\n' "$COMPLIANCE_HITS" | grep '^OVERDUE|' || true)
+  UPCOMING_LINE=$(printf '%s\n' "$COMPLIANCE_HITS" | grep '^UPCOMING|' || true)
+  if [ -n "$OVERDUE_LINE" ]; then
+    OVERDUE_COUNT=$(printf '%s' "$OVERDUE_LINE" | cut -d'|' -f2)
+    echo "Compliance: $OVERDUE_COUNT OVERDUE deadline(s) - file or escalate today"
+    printf '%s\n' "$COMPLIANCE_HITS" | grep -A100 '^OVERDUE|' | grep -v '^OVERDUE|' | grep -v '^UPCOMING|' | head -3
+  fi
+  if [ -n "$UPCOMING_LINE" ]; then
+    UPCOMING_COUNT=$(printf '%s' "$UPCOMING_LINE" | cut -d'|' -f2)
+    echo "Compliance: $UPCOMING_COUNT deadline(s) within 30 days"
+    printf '%s\n' "$COMPLIANCE_HITS" | grep -A100 '^UPCOMING|' | grep -v '^UPCOMING|' | grep -v '^OVERDUE|' | head -3
   fi
 fi
 
@@ -265,69 +241,11 @@ if [ -f "$QUARANTINE" ]; then
 fi
 
 # --- Review Due (decay scan) ---
-# Convention: rules/entry-conventions.md.
-scan_decay() {
-  local file="$1" heading_re="$2"
-  [ ! -f "$file" ] && return
-  [ -z "$PYTHON" ] && return
-  $PYTHON - "$file" "$heading_re" "$TODAY" <<'PYEOF' 2>/dev/null
-import sys, re
-from datetime import date, timedelta
-path, heading_re, today_str = sys.argv[1], sys.argv[2], sys.argv[3]
-today = date.fromisoformat(today_str)
-with open(path, encoding='utf-8') as f:
-    lines = f.read().splitlines()
-hpat = re.compile(heading_re)
-def anchor_date(entry, file):
-    h = entry[0]
-    if 'flags.md' in file:
-        m = re.search(r'(\d{4}-\d{2}-\d{2})', h)
-        if m: return date.fromisoformat(m.group(1))
-    for l in entry:
-        m = re.match(r'\s*-?\s*Date parked:\s*(\d{4}-\d{2}-\d{2})', l)
-        if m: return date.fromisoformat(m.group(1))
-        m = re.match(r'\s*-?\s*First observed:\s*(\d{4}-\d{2}-\d{2})', l)
-        if m: return date.fromisoformat(m.group(1))
-    return None
-def process(entry):
-    if not entry: return
-    head = entry[0].strip()
-    decay = None
-    missing_anchor = False
-    for l in entry:
-        m = re.match(r'\s*-?\s*Decay after:\s*(.+?)\s*$', l)
-        if m:
-            val = m.group(1).strip()
-            if re.match(r'^\d{4}-\d{2}-\d{2}$', val):
-                decay = date.fromisoformat(val)
-            else:
-                m2 = re.match(r'^(\d+)d$', val)
-                if m2:
-                    a = anchor_date(entry, path)
-                    if a: decay = a + timedelta(days=int(m2.group(1)))
-                    else: missing_anchor = True
-            break
-    if decay and decay < today:
-        age = (today - decay).days
-        print(f"DECAY|{head}|{age}")
-    elif missing_anchor:
-        print(f"NOANCHOR|{head}|0")
-entry = []
-for ln in lines:
-    if hpat.match(ln):
-        process(entry); entry = [ln]
-    else:
-        entry.append(ln)
-process(entry)
-PYEOF
-}
-
-if [ -n "$PYTHON" ]; then
-  HITS=""
-  HITS="$HITS$(scan_decay "$REPO/brain/flags.md" '^##\s')"$'\n'
-  HITS="$HITS$(scan_decay "$REPO/brain/patterns.md" '^###\s')"$'\n'
-  HITS="$HITS$(scan_decay "$REPO/brain/decisions-parked.md" '^###\s')"
-  HITS=$(printf '%s\n' "$HITS" | grep -v '^$' || true)
+# Convention: rules/entry-conventions.md. Backed by the consolidated Python
+# pass above which scans brain/flags.md, brain/patterns.md, and
+# brain/decisions-parked.md in one process.
+HITS=$(get_section decay)
+if [ -n "$HITS" ]; then
   DECAY_HITS=$(printf '%s\n' "$HITS" | grep '^DECAY|' || true)
   NOANCHOR_HITS=$(printf '%s\n' "$HITS" | grep '^NOANCHOR|' || true)
   if [ -n "$DECAY_HITS" ]; then
@@ -357,97 +275,12 @@ if [ -f "$MEMORY_DIFF" ] && [ -n "$PYTHON" ]; then
 fi
 
 # --- Tip (rotates weekly, surfaces one underused capability) ---
-# Scans brain/log.md for explicit action tags only. Counts #used-<capability>
-# or #acted lines that name the capability. Picks a capability not
-# invoked in 14+ days that matches current state. Rotates the pick weekly so
-# the same tip does not repeat. Fresh-install gate: the log must have at
-# least 10 entries (### date headings) AND span at least 30 days from the
-# earliest entry to today. Below that floor the Tip is omitted entirely so
-# new users don't see capability pitches before they have any state. If no
-# eligible tip, the line is omitted (do NOT print "no tip" or similar).
-LOG="$REPO/brain/log.md"
-if [ -f "$LOG" ] && [ -n "$PYTHON" ]; then
-  TIP=$($PYTHON - "$LOG" "$TODAY" <<'PYEOF' 2>/dev/null
-import sys, re
-from datetime import date, timedelta
-log_path, today_str = sys.argv[1], sys.argv[2]
-today = date.fromisoformat(today_str)
-# Capabilities with their natural-language tip lines. Order matters for the
-# weekly rotation tie-break.
-TIPS = [
-    ("decision-framework", "Try saying \"help me decide\" next time you're stuck on a choice - the decision-framework skill walks you through it."),
-    ("priority-triage", "Say \"what should I focus on next\" when the open list grows past five - priority-triage cuts it down to one thing."),
-    ("forcing-questions", "Try \"force me to think this through\" before starting something new - forcing-questions runs six tests on the idea before you commit."),
-    ("weekly-review", "Say \"run my weekly review\" on Friday or Monday - weekly-review rolls the sprint and forces a verdict on every open flag."),
-    ("audit", "Say \"audit the OS\" when things feel drifty - one composite report on health, voice, and wiki state."),
-    ("brain-pass", "Try \"ask the brain about <topic>\" - brain-pass synthesises across log, knowledge, and decisions instead of one keyword match."),
-    ("knowledge-capture", "Say \"capture this\" after a book or podcast worth keeping - knowledge-capture files it with a stable ID."),
-    ("ingest", "Say \"ingest this\" on a URL or transcript - ingest preserves the source with provenance and proposes wiki updates."),
-    ("bottleneck-diagnostic", "Try \"what's blocking me\" once a quarter - bottleneck-diagnostic scores founder dependency across five dimensions."),
-    ("strategic-analysis", "Say \"analyze this market\" or \"competitor map\" - strategic-analysis grounds the scan in your knowledge notes."),
-]
-try:
-    text = open(log_path, encoding='utf-8').read()
-except Exception:
-    sys.exit(0)
-# Fresh-install gate. An entry is a line starting with "### " followed by an
-# ISO date. Require >= 10 entries AND earliest-entry-to-today >= 30 days.
-entry_re = re.compile(r'^###\s+(\d{4}-\d{2}-\d{2})')
-entry_dates = []
-for ln in text.splitlines():
-    m = entry_re.match(ln)
-    if m:
-        try:
-            entry_dates.append(date.fromisoformat(m.group(1)))
-        except ValueError:
-            continue
-if len(entry_dates) < 10:
-    sys.exit(0)
-earliest = min(entry_dates)
-if (today - earliest).days < 30:
-    sys.exit(0)
-# Build last-used-on map. Walk lines, track current date header (## or ###),
-# accumulate explicit action tags. A planning line like "run audit later" is
-# not a use. Count #used-<capability>, or #acted lines that name a capability.
-date_re = re.compile(r'^#{2,3}\s+(\d{4}-\d{2}-\d{2})')
-last_used = {}
-cur = None
-for ln in text.splitlines():
-    m = date_re.match(ln)
-    if m:
-        try:
-            cur = date.fromisoformat(m.group(1))
-        except ValueError:
-            cur = None
-        continue
-    if cur is None:
-        continue
-    for cap, _ in TIPS:
-        if f"#used-{cap}" in ln or ("#acted" in ln and cap in ln):
-            prev = last_used.get(cap)
-            if prev is None or cur > prev:
-                last_used[cap] = cur
-# Eligible: not used in 14+ days OR never used. "Never used" only counts
-# here because the fresh-install gate above already enforced enough log
-# history for the pitch to make sense.
-eligible = []
-for cap, tip in TIPS:
-    last = last_used.get(cap)
-    if last is None or (today - last).days >= 14:
-        eligible.append((cap, tip))
-if not eligible:
-    sys.exit(0)
-# Weekly rotation: pick the index based on iso-week so the same tip does not
-# repeat within a week.
-week = today.isocalendar()[1]
-idx = week % len(eligible)
-print(eligible[idx][1])
-PYEOF
-  )
-  if [ -n "$TIP" ]; then
-    echo ""
-    echo "Tip: $TIP"
-  fi
+# Backed by the consolidated Python pass above. Fresh-install gate, last-used
+# tracking, and weekly rotation logic all live in session_start_brief.py.
+TIP=$(get_section tip)
+if [ -n "$TIP" ]; then
+  echo ""
+  echo "Tip: $TIP"
 fi
 
 # --- Observations (opt-in telemetry, FOUNDER_OS_OBSERVATIONS=1 to enable) ---
@@ -463,29 +296,11 @@ if [ -n "$FOUNDER_OS_OBSERVATIONS" ] && [ "$FOUNDER_OS_OBSERVATIONS" = "1" ]; th
     ROLLUP_COUNT=$(ls -1 "$ROLLUP_DIR"/*.md 2>/dev/null | wc -l | tr -d ' ' || echo 0)
   fi
   echo "  Rollups: ${ROLLUP_COUNT} weekly summaries in brain/observations/_rollups/"
-  if [ -n "$PYTHON" ] && [ -d "$OBS_DIR" ]; then
-    # On Git Bash/Cygwin/WSL, Python is the Windows binary and does not parse
-    # POSIX paths like /c/Users/...; cygpath converts to Windows form so
-    # pathlib's glob actually finds the files.
-    if command -v cygpath >/dev/null 2>&1; then
-      OBS_PY=$(cygpath -w "$OBS_DIR" 2>/dev/null || echo "$OBS_DIR")
-    else
-      OBS_PY="$OBS_DIR"
-    fi
-    STALE=$($PYTHON -c "
-from datetime import date, timedelta
-from pathlib import Path
-obs = Path(r'''$OBS_PY''')
-cut = date.today() - timedelta(days=10)
-try:
-    n = sum(1 for f in obs.glob('*.jsonl') if date.fromisoformat(f.stem) < cut)
-    print(n)
-except Exception:
-    print(0)
-" 2>/dev/null || echo 0)
-    if [ "${STALE:-0}" -gt 0 ] 2>/dev/null; then
-      echo "  ${STALE} JSONL files older than 10 days - say 'roll up observations' to compress old logs."
-    fi
+  # Stale-jsonl count comes from the consolidated Python pass above (emitted
+  # only when FOUNDER_OS_OBSERVATIONS=1, so no extra process spawned here).
+  STALE=$(get_section observations)
+  if [ -n "$STALE" ] && [ "${STALE:-0}" -gt 0 ] 2>/dev/null; then
+    echo "  ${STALE} JSONL files older than 10 days - say 'roll up observations' to compress old logs."
   fi
 else
   echo "Observations: disabled (set FOUNDER_OS_OBSERVATIONS=1 to enable)"

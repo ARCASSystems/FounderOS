@@ -504,12 +504,13 @@ def print_no_match(question: str) -> None:
 
 
 def run_index_mode(question: str, root: Path) -> int:
-    include_rants = is_rant_query(question)
-    files = candidate_files(root, include_rants=include_rants)
-    if not files:
-        print(f"QUERY: {question}\n---\nTop results:\n\nNo markdown files found under {root}.")
-        return 1
-
+    # Preflight ordering: common-case checks run before edge-case checks.
+    # Validating the question string is the most-frequent failure path
+    # (empty question, punctuation-only, all stop words). Walking the
+    # filesystem to gather candidate files is the rare edge case (only
+    # fails on a fresh / empty corpus). Running the common path first
+    # means the typical fixture pass does not pay for an unnecessary
+    # filesystem walk just to discover the question is unsearchable.
     q_tokens = set(tokenize(question))
     if not q_tokens:
         print(
@@ -517,6 +518,13 @@ def run_index_mode(question: str, root: Path) -> int:
             "Try a question with at least one word or identifier (e.g. 'what blocks the launch?')."
         )
         return 2
+
+    include_rants = is_rant_query(question)
+    files = candidate_files(root, include_rants=include_rants)
+    if not files:
+        print(f"QUERY: {question}\n---\nTop results:\n\nNo markdown files found under {root}.")
+        return 1
+
     file_scores = score_files(files, root, q_tokens)
 
     # Zero-score fallback: if no file has a positive match, surface the
