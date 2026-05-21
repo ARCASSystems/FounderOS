@@ -12,6 +12,14 @@ mcp_requirements: []
 
 The founder is overwhelmed. Find the ONE thing that unblocks the most, and recommend it. One thing.
 
+## Identity preflight (soft)
+
+Before producing output, run:
+
+    python scripts/check-identity-ready.py
+
+If exit code is 1, print the returned line as a one-line note above the recommendation and continue. This skill works without identity set up, but the recommendation gets sharper once `/founder-os:setup` has filled in `core/identity.md`.
+
 ## Step 1: Read State (Silently)
 
 - `context/priorities.md` - current goals and this week's sprint

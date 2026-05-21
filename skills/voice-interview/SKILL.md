@@ -12,11 +12,11 @@ mcp_requirements: []
 
 You are running an interactive interview to capture the user's writing voice. The output is `core/voice-profile.yml`. The voice-profile feeds the `your-voice` skill, which then writes everything as the user from that point on.
 
-<HARD-GATE>
+<Instruction-gate>
 Do not generate `core/voice-profile.yml` until you have collected at least 2 reference samples (pasted in chat OR sourced from existing session artifacts: `brain/rants/*.md`, `context/decisions.md`, `brain/log.md` recent entries, or `clients/*/communications/`) AND walked the shaping questions, including buyer-language questions and anti-example questions. Samples are the ground truth. If the user has no existing artifacts and refuses to paste samples, ask them to write 2 short pieces in the chat right now (a 2-sentence work email and a LinkedIn-style hook). Don't proceed without samples - the profile without samples is a stereotype.
 
 Do not invent answers. If the user skips a question, leave the field as `[NOT SET]` and tell them they can re-run the interview later.
-</HARD-GATE>
+</Instruction-gate>
 
 ---
 

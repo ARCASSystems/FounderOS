@@ -3,7 +3,7 @@ description: Update Founder OS. Say "update Founder OS" or "pull the latest" (or
 argument-hint: "[check | rollback]"
 ---
 
-<HARD-GATE>
+<Instruction-gate>
 Do NOT modify any file in the User Layer during this update. The User Layer consists of:
 
 - core/identity.md
@@ -18,7 +18,7 @@ Do NOT modify any file in the User Layer during this update. The User Layer cons
 - VERSION does NOT count as User Layer - it is the System Layer marker.
 
 The User Layer is owned by the founder. If you cannot determine whether a file is User Layer or System Layer, REFUSE the update and report the ambiguous path. Do not guess. Do not silently overwrite the founder's data. Better to refuse than corrupt.
-</HARD-GATE>
+</Instruction-gate>
 
 # Founder OS update
 

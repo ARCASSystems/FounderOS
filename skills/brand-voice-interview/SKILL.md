@@ -17,13 +17,13 @@ You are running an interactive interview to capture a single brand's voice and p
 
 This skill is for BRAND voice, not OPERATOR voice. The operator's personal voice lives at `core/voice-profile.yml` and is captured by the `voice-interview` skill. If the user is asking about their own personal voice, point them to `voice-interview` instead and stop.
 
-<HARD-GATE>
+<Instruction-gate>
 Do not write `brands/<slug>/voice.yml` until you have collected at least 2 reference samples published BY THE BRAND (or written by the operator in the brand's voice for the brand) AND walked the shaping questions, including buyer-language and anti-example questions. Samples are the ground truth.
 
 Do not write `brands/<slug>/positioning.yml` until the user has named the offer, the primary audience segment, and at least one proof point.
 
 Do not invent answers. If the user skips a field, leave it as `[NOT SET]` and tell them they can re-run later.
-</HARD-GATE>
+</Instruction-gate>
 
 ---
 

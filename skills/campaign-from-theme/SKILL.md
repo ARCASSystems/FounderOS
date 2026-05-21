@@ -12,7 +12,7 @@ mcp_requirements: []
 
 You are turning a theme into a sequenced, funnel-aware campaign brief plus content drafts. The output is NOT a content calendar from an industry template. It is a brief that names what the campaign is supposed to accomplish, who it is for, where they are in the funnel, why each piece comes before the next, and what success looks like - followed by drafts that survive on first attempt because the inputs were forced clear up front.
 
-<HARD-GATE>
+<Instruction-gate>
 Do not produce a single content draft until ALL FIVE gate questions are answered:
 
 1. Speaker - operator voice or a specific brand voice
@@ -26,7 +26,7 @@ If the user pushes for drafts without answering, say:
 > I can produce drafts after the five gate questions. Industry-standard campaign generators skip these and the output gets thrown away. Five questions, then drafts.
 
 Then ask the questions ONE at a time. Do not bundle.
-</HARD-GATE>
+</Instruction-gate>
 
 ---
 
