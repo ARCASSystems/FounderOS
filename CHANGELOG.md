@@ -2,6 +2,32 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.26.0 - 2026-05-22
+
+Polish patch on the 60-finding audit. Six findings closed across two workstreams. Three findings (F27, F34, F38, F46) deferred to a v1.27 design plan because they need design work, not polish.
+
+### WS1 mechanical polish (F45, F47, F35)
+
+`F45` consolidated seven Python heredocs in `.claude/hooks/session-start-brief.sh` into a single subprocess that calls a new `.claude/hooks/session_start_brief.py` module emitting `@@SECTION` markers the bash script parses with awk. Output is byte-identical. Measured Windows session-start latency dropped from ~2.35s to ~0.45s, about a 5x improvement. The PowerShell variant `.claude/hooks/session-start-brief.ps1` already runs all date math and tip rotation in native PowerShell, so no parity edit was needed there.
+
+`F47` reordered the preflight inside `run_index_mode` in both `scripts/query.py` and `templates/scripts/query.py` so the common-case token check fires before the edge-case empty-corpus walk. The two copies remain byte-identical, guarded by the parity test added in v1.25.3. A new test `test_common_case_preflight_runs_before_edge_case` exercises the common-case path and asserts that an empty root with a token-less question hits the token-check exit code, not the no-files exit code. If the order ever flips back, the test fails.
+
+`F35` closed as a no-op. The audit finding described a contradiction between `templates/bootloader-claude-md.md` and the queue skill frontmatter. On inspection, the bootloader has no queue reference at all, and the queue skill is correctly on-demand (frontmatter triggers on natural-language phrases). The SessionStart hook reads `cadence/queue.md` to print a one-line brief summary; that coexists with on-demand skill invocation by design. Recorded here so the audit's after-state matches the artifact.
+
+### WS2 short decisions (F25, F28, F36)
+
+`F25` added a soft identity preflight to `priority-triage` and `unit-economics`. Both skills now run `python scripts/check-identity-ready.py` before producing output. On exit code 1, the returned line surfaces as a one-line note above the result and the skill continues. Output is still produced without identity set up, but the user gets told the recommendation gets sharper after `/founder-os:setup`. This is a softer pattern than the blocking preflight in `meeting-prep` because triage and math work without identity, they just work less well.
+
+`F28` renamed `<HARD-GATE>` to `<Instruction-gate>` across eight files: `pre-send-check`, `pre-meeting`, `update`, `campaign-from-theme`, `brand-interview`, `brand-voice-interview`, `voice-interview`, and `review-responder`. The old label implied a runtime-enforced gate, but the tag is markdown decoration the model reads, not a script that exits non-zero on violation. The new name is honest about what the construct does. The body of the pre-send-check gate was also softened from "hard stop" to "instructional stop, not a runtime-enforced one - but treat it as a hard stop in your own behavior" so the honesty extends past the tag itself.
+
+`F36` added an explicit `N/A` branch to Check 6 of `pre-send-check`. Some deliverables genuinely trigger no internal updates (a one-off thank-you, a reply to a known thread, a personal note). Marking those as PASS or FAIL was wrong; PASS implied a cross-reference was identified and queued, FAIL implied one was missing. The output format and the "one FAIL = HOLD" rule were updated so N/A is valid on Check 6 only.
+
+### Deferred to v1.27
+
+Four findings need design work, not polish, and are out of scope for v1.26: `F27` (`companies/<slug>-business.md` semantic split between prospects and operator businesses), `F34` (`context/entities/<slug>.md` schema or removing the ingest reference to it), `F38` (`wiki-build.py` rglob narrowing to mirror the query.py walking pattern), and `F46` (voice-interview phase split clarity).
+
+48 skills, 30 commands, 366 tests pass.
+
 ## v1.25.3 - 2026-05-22
 
 Closes a 60-finding audit run that surfaced bug clusters across the wizard, runtime, tests, and documentation surface. Bug-fix release. No new features. Every finding is either closed in code or closed by design with a test docstring update so the same item does not re-flag next audit.
