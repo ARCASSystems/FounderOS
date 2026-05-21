@@ -37,7 +37,7 @@ This file gives your AI assistant the operating context for your business so its
 
 **Last refreshed:** [FILL - YYYY-MM-DD]
 
-- **Company name:** [FILL]
+- **Company name:** {{COMPANY_NAME}}
 - **Legal entity status:** [FILL - registered / pre-licence / dba / subsidiary of X]
 - **Founders + equity split:** [FILL - name : % : role]
 - **Headcount today:** [FILL]

@@ -4,6 +4,7 @@ description: >
   Run business math: unit economics, pricing, CAC, LTV, margins, break-even. Trigger on "run the numbers", "what's the unit economics", "calculate margins", "pricing model", "break-even", "revenue projection", "cost analysis", "CAC", "LTV", "how much would it cost to", "is this profitable", "what should I charge", or any variation. Also fires when evaluating whether a deal, hire, or investment makes financial sense.
 why: "Runs business math in a structured format that shows assumptions and scenarios rather than a single number that can be misread without context."
 enhance: "Give real numbers rather than ranges when you can - the skill flags assumptions that could change the answer, but it cannot flag the ones you did not provide."
+allowed-tools: ["Read", "Bash"]
 mcp_requirements: []
 ---
 

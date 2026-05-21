@@ -12,7 +12,7 @@ class SetupWizardTemplatesPathTests(unittest.TestCase):
         cls.body = SETUP_SKILL.read_text(encoding="utf-8")
 
     def test_vague_phrase_is_gone(self) -> None:
-        self.assertNotIn("find the plugin install path", self.body)
+        self.assertNotIn("find the plugin install path", self.body.lower())
 
     def test_all_three_install_methods_named(self) -> None:
         self.assertIn("Plugin install", self.body)

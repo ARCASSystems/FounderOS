@@ -51,8 +51,15 @@ def is_unset(value: str | None) -> bool:
 
 
 def strip_inline_comment(content: str) -> str:
-    """Drop a trailing ' #...' comment when no quotes are involved."""
+    """Drop a trailing ' #...' comment from a YAML key-value line."""
     if '"' in content or "'" in content:
+        # Strip comment that appears after the closing quote character.
+        for q in ('"', "'"):
+            pos = content.rfind(q)
+            if pos != -1:
+                after = content[pos + 1:]
+                if " #" in after:
+                    return content[: pos + 1].rstrip()
         return content
     if " #" in content:
         return content.split(" #", 1)[0].rstrip()

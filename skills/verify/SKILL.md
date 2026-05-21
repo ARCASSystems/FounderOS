@@ -88,7 +88,7 @@ Grep the working tree for environment variable references that imply a paid API 
 - `OPENAI_API_KEY`
 - `GEMINI_API_KEY`
 
-The CORE script set (the five scripts in Check 3) must not require any paid key.
+The CORE script set (the seven scripts in Check 3) must not require any paid key.
 Optional skills that call paid APIs are allowed.
 
 Outcome:

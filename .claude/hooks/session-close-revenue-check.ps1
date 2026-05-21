@@ -30,7 +30,7 @@ if (-not (Test-Path $ClientsFile)) { exit 0 }
 $logStatus = & git -C $RepoRoot status --porcelain "brain/log.md" 2>$null
 if ([string]::IsNullOrEmpty($logStatus)) { exit 0 }
 
-$recent = Get-Content $LogFile -TotalCount 120 -ErrorAction SilentlyContinue
+$recent = Get-Content $LogFile -TotalCount 120 -Encoding UTF8 -ErrorAction SilentlyContinue
 
 $outreachPattern = "\b(sent|messaged|called|DM'?d|emailed|pitched|reached\s+out|spoke\s+with|outreach|ping(ed)?|texted|whatsapp(ed)?)\b"
 $actedSPattern = "#acted\s+\[S\]"

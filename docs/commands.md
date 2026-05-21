@@ -73,7 +73,7 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 ### `/founder-os:status`
 
 - **Or say.** "check my OS readiness"
-- **Outcome.** A weighted readiness score and the next 3 high-impact moves to run. Score breaks down by Identity, Priorities, Decisions, Cadence, Voice.
+- **Outcome.** A weighted readiness score and the next 3 high-impact moves to run. Score breaks down across six buckets: Core, Voice and Brand, Cadence, Business Context, Brain Layer, and Queue.
 - **Args.** None.
 - **Writes.** Read-only.
 - **Prereqs.** `/founder-os:setup` complete.
@@ -211,6 +211,40 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **Prereqs.** `/founder-os:setup` complete. At least one unprocessed rant in `brain/rants/`.
 - **When to run.** End of day, or when `brain/rants/` has 2+ unprocessed files.
 - **Follow-up.** `/today` or `/next` to act on any new flags.
+
+---
+
+## Brand and content
+
+### `/founder-os:brand-voice-interview`
+
+- **Or say.** "set up a brand voice" / "capture our brand voice" / "add a brand"
+- **Outcome.** An interactive interview captures a single brand's writing voice and positioning. Different from voice-interview, which captures the OPERATOR's personal voice. Walks brand samples, shaping questions, buyer language, and anti-examples, then writes two files under `brands/<slug>/`.
+- **Args.** Optional brand slug (e.g. "set up brand voice for acme"). If absent, the skill asks.
+- **Writes.** `brands/<slug>/voice.yml`, `brands/<slug>/positioning.yml`.
+- **Prereqs.** `/founder-os:setup` complete. At least 2 to 5 real brand samples (existing captions, product copy, customer emails) to feed the interview.
+- **When to run.** Once per brand the operator runs. Re-run when the brand voice or positioning has shifted.
+- **Follow-up.** Test with `/founder-os:campaign-from-theme` or `/founder-os:review-responder` and confirm the output sounds like the brand. See `skills/brand-voice-interview/SKILL.md`.
+
+### `/founder-os:campaign-from-theme <theme>`
+
+- **Or say.** "build a campaign" / "campaign for [topic]" / "plan a campaign" / "draft a launch campaign"
+- **Outcome.** A campaign brief with sequencing rationale, then 3 to 7 content drafts in the right voice. The skill REFUSES to generate content until five funnel-gating questions are answered: speaker (operator or brand), objective (awareness / consideration / conversion / retention / advocacy), audience segment + temperature (cold / warm / customer), channel-fit logic, and success metric. Industry-standard generators skip these and produce throwaway output.
+- **Args.** A theme (one phrase or sentence describing what the campaign is about).
+- **Writes.** Campaign brief and drafts to a campaign folder (location chosen during the interview).
+- **Prereqs.** `/founder-os:setup` complete. Voice profile filled. If a brand is the speaker, `brands/<slug>/voice.yml` and `brands/<slug>/positioning.yml` should exist (run `/founder-os:brand-voice-interview` first).
+- **When to run.** Before any multi-piece campaign, launch, or sequenced content push.
+- **Follow-up.** Run drafts through your usual approval flow. See `skills/campaign-from-theme/SKILL.md`.
+
+### `/founder-os:review-responder <message>`
+
+- **Or say.** "draft a reply to this review" / "respond to this DM" / "reply to this WhatsApp" / "respond to this customer" / "answer this Google review"
+- **Outcome.** A draft reply to an incoming customer message in the right voice for the channel and brand. Works for Google reviews, Trustpilot, Instagram DMs, WhatsApp Business inquiries, customer emails, Yelp, Facebook comments, and any inbound. Asks one question first: whose voice should the reply use, operator or which brand. Then drafts the reply.
+- **Args.** The incoming message (paste it, or describe it).
+- **Writes.** Read-only by default. Returns the draft in chat. The operator copies and sends.
+- **Prereqs.** `/founder-os:setup` complete. Voice profile filled. If responding as a brand, `brands/<slug>/voice.yml` and `brands/<slug>/positioning.yml` should exist (run `/founder-os:brand-voice-interview` first).
+- **When to run.** Whenever a customer message arrives that needs a careful, on-voice reply.
+- **Follow-up.** Copy the draft, edit if needed, send. See `skills/review-responder/SKILL.md`.
 
 ---
 

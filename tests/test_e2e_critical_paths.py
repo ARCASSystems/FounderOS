@@ -300,6 +300,17 @@ class WikiBuildIdempotencyTests(unittest.TestCase):
         )
         content_after_first = relations_path.read_text(encoding="utf-8")
 
+        # Sanity check: idempotency is vacuous if wiki-build produced no output.
+        # The fixture has [[context/priorities]] and [[core/identity]] wikilinks,
+        # so the WIKI_LINKS block must contain at least one of those node names
+        # after the first run. If both content_after_first and content_after_second
+        # happen to be empty/blank, equality would trivially pass and hide a bug.
+        self.assertIn(
+            "context/priorities",
+            content_after_first,
+            "wiki-build must extract at least one edge or this test is vacuous",
+        )
+
         # Second run
         subprocess.run(
             [sys.executable, str(self.script), "--root", str(repo)],

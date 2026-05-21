@@ -14,6 +14,7 @@ Pure stdlib. No dependencies.
 
 import argparse
 import json
+import shutil
 import sys
 from collections import Counter
 from datetime import date, timedelta
@@ -70,7 +71,7 @@ def write_rollup(week_key: str, files: list, rollup_dir: Path) -> Path:
             skill = entry.get("skill", "")
             if skill:
                 skill_counts[skill] += 1
-            sid = entry.get("session_id", "")
+            sid = entry.get("session", "") or entry.get("session_id", "")
             if sid:
                 session_ids.add(sid)
 
@@ -211,14 +212,24 @@ def main() -> None:
         else:
             week_archive = archive_dir / week_key
             week_archive.mkdir(parents=True, exist_ok=True)
+            archive_failed = False
             for f in files:
                 try:
-                    f.replace(week_archive / f.name)
-                except OSError as exc:
+                    shutil.move(str(f), str(week_archive / f.name))
+                except (OSError, shutil.Error) as exc:
                     print(
-                        f"WARNING: could not archive {f}: {exc}",
+                        f"Failed to archive {f.name}: {exc}",
                         file=sys.stderr,
                     )
+                    archive_failed = True
+                    break
+            if archive_failed:
+                # Roll back the rollup write so the next run retries cleanly.
+                try:
+                    written.unlink()
+                except OSError:
+                    pass
+                continue
             disposition = f"archived to {week_archive.relative_to(repo)}"
 
         rolled += 1

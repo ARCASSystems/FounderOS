@@ -14,6 +14,10 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 ---
 
+**What it is. What it is not.** Your personal brain. Your files, queryable by you. Not team-shared. Not always-on.
+
+---
+
 ## Who this is for
 
 You run the business or run a P&L inside one. Owner, operator, agency lead, consultancy head, head of department. If the buck stops with you, this is for you.
@@ -142,11 +146,11 @@ After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-scr
 
 ## What ships in this repo
 
-### Skills (45)
+### Skills (48)
 
-Grouped by when you reach for them, not by category. Three tiers: 7 for Day 1, 13 for Week 1, 25 for Month 1+ and beyond. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
+Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
-### Slash commands (27)
+### Slash commands (30)
 
 Every command has a natural-language equivalent - slash commands are speed shortcuts for power users, not the primary surface. Full reference with outcomes, args, and follow-ups in [`docs/commands.md`](docs/commands.md).
 
@@ -167,7 +171,7 @@ Scaffold artifacts for users who do not run Claude Code. This path is not live u
 
 Not a daily skill. A safety layer for the moments you do need it: a hire or a fire, a VAT or corporate tax filing, an NDA you've been asked to sign, a license renewal coming up, a meeting with a lawyer or accountant where you want to walk in informed instead of guessing.
 
-The skill is jurisdiction-aware. It reads a `jurisdiction:` field from `core/identity.md` and loads only that jurisdiction's reference folder. UAE founders get a complete reference set out of the box - 10 domain files (company formation, employment, tax/VAT, visas, contracts, IP, data protection, dispute resolution, industry permits) plus 27 tracked primary government sources (mohre.gov.ae, tax.gov.ae, icp.gov.ae, det.gov.ae, difc.ae, adgm.com, etc.) plus document templates for NDAs, employment offers, privacy policies. Verified 2026-04-25.
+The skill is jurisdiction-aware. It reads a `jurisdiction:` field from `core/identity.md` and loads only that jurisdiction's reference folder. UAE founders get a complete reference set out of the box - 9 domain files (company formation, employment, tax/VAT, visas, contracts, IP, data protection, dispute resolution, industry permits) plus 27 tracked primary government sources (mohre.gov.ae, tax.gov.ae, icp.gov.ae, det.gov.ae, difc.ae, adgm.com, etc.) plus document templates for NDAs, employment offers, privacy policies. Verified 2026-04-25.
 
 Founders outside the UAE run `/founder-os:legal-setup` to:
 1. Name their jurisdiction (e.g., `US-Delaware-LLC`, `UK-Ltd`, `IN-Karnataka-Pvt-Ltd`)
@@ -266,7 +270,7 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.25.2. Public release. 48 skills, 30 commands, 359 tests.
+Version 1.25.3. Public release. 48 skills, 30 commands, 365 tests.
 
 v1.25 adds the brand voice layer. Operators running a multi-brand ecosystem (a founder with a personal voice plus brand voices, an agency with per-client brands, a marketing manager handling several group brands) can now capture each brand voice separately from the operator's personal voice. Writing skills route to the right voice based on task context. Three new skills: `brand-voice-interview`, `campaign-from-theme` (funnel-gated, refuses to draft until audience and objective are answered), and `review-responder` (incoming customer messages with channel + posture constraints). Full release history in [CHANGELOG.md](CHANGELOG.md).
 

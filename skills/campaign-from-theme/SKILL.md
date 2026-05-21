@@ -85,7 +85,7 @@ Ask:
 
 Capture as `objective`. If the user picks more than one, push back:
 
-> A campaign can support more than one stage but it should be optimized for one. Which is the primary? The others become secondary effects.
+> A campaign can support more than one stage but it should be built around one primary stage. Which is the primary? The others become secondary effects.
 
 Force a single primary.
 

@@ -4,6 +4,7 @@ description: >
   Write a delegation-ready SOP. Trigger on "write an SOP", "document this process", "create a procedure", "process documentation", "how-to guide", "write up the steps for", "create a runbook", or any request to turn a process into a reusable document. Also fires when the user describes how something works and wants it captured for someone else to follow.
 why: "Documents a process so it can run without the founder in the room - the goal is a document a smart person who has never done this task can follow to completion."
 enhance: "Fill stack.json with your actual tools before running so TOOLS NEEDED names your real CRM, automation platform, and email client rather than generic labels the delegate cannot look up."
+allowed-tools: ["Read"]
 mcp_requirements: []
 ---
 

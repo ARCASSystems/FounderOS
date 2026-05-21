@@ -44,7 +44,7 @@ Templates location by install method:
 - **Git clone** (`git clone https://github.com/ARCASSystems/FounderOS`): `templates/` at the repo root.
 - **Curl install**: `templates/` at the install root (the folder named in the curl recipe).
 
-If the exact path is uncertain, run a Glob for `**/templates/identity.md` and use the parent directory. The templates folder always contains: `identity.md`, `bootloader-claude-md.md`, `global-claude-md.md`, `company-claude-md.md`, `project-claude-md.md`, `voice-profile.yml.template`, `brand-profile.yml.template`, and the subfolders `brain/`, `cadence/`, `context/`, `roles/`, `rules/`, `scripts/`, `network/`, `memory/`, `raw/`, `system/`. Use that file list to verify you found the right folder before reading.
+If the exact path is uncertain, run a Glob for `**/templates/identity.md` and use the parent directory. The templates folder always contains: `identity.md`, `avatar.md`, `bootloader-claude-md.md`, `global-claude-md.md`, `company-claude-md.md`, `project-claude-md.md`, `business-context.template.md`, `voice-profile.yml.template`, `brand-profile.yml.template`, `brand-voice.yml.template`, `brand-positioning.yml.template`, `brand-visual.yml.template`, and the subfolders `brain/`, `cadence/`, `context/`, `roles/`, `rules/`, `scripts/`, `network/`, `memory/`, `raw/`, `system/`. Use that file list to verify you found the right folder before reading.
 
 If the user passed "reset": scan for an existing Founder OS folder, confirm they want to reconfigure, then re-run discovery.
 
@@ -391,9 +391,9 @@ Create the full folder structure. Read each template before generating the perso
 
 Show the full list of files that will be created. Get approval. Then create them all.
 
-**Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, and post-tool-use observation hook live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Find the plugin install path (same as where templates live), then copy all six hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
+**Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, user-prompt capture, and post-tool-use observation hooks live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Resolve the plugin source path the same way Phase 2.2 already does (one of the three named install methods: Plugin, Git clone, or Curl), then copy all eight hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. The eight hook files are: `session-start-brief.sh`, `session-start-brief.ps1`, `session-close-revenue-check.sh`, `session-close-revenue-check.ps1`, `user-prompt-capture.sh`, `user-prompt-capture.ps1`, `post-tool-use-observation.sh`, `post-tool-use-observation.ps1`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, UserPromptSubmit, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
-**Scripts copy step (mandatory).** Copy all twelve Python helpers from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
+**Scripts copy step (mandatory).** Copy all fourteen Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
 
 - `templates/scripts/wiki-build.py` → `scripts/wiki-build.py` (used by `/founder-os:wiki-build`)
 - `templates/scripts/query.py` → `scripts/query.py` (used by `/founder-os:query`)
@@ -407,8 +407,14 @@ Show the full list of files that will be created. Get approval. Then create them
 - `templates/scripts/check-identity-ready.py` → `scripts/check-identity-ready.py` (preflight gate for reasoning skills: meeting-prep, decision-framework, strategic-analysis, weekly-review)
 - `templates/scripts/check-log-has-history.py` → `scripts/check-log-has-history.py` (preflight gate for brain-pass and linkedin-post when prior context is required)
 - `templates/scripts/list-brands.py` → `scripts/list-brands.py` (lists brand slugs under `brands/`, used by your-voice, campaign-from-theme, review-responder)
+- `templates/scripts/user-prompt-capture.py` → `scripts/user-prompt-capture.py` (writes user prompts to `brain/observations/` when `FOUNDER_OS_OBSERVATIONS=1`)
+- `templates/scripts/check-private-names.py` → `scripts/check-private-names.py` (called by `.githooks/pre-commit` and `.githooks/commit-msg` to block leaked private names)
 
-These are not personalized templates. Copy contents exactly. Do not edit. Verify all twelve copies exist on disk before continuing. If any are missing, the brain-snapshot, brain-pass, wiki-build, menu, observation-rollup, or preflight-gate helpers will fail silently or hard-error.
+Also copy `templates/scripts/private-name-patterns.txt.template` → `scripts/private-name-patterns.txt` (NOTE: drop the `.template` suffix on the destination filename). The pre-commit hook and `install-git-hooks.sh` both look for `scripts/private-name-patterns.txt` exactly. The `.template` suffix marks the source-of-truth example, not the runtime file.
+
+Offer to auto-write the captured founder name as the first uncommented pattern in `scripts/private-name-patterns.txt`: `\b<FOUNDER_NAME>\b`. This gives the new install one working guard out of the box without forcing the founder to learn regex syntax on day one.
+
+These are not personalized templates. Copy contents exactly. Do not edit. Verify all fourteen `.py` copies plus `scripts/private-name-patterns.txt` exist on disk before continuing. If any are missing, the brain-snapshot, brain-pass, wiki-build, menu, observation-rollup, preflight-gate, observation-capture, or private-name guard helpers will fail silently or hard-error.
 
 **{{role_noun}} substitution.** The `templates/bootloader-claude-md.md` file contains `{{role_noun}}` placeholders in two places. When writing the bootloader CLAUDE.md, substitute based on the role captured in Phase 0.2.1:
 
@@ -417,6 +423,18 @@ These are not personalized templates. Copy contents exactly. Do not edit. Verify
 - `team_of_one` → replace `{{role_noun}}` with `operator` (operator is the generic term for non-owners)
 
 If role was not captured or defaulted, use `founder`.
+
+**{{FOUNDER_NAME}} substitution.** Before the universal placeholder pass below runs, substitute `{{FOUNDER_NAME}}` with the founder name captured in Phase 0.1 in every template that contains it. At minimum:
+
+- `templates/bootloader-claude-md.md` → bootloader CLAUDE.md (lines 1 and 5 must end up with the founder's actual name, NOT `[NOT SET]`).
+- `templates/global-claude-md.md` → `~/.claude/CLAUDE.md` or equivalent global location.
+- `templates/identity.md` → `core/identity.md`.
+- `templates/avatar.md` → `core/avatar.md` (already covered above; do not double-substitute).
+- `templates/business-context.template.md` → `companies/<slug>-business.md` (substitutes `{{COMPANY_NAME}}` with the company name from Phase 0.1).
+
+If no founder name was captured, fall through to the universal pass and write `[NOT SET]`. Do NOT leave literal `{{FOUNDER_NAME}}` on disk.
+
+**Universal placeholder pass (always run last).** After every template copy completes in Phase 2.2 (and any later phase that copies a template), grep the destination file for any remaining `{{...}}` placeholder. Replace every match with `[NOT SET]`. This is the same rule already applied to `cadence/weekly-commitments.md`. It must apply universally: `rules/operating-rules.md`, `rules/writing-style.md`, `roles/*.md`, `global-claude-md.md`, `context/priorities.md`, and any future template all go through this pass. The named substitutions above MUST run before the universal pass so they don't get overwritten with `[NOT SET]`.
 
 **{{TODAY}} substitution.** The `templates/brain/relations.yaml` file contains the literal placeholder `{{TODAY}}`. When copying to `brain/relations.yaml`, replace every occurrence of `{{TODAY}}` with today's date in `YYYY-MM-DD` format (use `date -u +%Y-%m-%d` via Bash to get it).
 
@@ -460,7 +478,7 @@ Under 60 lines. Show draft. Get approval. Write it.
 
 ### 3.2.5 Company business-context file (recommended)
 
-Copy `templates/business-context.template.md` to `companies/<slug>-business.md` (where `<slug>` is the company folder name from 3.1). Replace the obvious placeholders ({{COMPANY_NAME}}, {{TAGLINE}}, {{YEAR}}) with what the founder gave in Phase 0.1 / 0.2. Leave the `[FILL]` markers intact - the `business-context-loader` skill walks them on first run with the founder.
+Copy `templates/business-context.template.md` to `companies/<slug>-business.md` (where `<slug>` is the company folder name from 3.1). Replace `{{COMPANY_NAME}}` on the **Company name** line with the company name captured in Phase 0.1. Leave every `[FILL]` marker intact - the `business-context-loader` skill walks them on first run with the founder. The universal placeholder pass (Phase 2.2) will not see this file because it runs Phase 2 only; if any other `{{...}}` placeholder lands here later, replace it with `[NOT SET]`.
 
 This file is the input that `business-context-loader`, `proposal-writer`, `client-update`, and `strategic-analysis` read for ICP, pricing tier, positioning, and offer structure. Without it those skills produce generic output. The wizard surfaces it once; the founder fills it the first time they need a company-specific deliverable.
 

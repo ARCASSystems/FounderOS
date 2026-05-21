@@ -177,8 +177,18 @@ if [[ -d "$TARGET/.git" ]]; then
     local_version=$(cat "$TARGET/VERSION")
   fi
   info "FounderOS is already installed at $TARGET (version: $local_version)."
-  printf '  Update to the latest version? [y/N] '
-  read -r answer
+  if [[ -t 0 ]]; then
+    printf '  Update to the latest version? [y/N] '
+    read -r answer
+  else
+    # Non-interactive (curl | bash). Default to update unless opted out.
+    if [[ -n "${FOUNDER_OS_NO_UPDATE:-}" ]]; then
+      answer="n"
+    else
+      answer="y"
+      echo "Non-interactive shell detected. Updating. Set FOUNDER_OS_NO_UPDATE=1 to skip."
+    fi
+  fi
   answer=$(printf '%s' "$answer" | tr '[:upper:]' '[:lower:]')
   if [[ "$answer" == "y" || "$answer" == "yes" ]]; then
     step "Updating FounderOS"

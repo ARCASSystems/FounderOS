@@ -4,6 +4,7 @@ description: >
   Run a strategic analysis: competitive map, market sizing, opportunity, or business model. Trigger on "analyze this market", "competitor map", "evaluate this opportunity", "market research", "SWOT", "who are the competitors", "market sizing", "TAM SAM SOM", or any variation of strategic business analysis. Also fires when the user describes a business opportunity or competitor and wants structured thinking.
 why: "Grounds competitive and market analysis in your actual position and prior knowledge rather than producing a generic table that ignores what you already know or have decided."
 enhance: "Populate brain/knowledge/ with notes from books and conversations about the market and competitors - the skill reads matching topics by name and uses them as prior evidence in the analysis."
+allowed-tools: ["Read", "Bash"]
 mcp_requirements: []
 ---
 
@@ -110,6 +111,45 @@ MINIMUM VIABLE TEST
 
 RECOMMENDATION
 [Pursue / Don't pursue / Test first]
+```
+
+## Business Model Evaluation
+
+```
+BUSINESS MODEL: [Name]
+---
+VALUE PROPOSITION
+[What job it does for the customer, in one sentence]
+
+CUSTOMER SEGMENTS
+[Who pays. Who uses. Whether they are the same.]
+
+REVENUE MODEL
+[How money comes in. Unit price, frequency, contract shape.]
+
+COST STRUCTURE
+[Biggest cost lines. Fixed vs variable. What scales linearly.]
+
+KEY RESOURCES
+[What the business cannot operate without]
+
+KEY ACTIVITIES
+[What the team has to be good at]
+
+KEY PARTNERS
+[Who carries load the business does not own]
+
+CHANNELS
+[How the offer reaches the customer and how the customer reaches back]
+
+COMPETITIVE MOAT
+[Why this is hard to copy. Be honest if it is not.]
+
+RELEVANT KNOWLEDGE
+[Matching notes from brain/knowledge/, or "No matching knowledge files found."]
+
+VERDICT
+[Viable / Viable with changes / Not viable, and the single biggest reason]
 ```
 
 ## Rules

@@ -221,9 +221,16 @@ If they want to change something, edit and re-confirm.
 
 ## File output
 
-Write `core/brand-profile.yml`. Use the exact structure from `templates/brand-profile.yml.template`, including the `existing_assets:` block. Replace every `[BRACKETED]` placeholder with the captured value or `[NOT SET]` if the user skipped it.
+Branch on whether the user named a specific brand in Phase 1 (Q1 / display name):
 
-Also create the `core/brand-assets/` directory if it doesn't exist. If the user gave logo file paths that don't exist yet, leave them in the profile and tell the user:
+- If the user named a specific brand (not the operator default, i.e. not just their personal name): derive a slug from the brand name and write `brands/<slug>/visual.yml` using `templates/brand-visual.yml.template`. Create the `brands/<slug>/` directory if absent.
+- Else (operator default, the personal brand): write `core/brand-profile.yml` using `templates/brand-profile.yml.template`.
+
+**Slug rule:** lowercase, kebab-case, alpha-numeric and hyphens only, derived from the brand display_name. Strip punctuation, replace spaces with hyphens, collapse repeated hyphens. Example: "Smith Studio" becomes `smith-studio`. "TruHoney & Co." becomes `truhoney-co`.
+
+Use the exact structure from the chosen template, including the `existing_assets:` block. Replace every `[BRACKETED]` placeholder with the captured value or `[NOT SET]` if the user skipped it.
+
+Also create the `core/brand-assets/` directory if it doesn't exist (or `brands/<slug>/brand-assets/` for a named brand, if logo paths point there). If the user gave logo file paths that don't exist yet, leave them in the profile and tell the user:
 
 > Your brand profile points to <path>. Place the file at that path before generating any branded document, or update the profile to point to where the file actually lives.
 
