@@ -422,6 +422,18 @@ These are not personalized templates. Copy contents exactly. Do not edit. Verify
 
 If role was not captured or defaulted, use `founder`.
 
+**{{FOUNDER_NAME}} substitution.** Before the universal placeholder pass below runs, substitute `{{FOUNDER_NAME}}` with the founder name captured in Phase 0.1 in every template that contains it. At minimum:
+
+- `templates/bootloader-claude-md.md` → bootloader CLAUDE.md (lines 1 and 5 must end up with the founder's actual name, NOT `[NOT SET]`).
+- `templates/global-claude-md.md` → `~/.claude/CLAUDE.md` or equivalent global location.
+- `templates/identity.md` → `core/identity.md`.
+- `templates/avatar.md` → `core/avatar.md` (already covered above; do not double-substitute).
+- `templates/business-context.template.md` → `companies/<slug>-business.md` (substitutes `{{COMPANY_NAME}}` with the company name from Phase 0.1).
+
+If no founder name was captured, fall through to the universal pass and write `[NOT SET]`. Do NOT leave literal `{{FOUNDER_NAME}}` on disk.
+
+**Universal placeholder pass (always run last).** After every template copy completes in Phase 2.2 (and any later phase that copies a template), grep the destination file for any remaining `{{...}}` placeholder. Replace every match with `[NOT SET]`. This is the same rule already applied to `cadence/weekly-commitments.md`. It must apply universally: `rules/operating-rules.md`, `rules/writing-style.md`, `roles/*.md`, `global-claude-md.md`, `context/priorities.md`, and any future template all go through this pass. The named substitutions above MUST run before the universal pass so they don't get overwritten with `[NOT SET]`.
+
 **{{TODAY}} substitution.** The `templates/brain/relations.yaml` file contains the literal placeholder `{{TODAY}}`. When copying to `brain/relations.yaml`, replace every occurrence of `{{TODAY}}` with today's date in `YYYY-MM-DD` format (use `date -u +%Y-%m-%d` via Bash to get it).
 
 **{{DATE}} substitution.** The `templates/cadence/daily-anchors.md` file contains the literal placeholder `{{DATE}}` on the `## Today: {{DATE}}` heading. When copying to `cadence/daily-anchors.md`, replace `{{DATE}}` with today's date in `YYYY-MM-DD` format (same source as `{{TODAY}}` above). The SessionStart brief and `/today` command both grep this heading - leaving the placeholder in place would make the very first session report STALE before the founder has done anything.
@@ -464,7 +476,7 @@ Under 60 lines. Show draft. Get approval. Write it.
 
 ### 3.2.5 Company business-context file (recommended)
 
-Copy `templates/business-context.template.md` to `companies/<slug>-business.md` (where `<slug>` is the company folder name from 3.1). Replace the obvious placeholders ({{COMPANY_NAME}}, {{TAGLINE}}, {{YEAR}}) with what the founder gave in Phase 0.1 / 0.2. Leave the `[FILL]` markers intact - the `business-context-loader` skill walks them on first run with the founder.
+Copy `templates/business-context.template.md` to `companies/<slug>-business.md` (where `<slug>` is the company folder name from 3.1). Replace `{{COMPANY_NAME}}` on the **Company name** line with the company name captured in Phase 0.1. Leave every `[FILL]` marker intact - the `business-context-loader` skill walks them on first run with the founder. The universal placeholder pass (Phase 2.2) will not see this file because it runs Phase 2 only; if any other `{{...}}` placeholder lands here later, replace it with `[NOT SET]`.
 
 This file is the input that `business-context-loader`, `proposal-writer`, `client-update`, and `strategic-analysis` read for ICP, pricing tier, positioning, and offer structure. Without it those skills produce generic output. The wizard surfaces it once; the founder fills it the first time they need a company-specific deliverable.
 

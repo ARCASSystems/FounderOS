@@ -107,6 +107,7 @@ rm -rf skills/
 rm -rf scripts/
 rm -rf templates/
 rm -rf rules/
+rm -rf notion-package/
 rm -rf .claude/commands/
 rm -rf .claude/hooks/
 rm -rf .claude-plugin/
@@ -120,7 +121,7 @@ Do NOT remove `CLAUDE.md` or `stack.json` in default mode - both are User Layer 
 If running in PowerShell on Windows native (no git-bash), use:
 
 ```powershell
-Remove-Item -Recurse -Force skills, scripts, templates, rules, docs
+Remove-Item -Recurse -Force skills, scripts, templates, rules, notion-package, docs
 Remove-Item -Recurse -Force .claude/commands, .claude/hooks, .claude-plugin
 Remove-Item -Force .claude/settings.json -ErrorAction SilentlyContinue
 Remove-Item -Force VERSION, AGENTS.md, GEMINI.md, AVATAR.md, README.md, LICENSE

@@ -16,18 +16,11 @@ set -euo pipefail
 # ---- constants ---------------------------------------------------------------
 
 DEFAULT_TARGET="$HOME/.claude/plugins/founder-os"
-HOOKS_TARGET="$HOME/.claude/hooks"
 
-# Hook files that install.sh copies - uninstall removes the same set.
-# Names must match .claude/settings.json registered hooks exactly.
-HOOK_FILES=(
-  "session-start-brief.sh"
-  "session-start-brief.ps1"
-  "session-close-revenue-check.sh"
-  "session-close-revenue-check.ps1"
-  "post-tool-use-observation.sh"
-  "post-tool-use-observation.ps1"
-)
+# install.sh stopped copying hooks to ~/.claude/hooks/ in v1.24.1; hooks now live
+# inside the plugin install directory at $TARGET/.claude/hooks/ and are removed
+# along with the install directory below. Do NOT re-introduce a global hook
+# removal step here: a sibling PersonalOS install shares ~/.claude/hooks/.
 
 # User data directories that must never be removed.
 PRESERVED_DIRS=(
@@ -123,14 +116,6 @@ echo "  Install directory:"
 echo "    $TARGET"
 echo "  (system layer only - skills, templates, scripts, hooks source)"
 echo ""
-echo "  Hook copies:"
-for hook in "${HOOK_FILES[@]}"; do
-  hook_path="$HOOKS_TARGET/$hook"
-  if [[ -f "$hook_path" ]]; then
-    echo "    $hook_path"
-  fi
-done
-echo ""
 echo "The following will NOT be removed (your data):"
 for dir in "${PRESERVED_DIRS[@]}"; do
   echo "    $TARGET/$dir/"
@@ -156,16 +141,6 @@ if [[ "$answer" != "y" && "$answer" != "yes" ]]; then
 fi
 
 echo ""
-
-# ---- remove hook copies ------------------------------------------------------
-
-for hook in "${HOOK_FILES[@]}"; do
-  hook_path="$HOOKS_TARGET/$hook"
-  if [[ -f "$hook_path" ]]; then
-    rm "$hook_path"
-    ok "$hook_path"
-  fi
-done
 
 # ---- remove install directory ------------------------------------------------
 
