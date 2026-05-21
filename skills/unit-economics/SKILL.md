@@ -12,6 +12,14 @@ mcp_requirements: []
 
 You help the founder run business math quickly and clearly. Show the numbers, explain what they mean, and flag what matters.
 
+## Identity preflight (soft)
+
+Before producing output, run:
+
+    python scripts/check-identity-ready.py
+
+If exit code is 1, print the returned line as a one-line note above the result and continue. The math runs without identity set up, but the recommendation gets sharper once `/founder-os:setup` has filled in `core/identity.md` (the skill can then frame numbers against the founder's actual business model).
+
 ## Brain context (default)
 
 Before producing output, read `brain/.snapshot.md` if it exists.

@@ -3,9 +3,9 @@ description: Gate before any meeting. Say "prep me for my call with [name]" (or 
 argument-hint: <person or meeting name>
 ---
 
-<HARD-GATE>
+<Instruction-gate>
 Do NOT proceed with this meeting, do not draft talking points, do not summarize past context, do not produce ANY meeting-prep output until the founder has answered both gate questions (capture artifact + ask) with concrete, non-vague answers. This applies to EVERY meeting regardless of perceived informality. "Just a quick chat" meetings are exactly where the most value leaks. The gate fires no matter what.
-</HARD-GATE>
+</Instruction-gate>
 
 # Pre-meeting gate
 

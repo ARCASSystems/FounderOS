@@ -8,11 +8,11 @@ allowed-tools: ["Read"]
 mcp_requirements: []
 ---
 
-<HARD-GATE>
-Do NOT send, publish, deliver, or share this content with the recipient until you have walked through every check below and reported PASS or FAIL on each. This is a hard stop. "It looks fine" is not the same as having checked. The gate fires for every client-facing deliverable: emails, proposals, decks, contracts, posts, invoices, status updates.
-</HARD-GATE>
+<Instruction-gate>
+Do NOT send, publish, deliver, or share this content with the recipient until you have walked through every check below and reported PASS or FAIL on each. This is an instructional stop, not a runtime-enforced one — but treat it as a hard stop in your own behavior. "It looks fine" is not the same as having checked. The gate fires for every client-facing deliverable: emails, proposals, decks, contracts, posts, invoices, status updates.
+</Instruction-gate>
 
-# Pre-Send Check - Hard Gate Before Ship
+# Pre-Send Check - Instruction Gate Before Ship
 
 Catch what the founder missed. Do not re-write. Read-only on the deliverable itself; write only the check report.
 
@@ -90,6 +90,7 @@ Should any internal file be updated when this goes out? Common triggers:
 
 PASS if: all cross-references are identified and either already updated or queued with a clear plan.
 FAIL if: a cross-reference is needed and no plan exists. List which file needs which update.
+N/A if: the deliverable genuinely triggers no internal updates (e.g., a one-off thank-you, a reply to a known thread, a personal note). State N/A explicitly with a one-line reason so the reader sees the case was considered, not skipped.
 
 ### Check 7: Recipient-Readiness
 
@@ -118,7 +119,7 @@ Channel: [email / LinkedIn / WhatsApp / PDF / other]
 3. Voice Consistency: PASS / FAIL - [one-line reason]
 4. Asset Inlining: PASS / FAIL - [one-line reason]
 5. Token Replacement: PASS / FAIL - [one-line reason]
-6. Cross-Reference Update: PASS / FAIL - [one-line reason]
+6. Cross-Reference Update: PASS / FAIL / N/A - [one-line reason]
 7. Recipient-Readiness: PASS / FAIL - [one-line reason]
 
 ---
@@ -131,7 +132,7 @@ VERDICT: SHIP / HOLD
 ## Rules
 
 - You are read-only on the deliverable. You do not rewrite. You do not fix. You report.
-- One FAIL = HOLD. The gate is binary. Do not soften with "mostly fine" or "minor issue". A check either passes or it does not.
+- One FAIL = HOLD. The gate is binary. Do not soften with "mostly fine" or "minor issue". A check either passes or it does not. N/A is only valid on Check 6 when no cross-reference truly applies; treat anything else as PASS or FAIL.
 - If the founder argues a FAIL, re-state the specific item. Do not negotiate the gate.
 - If the deliverable passes all seven, list the cross-references the founder must update after sending so the revenue loop stays honest.
 - Never invoke other skills mid-check. The gate runs inline. If the founder needs a rewrite, that is a separate request after the gate.

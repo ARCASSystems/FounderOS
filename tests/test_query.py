@@ -83,6 +83,44 @@ class QueryCliTests(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("Usage: python scripts/query.py <question>", result.stdout)
 
+    def test_common_case_preflight_runs_before_edge_case(self) -> None:
+        # Preflight ordering guard. Two assertions in one test:
+        #
+        # 1. Common-case path: a normal fixture query with searchable
+        #    tokens against the populated corpus passes preflight and
+        #    returns ranked hits (exit 0, "Top results:" header). This
+        #    is the path 99% of real invocations follow.
+        #
+        # 2. Common-before-edge ordering: against a deliberately empty
+        #    root (no markdown files), a token-less question must exit
+        #    2 (no searchable tokens, the common-case failure) rather
+        #    than exit 1 (no markdown files under root, the edge-case
+        #    failure). If the order ever flips back, this assertion
+        #    fails because the no-files branch would short-circuit
+        #    with exit 1 and the "Top results:" header.
+        common = run_query("outreach", "stalled")
+        self.assertEqual(common.returncode, 0)
+        self.assertIn("Top results:", common.stdout)
+
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            cmd = [
+                sys.executable,
+                str(QUERY_SCRIPT),
+                "--root",
+                str(tmp),
+                "?",
+            ]
+            empty = subprocess.run(cmd, text=True, capture_output=True)
+
+        self.assertEqual(
+            empty.returncode, 2,
+            "token-check (common case) must fire before no-files check (edge case); "
+            f"got returncode={empty.returncode}, stdout={empty.stdout!r}",
+        )
+        self.assertIn("No searchable tokens", empty.stdout)
+        self.assertNotIn("No markdown files found under", empty.stdout)
+
 
 class ParseEdgesTests(unittest.TestCase):
     """Direct unit tests for parse_edges in scripts/query.py and its template

@@ -16,11 +16,11 @@ By default, output is `core/brand-profile.yml` (the operator's default visual br
 
 The brand-profile feeds the `your-deliverable-template` skill, which then produces all visual outputs (CV, proposals, decks, one-pagers) in the user's brand.
 
-<HARD-GATE>
+<Instruction-gate>
 Three branches at the start: (1) they have a brand kit already, (2) they have partial brand (a logo, or some colors, but not a full kit), (3) they are starting from zero. Detect which one and run the matching path. Don't force a user with no brand to invent one cold - help them pick defaults that look good and can evolve.
 
 Do not invent values. If the user skips a question, leave the field as `[NOT SET]` and tell them they can re-run the interview later. Do not generate `core/brand-profile.yml` until the required fields (display_name, primary color, primary font, logomark path) are answered.
-</HARD-GATE>
+</Instruction-gate>
 
 ---
 

@@ -14,7 +14,7 @@ You are drafting a reply to an incoming customer message. The message could be a
 
 This skill is NOT a generic AI customer-service responder. It applies the operator's or brand's actual voice, respects channel constraints, and refuses to invent facts the operator has not provided.
 
-<HARD-GATE>
+<Instruction-gate>
 Do not draft a reply until:
 1. The user has shown you the incoming message (paste or summary).
 2. You know whose voice to use (operator or a specific brand).
@@ -22,7 +22,7 @@ Do not draft a reply until:
 4. You know the desired posture (warm thank-you, careful negative response, factual answer, soft sell, etc.).
 
 If any are missing, ask.
-</HARD-GATE>
+</Instruction-gate>
 
 ---
 
