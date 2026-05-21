@@ -12,6 +12,7 @@
 **Location:** {{LOCATION}}
 **Team size:** {{TEAM_SIZE}} (e.g. solo, 2 people, 5 contractors)
 **Time zone:** {{TIMEZONE}}
+- **Jurisdiction:** [NOT SET - run /founder-os:legal-setup]
 
 ---
 

@@ -113,6 +113,45 @@ RECOMMENDATION
 [Pursue / Don't pursue / Test first]
 ```
 
+## Business Model Evaluation
+
+```
+BUSINESS MODEL: [Name]
+---
+VALUE PROPOSITION
+[What job it does for the customer, in one sentence]
+
+CUSTOMER SEGMENTS
+[Who pays. Who uses. Whether they are the same.]
+
+REVENUE MODEL
+[How money comes in. Unit price, frequency, contract shape.]
+
+COST STRUCTURE
+[Biggest cost lines. Fixed vs variable. What scales linearly.]
+
+KEY RESOURCES
+[What the business cannot operate without]
+
+KEY ACTIVITIES
+[What the team has to be good at]
+
+KEY PARTNERS
+[Who carries load the business does not own]
+
+CHANNELS
+[How the offer reaches the customer and how the customer reaches back]
+
+COMPETITIVE MOAT
+[Why this is hard to copy. Be honest if it is not.]
+
+RELEVANT KNOWLEDGE
+[Matching notes from brain/knowledge/, or "No matching knowledge files found."]
+
+VERDICT
+[Viable / Viable with changes / Not viable, and the single biggest reason]
+```
+
 ## Rules
 
 - Show reasoning, not just conclusions

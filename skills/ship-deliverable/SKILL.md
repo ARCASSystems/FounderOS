@@ -31,7 +31,7 @@ If the brand or template skill is missing, record `WARN - template skill missing
 
 ### Link 2 - Anti-AI Scan
 
-Apply the baseline from `rules/writing-style.md` or `templates/rules/writing-style.md`:
+Apply the baseline: use `rules/writing-style.md`; fall back to `templates/rules/writing-style.md` only if the local copy is missing.
 
 - No em dashes or en dashes.
 - No rule-of-three filler.

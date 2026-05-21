@@ -5,7 +5,7 @@ description: >
 why: "Makes work transferable to a new session or another person without losing the reasoning behind decisions - context in chat alone is gone the moment the session ends."
 enhance: "Be explicit about handoff type (A/B/C) at the start - the skill strips internal strategy and inlines skill-dependent knowledge differently for each type, and guessing wrong produces a document that leaks or lacks context."
 allowed-tools: ["Read", "Write"]
-mcp_requirements: [optional: notion]
+mcp_requirements: []
 ---
 
 # Session Handoff

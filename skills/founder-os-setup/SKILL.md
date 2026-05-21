@@ -44,7 +44,7 @@ Templates location by install method:
 - **Git clone** (`git clone https://github.com/ARCASSystems/FounderOS`): `templates/` at the repo root.
 - **Curl install**: `templates/` at the install root (the folder named in the curl recipe).
 
-If the exact path is uncertain, run a Glob for `**/templates/identity.md` and use the parent directory. The templates folder always contains: `identity.md`, `bootloader-claude-md.md`, `global-claude-md.md`, `company-claude-md.md`, `project-claude-md.md`, `voice-profile.yml.template`, `brand-profile.yml.template`, and the subfolders `brain/`, `cadence/`, `context/`, `roles/`, `rules/`, `scripts/`, `network/`, `memory/`, `raw/`, `system/`. Use that file list to verify you found the right folder before reading.
+If the exact path is uncertain, run a Glob for `**/templates/identity.md` and use the parent directory. The templates folder always contains: `identity.md`, `avatar.md`, `bootloader-claude-md.md`, `global-claude-md.md`, `company-claude-md.md`, `project-claude-md.md`, `business-context.template.md`, `voice-profile.yml.template`, `brand-profile.yml.template`, `brand-voice.yml.template`, `brand-positioning.yml.template`, `brand-visual.yml.template`, and the subfolders `brain/`, `cadence/`, `context/`, `roles/`, `rules/`, `scripts/`, `network/`, `memory/`, `raw/`, `system/`. Use that file list to verify you found the right folder before reading.
 
 If the user passed "reset": scan for an existing Founder OS folder, confirm they want to reconfigure, then re-run discovery.
 

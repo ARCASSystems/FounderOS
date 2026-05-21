@@ -16,7 +16,7 @@ FounderOS ships in deliberate increments. Each release closes a gap the previous
 
 ### Issues we will be slow on
 
-- **Feature requests outside the ROADMAP scope.** See ROADMAP.md for the direction. If your idea fits, open an issue. If it does not, fork.
+- **Feature requests outside the FounderOS scope.** See docs/forking.md for the direction. If your idea fits, open an issue. If it does not, fork.
 - **Vendor-specific integrations** beyond the existing MCP set.
 - **Usage questions** that the README, docs/, or skill bodies already answer.
 
