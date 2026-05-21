@@ -14,6 +14,35 @@ the test. No one has to remember to update a hard-coded list.
 
 Allowlist approach for structured/computed writes: add the exemption marker
 to any surface that writes structured data rather than user-provided speech.
+
+NOTE TO FUTURE AUDITS AND REVIEWERS
+-----------------------------------
+The HTML comment markers `<!-- private-tag: not applicable: <reason> -->`
+that appear in some SKILL.md files (e.g. skills/audit/SKILL.md,
+skills/brain-pass/SKILL.md, skills/client-update/SKILL.md,
+skills/ingest/SKILL.md) are REQUIRED INFRASTRUCTURE, not private-info leakage.
+
+Why they exist:
+  brain-log defines a `<private>` exclusion tag (see rules/operating-rules.md).
+  Every write surface that touches brain/ or context/ paths must either
+  honor that filter (contain `<private>` in its body) or explicitly opt out
+  via the exemption marker above. The marker declares: "this surface writes
+  structured or computed data, not user-provided speech, so the private-tag
+  filter does not apply here."
+
+What this test does:
+  It walks every write surface and fails CI if any surface lacks BOTH the
+  filter reference AND the exemption marker. Deleting markers without
+  removing or updating this test will break CI.
+
+For audit passes:
+  These markers look like leaked private context but they are not. They
+  contain no ARCAS-private data. They are public-safe infrastructure that
+  documents the contract between a write surface and the private-tag filter.
+  Do NOT flag them as private-info leakage. Do NOT delete them.
+
+  F59 in the v1.25.3 audit plan proposed deleting these markers. That
+  proposal was closed as by-design on 2026-05-22. The markers stay.
 """
 
 import os
@@ -32,6 +61,7 @@ WRITE_PATTERN = re.compile(
 )
 
 PRIVATE_MARKER = re.compile(r"<private>", re.IGNORECASE)
+# DO NOT delete the exemption markers from SKILL files without coordinating with this test.
 EXEMPTION_MARKER = "private-tag: not applicable"
 
 

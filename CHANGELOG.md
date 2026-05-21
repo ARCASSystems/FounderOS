@@ -2,6 +2,40 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.25.3 - 2026-05-22
+
+Closes a 60-finding audit run that surfaced bug clusters across the wizard, runtime, tests, and documentation surface. Bug-fix release. No new features. Every finding is either closed in code or closed by design with a test docstring update so the same item does not re-flag next audit.
+
+### Templates/scripts payload parity
+
+The `scripts/` directory at repo root and `templates/scripts/` (the payload the wizard copies to a fresh install) had drifted. Several scripts existed only in the repo root and never landed on a real install. `user-prompt-capture.py`, `check-private-names.py`, and `private-name-patterns.txt.template` now ship in `templates/scripts/`. Three other scripts (`menu.py`, `observation-rollup.py`, `brain-snapshot.py`) were out of sync and have been re-synced to the live versions. The wizard's copy list now references fourteen scripts and the hook-copy step references eight files. The durable guard for this is `tests/test_templates_scripts_parity.py`, which fails if any script lives in one location but not the other. Future drift gets caught at test time, not on a user's machine.
+
+### Wizard placeholder substitution
+
+Three placeholder gaps were leaving literal `{{FOUNDER_NAME}}` and `{{COMPANY_NAME}}` markers in installed files. The wizard now substitutes `{{FOUNDER_NAME}}` across the bootloader CLAUDE.md, the global CLAUDE.md, `core/identity.md`, and the avatar template. `templates/companies/business-context.template` had a name-mismatch (`{{COMPANY}}` vs `{{COMPANY_NAME}}`) that is now aligned. A universal `{{...}}` to `[NOT SET]` pass runs after every template copy so a half-substituted template never reaches the user as a literal placeholder. `uninstall.sh` drops the dead `HOOKS_TARGET` block left over from the v1.24.1 curl-installer cleanup. `update.md` and `uninstall.md` layer matrices were inconsistent on three rows (companies, MEMORY, notion-package) and now agree.
+
+### Runtime correctness fixes
+
+PowerShell hooks now read files with `-Encoding UTF8` so Windows machines on `cp1252` no longer mangle banner characters. The repo's `.githooks` scripts probe `python3` then fall back to `python`, fixing the case where a Windows install has only `python` on PATH. Sixteen skills that called out to `python scripts/*.py` were missing `allowed-tools` frontmatter and have been added; without the field, Claude Code could not register their tool surface. `brand-interview` and `your-deliverable-template` now route per-brand asset paths correctly when multiple brands exist. `install.sh` handles non-interactive stdin (the `curl | bash` install path), so update prompts no longer hang. `observation-rollup.py` uses `shutil.move` for cross-device safety. `private-name-patterns.txt.template` now ships starter examples and the wizard offers to auto-write the founder's name. `check-private-names.py` exits 1 when `git` fails instead of silently passing. `install-git-hooks.sh` verifies hook files exist before setting `core.hooksPath`. The `audit` skill declares `Agent` in `allowed-tools` so its parallel-dispatch path works on a fresh install.
+
+### Test hardening against vacuous patterns
+
+A pass through the test suite caught five tests that asserted weaker properties than their names implied. `test_all_seven_template_scripts_exist` was renamed to `test_all_fourteen` and now asserts the new 5 scripts plus the 2 that previously existed. `test_vague_phrase_is_gone` is now case-insensitive so it catches "Find" as well as "find". `test_skill_catalogue` had a regex that returned `None` silently when `skills/index.md` changed shape; it now fails loudly. `WikiBuildIdempotencyTests` now asserts edge presence before testing idempotency, so a broken extractor that produces zero edges can no longer pass the idempotency check. `email-drafter` has an explicit fallback to operator voice with a new gate-coverage test. A new test (`test_python_callers_declare_bash_in_allowed_tools`) asserts that every `SKILL.md` calling `python scripts/` declares `Bash` in `allowed-tools`. That test caught four surprise bugs in `client-update`, `linkedin-post`, `proposal-writer`, and `your-voice` skills that had been silently mis-declared.
+
+### Documentation surface alignment
+
+Eighteen documentation and surface-prose claims were out of date or contradicted by what the product actually does. README and AGENTS skill+command counts move from 45/27 to 48/30 to match the v1.25.0 brand-voice additions. README gains a welcome qualifier block matching the v1.25.2 banner (not team-shared, not always-on). Six-bucket alignment now reads the same across `readiness-check`, `status.md`, and `docs/commands.md`. The three new brand commands are listed in `docs/commands.md`. The legal-compliance domain count drops from 10 to 9 in the README to match the actual skill body. `CONTRIBUTING.md` replaces its `ROADMAP.md` reference with `docs/forking.md` (ROADMAP was removed in v1.24.1). `campaign-from-theme` had the banned word "optimized" in its body, which is now replaced. The setup skill's template inventory now lists all five missing top-level templates. `templates/identity.md` gains a jurisdiction placeholder. The `today` skill picks up the Day-1 setup gate so a fresh install does not hit a confusing empty view. `strategic-analysis` ships a Business Model Evaluation template that was referenced but missing. `session-handoff` drops a dead Notion MCP declaration. `ship-deliverable` defines writing-style precedence. `observation-rollup`'s description matches its per-week body rule. `today`'s description now includes "open decisions". The `verify` command's count is corrected from five to seven scripts to match what it actually checks. `skills/index.md` is version-stamped v1.25.3.
+
+### F59 closed by design
+
+Four `<!-- private-tag: not applicable -->` markers in skill files were flagged in the audit as potential private-tag leakage. They are not leakage. They are required infrastructure: `tests/test_private_tag.py` walks every skill and expects either a `<private>...</private>` block or an explicit "not applicable" comment so the audit cannot silently miss a skill. The markers stay. The test docstring is updated to explain the exemption so the same finding does not re-flag in a future audit.
+
+### F20 and F41 honest deviations
+
+F20 (templates/scripts parity comment pointers) was already correct in both files. No change was needed and none was made. F41 (a doc claim about brand routing) lived in `README.md`, not `CLAUDE.md` as the audit plan stated. Fixed in `README.md` line 174. Both are recorded here so the audit's after-state matches the artifact.
+
+48 skills, 30 commands, 365 tests pass.
+
 ## v1.25.2 - 2026-05-21
 
 Closes the install-handshake gap introduced in v1.25.1 and ships the cluster of fresh-install bugs surfaced by a full skills and scripts audit. v1.25.1 added "set up my second brain" as a natural-language trigger but the wizard then ran the same generic interview, leaving users who arrived via the second-brain phrasing with a mental model the product does not deliver. v1.25.2 closes the promise-vs-reality gap at the handshake and fixes the audit findings.
