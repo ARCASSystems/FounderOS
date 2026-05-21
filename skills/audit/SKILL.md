@@ -3,7 +3,7 @@ name: audit
 description: Audit the OS in one composite report. Say "audit the OS", "check OS health", "full audit", or "is the OS healthy" (or run /founder-os:audit). Runs readiness, lint, wiki graph state, brain staleness, and voice completeness together. Read-only.
 why: "Gives you one honest number for OS health so you know what to fix instead of guessing which layer is causing bad output."
 enhance: "Run after a sprint roll so cadence files are fresh - stale daily-anchors and empty brain log are the two checks most likely to drag your score down."
-allowed-tools: ["Read", "Glob", "Grep", "Bash"]
+allowed-tools: ["Read", "Glob", "Grep", "Bash", "Agent"]
 mcp_requirements: []
 ---
 

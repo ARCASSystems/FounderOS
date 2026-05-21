@@ -77,7 +77,7 @@ $Queue = Join-Path $Repo 'cadence\queue.md'
 if (-not (Test-Path $Queue)) {
   Write-Output 'Active: 0/3 (queue empty - say "add to queue: <thing>" to start)'
 } else {
-  $qLines = Get-Content $Queue
+  $qLines = Get-Content $Queue -Encoding UTF8
   $inActive = $false
   $activeItems = @()
   foreach ($line in $qLines) {
@@ -98,7 +98,7 @@ if (-not (Test-Path $Queue)) {
 # --- Open flags ---
 $Flags = Join-Path $Repo 'brain\flags.md'
 if (Test-Path $Flags) {
-  $content = Get-Content $Flags
+  $content = Get-Content $Flags -Encoding UTF8
   $openCount = ($content | Select-String -Pattern 'Status:\s*\**OPEN').Count
   # Match any line that has both Severity context AND a Week number >= 3.
   # Covers "Severity Week 3", "Severity: Week 3", "Severity at resolution:
@@ -120,7 +120,7 @@ if (Test-Path $Flags) {
 # --- Daily cadence staleness ---
 $Daily = Join-Path $Repo 'cadence\daily-anchors.md'
 if (Test-Path $Daily) {
-  $m = (Get-Content $Daily | Select-String -Pattern '^## Today: (\d{4}-\d{2}-\d{2})' | Select-Object -First 1)
+  $m = (Get-Content $Daily -Encoding UTF8 | Select-String -Pattern '^## Today: (\d{4}-\d{2}-\d{2})' | Select-Object -First 1)
   if ($m) {
     $dailyDate = $m.Matches[0].Groups[1].Value
     if ($dailyDate -lt $Today) {
@@ -134,7 +134,7 @@ if (Test-Path $Daily) {
 # --- Weekly cadence staleness ---
 $Weekly = Join-Path $Repo 'cadence\weekly-commitments.md'
 if (Test-Path $Weekly) {
-  $m = (Get-Content $Weekly | Select-String -Pattern '^## Week of (\d{4}-\d{2}-\d{2})' | Select-Object -First 1)
+  $m = (Get-Content $Weekly -Encoding UTF8 | Select-String -Pattern '^## Week of (\d{4}-\d{2}-\d{2})' | Select-Object -First 1)
   if ($m) {
     $weekDate = $m.Matches[0].Groups[1].Value
     $weekDt = ConvertTo-IsoDate $weekDate
@@ -156,7 +156,7 @@ if (Test-Path $Weekly) {
 # Count only ### headings under the ## Pending section to exclude Resolved/Parked.
 $Dec = Join-Path $Repo 'context\decisions.md'
 if (Test-Path $Dec) {
-  $dc = Get-Content $Dec
+  $dc = Get-Content $Dec -Encoding UTF8
   $pending = 0
   $inPending = $false
   foreach ($line in $dc) {
@@ -170,7 +170,7 @@ if (Test-Path $Dec) {
 # --- Clients [FILL] ---
 $Clients = Join-Path $Repo 'context\clients.md'
 if (Test-Path $Clients) {
-  $fill = (Get-Content $Clients | Select-String -Pattern '\[FILL\]').Count
+  $fill = (Get-Content $Clients -Encoding UTF8 | Select-String -Pattern '\[FILL\]').Count
   if ($fill -gt 0) { Write-Output "Clients: $fill [FILL] rows awaiting data" }
 }
 
@@ -183,7 +183,7 @@ $RantsDir = Join-Path $Repo 'brain\rants'
 if (Test-Path $RantsDir) {
   $unproc = 0
   foreach ($file in (Get-ChildItem -Path $RantsDir -Filter '*.md' -ErrorAction SilentlyContinue)) {
-    $rantMatches = (Get-Content $file.FullName -ErrorAction SilentlyContinue) | Select-String -Pattern '^processed:\s*false\s*$'
+    $rantMatches = (Get-Content $file.FullName -Encoding UTF8 -ErrorAction SilentlyContinue) | Select-String -Pattern '^processed:\s*false\s*$'
     if ($rantMatches) { $unproc += $rantMatches.Count }
   }
   if ($unproc -gt 0) {
@@ -205,7 +205,7 @@ if (-not $todayDt) { $todayDt = Get-Date }
 # Quiet exit if file missing - skill is opt-in via /founder-os:legal-setup.
 $Compliance = Join-Path $Repo 'context\compliance.md'
 if (Test-Path $Compliance) {
-  $complianceLines = Get-Content $Compliance
+  $complianceLines = Get-Content $Compliance -Encoding UTF8
   $overdue = @()
   $upcoming = @()
   $i = 0
@@ -262,7 +262,7 @@ if (Test-Path $Quarantine) {
   $activeCount = 0
   $latestHeader = $null
   $inFence = $false
-  foreach ($line in (Get-Content $Quarantine)) {
+  foreach ($line in (Get-Content $Quarantine -Encoding UTF8)) {
     if ($line -match '^\s*```') { $inFence = -not $inFence; continue }
     if ($inFence) { continue }
     if ($line -match '^##\s+\d{4}-\d{2}-\d{2}') { $latestHeader = $line }
@@ -297,7 +297,7 @@ function Get-DecayHits {
   param([string]$path, [string]$headingPattern)
   if (-not (Test-Path $path)) { return @() }
   $hits = @()
-  $lines = Get-Content $path
+  $lines = Get-Content $path -Encoding UTF8
   $entry = @()
   $entryHeading = $null
   for ($i = 0; $i -lt $lines.Count; $i++) {
@@ -402,7 +402,7 @@ if (Test-Path $Log) {
     @{cap='bottleneck-diagnostic'; tip='Try "what''s blocking me" once a quarter - bottleneck-diagnostic scores founder dependency across five dimensions.'},
     @{cap='strategic-analysis'; tip='Say "analyze this market" or "competitor map" - strategic-analysis grounds the scan in your knowledge notes.'}
   )
-  $logLines = Get-Content $Log
+  $logLines = Get-Content $Log -Encoding UTF8
   # Fresh-install gate. An entry is a line starting with "### " followed by
   # an ISO date. Require >= 10 entries AND earliest-entry-to-today >= 30 days.
   $entryDates = @()

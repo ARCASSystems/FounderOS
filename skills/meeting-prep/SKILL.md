@@ -4,6 +4,7 @@ description: >
   Prep for a meeting or debrief one after. Trigger on "prep me for my call with [name]", "prep for a meeting", "prepare for a call", "get me ready for", "meeting notes", "debrief this meeting", "summarize the call", "what should I ask in", or any reference to preparing for or processing meetings, calls, interviews, or conversations. Also fires when the user mentions an upcoming meeting and needs context, talking points, or questions.
 why: "Builds a specific brief from your own prior context rather than a generic one - knowing what you already committed to and what is unresolved with this person is what makes the meeting productive."
 enhance: "Keep context/clients.md updated after each touchpoint so brain-pass can surface real prior commitments - a brief built from stale client data will miss the most important watch-for items."
+allowed-tools: ["Read", "Bash"]
 mcp_requirements: [optional: gcal, optional: gmail]
 ---
 

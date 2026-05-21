@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
 set -e
-python "$(git rev-parse --show-toplevel)/scripts/check-private-names.py" --staged
+if command -v python3 >/dev/null 2>&1; then
+  PY=python3
+elif command -v python >/dev/null 2>&1; then
+  PY=python
+else
+  exit 0
+fi
+exec "$PY" "$(git rev-parse --show-toplevel)/scripts/check-private-names.py" --staged

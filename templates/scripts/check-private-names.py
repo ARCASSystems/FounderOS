@@ -53,6 +53,12 @@ def get_staged_diff() -> str:
         text=True,
         capture_output=True,
     )
+    if result.returncode != 0:
+        print(
+            f"git diff --cached failed (exit {result.returncode}): {result.stderr.strip()}",
+            file=sys.stderr,
+        )
+        sys.exit(1)
     return result.stdout
 
 

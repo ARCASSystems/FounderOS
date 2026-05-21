@@ -4,6 +4,7 @@ description: >
   Run a pre-send gate before any deliverable goes out. Trigger on "check this before I send", "ready to send", "final review", "look this over before it goes out", "review before I ship", or any variation of pre-ship review on an email, proposal, deck, contract, post, invoice, or status update. Read-only - never modifies the deliverable. Reports PASS or FAIL on each of seven checks and returns a decision.
 why: "Forces a structured check before anything goes out so token-replacement misses, broken links, and voice inconsistencies are caught rather than sent to clients."
 enhance: "Always provide the source of truth the deliverable was built from - Check 2 (source-truth match) is the most failure-prone check and only works when the skill can compare the draft against real source material."
+allowed-tools: ["Read"]
 mcp_requirements: []
 ---
 

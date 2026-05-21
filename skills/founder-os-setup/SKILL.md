@@ -412,6 +412,8 @@ Show the full list of files that will be created. Get approval. Then create them
 
 Also copy `templates/scripts/private-name-patterns.txt.template` → `scripts/private-name-patterns.txt` (NOTE: drop the `.template` suffix on the destination filename). The pre-commit hook and `install-git-hooks.sh` both look for `scripts/private-name-patterns.txt` exactly. The `.template` suffix marks the source-of-truth example, not the runtime file.
 
+Offer to auto-write the captured founder name as the first uncommented pattern in `scripts/private-name-patterns.txt`: `\b<FOUNDER_NAME>\b`. This gives the new install one working guard out of the box without forcing the founder to learn regex syntax on day one.
+
 These are not personalized templates. Copy contents exactly. Do not edit. Verify all fourteen `.py` copies plus `scripts/private-name-patterns.txt` exist on disk before continuing. If any are missing, the brain-snapshot, brain-pass, wiki-build, menu, observation-rollup, preflight-gate, observation-capture, or private-name guard helpers will fail silently or hard-error.
 
 **{{role_noun}} substitution.** The `templates/bootloader-claude-md.md` file contains `{{role_noun}}` placeholders in two places. When writing the bootloader CLAUDE.md, substitute based on the role captured in Phase 0.2.1:

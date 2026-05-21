@@ -51,6 +51,19 @@ else
     echo "core.hooksPath already set to .githooks — skipping"
 fi
 
+for hook in "$REPO_ROOT/.githooks/pre-commit" "$REPO_ROOT/.githooks/commit-msg"; do
+    if [ ! -f "$hook" ]; then
+        echo "Error: $hook is missing. Cannot install git hooks." >&2
+        exit 1
+    fi
+    if [ ! -x "$hook" ]; then
+        chmod +x "$hook" 2>/dev/null || {
+            echo "Error: $hook is not executable and chmod failed." >&2
+            exit 1
+        }
+    fi
+done
+
 if [ -n "$ACTION_PATTERNS" ]; then
     cp "$PATTERNS_SRC" "$PATTERNS_DST"
     echo "Created $PATTERNS_DST from template."
