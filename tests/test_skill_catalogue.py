@@ -28,10 +28,13 @@ def _parse_index_skill_names() -> list[str]:
     return names
 
 
+INDEX_COUNT_RE = re.compile(r"^(\d+)\s+skills?\s+as of", re.MULTILINE)
+
+
 def _parse_index_skill_count_text() -> int | None:
     """Extract the numeric skill count stated at the top of index.md."""
     body = INDEX_FILE.read_text(encoding="utf-8")
-    m = re.search(r"(\d+)\s+skills?\s+included", body)
+    m = INDEX_COUNT_RE.search(body)
     return int(m.group(1)) if m else None
 
 
@@ -127,6 +130,10 @@ class SkillCatalogueIntegrityTests(unittest.TestCase):
 
         # Count from index.md header
         index_count = _parse_index_skill_count_text()
+        self.assertIsNotNone(
+            index_count,
+            "skills/index.md must declare a skill count at the top (e.g. 'N skills as of vX.Y.Z')",
+        )
 
         # Count from plugin.json description
         plugin_text = PLUGIN_JSON.read_text(encoding="utf-8")

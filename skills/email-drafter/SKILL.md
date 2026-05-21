@@ -20,6 +20,7 @@ Apply the routing rules in `skills/your-voice/SKILL.md` "Voice routing - operato
 
 If using operator voice, run: `python scripts/check-voice-ready.py`
 If using brand voice, run: `python scripts/check-brand-voice-ready.py --brand <slug>`
+If neither operator nor brand voice is explicitly named, default to operator voice and run `python scripts/check-voice-ready.py`. Stop on exit code 1.
 
 If exit code is 1, read the output line and surface it to the user verbatim. Do not produce any draft. Stop.
 

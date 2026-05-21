@@ -4,7 +4,7 @@ description: >
   Apply the founder's writing voice to any text. Trigger on every writing task: LinkedIn posts, YouTube scripts, emails, cover letters, applications, internal docs, anything that contains words. Say "rewrite this in my voice", "voice this up", or "apply my voice". Reads `core/voice-profile.yml`. If the profile is missing, falls back to anti-AI defaults and warns the user that the voice interview has not been run.
 why: "Applies the captured voice profile to any text so every output sounds like you rather than like a language model - it is the layer that makes personalization real rather than cosmetic."
 enhance: "Add anti-example pairs to core/voice-profile.yml over time by flagging outputs that do not sound like you - each pair tightens the profile and reduces future corrections."
-allowed-tools: ["Read", "Write", "Edit"]
+allowed-tools: ["Read", "Write", "Edit", "Bash"]
 mcp_requirements: []
 ---
 

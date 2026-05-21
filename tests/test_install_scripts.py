@@ -173,7 +173,7 @@ class CadenceTemplatePlaceholderTests(unittest.TestCase):
 
 
 class TemplateScriptPresenceTests(unittest.TestCase):
-    """Assert that all seven helper scripts have a templates/scripts/ mirror."""
+    """Assert that all fourteen helper scripts have a templates/scripts/ mirror."""
 
     def _template_path(self, name: str) -> Path:
         return REPO_ROOT / "templates" / "scripts" / name
@@ -192,16 +192,34 @@ class TemplateScriptPresenceTests(unittest.TestCase):
             "templates/scripts/observation-rollup.py is missing - setup cannot copy it to the founder's scripts/",
         )
 
-    def test_all_seven_template_scripts_exist(self):
+    def test_all_fourteen_template_scripts_exist(self):
+        """Every helper script in scripts/ must have a byte-aligned copy in templates/scripts/.
+
+        The list is hard-coded to force a conscious decision when scripts are added or
+        removed. Do not collapse this into a glob - reducing the count must require
+        consciously deleting an assertion, not silently dropping a missing file.
+        """
         required = [
-            "wiki-build.py",
-            "query.py",
-            "brain-snapshot.py",
             "brain-pass-log.py",
+            "brain-snapshot.py",
+            "check-brand-voice-ready.py",
+            "check-identity-ready.py",
+            "check-log-has-history.py",
+            "check-private-names.py",
+            "check-voice-ready.py",
+            "list-brands.py",
             "memory-diff.py",
             "menu.py",
             "observation-rollup.py",
+            "query.py",
+            "user-prompt-capture.py",
+            "wiki-build.py",
         ]
+        self.assertEqual(
+            len(required),
+            14,
+            "required list must contain exactly 14 entries - update the test name if this changes",
+        )
         for name in required:
             with self.subTest(script=name):
                 path = self._template_path(name)

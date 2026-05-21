@@ -4,7 +4,7 @@ description: >
   Write a LinkedIn post in the founder's voice. Trigger on "write a LinkedIn post", "draft a post", "post about this", "make this a LinkedIn post", "turn this into a post", "I want to share this on LinkedIn", or any mention of "LinkedIn" in the context of creating content. Also fires when the user shares an idea, insight, or experience and wants it shaped into a post. Covers founder stories, leadership insights, hiring perspectives, AI commentary, systems thinking, and business-related content. Reads `core/voice-profile.yml`.
 why: "Produces posts that sound like you wrote them rather than like a content tool did - voice profile plus brain context means the post is grounded in your actual situation this week."
 enhance: "Fill brain/log.md regularly so brain-pass can suggest angles you have not posted recently and flag theme repetition before you draft - a rich log means fresher, non-repetitive content."
-allowed-tools: ["Read", "Write", "Edit"]
+allowed-tools: ["Read", "Write", "Edit", "Bash"]
 mcp_requirements: []
 ---
 
