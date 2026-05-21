@@ -310,8 +310,9 @@ def eager_capture_rant(repo: Path, prompt: str) -> Path | None:
     if not cleaned:
         return None
 
-    today = datetime.now().strftime("%Y-%m-%d")
-    timestamp = datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
+    now = datetime.now(timezone.utc).astimezone()
+    today = now.strftime("%Y-%m-%d")
+    timestamp = now.isoformat(timespec="seconds")
     target = rants_dir / f"{today}.md"
 
     entry = (

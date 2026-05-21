@@ -88,7 +88,7 @@ Read the source. Extract candidate updates across these categories:
 | Decision input | `context/decisions.md` (append) | Information that bears on an open or pending decision. Check current `context/decisions.md` for matches. |
 | Pattern | `brain/patterns.md` (append) | A recurring pattern, observation, or principle worth remembering. |
 | Action item | `cadence/daily-anchors.md` or `cadence/weekly-commitments.md` (append to Could Do) | A concrete next action surfaced by the source. |
-| Reference | `context/companies/<name>.md` (append) | Information specific to a company or business already in the OS. |
+| Reference | `companies/<slug>-business.md` (append) | Information specific to a company or business already in the OS. |
 
 Aim for 2-5 candidates total. Do NOT propose more than 7. If a source produces zero clear candidates, that's fine - proceed to Step 4 with an empty list.
 

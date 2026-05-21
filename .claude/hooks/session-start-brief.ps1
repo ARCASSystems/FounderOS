@@ -63,6 +63,8 @@ if (-not (Test-Path (Join-Path $Repo 'core\identity.md'))) {
     Write-Output '  - "set up Founder OS"'
     Write-Output '  - "help me set up my second brain"'
     Write-Output '  - "help me onboard" or "what do I do"'
+    Write-Output ''
+    Write-Output 'Your personal brain - your files, queryable by you. Not team-shared. Not always-on.'
     Write-Output "(15-20 minutes. The wizard asks who you are, what you run, and what is slowing you down.)"
   }
   exit 0
@@ -181,8 +183,8 @@ $RantsDir = Join-Path $Repo 'brain\rants'
 if (Test-Path $RantsDir) {
   $unproc = 0
   foreach ($file in (Get-ChildItem -Path $RantsDir -Filter '*.md' -ErrorAction SilentlyContinue)) {
-    $matches = (Get-Content $file.FullName -ErrorAction SilentlyContinue) | Select-String -Pattern '^processed:\s*false\s*$'
-    if ($matches) { $unproc += $matches.Count }
+    $rantMatches = (Get-Content $file.FullName -ErrorAction SilentlyContinue) | Select-String -Pattern '^processed:\s*false\s*$'
+    if ($rantMatches) { $unproc += $rantMatches.Count }
   }
   if ($unproc -gt 0) {
     if ($unproc -ge 3) {

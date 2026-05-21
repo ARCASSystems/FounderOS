@@ -43,7 +43,7 @@ Before drafting, read `brain/.snapshot.md` if it exists. Use the open-flags bloc
 
 If the founder has filled `core/brand-profile.yml`, follow the visual brand for any branded version of the update (PDF, doc, etc.). Plain-text updates do not need brand assets.
 
-If the engagement has a context file under `context/companies/<client>.md` or similar, read it for project specifics, named milestones, and the agreed scope.
+If the engagement has a context file under `companies/<client>-business.md` or similar, read it for project specifics, named milestones, and the agreed scope.
 
 ## Core Principles
 

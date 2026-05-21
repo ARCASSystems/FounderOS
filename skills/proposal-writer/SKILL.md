@@ -1,7 +1,7 @@
 ---
 name: proposal-writer
 description: >
-  Write a consulting or service proposal. Trigger on "write a proposal", "create a quote", "draft a SOW", "scope of work", "put together a proposal", "pricing for", "engagement letter", or any variation of creating business proposals, quotes, scoping documents, or service agreements. Also fires when the user describes a potential client engagement and needs it formalized. Reads `core/voice-profile.yml`, `core/brand-profile.yml`, and any relevant `context/companies/<client>.md`.
+  Write a consulting or service proposal. Trigger on "write a proposal", "create a quote", "draft a SOW", "scope of work", "put together a proposal", "pricing for", "engagement letter", or any variation of creating business proposals, quotes, scoping documents, or service agreements. Also fires when the user describes a potential client engagement and needs it formalized. Reads `core/voice-profile.yml`, `core/brand-profile.yml`, and any relevant `companies/<client>-business.md`.
 why: "Builds proposals that reflect the specific prospect's situation rather than a generic template - a proposal that mirrors the client's own words wins more than one that describes the service."
 enhance: "Fill context/clients.md with scoping notes before running - the more prospect-specific context you provide, the stronger the Situation section, which is where most proposals lose."
 allowed-tools: ["Read", "Write", "Edit"]
@@ -29,7 +29,7 @@ Then read in this order:
 
 1. The chosen voice profile (operator: `core/voice-profile.yml`. Brand: `brands/<slug>/voice.yml` + `brands/<slug>/positioning.yml`).
 2. The chosen visual brand (operator default: `core/brand-profile.yml`. Brand: `brands/<slug>/visual.yml` if present). Governs any branded version of this proposal (PDF, DOCX). For plain-text proposals, this is optional.
-3. `context/companies/<client>.md` if a relevant context file exists - prior research, scope conversations, the prospect's stated pain.
+3. `companies/<client>-business.md` if a relevant context file exists - prior research, scope conversations, the prospect's stated pain.
 4. Any prior scoping notes the user points you at.
 5. `brain/knowledge/` - topic notes relevant to the deal type, buyer pain, industry, proof points, or prior wins. Read frontmatter and top headings first. Do not hard-parse full bodies unless the user asks.
 

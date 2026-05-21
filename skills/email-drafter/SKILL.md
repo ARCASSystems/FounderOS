@@ -4,6 +4,7 @@ description: >
   Draft an email in the founder's voice. Trigger on "write an email", "draft a reply", "send a message", "follow up with", "reach out to", "respond to this email", "compose an email", or any variation. Also fires when the user pastes email content and asks for a response, or when they describe a situation that clearly needs an email. Covers client emails, partnership outreach, investor updates, team communications, cold outreach, and personal correspondence. Reads `core/voice-profile.yml`.
 why: "Writes emails that sound like you sent them instead of like a marketing tool did - especially useful for cold outreach and difficult conversations where tone matters."
 enhance: "Fill core/voice-profile.yml and set stack.json email_platform so the skill mirrors your actual send environment and applies your exact voice rules to every draft."
+allowed-tools: ["Read", "Write", "Edit", "Bash"]
 mcp_requirements: [optional: gmail]
 ---
 

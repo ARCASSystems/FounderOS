@@ -42,6 +42,8 @@ if [ ! -f "$REPO/core/identity.md" ]; then
     echo "  - \"set up Founder OS\""
     echo "  - \"help me set up my second brain\""
     echo "  - \"help me onboard\" or \"what do I do\""
+    echo ""
+    echo "Your personal brain - your files, queryable by you. Not team-shared. Not always-on."
     echo "(15-20 minutes. The wizard asks who you are, what you run, and what is slowing you down.)"
   fi
   exit 0

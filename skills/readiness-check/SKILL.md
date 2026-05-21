@@ -30,7 +30,7 @@ Six buckets, each scored 0-100. Overall is the weighted average.
 | Core | 25% | `core/identity.md`, `context/priorities.md` |
 | Voice and Brand | 25% | `core/voice-profile.yml`, `core/brand-profile.yml` |
 | Cadence | 20% | `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `cadence/quarterly-sprints.md` |
-| Business Context | 15% | `context/companies.md`, `context/companies/<name>.md` for each declared business |
+| Business Context | 15% | `context/companies.md`, `companies/<slug>-business.md` for each declared business |
 | Brain Layer | 10% | `brain/log.md`, `brain/flags.md`, `brain/patterns.md` |
 | Queue | 5% | `cadence/queue.md` |
 
@@ -99,7 +99,7 @@ Bucket score = average of the three file scores.
 
 Read `context/companies.md`. Count the number of declared businesses (top-level `## ` headers naming businesses, or rows in a table - whichever pattern the file uses).
 
-For each declared business, check whether `context/companies/<sanitised-name>.md` exists and has content.
+For each declared business, check whether `companies/<sanitised-slug>-business.md` exists and has content (the file the setup wizard and business-context-loader produce).
 
 - Score per business: 0 if context file missing, 50 if file exists but contains `[FILL]` placeholders, 100 if file is populated.
 - Bucket score = average across all declared businesses.
@@ -155,7 +155,7 @@ The next 3 moves are the highest-impact gaps. Pick in this order:
 5. If daily-anchors is stale by 4+ days: `Roll cadence/daily-anchors.md and run a weekly-review` (chain).
 6. If weekly-commitments is stale by 7+ days: `Say "run my weekly review" - weekly-review is a skill, not a slash command`.
 7. If brain/log.md has 0 entries in last 7 days: `Open brain-log skill and capture this week's signals`.
-8. If a declared business has no `context/companies/<name>.md`: `Run business-context-loader for <name>`.
+8. If a declared business has no `companies/<slug>-business.md`: `Run business-context-loader for <slug>`.
 9. If quarterly-sprints is empty: `Set this quarter's focus in cadence/quarterly-sprints.md`.
 10. If brain/flags.md is empty AND priorities have rolled 2+ weeks: `Open Chief of Staff lens, surface stalls`.
 
@@ -219,9 +219,9 @@ If a section has no content (e.g. no businesses declared), keep the section head
 - If total score is under 20, replace the NEXT 3 MOVES section content with the Day-1 starter sequence below, and replace the top line of the fenced block with `STATUS: Day 1 - your OS is fresh. Score will climb as you complete setup.` Keep every other section header in place (mark each `none recorded` or its actual value).
 
   Day-1 NEXT 3 MOVES content:
-  - Run /founder-os:identity-interview to capture who you are
+  - Run /founder-os:setup to walk the interactive wizard
   - Run /founder-os:voice-interview to capture how you write
-  - Set 1-3 priorities in `context/priorities.md`
+  - Run /founder-os:brand-interview to capture your visual brand
 
 - Output ONLY the fenced block. No prose around it.
 - If `core/identity.md` is missing, reply with exactly this block and stop:
@@ -229,8 +229,8 @@ If a section has no content (e.g. no businesses declared), keep the section head
   ```
   Founder OS not set up here. Day 1 - start with these three steps:
   1. Run /founder-os:setup to walk the interactive wizard
-  2. Then /founder-os:identity-interview to capture who you are
-  3. Then /founder-os:voice-interview to capture how you write
+  2. Then /founder-os:voice-interview to capture how you write
+  3. Then /founder-os:brand-interview to capture your visual brand
 
   Run /founder-os:status after each step to see your score build.
   ```

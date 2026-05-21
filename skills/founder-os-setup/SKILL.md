@@ -50,6 +50,28 @@ If the user passed "reset": scan for an existing Founder OS folder, confirm they
 
 ---
 
+## Phase 0.0: Frame what you're getting (always run first)
+
+Open with this in one short turn before any discovery questions. Without it, users who arrived via "help me set up my second brain" leave the wizard with a mental model the product does not deliver.
+
+Say (verbatim, or close paraphrase matching the user's tone):
+
+> "Founder OS is your personal second brain. Your files, on your machine, queryable by you across sessions. It captures the judgment that currently lives only in your head.
+>
+> What it is NOT, by design: not team-shared (your team would install their own, the files do not merge), not always-on (no background agents, no notifications while you sleep). Both could ship later. Neither ships today.
+>
+> Want to keep going?"
+
+Routing:
+
+- If the user says "yes" / "go" / "continue" / any positive signal: proceed to Phase 0.1.
+- If the user asks a question first: answer it briefly, then ask the framing question again. Do not start Phase 0.1 until you have a clean yes.
+- If the user says they wanted team-shared or always-on: name the gap honestly. "That's not what Founder OS ships today. The personal version installs in 15 minutes. Want that, or stop here?" Respect a stop.
+
+Do not skip this phase. Users who arrived via "set up Founder OS" benefit from the reset too - "Founder OS" is ambiguous to a first-time reader and the rest of the wizard assumes a clean expectation contract.
+
+---
+
 ## PHASE 0: DISCOVERY
 
 Ask these questions one at a time. Record answers internally.
@@ -324,7 +346,12 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── brain-pass-log.py        # From templates/scripts/brain-pass-log.py (opt-in JSONL telemetry for /founder-os:brain-pass)
 │   ├── memory-diff.py           # From templates/scripts/memory-diff.py (SessionStart helper - flags clients/ folders without an auto-memory entry)
 │   ├── menu.py                  # From templates/scripts/menu.py (context-aware action surface for /founder-os:menu)
-│   └── observation-rollup.py    # From templates/scripts/observation-rollup.py (daily observation compaction for /founder-os:observation-rollup)
+│   ├── observation-rollup.py    # From templates/scripts/observation-rollup.py (daily observation compaction for /founder-os:observation-rollup)
+│   ├── check-voice-ready.py     # From templates/scripts/check-voice-ready.py (preflight gate for 5 voice-coupled writing skills)
+│   ├── check-brand-voice-ready.py # From templates/scripts/check-brand-voice-ready.py (preflight gate for brand-voice path)
+│   ├── check-identity-ready.py  # From templates/scripts/check-identity-ready.py (preflight gate for 4 reasoning skills)
+│   ├── check-log-has-history.py # From templates/scripts/check-log-has-history.py (preflight gate for brain-pass + linkedin-post)
+│   └── list-brands.py           # From templates/scripts/list-brands.py (lists brand slugs under brands/)
 ├── cadence/
 │   ├── daily-anchors.md         # From templates/cadence/daily-anchors.md
 │   ├── weekly-commitments.md    # Personalized with their current priorities
@@ -366,7 +393,7 @@ Show the full list of files that will be created. Get approval. Then create them
 
 **Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, and post-tool-use observation hook live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Find the plugin install path (same as where templates live), then copy all six hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
-**Scripts copy step (mandatory).** Copy all seven Python helpers from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
+**Scripts copy step (mandatory).** Copy all twelve Python helpers from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
 
 - `templates/scripts/wiki-build.py` → `scripts/wiki-build.py` (used by `/founder-os:wiki-build`)
 - `templates/scripts/query.py` → `scripts/query.py` (used by `/founder-os:query`)
@@ -375,8 +402,13 @@ Show the full list of files that will be created. Get approval. Then create them
 - `templates/scripts/memory-diff.py` → `scripts/memory-diff.py` (SessionStart helper that flags `clients/<slug>/` folders without an auto-memory entry)
 - `templates/scripts/menu.py` → `scripts/menu.py` (used by `/founder-os:menu` to surface context-aware actions)
 - `templates/scripts/observation-rollup.py` → `scripts/observation-rollup.py` (used by `/founder-os:observation-rollup` to compact daily observations)
+- `templates/scripts/check-voice-ready.py` → `scripts/check-voice-ready.py` (preflight gate for voice-coupled writing skills: linkedin-post, email-drafter, client-update, content-repurposer, proposal-writer)
+- `templates/scripts/check-brand-voice-ready.py` → `scripts/check-brand-voice-ready.py` (preflight gate when brand voice is selected)
+- `templates/scripts/check-identity-ready.py` → `scripts/check-identity-ready.py` (preflight gate for reasoning skills: meeting-prep, decision-framework, strategic-analysis, weekly-review)
+- `templates/scripts/check-log-has-history.py` → `scripts/check-log-has-history.py` (preflight gate for brain-pass and linkedin-post when prior context is required)
+- `templates/scripts/list-brands.py` → `scripts/list-brands.py` (lists brand slugs under `brands/`, used by your-voice, campaign-from-theme, review-responder)
 
-These are not personalized templates. Copy contents exactly. Do not edit. Verify all seven copies exist on disk before continuing. If any are missing the brain-snapshot, brain-pass, wiki-build, menu, or observation-rollup helpers will fail silently or hard-error.
+These are not personalized templates. Copy contents exactly. Do not edit. Verify all twelve copies exist on disk before continuing. If any are missing, the brain-snapshot, brain-pass, wiki-build, menu, observation-rollup, or preflight-gate helpers will fail silently or hard-error.
 
 **{{role_noun}} substitution.** The `templates/bootloader-claude-md.md` file contains `{{role_noun}}` placeholders in two places. When writing the bootloader CLAUDE.md, substitute based on the role captured in Phase 0.2.1:
 

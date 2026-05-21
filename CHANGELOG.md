@@ -2,6 +2,48 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.25.2 - 2026-05-21
+
+Closes the install-handshake gap introduced in v1.25.1 and ships the cluster of fresh-install bugs surfaced by a full skills and scripts audit. v1.25.1 added "set up my second brain" as a natural-language trigger but the wizard then ran the same generic interview, leaving users who arrived via the second-brain phrasing with a mental model the product does not deliver. v1.25.2 closes the promise-vs-reality gap at the handshake and fixes the audit findings.
+
+### Wizard Phase 0.0 reframe
+
+`skills/founder-os-setup/SKILL.md` now runs a Phase 0.0 step before Phase 0 discovery starts. The wizard opens by naming what the user is getting (personal second brain - files on their machine, queryable by them across sessions) and what it is not yet, by design (not team-shared, not always-on). The user must acknowledge the frame before discovery begins. Users who arrived via "set up Founder OS" benefit from the reset too because the term is ambiguous to first-time readers.
+
+### Welcome banner qualifier
+
+`.claude/hooks/session-start-brief.sh` and `.claude/hooks/session-start-brief.ps1` add one qualifier line under the alternative phrasings: "Your personal brain - your files, queryable by you. Not team-shared. Not always-on." Readers of the banner who do not then trigger the wizard still see the truth of what the product delivers.
+
+### Bootloader routing note
+
+`templates/bootloader-claude-md.md` adds a one-line note to the first-time setup routing block explaining that the wizard opens with Phase 0.0 framing.
+
+### Five preflight scripts now ship to fresh installs
+
+The setup wizard's "scripts copy step" only copied seven Python helpers from `templates/scripts/`. Five preflight gate scripts (`check-voice-ready.py`, `check-brand-voice-ready.py`, `check-identity-ready.py`, `check-log-has-history.py`, `list-brands.py`) lived only in the repo's `scripts/` and were never copied. Every voice-coupled writing skill and every reasoning skill called these scripts and silently failed on fresh installs. All five now live in `templates/scripts/`, the wizard's copy step references twelve scripts, and the file-tree representation in Phase 2.2 lists them.
+
+### Company-context path alignment across four skills
+
+`readiness-check`, `proposal-writer`, `client-update`, and `ingest` all looked in `context/companies/<name>.md` for the per-company context file. The setup wizard and `business-context-loader` write to `companies/<slug>-business.md`. The four consumer skills now read from the producer's actual path. Effect: the 15% Business Context score now reflects real installs, and `proposal-writer` reads the prospect's context file instead of silently shipping a generic draft.
+
+### Dead `/identity-interview` command replaced
+
+The `readiness-check` Day-1 and "not set up" blocks recommended `/founder-os:identity-interview`, which does not exist. Both blocks now recommend `/founder-os:setup` (which captures identity) followed by `/founder-os:voice-interview` and `/founder-os:brand-interview`. A regression test guards against the dead command coming back.
+
+### `email-drafter` `allowed-tools` added
+
+The skill was missing the `allowed-tools` frontmatter field while declaring write behavior in the body. Added `allowed-tools: ["Read", "Write", "Edit", "Bash"]` so Claude Code can enforce the tool surface and so the skill registers correctly in plugin contexts.
+
+### `$matches` automatic-variable collision in PowerShell hook
+
+`.claude/hooks/session-start-brief.ps1` was assigning user data to `$matches`, PowerShell's session-global automatic variable. Renamed to `$rantMatches` to remove the collision risk in the unprocessed-rants block.
+
+### `datetime.now()` race in `user-prompt-capture.py`
+
+The rant-capture script called `datetime.now()` twice (once for the filename date, once for the frontmatter timestamp). A prompt submitted at midnight could land in yesterday's file with today's timestamp. Both values now derive from a single `datetime.now(timezone.utc).astimezone()` call.
+
+48 skills, 30 commands, 359 tests pass.
+
 ## v1.25.1 - 2026-05-18
 
 The setup wizard now fires on the phrasings a non-technical user would actually try first. v1.25.0 added the brand voice layer; v1.25.1 closes the trigger-surface gap so the founder does not have to know the magic phrase "set up Founder OS" to start.

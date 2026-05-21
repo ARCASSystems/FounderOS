@@ -49,7 +49,7 @@ Treat any of these phrasings as "run the setup wizard" when `core/identity.md` i
 - "what do I do" / "where do I start" / "how does this work"
 - "I'm new" / "get me started" / "run the setup wizard"
 
-When any of those arrives AND `core/identity.md` is absent, route to the `founder-os-setup` skill. Do not improvise an answer, do not produce generic advice, do not stall on clarifying questions - the wizard handles all of that.
+When any of those arrives AND `core/identity.md` is absent, route to the `founder-os-setup` skill. Do not improvise an answer, do not produce generic advice, do not stall on clarifying questions - the wizard handles all of that. The wizard opens with Phase 0.0, which reframes what Founder OS actually delivers (personal second brain, not team-shared, not always-on) before any discovery question - so the user's expectations and the product's reality match from the first turn.
 
 When `core/identity.md` already exists, the same phrasings mean something different (e.g. "what do I do" is a triage question, not a setup ask). Route them as normal OS queries instead.
 
