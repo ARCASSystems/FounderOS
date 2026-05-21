@@ -391,9 +391,9 @@ Create the full folder structure. Read each template before generating the perso
 
 Show the full list of files that will be created. Get approval. Then create them all.
 
-**Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, and post-tool-use observation hook live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Find the plugin install path (same as where templates live), then copy all six hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
+**Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, user-prompt capture, and post-tool-use observation hooks live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Resolve the plugin source path the same way Phase 2.2 already does (one of the three named install methods: Plugin, Git clone, or Curl), then copy all eight hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. The eight hook files are: `session-start-brief.sh`, `session-start-brief.ps1`, `session-close-revenue-check.sh`, `session-close-revenue-check.ps1`, `user-prompt-capture.sh`, `user-prompt-capture.ps1`, `post-tool-use-observation.sh`, `post-tool-use-observation.ps1`. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, UserPromptSubmit, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
-**Scripts copy step (mandatory).** Copy all twelve Python helpers from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
+**Scripts copy step (mandatory).** Copy all fourteen Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
 
 - `templates/scripts/wiki-build.py` → `scripts/wiki-build.py` (used by `/founder-os:wiki-build`)
 - `templates/scripts/query.py` → `scripts/query.py` (used by `/founder-os:query`)
@@ -407,8 +407,12 @@ Show the full list of files that will be created. Get approval. Then create them
 - `templates/scripts/check-identity-ready.py` → `scripts/check-identity-ready.py` (preflight gate for reasoning skills: meeting-prep, decision-framework, strategic-analysis, weekly-review)
 - `templates/scripts/check-log-has-history.py` → `scripts/check-log-has-history.py` (preflight gate for brain-pass and linkedin-post when prior context is required)
 - `templates/scripts/list-brands.py` → `scripts/list-brands.py` (lists brand slugs under `brands/`, used by your-voice, campaign-from-theme, review-responder)
+- `templates/scripts/user-prompt-capture.py` → `scripts/user-prompt-capture.py` (writes user prompts to `brain/observations/` when `FOUNDER_OS_OBSERVATIONS=1`)
+- `templates/scripts/check-private-names.py` → `scripts/check-private-names.py` (called by `.githooks/pre-commit` and `.githooks/commit-msg` to block leaked private names)
 
-These are not personalized templates. Copy contents exactly. Do not edit. Verify all twelve copies exist on disk before continuing. If any are missing, the brain-snapshot, brain-pass, wiki-build, menu, observation-rollup, or preflight-gate helpers will fail silently or hard-error.
+Also copy `templates/scripts/private-name-patterns.txt.template` → `scripts/private-name-patterns.txt` (NOTE: drop the `.template` suffix on the destination filename). The pre-commit hook and `install-git-hooks.sh` both look for `scripts/private-name-patterns.txt` exactly. The `.template` suffix marks the source-of-truth example, not the runtime file.
+
+These are not personalized templates. Copy contents exactly. Do not edit. Verify all fourteen `.py` copies plus `scripts/private-name-patterns.txt` exist on disk before continuing. If any are missing, the brain-snapshot, brain-pass, wiki-build, menu, observation-rollup, preflight-gate, observation-capture, or private-name guard helpers will fail silently or hard-error.
 
 **{{role_noun}} substitution.** The `templates/bootloader-claude-md.md` file contains `{{role_noun}}` placeholders in two places. When writing the bootloader CLAUDE.md, substitute based on the role captured in Phase 0.2.1:
 

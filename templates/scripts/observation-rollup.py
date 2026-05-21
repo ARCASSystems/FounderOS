@@ -70,7 +70,7 @@ def write_rollup(week_key: str, files: list, rollup_dir: Path) -> Path:
             skill = entry.get("skill", "")
             if skill:
                 skill_counts[skill] += 1
-            sid = entry.get("session_id", "")
+            sid = entry.get("session", "") or entry.get("session_id", "")
             if sid:
                 session_ids.add(sid)
 

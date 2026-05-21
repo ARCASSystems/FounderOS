@@ -102,6 +102,11 @@ CAPABILITIES = {
         "always_bare": False,
         "phrase": "ingest this",
     },
+    "dream": {
+        "command": "dream",
+        "always_bare": False,
+        "phrase": "process my rants",
+    },
 }
 
 ALWAYS_BARE_NAMES = {
@@ -306,6 +311,23 @@ def drafts_recent(root: Path, today: date) -> int:
     return count
 
 
+def unprocessed_rant_count(root: Path) -> int:
+    """Count rant entries (not files) where frontmatter `processed: false`."""
+    rants_dir = root / "brain" / "rants"
+    if not rants_dir.is_dir():
+        return 0
+    count = 0
+    pat = re.compile(r"^processed:\s*false\s*$")
+    for f in rants_dir.glob("*.md"):
+        body = safe_read(f)
+        if not body:
+            continue
+        for line in body.splitlines():
+            if pat.match(line):
+                count += 1
+    return count
+
+
 # ---------------------------------------------------------------------------
 # Rules. Each returns (fired: bool, why_now: str).
 # ---------------------------------------------------------------------------
@@ -385,6 +407,15 @@ def rule_ingest(state: dict) -> tuple[bool, str]:
     return False, "files a source into raw/ with provenance preserved."
 
 
+def rule_dream(state: dict) -> tuple[bool, str]:
+    n = state.get("unprocessed_rants", 0)
+    if n >= 3:
+        return True, f"{n} rants captured but not processed - distil them before they go stale at 30 days."
+    if n >= 1:
+        return True, f"{n} rant(s) waiting - dream distils them into patterns, flags, and one recommended action."
+    return False, "distils unprocessed rants into patterns, flags, parked decisions, and one action."
+
+
 def rule_linkedin_post(state: dict) -> tuple[bool, str]:
     if state["voice"] == "set" and state.get("primary_channel") == "linkedin":
         return True, "your primary channel is LinkedIn and your voice profile is set - you can create posts in your own voice."
@@ -412,6 +443,7 @@ RULES = [
     ("ingest", rule_ingest),
     ("linkedin-post", rule_linkedin_post),
     ("content-repurposer", rule_content_repurposer),
+    ("dream", rule_dream),
 ]
 
 
@@ -451,6 +483,7 @@ def collect_state(root: Path, today: date) -> dict:
         "priorities_rolled": priorities_rolled(root),
         "drafts_24h": drafts_recent(root, today),
         "primary_channel": read_primary_channel(root),
+        "unprocessed_rants": unprocessed_rant_count(root),
     }
 
 
