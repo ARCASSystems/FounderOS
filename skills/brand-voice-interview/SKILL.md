@@ -440,4 +440,4 @@ Stop. Do not do anything else.
 - Never invent samples or vocabulary.
 - Plain language. Operators are not linguists or brand strategists.
 - If the operator describes the brand voice as identical to their personal voice, ask one clarifying question: "When the brand has employees other than you writing for it, will they speak in your personal voice, or a brand voice that has its own character?" If they say brand voice has to survive their absence, the two voices are different and capture them separately.
-- Slug must be unique under `brands/`. If a collision happens, append a disambiguator (e.g. `suit-carriage-uk` vs `suit-carriage-uae`).
+- Slug must be unique under `brands/`. If a collision happens, append a disambiguator (e.g. `brown-co-uk` vs `brown-co-us`).

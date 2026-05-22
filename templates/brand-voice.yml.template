@@ -9,7 +9,7 @@ brand:
   slug: "[lowercase-kebab-slug, matches the folder name]"
   display_name: "[BRAND NAME as written on packaging, web, social]"
   speaker: "[brand | founder-led | spokesperson-led]"
-  # brand: the brand speaks. No named author. (Apple, Coca-Cola, Suit Carriage)
+  # brand: the brand speaks. No named author. (Apple, Coca-Cola, Nike)
   # founder-led: the founder's name attaches to brand voice. (Patagonia, Spanx)
   # spokesperson-led: a specific person fronts the brand (Group MD, head of marketing).
 
@@ -24,7 +24,7 @@ voice:
   rhythm: "[CHOOSE: short_hits | long_builders | mixed | verse_like]"
   opening_style: "[CHOOSE: punch | confession | question | observation | story | list]"
   closing_style: "[CHOOSE: weight | hand | question | signoff]"
-  signoff_phrase: "[brand sign-off, e.g. The Suit Carriage Team, or empty]"
+  signoff_phrase: "[brand sign-off, e.g. The Brown & Co. Team, or empty]"
   person_default: "[CHOOSE: first | second | mixed | third]"
   # third = the brand refers to itself by name. Common for premium and corporate.
   contractions: "[CHOOSE: always | sometimes | never]"

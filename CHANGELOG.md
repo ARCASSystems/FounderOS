@@ -4,7 +4,7 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 ## Unreleased
 
-v1.28 work in progress. The `tests/` directory and the on-push CI test workflows are removed from the public repo so the user-facing surface no longer carries 1.4 MB of dev infrastructure that plugin users never ran. The weekly leakage and drift audit workflow stays. The maintainer keeps the test suite locally via `.gitignore`. Other items from the v1.28 backlog in `plans/v1.27-close-out-and-v1.28-backlog-2026-05-22.md` land in follow-up commits before the tag cuts.
+v1.28 work in progress. Two cleanups so far. First, the `tests/` directory and the on-push CI test workflows are removed from the public repo so the user-facing surface no longer carries 1.4 MB of dev infrastructure that plugin users never ran. The weekly leakage and drift audit workflow stays. The maintainer keeps the test suite locally via `.gitignore`. Second, an operator-name leak sweep across all tracked files found three residual references to a private brand inside generic examples in `skills/brand-voice-interview/SKILL.md` and `templates/brand-voice.yml.template`. All three replaced with neutral examples (`brown-co`, `Nike`, `Brown & Co.`) in the same shape as the v1.27 TruHoney cleanup. The tag cuts when the v1.28 backlog reaches a stopping point.
 
 ## v1.27.0 - 2026-05-22
 
