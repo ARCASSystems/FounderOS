@@ -4,7 +4,11 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 ## Unreleased
 
-v1.28 work in progress. Two cleanups so far. First, the `tests/` directory and the on-push CI test workflows are removed from the public repo so the user-facing surface no longer carries 1.4 MB of dev infrastructure that plugin users never ran. The weekly leakage and drift audit workflow stays. The maintainer keeps the test suite locally via `.gitignore`. Second, an operator-name leak sweep across all tracked files found three residual references to a private brand inside generic examples in `skills/brand-voice-interview/SKILL.md` and `templates/brand-voice.yml.template`. All three replaced with neutral examples (`brown-co`, `Nike`, `Brown & Co.`) in the same shape as the v1.27 TruHoney cleanup. The tag cuts when the v1.28 backlog reaches a stopping point.
+Stub for v1.29.0. The v1.28 backlog items not landed in v1.28 (playbook refresh, richer prospect-tracking flow on top of F27, time-awareness primitive in SessionStart, Hermes/OpenClaw positioning audit when the playbook refreshes) stay queued in `plans/v1.27-close-out-and-v1.28-backlog-2026-05-22.md` for future releases.
+
+## v1.28.0 - 2026-05-23
+
+v1.28 strips dev-only infrastructure off the public repo and closes one residual operator-name leak. The `tests/` directory (62 files) and the on-push pytest CI workflow are removed so plugin users no longer download 1.4 MB of test code they never run. The weekly leakage and drift audit workflow stays. A 25-name sweep across all tracked files surfaced three references to a private brand used as generic examples in `skills/brand-voice-interview/SKILL.md` and `templates/brand-voice.yml.template`, all three replaced with neutral examples in the same shape as the v1.27 TruHoney cleanup. The maintainer keeps the test suite locally via `.gitignore` so parity guards continue to run before each release. No new features. No user-facing behavior change. 49 skills, 30 commands.
 
 ## v1.27.0 - 2026-05-22
 
