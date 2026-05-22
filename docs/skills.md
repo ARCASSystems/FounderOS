@@ -521,7 +521,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Say.** "ingest this", "process this source", or "save this transcript".
 - **Outcome.** A new file in `raw/<source>.md` with provenance frontmatter (URL or path, captured date, source title), plus proposed wiki updates you approve before they land.
 - **Reads.** Source URL, file, or pasted text.
-- **Writes.** `raw/<source>.md` always. After your approval: `context/entities/`, `context/decisions.md`, `brain/patterns.md`, `cadence/`, or company files (whichever the proposal targets), plus a one-line trace in `brain/log.md`.
+- **Writes.** `raw/<source>.md` always. After your approval: `context/clients.md`, `context/decisions.md`, `brain/patterns.md`, `cadence/`, or company files under `companies/` (whichever the proposal targets), plus a one-line trace in `brain/log.md`.
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete.
 - **When to run.** Whenever you read or watch something worth preserving with provenance.

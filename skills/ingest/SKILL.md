@@ -84,11 +84,11 @@ Read the source. Extract candidate updates across these categories:
 
 | Category | Target file | What qualifies |
 |---|---|---|
-| Entity | `context/entities/<slug>.md` (new) | A person, company, framework, concept that doesn't already have a page. Check `context/entities/` first. |
+| Person | `context/clients.md` (append a roster row) | A person worth tracking in the roster. Check `context/clients.md` first; append a new row only if not already there. |
 | Decision input | `context/decisions.md` (append) | Information that bears on an open or pending decision. Check current `context/decisions.md` for matches. |
-| Pattern | `brain/patterns.md` (append) | A recurring pattern, observation, or principle worth remembering. |
+| Pattern | `brain/patterns.md` (append) | A recurring pattern, framework, concept, or principle worth remembering. |
 | Action item | `cadence/daily-anchors.md` or `cadence/weekly-commitments.md` (append to Could Do) | A concrete next action surfaced by the source. |
-| Reference | `companies/<slug>-business.md` (append) | Information specific to a company or business already in the OS. |
+| Company | `companies/<slug>-business.md` (append a Source notes section) | Information about a company or organisation. If no file exists for the company, propose creating one with a one-line description. |
 
 Aim for 2-5 candidates total. Do NOT propose more than 7. If a source produces zero clear candidates, that's fine - proceed to Step 4 with an empty list.
 
@@ -119,11 +119,11 @@ If there are zero candidates: `No clear wiki updates surfaced. Source filed to r
 
 For each approved update:
 
-- **Entity (new file):** Write `context/entities/<slug>.md` with a short summary, the source link `[[raw/<filename>]]`, and any cross-references to existing wiki files.
+- **Person (append):** Append a roster row to `context/clients.md` with `<name> - <one-line note>` plus `Per [[raw/<filename>]]`.
 - **Decision input (append):** Append to `context/decisions.md` under the relevant decision header with provenance: `Per [[raw/<filename>]]: <update>`.
 - **Pattern (append):** Append to `brain/patterns.md`: `## YYYY-MM-DD - <pattern title>` plus body and `[[raw/<filename>]]` reference.
 - **Action item (append):** Append to the relevant cadence file's "Could Do" section with `[[raw/<filename>]]` reference.
-- **Reference (append):** Append to the company file under a "Source notes" section with `[[raw/<filename>]]` reference.
+- **Company (append or create):** Append to `companies/<slug>-business.md` under a "Source notes" section with `[[raw/<filename>]]` reference. If the file does not exist, propose creating it with a one-line description before appending.
 
 Use `[[wiki-link]]` syntax for all cross-references per the Wiki Conventions in CLAUDE.md.
 
