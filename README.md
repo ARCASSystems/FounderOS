@@ -202,7 +202,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 ## Tools and MCPs
 
-Founder OS does not assume your stack. Most of the 48 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+Founder OS does not assume your stack. Most of the 49 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 ---
 
@@ -270,7 +270,7 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.26.0. Public release. 48 skills, 30 commands, 388 tests.
+Version 1.26.0. Public release. 49 skills, 30 commands, 411 tests.
 
 v1.25 adds the brand voice layer. Operators running a multi-brand ecosystem (a founder with a personal voice plus brand voices, an agency with per-client brands, a marketing manager handling several group brands) can now capture each brand voice separately from the operator's personal voice. Writing skills route to the right voice based on task context. Three new skills: `brand-voice-interview`, `campaign-from-theme` (funnel-gated, refuses to draft until audience and objective are answered), and `review-responder` (incoming customer messages with channel + posture constraints). Full release history in [CHANGELOG.md](CHANGELOG.md).
 

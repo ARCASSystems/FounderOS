@@ -2,6 +2,8 @@
 
 > One section per company or significant project the founder is involved with.
 > Update when relationship type, status, or involvement changes.
+>
+> Prospect records (companies you sell to or watch, but do not run) live at `companies/prospects/<slug>.md` from the `prospect-init` flow. This file indexes companies you run.
 
 ---
 

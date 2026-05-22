@@ -1,5 +1,6 @@
 <!-- mirror: keep section headers identical to the private business-context.template.md -->
 <!-- this is the public (generic) copy. examples are intentionally vendor-neutral. -->
+<!-- This template is for businesses you run. For prospects (companies you sell to or watch), see `templates/prospect-context.template.md`. -->
 
 ---
 template:

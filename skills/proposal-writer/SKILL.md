@@ -1,7 +1,7 @@
 ---
 name: proposal-writer
 description: >
-  Write a consulting or service proposal. Trigger on "write a proposal", "create a quote", "draft a SOW", "scope of work", "put together a proposal", "pricing for", "engagement letter", or any variation of creating business proposals, quotes, scoping documents, or service agreements. Also fires when the user describes a potential client engagement and needs it formalized. Reads `core/voice-profile.yml`, `core/brand-profile.yml`, and any relevant `companies/<client>-business.md`.
+  Write a consulting or service proposal. Trigger on "write a proposal", "create a quote", "draft a SOW", "scope of work", "put together a proposal", "pricing for", "engagement letter", or any variation of creating business proposals, quotes, scoping documents, or service agreements. Also fires when the user describes a potential client engagement and needs it formalized. Reads `core/voice-profile.yml`, `core/brand-profile.yml`, and any relevant company context (operator path `companies/<slug>-business.md` first, prospect path `companies/prospects/<slug>.md` second).
 why: "Builds proposals that reflect the specific prospect's situation rather than a generic template - a proposal that mirrors the client's own words wins more than one that describes the service."
 enhance: "Fill context/clients.md with scoping notes before running - the more prospect-specific context you provide, the stronger the Situation section, which is where most proposals lose."
 allowed-tools: ["Read", "Write", "Edit", "Bash"]
@@ -29,7 +29,11 @@ Then read in this order:
 
 1. The chosen voice profile (operator: `core/voice-profile.yml`. Brand: `brands/<slug>/voice.yml` + `brands/<slug>/positioning.yml`).
 2. The chosen visual brand (operator default: `core/brand-profile.yml`. Brand: `brands/<slug>/visual.yml` if present). Governs any branded version of this proposal (PDF, DOCX). For plain-text proposals, this is optional.
-3. `companies/<client>-business.md` if a relevant context file exists - prior research, scope conversations, the prospect's stated pain.
+3. **Company-specific context (two-path check).** Look for the prospect or client at:
+   1. `companies/<slug>-business.md` (operator path - the company you run, if this proposal is going out from a brand you operate to a related entity)
+   2. `companies/prospects/<slug>.md` (prospect path - the company you are selling to)
+
+   Prefer the operator file if both exist. If neither exists and the engagement is with a tracked prospect, surface a one-line note offering to run the `prospect-init` flow to capture the minimum context before drafting. Proceed with generic output if the user declines.
 4. Any prior scoping notes the user points you at.
 5. `brain/knowledge/` - topic notes relevant to the deal type, buyer pain, industry, proof points, or prior wins. Read frontmatter and top headings first. Do not hard-parse full bodies unless the user asks.
 

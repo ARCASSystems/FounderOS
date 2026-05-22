@@ -87,8 +87,8 @@ If a skill has a slash command that wraps it, that command is named at the end a
 ### readiness-check
 
 - **Say.** "check my OS readiness", "how am I doing", or "where are the gaps".
-- **Outcome.** A weighted readiness score across Identity, Priorities, Decisions, Cadence, Voice. Plus the next 3 high-impact moves.
-- **Reads.** `core/identity.md`, `core/voice-profile.yml`, `context/priorities.md`, `context/decisions.md`, `cadence/`, `brain/flags.md`.
+- **Outcome.** A weighted readiness score across six buckets (Core, Voice and Brand, Cadence, Business Context, Brain Layer, Queue) plus the next 3 high-impact moves. The Business Context bucket counts operator companies only (`companies/<slug>-business.md`); prospect files under `companies/prospects/` are tracked separately and not in this score.
+- **Reads.** `core/identity.md`, `core/voice-profile.yml`, `core/brand-profile.yml`, `context/priorities.md`, `context/companies.md`, `cadence/`, `brain/flags.md`, `brain/log.md`, `brain/patterns.md`, `cadence/queue.md`.
 - **Writes.** Read-only.
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete.
@@ -509,19 +509,30 @@ If a skill has a slash command that wraps it, that command is named at the end a
 
 - **Say.** "load context for <company>", "what's next on <company>", or "give me an action on <company>".
 - **Outcome.** A loaded per-company context file plus a list of what is missing or stale and the next obvious move.
-- **Reads.** `companies/<slug>.md` (or your equivalent), `context/clients.md`.
+- **Reads.** `companies/<slug>-business.md` (operator path; the company you run), `context/clients.md`.
 - **Writes.** Read-only.
 - **Voice rules.** No.
-- **Prereqs.** `founder-os-setup` complete. At least one company file under `companies/`.
-- **When to run.** When switching focus to a different company or project. Start of a working block scoped to one entity.
-- **Follow-up.** Skill named in the "next move". No dedicated slash command.
+- **Prereqs.** `founder-os-setup` complete. At least one operator company file at `companies/<slug>-business.md`.
+- **When to run.** When switching focus to a different company or project you run. Start of a working block scoped to one operator entity.
+- **Follow-up.** Skill named in the "next move". For prospect companies, use `prospect-init` instead. No dedicated slash command.
+
+### prospect-init
+
+- **Say.** "add a prospect", "track <company> as a prospect", "start tracking <company>", or "new prospect <company>".
+- **Outcome.** A new lightweight prospect file at `companies/prospects/<slug>.md` capturing the minimum intel (company name, sector, why you are tracking them, current relationship stage, fit signals against your ICP).
+- **Reads.** `templates/prospect-context.template.md`, optionally `companies/<slug>-business.md` (operator) for ICP and anti-ICP signals.
+- **Writes.** `companies/prospects/<slug>.md` (new), `brain/log.md` (one-line trace).
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete.
+- **When to run.** When you first start tracking a company you are selling to or watching. Different from `business-context-loader`, which is for companies you run.
+- **Follow-up.** `proposal-writer`, `strategic-analysis`, or `client-update` will read this file when they need company-specific context. Slash command: `/founder-os:prospect-init <slug>`.
 
 ### ingest
 
 - **Say.** "ingest this", "process this source", or "save this transcript".
 - **Outcome.** A new file in `raw/<source>.md` with provenance frontmatter (URL or path, captured date, source title), plus proposed wiki updates you approve before they land.
 - **Reads.** Source URL, file, or pasted text.
-- **Writes.** `raw/<source>.md` always. After your approval: `context/clients.md`, `context/decisions.md`, `brain/patterns.md`, `cadence/`, or company files under `companies/` (whichever the proposal targets), plus a one-line trace in `brain/log.md`.
+- **Writes.** `raw/<source>.md` always. After your approval: `context/clients.md`, `context/decisions.md`, `brain/patterns.md`, `cadence/`, or company files under `companies/` (operator path `companies/<slug>-business.md` or prospect path `companies/prospects/<slug>.md`, whichever the proposal targets), plus a one-line trace in `brain/log.md`.
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete.
 - **When to run.** Whenever you read or watch something worth preserving with provenance.

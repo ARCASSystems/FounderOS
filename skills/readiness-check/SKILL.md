@@ -30,7 +30,7 @@ Six buckets, each scored 0-100. Overall is the weighted average.
 | Core | 25% | `core/identity.md`, `context/priorities.md` |
 | Voice and Brand | 25% | `core/voice-profile.yml`, `core/brand-profile.yml` |
 | Cadence | 20% | `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `cadence/quarterly-sprints.md` |
-| Business Context | 15% | `context/companies.md`, `companies/<slug>-business.md` for each declared business |
+| Business Context | 15% | `context/companies.md`, `companies/<slug>-business.md` for each declared business (operator path only; prospect files under `companies/prospects/` do not count toward this bucket) |
 | Brain Layer | 10% | `brain/log.md`, `brain/flags.md`, `brain/patterns.md` |
 | Queue | 5% | `cadence/queue.md` |
 
@@ -100,6 +100,8 @@ Bucket score = average of the three file scores.
 Read `context/companies.md`. Count the number of declared businesses (top-level `## ` headers naming businesses, or rows in a table - whichever pattern the file uses).
 
 For each declared business, check whether `companies/<sanitised-slug>-business.md` exists and has content (the file the setup wizard and business-context-loader produce).
+
+Prospect files at `companies/prospects/<slug>.md` are intentionally NOT counted in this bucket. The Business Context score measures readiness for operator workstreams (proposals, strategic analysis, client updates). Prospect tracking is its own surface and lacks a readiness metric in v1.27.
 
 - Score per business: 0 if context file missing, 50 if file exists but contains `[FILL]` placeholders, 100 if file is populated.
 - Bucket score = average across all declared businesses.

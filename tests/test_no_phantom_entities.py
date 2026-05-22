@@ -103,6 +103,17 @@ class IngestRoutingPositiveTests(unittest.TestCase):
         self.assertIn("companies/<slug>-business.md", self.skill_text,
                       "ingest skill must reference companies/<slug>-business.md as Company target.")
 
+    def test_company_routing_includes_prospect_path(self):
+        # F27 task 5.5 reconciles ingest with the new prospect path under
+        # Option X: the Company row names both operator and prospect paths
+        # in priority order. Without this positive assertion the row could
+        # silently drop the prospect path while existing tests still pass.
+        self.assertIn("companies/prospects/<slug>.md", self.skill_text,
+                      "ingest Company row must also reference "
+                      "companies/prospects/<slug>.md as the prospect-path "
+                      "target post-F27 (Option X: single Company row, dual "
+                      "path in description).")
+
     def test_entity_row_removed(self):
         self.assertNotIn("| Entity |", self.skill_text,
                          "ingest skill must NOT contain the removed Entity routing row.")

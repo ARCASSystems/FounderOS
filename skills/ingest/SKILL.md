@@ -88,7 +88,7 @@ Read the source. Extract candidate updates across these categories:
 | Decision input | `context/decisions.md` (append) | Information that bears on an open or pending decision. Check current `context/decisions.md` for matches. |
 | Pattern | `brain/patterns.md` (append) | A recurring pattern, framework, concept, or principle worth remembering. |
 | Action item | `cadence/daily-anchors.md` or `cadence/weekly-commitments.md` (append to Could Do) | A concrete next action surfaced by the source. |
-| Company | `companies/<slug>-business.md` (append a Source notes section) | Information about a company or organisation. If no file exists for the company, propose creating one with a one-line description. |
+| Company | `companies/<slug>-business.md` (operator path, append a Source notes section) OR `companies/prospects/<slug>.md` (prospect path, append a Notes entry) | Information about a company or organisation. Check the operator path first, then the prospect path. If no file exists at either path and the company is one the user runs, propose creating the operator file with a one-line description. If the company is one the user is selling to or watching, propose running the `prospect-init` flow instead. |
 
 Aim for 2-5 candidates total. Do NOT propose more than 7. If a source produces zero clear candidates, that's fine - proceed to Step 4 with an empty list.
 
@@ -123,7 +123,7 @@ For each approved update:
 - **Decision input (append):** Append to `context/decisions.md` under the relevant decision header with provenance: `Per [[raw/<filename>]]: <update>`.
 - **Pattern (append):** Append to `brain/patterns.md`: `## YYYY-MM-DD - <pattern title>` plus body and `[[raw/<filename>]]` reference.
 - **Action item (append):** Append to the relevant cadence file's "Could Do" section with `[[raw/<filename>]]` reference.
-- **Company (append or create):** Append to `companies/<slug>-business.md` under a "Source notes" section with `[[raw/<filename>]]` reference. If the file does not exist, propose creating it with a one-line description before appending.
+- **Company (append or create):** Check `companies/<slug>-business.md` first (operator path). If it exists, append to a "Source notes" section with `[[raw/<filename>]]` reference. If the operator file does not exist, check `companies/prospects/<slug>.md` (prospect path) and append to its **Notes** section with the same reference. If neither file exists, propose creating the operator file (for companies the user runs) or running the `prospect-init` flow (for companies the user sells to or watches) before appending. Do not write both files in one pass - the source belongs at one path, not both.
 
 Use `[[wiki-link]]` syntax for all cross-references per the Wiki Conventions in CLAUDE.md.
 

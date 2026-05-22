@@ -1,6 +1,6 @@
 # Founder OS Skills
 
-48 skills as of v1.25.3. v1.25 adds the brand voice layer: an operator can now run a multi-brand ecosystem with separate voice + positioning per brand, distinct from the operator's personal voice. Three new skills (`brand-voice-interview`, `campaign-from-theme`, `review-responder`) and voice-routing across the five voice-coupled writing skills. v1.24 adds Python preflight gates to 10 writing and reasoning skills (no new skills, hardened existing ones). v1.23 added the natural-language capture path (no new skills, new hook + bootloader rewrite). v1.22 added `observation-rollup` (weekly JSONL compression) and `legal-compliance` (jurisdiction-aware legal reference). v1.21 added `queue` (execution queue with 3-item ACTIVE cap) and `verify` (read-only health check across 8 substrate points). v1.20.0 was the natural-language routing release plus `/founder-os:menu`. v1.20.2 added the `today` wrapper skill. v1.20.3 added anti-example voice depth. v1.10 added the runtime brain context layer plus brain-pass. The setup wizard (`founder-os-setup`) is the entry point. All others activate via natural language phrasing or via `/founder-os:<command>`.
+49 skills as of v1.27 (Unreleased). v1.27 adds `prospect-init` (lightweight per-prospect file creator under `companies/prospects/<slug>.md`) alongside the F27 operator/prospect path split, the F34 ingest cleanup, the F46 voice-interview phase renumber, and the F38 wiki-walk consolidation. v1.25 adds the brand voice layer: an operator can now run a multi-brand ecosystem with separate voice + positioning per brand, distinct from the operator's personal voice. Three new skills (`brand-voice-interview`, `campaign-from-theme`, `review-responder`) and voice-routing across the five voice-coupled writing skills. v1.24 adds Python preflight gates to 10 writing and reasoning skills (no new skills, hardened existing ones). v1.23 added the natural-language capture path (no new skills, new hook + bootloader rewrite). v1.22 added `observation-rollup` (weekly JSONL compression) and `legal-compliance` (jurisdiction-aware legal reference). v1.21 added `queue` (execution queue with 3-item ACTIVE cap) and `verify` (read-only health check across 8 substrate points). v1.20.0 was the natural-language routing release plus `/founder-os:menu`. v1.20.2 added the `today` wrapper skill. v1.20.3 added anti-example voice depth. v1.10 added the runtime brain context layer plus brain-pass. The setup wizard (`founder-os-setup`) is the entry point. All others activate via natural language phrasing or via `/founder-os:<command>`.
 
 | Skill | Status | Replaces |
 |-------|--------|---------|
@@ -45,7 +45,8 @@
 | [brand-voice-interview](brand-voice-interview/SKILL.md) | Ready | Captures a brand's voice and positioning into brands/<slug>/voice.yml + positioning.yml. One run per brand. Separate from voice-interview which captures operator voice. |
 | [campaign-from-theme](campaign-from-theme/SKILL.md) | Ready | Turns a theme into a funnel-gated marketing campaign. Refuses to draft until speaker, objective, audience temperature, channels, and success metric are all answered. |
 | [review-responder](review-responder/SKILL.md) | Ready | Drafts replies to incoming customer reviews, DMs, WhatsApp, emails. Asks whose voice (operator or brand) and applies channel + posture constraints. |
-| [business-context-loader](business-context-loader/SKILL.md) | Ready | Per-company context file scanner and gap router |
+| [business-context-loader](business-context-loader/SKILL.md) | Ready | Per-company context file scanner and gap router (operator companies only) |
+| [prospect-init](prospect-init/SKILL.md) | Ready | Lightweight per-prospect file creator. Captures 3-5 fields and writes `companies/prospects/<slug>.md`. Companion to business-context-loader (which is operator-only). Run via `/founder-os:prospect-init <slug>`. |
 | [linkedin-post](linkedin-post/SKILL.md) | Ready | Voice-coupled LinkedIn post writer |
 | [client-update](client-update/SKILL.md) | Ready | Voice-coupled client status update writer |
 | [proposal-writer](proposal-writer/SKILL.md) | Ready | Voice and brand-coupled proposal writer. Reads `brain/knowledge/` for past wins. |
@@ -92,7 +93,7 @@ This plugin ships 30 slash commands:
 
 ## Status
 
-48 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile. Operators running multiple brands capture each brand voice separately via `brand-voice-interview`.
+49 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile. Operators running multiple brands capture each brand voice separately via `brand-voice-interview`.
 
 Release notes:
 

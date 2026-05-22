@@ -43,7 +43,12 @@ Before drafting, read `brain/.snapshot.md` if it exists. Use the open-flags bloc
 
 If the founder has filled `core/brand-profile.yml`, follow the visual brand for any branded version of the update (PDF, doc, etc.). Plain-text updates do not need brand assets.
 
-If the engagement has a context file under `companies/<client>-business.md` or similar, read it for project specifics, named milestones, and the agreed scope.
+If the engagement has a company-specific context file, read it for project specifics, named milestones, and the agreed scope. Check in this order:
+
+1. `companies/<slug>-business.md` (operator path)
+2. `companies/prospects/<slug>.md` (prospect path - typically pre-engagement, but the file may exist if this update is going to a prospect you have been tracking)
+
+Prefer the operator file if both exist. If neither exists, proceed without company-specific context and surface a one-line note offering to run the `prospect-init` flow if this is a tracked prospect.
 
 ## Core Principles
 

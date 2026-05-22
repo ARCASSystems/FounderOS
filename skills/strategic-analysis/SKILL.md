@@ -24,6 +24,11 @@ Then read these files so the analysis is grounded in the user's actual position,
 2. **`context/companies.md`** - portfolio of companies and projects. Lift competitor and adjacent-business context from here before doing fresh research.
 3. **`context/decisions.md`** - prior decisions that bound the option space. Do not recommend an option already ruled out.
 4. **`brain/knowledge/`** - captured notes relevant to the market, competitor, framework, customer segment, or prior pattern. Read frontmatter and top headings first. Reference matching topics by name.
+5. **Company-specific context (if analysing a specific company).** Two-path check:
+   1. `companies/<slug>-business.md` (operator path - the company you run, if the analysis is about a brand you operate)
+   2. `companies/prospects/<slug>.md` (prospect path - a competitor or target company you have tracked)
+
+   Prefer the operator file if both exist. If neither exists and the analysis is about a specific named company, name the gap explicitly in the OUR POSITIONING block - do not invent fit signals, anti-ICP signals, or relationship state.
 
 If a file is empty or missing, name the gap explicitly in the OUR POSITIONING block. Do not silently default to a generic stance.
 

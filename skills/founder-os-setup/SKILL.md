@@ -478,11 +478,13 @@ Under 60 lines. Show draft. Get approval. Write it.
 
 ### 3.2.5 Company business-context file (recommended)
 
-Copy `templates/business-context.template.md` to `companies/<slug>-business.md` (where `<slug>` is the company folder name from 3.1). Replace `{{COMPANY_NAME}}` on the **Company name** line with the company name captured in Phase 0.1. Leave every `[FILL]` marker intact - the `business-context-loader` skill walks them on first run with the founder. The universal placeholder pass (Phase 2.2) will not see this file because it runs Phase 2 only; if any other `{{...}}` placeholder lands here later, replace it with `[NOT SET]`.
+Copy `templates/business-context.template.md` to `companies/<slug>-business.md` (where `<slug>` is the company folder name from 3.1). This is your business, not a prospect - the operator template captures ICP, pricing, offer structure for the company you run. Prospect records (companies you sell to or watch) are created on-demand via the `prospect-init` flow and land at `companies/prospects/<slug>.md`; the wizard does not pre-create those.
+
+Replace `{{COMPANY_NAME}}` on the **Company name** line with the company name captured in Phase 0.1. Leave every `[FILL]` marker intact - the `business-context-loader` skill walks them on first run with the founder. The universal placeholder pass (Phase 2.2) will not see this file because it runs Phase 2 only; if any other `{{...}}` placeholder lands here later, replace it with `[NOT SET]`.
 
 This file is the input that `business-context-loader`, `proposal-writer`, `client-update`, and `strategic-analysis` read for ICP, pricing tier, positioning, and offer structure. Without it those skills produce generic output. The wizard surfaces it once; the founder fills it the first time they need a company-specific deliverable.
 
-If the founder skips it, log a backlog item: `- [ ] Fill companies/<slug>-business.md before next proposal or strategic analysis`.
+If the founder skips it, log a backlog item: `- [ ] Fill companies/<slug>-business.md before next proposal or strategic analysis`. Also log: `- [ ] Use prospect-init when you start tracking your first prospect company (creates companies/prospects/<slug>.md)`.
 
 ### 3.3 Company .mcp.json
 Based on tool stack from 0.5, create a `.mcp.json` with only the MCPs this business needs.
