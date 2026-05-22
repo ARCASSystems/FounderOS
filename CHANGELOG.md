@@ -2,6 +2,18 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## Unreleased
+
+Stub for v1.27.0. F38 lands now; F27, F34, and F46 follow in separate sessions, each with its own plan file. The tag cuts when the last finding closes.
+
+### Refactor (F38)
+
+F38 consolidated the wiki-layer walk into `scripts/_common.py`. `scripts/wiki-build.py` and `scripts/query.py` now import `WIKI_LAYER_PREFIXES`, `wiki_layer_files`, and `normalize_wikilink_target` from one canonical helper instead of carrying near-duplicate `rglob` logic side by side. `templates/scripts/_common.py` mirrors the same helper so a fresh install gets the consolidated module. Cross-script parity is locked by `tests/test_walk_parity.py`, which runs both scripts against a controlled fixture corpus and asserts identical outputs on every commit. `tests/test_common.py` adds 15 unit tests covering the prefix set, the file walker, the wikilink normalizer, and the excluded-parts guard. `tests/test_templates_scripts_parity.py` had its allow-list for `_common.py` removed because both copies must now stay byte-identical. Skill docs `skills/wiki-build/SKILL.md` and `skills/lint/SKILL.md` point at the new module.
+
+Empirical no-regression check on the real private OS content confirmed byte-identical `brain/relations.yaml` output: pre-refactor (`f38d6b1`) and post-refactor (`b503b74`) both produced 380 wiki links from 16 source files with zero diff lines.
+
+48 skills, 30 commands, 384 tests pass.
+
 ## v1.26.0 - 2026-05-22
 
 Polish patch on the 60-finding audit. Six findings closed across two workstreams. Three findings (F27, F34, F38, F46) deferred to a v1.27 design plan because they need design work, not polish.
