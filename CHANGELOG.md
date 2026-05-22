@@ -4,7 +4,11 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 ## Unreleased
 
-Stub for v1.27.0. F38 and F46 land now; F27 and F34 follow in separate sessions, each with its own plan file. The tag cuts when the last finding closes.
+Stub for v1.28.0. See `plans/v1.27-close-out-and-v1.28-backlog-2026-05-22.md` § v1.28 backlog for what is queued.
+
+## v1.27.0 - 2026-05-22
+
+v1.27 closes the last four findings from the 60-finding audit. `F38` consolidated the wiki-layer walk into one canonical helper. `F46` renumbered voice-interview phases to honest integers. `F34` removed the dangling `context/entities/` reference from the ingest skill. `F27` split the companies surface so prospects live at `companies/prospects/<slug>.md` while operator companies stay at the pre-existing path. The audit is complete. No findings remain open.
 
 ### Refactor (F38)
 
