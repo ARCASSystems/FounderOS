@@ -55,7 +55,11 @@ dist/
 build/
 node_modules/
 
-# Python bytecode (generated when tests/ runs)
+# Test suite (dev-only; removed from public repo in v1.28, kept locally for the maintainer)
+tests/
+.pytest_cache/
+
+# Python bytecode
 __pycache__/
 *.py[cod]
 *$py.class

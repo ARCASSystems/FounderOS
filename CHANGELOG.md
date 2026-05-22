@@ -4,7 +4,7 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 ## Unreleased
 
-Stub for v1.28.0. See `plans/v1.27-close-out-and-v1.28-backlog-2026-05-22.md` § v1.28 backlog for what is queued.
+v1.28 work in progress. The `tests/` directory and the on-push CI test workflows are removed from the public repo so the user-facing surface no longer carries 1.4 MB of dev infrastructure that plugin users never ran. The weekly leakage and drift audit workflow stays. The maintainer keeps the test suite locally via `.gitignore`. Other items from the v1.28 backlog in `plans/v1.27-close-out-and-v1.28-backlog-2026-05-22.md` land in follow-up commits before the tag cuts.
 
 ## v1.27.0 - 2026-05-22
 
