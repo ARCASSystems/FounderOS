@@ -4,13 +4,17 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 ## Unreleased
 
-Stub for v1.27.0. F38 lands now; F27, F34, and F46 follow in separate sessions, each with its own plan file. The tag cuts when the last finding closes.
+Stub for v1.27.0. F38 and F46 land now; F27 and F34 follow in separate sessions, each with its own plan file. The tag cuts when the last finding closes.
 
 ### Refactor (F38)
 
 F38 consolidated the wiki-layer walk into `scripts/_common.py`. `scripts/wiki-build.py` and `scripts/query.py` now import `WIKI_LAYER_PREFIXES`, `wiki_layer_files`, and `normalize_wikilink_target` from one canonical helper instead of carrying near-duplicate `rglob` logic side by side. `templates/scripts/_common.py` mirrors the same helper so a fresh install gets the consolidated module. Cross-script parity is locked by `tests/test_walk_parity.py`, which runs both scripts against a controlled fixture corpus and asserts identical outputs on every commit. `tests/test_common.py` adds 15 unit tests covering the prefix set, the file walker, the wikilink normalizer, and the excluded-parts guard. `tests/test_templates_scripts_parity.py` had its allow-list for `_common.py` removed because both copies must now stay byte-identical. Skill docs `skills/wiki-build/SKILL.md` and `skills/lint/SKILL.md` point at the new module.
 
 Empirical no-regression check on the real private OS content confirmed byte-identical `brain/relations.yaml` output: pre-refactor (`f38d6b1`) and post-refactor (`b503b74`) both produced 380 wiki links from 16 source files with zero diff lines.
+
+### Refactor (F46)
+
+F46 renumbered the phase headers in `skills/voice-interview/SKILL.md` and `skills/brand-voice-interview/SKILL.md` to honest integers and added operator-visible "Part X of 3" markers inside the model utterances. The pre-F46 numbering used fractional phases (`## Phase 0`, `## Phase 0.5`, `## Phase 2`, `## Phase 2.5`) that read as historical accretions rather than design intent; a maintainer or executor opening the file could not tell where one phase ended and the next began. `voice-interview` now runs Phase 1 Setup, Phase 2 Samples, Phase 3 Shaping (Q1-Q12, with Anti-examples as an H3 sub-section under the same Phase 3), Phase 4 Confirm-and-save, Phase 5 Final message. `brand-voice-interview` runs Phase 1 Setup, Phase 2 Positioning (Q1-Q13), Phase 3 Brand voice (samples + V1-V10 as a sub-section), Phase 4 Confirm-and-save, Phase 5 Visual capture (optional), Phase 6 Final message. The asymmetry (5 vs 6 phases) is documented in both SKILL bodies: brand has an extra Positioning phase because brand positioning has no equivalent file the way operator positioning lives in `core/identity.md`. Each SKILL now leads with a one-sentence marker-decision note so the next maintainer knows the integer phase numbers are for them while the three-part frame is for the operator. Two meta-comment lines were removed via the "would removing this change output?" heuristic; no question text, no schema field, no captured-language anchor was touched. One paired test edit in `tests/test_voice_interview_anti_examples.py` retargeted the only pinned phase-header assertion to the demoted H3 form so the test contract still verifies the section exists. All other test-pinned strings (Q9-Q12 prompts, the Q12 Bad/Good/Rule worked example, the storage-rule sentences, the pre-step section header, the four scan paths, the buyer-language and confirm-block labels, the four downstream skill names) survive verbatim.
 
 48 skills, 30 commands, 384 tests pass.
 

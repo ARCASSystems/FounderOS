@@ -17,6 +17,10 @@ You are running an interactive interview to capture a single brand's voice and p
 
 This skill is for BRAND voice, not OPERATOR voice. The operator's personal voice lives at `core/voice-profile.yml` and is captured by the `voice-interview` skill. If the user is asking about their own personal voice, point them to `voice-interview` instead and stop.
 
+Internal phase numbers in markdown H2 headers are for the maintainer; the operator sees a three-part frame (Part 1 of 3 - Positioning, Part 2 of 3 - Brand voice, Part 3 of 3 - Confirm and save) inside model utterances. Setup (Phase 1), Visual capture (Phase 5, optional), and Final message (Phase 6) sit outside the three-part frame.
+
+Cross-skill asymmetry note: this skill has 6 phases. The sibling `voice-interview` has 5 because it does not need a positioning phase - operator positioning lives in `core/identity.md` (captured by `founder-os-setup`). Brand positioning (who-the-brand-sells-to) has no equivalent file, so it gets captured here before voice. Do not collapse positioning into voice when editing this skill.
+
 <Instruction-gate>
 Do not write `brands/<slug>/voice.yml` until you have collected at least 2 reference samples published BY THE BRAND (or written by the operator in the brand's voice for the brand) AND walked the shaping questions, including buyer-language and anti-example questions. Samples are the ground truth.
 
@@ -27,7 +31,7 @@ Do not invent answers. If the user skips a field, leave it as `[NOT SET]` and te
 
 ---
 
-## Phase 0 - Clarify: brand voice or operator voice?
+## Phase 1 - Setup (clarify scope, pick slug)
 
 Before anything else, confirm the speaker.
 
@@ -48,11 +52,7 @@ If they say "brand", continue.
 
 If unclear, ask once: "Whose name goes on the customer-facing output - yours, or a brand name?"
 
----
-
-## Phase 0.5 - Pick or create a brand slug
-
-Ask:
+Then ask:
 
 > What is the brand called? Use the customer-facing name as written on packaging, web, social.
 
@@ -80,7 +80,7 @@ Create the directory `brands/<slug>/` if it does not exist. Also create `brands/
 
 ---
 
-## Phase 1 - Brand positioning (write first, then voice)
+## Phase 2 - Brand positioning (Q1-Q13)
 
 Positioning gates voice. The brand writes differently to a 25-year-old digital-native than to a 55-year-old in tailoring. Capture positioning before voice.
 
@@ -88,6 +88,8 @@ Positioning gates voice. The brand writes differently to a 25-year-old digital-n
 
 Ask:
 
+> Part 1 of 3 - Positioning.
+>
 > One sentence: what does the brand sell? Plain words, not marketing. (e.g. "We sell custom-tailored suits in Dubai" not "We deliver bespoke sartorial experiences".)
 
 Capture as `offer.primary`.
@@ -196,9 +198,7 @@ Capture as `brand.archetype`. If skipped, write `[NOT SET]` and infer from voice
 
 ---
 
-## Phase 2 - Brand voice (the samples first)
-
-Now capture the voice. Same pattern as `voice-interview`: samples first, shaping questions after.
+## Phase 3 - Brand voice (samples + shaping)
 
 ### Pre-step: Scan for existing brand artifacts
 
@@ -217,6 +217,8 @@ If none exist (typical), go straight to paste flow.
 
 Ask:
 
+> Part 2 of 3 - Brand voice.
+>
 > Part 1 - samples. Paste 3 short pieces the brand has already published. Instagram caption, website hero, product page copy, customer email, DM reply, ad copy, anything in the brand's actual voice. Even 50 words is enough per piece. Paste the first one.
 
 After each, ask "What was this? (caption, website, email, etc.)" and capture context.
@@ -238,9 +240,7 @@ After samples are captured, say:
 
 > Got it. Now I will ask 10 shaping questions to fill the patterns the samples might not show. Quick answers are fine.
 
----
-
-## Phase 2.5 - Voice shaping questions
+### Voice shaping questions
 
 ONE at a time. Wait for answer.
 
@@ -349,10 +349,12 @@ Capture as `voice.idiosyncrasies`. Empty list if skipped.
 
 ---
 
-## Phase 3 - Confirm and save
+## Phase 4 - Confirm and save
 
 Show this block (filled with captured values from BOTH positioning and voice):
 
+> Part 3 of 3 - Confirm and save.
+>
 > Here is what I captured for `<display_name>`. Confirm or correct any line.
 >
 > **Positioning**
@@ -389,9 +391,7 @@ Show this block (filled with captured values from BOTH positioning and voice):
 
 If yes, write both files. If they want to change something, edit and re-confirm.
 
----
-
-## Phase 4 - File output
+### File output
 
 Write `brands/<slug>/voice.yml` using the structure from `templates/brand-voice.yml.template`. Replace every `[BRACKETED]` placeholder with the captured value or `[NOT SET]` if skipped.
 
@@ -403,10 +403,12 @@ Do not invent values. Empty lists are `[]`. Skipped string fields are `"[NOT SET
 
 ---
 
-## Phase 5 - Offer visual capture
+## Phase 5 - Visual capture (optional)
 
 After both files are written, ask:
 
+> Optional - Visual identity.
+>
 > Brand voice and positioning are saved. Want to capture the visual identity too (logo, colors, fonts)? It takes 5 to 10 minutes and unlocks branded visual outputs (proposals, decks, one-pagers in this brand's look).
 >
 > Options: yes-now / yes-later / not-needed.

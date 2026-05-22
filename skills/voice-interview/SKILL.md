@@ -12,6 +12,10 @@ mcp_requirements: []
 
 You are running an interactive interview to capture the user's writing voice. The output is `core/voice-profile.yml`. The voice-profile feeds the `your-voice` skill, which then writes everything as the user from that point on.
 
+Internal phase numbers in markdown H2 headers are for the maintainer; the operator sees a three-part frame (Part 1 of 3 - Samples, Part 2 of 3 - Shaping questions, Part 3 of 3 - Confirm and save) inside model utterances. Setup (Phase 1) and Final message (Phase 5) sit outside the three-part frame because they are pre-interview onboarding and post-save confirmation respectively.
+
+Cross-skill asymmetry note: this skill has 5 phases. The sibling `brand-voice-interview` has 6 because it captures positioning (who-the-brand-sells-to) before voice (how-the-brand-speaks). Operator voice does not need a positioning phase because operator positioning lives in `core/identity.md` (captured by `founder-os-setup`). Do not collapse positioning into voice when editing the sibling skill.
+
 <Instruction-gate>
 Do not generate `core/voice-profile.yml` until you have collected at least 2 reference samples (pasted in chat OR sourced from existing session artifacts: `brain/rants/*.md`, `context/decisions.md`, `brain/log.md` recent entries, or `clients/*/communications/`) AND walked the shaping questions, including buyer-language questions and anti-example questions. Samples are the ground truth. If the user has no existing artifacts and refuses to paste samples, ask them to write 2 short pieces in the chat right now (a 2-sentence work email and a LinkedIn-style hook). Don't proceed without samples - the profile without samples is a stereotype.
 
@@ -20,9 +24,7 @@ Do not invent answers. If the user skips a question, leave the field as `[NOT SE
 
 ---
 
-## Phase 0 - Clarify: operator voice, not brand voice
-
-Before starting, confirm scope. This skill captures the OPERATOR's personal voice. A brand the operator runs has a separate voice that lives under `brands/<slug>/voice.yml` and is captured by `brand-voice-interview`.
+## Phase 1 - Setup (operator vs brand, then welcome)
 
 Say exactly:
 
@@ -39,9 +41,7 @@ If they say "brand", stop and dispatch to `brand-voice-interview` instead.
 
 If they say "personal" or "both", continue with this skill for personal voice. (If "both", note at the end that they should also run brand-voice-interview separately.)
 
-## Phase 0.5 - Welcome
-
-Say exactly:
+Then say exactly:
 
 > Voice interview. About 10 minutes. The output is your personal voice profile - it will write everything as you from now on: emails, posts, scripts, cover letters, whatever you generate. We'll do it in three parts: paste a few samples of your writing, walk a few shaping questions, then you confirm and we save. Ready?
 
@@ -49,7 +49,7 @@ Wait for confirmation.
 
 ---
 
-## Phase 1 - Samples (the ground truth)
+## Phase 2 - Samples (the ground truth)
 
 ### Pre-step: Scan for existing artifacts
 
@@ -90,11 +90,11 @@ This always works. Capture both as samples.
 
 After samples are captured, say:
 
-> Got it. Now I'll ask 12 shaping questions to fill in patterns the samples might not show. Quick answers are fine.
+> Part 2 of 3 - 12 shaping questions. Quick answers are fine.
 
 ---
 
-## Phase 2 - Shaping questions
+## Phase 3 - Shaping questions (Q1-Q12)
 
 Ask each one in order. ONE at a time.
 
@@ -162,9 +162,7 @@ Ask:
 
 Capture as `buyer_language.phrases`. These phrases help `linkedin-post`, `email-drafter`, `proposal-writer`, and `client-update` meet the buyer in their own words.
 
----
-
-## Phase 2.5 - Anti-examples
+### Anti-examples (Q9-Q12, continues Phase 3)
 
 Ask each one in order. ONE at a time.
 
@@ -210,10 +208,12 @@ If the user struggles, offer to extract one candidate pair from their pasted sam
 
 ---
 
-## Phase 3 - Confirm and save
+## Phase 4 - Confirm and save
 
 Show this exact block (filled with the captured values):
 
+> Part 3 of 3 - Confirm and save.
+>
 > Here's what I captured. Confirm or correct any line.
 >
 > - Rhythm: <value>
@@ -241,9 +241,7 @@ If yes, write `core/voice-profile.yml` from the captured values.
 
 If they want to change something, edit the value and re-confirm.
 
----
-
-## File output
+### File output
 
 Write `core/voice-profile.yml`. Use this exact structure:
 
@@ -301,7 +299,7 @@ If a field is not set, write `"[NOT SET]"` for strings, `0` for numbers, or `[]`
 
 ---
 
-## Phase 4 - Final message
+## Phase 5 - Final message
 
 Say exactly:
 

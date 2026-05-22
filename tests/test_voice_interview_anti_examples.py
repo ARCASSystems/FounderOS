@@ -11,8 +11,8 @@ class VoiceInterviewAntiExampleTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.skill = VOICE_SKILL.read_text(encoding="utf-8")
 
-    def test_phase_25_exists(self) -> None:
-        self.assertIn("## Phase 2.5 - Anti-examples", self.skill)
+    def test_anti_examples_section_exists(self) -> None:
+        self.assertIn("Anti-examples (Q9-Q12", self.skill)
 
     def test_q9_to_q12_prompts_exist(self) -> None:
         expected_prompts = (
