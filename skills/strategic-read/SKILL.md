@@ -1,7 +1,7 @@
 ---
 name: strategic-read
 description: >
-  Produce a state-of-the-OS report from the current file layer. Say "give me a strategic read", "where am I", "what's the state of my OS", "read across my brain and tell me where I stand" (or run `/founder-os:strategic-read`). Reads identity, priorities, decisions, clients, leads, cadence, flags, and the recent log, then returns a 5-section report: Identity anchor, Active commitments and pipeline, Open decisions, Active flags, Next 3 recommended moves. Read-only. Free-tier accessible: file read plus in-session synthesis, no external API call, no paid model required.
+  Produce a state-of-the-OS report from the current file layer. Say "give me a strategic read", "where am I", "what's the state of my OS", "read across my brain and tell me where I stand" (or run `/founder-os:strategic-read`). Reads identity, priorities, decisions, clients, leads, cadence, flags, and the recent log, then returns a 5-section report: Identity anchor, Active commitments and pipeline, Open decisions, Active flags, Next 3 recommended moves. Pass a section key (`/founder-os:strategic-read flags`) to produce only that section when you do not need the full report. Read-only. Free-tier accessible: file read plus in-session synthesis, no external API call, no paid model required.
 why: "Produces a one-shot orientation across the operating files instead of asking you to remember which file holds which piece of state."
 enhance: "Keep cadence/daily-anchors.md and cadence/weekly-commitments.md current. If those headers are stale, the report flags it and recommends a refresh before any synthesis lands."
 allowed-tools: ["Read", "Glob", "Grep"]
@@ -10,7 +10,29 @@ mcp_requirements: []
 
 # Strategic Read
 
-A user runs `/founder-os:strategic-read` (no arguments). You produce a state-of-the-OS report from the current file layer in five sections. The report is the output. Nothing is written. No file is modified.
+A user runs `/founder-os:strategic-read` (no arguments) for the full 5-section report, or `/founder-os:strategic-read <section>` for a single named section. The report is the output. Nothing is written. No file is modified.
+
+## Section argument (optional)
+
+When the user passes a single argument, treat it as a section selector. Valid section keys (lowercase, kebab-case) map to the section headers below:
+
+| arg | section header |
+|---|---|
+| `identity` | `## 1. Identity anchor` |
+| `commitments` | `## 2. Active commitments and pipeline` |
+| `decisions` | `## 3. Open decisions` |
+| `flags` | `## 4. Active flags` |
+| `next-moves` | `## 5. Next 3 recommended moves` |
+
+When a valid section is named, run the read list and the stale-context check as usual, then render ONLY that section inside the fenced block. Drop the other four sections. The fenced block opens with the same `STRATEGIC READ - <YYYY-MM-DD>` line as the full report so downstream skills can grep deterministically.
+
+When the section argument does NOT match any valid key, do NOT fall back to the full report. Print a one-line note listing the valid keys and stop:
+
+```
+Unknown section: <arg>. Valid keys: identity, commitments, decisions, flags, next-moves.
+```
+
+The mapping table is the contract. If the section headers in this skill body ever change wording, update the table here so the args stay coupled to the actual headers.
 
 ## When to use
 

@@ -1,18 +1,19 @@
 ---
-description: Produce a state-of-the-OS report from the current file layer. Say "give me a strategic read", "where am I", or run /founder-os:strategic-read. Returns 5 sections: Identity anchor, Active commitments and pipeline, Open decisions, Active flags, Next 3 recommended moves. Read-only.
+description: Produce a state-of-the-OS report from the current file layer. Say "give me a strategic read", "where am I", or run /founder-os:strategic-read. Returns 5 sections by default; pass a section key (identity, commitments, decisions, flags, next-moves) to render only that section. Read-only.
 allowed-tools: ["Read", "Glob", "Grep"]
 ---
 
 # Founder OS strategic read
 
-Run the strategic-read skill at `skills/strategic-read/SKILL.md` end to end. No arguments.
+Run the strategic-read skill at `skills/strategic-read/SKILL.md` end to end. Optional single argument selects one section.
 
 ## Procedure
 
 1. If `core/identity.md` does not exist, reply `Founder OS not set up here. Run /founder-os:setup first.` and stop.
 2. If `skills/strategic-read/SKILL.md` is missing, reply `strategic-read skill not found at skills/strategic-read/SKILL.md. Re-install the plugin.` and stop.
-3. Follow the strategic-read skill instructions exactly. Read each file in the documented order, run the stale-context check, then render the 5-section report.
-4. Output the structured block defined in the skill. Nothing before, nothing after.
+3. If a single argument was passed AND it does not match one of the valid section keys (`identity`, `commitments`, `decisions`, `flags`, `next-moves`), reply `Unknown section: <arg>. Valid keys: identity, commitments, decisions, flags, next-moves.` and stop. Do not fall back to the full report.
+4. Follow the strategic-read skill instructions exactly. Read each file in the documented order, run the stale-context check, then render the 5-section report (no arg) or the one selected section (valid arg) inside the fenced block.
+5. Output the structured block defined in the skill. Nothing before, nothing after.
 
 ## When to use
 
@@ -27,9 +28,12 @@ Run the strategic-read skill at `skills/strategic-read/SKILL.md` end to end. No 
 
 ## Examples
 
-- `/founder-os:strategic-read`
+- `/founder-os:strategic-read` - full 5-section report
+- `/founder-os:strategic-read flags` - only the Active flags section
+- `/founder-os:strategic-read next-moves` - only the Next 3 recommended moves section
 - "give me a strategic read"
 - "where am I across the OS"
+- "just give me the flags from the strategic read"
 
 ## Rules
 
