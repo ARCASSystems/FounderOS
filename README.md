@@ -150,7 +150,7 @@ After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-scr
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
-### Slash commands (30)
+### Slash commands (33)
 
 Every command has a natural-language equivalent - slash commands are speed shortcuts for power users, not the primary surface. Full reference with outcomes, args, and follow-ups in [`docs/commands.md`](docs/commands.md).
 
@@ -202,7 +202,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 ## Tools and MCPs
 
-Founder OS does not assume your stack. Most of the 49 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+Founder OS does not assume your stack. Most of the 52 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 ---
 
@@ -270,9 +270,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.26.0. Public release. 49 skills, 30 commands, 411 tests.
+Version 1.29.0. Public release. 52 skills, 33 commands, 569 tests.
 
-v1.25 adds the brand voice layer. Operators running a multi-brand ecosystem (a founder with a personal voice plus brand voices, an agency with per-client brands, a marketing manager handling several group brands) can now capture each brand voice separately from the operator's personal voice. Writing skills route to the right voice based on task context. Three new skills: `brand-voice-interview`, `campaign-from-theme` (funnel-gated, refuses to draft until audience and objective are answered), and `review-responder` (incoming customer messages with channel + posture constraints). Full release history in [CHANGELOG.md](CHANGELOG.md).
+v1.29 adds three on-demand liveness reads. `/strategic-read` returns a 5-section state-of-the-OS report from the current file layer in one pass: identity anchor, active commitments and pipeline, open decisions, active flags with decay status, and three next moves. `/log-reply` ingests a pasted thread (WhatsApp, Telegram, email body, voice memo transcript) and writes a structured entry to `brain/log.md`, proposing (never auto-writing) updates to `context/clients.md` and `context/leads.md`. `/since-last-session` reports what changed since the last marker: hours elapsed, log entries added, flags decayed, commitments overdue, and files modified in `context/`. All three are free-tier accessible: file reads plus in-session synthesis, no external API call. Full release history in [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

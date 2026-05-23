@@ -1,6 +1,6 @@
 # Founder OS Skills
 
-49 skills as of v1.27 (Unreleased). v1.27 adds `prospect-init` (lightweight per-prospect file creator under `companies/prospects/<slug>.md`) alongside the F27 operator/prospect path split, the F34 ingest cleanup, the F46 voice-interview phase renumber, and the F38 wiki-walk consolidation. v1.25 adds the brand voice layer: an operator can now run a multi-brand ecosystem with separate voice + positioning per brand, distinct from the operator's personal voice. Three new skills (`brand-voice-interview`, `campaign-from-theme`, `review-responder`) and voice-routing across the five voice-coupled writing skills. v1.24 adds Python preflight gates to 10 writing and reasoning skills (no new skills, hardened existing ones). v1.23 added the natural-language capture path (no new skills, new hook + bootloader rewrite). v1.22 added `observation-rollup` (weekly JSONL compression) and `legal-compliance` (jurisdiction-aware legal reference). v1.21 added `queue` (execution queue with 3-item ACTIVE cap) and `verify` (read-only health check across 8 substrate points). v1.20.0 was the natural-language routing release plus `/founder-os:menu`. v1.20.2 added the `today` wrapper skill. v1.20.3 added anti-example voice depth. v1.10 added the runtime brain context layer plus brain-pass. The setup wizard (`founder-os-setup`) is the entry point. All others activate via natural language phrasing or via `/founder-os:<command>`.
+52 skills as of v1.29. v1.29 adds three on-demand liveness skills: `strategic-read` (5-section state-of-the-OS report on demand), `log-reply` (ingests pasted threads from WhatsApp / Telegram / email / voice memo transcript into `brain/log.md` with proposed context updates), and `since-last-session` (reports the delta since the last marker time, then advances the marker). All three are free-tier accessible: file reads plus in-session synthesis, no external API call. v1.27 added `prospect-init` (lightweight per-prospect file creator under `companies/prospects/<slug>.md`) alongside the F27 operator/prospect path split, the F34 ingest cleanup, the F46 voice-interview phase renumber, and the F38 wiki-walk consolidation. v1.25 adds the brand voice layer: an operator can now run a multi-brand ecosystem with separate voice + positioning per brand, distinct from the operator's personal voice. Three new skills (`brand-voice-interview`, `campaign-from-theme`, `review-responder`) and voice-routing across the five voice-coupled writing skills. v1.24 adds Python preflight gates to 10 writing and reasoning skills (no new skills, hardened existing ones). v1.23 added the natural-language capture path (no new skills, new hook + bootloader rewrite). v1.22 added `observation-rollup` (weekly JSONL compression) and `legal-compliance` (jurisdiction-aware legal reference). v1.21 added `queue` (execution queue with 3-item ACTIVE cap) and `verify` (read-only health check across 8 substrate points). v1.20.0 was the natural-language routing release plus `/founder-os:menu`. v1.20.2 added the `today` wrapper skill. v1.20.3 added anti-example voice depth. v1.10 added the runtime brain context layer plus brain-pass. The setup wizard (`founder-os-setup`) is the entry point. All others activate via natural language phrasing or via `/founder-os:<command>`.
 
 | Skill | Status | Replaces |
 |-------|--------|---------|
@@ -47,6 +47,9 @@
 | [review-responder](review-responder/SKILL.md) | Ready | Drafts replies to incoming customer reviews, DMs, WhatsApp, emails. Asks whose voice (operator or brand) and applies channel + posture constraints. |
 | [business-context-loader](business-context-loader/SKILL.md) | Ready | Per-company context file scanner and gap router (operator companies only) |
 | [prospect-init](prospect-init/SKILL.md) | Ready | Lightweight per-prospect file creator. Captures 3-5 fields and writes `companies/prospects/<slug>.md`. Companion to business-context-loader (which is operator-only). Run via `/founder-os:prospect-init <slug>`. |
+| [strategic-read](strategic-read/SKILL.md) | Ready | On-demand state-of-the-OS report. 5 sections: Identity anchor, Active commitments and pipeline, Open decisions, Active flags, Next 3 recommended moves. Read-only. Free-tier accessible. Run via `/founder-os:strategic-read`. |
+| [log-reply](log-reply/SKILL.md) | Ready | Captures a pasted thread (WhatsApp, Telegram, email body, voice memo transcript) into `brain/log.md`. Proposes (never auto-writes) updates to `context/clients.md` and `context/leads.md`. Per `rules/approval-gates.md`. Run via `/founder-os:log-reply`. |
+| [since-last-session](since-last-session/SKILL.md) | Ready | Delta report since the last marker time. 5 sections: hours elapsed, brain/log.md entries added, flags decayed, commitments overdue, files modified in `context/`. Marker at `brain/.last-session`. First-run seeds the marker and stops. Run via `/founder-os:since-last-session`. |
 | [linkedin-post](linkedin-post/SKILL.md) | Ready | Voice-coupled LinkedIn post writer |
 | [client-update](client-update/SKILL.md) | Ready | Voice-coupled client status update writer |
 | [proposal-writer](proposal-writer/SKILL.md) | Ready | Voice and brand-coupled proposal writer. Reads `brain/knowledge/` for past wins. |
@@ -56,7 +59,7 @@
 
 ## Commands
 
-This plugin ships 30 slash commands:
+This plugin ships 33 slash commands:
 
 | Command | Purpose |
 |---------|---------|
@@ -90,10 +93,13 @@ This plugin ships 30 slash commands:
 | [/founder-os:queue](../.claude/commands/queue.md) | Manage the execution queue. Say "what's on my plate" or "add to queue: <thing>". ACTIVE is capped at 3. |
 | [/founder-os:verify](../.claude/commands/verify.md) | Read-only substrate health check across 8 checks. Say "verify the OS". Never auto-fixes. |
 | [/founder-os:observation-rollup](../.claude/commands/observation-rollup.md) | Compress weekly observation logs. Say "roll up observations" or "compress old logs". |
+| [/founder-os:strategic-read](../.claude/commands/strategic-read.md) | On-demand state-of-the-OS report. 5 sections: Identity anchor, Active commitments and pipeline, Open decisions, Active flags, Next 3 recommended moves. Read-only. |
+| [/founder-os:log-reply](../.claude/commands/log-reply.md) | Capture a pasted thread (WhatsApp, Telegram, email body, voice memo transcript) into `brain/log.md`. Proposes context updates; operator confirms each before any write to `context/clients.md` or `context/leads.md`. |
+| [/founder-os:since-last-session](../.claude/commands/since-last-session.md) | Delta report since the last marker time. Marker at `brain/.last-session` updates at end of run. First run seeds the marker and stops. |
 
 ## Status
 
-49 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile. Operators running multiple brands capture each brand voice separately via `brand-voice-interview`.
+52 skills. Each skill is generic: no founder-specific references, no personal names. Voice-neutral for adaptation by the setup wizard using the founder's identity, voice profile, and brand profile. Operators running multiple brands capture each brand voice separately via `brand-voice-interview`.
 
 Release notes:
 
@@ -119,4 +125,6 @@ Release notes:
 - v1.24 added Python preflight gates to ten existing skills (five voice-coupled writing skills, four reasoning skills, brain-pass). When a required file is missing or template-filled, the gate exits in code and the skill stops with a one-line reason instead of producing silently-generic output. No new skills.
 - v1.25 added the brand voice layer. Three new skills (`brand-voice-interview`, `campaign-from-theme`, `review-responder`). New `brands/<slug>/` directory holds per-brand voice + positioning + visual files. Five voice-coupled writing skills (linkedin-post, email-drafter, client-update, content-repurposer, proposal-writer) now route between operator voice and brand voice based on task context. Backward-compatible: operators without `brands/` set up see no behavior change. Operators with one or many brands get voice-correct output without manual switching. Anti-AI baseline adapts by brand register (plain-direct, measured-elegant, corporate-restrained, friendly-casual). Universal banned-phrase list and hard floor unchanged.
 
-All additions across v1.2 through v1.24 are additive. No existing skill behaviour was changed without an explicit version note.
+- v1.29 added three on-demand liveness skills (`strategic-read`, `log-reply`, `since-last-session`) and their wrapper commands. All three are free-tier accessible: file reads plus in-session synthesis, no external API call. The `since-last-session` marker at `brain/.last-session` is owned by the skill itself; a future SessionStart hook may also update it, but the skill does not depend on the hook existing.
+
+All additions across v1.2 through v1.29 are additive. No existing skill behaviour was changed without an explicit version note.

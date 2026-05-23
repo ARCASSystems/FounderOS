@@ -4,7 +4,27 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 ## Unreleased
 
-Stub for v1.29.0. The v1.28 backlog items not landed in v1.28 (playbook refresh, richer prospect-tracking flow on top of F27, time-awareness primitive in SessionStart, Hermes/OpenClaw positioning audit when the playbook refreshes) stay queued in `plans/v1.27-close-out-and-v1.28-backlog-2026-05-22.md` for future releases.
+Stub for v1.30.0. The v1.28 backlog items not landed in v1.28 or v1.29 (playbook refresh, richer prospect-tracking flow on top of F27, time-awareness primitive in SessionStart hook so `brain/.last-session` advances even when the operator forgets to run `/since-last-session`, Hermes/OpenClaw positioning audit when the playbook refreshes) stay queued in `plans/v1.27-close-out-and-v1.28-backlog-2026-05-22.md` and `plans/v1.28-liveness-skills-2026-05-23.md` for future releases.
+
+## v1.29.0 - 2026-05-23
+
+v1.29 ships three on-demand liveness skills. Together they produce the "the OS knows where I am" feeling from file reads at task time, with no daemon, no SessionStart hook, no paid API. The release closes the gap between starting a session cold and orienting across the brain in one pass.
+
+### Feature - /strategic-read
+
+`/strategic-read` returns a 5-section state-of-the-OS report from the current file layer in one read. Sections: 1. Identity anchor, 2. Active commitments and pipeline, 3. Open decisions, 4. Active flags (with decay status per `rules/entry-conventions.md`), 5. Next 3 recommended moves. The skill reads `core/identity.md`, `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `context/leads.md`, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `brain/flags.md`, and the last 20 entries of `brain/log.md` in that order. Missing files degrade gracefully: the section header renders with a `(missing: <path>)` line instead of fabricated content. A stale `## Today:` or `## Week of` header prepends a `STALE:` line so the reader knows to refresh cadence before acting on the synthesis. Read-only on the entire repo. Free-tier accessible: file read plus in-session synthesis, no external API call. The 5 section headers are a contract other skills may grep for.
+
+### Feature - /log-reply
+
+`/log-reply` ingests a pasted conversational thread (WhatsApp export, Telegram dump, email body, voice memo transcript) and routes it into the brain layer in one pass. The skill extracts participants, dates, key updates, commitments made, action items, and person or company mentions. One entry per distinct conversation lands in `brain/log.md` with an `#acted` tag and `#xref` wikilinks where the names are already in the wiki. Updates to `context/clients.md` and `context/leads.md` are proposed only; the operator confirms each before any write lands, per `rules/approval-gates.md`. Unknown names propose adding to `context/leads.md` with `Stage: Raw` per `templates/rules/entry-conventions.md`. Source format is never guessed: ambiguous pastes ask the operator to label as WhatsApp / Telegram / email / voice memo transcript. A `<private>...</private>` filter in Step 5 strips blocks the operator does not want persisted before any write. Multiple separate conversations in one paste are structured as separate log entries with their own IDs.
+
+### Feature - /since-last-session
+
+`/since-last-session` reports the delta since the last marker time. The marker sits at `brain/.last-session` as a single ISO-8601 timestamp; the skill owns it. Report shape: 1. Hours elapsed, 2. brain/log.md entries added since the marker, 3. Flags decayed in that window (per `Decay after:` markers), 4. Commitments now overdue from `cadence/daily-anchors.md` and `cadence/weekly-commitments.md`, 5. Files modified in `context/` (git diff names only). First run with no marker prints `No prior session found, creating marker now.`, seeds the marker, and stops. No delta report on the first run. Subsequent runs render the 5-section report and advance the marker. Skips Section 5 with `(install is not under git; skipping context/ diff)` on installs that are not under git, so the other four sections still render. A future SessionStart hook may also write the marker; the skill does not depend on the hook existing (deferred to v1.30 if needed).
+
+### Cross-cutting
+
+`skills/index.md` adds rows for the three new skills and three new commands. `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` versions bumped from `1.26.0` to `1.29.0`, descriptions updated with the new skill and command counts. `README.md` `Version` line and `Slash commands (N)` header bumped to match. 52 skills, 33 commands.
 
 ## v1.28.0 - 2026-05-23
 
