@@ -68,7 +68,7 @@ The skill reads, in order:
 
 If `brain/.snapshot.md` exists, also read it. Use it as supplementary runtime state. Proceed without it if missing.
 
-For Section 5 the skill calls `git diff --name-only <marker-iso> -- context/` to list files in `context/` modified since the marker. The call goes through the `Bash` tool. If the install is not under git (no `.git/` directory at the repo root, or `git` returns a non-zero exit), skip Section 5 with the documented one-line note.
+For Section 5 the skill calls `git log --since=<marker-iso> --name-only --pretty=format: -- context/` (then dedupes paths and drops blank lines) to list files in `context/` modified since the marker. The call goes through the `Bash` tool. `git log --since` accepts an ISO-8601 timestamp directly, including the timezone offset written into the marker. If the install is not under git (no `.git/` directory at the repo root, or `git` returns a non-zero exit), skip Section 5 with the documented one-line note.
 
 ## Report shape (exact 5-section structure)
 
@@ -90,7 +90,7 @@ SINCE LAST SESSION - <YYYY-MM-DD HH:MM> -> <YYYY-MM-DD HH:MM>
 <one line per Must Do / Should Do row in cadence/weekly-commitments.md whose deadline sits between the marker and now and which is still marked pending; one line per Day-anchored row in cadence/daily-anchors.md whose Day is past today and which is still pending; "(none)" if zero>
 
 ## 5. Files modified in context/
-<git diff --name-only output, one path per line; "(install is not under git; skipping context/ diff)" if the install is not under git; "(none)" if git ran cleanly and reported no changes>
+<deduplicated file paths from `git log --name-only --since=<marker-iso>`, one path per line; "(install is not under git; skipping context/ diff)" if the install is not under git; "(none)" if git ran cleanly and reported no changes>
 ```
 
 After the fenced block, on its own line outside the fence, print: `Marker advanced to <new-iso-timestamp>.`
@@ -124,7 +124,7 @@ Example degraded section:
 - **Flag with relative decay but no anchor date.** Skip that flag from Section 3. The `rules/entry-conventions.md` scanner surfaces it via a separate `Decay anchor missing` block; this skill does not duplicate that.
 - **Multiple separate conversations or threads in brain/log.md.** Count each as one entry. Do not group.
 - **Install not under git.** Section 5 reads `(install is not under git; skipping context/ diff)`. The other four sections still render.
-- **git command times out or errors for reasons other than no-git.** Section 5 reads `(git diff failed; skipping context/ diff)`. The skill does not stop.
+- **git command times out or errors for reasons other than no-git.** Section 5 reads `(git log failed; skipping context/ diff)`. The skill does not stop.
 
 ## Approval gates
 
@@ -154,6 +154,6 @@ Before producing output, read `brain/.snapshot.md` if it exists. The open-flags 
 - Read-only on every file except `brain/.last-session`. The marker is the one file this skill writes.
 - The five section headers are a contract. Other skills may grep for them. Keep them verbatim: `## 1. Hours elapsed`, `## 2. brain/log.md entries added`, `## 3. Flags decayed`, `## 4. Commitments now overdue`, `## 5. Files modified in context/`.
 - First-run behaviour is fixed: print the documented seed line, write the marker, stop. No delta on first run.
-- The skill must work without git. The Bash tool is required only for the `git diff --name-only` call in Section 5; the other four sections run on pure filesystem reads.
+- The skill must work without git. The Bash tool is required only for the `git log --name-only --since=<marker-iso>` call in Section 5; the other four sections run on pure filesystem reads.
 
 <!-- private-tag: not applicable: since-last-session reads file modification times, log entry IDs, flag IDs, and git diff filenames. It does not ingest user-provided speech content. The marker file holds a single ISO-8601 timestamp, not narrative content. The private-tag exclusion contract has no narrative write surface to govern here. -->
