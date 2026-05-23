@@ -179,11 +179,15 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/next` - one recommended next action across priorities, deals, and cadence.
 - `/founder-os:queue` - manage the execution queue (read, add, start, done, park). Say "what's on my plate" or "add to queue: <thing>".
 - `/founder-os:verify` - read-only substrate health check across 8 checks. Say "verify the OS".
+- `/founder-os:strategic-read` - 5-section state-of-the-OS read across identity, commitments, decisions, flags, and recommended moves. Pass an optional section key (`identity`, `commitments`, `decisions`, `flags`, `next-moves`) to scope to one section. Say "read across the OS" or "what does the system look like right now".
+- `/founder-os:log-reply` - ingest a pasted conversational thread (WhatsApp export, email body, voice memo transcript) into `brain/log.md` in one pass, with proposed updates to `context/clients.md` and `context/leads.md` you confirm before any write lands. Say "log this reply".
+- `/founder-os:since-last-session` - report what shifted since the last run. Reads `brain/.last-session`, computes elapsed time, surfaces new log entries, decayed flags, overdue commitments, and modified `context/` files. Say "what changed since last session" or "catch me up since I was last here".
 
 **Hooks** (`.claude/hooks/`)
 - SessionStart brief (v1.4 + v1.12 + v1.15 + v1.23) - surfaces open flags, stale cadence, pending decisions, [FILL] client rows, unprocessed rants awaiting `/dream`, ACTIVE quarantine entries, Review Due entries (past their `Decay after:` date), `clients/<slug>/` folders without an auto-memory entry, and a final `Observations:` line stating whether `FOUNDER_OS_OBSERVATIONS=1` is set so the silent-disable case is visible. One screen at session open. Registered on the SessionStart event in `.claude/settings.json`. Quietly skips if the repo is not a Founder OS install (no `core/identity.md`). On fresh install (no `core/identity.md`) but with `CLAUDE.md` / `templates/` / `.claude/settings.json` present, the brief prints a one-line welcome nudging `/founder-os:setup` so the new-user path is not silence.
 - UserPromptSubmit capture hook (v1.23) - classifies the operator's prompt against four shapes (rant, named-person + meeting verb, status update, durable preference) and emits a `[capture-suggestion]` system note that Claude reads before composing its reply. Rants are eagerly written to `brain/rants/` so the text is safe even if the operator walks away. The other three shapes are suggest-only - Claude must confirm with the operator before writing. Powered by `scripts/user-prompt-capture.py`. Registered on the UserPromptSubmit event in `.claude/settings.json`. Fails open: if Python is missing, the hook exits 0 and the session continues normally.
 - Session-close revenue-loop check - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update. Registered on the Stop event in `.claude/settings.json`.
+- SessionStart liveness one-liner (v1.30) - reads `brain/.last-session` and prints one line below the brief showing elapsed time since the last `/founder-os:since-last-session` run. Marker missing prompts you to initialize. Pure file read plus integer math, no LLM call, no marker write. Bash and PowerShell variants both ship; the existing SessionStart matcher block fires brief first, liveness second.
 
 **Windows note:** Hooks ship in both bash and PowerShell variants. `.claude/settings.json` wires both automatically. If you have PowerShell installed (every modern Windows install does), the SessionStart brief and the Stop revenue-check fire without any extra setup. Git-bash is optional - useful if you also want the bash variants to run, but not required.
 
@@ -196,7 +200,7 @@ If you have not installed the scheduled-tasks MCP, ignore this section. Nothing 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks are bring-your-own.
 
-## Skills (45 included)
+## Skills (52 total; selected list below, full set in `docs/skills.md`)
 
 | Skill | Purpose |
 |-------|---------|
@@ -245,6 +249,10 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 | queue | Execution queue with 3-item ACTIVE cap. Say "what's on my plate" or run `/founder-os:queue`. |
 | verify | Read-only substrate health check across 8 checks. Say "verify the OS" or run `/founder-os:verify`. |
 | observation-rollup | Compresses old `brain/observations/*.jsonl` into weekly markdown rollups. Say "roll up observations" or run `/founder-os:observation-rollup`. |
+| prospect-init | Creates a prospect file at `companies/prospects/<slug>.md` from a 3 to 5 question intake. Operator-side `business-context-loader` stays for companies you run. |
+| strategic-read | 5-section state-of-the-OS read across identity, commitments, decisions, flags, and recommended moves. Accepts an optional section key to scope to one section. Routed via `/founder-os:strategic-read`. |
+| log-reply | Ingests a pasted conversational thread into `brain/log.md` with proposed updates to `context/clients.md` and `context/leads.md`. Routed via `/founder-os:log-reply`. |
+| since-last-session | Reports what shifted since the last run from `brain/.last-session`. Hours elapsed, new log entries, decayed flags, overdue commitments, modified `context/` files. Routed via `/founder-os:since-last-session`. |
 
 ## Philosophy
 

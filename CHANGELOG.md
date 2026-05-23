@@ -4,7 +4,7 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 ## Unreleased
 
-Stub for v1.31.0. Queued items: playbook refresh (manual-pass, not renderer-flow), explicit operator-first preference in `scripts/query.py:find_anchor_file` so the wikilink resolver routes operator-first for ALL slugs (not only those sorting before `prospects/` alphabetically; gap surfaced by v1.30 Workstream B), richer prospect-tracking flow on top of F27, prospect-mis-filing migration helper (gated on real user demand signal), Hermes/OpenClaw positioning audit when the playbook refreshes.
+Stub for v1.31.0. Queued items: playbook refresh (manual-pass, not renderer-flow), explicit operator-first preference in `scripts/query.py:find_anchor_file` so the wikilink resolver routes operator-first for ALL slugs (not only those sorting before `prospects/` alphabetically; gap surfaced by v1.30 Workstream B), richer prospect-tracking flow on top of F27, prospect-mis-filing migration helper (gated on real user demand signal), competitor positioning audit when the playbook refreshes.
 
 ## v1.30.0 - 2026-05-23
 
@@ -48,7 +48,7 @@ v1.29 ships three on-demand liveness skills. Together they produce the "the OS k
 
 ## v1.28.0 - 2026-05-23
 
-v1.28 strips dev-only infrastructure off the public repo and closes one residual operator-name leak. The `tests/` directory (62 files) and the on-push pytest CI workflow are removed so plugin users no longer download 1.4 MB of test code they never run. The weekly leakage and drift audit workflow stays. A 25-name sweep across all tracked files surfaced three references to a private brand used as generic examples in `skills/brand-voice-interview/SKILL.md` and `templates/brand-voice.yml.template`, all three replaced with neutral examples in the same shape as the v1.27 TruHoney cleanup. The maintainer keeps the test suite locally via `.gitignore` so parity guards continue to run before each release. No new features. No user-facing behavior change. 49 skills, 30 commands.
+v1.28 strips dev-only infrastructure off the public repo and closes one residual operator-name leak. The `tests/` directory (62 files) and the on-push pytest CI workflow are removed so plugin users no longer download 1.4 MB of test code they never run. The weekly leakage and drift audit workflow stays. A 25-name sweep across all tracked files surfaced three references to a private brand used as generic examples in `skills/brand-voice-interview/SKILL.md` and `templates/brand-voice.yml.template`, all three replaced with neutral examples in the same shape as the v1.27 cleanup of generic-example brand names. The maintainer keeps the test suite locally via `.gitignore` so parity guards continue to run before each release. No new features. No user-facing behavior change. 49 skills, 30 commands.
 
 ## v1.27.0 - 2026-05-22
 
