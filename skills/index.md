@@ -47,7 +47,7 @@
 | [review-responder](review-responder/SKILL.md) | Ready | Drafts replies to incoming customer reviews, DMs, WhatsApp, emails. Asks whose voice (operator or brand) and applies channel + posture constraints. |
 | [business-context-loader](business-context-loader/SKILL.md) | Ready | Per-company context file scanner and gap router (operator companies only) |
 | [prospect-init](prospect-init/SKILL.md) | Ready | Lightweight per-prospect file creator. Captures 3-5 fields and writes `companies/prospects/<slug>.md`. Companion to business-context-loader (which is operator-only). Run via `/founder-os:prospect-init <slug>`. |
-| [strategic-read](strategic-read/SKILL.md) | Ready | On-demand state-of-the-OS report. 5 sections: Identity anchor, Active commitments and pipeline, Open decisions, Active flags, Next 3 recommended moves. Read-only. Free-tier accessible. Run via `/founder-os:strategic-read`. |
+| [strategic-read](strategic-read/SKILL.md) | Ready | On-demand state-of-the-OS report. 5 sections: Identity anchor, Active commitments and pipeline, Open decisions, Active flags, Next 3 recommended moves. Read-only. Free-tier accessible. Pass a section key (`identity`, `commitments`, `decisions`, `flags`, `next-moves`) to render only that section. Run via `/founder-os:strategic-read [section]`. |
 | [log-reply](log-reply/SKILL.md) | Ready | Captures a pasted thread (WhatsApp, Telegram, email body, voice memo transcript) into `brain/log.md`. Proposes (never auto-writes) updates to `context/clients.md` and `context/leads.md`. Per `rules/approval-gates.md`. Run via `/founder-os:log-reply`. |
 | [since-last-session](since-last-session/SKILL.md) | Ready | Delta report since the last marker time. 5 sections: hours elapsed, brain/log.md entries added, flags decayed, commitments overdue, files modified in `context/`. Marker at `brain/.last-session`. First-run seeds the marker and stops. Run via `/founder-os:since-last-session`. |
 | [linkedin-post](linkedin-post/SKILL.md) | Ready | Voice-coupled LinkedIn post writer |
@@ -93,7 +93,7 @@ This plugin ships 33 slash commands:
 | [/founder-os:queue](../.claude/commands/queue.md) | Manage the execution queue. Say "what's on my plate" or "add to queue: <thing>". ACTIVE is capped at 3. |
 | [/founder-os:verify](../.claude/commands/verify.md) | Read-only substrate health check across 8 checks. Say "verify the OS". Never auto-fixes. |
 | [/founder-os:observation-rollup](../.claude/commands/observation-rollup.md) | Compress weekly observation logs. Say "roll up observations" or "compress old logs". |
-| [/founder-os:strategic-read](../.claude/commands/strategic-read.md) | On-demand state-of-the-OS report. 5 sections: Identity anchor, Active commitments and pipeline, Open decisions, Active flags, Next 3 recommended moves. Read-only. |
+| [/founder-os:strategic-read](../.claude/commands/strategic-read.md) | On-demand state-of-the-OS report. 5 sections by default. Pass a section key (`identity`, `commitments`, `decisions`, `flags`, `next-moves`) to render only that section. Read-only. |
 | [/founder-os:log-reply](../.claude/commands/log-reply.md) | Capture a pasted thread (WhatsApp, Telegram, email body, voice memo transcript) into `brain/log.md`. Proposes context updates; operator confirms each before any write to `context/clients.md` or `context/leads.md`. |
 | [/founder-os:since-last-session](../.claude/commands/since-last-session.md) | Delta report since the last marker time. Marker at `brain/.last-session` updates at end of run. First run seeds the marker and stops. |
 
@@ -127,4 +127,6 @@ Release notes:
 
 - v1.29 added three on-demand liveness skills (`strategic-read`, `log-reply`, `since-last-session`) and their wrapper commands. All three are free-tier accessible: file reads plus in-session synthesis, no external API call. The `since-last-session` marker at `brain/.last-session` is owned by the skill itself; a future SessionStart hook may also update it, but the skill does not depend on the hook existing.
 
-All additions across v1.2 through v1.29 are additive. No existing skill behaviour was changed without an explicit version note.
+- v1.30 added the SessionStart liveness hook that v1.29 deferred. The hook reads `brain/.last-session` on every Claude Code session boot and prints one line below the brief about elapsed time since the last `/since-last-session` run. The hook does not call any LLM, does not write the marker, and does not block session start. Plus a section argument on `/strategic-read` so the report can be scoped to one of the 5 sections without generating the others. No new skills; one new hook; one arg extension.
+
+All additions across v1.2 through v1.30 are additive. No existing skill behaviour was changed without an explicit version note.

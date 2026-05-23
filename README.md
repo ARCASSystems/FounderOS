@@ -270,9 +270,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.29.0. Public release. 52 skills, 33 commands, 569 tests.
+Version 1.30.0. Public release. 52 skills, 33 commands, 596 tests.
 
-v1.29 adds three on-demand liveness reads. `/strategic-read` returns a 5-section state-of-the-OS report from the current file layer in one pass: identity anchor, active commitments and pipeline, open decisions, active flags with decay status, and three next moves. `/log-reply` ingests a pasted thread (WhatsApp, Telegram, email body, voice memo transcript) and writes a structured entry to `brain/log.md`, proposing (never auto-writing) updates to `context/clients.md` and `context/leads.md`. `/since-last-session` reports what changed since the last marker: hours elapsed, log entries added, flags decayed, commitments overdue, and files modified in `context/`. All three are free-tier accessible: file reads plus in-session synthesis, no external API call. Full release history in [CHANGELOG.md](CHANGELOG.md).
+v1.30 makes the v1.29 liveness reads feel ambient. A SessionStart hook reads `brain/.last-session` on every Claude Code session boot and prints a one-line summary like "3 hours since you last ran /since-last-session" below the brief. No LLM call. No marker write. Pure file read plus integer math, so the free-tier accessibility floor stays intact. `/strategic-read` also gains an optional section argument: `/strategic-read flags` renders only the Active flags section, `/strategic-read next-moves` only the recommended moves. Saves the time spent reading four sections you do not need right now. Invalid section keys print the valid list and exit rather than falling back to the full report. Full release history in [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

@@ -4,7 +4,27 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 ## Unreleased
 
-Stub for v1.30.0. The v1.28 backlog items not landed in v1.28 or v1.29 (playbook refresh, richer prospect-tracking flow on top of F27, time-awareness primitive in SessionStart hook so `brain/.last-session` advances even when the operator forgets to run `/since-last-session`, Hermes/OpenClaw positioning audit when the playbook refreshes) stay queued in `plans/v1.27-close-out-and-v1.28-backlog-2026-05-22.md` and `plans/v1.28-liveness-skills-2026-05-23.md` for future releases.
+Stub for v1.31.0. Queued items: playbook refresh (manual-pass, not renderer-flow), explicit operator-first preference in `scripts/query.py:find_anchor_file` so the wikilink resolver routes operator-first for ALL slugs (not only those sorting before `prospects/` alphabetically; gap surfaced by v1.30 Workstream B), richer prospect-tracking flow on top of F27, prospect-mis-filing migration helper (gated on real user demand signal), Hermes/OpenClaw positioning audit when the playbook refreshes.
+
+## v1.30.0 - 2026-05-23
+
+v1.30 closes the deferred SessionStart hook from v1.29 and adds one polish on `/strategic-read`. The on-demand liveness reads from v1.29 now feel ambient: every Claude Code session start surfaces a one-line summary of how long since the last `/since-last-session` run, below the existing session brief. No LLM call in the hook, no marker write, no block on session start. Free-tier accessibility preserved end-to-end.
+
+### Feature - SessionStart liveness hook
+
+A new `session-start-liveness` hook fires on every Claude Code session start in a FounderOS install. It reads `brain/.last-session` (the marker file owned by the v1.29 `/since-last-session` skill), computes elapsed time, and prints one line below the existing session brief. Marker missing: `No prior synthesis marker found. Run /since-last-session to initialize.` Under one hour: `Less than an hour since you last ran /since-last-session.` One hour or more: `X hours since you last ran /since-last-session. Run /since-last-session for the delta, or /strategic-read for a full state-of-OS report.` Malformed marker (not parseable ISO-8601 with timezone offset): `Synthesis marker malformed at brain/.last-session. Run /since-last-session to repair.` Marker dated in the future: `Synthesis marker is in the future; ignoring. Run /since-last-session if you want to repair it.` The hook does NOT update or write the marker (only `/since-last-session` writes it). The hook does NOT call any LLM (pure file read plus integer math). The hook does NOT block session start (exits within 100ms on a reasonable filesystem). Gates on `core/identity.md` matching the existing brief, so a fresh pre-setup repo stays silent. Bash variant (`.sh`) and PowerShell variant (`.ps1`) follow the same Windows platform-guard convention as the existing brief hook. Registered as the second command pair inside the existing `SessionStart` matcher block in `.claude/settings.json`, after the brief, so the brief prints first and the liveness one-liner appears below it.
+
+### Feature - /strategic-read section argument
+
+`/strategic-read` now accepts an optional section key so you can scope the report to one of the five sections instead of generating all five. Valid keys: `identity`, `commitments`, `decisions`, `flags`, `next-moves`. The keys map one-to-one to the v1.29 section headers via a contract table in the SKILL body; the mapping stays coupled if the headers ever reword. Example: `/strategic-read flags` renders only the Active flags section. `/strategic-read next-moves` renders only the recommended moves. Invalid section keys print the valid list and exit; the command does NOT fall back to the full report, so a typo cannot silently broaden the surface. No-arg behavior unchanged: the full 5-section report still renders.
+
+### Test - wikilink resolver operator-first behavior contract
+
+A local test at `tests/test_wikilink_operator_first.py` locks the F27 CTO-review MAJOR-2 router behavior: when both `companies/<slug>.md` (operator-facing) and `companies/prospects/<slug>.md` exist for the same bare slug, `[[<slug>]]` is supposed to resolve to the operator file. The three `acme` cases pass cleanly. The test also surfaced a plan-fidelity gap: the v1.28 backlog claim that the router is "de-facto operator-first via alphabetical-within-directory sort" is only true for slugs that sort before `prospects/` lexicographically. Slugs starting with q-z (e.g. `widget-co`) hit the prospect file first. The `widget-co` case ships as `@unittest.expectedFailure` to document the gap honestly; the resolver fix is queued for v1.31 (test-only scope in v1.30 per plan). `tests/` is `.gitignore`d per v1.28; this file lives in the maintainer's local working tree and runs before each release.
+
+### Cross-cutting
+
+`.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` versions bumped from `1.29.0` to `1.30.0`. Descriptions left untouched (no hook count or test count named there to update). `README.md` Version line and test count bumped to match (`52 skills, 33 commands, 596 tests`). `skills/index.md` `/strategic-read` skill and command rows updated to mention the new section arg; a v1.30 line added to the recent-versions block.
 
 ## v1.29.0 - 2026-05-23
 
