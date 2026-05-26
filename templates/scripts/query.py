@@ -548,7 +548,15 @@ def run_index_mode(question: str, root: Path) -> int:
 
 
 def find_anchor_file(anchor: str, root: Path) -> Path | None:
-    """Resolve anchor (slug or path) to an actual file under root."""
+    """Resolve anchor (slug or path) to an actual file under root.
+
+    When the slug matches more than one file (typically `companies/<slug>.md`
+    AND `companies/prospects/<slug>.md`), prefer the file that is NOT under
+    a `prospects/` subdirectory. Without this, alphabetical-within-directory
+    sort makes the result depend on whether the slug sorts before or after
+    `prospects/` lexicographically, which breaks the operator-first contract
+    for slugs starting with q-z.
+    """
     candidate = root / anchor
     if candidate.is_file():
         return candidate
@@ -556,10 +564,17 @@ def find_anchor_file(anchor: str, root: Path) -> Path | None:
     if matches:
         return matches[0]
     base = anchor.lower()
-    for p in all_markdown_files(root):
-        if p.name.lower() == base or p.stem.lower() == base:
-            return p
-    return None
+    stem_matches = [
+        p for p in all_markdown_files(root)
+        if p.name.lower() == base or p.stem.lower() == base
+    ]
+    if not stem_matches:
+        return None
+    non_prospect = [
+        p for p in stem_matches
+        if "prospects" not in p.relative_to(root).parts
+    ]
+    return non_prospect[0] if non_prospect else stem_matches[0]
 
 
 def find_id_in_corpus(entry_id: str, root: Path) -> Path | None:
