@@ -4,7 +4,23 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 ## Unreleased
 
-Stub for v1.31.0. Queued items: playbook refresh (manual-pass, not renderer-flow), explicit operator-first preference in `scripts/query.py:find_anchor_file` so the wikilink resolver routes operator-first for ALL slugs (not only those sorting before `prospects/` alphabetically; gap surfaced by v1.30 Workstream B), richer prospect-tracking flow on top of F27, prospect-mis-filing migration helper (gated on real user demand signal), competitor positioning audit when the playbook refreshes.
+Stub for v1.32.0. Queued items: playbook refresh (manual-pass, not renderer-flow), richer prospect-tracking flow on top of F27, prospect-mis-filing migration helper (gated on real user demand signal), CLAUDE.md skills table catch-up (brand-voice-interview, campaign-from-theme, review-responder rows surfaced by v1.30 second-pass review), competitor positioning audit when the playbook refreshes.
+
+## v1.31.0 - 2026-05-26
+
+v1.31 closes the wikilink resolver gap that v1.30 Workstream B surfaced through an `@expectedFailure` test. The fix lands one place, `scripts/query.py:find_anchor_file`. The `widget-co` test flips from `expectedFailure` to a normal pass and the operator-first contract now holds for every slug regardless of where it sorts relative to `prospects/`.
+
+### Fix - wikilink resolver operator-first preference
+
+When `[[<slug>]]` matches both `companies/<slug>.md` (operator) and `companies/prospects/<slug>.md` (prospect), the resolver now prefers the operator file. Before this fix, `find_anchor_file` returned the first match in sorted path order. Inside `companies/`, the `prospects/` directory sorts after slug names starting with a-o ('a'-'o' < 'p') and before slug names starting with q-z ('p' < 'q'-'z'). So the de-facto operator-first behavior from the v1.28 backlog claim held only for the first half of the alphabet; slugs starting with q, r, s, t, u, v, w, x, y, z silently routed to the prospect file. The v1.30 `widget-co` test marked the gap as `@unittest.expectedFailure` with a docstring naming the fix as v1.31 scope.
+
+The fix replaces the early-return loop with a collect-all-matches pattern, then prefers any match that is NOT under a `prospects/` subdirectory. When no operator-side file exists, the resolver falls back to the prospect file as before. The behavior for slugs that match exactly one file is unchanged.
+
+Lands in both `scripts/query.py` and `templates/scripts/query.py` (F38 parity guard requires byte-identical copies). The `tests/test_wikilink_operator_first.py::test_operator_first_for_widget_co` test loses its `@unittest.expectedFailure` decorator and now asserts the operator-first contract directly. 577 passed, 19 skipped, 0 failed (596 total, unchanged from v1.30 — the widget-co test simply flipped from xfail to pass).
+
+### Cross-cutting
+
+`.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` versions bumped from `1.30.0` to `1.31.0`. `README.md` Version line and `Status` narrative updated. Skill count (52), command count (33), and test count (596) unchanged.
 
 ## v1.30.0 - 2026-05-23
 

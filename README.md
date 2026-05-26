@@ -270,9 +270,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.30.0. Public release. 52 skills, 33 commands, 596 tests.
+Version 1.31.0. Public release. 52 skills, 33 commands, 596 tests.
 
-v1.30 makes the v1.29 liveness reads feel ambient. A SessionStart hook reads `brain/.last-session` on every Claude Code session boot and prints a one-line summary like "3 hours since you last ran /since-last-session" below the brief. No LLM call. No marker write. Pure file read plus integer math, so the free-tier accessibility floor stays intact. `/strategic-read` also gains an optional section argument: `/strategic-read flags` renders only the Active flags section, `/strategic-read next-moves` only the recommended moves. Saves the time spent reading four sections you do not need right now. Invalid section keys print the valid list and exit rather than falling back to the full report. Full release history in [CHANGELOG.md](CHANGELOG.md).
+v1.31 closes the wikilink resolver gap surfaced by v1.30 Workstream B. `scripts/query.py:find_anchor_file` now prefers `companies/<slug>.md` over `companies/prospects/<slug>.md` when both exist, regardless of where the slug sorts alphabetically. Before this fix, slugs starting with q-z hit the prospect file first because `prospects/` sorts before them; now the operator file wins for every slug. The v1.30 `widget-co` `@expectedFailure` test flips to a normal passing test. Full release history in [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
