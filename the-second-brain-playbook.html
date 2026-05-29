@@ -1,0 +1,2316 @@
+<!doctype html>
+<!--
+  You stay human. - The Second Brain Playbook v2.1
+  Manual-pass render. Do not run scripts/render-playbook.py against this file.
+  Generated 2026-05-26. Public-facing rebuild of the-second-brain-playbook.html (v1, repo root).
+  Canonical source: playbooks/sources/the-second-brain-playbook-v2.md
+  Pattern library: brand/arcas.md (Patterns 1-18, esp. 16 button shape rule)
+  Companion: internal/founder-os-technical-playbook.html
+  Print CSS preserves textures via print-color-adjust: exact (PDF fidelity rule).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Second Brain Playbook - ARCAS Systems</title>
+<meta name="description" content="The complete Second Brain Playbook in one read: the why, the how, the what, and the long game. A second brain that holds your judgment, runs on your machine, and stays yours. Nothing to install to read it." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,100..1000&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy: #041E37;
+    --magenta: #F70872;
+    --purple: #8234EA;
+    --purple-dark: #6B22C9;
+    --mint: #35D39A;
+    --orange: #FB610E;
+    --bg: #FFFFFF;
+    --bg-cream: #FAF8F4;
+    --line: #E8E5E0;
+    --text: var(--navy);
+    --muted: #6B6F7A;
+    --muted-light: #A4A8B1;
+    --card-dark: linear-gradient(135deg, #061830 0%, #0F1238 35%, #1A0A35 70%, #2A0A2E 100%);
+    --r-sm: 8px;
+    --r-md: 12px;
+    --r-lg: 18px;
+    --r-pill: 999px;
+    --font-body: 'Google Sans Flex', 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    font-weight: 380;
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--purple); }
+  ::selection { background: rgba(130, 52, 234, 0.18); }
+
+  /* ============ Hero ============ */
+  .hero {
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: 72px 32px 56px;
+    text-align: center;
+  }
+  .hero .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-bottom: 22px;
+  }
+  .hero .dot {
+    width: 10px; height: 10px;
+    background: var(--orange);
+    border-radius: var(--r-pill);
+  }
+  .hero .brand span {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .hero h1 {
+    font-size: 48px;
+    line-height: 1.08;
+    letter-spacing: -1px;
+    margin: 0 0 16px;
+    font-weight: 600;
+    max-width: 760px;
+    margin-left: auto; margin-right: auto;
+    color: var(--navy);
+  }
+  .hero .subtitle {
+    font-size: 18px;
+    color: var(--muted);
+    margin: 0 auto 28px;
+    max-width: 620px;
+    line-height: 1.55;
+  }
+  .three-thirty {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 22px;
+    background: var(--bg-cream);
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+  .three-thirty span { display: flex; align-items: center; gap: 6px; font-weight: 500; }
+  .three-thirty .num { font-weight: 700; color: var(--purple); }
+  .three-thirty .sep { color: var(--muted-light); }
+
+  /* Hero CTA pair - primary pill + secondary text link */
+  .hero-cta {
+    margin-top: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .btn-primary {
+    display: inline-block;
+    background: var(--purple);
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: var(--r-pill);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.2px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+  .btn-link {
+    color: var(--navy);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: none;
+  }
+  .btn-link:hover { color: var(--purple); }
+
+  /* Hero meta - horizontal pill row */
+  .hero-meta {
+    margin-top: 40px;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    padding: 10px 4px;
+    align-items: center;
+  }
+  .hero-meta .item { padding: 4px 18px; display: inline-flex; align-items: center; gap: 6px; }
+  .hero-meta .item strong {
+    color: var(--purple);
+    font-weight: 700;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+  }
+  .hero-meta .item .v { color: var(--navy); font-weight: 500; }
+  .hero-meta .divider { width: 1px; height: 16px; background: var(--line); }
+
+  /* ============ Sections ============ */
+  section.s {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 56px 32px;
+  }
+  section.s.cream {
+    background: var(--bg-cream);
+    max-width: none;
+  }
+  section.s.cream > .inner { max-width: 820px; margin: 0 auto; }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--purple);
+    margin-bottom: 14px;
+  }
+  section.cream .eyebrow { color: var(--magenta); }
+
+  section h2 {
+    font-size: 32px;
+    line-height: 1.18;
+    letter-spacing: -0.5px;
+    margin: 0 0 16px;
+    font-weight: 600;
+    color: var(--purple);
+  }
+  section .lede {
+    font-size: 17px;
+    color: var(--muted);
+    line-height: 1.55;
+    margin: 0 0 32px;
+    max-width: 660px;
+  }
+  section h3 {
+    font-size: 19px;
+    margin: 32px 0 12px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    color: var(--navy);
+  }
+  section h4 {
+    font-size: 14px;
+    margin: 0 0 6px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  section p { margin: 0 0 14px; }
+  section ul { margin: 0 0 16px; padding-left: 22px; }
+  section ul li { margin-bottom: 8px; }
+
+  /* ============ Hats counter list ============ */
+  .hats-list {
+    margin: 18px 0 24px;
+    padding-left: 0;
+    list-style: none;
+  }
+  .hats-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 14.5px;
+  }
+  .hats-list li:last-child { border-bottom: none; }
+  .hats-list li .ix {
+    font-weight: 700;
+    color: var(--purple);
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    min-width: 68px;
+  }
+  .hats-list li .text { color: var(--navy); }
+
+  /* ============ Buyer-voice quote cards ============ */
+  .quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0 22px; }
+  .q {
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--magenta);
+    border-radius: var(--r-sm);
+    font-size: 13.5px;
+    font-style: italic;
+    color: var(--navy);
+  }
+  .q::before { content: '\201C'; color: var(--magenta); margin-right: 2px; font-weight: 700; }
+  .q::after { content: '\201D'; color: var(--magenta); margin-left: 2px; font-weight: 700; }
+
+  /* ============ Promise block (dark gradient, the value-prop) ============ */
+  .promise-block {
+    background: var(--card-dark);
+    color: white;
+    padding: 36px 40px;
+    border-radius: var(--r-lg);
+    margin: 18px 0 28px;
+  }
+  .promise-block .promise-eyebrow {
+    font-size: 10px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--mint);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .promise-block h3 {
+    color: white;
+    font-size: 28px;
+    margin: 0 0 12px;
+    line-height: 1.18;
+    letter-spacing: -0.4px;
+  }
+  .promise-block p { color: rgba(255,255,255,0.78); margin: 0 0 10px; font-size: 15px; max-width: 600px; }
+  .promise-block p:last-child { margin-bottom: 0; }
+
+  /* ============ Pillar trio - semantic locked (People=magenta / Systems=purple / AI=mint) ============ */
+  .pillars { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 20px 0 28px; }
+  .pillar {
+    padding: 22px 22px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-top: 3px solid;
+    border-radius: var(--r-md);
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+  .pillar.people { border-top-color: var(--magenta); }
+  .pillar.systems { border-top-color: var(--purple); }
+  .pillar.ai { border-top-color: var(--mint); }
+  .pillar .label {
+    display: block;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .pillar.people .label { color: var(--magenta); }
+  .pillar.systems .label { color: var(--purple); }
+  .pillar.ai .label { color: var(--mint); }
+  .pillar strong { display: block; margin-bottom: 4px; font-weight: 600; font-size: 15px; color: var(--navy); }
+  .pillar p { margin: 0; color: var(--muted); }
+
+  /* ============ Layered table (people / systems / AI) ============ */
+  table.layers {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    font-size: 14px;
+    margin: 14px 0 22px;
+  }
+  table.layers th, table.layers td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+  table.layers tr:last-child td { border-bottom: none; }
+  table.layers th {
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 1.1px;
+    background: var(--bg-cream);
+  }
+  table.layers td.layer-name { font-weight: 600; color: var(--navy); width: 24%; }
+  table.layers tr.row-people td.layer-name { color: var(--magenta); }
+  table.layers tr.row-systems td.layer-name { color: var(--purple); }
+  table.layers tr.row-ai td.layer-name { color: var(--mint); }
+
+  /* ============ Pull quote ============ */
+  .pull {
+    border-left: 4px solid var(--purple);
+    padding: 12px 0 12px 22px;
+    margin: 26px 0;
+    font-size: 19px;
+    line-height: 1.45;
+    color: var(--navy);
+    font-weight: 500;
+    letter-spacing: -0.2px;
+  }
+  .pull.magenta { border-color: var(--magenta); }
+  .pull.mint { border-color: var(--mint); }
+
+  /* ============ Step cards (the 3-step pathway) ============ */
+  .plan { counter-reset: s; margin: 14px 0 24px; }
+  .step {
+    counter-increment: s;
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    gap: 18px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+  .step:last-child { border-bottom: none; }
+  .step::before {
+    content: counter(s);
+    background: var(--purple); color: #fff;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+
+  /* FIX: keep heading+paragraph in the content column. Without explicit
+     placement the 3rd grid item (the <p>) auto-flows into the 38px number
+     column and wraps one word per line. */
+  .step::before { grid-column: 1; grid-row: 1; }
+  .step > * { grid-column: 2; min-width: 0; }
+
+  .step h4 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .step p { font-size: 14.5px; margin: 0; color: var(--muted); line-height: 1.6; }
+
+  /* ============ Arc trio (Month 1-3 / 3-6 / 6-12) ============ */
+  .arc { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 16px 0 22px; }
+  .arc-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 22px 22px;
+  }
+  .arc-card .stage {
+    color: var(--purple);
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .arc-card h4 { font-size: 16px; margin: 0 0 8px; color: var(--navy); }
+  .arc-card p { font-size: 13.5px; color: var(--muted); margin: 0; line-height: 1.55; }
+
+  /* ============ Aspirational testimonials (dashed purple) ============ */
+  .aspirations { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 10px 0 24px; }
+  .aspiration {
+    border: 1px dashed var(--purple);
+    border-radius: var(--r-md);
+    padding: 22px 24px;
+    background: rgba(130, 52, 234, 0.04);
+  }
+  .aspiration .from {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--purple);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .aspiration p {
+    color: var(--navy);
+    font-style: italic;
+    margin: 0 0 10px;
+    line-height: 1.55;
+    font-size: 14px;
+  }
+  .aspiration p:last-child { margin-bottom: 0; }
+
+  /* ============ Anti-list pills ============ */
+  .anti { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 22px; }
+  .anti .a {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--muted-light);
+  }
+
+  /* ============ Feel-grid (relief / not relief) ============ */
+  .feel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0 22px; }
+  .feel-box {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 18px 20px;
+  }
+  .feel-box.yes { border-left: 3px solid var(--mint); }
+  .feel-box.no { border-left: 3px solid var(--magenta); }
+  .feel-box h4 {
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 12px;
+  }
+  .feel-box ul { margin: 0; padding-left: 18px; }
+  .feel-box li { margin-bottom: 6px; font-size: 13.5px; }
+
+  /* ============ Insight callout (navy, mint-eyebrow) ============ */
+  .insight {
+    background: var(--navy);
+    color: #ffffff;
+    border-radius: var(--r-md);
+    padding: 24px 28px;
+    margin: 22px 0;
+  }
+  .insight .label {
+    color: var(--mint);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .insight p {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.65;
+    margin: 0;
+    max-width: none;
+  }
+
+  /* ============ Two-path cards ============ */
+  .two-paths { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0 22px; }
+  .path-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 24px 26px;
+  }
+  .path-card.diy { border-left: 3px solid var(--mint); }
+  .path-card.fast { border-left: 3px solid var(--purple); }
+  .path-card h4 { font-size: 16px; margin: 0 0 8px; color: var(--navy); }
+  .path-card p { font-size: 14px; color: var(--muted); margin: 0 0 12px; }
+  .path-card .pathlink {
+    font-size: 12.5px;
+    color: var(--purple);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  .path-card .pathlink::after { content: ' \2192'; }
+
+  /* ============ CTA box (dark gradient + full pill primary) ============ */
+  .cta {
+    background: var(--card-dark);
+    color: #FFFFFF;
+    border-radius: var(--r-lg);
+    padding: 36px 40px;
+    margin: 30px 0 18px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 28px;
+    align-items: center;
+  }
+  .cta .label {
+    color: var(--mint);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .cta h3 { color: #FFFFFF; margin: 0 0 6px; font-size: 22px; font-weight: 600; }
+  .cta p { color: rgba(255,255,255,0.78); margin: 0; font-size: 14px; max-width: 460px; }
+  .cta .actions { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
+  .cta .btn {
+    display: inline-block;
+    background: var(--purple);
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 14px 30px;
+    border-radius: var(--r-pill);
+    font-weight: 600;
+    font-size: 14.5px;
+    letter-spacing: 0.3px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .cta .btn:hover { background: var(--purple-dark); transform: translateY(-1px); }
+  .cta .btn.alt {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.92);
+  }
+  .cta .btn.alt:hover { background: rgba(255,255,255,0.08); }
+
+  /* ============ Companion-doc reference card ============ */
+  .companion {
+    background: var(--bg-cream);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 18px 22px;
+    margin: 22px 0;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .companion strong { color: var(--navy); font-weight: 600; }
+
+  /* ============ Closing signature footer ============ */
+  .closer {
+    background: var(--navy);
+    color: #FFFFFF;
+    padding: 56px 32px 48px;
+    text-align: center;
+  }
+  .closer .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .closer .wordmark .dot {
+    width: 10px; height: 10px;
+    background: var(--orange);
+    border-radius: var(--r-pill);
+  }
+  .closer .wordmark span {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    font-weight: 600;
+  }
+  .closer .line1 {
+    font-weight: 700;
+    color: #FFFFFF;
+    font-size: 19px;
+    line-height: 1.3;
+    margin: 0;
+    letter-spacing: -0.2px;
+  }
+  .closer .line2 {
+    font-weight: 700;
+    color: var(--magenta);
+    font-size: 19px;
+    line-height: 1.3;
+    margin: 4px 0 0;
+    letter-spacing: -0.2px;
+  }
+  .closer .tagline {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    max-width: 560px;
+    margin: 24px auto 0;
+    font-weight: 300;
+  }
+  .closer .meta {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ============ Hairlines ============ */
+  hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+  .small { font-size: 13px; color: var(--muted); }
+
+
+  /* ============ Logomark + full-logo ============ */
+  .hero .mark { width: 36px; height: 36px; display: inline-block; vertical-align: middle; }
+  .closer .full-logo { display: block; width: 140px; height: auto; margin: 0 auto 24px; }
+
+  /* ============ For-list (dream-outcome laundry list) ============ */
+  .for-list {
+    max-width: 720px;
+    margin: 56px auto 0;
+    padding: 32px 36px 36px;
+    background: var(--bg-cream);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    text-align: left;
+  }
+  .for-list .for-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--magenta);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .for-list p {
+    margin: 0 0 10px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--navy);
+  }
+  .for-list p:last-child { margin-bottom: 0; padding-top: 12px; border-top: 1px solid var(--line); margin-top: 12px; color: var(--muted); font-size: 14.5px; }
+
+  /* ============ Caveats strip (3 positioning anchors, bold-inline pattern) ============ */
+  .caveats {
+    text-align: center;
+    padding: 56px 32px 48px;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .caveats .caveat-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--purple);
+    margin-bottom: 24px;
+  }
+  .caveats .row {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .caveats .anchor {
+    font-size: 19px;
+    line-height: 1.35;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: var(--navy);
+    margin: 0;
+  }
+  .caveats .anchor.magenta { color: var(--magenta); }
+  .caveats .anchor.purple { color: var(--purple); }
+  .caveats .anchor.mint { color: #1FA876; } /* mint reads stronger as text than --mint */
+
+  @media (max-width: 720px) {
+    .hero .mark { width: 32px; height: 32px; }
+    .closer .full-logo { width: 120px; }
+    .for-list { padding: 26px 22px 28px; margin: 40px 16px 0; }
+    .for-list p { font-size: 14.5px; }
+    .caveats { padding: 44px 22px 40px; }
+    .caveats .anchor { font-size: 17px; }
+  }
+  /* ============ Print / PDF fidelity ============ */
+  @media print {
+    @page { size: A4; margin: 14mm 12mm 14mm 12mm; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    html, body { background: #FFFFFF; }
+    body { font-size: 10.5pt; line-height: 1.5; }
+    .hero { padding: 16mm 0 8mm; border: none; page-break-after: always; }
+    .hero h1 { font-size: 30pt; }
+    .hero .subtitle { font-size: 12pt; }
+    .hero-cta { display: none; }
+    section.s { padding: 12mm 0; max-width: none; page-break-after: always; }
+    section.s.cream { padding: 12mm 8mm; }
+    section.s:last-of-type { page-break-after: auto; }
+    section h2 { font-size: 18pt; }
+    section h3 { font-size: 13pt; }
+    section .lede { font-size: 12pt; }
+    .promise-block,
+    .insight,
+    .cta,
+    .closer,
+    .aspiration,
+    .feel-box,
+    .pillar,
+    .arc-card,
+    .path-card,
+    .q,
+    .anti .a,
+    .three-thirty,
+    .companion,
+    table.layers,
+    table.layers th { background-color: inherit; }
+    .promise-block, .cta, .closer { color: #FFFFFF !important; }
+    .promise-block h3, .cta h3, .closer .line1 { color: #FFFFFF !important; }
+    .cta .btn { background: var(--purple) !important; color: #FFFFFF !important; border-radius: var(--r-pill) !important; }
+    .promise-block, .pillar, .arc-card, .path-card, .q, .aspiration, .feel-box, .insight,
+    .cta, .step, table.layers, .companion, .brief-mock, .ba, figure.viz { page-break-inside: avoid; break-inside: avoid; }
+    .brief-mock { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    h2, h3 { page-break-after: avoid; }
+    svg { max-width: 100% !important; height: auto !important; }
+    a, a:visited { color: var(--purple); text-decoration: none; }
+  }
+
+  /* ============ Mobile ============ */
+  @media (max-width: 720px) {
+    .hero { padding: 48px 22px 36px; }
+    .hero h1 { font-size: 32px; }
+    .hero .subtitle { font-size: 15px; }
+    section.s { padding: 44px 22px; }
+    section h2 { font-size: 25px; }
+    .pillars, .quotes, .feel-grid, .aspirations, .two-paths, .arc, .compare, .ba { grid-template-columns: 1fr; }
+    .cta { grid-template-columns: 1fr; }
+    .cta .actions { align-items: stretch; }
+    .cta .btn { text-align: center; }
+    .three-thirty { font-size: 12px; padding: 8px 14px; gap: 8px; }
+    .hero-meta { padding: 12px 16px; flex-direction: column; gap: 8px; align-items: flex-start; border-radius: var(--r-md); }
+    .hero-meta .divider { display: none; }
+    .hero-meta .item { padding: 0; }
+  }
+
+  /* ===== Trilogy utility components (added for render) ===== */
+  /* Floor band: where the reader is when this playbook helps + trilogy sequence */
+  .floor-band {
+    max-width: 820px; margin: 0 auto; padding: 22px 32px 0;
+  }
+  .floor-band .seq {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;
+  }
+  .floor-band .seq .node {
+    flex: 1; min-width: 150px;
+    border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: 10px 14px; background: var(--bg);
+    font-size: 12.5px; color: var(--muted);
+  }
+  .floor-band .seq .node .step-no {
+    display: block; font-size: 10px; font-weight: 700; letter-spacing: 1.4px;
+    text-transform: uppercase; color: var(--muted-light); margin-bottom: 3px;
+  }
+  .floor-band .seq .node .name { font-weight: 600; color: var(--navy); font-size: 14px; }
+  .floor-band .seq .node.active {
+    border-color: var(--purple); border-width: 1.5px;
+    background: linear-gradient(180deg, rgba(130,52,234,0.05), rgba(130,52,234,0));
+  }
+  .floor-band .seq .node.active .step-no { color: var(--purple); }
+  .floor-band .read-when {
+    display: flex; align-items: baseline; gap: 10px;
+    font-size: 14px; color: var(--navy);
+    border-left: 3px solid var(--mint); padding: 4px 0 4px 14px;
+  }
+  .floor-band .read-when .rw-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase;
+    color: var(--muted); white-space: nowrap;
+  }
+
+  /* Series eyebrow: umbrella name + part tag, sits above the H1 in the hero */
+  .series-eyebrow {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    margin-bottom: 18px;
+  }
+  .series-eyebrow .series-name {
+    font-size: 11px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase;
+    color: var(--purple);
+  }
+  .series-eyebrow .series-part {
+    font-size: 12.5px; font-weight: 600; letter-spacing: 0.3px; color: var(--muted);
+  }
+
+  /* "How to read this" strip: one line under the floor band on every part */
+  .read-this {
+    max-width: 820px; margin: 14px auto 0; padding: 12px 32px 0;
+    font-size: 13.5px; color: var(--muted); line-height: 1.55;
+  }
+  .read-this .rt-label { font-weight: 700; color: var(--navy); }
+
+  /* Honest deferred-visual placeholder (Phase 5 designer pass) */
+  .visual-placeholder {
+    border: 1.5px dashed var(--muted-light); border-radius: var(--r-md);
+    padding: 28px 26px; margin: 18px 0 24px; background: var(--bg-cream);
+    text-align: center;
+  }
+  .visual-placeholder .vp-label {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.6px;
+    text-transform: uppercase; color: var(--purple); margin-bottom: 8px;
+  }
+  .visual-placeholder .vp-desc { margin: 0; color: var(--muted); font-size: 13.5px; font-style: italic; }
+
+  /* 2-column compare (tactics vs strategy, agent vs employee, before/after) */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0 24px; }
+  .compare .col {
+    border: 1px solid var(--line); border-top: 3px solid var(--muted-light);
+    border-radius: var(--r-md); padding: 20px 22px; background: var(--bg); font-size: 14px;
+  }
+  .compare .col.left { border-top-color: var(--magenta); }
+  .compare .col.right { border-top-color: var(--purple); }
+  .compare .col .col-label {
+    display: block; font-size: 11px; font-weight: 700; letter-spacing: 1.4px;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .compare .col.left .col-label { color: var(--magenta); }
+  .compare .col.right .col-label { color: var(--purple); }
+  .compare .col ul { margin: 0; padding-left: 18px; }
+  .compare .col li { margin-bottom: 7px; }
+
+  /* ===== WS6 designer visuals (brand-locked, mobile + PDF safe) ===== */
+  figure.viz { margin: 22px 0 8px; }
+  figure.viz figcaption {
+    font-size: 13px; color: var(--muted); line-height: 1.5; margin-top: 12px;
+    text-align: center; max-width: 640px; margin-left: auto; margin-right: auto;
+  }
+
+  /* Visual 1: session-start brief mock (the 8am screen) */
+  .brief-mock {
+    border-radius: var(--r-lg); overflow: hidden;
+    background: var(--card-dark);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 18px 40px rgba(4,30,55,0.22);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .brief-mock .bm-bar {
+    display: flex; align-items: center; gap: 7px;
+    padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.10);
+  }
+  .brief-mock .bm-dot { width: 9px; height: 9px; border-radius: var(--r-pill); background: rgba(255,255,255,0.28); }
+  .brief-mock .bm-title {
+    margin-left: 8px; font-size: 12px; letter-spacing: 0.4px;
+    color: rgba(255,255,255,0.72); font-weight: 600;
+  }
+  .brief-mock .bm-body { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+  .brief-mock .bm-row {
+    display: grid; grid-template-columns: 92px 1fr; gap: 14px; align-items: baseline;
+    padding-left: 12px; border-left: 3px solid var(--muted-light); min-width: 0;
+  }
+  .brief-mock .bm-row.anchor { border-left-color: var(--mint); }
+  .brief-mock .bm-row.flag { border-left-color: var(--magenta); }
+  .brief-mock .bm-row.decision { border-left-color: var(--orange); }
+  .brief-mock .bm-row.held { border-left-color: var(--purple); }
+  .brief-mock .bm-tag {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); white-space: nowrap;
+  }
+  .brief-mock .bm-text { font-size: 14px; color: rgba(255,255,255,0.92); line-height: 1.45; min-width: 0; }
+
+  /* Visual 2: before / after the brain */
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .ba .ba-col {
+    border: 1px solid var(--line); border-radius: var(--r-md); padding: 18px 20px;
+    background: var(--bg); font-size: 14px; line-height: 1.55;
+  }
+  .ba .ba-col.before { background: var(--bg-cream); border-top: 3px solid var(--muted-light); color: var(--muted); }
+  .ba .ba-col.after { border-top: 3px solid var(--mint); }
+  .ba .ba-label {
+    display: block; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .ba .ba-col.before .ba-label { color: var(--muted); }
+  .ba .ba-col.after .ba-label { color: var(--mint-ink, #16916a); }
+  .ba .ba-col p { margin: 0; }
+  .ba mark {
+    background: rgba(53,211,154,0.20); color: var(--navy);
+    padding: 1px 3px; border-radius: 4px;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+
+  /* Visual 3: one skill, many hands (inline SVG hub) */
+  .hub { width: 100%; max-width: 620px; margin: 0 auto; display: block; height: auto; }
+  .hub .hub-skill-box { fill: var(--purple); }
+  .hub .hub-tool-box { fill: #FFFFFF; stroke: var(--line); stroke-width: 1.5; }
+  .hub .hub-line { stroke: var(--purple); stroke-width: 1.5; opacity: 0.45; fill: none; }
+  .hub .hub-skill-text { fill: #FFFFFF; font-weight: 700; }
+  .hub .hub-tool-text { fill: var(--navy); font-weight: 600; }
+  .hub text { font-family: var(--font-body); font-size: 14px; }
+
+  /* Version stamp: quiet line under the closing signature */
+  .closer .vstamp {
+    margin-top: 20px; font-size: 10.5px; letter-spacing: 1.4px; text-transform: uppercase;
+    color: rgba(255,255,255,0.40);
+  }
+
+  /* Mobile collapse for components defined after the main mobile block
+     (source order means this override has to live here to win). */
+  @media (max-width: 720px) {
+    .compare, .ba { grid-template-columns: 1fr; }
+    .brief-mock .bm-row { grid-template-columns: 72px 1fr; gap: 10px; }
+  }
+
+  /* ===== Author pull-quote in Caveat (handwritten authority) - WS-F ===== */
+  .script-quote {
+    font-family: 'Caveat', 'Segoe Script', cursive;
+    font-size: 27px;
+    line-height: 1.35;
+    font-weight: 600;
+    color: var(--purple);
+    margin: 18px 0 10px;
+    max-width: 640px;
+  }
+  section.cream .script-quote { color: var(--magenta); }
+  .script-quote .cite {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  @media (max-width: 720px) { .script-quote { font-size: 23px; } }
+
+  /* Tertiary do-it-yourself link inside the dark reach CTA */
+  .cta .pathlink-light {
+    color: rgba(255,255,255,0.82);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    border-bottom: 1px solid rgba(255,255,255,0.28);
+    padding-bottom: 2px;
+    align-self: flex-end;
+    white-space: nowrap;
+  }
+  .cta .pathlink-light:hover { color: #FFFFFF; border-bottom-color: rgba(255,255,255,0.65); }
+  @media (max-width: 720px) { .cta .pathlink-light { align-self: stretch; text-align: center; border-bottom: none; } }
+
+  /* ===== Accessibility: honour reduced-motion (WS-F) ===== */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .btn-primary:hover, .cta .btn:hover, .btn:hover { transform: none !important; }
+  }
+
+</style>
+
+<style id="bundle-style">
+  html { scroll-behavior: smooth; }
+  .bundle-intro { max-width: 600px; margin: 26px auto 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+
+  /* Sticky part switcher */
+  .bundle-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .bundle-nav .bn-inner {
+    max-width: 1080px; margin: 0 auto; padding: 10px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .bn-title { font-size: 12px; font-weight: 700; letter-spacing: 0.2px; color: var(--navy); white-space: nowrap; }
+  .bn-parts {
+    display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; flex: 1;
+    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .bn-parts::-webkit-scrollbar { display: none; }
+  .bn-parts a {
+    display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+    text-decoration: none; color: var(--muted); font-size: 13px; font-weight: 500;
+    padding: 7px 12px; border-radius: var(--r-pill); transition: background 0.15s, color 0.15s;
+  }
+  .bn-parts a:hover { color: var(--navy); background: var(--bg-cream); }
+  .bn-parts a.active { color: var(--purple); background: rgba(130,52,234,0.10); font-weight: 600; }
+  .bn-no { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--purple); }
+  .bn-cta {
+    white-space: nowrap; text-decoration: none; background: var(--purple); color: #fff;
+    font-size: 12.5px; font-weight: 600; padding: 8px 16px; border-radius: var(--r-pill);
+    transition: background 0.15s;
+  }
+  .bn-cta:hover { background: var(--purple-dark); }
+
+  /* Per-part section + header */
+  .part { scroll-margin-top: 72px; border-top: 1px solid var(--line); }
+  .part:first-of-type { border-top: none; }
+  .part-header { max-width: 820px; margin: 0 auto; padding: 60px 32px 0; }
+  .part-header .series-part {
+    display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.8px; color: var(--purple); margin-bottom: 12px;
+  }
+  .part-header h1 { font-size: 40px; line-height: 1.1; letter-spacing: -0.8px; margin: 0 0 12px; font-weight: 600; color: var(--navy); }
+  .part-header .subtitle { font-size: 17px; color: var(--muted); margin: 0 0 4px; max-width: 640px; line-height: 1.5; }
+
+  @media (max-width: 720px) {
+    .bn-title { display: none; }
+    .bundle-nav .bn-inner { padding: 8px 14px; gap: 10px; }
+    .part-header { padding: 44px 22px 0; }
+    .part-header h1 { font-size: 30px; }
+  }
+  @media print {
+    .bundle-nav { display: none !important; }
+    .part { page-break-before: always; border-top: none; }
+    .part:first-of-type { page-break-before: avoid; }
+  }
+</style>
+</head>
+<body class="bundle">
+
+<div class="hero">
+  <div class="brand">
+    <img class="mark" src="data:image/png;base64,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" alt="ARCAS" />
+    <span>ARCAS SYSTEMS</span>
+  </div>
+  <div class="series-eyebrow">
+    <span class="series-name">The Second Brain Playbook</span>
+    <span class="series-part">The complete playbook &middot; four parts</span>
+  </div>
+  <h1>The Second Brain Playbook</h1>
+  <p class="subtitle">A second brain that holds your judgment, runs on your machine, and stays yours. The why, the how, the what, and the long game, in one read.</p>
+  <div class="three-thirty">
+    <span><span class="num">30</span> seconds to start</span>
+    <span class="sep">&middot;</span>
+    <span><span class="num">30</span> minutes to set up</span>
+    <span class="sep">&middot;</span>
+    <span><span class="num">30</span> days to compound</span>
+  </div>
+  <div class="hero-cta">
+    <a class="btn-primary" href="#part-1">Start reading <span aria-hidden="true">&darr;</span></a>
+    <a class="btn-link" href="https://cal.com/arcas/yourstrategy">or book a free 30-minute call</a>
+  </div>
+  <p class="bundle-intro">Four parts, one sitting if you want it. Nothing to install to read it. Two honest paths at the end of every part: build it yourself for free, or build it with us. Start at the top, or jump to any part below.</p>
+</div>
+
+<nav class="bundle-nav" aria-label="Playbook parts">
+  <div class="bn-inner">
+    <span class="bn-title">The Second Brain Playbook</span>
+    <ul class="bn-parts">
+      <li><a href="#part-1"><span class="bn-no">01</span> Expand your mind</a></li>
+      <li><a href="#part-2"><span class="bn-no">02</span> Build the brain</a></li>
+      <li><a href="#part-3"><span class="bn-no">03</span> Give it hands</a></li>
+      <li><a href="#part-4"><span class="bn-no">Bonus</span> Systems are strategy</a></li>
+    </ul>
+    <a class="bn-cta" href="https://cal.com/arcas/yourstrategy">Free call</a>
+  </div>
+</nav>
+
+<main>
+<section class="part" id="part-1">
+<header class="part-header">
+  <span class="series-part">Part 1 of 4 · the why</span>
+  <h1>Expand your mind.</h1>
+  <p class="subtitle">Do the things you cannot do alone.</p>
+  <div class="for-list">
+    <span class="for-label">Who this is for</span>
+    <p>For the founder who has not taken a real day off in two years.</p>
+    <p>For the operator carrying four hats and pretending it is sustainable.</p>
+    <p>For anyone who has tried to scale by working harder and felt the ceiling.</p>
+    <p>For the founder who senses the business cannot run without them, and wants that to change.</p>
+  </div>
+</header>
+<div class="floor-band">
+  <div class="seq">
+    <div class="node active"><span class="step-no">Part 1 · the why</span><span class="name">Expand your mind</span></div>
+    <div class="node"><span class="step-no">Part 2 · the how</span><span class="name">Build the brain</span></div>
+    <div class="node"><span class="step-no">Part 3 · the what</span><span class="name">Give it hands</span></div>
+    <div class="node"><span class="step-no">Bonus · the long game</span><span class="name">Systems are strategy</span></div>
+  </div>
+  <div class="read-when"><span class="rw-label">Read this when</span><span>You are still doing everything yourself and cannot picture how that ever changes.</span></div>
+</div>
+<div class="read-this"><span class="rt-label">How to read this:</span> About 10 minutes, nothing to install. This part makes the case for a second brain. The how comes next, in Part 2, Build the brain.</div>
+<section class="caveats">
+  <span class="caveat-label">Before you read</span>
+  <div class="row">
+    <p class="anchor purple">There is nothing to install.</p>
+    <p class="anchor magenta">There is nothing to learn.</p>
+    <p class="anchor">There is something to choose.</p>
+  </div>
+</section>
+
+<section class="s">
+  <div class="eyebrow">01 · Who this is for</div>
+  <h2>You are carrying more hats than you can wear</h2>
+  <p class="lede">If something in your week has stopped feeling sustainable, you are reading the right thing.</p>
+  <ul class="hats-list">
+    <li><span class="ix">The operator</span><span class="text">who wants the weekend back.</span></li>
+    <li><span class="ix">The founder</span><span class="text">who hasn't taken a real day off in two years.</span></li>
+    <li><span class="ix">The manager</span><span class="text">whose team asks them every question, every time.</span></li>
+    <li><span class="ix">The consultant</span><span class="text">trying to grow without burning out.</span></li>
+    <li><span class="ix">The parent</span><span class="text">who wants more time at the dinner table.</span></li>
+  </ul>
+  <p>You start the company. You know your buyer. You know your craft. Then the week fills with the work nobody else can hold, and the thing you wanted to build five years ago is still sitting behind the one hat you keep ignoring. That is who this is for.</p>
+</section>
+
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">02 · What game are you playing</div>
+    <h2>The strategy game is a different week</h2>
+    <p class="lede">Most founders are playing a tactics game. They think they are losing because their tactics are weak. They are losing because they are in the wrong game.</p>
+    <p>There is a game most founders play. Faster emails, sharper prompts, a better template for the proposal you have written forty times. It is visible work. It pays back the same week.</p>
+    <p>And then there is the other game. The one where you build the thing underneath the work. A brain that holds what only you have held. Something that runs when you are not in the room. A self that gets to leave the office.</p>
+    <p>Both are real. They are two different games.</p>
+
+    <div class="compare">
+      <div class="col left">
+        <span class="col-label">Tactics</span>
+        <ul>
+          <li>Faster emails</li>
+          <li>Sharper prompts</li>
+          <li>Better templates</li>
+          <li>Visible. Cheap. This week.</li>
+        </ul>
+      </div>
+      <div class="col right">
+        <span class="col-label">Strategy</span>
+        <ul>
+          <li>A brain that holds your judgment</li>
+          <li>A team that does not wait for you</li>
+          <li>A self that gets the weekend back</li>
+          <li>Slow. Invisible. Twelve months.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>The first game is loud and fast. The second is quiet, and invisible until the day it isn't. By the day it isn't, the founders who started two years ago are already two years ahead.</p>
+    <p>Seth Godin makes this point in <em>This is Strategy</em>. Tactics are the noise on the surface. Strategy is the choice underneath. Who is it for, what is it for, and how long are you willing to wait. The founders who win the long game answer those questions first and let the tactics fall out of the answers.</p>
+    <div class="pull purple">If you have been losing weekends to tactics, this is the part where you find out you were playing a different game than you thought.</div>
+  </div>
+</section>
+
+<section class="s">
+  <div class="eyebrow">03 · Ten times the version of you</div>
+  <h2>The 10x that actually matters</h2>
+  <p class="lede">The phrase "10x" got hijacked. It became about output. More emails, a bigger pipeline.</p>
+  <p>The 10x that matters is the version of <em>you</em> that gets to show up to your own life. The you who isn't tired by lunch. The you who is fully there at dinner, who reads the book on the flight instead of clearing the inbox, who decides whether a meeting is worth taking instead of taking it because it was already on the calendar.</p>
+  <p>You reach that version by building something underneath that does the work the tactics were trying to compensate for. Faster tactics keep you in the same week. The build is what changes which week you get to live in.</p>
+</section>
+
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">04 · Three things you cannot do alone</div>
+    <h2>Some things grinding will never solve</h2>
+    <p class="lede">You can grind through a slow quarter. These three you cannot grind through, no matter the hours. Worth knowing which is which.</p>
+
+    <h3>You can't remember everything you've already decided</h3>
+    <p>Last quarter you decided not to take a discounted scope. Last year you decided which type of client drained the team and which type lifted them. Two months ago you settled the question about the senior who keeps escalating things they could resolve. You decided all of it. You decided most of it well.</p>
+    <p>Then you forgot, because you also decided 200 other things in between. The buyer who walked in last Tuesday looked just enough like the one you'd ruled out that you took them anyway. You re-decided something you'd already decided. It cost you a month.</p>
+    <p>Your head is the wrong place to hold the reasoning behind every call your business has already settled. The memory works fine. The layer underneath it was never built.</p>
+
+    <h3>You can't carry the function you've never sat through a training for</h3>
+    <p>You don't know how to run a marketing function. You haven't sat through positioning training, you've never modelled a sales pipeline, you haven't written a finance scorecard.</p>
+    <p>You can pretend. You can wear those hats at 60% and tell yourself it's enough. But every function you can't wear is a soft ceiling on the business. Revenue plateaus at the function you wear worst. Senior hires drift in the place that needed the function you can't wear.</p>
+    <p>Hiring a human to wear it costs years and salaries. Ignoring it costs growth. There is a third option, and it is what the next playbook in this trilogy is about.</p>
+
+    <h3>You can't scale yourself by working harder</h3>
+    <p>Capacity doesn't bend that way. You have maybe 70 productive hours in a week if you're willing to give up the rest of your life. Maybe 50 if you want to keep it. The hours you can buy with hustle are bounded.</p>
+    <p>What isn't bounded is what you can build into the surfaces around you. The notes you take, the decisions you log, the patterns you've never written down, the clients you've already learned how to read, the week you've already learned how to defend. All of that is portable. None of it travels while it sits in your head.</p>
+    <p>So the question stops being <em>how do I work harder</em>. It becomes <em>what do I build, today, so my next week doesn't start from zero.</em></p>
+  </div>
+</section>
+
+<section class="s">
+  <div class="eyebrow">05 · The strategic choice</div>
+  <h2>Strategy is the choice of who you want to be in twelve months</h2>
+  <p class="lede">The usual move when you are stuck is to do more of what you were already doing. Faster, sharper, longer hours. Better tools, better templates. None of that is wrong. It just doesn't close the gap.</p>
+  <p>The gap is between you and the version of you who gets to leave. The version who isn't the only person in the building who can answer the question. Whose judgment has been written down, made reachable by the team, made portable across whatever tools the team happens to use.</p>
+  <p>That gap closes by building. Not by working.</p>
+
+  <div class="promise-block">
+    <div class="promise-eyebrow">The strategic choice</div>
+    <h3>Tactics make this week easier. The brain makes next year possible.</h3>
+    <p>The brain you build carries your judgment. It holds what only you have held, in a place the team can reach without reaching for you. It pays back the first week you stop re-deciding something you had already settled, and compounds quietly from there. By month six it is the part of the business that holds steady when you leave.</p>
+    <p>You can play both games. You can only win one of them by playing it alone.</p>
+  </div>
+</section>
+
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">06 · What this should leave you with</div>
+    <h2>The feeling you are after is relief</h2>
+    <p class="lede">Not excitement, not pressure, not a list of things you suddenly need to do tonight. Relief.</p>
+    <p>Relief, because you have been carrying something nobody told you was carry-able. Relief, because the week you have been pretending you can sustain isn't the only one available to you. And relief, because there is a way out that doesn't ask you to become a different person, learn a new tool, or buy a new platform.</p>
+    <p>If you have never touched a terminal, this is for you. There is nothing to learn. There is something to choose.</p>
+    <p>If you have read a hundred business books and watched the productivity advice cycle through three vintages of trends, this is for you too. The choice underneath was always the same choice. The books just kept calling it different things.</p>
+    <p>And if you have heard the word "AI" so many times in the last twelve months that it has started to mean nothing, this is for you too. The brain underneath is the part that matters. The speed on top is how fast that brain operates. Most of what you have heard called AI is a chat window on top of an empty brain. We are going to build the brain. The chat window comes later.</p>
+  </div>
+</section>
+
+<section class="s">
+  <div class="eyebrow">07 · What this is not</div>
+  <h2>What we are not selling you</h2>
+  <p class="lede">There is no productivity trick at the end of this. No template, no new app to install on your phone.</p>
+  <p>This is not a course. There is nothing to certify, nothing to graduate from.</p>
+  <p>You are not signing up for a subscription either. The brain you build is yours, on your machine, in plain text any tool can read. If we walk away tomorrow, you keep everything. Portability is the design.</p>
+  <p>And we are not an agency sitting between you and your work. The brain answers in your voice because you taught it your voice. The team queries it because the team learned to use it. We are the people who have done this before and can skip you past the parts that take six months to figure out alone. That is the only thing we charge for.</p>
+</section>
+
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">08 · What changes when you make the choice</div>
+    <h2>The twelve months after the choice</h2>
+    <p class="lede">This is the dream outcome. A lot of founders never reach it because they keep playing the tactics game, hoping the next sharper prompt is the one that finally buys them the weekend back.</p>
+
+    <div class="plan">
+      <div class="step">
+        <h4>Month one</h4>
+        <p>You stop re-deciding things you have already decided. The brain holds the reasoning. The next time the same shape of question shows up, the answer is there in your voice, with the right caveats.</p>
+      </div>
+      <div class="step">
+        <h4>Month three</h4>
+        <p>The team has learned to ask the brain before they ask you. The questions that reach your phone are the ones that actually need you. The queue gets shorter for the first time in years.</p>
+      </div>
+      <div class="step">
+        <h4>Month six</h4>
+        <p>You can leave for a week and the business doesn't notice. You have stopped tracking the hours you used to spend pulling everything uphill. You have stopped confusing "the business needs me" with "the business needs me to be doing the wrong thing."</p>
+      </div>
+      <div class="step">
+        <h4>Month twelve</h4>
+        <p>You are a different operator. You stopped being the only place the business kept its judgment. The brain held it, the team queried it, and you showed up for the work only you could do.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s">
+  <div class="eyebrow">09 · Read next</div>
+  <h2>This one was the why</h2>
+  <p class="lede">Part 2, <strong>Build the brain</strong>, is the how. It walks through the way the brain gets built, what lives where, and how the pieces breathe together. Part 3, <strong>Give it hands</strong>, is the what: the brain doing real work across your week.</p>
+  <p>Build the brain arrives next in the sequence. If you don't want to wait, the technical playbook is at the link below.</p>
+
+  <div class="cta">
+    <div>
+      <div class="label">Two honest paths</div>
+      <h3>Build it yourself, or build it with us.</h3>
+      <p>The scaffold, the skills, and this playbook are free, so you can build your second brain alone. If you would rather have help, bring your real business to a free 30-minute call and leave with one useful answer, whether or not we ever work together. We give it away so you can build a system that builds your own systems.</p>
+    </div>
+    <div class="actions">
+      <a class="btn" href="https://cal.com/arcas/yourstrategy">Book a free 30-minute call</a>
+      <a class="btn alt" href="https://api.whatsapp.com/send/?phone=971506987809&text=Hi%2C+I+just+read+the+Second+Brain+Playbook+and+I+want+to+create+my+second+brain+with+you.&type=phone_number&app_absent=0">Message us on WhatsApp</a>
+      <a class="pathlink-light" href="https://github.com/ARCASSystems/FounderOS">Or build it yourself, free &rarr;</a>
+    </div>
+  </div>
+</section>
+
+</section>
+
+<section class="part" id="part-2">
+<header class="part-header">
+  <span class="series-part">Part 2 of 4 · the how</span>
+  <h1>Build the brain.</h1>
+  <p class="subtitle">The mechanics. The four layers. The sleep cycle.</p>
+  <div class="for-list">
+    <span class="for-label">Who this is for</span>
+    <p>For the founder who read the why and now wants the how.</p>
+    <p>For the non-technical operator who has never touched a terminal and still wants to own the machine.</p>
+    <p>For anyone who wants to understand the system before they trust it.</p>
+  </div>
+</header>
+<div class="floor-band">
+  <div class="seq">
+    <div class="node"><span class="step-no">Part 1 · the why</span><span class="name">Expand your mind</span></div>
+    <div class="node active"><span class="step-no">Part 2 · the how</span><span class="name">Build the brain</span></div>
+    <div class="node"><span class="step-no">Part 3 · the what</span><span class="name">Give it hands</span></div>
+    <div class="node"><span class="step-no">Bonus · the long game</span><span class="name">Systems are strategy</span></div>
+  </div>
+  <div class="read-when"><span class="rw-label">Read this when</span><span>You have decided to build, and you want to understand the machine before you run it.</span></div>
+</div>
+<div class="read-this"><span class="rt-label">How to read this:</span> About 12 minutes, nothing to install. This part shows how the brain is built and what lives where. What it does in your week is Part 3, Give it hands.</div>
+<!-- ============ Positioning anchors ============ -->
+<section class="caveats">
+  <span class="caveat-label">Before we open the floor</span>
+  <div class="row">
+    <p class="anchor">You will not need a terminal.</p>
+    <p class="anchor magenta">You will not write a line of code.</p>
+    <p class="anchor purple">By the end you can draw the four layers on a napkin.</p>
+  </div>
+</section>
+
+<!-- ============ 01 The sleep cycle ============ -->
+<section class="s">
+  <div class="eyebrow">01 · The sleep cycle</div>
+  <h2>Start with how you sleep.</h2>
+  <p class="lede">A founder asked me last month what was actually inside the brain. Not what it does. What it is. She had already decided. Now she wanted to look under the floor. This is that view.</p>
+
+  <p>You wake up with a clear head. Across the day you fill it. Meetings, conversations, half-finished decisions, a thing the team flagged at 4pm, the message from the buyer you have not replied to. By evening your head is full. You are tired in a way that is not really about effort. The head cannot keep adding without something falling out.</p>
+  <p>So you sleep.</p>
+  <p>Sleep is the brain consolidating what matters and dropping what does not. The next morning you wake with a fresh head and the cycle resumes. You forget most of yesterday on purpose, and you keep the few things worth keeping.</p>
+
+  <h3>AI runs on the same shape</h3>
+  <p>An AI session is a working head. It opens empty. As you talk, it fills with state: the prompt, the documents, the back-and-forth, the things it generated. By a certain length it is full. You cannot keep adding without something falling out. The AI does not get tired the way you do. It just stops being useful. This filling-then-full span is the context window. Think of it as one sleep cycle. One head, one waking day, then a flush.</p>
+  <p>The fix is a fresh session. A new clean head. That is the part most founders miss. If the AI starts every session empty, you refill it every time. You explain who you are, you paste the same client context, you repeat the same voice rules. You do that every session because nothing survived the sleep.</p>
+
+  <h3>The brain layer is what survives the sleep</h3>
+  <p>It is the long-term memory the AI loads at the start of every fresh head. The AI walks in already knowing who you are, what you have decided before, what your client list looks like, which buyer asked which question last quarter, what your voice sounds like. You do not refill the context. The brain does. That is the whole job.</p>
+
+  <div class="pull">The brain is to the AI what long-term memory is to you. Every morning it loads into the context window. Every evening, what the session produced gets distilled back into the brain. Sleep, but for software.</div>
+
+  <p>Everything else in this playbook serves that one job. The mechanics stay calm and small on purpose.</p>
+</section>
+
+<!-- ============ 02 The four layers ============ -->
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">02 · The four layers</div>
+    <h2>Four layers, stacked.</h2>
+    <p class="lede">Hold it in your head as four layers on top of each other. Each does one job. Remove any one and the whole thing breaks. Each one has a human equal you already understand.</p>
+
+    <table class="layers">
+      <thead>
+        <tr><th>Layer</th><th>What it is</th><th>Human analogue</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="layer-name">The Brain</td><td>Memory and judgment. Six operating pages that hold who you are, your clients, your decisions, your week.</td><td>Your long-term memory. The part of you that walks into a room already knowing the history.</td></tr>
+        <tr><td class="layer-name">The Skills</td><td>The abilities the brain has. Write a follow-up, prep a meeting, draft a proposal, run the weekly retro.</td><td>A trained reflex. The way you walk down the stairs without thinking, because the body already learned how.</td></tr>
+        <tr><td class="layer-name">The Hands</td><td>The tools the skills reach for. Calendar, inbox, notes app, transcriber, voice capture.</td><td>Your hands. They do not decide what to do. They carry out what the head already chose.</td></tr>
+        <tr><td class="layer-name">The Heartbeat</td><td>The rhythm that keeps it alive. A daily anchor at the start of the day, a weekly retro at the end of the week.</td><td>Your pulse. Quiet, steady, easy to ignore, and the thing that stops if you stop paying attention.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Read it from the bottom up</h3>
+    <p>The hands are the tools you already use, and you keep all of them; the brain layer connects them rather than replacing them. The skills sit on top, each one a trained reflex, so once a skill is written the AI does that one thing the way you do it. The brain feeds every skill before it acts, which is what makes the output land like you instead of like a chat window. The heartbeat wraps all three so the brain stays current on its own.</p>
+    <p>A lot of people see the hands and think they bought the hands. The hands are the cheapest layer. Anyone can buy a calendar. The brain underneath is what makes the difference.</p>
+  </div>
+</section>
+
+<!-- ============ 03 Cadence as wakefulness ============ -->
+<section class="s">
+  <div class="eyebrow">03 · Cadence as wakefulness</div>
+  <h2>How the brain stays awake.</h2>
+  <p class="lede">A founder running the system day to day touches three pages most. If those three pages are current, the brain is awake.</p>
+
+  <table class="layers">
+    <thead>
+      <tr><th>Page</th><th>Its role</th><th>Rhythm</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="layer-name">Today's anchor</td><td>The single deep-work block for today. One thing, named.</td><td>Refreshed every morning.</td></tr>
+      <tr><td class="layer-name">This week</td><td>The five things that must happen this week.</td><td>Refreshed every Monday with the weekly retro.</td></tr>
+      <tr><td class="layer-name">Your daily log</td><td>What happened today. Decisions, shipped, stalled. Three lines is enough.</td><td>Appended through the day. Quietly archived each month.</td></tr>
+    </tbody>
+  </table>
+
+  <p>If those three pages are stale, the brain is asleep, and the morning brief will say so before you have finished your coffee.</p>
+  <p>Staleness is a signal. A stale daily anchor means yesterday did not get closed cleanly. A stale weekly page means last Monday's retro never happened. The brain surfaces this on every session start so you notice before a real decision gets missed.</p>
+
+  <h3>Here is what that looks like on a Monday</h3>
+  <p>You open the session and see a short brief: "Today's anchor is stale. Last entry was Thursday. Today is Monday. Run the daily reset before planning." You run it. Last week's anchors roll into a retro that forces a keep, kill, or escalate call on every open commitment, the week page rolls forward, and today's anchor gets named. Asleep to awake in about 15 minutes.</p>
+  <p>Skip the loop and the brain ages silently until something important slips. So the heartbeat stays small on purpose: a daily anchor that takes 5 minutes, a weekly retro that takes 30.</p>
+</section>
+
+<!-- ============ 04 How retrieval works ============ -->
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">04 · How retrieval works</div>
+    <h2>You ask. The brain walks.</h2>
+    <p class="lede">You do not query a database. You ask the AI a question, and the AI walks the brain looking for the answer.</p>
+
+    <p>The brain is plain text. The AI reads it the way you read this playbook. It finds the right pages by name. It scans across pages for the right entry. It follows the cross-references between pages the way you follow a footnote.</p>
+    <p>No database. No embedding model required for the basic loop. No special infrastructure. The text is the index.</p>
+
+    <h3>This is a deliberate choice</h3>
+    <p>Plain-text retrieval works on any machine, with any AI model, on the free tier, offline, and in five years when the AI you use today has been replaced by something better. The plain text outlives the tool.</p>
+    <p>You will hear the pieces sold to you as separate products. A database for your data here, a memory service there, a retrieval add-on, an intelligence layer on top. They are not separate things to buy. They are layers of one brain, and the brain is plain text on your machine. A plain notes app like Obsidian reads it. Any agent tool reads it. That plain text is the neuron layer everything else runs on, and it is the layer you own.</p>
+    <p>When the AI answers a question that spans several pages, it returns the answer plus its trail. Which entries it read, which decisions it followed, which flags it considered. You see the receipts. Trust is earned by being able to look at the source.</p>
+    <p>That is the retrieval loop. It works because the substrate is plain text and any model can read it.</p>
+  </div>
+</section>
+
+<!-- ============ 05 Where memory lives (mechanics: memory + the three primitives) ============ -->
+<section class="s">
+  <div class="eyebrow">05 · Where memory lives</div>
+  <h2>What survives, and what falls away.</h2>
+  <p class="lede">What does the brain remember, and what does it forget?</p>
+
+  <p>Anything written into a brain page is long-term memory. Decisions, client context, identity, voice rules, the log. These survive every fresh head and load at the start of every session. The current session is working memory: the AI loads the relevant pages, does the work, fills up, and flushes when the session ends.</p>
+  <p>If the new state never gets written back, it dies with the session, the same way an idea dies if you do not write it down before sleep. Three primitives keep that from happening. If you only ever do one of them, do capture.</p>
+
+  <h3>Capture, decay, consolidation</h3>
+  <p><strong>Capture</strong> is writing new state into a page before it flushes. A meeting ends, one sentence into the voice capture writes the decision, the deadline, and the open question into the right page. It is cheap, and the system prefers a little too much over too little. <strong>Decay</strong> is how the brain stays current: every entry has a freshness window, and a flag left untouched for 14 days surfaces for a keep or kill call, so dead state never piles up and starts lying about what is true. <strong>Consolidation</strong> is the work that pays back: a pattern showing up in three captured entries gets promoted into a knowledge page, and the weekly retro is where that happens.</p>
+  <p>Capture is the easy part, and anyone can do it on day one. Consolidation is what makes the brain keep paying you back. Forgetting is the brain's job: one that remembers everything is unusable, so it keeps what matters and lets the rest fall away on purpose.</p>
+</section>
+
+<!-- ============ 06 Sleep is consolidation, worked example ============ -->
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">06 · A worked example</div>
+    <h2>Sleep is consolidation. A real Tuesday.</h2>
+    <p class="lede">Watch the brain breathe across one day. Five small moments, each one a capture, each one writing state back before it flushes.</p>
+
+    <div class="plan">
+      <div class="step">
+        <h4>7:30am · The morning brief loads</h4>
+        <p>You open the session. The brief loads: two flags open, one decision overdue, the engineering buyer's proposal three days stale, today's anchor the 9am call. You read the state of the business in 15 seconds without opening a thing.</p>
+      </div>
+      <div class="step">
+        <h4>9:00am · The call, then one sentence</h4>
+        <p>After the call you say one sentence into the voice capture: scope confirmed, wants to start in June, two open questions on terms, revised proposal by Friday. The capture skill files it on the client page, adds the Friday deadline to your commitments, and logs the win.</p>
+      </div>
+      <div class="step">
+        <h4>6:00pm · You close the day</h4>
+        <p>One line in the log: proposal sent, Friday deadline, team unblocked on the Q2 brief. Tomorrow's anchor gets named, the session ends, and that is the brain breathing.</p>
+      </div>
+    </div>
+
+    <p>Across the week each capture accumulates, and by Friday the weekly retro promotes the keepers into knowledge pages while the rest decays away. By Monday the brain is current, the head is fresh, and the cycle resumes: sleep, but for the business.</p>
+  </div>
+</section>
+
+<!-- ============ 07 The non-technical reader (flipped to white after 05/07 collapse) ============ -->
+<section class="s">
+    <div class="eyebrow">07 · The non-technical reader</div>
+    <h2>The same four fears, every time.</h2>
+    <p class="lede">A short callout, because the same four fears come up in every conversation. Here they are, in the words founders use, with the plain answer to each.</p>
+
+    <div class="quotes">
+      <div class="q">I'm not technical enough for this.</div>
+      <div class="q">What if I break it?</div>
+      <div class="q">What if my business is different?</div>
+      <div class="q">Where does my data actually live?</div>
+    </div>
+
+    <p><strong>I'm not technical enough.</strong> No terminal needed. The setup wizard talks in plain English. You answer, it builds. The same conversation you would have with a new hire on their first morning.</p>
+    <p><strong>What if I break it?</strong> Everything is a text file. There is nothing here that two clicks cannot undo. You are editing notes, not wiring electronics.</p>
+    <p><strong>What if my business is different?</strong> Every founder's brain looks different. Same shape, different contents. The brain is yours. You decide what goes in it.</p>
+    <p><strong>Where does my data live?</strong> On your machine. Nothing routes through us. We do not see your pages, your log, or your decisions. The brain is yours alone.</p>
+    <p>Read these one more time if any of them sits with you.</p>
+</section>
+
+<!-- ============ 08 The brain is yours (flipped to cream) ============ -->
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">08 · The brain is yours</div>
+    <h2>This is the part that matters most.</h2>
+
+    <div class="promise-block">
+      <div class="promise-eyebrow">The one promise</div>
+      <h3>The brain is yours. It lives on your machine. If we disappear tomorrow, you keep everything.</h3>
+      <p>Every page is plain text. You can read it in any editor on any operating system. Back it up the way you back up anything else. Put it on a hard drive, email it to yourself, hand it to a different AI tool and walk in with the same head.</p>
+    </div>
+
+    <p>Behind the scenes it is the same format AI was trained on most, so the AI reads it natively. You never have to learn the syntax. The AI model can change. The tool you use can change. The brain outlives all of it because it is just text.</p>
+    <p>This is the design: the thing you would have built for yourself if you had had the time. The opposite of being locked into someone else's box.</p>
+
+    <h3>You hold the controls</h3>
+    <p>Because the brain is yours, you decide what goes into it, what it is for, and who it serves. What the team is allowed to ask it. How decisions get made on top of it. The unwritten rules of how your business actually runs are yours to set, not ours. We do not sit in the middle of that, and we could not even if we wanted to, because the pages never leave your machine.</p>
+    <p>It is free for a reason worth saying plainly. We give the scaffold, the skills, and this playbook away so you can build a system that builds your own systems. The brain you end up with is the asset, and you own it whether or not you ever speak to us.</p>
+
+    <h3>What it is, and what it sits next to</h3>
+    <p>Worth saying clearly what the brain is, because the closest neighbours sound similar and work differently.</p>
+
+    <ul class="hats-list">
+      <li><span class="ix">vs an app</span><span class="text">A productivity app tunes your day. The brain captures your judgment.</span></li>
+      <li><span class="ix">vs a CRM</span><span class="text">A customer database tracks deals. The brain holds the judgment that decides which deals are worth tracking.</span></li>
+      <li><span class="ix">vs automation</span><span class="text">An automation platform runs workflows. The brain is the memory that makes any workflow informed.</span></li>
+      <li><span class="ix">vs an agency</span><span class="text">An AI agency delivers automations as a black box. The brain is a living substrate you own end to end.</span></li>
+    </ul>
+
+    <p>What you bought is the brain. The AI is a renter. The brain is yours forever.</p>
+  </div>
+</section>
+
+<!-- ============ 09 Week one (flipped to white) ============ -->
+<section class="s">
+  <div class="eyebrow">09 · The first month</div>
+  <h2>What this looks like in week one.</h2>
+  <p class="lede">If you install this tomorrow, what changes in week one? Here is the curve, small at first, paying back by the end of the first month.</p>
+
+  <div class="plan">
+    <div class="step">
+      <h4>Day one · Set up the brain</h4>
+      <p>About 30 minutes with the wizard. It asks who you are, who your clients are, what your voice sounds like, what you decided this quarter. You answer, the pages get written, and the brain is awake.</p>
+    </div>
+    <div class="step">
+      <h4>Days two and three · First capture, first draft</h4>
+      <p>You write the daily anchor and start the log, three lines at the end of the day. Then you ask the AI to draft something real and it comes back in your voice instead of chat-window voice. Ten minutes editing instead of sixty from scratch.</p>
+    </div>
+    <div class="step">
+      <h4>Day seven · The first retro</h4>
+      <p>You run the first weekly retro. Last week rolls forward and the first knowledge entry gets consolidated from the log. The brain has built one extra rung.</p>
+    </div>
+    <div class="step">
+      <h4>Day thirty · The cycle is yours</h4>
+      <p>The morning brief catches things you would have missed, the skills draft in your voice without coaching, and the team starts asking the brain before they ask you because the answer comes back faster.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 Read Give it hands next + CTA (flipped to cream) ============ -->
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">10 · What comes next</div>
+    <h2>Read Give it hands next.</h2>
+    <p class="lede">This is the part where the brain reaches into your week. The brain is the memory; the hands are where it shows up in your actual Tuesday.</p>
+
+    <p>You now know the why and the how. Part 3, <strong>Give it hands</strong>, is the what: the brain reaching into your calendar, your inbox, your notes, and doing the work alongside you. We send it next in the sequence.</p>
+    <p>If you cannot wait, there are two ways in. Install it yourself and read every page first, or spend 30 minutes with us on your real business. Don't trust us yet. Test us.</p>
+
+    <div class="cta">
+      <div>
+        <div class="label">Two honest paths</div>
+        <h3>Do not trust us yet. Test us.</h3>
+        <p>Install it yourself and read every page first, free. Or spend a free 30 minutes with us on your real business, where we map the four layers to how you actually work. You walk away with the brain set up either way. We give it away so you can build a system that builds your own systems.</p>
+      </div>
+      <div class="actions">
+        <a class="btn" href="https://cal.com/arcas/yourstrategy">Book a free 30-minute call</a>
+        <a class="btn alt" href="https://api.whatsapp.com/send/?phone=971506987809&text=Hi%2C+I+just+read+the+Second+Brain+Playbook+and+I+want+to+create+my+second+brain+with+you.&type=phone_number&app_absent=0">Message us on WhatsApp</a>
+        <a class="pathlink-light" href="https://github.com/ARCASSystems/FounderOS">Or install it yourself, free &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</section>
+
+<section class="part" id="part-3">
+<header class="part-header">
+  <span class="series-part">Part 3 of 4 · the what</span>
+  <h1>Give it hands.</h1>
+  <p class="subtitle">Skills, tools, output. The brain reaching into your week.</p>
+  <div class="for-list">
+    <span class="for-label">Who this is for</span>
+    <p>For the founder who has the brain and wants it working inside the week.</p>
+    <p>For the operator who wants drafts, prep and follow-ups carried without losing their voice.</p>
+    <p>For anyone who wants to see the brain do something real by Tuesday morning.</p>
+  </div>
+</header>
+<div class="floor-band">
+  <div class="seq">
+    <div class="node"><span class="step-no">Part 1 · the why</span><span class="name">Expand your mind</span></div>
+    <div class="node"><span class="step-no">Part 2 · the how</span><span class="name">Build the brain</span></div>
+    <div class="node active"><span class="step-no">Part 3 · the what</span><span class="name">Give it hands</span></div>
+    <div class="node"><span class="step-no">Bonus · the long game</span><span class="name">Systems are strategy</span></div>
+  </div>
+  <div class="read-when"><span class="rw-label">Read this when</span><span>The brain exists, and you want it working inside your real week.</span></div>
+</div>
+<div class="read-this"><span class="rt-label">How to read this:</span> About 12 minutes, nothing to install. This part puts the brain to work across one real week. The long game is the bonus, Systems are strategy.</div>
+<section class="caveats">
+  <span class="caveat-label">Where this playbook stands</span>
+  <div class="row">
+    <p class="anchor magenta">You have the why and the how. This is what it does on a Tuesday.</p>
+    <p class="anchor purple">Seven functions. One 20 percent capture each. The brain does the rest with you in the loop.</p>
+    <p class="anchor">30 seconds to start. 30 minutes to set up. 30 days to compound.</p>
+  </div>
+</section>
+
+<section class="s">
+  <div class="eyebrow">01 · Where we are in the trilogy</div>
+  <h2>You have the why and the how. Here is the what.</h2>
+  <p class="lede">What has been missing is what the brain actually does on a normal day, in a business that did not stop running while you read two playbooks. We will fix that now.</p>
+  <p>If you read <em>Expand your mind</em>, you know the strategic choice. If you read <em>Build the brain</em>, you know how it works. This is what it does on a Tuesday.</p>
+  <p>This playbook lands three things. A layer we have not named yet, the mouth. A list of seven functions where a second brain pays you back faster than the rest. And a walk through what a Tuesday morning looks like once the brain is running.</p>
+  <p>By the end you will know which function in your business has been waiting for this the longest.</p>
+</section>
+
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">02 · The mouth</div>
+    <h2>The mouth is where the brain speaks. The hands are where it reaches.</h2>
+    <p class="lede">We talked about the brain. We talked about the hands. We did not talk about the third thing.</p>
+    <p>The hands are the tools the brain reaches for. Gmail, Calendar, Notion, Slack, Granola, Wispr Flow. They act on the world. They send the email, hold the meeting, write the file, ping the team.</p>
+    <p>The mouth is different. The mouth is where the brain <em>speaks</em> into the world. The morning brief that lands in your inbox with the three things that need a decision today. The email drafted in your voice, with your pricing, with the right caveats for that buyer's industry, sitting in your drafts folder waiting for you to hit send. The LinkedIn post that finally sounds like you. The proposal that reads as if you wrote it on the plane, even though you were asleep.</p>
+
+    <div class="pillars">
+      <div class="pillar people">
+        <span class="label">The mouth</span>
+        <strong>Where the brain speaks</strong>
+        <p>The morning brief, the drafts, the summary of yesterday. The visible output you read every morning.</p>
+      </div>
+      <div class="pillar systems">
+        <span class="label">The hands</span>
+        <strong>Where the brain reaches</strong>
+        <p>Gmail, Calendar, Notion, Slack, Granola, Wispr Flow. The tools that act on the world for you.</p>
+      </div>
+      <div class="pillar ai">
+        <span class="label">The brain</span>
+        <strong>Where the work happens</strong>
+        <p>Holds your judgment between sessions. Does the work. The mouth is just where you hear it.</p>
+      </div>
+    </div>
+
+    <p>You will notice the mouth before you notice anything else, because the mouth is the part of the brain you read every morning. It is what your team will see first when they start querying the brain instead of querying you.</p>
+    <p>It matters to name the mouth separately because most founders see one good draft come back from an AI and assume the AI is doing the work. The brain is doing the work. The mouth is just where you hear it. The rest of this playbook is about what the brain actually says, once it has something to say.</p>
+
+    <figure class="viz">
+      <svg class="hub" viewBox="0 0 600 320" role="img" aria-label="One captured skill reaching into Gmail, Calendar, Notion, Slack and Granola.">
+        <path class="hub-line" d="M224,170 C320,170 320,37 406,37" />
+        <path class="hub-line" d="M224,170 C320,170 320,95 406,95" />
+        <path class="hub-line" d="M224,170 L406,153" />
+        <path class="hub-line" d="M224,170 C320,170 320,211 406,211" />
+        <path class="hub-line" d="M224,170 C320,170 320,269 406,269" />
+        <rect class="hub-skill-box" x="24" y="126" width="200" height="88" rx="16" />
+        <text class="hub-skill-text" x="124" y="162" text-anchor="middle" style="font-size:11px;letter-spacing:1.5px;opacity:0.85">ONE SKILL</text>
+        <text class="hub-skill-text" x="124" y="187" text-anchor="middle" style="font-size:15px">Draft the follow-up</text>
+        <rect class="hub-tool-box" x="406" y="14" width="170" height="46" rx="12" />
+        <text class="hub-tool-text" x="491" y="42" text-anchor="middle">Gmail</text>
+        <rect class="hub-tool-box" x="406" y="72" width="170" height="46" rx="12" />
+        <text class="hub-tool-text" x="491" y="100" text-anchor="middle">Calendar</text>
+        <rect class="hub-tool-box" x="406" y="130" width="170" height="46" rx="12" />
+        <text class="hub-tool-text" x="491" y="158" text-anchor="middle">Notion</text>
+        <rect class="hub-tool-box" x="406" y="188" width="170" height="46" rx="12" />
+        <text class="hub-tool-text" x="491" y="216" text-anchor="middle">Slack</text>
+        <rect class="hub-tool-box" x="406" y="246" width="170" height="46" rx="12" />
+        <text class="hub-tool-text" x="491" y="274" text-anchor="middle">Granola</text>
+      </svg>
+      <figcaption>One captured skill reaches into every tool. You write the follow-up rule once, and the brain runs it through Gmail, Calendar, Notion, Slack and Granola.</figcaption>
+    </figure>
+
+    <h3>We ran this for real</h3>
+    <p>We took the same Founder OS brain you would build and dropped it into Hermes, a separate agentic tool that gets tasks done on its own. We did not rebuild the brain. We connected one thing, a Telegram bot, which is the mouth, and ran the whole system from Telegram the way you would text a colleague. The brain stayed exactly as it was. Only the mouth and the hands changed.</p>
+    <p>That is the proof the brain is portable. It is not trapped inside one app or one company. It is yours, in plain text, and it travels to whatever tool you decide to run it on. The mouth and the hands are swappable. The brain is the part you keep.</p>
+
+    <h3>You can build your own window</h3>
+    <p>Talking to the brain in plain language stays the simplest way in. But nothing stops you building your own small window onto the system, shaped the way you think. A glanceable dashboard that shows what the brain is doing right now. The tokens and the model you are spending. What is in context and what has been set aside. The insights it surfaced this week. The line out to your hands, whether that is Hermes or whatever agent tool you run. One screen that is the live pulse of the whole operation.</p>
+    <p>Build it your way. The rule is simple: the brain and its plain-text pages stay the source of truth, and your window is a read-mostly view on top. You do not move the brain into the dashboard. You point the dashboard at the brain. Keep that line and the connections never break, so you can talk to the AI and watch your own screen at the same time. That is the whole idea in one sentence. Build a system that builds your own systems, then build the window you want to watch it through.</p>
+  </div>
+</section>
+
+<section class="s">
+  <div class="eyebrow">03 · The seven functions</div>
+  <h2>Seven places where the brain pays you back fastest</h2>
+  <p class="lede">There are seven places in a service business where a second brain pays you back faster than anywhere else. None are technical. All of them are functions you already run, mostly in your head, mostly badly.</p>
+  <p>The work is a 20 percent capture you put in once. The brain holds it. From then on, the brain does the function with you in the loop instead of you doing it alone.</p>
+
+  <div class="promise-block">
+    <div class="promise-eyebrow">The bridge from exists to does</div>
+    <h3>Your judgment lives between sessions.</h3>
+    <p>The next conversation, the next draft, the next decision starts where the last one ended, instead of starting from scratch. That is what this matrix does across seven functions.</p>
+  </div>
+
+  <table class="layers">
+    <thead>
+      <tr>
+        <th>Function</th>
+        <th>The 20 percent capture</th>
+        <th>The 80 percent leverage</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="row-people">
+        <td class="layer-name">Sales</td>
+        <td>Top 10 buyer objections plus your best reply to each</td>
+        <td>The next reply writes itself in your voice with the right caveats</td>
+      </tr>
+      <tr class="row-people">
+        <td class="layer-name">Marketing</td>
+        <td>Voice profile plus 10 stories that always work plus your anti-AI list</td>
+        <td>Every post sounds like you, not like every other post in the feed</td>
+      </tr>
+      <tr class="row-systems">
+        <td class="layer-name">Delivery</td>
+        <td>Definition of done plus scope guardrails plus escalation rules</td>
+        <td>Team unblocks itself, scope creep gets named before it lands</td>
+      </tr>
+      <tr class="row-systems">
+        <td class="layer-name">Finance</td>
+        <td>The 5 to 7 numbers you actually read weekly</td>
+        <td>No more Sunday-night spreadsheet hunting</td>
+      </tr>
+      <tr class="row-systems">
+        <td class="layer-name">Hiring</td>
+        <td>Pattern bank: who lasted, who drifted, what you wish you had asked</td>
+        <td>Fewer bad hires, faster offboards</td>
+      </tr>
+      <tr class="row-ai">
+        <td class="layer-name">Decisions</td>
+        <td>Decision log with the <em>reasoning</em>, not just the outcome</td>
+        <td>Stop re-deciding things you already decided</td>
+      </tr>
+      <tr class="row-ai">
+        <td class="layer-name">Self</td>
+        <td>A weekly three-line retro, and a flag when something feels off</td>
+        <td>Catch burnout 4 weeks earlier than you would have</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Sales</h3>
+  <p>You close better than you think, because you have answered the same ten objections a thousand times. The trouble is the answers live in your head, so a senior on the team cannot use them and every objection comes back to you. Spend one evening writing the ten objections you get most, with the reply you would give to each. From then on the next price pushback gets answered in your voice, with the right caveat for that buyer's industry, by whoever is closest to the deal.</p>
+
+  <h3>Marketing</h3>
+  <p>AI-written marketing reads badly mostly because the AI does not know what you sound like or what your audience is searching for. Write down three things, once: your voice profile, the words you use and the words you refuse; your ten stories that always work, the IKEA story, the day you fired yourself, the moment you stopped wearing the hat; your anti-AI list, the words you never want to see under your name. After that, every post sounds like you instead of like every other post in the feed.</p>
+
+  <h3>Delivery</h3>
+  <p>Scope creep that nobody named is the most expensive thing in a service business. A team that does not know your definition of done delivers until the client stops asking, and a team that does not know your escalation rules pings you for every small call. Pin down three things: the definition of done for each offer, the guardrails on what is in scope, and the rules for who decides and what counts as a flag versus a fire. Then the team unblocks itself, and scope creep gets named on the call where it appears instead of on the invoice three weeks later.</p>
+
+  <h3>Finance</h3>
+  <p>Usually five to seven numbers tell you weekly whether the business is healthy: cash position, pipeline coverage, revenue versus plan, margin trend, days sales outstanding, headcount cost as a share of revenue. The exact set differs per business, and most founders have never written theirs down, so every Sunday night they go hunting through spreadsheets for numbers that should already be in front of them. Write your list once, and the brain pulls them every Monday and shows you the trend before the week starts.</p>
+
+  <h3>Hiring</h3>
+  <p>Every founder keeps a pattern bank in their head about who lasts and who drifts. The senior who could not let go of being right. The junior who turned into a leader by month nine. The one you hired for a role you did not actually have. None of it is written down, so the next hire repeats a version of the same mistake. Bank the patterns: the call you made on each past hire, the questions you wish you had asked, the early signs you missed. Your last hire ends up teaching your next one.</p>
+
+  <h3>Decisions</h3>
+  <p>The hidden tax in a founder-led business is the decisions you make twice, because you forgot you settled them the first time. The supplier you swore off. The buyer profile you decided not to chase. The pricing question you closed in February and reopened in May because nobody wrote down the reasoning. Log the <em>why</em> with every decision, not just the outcome. Six months later, when the same trade-off returns, the brain reminds you what past-you concluded and what has changed since.</p>
+
+  <h3>Self</h3>
+  <p>The function you skip first is the one about you, because capturing it feels self-indulgent. A weekly retro, three lines on what shipped and what stalled. A flag every time something feels off. A freshness window that resurfaces what has gone quiet. The brain remembers what you were saying three weeks ago and notices when the pattern has not shifted, which is how it catches burnout four weeks before you would alone.</p>
+
+  <figure class="viz">
+    <div class="ba">
+      <div class="ba-col before">
+        <span class="ba-label">Generic AI draft</span>
+        <p>Hi there, thank you for your email. I wanted to follow up regarding our proposal. Please let me know if you have any questions. Looking forward to hearing from you.</p>
+      </div>
+      <div class="ba-col after">
+        <span class="ba-label">After the brain loads your voice</span>
+        <p><mark>Karim</mark>, good speaking today. Revised proposal attached, <mark>phased so the first 22 seats go live before the finance sign-off</mark>, the way we talked it through. <mark>The two open questions on payment terms sit on page two</mark>, where you will see them. No rush before Thursday.</p>
+      </div>
+    </div>
+    <figcaption>Same model, same minute. The difference is the brain underneath: your voice, the buyer's name and context, the caveats you always include.</figcaption>
+  </figure>
+</section>
+
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">04 · A Tuesday morning, in motion</div>
+    <h2>The matrix is the static view. Here it is in motion.</h2>
+    <p class="lede">It is Tuesday. You walk into your office at 8am. You have not opened a tab. You have not read an email. The brief is already on your screen.</p>
+
+    <div class="plan">
+      <div class="step">
+        <h4>Good morning. What is today?</h4>
+        <p>The brain loads the morning brief. It reads your calendar, finds three meetings and a gap from 11am to 1pm, then pulls your flags, stale items, and overdue decisions. The brief lands on screen with the anchor named and the 11am block held.</p>
+      </div>
+      <div class="step">
+        <h4>Draft the follow-up to the engineering buyer.</h4>
+        <p>The brain loads the proposal writer and your voice rules, pulls the buyer context, the last three messages, and the pricing. It knows it is a phased rollout, a Thursday deadline, a 22-person firm. A Gmail draft is ready in your voice, waiting for you to send.</p>
+      </div>
+      <div class="step">
+        <h4>A team lead asks about scope on a mid-tier account.</h4>
+        <p>The brain pulls the definition of done and the scope rules for that tier. The answer surfaces. No founder call needed. The team lead unblocks themselves.</p>
+      </div>
+      <div class="step">
+        <h4>You are thinking about hiring a senior PM.</h4>
+        <p>The brain pulls your last three senior hires, what worked and what did not, and surfaces the pattern with three questions to add to the interview. The decision moves forward without you thinking it through from scratch.</p>
+      </div>
+    </div>
+
+    <p>That is one morning. Four functions touched. Two drafts produced. One team unblock. One hiring decision moved forward. None of it required you to remember anything. The brain remembered. The skills loaded. The hands acted.</p>
+    <p>These moves were possible without a brain. They were just expensive. Each one took 20 minutes of context-switching and re-deciding. Four moves a morning is 80 minutes of friction you no longer carry. Across a year, that is the holiday you have not taken.</p>
+
+    <figure class="viz">
+      <div class="brief-mock">
+        <div class="bm-bar">
+          <span class="bm-dot"></span><span class="bm-dot"></span><span class="bm-dot"></span>
+          <span class="bm-title">Morning brief · Tuesday, 8:00</span>
+        </div>
+        <div class="bm-body">
+          <div class="bm-row anchor"><span class="bm-tag">Anchor</span><span class="bm-text">Prep the 9:00 call with the engineering buyer.</span></div>
+          <div class="bm-row flag"><span class="bm-tag">Flag</span><span class="bm-text">Proposal for the 22-person firm is three days stale.</span></div>
+          <div class="bm-row flag"><span class="bm-tag">Flag</span><span class="bm-text">Senior PM hire: your call has been owed since Friday.</span></div>
+          <div class="bm-row decision"><span class="bm-tag">Overdue</span><span class="bm-text">The pricing question you reopened in May is still unsettled.</span></div>
+          <div class="bm-row held"><span class="bm-tag">Held</span><span class="bm-text">11:00 to 13:00 blocked for deep work. Do not book over it.</span></div>
+        </div>
+      </div>
+      <figcaption>The 8am brief is the mouth of the brain. You read the state of the business before you open a single tab.</figcaption>
+    </figure>
+
+    <p>The brief that lands at 8am is the mouth. The Gmail draft is a hand reaching for a tool. The hiring pattern that surfaced is the brain pulling memory you wrote down six months ago. Same system, showing up three different ways inside one morning.</p>
+  </div>
+</section>
+
+<section class="s">
+  <div class="eyebrow">05 · Agent versus employee</div>
+  <h2>So why do I still need people?</h2>
+  <p class="lede">A question that comes up the moment anyone sees the brain working. Or the other version: why do I still need an AI if I have good people?</p>
+  <p>Both questions assume the AI and the person are doing the same job. They each do part of the job, and they each fail in characteristic ways.</p>
+
+  <div class="compare">
+    <div class="col left">
+      <span class="col-label">AI agent</span>
+      <ul>
+        <li>Reads context fast</li>
+        <li>Drafts at scale</li>
+        <li>Never tired, never bored</li>
+        <li>Holds long memory across sessions</li>
+        <li>Costs predictable</li>
+        <li>Fails when context is missing, stakes are high and reversible only with an apology, or the situation has never happened before</li>
+      </ul>
+    </div>
+    <div class="col right">
+      <span class="col-label">Human employee</span>
+      <ul>
+        <li>Reads a room</li>
+        <li>Judges new situations</li>
+        <li>Owns relationships</li>
+        <li>Sees what is not on the page</li>
+        <li>Carries the brand into the world</li>
+        <li>Fails when asked to remember everything, draft from scratch all day, or be consistent across 200 conversations</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>The AI agent is good at the things humans burn out doing. The human is good at the things AI cannot see. The brain in the middle is what connects them, because it holds the context the AI needs and the patterns the human team can query.</p>
+  <p>Most teams I see fail one of two ways. They hire a human to do work the AI should be doing, drafting the same email thirty times a week, and the human burns out. Or they buy an AI to do work a human should be doing, closing a strategic deal, and the deal goes nowhere. The brain is what makes sure neither of those happens.</p>
+
+  <div class="pull magenta">Ask which part of what your assistant does the brain should carry, so they get back to the work you actually hired them for. That is the question that pays.</div>
+</section>
+
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">06 · What can go wrong</div>
+    <h2>The brain is not magic. Here is how it fails, and the fix.</h2>
+    <p class="lede">It is a system, and systems can fail. Here are the six ways it goes wrong, with the fix for each. None of these are guesses. They are mistakes I have made or watched founders make.</p>
+
+    <table class="layers">
+      <thead>
+        <tr>
+          <th>Failure mode</th>
+          <th>The fix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="layer-name">The brain becomes a graveyard</td>
+          <td>You captured a lot in week one, never went back, and now it is dead text nobody trusts. The fix is the weekly retro. Thirty minutes every Friday. Read what is current, decay what is not, mark what should be promoted to a permanent pattern. The brain dies without the retro.</td>
+        </tr>
+        <tr>
+          <td class="layer-name">You over-capture and lose signal</td>
+          <td>Everything goes in. Nothing is more important than anything else. The brain is full and useless. The fix is the decay window. Every entry has a freshness date. Things nobody touches for 14 days surface for a keep-or-kill review. Forgetting is the brain's job as much as remembering.</td>
+        </tr>
+        <tr>
+          <td class="layer-name">You hand it to the team too early</td>
+          <td>You told the team "ask the brain first" and it answered three questions wrong because the substrate was too thin. Trust was lost. The fix is to run the brain yourself for the first four weeks. Watch what it gets right. Fix what it gets wrong. Only then invite the team in.</td>
+        </tr>
+        <tr>
+          <td class="layer-name">You confuse the brain with a chatbot</td>
+          <td>You start asking it general questions and the output is generic because you are using it like a public AI. The fix is to remember the brain only matters when it is loading your substrate. If you are not asking about your business, your decisions, your team, or your week, open a normal chat instead.</td>
+        </tr>
+        <tr>
+          <td class="layer-name">The mouth runs ahead of the brain</td>
+          <td>The drafts read beautifully, but the team starts sending them without reading them. Bad emails go out in your voice. The fix is the pre-ship gate. Every draft that leaves your machine passes a voice check, a truth check, and a contact-info check. The mouth is fast. The gate is what makes fast safe.</td>
+        </tr>
+        <tr>
+          <td class="layer-name">You install everything at once</td>
+          <td>Week one you tried to capture all seven functions and burned out. The brain has half-formed substrate everywhere and a complete one nowhere. The fix is to start with the function where the pain is loudest, get that one working, then add the next. The brain pays you back one function at a time, never seven at once.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="s">
+  <div class="eyebrow">07 · The 12-month arc</div>
+  <h2>The same arc as Expand your mind, told from the inside.</h2>
+  <p class="lede">What surviving looks like is something you already know. What thriving looks like is harder to describe until you have lived it, but here is the shape.</p>
+
+  <h3>Month 1</h3>
+  <p>You stop re-deciding. The first time the brain reminds you what you already concluded about a buyer profile, you feel the difference. It feels like finding a notebook you forgot you kept. Small, quiet. The queue in your head gets shorter by maybe 10 percent. The first skill loads, usually the proposal writer or the email drafter. You start to trust the output enough to send a draft without rewriting half of it.</p>
+
+  <h3>Month 3</h3>
+  <p>The first team member queries the brain instead of querying you. They get the answer in 20 seconds. You get a ping that says "found it, thanks". You sit with that for a moment, because for the first time in a long time, you were not needed for a thing that used to need you. Then you go back to work. The relief is bigger than the moment, and you do not really notice it yet.</p>
+
+  <h3>Month 6</h3>
+  <p>The brain has held you through one bad quarter and one good one. The bad quarter is where the brain proves itself. It remembers what worked the last time the pipeline got soft, and the team can pull that history without you re-explaining the playbook. The senior hire you brought in three months ago is still there because the brain held the onboarding context nobody had written down before. You start to plan a week off. The thought does not feel reckless anymore.</p>
+
+  <h3>Month 12</h3>
+  <p>A year in, you leave for two weeks. You actually leave. The team runs the business without you. Your spouse asks why you have been around more. You take a beat before answering because you are no longer sure how to describe what changed. The honest answer is that the brain caught up with you, and the work stopped feeling like dragging the business uphill. You stopped wearing hats that were never yours. You stopped confusing exhaustion with importance. The business does not need you to be the bottleneck anymore. It needs you to be the founder, which is a different job, and you have time for it for the first time since you started.</p>
+
+  <p>That is the arc. Twelve months is the realistic horizon. Less than that and you are still building substrate. More than that and you should be running on it, not still installing it.</p>
+</section>
+
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">08 · How to start</div>
+    <h2>You have the trilogy. The bundle is below.</h2>
+    <p class="lede">Install it yourself, or spend 30 minutes with us on your real business.</p>
+
+    <div class="two-paths">
+      <div class="path-card diy">
+        <h4>Do it yourself - free</h4>
+        <p>The scaffold is free. The skills are free. The playbook you are reading is free. Grab the Founder OS repo, follow the README, and you are running by the end of an evening. Pick one function from the matrix above. Capture the 20 percent for that function this week. The first month is substrate work. The pay-back starts after that.</p>
+        <a class="pathlink" href="https://github.com/ARCASSystems/FounderOS">Get the free Founder OS repo</a>
+      </div>
+      <div class="path-card fast">
+        <h4>Create your second brain with us</h4>
+        <p>Book a free 30-minute call. We spend the time on your business, not pitching. The brain answers your real questions in front of you, so you see how it behaves before you commit to anything. Walk away with one useful answer and nothing owed, and the call was worth your time.</p>
+        <a class="pathlink" href="https://cal.com/arcas/yourstrategy">Book a free 30-minute call</a>
+      </div>
+    </div>
+
+    <div class="companion">
+      <strong>If you want the business-level view.</strong> The 32-chapter business playbook is the company-layer companion to this trilogy. It maps where the brain fits inside a service business that is trying to grow past the founder. <a href="https://arcassystems.com/resources/playbook">Read the business playbook</a>
+    </div>
+
+    <div class="cta">
+      <div>
+        <div class="label">Give your brain hands</div>
+        <h3>Pick one function. Capture the 20 percent. Watch the brain do the rest.</h3>
+        <p>Build it yourself with the free repo, or bring your real business to a free 30-minute call and watch the brain answer your questions before you commit. If it does not earn the next conversation, we walk. We give it away so you can build a system that builds your own systems.</p>
+      </div>
+      <div class="actions">
+        <a class="btn" href="https://cal.com/arcas/yourstrategy">Book a free 30-minute call</a>
+        <a class="btn alt" href="https://api.whatsapp.com/send/?phone=971506987809&text=Hi%2C+I+just+read+the+Second+Brain+Playbook+and+I+want+to+create+my+second+brain+with+you.&type=phone_number&app_absent=0">Message us on WhatsApp</a>
+        <a class="pathlink-light" href="https://github.com/ARCASSystems/FounderOS">Or build it yourself, free &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</section>
+
+<section class="part" id="part-4">
+<header class="part-header">
+  <span class="series-part">Bonus · the long game</span>
+  <h1>Systems are strategy.</h1>
+  <p class="subtitle">Tactics are the noise on the surface. The system underneath is the strategic choice.</p>
+  <div class="for-list">
+    <span class="for-label">Who this is for</span>
+    <p>For the founder who finished the trilogy and wants the long game.</p>
+    <p>For the operator ready to choose who they want to be in twelve months.</p>
+    <p>For anyone who suspects the system underneath matters more than the next tactic.</p>
+  </div>
+</header>
+<div class="floor-band">
+  <div class="seq">
+    <div class="node"><span class="step-no">Part 1 · the why</span><span class="name">Expand your mind</span></div>
+    <div class="node"><span class="step-no">Part 2 · the how</span><span class="name">Build the brain</span></div>
+    <div class="node"><span class="step-no">Part 3 · the what</span><span class="name">Give it hands</span></div>
+    <div class="node active"><span class="step-no">Bonus · the long game</span><span class="name">Systems are strategy</span></div>
+  </div>
+  <div class="read-when"><span class="rw-label">Read this when</span><span>You have finished the trilogy and you are ready to play the long game.</span></div>
+</div>
+<div class="read-this"><span class="rt-label">How to read this:</span> About 15 minutes, nothing to install. This is the bonus. It is why the brain is the strategic choice, once the three parts are behind you.</div>
+<section class="caveats">
+  <span class="caveat-label">Before you read</span>
+  <div class="row">
+    <p class="anchor purple">Tactics pay back this week. The substrate underneath pays back across the year.</p>
+    <p class="anchor magenta">This is the layer beneath the trilogy. The why under the why.</p>
+    <p class="anchor">Four pieces. One choice. The brain is the thing you build first.</p>
+  </div>
+</section>
+
+<section class="s">
+  <div class="eyebrow">01 · Systems are strategy.</div>
+  <h2>Systems are strategy.</h2>
+  <p class="lede">Tactics are the noise on the surface. The system underneath is the strategic choice. 30 seconds to start. 30 minutes to set up. 30 days to compound.</p>
+
+  <h3>Who is it for. What is it for.</h3>
+  <p>Seth Godin asks two questions in <em>This is Strategy</em>.</p>
+  <p class="script-quote">Who is it for. What is it for.<span class="cite">Seth Godin, This is Strategy</span></p>
+  <p>He asks them about the things you make. The product, the company, the next decision on the table.</p>
+  <p>I want you to ask them about your brain.</p>
+  <p>Who is your brain for, right now, today, in this week of this year? Whose questions does it hold? Whose decisions does it carry from week to week? Whose context does it load when you sit down on Monday morning?</p>
+  <p>For most founders the honest answer is the brain is for whoever has been loudest in the queue. The buyer who pinged at 11pm. The senior who escalated at 3pm. The client who replied to a thread you started two weeks ago. The brain is whoever shouted last.</p>
+  <p>That's who it's for. That's also why nothing strategic gets built. The strategic work needs a brain that's for <em>you</em>. The version of you who is trying to make a different business in three years. The version of you who is trying to make a different life across the next decade. That work can't get done by a brain that's for the loudest voice in the inbox.</p>
+  <p>What is it for. The next reply? The next deal? Or the next twelve months of who you want to be?</p>
+  <p>If you can't answer those two questions about your own brain, you aren't making strategic choices. You're reacting at high speed. There's a difference.</p>
+
+  <h3>Tactics are the surface</h3>
+  <p>A founder I spoke to last month told me she'd read four books on prompting in 90 days. She had two prompt libraries. She could quote three productivity systems from memory.</p>
+  <p>I asked her what she'd decided about her business in that time.</p>
+  <p>The pause was long.</p>
+  <p>She'd been doing tactics for three months. The tactics felt like progress because they produced visible output, better drafts, faster emails, sharper one-pagers. She hadn't made a single strategic call in that time, because she'd never built the thing underneath the tactics that would let a strategic call hold.</p>
+  <p>Tactics are the surface. The surface is the part you can see, and it pays back this week. So the surface gets all the attention, and the foundation underneath stays small.</p>
+  <p>The trouble is that tactics build on substrate. A founder with a thin substrate and ten tactics has the same output ceiling as a founder with no tactics, because every tactic still routes back through the same head with the same gaps. A founder with a thick substrate and three tactics has output the first founder can't reach in a year.</p>
+  <p>Tactics are visible. Substrate isn't. The market rewards what it can't see, and the week rewards what it can. So most founders work for the week and wonder why the year keeps looking like the last one.</p>
+
+  <h3>Time is the medium</h3>
+  <p>Strategy is a long game. That phrase has been used so often it's lost its weight.</p>
+  <p>What it actually means is that strategy plays out in a medium called time. Tactics play out in a medium called the week. The two are different shapes, and you can't move from one to the other by working harder.</p>
+  <p>A week has 168 hours. Half are sleep, family, eating, moving from one place to another. You have maybe 60 productive hours left if you're willing to give up the rest of your life, and 45 if you want to keep it. That's the budget.</p>
+  <p>A year has 52 of those weeks. The strategic question isn't how to fit more into a week. It's what you build in week three that means week 38 doesn't start from zero.</p>
+  <p>The brain is the answer. Not the only one. The most general one.</p>
+  <p>Anything you write into a brain page in February is there in September. The reasoning behind a decision you made in March is there in November. The pattern you noticed in week 10 is sitting in week 40, waiting to remind you that the situation in front of you is the same shape as something you've already settled. The brain carries the past forward without you carrying it.</p>
+  <p>Tactics don't have this property. A tactic that worked in week three has no presence in week 38 unless you wrote it into the brain.</p>
+  <p>Strategy pays back in the medium of time. A tactic is spent the week you use it. The brain is still working in the week you forgot you built it.</p>
+  <p>If you've ever wondered why your life looks the same in November as it did in February despite working flat out the whole time, this is the answer. The brain is what would have made February's work present in November's calendar. You didn't build it, so the work expired.</p>
+
+  <h3>Games you play. Games you can change.</h3>
+  <p>There's a game you can play. There's a game you can change.</p>
+  <p>The game you can play is your business as it currently runs. The clients you have, the team you have, the pricing you charge, the week you keep. You can play that game well. You can win small moves inside it. A lot of founders spend years playing inside the existing game with increasing skill and almost no leverage.</p>
+  <p>The game you can change is the one you stop playing the same way because you decided to. You stopped taking the kind of client who drains the team. You stopped pricing by the hour because you noticed it punished competence. You stopped opening your inbox before your daily anchor because that was where the day was being eaten. The game changes when you stop accepting the constraint that was producing the result.</p>
+  <p>Most founders never change the game. They get better at it. They tune the surface, sharpen the tactics, and never go down a layer.</p>
+  <p>The reason they never go down a layer is that going down a layer takes longer than the week pays back. The week pays back fast and visibly. The layer pays back slow and silently for six months and then carries the rest of your year.</p>
+  <p>You can keep playing the game you have, getting marginally better. Or you can change the game by building the substrate that lets you operate from a different position. The brain is what lets you change the game. Without it you stay inside the game forever, no matter how good your tactics get.</p>
+  <p>The game you play is the game your current self can win. The game you can change is the game your future self gets to play. You only reach the second one by building forward into it.</p>
+
+  <h3>This is the computer moment again</h3>
+  <p>When computers arrived in the office, two kinds of business met them. One group bolted a PC onto the process they already ran, typed the same forms into a screen instead of a typewriter, and kept the work exactly as it was. The other group asked the harder question: now that the machine can do this, what should the work even be? They redesigned around the machine. A decade later the two were not in the same league.</p>
+  <p>Josh Kaufman, in <em>The Personal MBA</em>, quotes the rule Bill Gates built Microsoft on.</p>
+  <p class="script-quote">Automation applied to an efficient operation magnifies the efficiency. Automation applied to an inefficient operation magnifies the inefficiency.<span class="cite">Bill Gates, via Josh Kaufman, The Personal MBA</span></p>
+  <p>The machine never fixes the process. It amplifies whatever process it finds.</p>
+  <p>AI is that moment again, and most founders are making the first group's mistake. They bolt a chat window onto the week they already run, then wonder why the output got faster while the business stayed the same size. They are amplifying a process that was never worth amplifying.</p>
+  <p>The founders who win this shift redesign around a brain that remembers. They build the floor first, so when the speed arrives it lands on a process worth multiplying. That is the whole difference between AI that makes you faster and AI that makes you bigger.</p>
+
+  <h3>Why founders pick tactics, and what it costs in five years</h3>
+  <p>I want to be honest about why this is hard.</p>
+  <p>Tactics are addictive. They feel like work. They produce a visible artefact at the end of every hour. You can show your work, post about it, compare yourself to other founders by what tactic they're running this month.</p>
+  <p>Substrate is the opposite. It's invisible for the first six weeks. There's no artefact. Your peers can't see what you're building. Your team can't see the leverage forming under the floor. You spend a Friday afternoon writing into pages that look like nothing, and the only feedback you get is the absence of a problem six months later.</p>
+  <p>That's a brutal feedback loop. Most humans can't stay on a task that pays back in six months when there's a task that pays back in 60 minutes. So most founders pick tactics. The wiring rewards the work that shows a result today, even when the work that pays back all year is sitting right next to it.</p>
+  <p>In year one, the founder running on tactics and the founder building the brain look the same. Same revenue, same team, same hours. Maybe the brain-builder is a little behind on revenue, because the first six months went into the brain.</p>
+  <p>By year three, the gap widens hard. The brain-builder has a business that runs without them in the room for two-week stretches. The tactical founder has hit a ceiling at the size of their own working week, and is now hiring more people to wear hats that should have been written into a system years ago.</p>
+  <p>By year five, the two founders are in different lives. The brain-builder has time. They built the thing they meant to build. They've written, travelled, parented, slept. The tactical founder is still running the same week they ran in year one, with more revenue, more obligation, and no clear way out except to grind harder.</p>
+  <p>This isn't a moral story. The tactical founder isn't lazy. They're smart, capable, and worked harder than almost anyone they know. They picked the wrong layer to work on, and the layer you choose either compounds for you or quietly works against you.</p>
+  <p>Five years is the horizon where the cost of skipping the brain becomes the cost of your one life. That's what's at stake. The week feels small. Five weeks feel small. Two hundred and sixty of them stacked on top of each other is the life you're building, whether you're doing it on purpose or not.</p>
+
+  <h3>The strategic choice</h3>
+  <p>So back to the two questions. Who is the brain for. What is it for.</p>
+  <p>If you answer those two questions today, and you build the brain to serve the answer, you've made the only strategic choice that matters this year. Every tactic flows out of those two answers. Every skill the brain has, every page in it, every decision logged, every flag raised, every retro run, is downstream of who you said the brain was for.</p>
+
+  <div class="promise-block">
+    <div class="promise-eyebrow">The choice that pays back forever</div>
+    <h3>The brain is the artefact of who you've chosen to become in twelve months.</h3>
+    <p>You aren't tuning the current you. You're building the foundation the future you will live on top of. Capture three things today. Three more tomorrow. Run the first retro on Friday. That's the whole strategy.</p>
+  </div>
+
+  <p>The trilogy showed you the trilogy. "Expand your mind." was the why. "Build the brain." was the mechanics. "Give it hands." was what the brain does in your Tuesday. This essay is the layer underneath all three. Why you would do it, why you would do it now, why you would do it in a week where you have a hundred other things and only one of them is the one that pays back.</p>
+  <p>The tactical work will still be there in the morning. It always is. The foundation work has to be made on purpose, because nobody and nothing in your week will ask you to do it. The week is built to crowd it out. Only the founder can build it.</p>
+</section>
+
+<section class="s cream">
+  <div class="inner">
+    <div class="eyebrow">02 · The seven functions, expanded</div>
+    <h2>The seven functions, expanded.</h2>
+    <p class="lede">The matrix from "Give it hands." in long form. One function at a time. One paste-ready prompt per function. Same names, same order. Pick the function where the pain is loudest. Run that one.</p>
+
+    <p>The matrix gives you the shape. Seven functions. The 20% capture. The 80% leverage. One row each. A row is enough to see the idea. It isn't enough to start. So this expands each row into what to capture, what week one looks like, what week four feels like if it's working, what breaks if you skip it, and one prompt you can paste into Claude or ChatGPT today.</p>
+
+    <h3>01 · Sales</h3>
+    <h4>The 20% capture</h4>
+    <p>A list of the top ten objections you've ever heard from a buyer, with the reply you'd give to each. One column for the objection, one for the reply you'd actually send if it was 9pm and you had to type it from your phone. Replies in your voice, caveats included. If the answer changes by industry or deal size, write the version for your most common buyer first.</p>
+    <h4>Week one</h4>
+    <p>You have the ten rows in a brain page. The next objection that lands, you ask the brain to draft a reply. The draft already knows the buyer is raising procurement friction, not budget friction, because you wrote that distinction in row four. It won't be perfect. You'll edit. You update the row. The next draft is closer.</p>
+    <h4>Week four</h4>
+    <p>Drafts come back tight. The team starts replying to objections without escalating, because the brain has the answer and the team trusts it. The queue of replies that need the founder shrinks for the first time in years. You're still the closer on the deals that matter. You're no longer the bottleneck on every routine objection.</p>
+    <h4>If you skip this</h4>
+    <p>Every deal still routes through you for the same five replies you've given a hundred times. Your senior salespeople won't push back, because they don't have the reply and would rather forward you the email than risk getting it wrong. The cost is that you can't leave for a week without three deals stalling.</p>
+    <h4>Sample prompt</h4>
+    <p class="small">I sell &lt;one sentence&gt;. My ICP is &lt;one sentence&gt;. List the 10 most common objections a buyer in this ICP raises in the last third of the sales cycle. For each, suggest a reply structure (not the words) a seasoned founder would use. Ask me one clarifying question per objection so I can fill in the reply in my voice. Hold off on writing any final replies until I have answered.</p>
+
+    <h3>02 · Marketing</h3>
+    <h4>The 20% capture</h4>
+    <p>Three things, captured once. Your voice profile: the words you use, the words you refuse, the tone someone hears when they get an email from you, the way you start a story and end one. Your ten stories that always work: the anecdotes you've told from stage or on a call that always land. Your anti-AI list: the words that would never appear in your writing, the phrases that make you cringe. Three different things, same page. Together they're the marketing brain.</p>
+    <h4>Week one</h4>
+    <p>You ask the brain to draft a LinkedIn post about a thing that happened this week. The post comes back in your voice. The story it pulled is one of your ten. The words you'd never use aren't there. You edit one line and hit publish. The first time it happens it's jarring. You read it twice. That's the working state.</p>
+    <h4>Week four</h4>
+    <p>Your output has stopped sounding like every other LinkedIn post. Drafts arrive in 20 seconds and ship in five minutes. You post twice as often without spending more time. The team can draft on your behalf without you sounding like a different person every Tuesday.</p>
+    <h4>If you skip this</h4>
+    <p>You keep paying for marketing in two currencies. Time, because you draft from scratch. Voice, because nothing the team writes for you sounds like you. The brand stays small because the output can't be trusted to anyone else, however good the work behind it is.</p>
+    <h4>Sample prompt</h4>
+    <p class="small">I want to capture my voice profile so an AI can draft in my voice from now on. Ask me 20 questions across: (1) words I use, (2) words I refuse, (3) how I start a story, (4) how I end one, (5) the emotion I want a reader to leave with. One at a time. Do not move on until I answer. At the end, summarise my voice in 200 words and ask me to correct anything that is off.</p>
+
+    <h3>03 · Delivery</h3>
+    <h4>The 20% capture</h4>
+    <p>Definition of done for each thing you sell, one sentence per offer. Scope guardrails: what's in, what's out, the common requests that arrive mid-project and the script for how the team responds. Escalation rules: who decides what, what's a flag the team can hold, what's a fire that needs you in the room.</p>
+    <h4>Week one</h4>
+    <p>The team hits a scope request and asks the brain instead of asking you. The brain knows the line. It returns the answer with the script. The team responds to the client without your input. You see the ping land and resolve without a single message from you.</p>
+    <h4>Week four</h4>
+    <p>Scope creep gets named on the call where it appears, not on the invoice three weeks later. Your team holds the line more consistently than you would, because the line is in writing and the brain reads it the same way every time. Delivery margin improves. You didn't raise prices. You stopped giving away work for free.</p>
+    <h4>If you skip this</h4>
+    <p>Delivery becomes the place where the business leaks. Every project is slightly different. Margins drift. The team carries the cost of every ambiguous moment because asking you takes more energy than just doing the extra hour of work. You won't see it on a P&amp;L. You'll see it in the team's exhaustion at the end of every quarter.</p>
+    <h4>Sample prompt</h4>
+    <p class="small">I want to write the definition-of-done, scope guardrails, and escalation rules for my main service offer. Ask me one question at a time: (1) what single sentence means this engagement is complete, (2) the 10 most common things a client asks for mid-project that I am not sure how to handle, (3) the three situations my team has escalated in the last 90 days where I wished they had decided themselves. Do not move on until I answer each.</p>
+
+    <h3>04 · Finance</h3>
+    <h4>The 20% capture</h4>
+    <p>The five to seven numbers you should be reading every Monday morning. For most service businesses: cash position, pipeline coverage, revenue against plan, gross margin trend, days sales outstanding, headcount cost as a share of revenue, and one or two leading indicators that matter for your model. The exact list is yours. The point is the list is short, named, and the same every week.</p>
+    <h4>Week one</h4>
+    <p>You ask the brain on Monday for the seven numbers. It returns them in a short table. You read them in two minutes. You see cash position is below your floor. You see pipeline coverage is short for the quarter. You decide what to do about both before your first meeting.</p>
+    <h4>Week four</h4>
+    <p>Sunday-night spreadsheet hunting stops. The team starts surfacing the numbers without being asked, because they've seen the page format four weeks running and know what good looks like. You catch trends in week two instead of in month two. The "I should have caught this earlier" moments drop to near zero.</p>
+    <h4>If you skip this</h4>
+    <p>You keep running the business by feel. Some weeks the feel is right. Some weeks the feel is two months behind reality. The first time you catch a serious problem late, the cost is bigger than every other function in this matrix combined.</p>
+    <h4>Sample prompt</h4>
+    <p class="small">I run a &lt;one sentence on the business&gt;. Help me write the list of 5 to 7 numbers I should be reading every Monday to know if the business is healthy. Ask me one question at a time: the failure mode I most want to catch early; the numbers I currently look at and which I trust; the leading indicators specific to my model. Do not give me a generic finance dashboard.</p>
+
+    <h3>05 · Hiring</h3>
+    <h4>The 20% capture</h4>
+    <p>The pattern bank. The reasoning behind every hire and every exit you've made in the last two to three years. Who lasted. Who drifted. What you wish you'd asked in the final interview. The early signs you missed. The 90-day moment where you knew this was going to work, or knew it wasn't. This is uncomfortable to write down. It feels like grading people you cared about. The honest version is where the value lives.</p>
+    <h4>Week one</h4>
+    <p>You start the pattern bank, one past hire at a time. Three lines each. You notice midway through that you've hired the same archetype four times. Two worked. Two didn't. You write the difference. That difference is now in the brain.</p>
+    <h4>Week four</h4>
+    <p>You're interviewing again. The brain pulls the pattern bank. It surfaces the three questions you wish you'd asked the last hire who didn't work out. You add them to the interview. The candidate gives an answer you wouldn't have noticed mattered six months ago. You make a different call.</p>
+    <h4>If you skip this</h4>
+    <p>You make a version of the same hiring mistake every 18 months. Each one costs you a year of payroll, a quarter of team morale, and the trust of the team members who watched you hire someone who shouldn't have been hired. The pattern bank is the cheapest insurance you can buy against your own blind spots.</p>
+    <h4>Sample prompt</h4>
+    <p class="small">I am going to walk through the last 5 hires and 3 exits. For each, ask me: (1) the role, (2) what made me say yes, (3) what I know now that I did not know then, (4) the one question I wish I had asked in the final interview. At the end, identify the 3 patterns that repeat across people who worked out and the 3 patterns that repeat across people who did not.</p>
+
+    <h3>06 · Decisions</h3>
+    <h4>The 20% capture</h4>
+    <p>The decision log. With the reasoning written down. Not just the outcome. You think you already have this because you remember the decisions. The memory is the problem. You remember the decision. You forget the reasoning. Six months later the same trade-off shows up, and you settle it differently because the context is gone. Each entry has the date, the question, the answer, the reasoning in two or three sentences, and the conditions under which you'd revisit it.</p>
+    <h4>Week one</h4>
+    <p>You start logging. Every meaningful decision gets three lines. The reasoning is the load-bearing line. You'll resist this because writing the reasoning takes 45 seconds longer, and 45 seconds feels like a lot between meetings. Do it anyway. The 45 seconds in week one save the hour you'd have spent in month six rethinking it from scratch.</p>
+    <h4>Week four</h4>
+    <p>A trade-off shows up that feels familiar. You ask the brain. It pulls the decision from February. It shows you what you concluded, why, and what would have to change for you to revisit it. Nothing has changed. You make the same call in 30 seconds instead of re-running the analysis from zero.</p>
+    <h4>If you skip this</h4>
+    <p>You re-decide the same question two or three times a year. Each time, you spend an hour reproducing reasoning you already had. Sometimes you land on a different answer than the original, for no reason except that you forgot the context. The team watches you contradict yourself and learns to wait you out.</p>
+    <h4>Sample prompt</h4>
+    <p class="small">I want to start logging decisions with reasoning. For the next 5 decisions I tell you about, ask me: (1) the question, (2) the answer, (3) the reasoning in 2-3 sentences, (4) what would have to change for me to revisit this. Then format each as a 4-line entry I can paste into my decision log. Push back if the reasoning is hand-wavy or if the conditions for revisiting are vague.</p>
+    <p>Push back is the load-bearing instruction. A decision log full of soft reasoning is the same as no log.</p>
+
+    <h3>07 · Self</h3>
+    <h4>The 20% capture</h4>
+    <p>The weekly retro. The open-flag system. The decay window. The retro is three lines on Friday: what shipped, what stalled, what's rolling forward. Five minutes. No theatre. The open-flag system is a place to write down the things that feel off but aren't yet a decision. The senior who's stopped pushing back in meetings. The client whose tone in the last three emails has shifted. The quiet feeling on Sunday evening. Flags are early sensors. The decay window keeps flags honest. A flag that sits two weeks without movement surfaces. You escalate it to a decision, kill it because nothing came of it, or re-flag it with a note on why it's still parked.</p>
+    <h4>Week one</h4>
+    <p>You write the first retro. Three lines. You write the first three flags. None are dramatic. One is about how a deal has been moving. One is about a recurring scheduling friction with the team. One is about how you've been feeling at the end of the day.</p>
+    <h4>Week four</h4>
+    <p>You have four retros and 12 to 15 flags. Three flags decayed and were killed. Four became decisions. The pattern across four weeks is one you wouldn't have noticed week to week. This is the function where the brain catches things you'd have missed alone. The brain isn't wise. It remembers what you were saying three weeks ago, and notices when the same thing has come up four times.</p>
+    <h4>If you skip this</h4>
+    <p>You catch burnout late, and team drift later. The slow erosion of a client relationship you usually catch last of all. None of these announce themselves in a single moment. They announce themselves across weeks, and only if something is keeping the record.</p>
+    <h4>Sample prompt</h4>
+    <p class="small">I want to start a weekly retro and an open-flag system. For this Friday, ask me: (1) what shipped, (2) what stalled, (3) what is rolling forward. Then: (4) what felt off this week that is not yet a decision. For each thing that felt off, log it as a flag with a 14-day decay date. Push back if my retro is more than 6 lines. The shorter the retro, the more likely I keep doing it.</p>
+    <p>This is the prompt you will not want to run, because Self always feels self-indulgent until the week the brain catches something you would have missed. Then it never feels self-indulgent again.</p>
+
+    <h3>How to use this</h3>
+    <p>You'll be tempted to start with all seven. Don't. The matrix is a menu. You pick one. You run the capture for that one this week. You let it pay back for two weeks before you add the next.</p>
+    <p>The function you start with is the one where the pain is loudest right now. For most founders that's Sales or Delivery, because those are the two that bleed money fastest when they're broken. For some it's Self, because the body has already told them where the problem is and the body is rarely wrong about that.</p>
+    <p>The wrong way to start is to capture three rows of every function in week one. You'll end up with seven half-formed substrates and trust in none of them. The capture work is small. The pay-back isn't.</p>
+  </div>
+</section>
+
+<section class="s">
+  <div class="eyebrow">03 · From second brain to business OS</div>
+  <h2>From second brain to business OS.</h2>
+  <p class="lede">The personal layer and the company layer. They stack. You install the brain first because the company layer doesn't work without it.</p>
+
+  <p>A founder asked me the obvious question after she finished the trilogy. Is this the whole thing? Or is there a company-level version? There is. The trilogy is the personal layer. The 32-chapter business playbook is the company layer. This piece is the bridge. It names what each layer holds, where they meet, and which parts of the company-level work can't move until the personal brain is installed.</p>
+
+  <h3>The two layers</h3>
+  <p>The personal layer is what the trilogy built. Your judgment, your decisions, your voice, your client patterns, your hiring patterns, your weekly rhythm. It lives in your brain, in your laptop, in plain text. It pays you back across weeks. It's the thing you'd still own if you sold the company tomorrow.</p>
+  <p>The company layer is what the 32-chapter playbook builds. The business as a system. The five levels every service business has to operate well to grow past the founder. Revenue, Cost, Risk, People, Systems. Each chapter walks through one level with the moves a founder makes to lift it.</p>
+  <p>The two layers carry different memory. The personal brain holds you. The company layer holds the way the business runs. They talk to each other. The company layer tells the personal brain what the next quarter needs. The personal brain tells the company layer what you've already decided about how it should run. Both layers are necessary. Neither is sufficient alone.</p>
+
+  <h3>The five levels</h3>
+  <p>The 32-chapter playbook organises a service business into five levels. Each is a stack of work that has to be in place before the level above it can move.</p>
+
+  <table class="layers">
+    <thead>
+      <tr><th>Level</th><th>What it covers</th><th>What it needs from the brain</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="layer-name">Revenue</td><td>Pricing, offers, sales motion, retention</td><td>Your buyer patterns, objection replies, voice</td></tr>
+      <tr><td class="layer-name">Cost</td><td>Margin, vendor mix, fixed versus variable, cash runway</td><td>Your weekly numbers, your historical spend decisions</td></tr>
+      <tr><td class="layer-name">Risk</td><td>Client concentration, legal exposure, single points of failure</td><td>Your flags, your decay window, your retro rhythm</td></tr>
+      <tr class="row-people"><td class="layer-name">People</td><td>Hiring, onboarding, performance, exits</td><td>Your pattern bank on who lasts and who drifts</td></tr>
+      <tr class="row-systems"><td class="layer-name">Systems</td><td>How work moves between people, how decisions get made, how knowledge accumulates</td><td>The brain itself</td></tr>
+    </tbody>
+  </table>
+
+  <p>Read the right column. Every level needs something from the brain. The first three (Revenue, Cost, Risk) can move with a thin brain layer because the founder is still in the room for most of the decisions. The bottom two (People and Systems) can't move at all without the brain. That's the load-bearing claim. Here's why.</p>
+
+  <h3>Why People and Systems can't move without the brain</h3>
+  <p>People is the level where the founder stops being the only person who carries the business. The team starts answering questions you used to answer. The senior hire starts making calls you used to make. The new joiner gets onboarded into a context they didn't invent. None of that works if the context lives in your head.</p>
+  <p>The senior hire from six months ago won't make the call you'd have made unless they can access the reasoning behind your past calls. The new joiner can't be onboarded into a context that exists only in scattered Slack threads. The team can't escalate well to you if they don't know your tolerance for what counts as a fire. The People level needs the brain to hold what only you have held, in a place where the team can reach it without reaching for you.</p>
+  <p>Systems is the level above People. It's where the work itself moves on rails. The process for taking on a new client, for closing out an engagement, for pricing a deal that doesn't fit the standard offer. These are systems. They're the way work moves between humans without you in the room.</p>
+  <p>A system can't exist without a brain underneath it. Every system has decisions inside it. Every decision needs reasoning. Every piece of reasoning has to live somewhere. The brain is where it lives. Without the brain, the system is a script the team follows for two weeks before it drifts back to "ask the founder".</p>
+  <p>So the People and Systems levels are downstream of the brain. The first three (Revenue, Cost, Risk) can be lifted with the founder in the room. The bottom two can't. This is why the trilogy comes first. You install the personal brain because it's the substrate the company-level work runs on top of. The business runs without you only when the brain holds what you held and the team can query it. The 32-chapter playbook is the work above. The brain is the floor that work stands on.</p>
+
+  <h3>How they meet on a Tuesday</h3>
+  <p>You open the day. The brain loads the personal layer. Your priorities, your open commitments, the flags that need a keep-or-kill call.</p>
+  <p>A call comes in about pricing a new engagement. That's a Revenue question. The brain pulls your past pricing decisions, your voice on margin, the patterns from similar deals. You make the call faster than you would alone.</p>
+  <p>Your delivery lead asks whether to escalate a scope question. That's a People question. The brain pulls your escalation rules, the definition of done, the script for handling a change request. The lead resolves it without your input.</p>
+  <p>A flag fires. The senior who joined three months ago has been quieter in the last two retros. That's a Risk signal. The brain surfaces it because the pattern is already in the record, before anyone has consciously named it.</p>
+  <p>Friday, the retro reads the week's log and asks what should be promoted to permanent knowledge, what flags decayed, what decisions need revisiting. The Systems-level memory of how the business runs gets a little sharper every week, because the retro is where personal-layer events become company-layer patterns. That's the stack working. Personal brain underneath. Company-level work above. Both layers touch every day.</p>
+
+  <h3>The order of installation</h3>
+  <p>The brain comes first. Always. Without the personal layer, the company-level work has nothing to stand on. You can read every chapter of the business playbook and you won't install the moves, because the moves require a brain that holds your judgment between sessions. No brain, no install.</p>
+
+  <div class="plan">
+    <div class="step">
+      <h4>Install the personal brain</h4>
+      <p>The trilogy walks you through the why, the how, and what it does on a Tuesday. Two to four weeks of light capture work. You're running on it by the end of month one.</p>
+    </div>
+    <div class="step">
+      <h4>Pick the most painful level on the company side</h4>
+      <p>Revenue, Cost, or Risk for most founders. Read the chapters that cover it. Run the moves. The brain holds the reasoning as you go.</p>
+    </div>
+    <div class="step">
+      <h4>Move to the next level after the first stabilises</h4>
+      <p>Repeat. One level at a time, in order of pain.</p>
+    </div>
+    <div class="step">
+      <h4>People and Systems are the long game</h4>
+      <p>They lift once the first three are running cleanly and the brain has 90 days of memory behind it. They can't be rushed, and they can't be skipped either.</p>
+    </div>
+  </div>
+
+  <p>The wrong order is to read the business playbook first and try to install the People and Systems moves without the brain in place. You'll burn out, the team will lose trust because the standards keep drifting, and you'll conclude that the playbook doesn't work. The playbook works. The foundation underneath it wasn't built.</p>
+
+  <h3>What you do this week</h3>
+  <p>Decide whether you're going to install the personal brain. That's the choice. Everything downstream of it follows once the choice is made. The trilogy gives you the how. This bonus pack gives you the deeper material. The 32-chapter playbook gives you the company-level moves once the brain is in place.</p>
+
+  <div class="two-paths">
+    <div class="path-card diy">
+      <h4>Start with the brain</h4>
+      <p>The trilogy and this bonus pack are the personal layer. Two to four weeks of light capture work. The brain is the work until it's running.</p>
+      <a class="pathlink" href="#starter-capture-checklist">Go to the starter checklist</a>
+    </div>
+    <div class="path-card fast">
+      <h4>The company layer, when you're ready</h4>
+      <p>The 32-chapter business playbook is the company-level moves. Read it once the brain is installed. Until then, the brain is the work.</p>
+      <a class="pathlink" href="https://arcassystems.com/resources/playbook">Read the business playbook</a>
+    </div>
+  </div>
+</section>
+
+<section class="s cream">
+  <div class="inner" id="starter-capture-checklist">
+    <div class="eyebrow">04 · The starter capture checklist</div>
+    <h2>The starter capture checklist.</h2>
+    <p class="lede">Twelve things to write down this week. If you do nothing else, do these. One printed page. One sitting. Roughly 90 minutes if you go slow.</p>
+
+    <p>These are the captures the brain wants first. They're concrete. They don't need a tool. A blank document and an honest hour is enough. When you're done, you have the foundation that lets every skill in the trilogy work on day one.</p>
+
+    <ul class="hats-list">
+      <li><span class="ix">01</span><span class="text"><strong>Your last 5 lost deals and why.</strong> Name each one. Write the one sentence that explains why it didn't close. Be honest. "Wrong fit" isn't an answer. "They wanted a fixed price, we quoted day rate" is.</span></li>
+      <li><span class="ix">02</span><span class="text"><strong>The 3 questions your team asks you most.</strong> The ones that hit your phone twice a week. Write the question and the answer you give every time.</span></li>
+      <li><span class="ix">03</span><span class="text"><strong>The 5 numbers you wish you saw every Monday.</strong> Not 20. Five. The ones that would tell you if the week is going to be a good one or a bad one before it starts.</span></li>
+      <li><span class="ix">04</span><span class="text"><strong>Your voice rules.</strong> Words you never use. Phrases you always use. The tone someone gets when an email lands from you. The way you start a story. The way you end one.</span></li>
+      <li><span class="ix">05</span><span class="text"><strong>Your top 5 buyer objections plus the reply you'd give to each.</strong> Not the generic reply. The reply you'd actually type from your phone at 9pm if you had to close the deal.</span></li>
+      <li><span class="ix">06</span><span class="text"><strong>The 3 things that mean a project is finished.</strong> Definition of done for your main offer. One sentence each. If you can't write three, write one. The line is what matters.</span></li>
+      <li><span class="ix">07</span><span class="text"><strong>The 5 senior hires or exits from the last 3 years plus what you wish you'd known.</strong> Three lines each. The one question you wish you'd asked in the final interview.</span></li>
+      <li><span class="ix">08</span><span class="text"><strong>The 3 decisions you've made twice in the last 12 months.</strong> The ones you re-relitigated because nobody wrote the reasoning down. Capture each one now, with the reasoning, so the next time it shows up you don't pay the same hour again.</span></li>
+      <li><span class="ix">09</span><span class="text"><strong>The 2 client patterns you can already see.</strong> The kind of client that drains the team. The kind that lifts it. One paragraph each.</span></li>
+      <li><span class="ix">10</span><span class="text"><strong>The 3 things you feel responsible for that you shouldn't be.</strong> The work you keep doing because nobody else has the context. Naming them is the first step to writing them out.</span></li>
+      <li><span class="ix">11</span><span class="text"><strong>The 1 thing that breaks if you take a week off tomorrow.</strong> Just one. The single point of failure that holds you in the building. Knowing it is half the work of fixing it.</span></li>
+      <li><span class="ix">12</span><span class="text"><strong>The one-sentence answer to "who is the brain for, and what is it for".</strong> Borrowed from the essay. Your answer becomes the filter for every page you write into the brain from here on.</span></li>
+    </ul>
+
+    <h3>What to do with this once it is done</h3>
+    <p>Open a folder. Call it whatever you want. Write the twelve captures into 12 short pages, one per item. Plain text. No formatting. The next AI session you open, point it at the folder and ask it to summarise what it can see about your business.</p>
+    <p>It'll give you a paragraph that surprises you. The brain isn't smart yet. It surprises you because you've never had your own thinking reflected back to you with that much pattern in it.</p>
+
+    <div class="pull mint">That's your starting foundation. It is yours. The brain is the long game.</div>
+  </div>
+</section>
+
+<section class="s">
+  <div class="cta">
+    <div>
+      <div class="label">The brain is the long game</div>
+      <h3>We help founders who are ready to play it.</h3>
+      <p>Capture three things today. Three more tomorrow. Run the first retro on Friday. Build it yourself with the free repo, or bring your real business to a free 30-minute call and leave with one useful answer, whether or not we ever work together. We give it away so you can build a system that builds your own systems.</p>
+    </div>
+    <div class="actions">
+      <a class="btn" href="https://cal.com/arcas/yourstrategy">Book a free 30-minute call</a>
+      <a class="btn alt" href="https://api.whatsapp.com/send/?phone=971506987809&text=Hi%2C+I+just+read+the+Second+Brain+Playbook+and+I+want+to+create+my+second+brain+with+you.&type=phone_number&app_absent=0">Message us on WhatsApp</a>
+      <a class="pathlink-light" href="https://github.com/ARCASSystems/FounderOS">Or build it yourself, free &rarr;</a>
+    </div>
+  </div>
+</section>
+
+</section>
+</main>
+
+<footer class="closer">
+  <img class="full-logo" src="data:image/png;base64,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" alt="ARCAS Systems" />
+  <p class="line1">People don't fail processes.</p>
+  <p class="line2">Processes fail people.</p>
+  <p class="tagline">People have the context. AI has the speed and the memory. Your system bridges the gap.</p>
+  <p class="vstamp">The Second Brain Playbook · v1.0.0</p>
+  <div class="meta">ARCAS Systems · Alistair Aranha · You stay human. · v2.1 · 2026-05-26</div>
+</footer>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.bn-parts a'));
+  var map = {};
+  links.forEach(function(a){ var id=a.getAttribute('href').slice(1); if(document.getElementById(id)) map[id]=a; });
+  if(!('IntersectionObserver' in window)) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(a){ a.classList.remove('active'); });
+        if(map[e.target.id]) map[e.target.id].classList.add('active');
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+  Object.keys(map).forEach(function(id){ obs.observe(document.getElementById(id)); });
+})();
+</script>
+
+</body>
+</html>
