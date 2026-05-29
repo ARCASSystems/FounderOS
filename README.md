@@ -146,7 +146,7 @@ After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-scr
 
 ## What ships in this repo
 
-### Skills (52)
+### Skills (58)
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
@@ -270,7 +270,7 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.31.0. Public release. 52 skills, 33 commands, 596 tests.
+Version 1.32.0. Public release. 58 skills, 33 commands, 596 tests.
 
 v1.31 closes the wikilink resolver gap surfaced by v1.30 Workstream B. `scripts/query.py:find_anchor_file` now prefers `companies/<slug>.md` over `companies/prospects/<slug>.md` when both exist, regardless of where the slug sorts alphabetically. Before this fix, slugs starting with q-z hit the prospect file first because `prospects/` sorts before them; now the operator file wins for every slug. The v1.30 `widget-co` `@expectedFailure` test flips to a normal passing test. Full release history in [CHANGELOG.md](CHANGELOG.md).
 

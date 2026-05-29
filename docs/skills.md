@@ -54,6 +54,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** Once Day 1 is otherwise stable. Skip if you do not produce branded deliverables.
 - **Follow-up.** Drop your logo files into `core/brand-assets/` per the captured paths. Test with `your-deliverable-template`. Slash command: `/founder-os:brand-interview`.
 
+### profile-router
+
+- **Say.** "update my profile", "what should the OS lead with for me", "set my profile", or "re-detect my profile". Also runs inside the setup wizard.
+- **Outcome.** A confirmed operator variant (founder, career-mover, builder, student, team-internal) written to `core/profile.md`, with the lead surfaces and frame the OS opens with for you. Nothing is locked - every skill stays available to every variant; the variant only changes what leads.
+- **Reads.** `core/profile.md`, `core/identity.md`, and the setup discovery answers when run during onboarding.
+- **Writes.** `core/profile.md` (variant, signals, lead surfaces, frame, technical comfort).
+- **Voice rules.** No.
+- **Prereqs.** None to read you at setup. Writes a fuller profile once `core/identity.md` exists.
+- **When to run.** Automatically at setup. Again whenever your situation changes - a new job search, a shift from building to selling, a move from learning to shipping.
+- **Follow-up.** The SessionStart brief and `menu` open with your variant's surfaces. No dedicated slash command.
+
 ---
 
 ## Discovery
@@ -138,6 +149,50 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Prereqs.** `FOUNDER_OS_OBSERVATIONS=1` was set at some point (no JSONL files otherwise; the skill exits cleanly).
 - **When to run.** When the SessionStart brief surfaces "N JSONL files older than 10 days". Safe to run anytime - idempotent.
 - **Follow-up.** None. The rollup file is the durable record. Slash command: `/founder-os:observation-rollup`.
+
+### cross-link
+
+- **Say.** "cross-link this file", "wikilink the references in", "convert backticks to wikilinks", or "retrofit links in".
+- **Outcome.** A proposal that converts backtick-quoted paths and bare prose paths in one markdown file into `[[wikilinks]]`, shown as a list and a unified diff before anything is written. Companion to `wiki-build` - cross-link writes the edges, wiki-build extracts them. Pure regex over the filesystem index, no model reasoning, free-tier accessible.
+- **Reads.** The one target file plus the filesystem index of existing wiki files. Uses `scripts/cross-link.py` if present, falls back to inline detection if not.
+- **Writes.** Read-only by default. On your approval, edits the same file in place, then runs `wiki-build` to refresh the graph and appends one line to `brain/log.md`.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete. The target file exists.
+- **When to run.** After a session edits a file whose prose names another wiki node by path. One file per run, not a back-catalog sweep.
+- **Follow-up.** `wiki-build` to refresh `brain/relations.yaml`, then `lint` to catch broken refs. Slash command: `/founder-os:cross-link <file>`.
+
+### memory-pass
+
+- **Say.** "run a memory pass", "check my memory", or "is my memory stale".
+- **Outcome.** A contradiction table that checks each Active Project Context entry in `MEMORY.md` against current file state, marking each STALE, FRESH, or CHECK. For every STALE or CHECK row you get a one-line proposed edit and approve it per row. Never touches Behavioral Guards.
+- **Reads.** `MEMORY.md` (Active Project Context only), `brain/log.md`, `context/clients.md`, `context/decisions.md`, `context/leads.md` and `brain/flags.md` if present.
+- **Writes.** Nothing without an explicit per-row yes. On yes, edits the linked memory file and the `MEMORY.md` index line, then appends one maintenance line to `brain/log.md`.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete (it sets up the auto-memory file).
+- **When to run.** First session after a 7-day-plus gap. After any close, block, unblock, or relationship reversal. When something said in chat contradicts what memory claims.
+- **Follow-up.** None. The corrected memory is on disk. Slash command: `/founder-os:memory-pass`.
+
+### since-last-session
+
+- **Say.** "what changed since last session", "what did I miss", or "catch me up since I was last here".
+- **Outcome.** A 5-section delta report scoped to the gap since this skill last ran: hours elapsed, `brain/log.md` entries added, flags decayed, commitments now overdue, and files modified in `context/`. The marker advances at the end so the next run scopes to the next gap. First run seeds the marker and prints a one-line note with no delta.
+- **Reads.** `brain/.last-session` (the marker), `brain/log.md`, `brain/flags.md`, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `brain/.snapshot.md` if present. One `git log` call lists changed files in `context/`.
+- **Writes.** `brain/.last-session` only. No other file is touched.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete. Works without git (Section 5 reports the gap if the install is not a repo).
+- **When to run.** At the start of a working session after a gap, before any planning work.
+- **Follow-up.** `strategic-read` if you want a fuller orientation after the delta. Slash command: `/founder-os:since-last-session`.
+
+### strategic-read
+
+- **Say.** "give me a strategic read", "where am I", or "read across my brain and tell me where I stand".
+- **Outcome.** A 5-section state-of-the-OS report: Identity anchor, Active commitments and pipeline, Open decisions, Active flags, Next 3 recommended moves. Pass a section key (`identity`, `commitments`, `decisions`, `flags`, `next-moves`) to render only that section. Prepends a STALE line if a cadence header is out of date.
+- **Reads.** `core/identity.md`, `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `context/leads.md` if present, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `brain/flags.md`, last 20 `brain/log.md` entries, `brain/.snapshot.md` if present.
+- **Writes.** Read-only. Nothing is modified.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete.
+- **When to run.** Returning after a gap and needing one orientation pass. Before a planning session. When a question spans priorities, pipeline, decisions, and flags at once.
+- **Follow-up.** `priority-triage` if the read shows overload, or `today` for the day view. Slash command: `/founder-os:strategic-read`.
 
 ---
 
@@ -381,6 +436,43 @@ If a skill has a slash command that wraps it, that command is named at the end a
 
 ---
 
+## Brand and content
+
+### brand-voice-interview
+
+- **Say.** "set up a brand voice", "capture our brand voice", "add a brand", or "set up brand voice for <name>".
+- **Outcome.** An interview captures one brand's writing voice and positioning, then writes two files under `brands/<slug>/`. Different from `voice-interview`, which captures your own personal voice. This captures how a brand you run speaks, so it can survive after you stop writing every word yourself.
+- **Reads.** `templates/brand-voice.yml.template`, `templates/brand-positioning.yml.template`. Scans `brands/<slug>/`, `clients/<slug>/`, `raw/<slug>/`, and `sources/<slug>/` for any brand writing already on disk before asking for fresh samples.
+- **Writes.** `brands/<slug>/voice.yml`, `brands/<slug>/positioning.yml`. Creates `brands/<slug>/assets/` for logo files.
+- **Voice rules.** This is the source for the named brand. Separate from `core/voice-profile.yml`.
+- **Prereqs.** `founder-os-setup` complete. 2 to 5 real brand samples ready to paste (existing captions, product copy, customer emails the brand has sent).
+- **When to run.** Once per brand you run. Re-run when a brand's voice or positioning shifts.
+- **Follow-up.** `campaign-from-theme` or `review-responder` for the same brand. Slash command: `/founder-os:brand-voice-interview`.
+
+### campaign-from-theme
+
+- **Say.** "build a campaign", "campaign for <topic>", "plan a campaign", or "draft a launch campaign".
+- **Outcome.** A campaign brief with sequencing rationale, then 3 to 7 content drafts in the right voice. The skill refuses to draft until five funnel-gating questions are answered: speaker, objective, audience segment plus temperature, channel-fit logic, and success metric. The gate is what makes the output usable on the first attempt.
+- **Reads.** `brands/<slug>/voice.yml` and `brands/<slug>/positioning.yml` when a brand is the speaker, else `core/voice-profile.yml` and `core/identity.md`. Globs `brands/*/voice.yml` to list speakers.
+- **Writes.** A campaign brief and drafts at `campaigns/<slug>-<date>.md` if you save. Creates `campaigns/` if it does not exist.
+- **Voice rules.** Yes. Required. Every draft runs through `your-voice`.
+- **Prereqs.** `founder-os-setup` complete. Voice profile filled. If a brand is the speaker, `brand-voice-interview` for that brand should be complete.
+- **When to run.** Before any multi-piece campaign, launch, or sequenced content push.
+- **Follow-up.** Run drafts through your usual approval flow. Slash command: `/founder-os:campaign-from-theme`.
+
+### review-responder
+
+- **Say.** "draft a reply to this review", "respond to this DM", "reply to this WhatsApp", or "answer this Google review".
+- **Outcome.** A draft reply to an incoming customer message in the right voice for the channel and brand. Works for Google reviews, Trustpilot, Instagram DMs, WhatsApp Business inquiries, customer emails, Yelp, and Facebook comments. Asks one question first - whose voice, operator or which brand - then drafts. Public channels also get a "who else reads this" check.
+- **Reads.** `core/voice-profile.yml` for operator voice, or `brands/<slug>/voice.yml` and `brands/<slug>/positioning.yml` when a brand is chosen. Globs `brands/*/voice.yml` to list speakers.
+- **Writes.** Read-only by default. Returns the draft in chat. You copy and send.
+- **Voice rules.** Yes. Required. A reply in the wrong voice erodes trust more than no reply.
+- **Prereqs.** `founder-os-setup` complete. Voice profile filled. If responding as a brand, `brand-voice-interview` for that brand should be complete.
+- **When to run.** Whenever a customer message arrives that needs a careful, on-voice reply.
+- **Follow-up.** Copy the draft, edit if needed, send. Slash command: `/founder-os:review-responder`.
+
+---
+
 ## Knowledge and analysis
 
 ### knowledge-capture
@@ -548,6 +640,50 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Prereqs.** `founder-os-setup` complete.
 - **When to run.** At the start of any work session to see what is moving. Use `add to queue` when a new item needs tracking.
 - **Follow-up.** `weekly-review` rolls completed queue items into `brain/log.md`. Slash command: `/founder-os:queue`.
+
+### log-reply
+
+- **Say.** "log this reply", "I got a reply", "they responded", "log this thread", or "capture this exchange".
+- **Outcome.** A pasted thread (WhatsApp export, Telegram dump, email body, voice memo transcript) is turned into one structured `brain/log.md` entry per conversation: participants, dates, key updates, commitments, action items, and mentions. Different from `meeting-prep` debrief, which is for a meeting you ran, and `brain-log`, which is for free-form thoughts. Asks you to label the source format rather than guessing.
+- **Reads.** `core/identity.md`, `brain/log.md`. Greps `context/clients.md` and `context/leads.md` to cross-reference names. `rules/approval-gates.md` (or the template fallback) for the gate. `brain/.snapshot.md` if present.
+- **Writes.** `brain/log.md` directly (one entry per conversation). Proposes, never auto-writes, updates to `context/clients.md` and `context/leads.md`. You confirm each proposed row before it lands. Strips any `<private>` blocks before writing.
+- **Voice rules.** Plain language, mirror the operator's words. Not voice-profile coupled.
+- **Prereqs.** `founder-os-setup` complete. A thread pasted in chat or available at a path.
+- **When to run.** A reply or thread landed and you want it on disk and cross-referenced before the context decays.
+- **Follow-up.** The new entries surface in the next `since-last-session` and `weekly-review`. Slash command: `/founder-os:log-reply`.
+
+### web-fetch-extract
+
+- **Say.** "scrape this page", "pull the team names from this URL", "get the pricing tiers from this page", or "what does this page say about <topic>".
+- **Outcome.** A public web page is fetched and the data you asked for is extracted: bios, leadership teams, prices, OpenGraph tags, titles, recent posts, or an answer to an open question. Extraction is the model's own reasoning over the fetched text, so there is no paid API call and it works on a free plan. Other skills call it as a sub-step when they need page data.
+- **Reads.** The supplied URL via `scripts/scrape.py`. Falls back to the `WebFetch` tool if the script is missing or fails twice.
+- **Writes.** Read-only. Returns JSON for fields, a markdown table for lists, or a short paragraph for an open question.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete. `scripts/scrape.py` plus its Python packages (`httpx`, `selectolax`, `tenacity`) for the default path. Playwright only for the `--render` flag on JS-walled pages.
+- **When to run.** When any task needs data from a public page. Never on a URL you did not supply, and it does not follow links unless the goal says to.
+- **Follow-up.** Feed the extracted data into the skill that needed it. Slash command: `/founder-os:scrape`.
+
+### github-ops
+
+- **Say.** "what GitHub issues are open", "review this PR", "check CI status", or "create a GitHub issue".
+- **Outcome.** A GitHub operation runs through the `gh` CLI on any repo your CLI is authenticated against: triage issues, open or review pull requests, manage branches, inspect repo state, check CI, list releases. Any write operation (create, comment, close, label, PR, rerun) is confirmed with you first.
+- **Reads.** `gh auth status` to confirm authentication. `rules/commit-naming.md` if present, before any commit or PR.
+- **Writes.** Read-only for queries. Write operations (issue, comment, label, PR) only after you confirm. Never force pushes, never skips hooks, never adds AI attribution to a commit, never pushes without you asking.
+- **Voice rules.** No.
+- **Prereqs.** `gh` CLI installed and authenticated (`gh auth login`). The target repo identified, or `--repo owner/name` passed.
+- **When to run.** Any time you want a fast GitHub action without leaving the session.
+- **Follow-up.** Depends on the operation. Slash command: `/founder-os:github-ops`.
+
+### skill-creator
+
+- **Say.** "create a skill", "make a skill for", "turn this into a skill", "improve this skill", "why isn't my skill triggering", or "tune the description".
+- **Outcome.** A new skill drafted from scratch, an existing skill improved, or a description tuned for better triggering, with optional eval runs that benchmark the skill against a baseline. Runs a hard description-length check at every write (at or under 900 PASS, 901 to 1024 WARN, over 1024 STOP) so a skill never silently fails to install.
+- **Reads.** Existing skills in `skills/` to match the frontmatter shape. Conversation history when you say "turn this into a skill". Any reference files the new skill needs.
+- **Writes.** A new `skills/<name>/SKILL.md` and bundled resources. For evals, a `<skill-name>-workspace/` sibling with iteration and result files. Never overwrites a skill name on an update.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete.
+- **When to run.** When a workflow you repeat is worth capturing as a skill, or when an existing skill triggers on the wrong prompts.
+- **Follow-up.** Run the test prompts the skill proposes, review the results, iterate. No dedicated slash command.
 
 ---
 

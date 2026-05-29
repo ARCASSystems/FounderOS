@@ -120,6 +120,26 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **When to run.** When the SessionStart brief surfaces "N JSONL files older than 10 days". Safe to run anytime - idempotent.
 - **Follow-up.** None. The rollup file is the durable record.
 
+### `/founder-os:since-last-session`
+
+- **Or say.** "what changed since last session" / "what did I miss" / "catch me up"
+- **Outcome.** A 5-section delta report scoped to the gap since this command last ran: hours elapsed, `brain/log.md` entries added, flags decayed, commitments now overdue, and files modified in `context/`. The marker advances at the end so the next run scopes to the next gap. First run seeds the marker and prints a one-line note with no delta.
+- **Args.** None.
+- **Writes.** `brain/.last-session` only. No other file is touched.
+- **Prereqs.** `/founder-os:setup` complete. Works without git (Section 5 reports the gap if the install is not a repo).
+- **When to run.** At the start of a working session after a gap, before any planning work.
+- **Follow-up.** `/founder-os:strategic-read` if you want a fuller orientation after the delta.
+
+### `/founder-os:strategic-read`
+
+- **Or say.** "give me a strategic read" / "where am I" / "what's the state of my OS"
+- **Outcome.** A 5-section state-of-the-OS report: Identity anchor, Active commitments and pipeline, Open decisions, Active flags, Next 3 recommended moves. Prepends a STALE line if a cadence header is out of date.
+- **Args.** Optional single section key: `identity`, `commitments`, `decisions`, `flags`, or `next-moves`. Pass one to render only that section. An unknown key prints the valid keys and stops.
+- **Writes.** Read-only. Nothing is modified.
+- **Prereqs.** `/founder-os:setup` complete.
+- **When to run.** Returning after a gap and needing one orientation pass. Before a planning session. When a question spans priorities, pipeline, decisions, and flags at once.
+- **Follow-up.** `/founder-os:priority-triage` if the read shows overload, or `/today` for the day view.
+
 ---
 
 ## Retrieval and recall
@@ -211,6 +231,16 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **Prereqs.** `/founder-os:setup` complete. At least one unprocessed rant in `brain/rants/`.
 - **When to run.** End of day, or when `brain/rants/` has 2+ unprocessed files.
 - **Follow-up.** `/today` or `/next` to act on any new flags.
+
+### `/founder-os:log-reply`
+
+- **Or say.** "log this reply" / "I got a reply" / "they responded" / "log this thread"
+- **Outcome.** A pasted thread (WhatsApp export, Telegram dump, email body, voice memo transcript) is turned into one structured `brain/log.md` entry per conversation, with participants, dates, key updates, commitments, action items, and mentions. Asks you to label the source format rather than guessing. Different from `/capture-meeting`, which is for a meeting you ran.
+- **Args.** None. The thread body and source label follow the command, or you paste them when prompted.
+- **Writes.** `brain/log.md` directly (auto-runnable). Proposes, never auto-writes, updates to `context/clients.md` and `context/leads.md`. You confirm each proposed row before it lands. Strips any `<private>` blocks before writing.
+- **Prereqs.** `/founder-os:setup` complete. `brain/log.md` present.
+- **When to run.** A reply or thread landed and you want it on disk and cross-referenced before the context decays.
+- **Follow-up.** The new entries surface in the next `/founder-os:since-last-session` and weekly review.
 
 ---
 

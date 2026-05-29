@@ -44,7 +44,7 @@ Templates location by install method:
 - **Git clone** (`git clone https://github.com/ARCASSystems/FounderOS`): `templates/` at the repo root.
 - **Curl install**: `templates/` at the install root (the folder named in the curl recipe).
 
-If the exact path is uncertain, run a Glob for `**/templates/identity.md` and use the parent directory. The templates folder always contains: `identity.md`, `avatar.md`, `bootloader-claude-md.md`, `global-claude-md.md`, `company-claude-md.md`, `project-claude-md.md`, `business-context.template.md`, `voice-profile.yml.template`, `brand-profile.yml.template`, `brand-voice.yml.template`, `brand-positioning.yml.template`, `brand-visual.yml.template`, and the subfolders `brain/`, `cadence/`, `context/`, `roles/`, `rules/`, `scripts/`, `network/`, `memory/`, `raw/`, `system/`. Use that file list to verify you found the right folder before reading.
+If the exact path is uncertain, run a Glob for `**/templates/identity.md` and use the parent directory. The templates folder always contains: `identity.md`, `profile.md`, `avatar.md`, `bootloader-claude-md.md`, `global-claude-md.md`, `company-claude-md.md`, `project-claude-md.md`, `business-context.template.md`, `voice-profile.yml.template`, `brand-profile.yml.template`, `brand-voice.yml.template`, `brand-positioning.yml.template`, `brand-visual.yml.template`, and the subfolders `brain/`, `cadence/`, `context/`, `roles/`, `rules/`, `scripts/`, `network/`, `memory/`, `raw/`, `system/`. Use that file list to verify you found the right folder before reading.
 
 If the user passed "reset": scan for an existing Founder OS folder, confirm they want to reconfigure, then re-run discovery.
 
@@ -101,6 +101,24 @@ Record the answer as `role` internally. Map to a token:
 - Unclear or no answer → `founder` (safe default)
 
 Store `role:` in `core/identity.md` under a `## Role` field. This value drives downstream question phrasing and the bootloader `{{role_noun}}` substitution in Phase 2.2.
+
+### 0.2.2 Meet you where you are
+
+Before the rest of discovery, take one read on WHO is using this OS and say it back. This is the moment the OS adapts to the person instead of assuming everyone is a founder. Keep it to one line and one question. Do not turn it into a form.
+
+From the name, business, and role captured so far, infer a provisional variant using the `profile-router` skill's signal table (founder / career-mover / builder / student / team-internal). State the pick and the lead it implies, then ask for a yes or an adjustment.
+
+Phrasing examples (match the user's tone):
+
+- founder: "Sounds like you run the business and carry most of it yourself. I will lead with your pipeline, your week, and the decisions you are sitting on. That right?"
+- career-mover: "Sounds like you are moving between roles. I will lead with your positioning and a record of your wins you can carry anywhere. That right?"
+- builder: "Sounds like you are heads-down building something. I will lead with one-thing-at-a-time focus and a finish line. That right?"
+- student: "Sounds like you are here to learn and remember. I will lead with capture and recall. That right?"
+- team-internal: "Sounds like you want this for a team. Founder OS installs per person today, so I will set you up as an individual operator and note the team interest. That work?"
+
+Record the provisional variant internally. Do NOT write any file yet. The priorities (0.4) and work-style (0.7) answers may refine it; you finalise and write `core/profile.md` in Phase 1.1.5. If the user corrects your read, take the correction as the variant.
+
+This is a soft touch, not a gate. If the user does not engage, keep the provisional read and move on. Never block discovery on it.
 
 ### 0.2.5 Positioning
 
@@ -256,6 +274,24 @@ If any positioning answer was skipped, write `[NOT SET]` for that line. Do not i
 
 Show the draft. Get approval. Don't write yet.
 
+### 1.1.5 Profile (what the OS leads with)
+
+Finalise the variant you read provisionally in Phase 0.2.2, now that you also have their priorities (0.4), tool stack (0.5), and work style (0.7). Re-check against the `profile-router` skill's signal table. If the fuller picture changes the read, say so in one line and confirm.
+
+Draft `core/profile.md` from `templates/profile.md`, filled from the `profile-router` variant map:
+
+- `variant` - the confirmed variant (founder / career-mover / builder / student / team-internal)
+- `detected on` - today's date
+- `confidence` - high / medium / low, by how clear the signals were
+- `signals` - the words, goal, and comfort that pointed here, in one line
+- `lead surfaces`, `frame`, `technical comfort` - copied from the variant's row in `profile-router`
+
+If the variant is `team-internal`, set them up as the closest individual variant (founder if they own the company) and append the team-interest note to `core/setup-backlog.md` per the router. Do not block - the individual install is the working product today.
+
+This file is the "meet the human" layer. Every reasoning and writing skill reads it alongside `core/identity.md`, so the OS opens with what this operator's situation needs instead of a generic surface. It locks nothing - every skill stays available to every variant; the variant only changes what leads.
+
+Show the draft. Get approval. Don't write yet - it lands with the rest of `core/` in Phase 2.2.
+
 ### 1.2 Global CLAUDE.md
 Create or update `~/.claude/CLAUDE.md`. Read `templates/global-claude-md.md` for structure. Keep under 80 lines.
 
@@ -320,6 +356,7 @@ Create the full folder structure. Read each template before generating the perso
 ├── CLAUDE.md                    # Bootloader (from templates/bootloader-claude-md.md)
 ├── core/
 │   ├── identity.md              # From Phase 1.1
+│   ├── profile.md               # From Phase 1.1.5 (what the OS leads with; read alongside identity by every skill)
 │   ├── avatar.md                # From templates/avatar.md (replace {{FOUNDER_NAME}}, leave prompts intact)
 │   ├── voice-profile.yml        # Copied from templates/voice-profile.yml.template (placeholders intact - filled later by voice-interview)
 │   └── brand-profile.yml        # Copied from templates/brand-profile.yml.template (placeholders intact - filled later by brand-interview)
@@ -450,6 +487,16 @@ If no founder name was captured, fall through to the universal pass and write `[
 
 **Avatar template copy.** Copy `templates/avatar.md` to `core/avatar.md` and replace `{{FOUNDER_NAME}}` with the founder name captured in Phase 0.1. Do not auto-populate the bracketed sections. The wizard asks the seed questions, then the founder fills or revises those prompts in their first review session.
 
+**Profile file write.** Write `core/profile.md` from the Phase 1.1.5 draft - the confirmed variant, signals, lead surfaces, frame, and technical comfort, all real values. Do not copy `templates/profile.md` verbatim; the template ships `[NOT SET]` defaults and Phase 1.1.5 already resolved them. The universal placeholder pass leaves the resolved file alone because it has no `{{...}}` tokens left.
+
+**Seed brain content (so the first brief is not a blank screen).** The brain templates ship one worked example each so a brand-new install has something to look at on day one. Empty states kill the first run. Date-stamp the seeds to the install so they read as current, not as two-year-old samples:
+
+- `brain/flags.md` ships one example flag dated `2024-01-01`. Replace that date with a date about 20 days before today, so it surfaces as Review Due on the first SessionStart brief - that surfacing is the demo. Give it a real ID per `rules/entry-conventions.md` (channel `flag`).
+- `brain/decisions-parked.md` ships one example parked decision dated `2024-01-01`. Replace `Date parked:` with today's date and give it a real `parked-` ID.
+- `brain/log.md` ships its worked examples inside an HTML comment. Plant ONE live worked entry dated today so the brief's "last 3 log entries" is not empty. Use a neutral entry: `### [<today>] #context Installed Founder OS and ran setup. First real entry. (log-<today>-001)`. Leave the commented examples in place as a format reference.
+
+Keep all three generic. Do not invent business facts. They are labelled as examples for the operator to replace once their own first entries land.
+
 ### 2.3 Initialize Git
 
 Guard: check if a `.git/` directory already exists in the Founder OS root before running `git init`.
@@ -578,6 +625,8 @@ Show the user what they have AND the next two profile steps. The wizard creates 
 When you render the orientation block below, substitute every `<prefix>` literally with the detected value before showing it to the user. Do not show the placeholder text. Verify the rendered output before sending: every backtick-wrapped command must start with a `/` and must match a real file in `.claude/commands/` (Path B) or a namespaced plugin command (Path A).
 
 **Voice and pattern in the orientation: lead with natural language.** Real users will not memorize a 20-command surface. The orientation tells the founder how to talk to Claude in plain English. Slash commands appear in parentheses as optional shortcuts for power users. Do not invert this. Anti-pattern: "Run `<prefix>voice-interview` to set up your voice." Pattern: "Say 'set up my voice' (or run `<prefix>voice-interview` if you prefer slash commands)."
+
+**Open with their profile.** Read `core/profile.md` (written in Phase 1.1.5). Open the orientation with the operator's `frame` in one line, then point them at their `lead surfaces` first - the files and skills their variant needs - before the generic walkthrough below. A career-mover should hear about their positioning and proof-of-value record before they hear about pipeline cadence; a student should hear about capture and recall first. The generic block below still applies to everyone; the profile only decides what leads. Say once that the variant changes nothing about what is available - every skill works for them - and that they can change it any time by saying "update my profile".
 
 "Your Founder OS is set up. The operating layer is live. Two more 10-minute steps activate the writing skills:
 

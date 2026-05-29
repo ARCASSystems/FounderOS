@@ -2,9 +2,29 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
-## Unreleased
+## v1.32.0 - 2026-05-29
 
-Stub for v1.32.0. Queued items: playbook refresh (manual-pass, not renderer-flow), richer prospect-tracking flow on top of F27, prospect-mis-filing migration helper (gated on real user demand signal), CLAUDE.md skills table catch-up (brand-voice-interview, campaign-from-theme, review-responder rows surfaced by v1.30 second-pass review), competitor positioning audit when the playbook refreshes.
+v1.32 makes the OS meet the human on first contact, and reconciles the skill registry so every surface tells the same truth. The headline is the out-of-box brain: the OS now reads who is operating it and what it should lead with, instead of assuming everyone is a founder.
+
+### Feature - profile-router and the out-of-box brain (WS-G)
+
+A new `profile-router` skill reads who is operating the OS and maps them to one of five variants - founder, career-mover, builder, student, or team-internal - then writes `core/profile.md` with the surfaces the OS should open with and the frame it speaks in. The setup wizard calls it: a new Phase 0.2.2 ("meet you where you are") states a provisional read in one line and asks for a yes, and Phase 1.1.5 finalises it once priorities and work style are known. The bootloader reads `core/profile.md` alongside `core/identity.md` at every session start, so reasoning and writing skills open with what this operator's situation needs. Nothing is locked: every skill stays available to every variant; the variant only changes what leads. The scaffold is identical for everyone; only the task differs, which is why one setup serves a founder, a job-seeker, a builder, and a student without forking into four products.
+
+Seed brain content is now dated to the install so the first SessionStart brief is not a blank screen: the wizard date-stamps the starter flag and parked decision and plants one worked log entry, so day one shows a real Review-Due flag and a real log line.
+
+Positioning guards applied to all new copy: the brain is the durable asset and it travels (mouth and hands swap around it), capability is explained through human analogues, and the words "governance" and "diagnostics" stay out of operator-facing copy.
+
+### Fix - skill registry reconciled to 58 skills (WS-C / WS-E3)
+
+The skill count was wrong and contradictory across surfaces. v1.32 reconciles it. The real count is 58 skill folders. `README.md`, `skills/index.md`, `AGENTS.md`, `docs/skills.md`, and the playbook manifest now all say 58. `skills/index.md` gains the rows it was missing for the five generic tooling skills that shipped to disk and docs earlier without registry entries (`skill-creator`, `web-fetch-extract`, `memory-pass`, `cross-link`, `github-ops`) plus the new `profile-router`. `docs/skills.md` gains the 11 entries it was missing (the five generic skills, `profile-router`, and `brand-voice-interview`, `campaign-from-theme`, `review-responder`, `log-reply`, `since-last-session`, `strategic-read`). `docs/commands.md` gains the 3 it was missing (`log-reply`, `since-last-session`, `strategic-read`). `AGENTS.md` scripts line adds `scrape`.
+
+### Docs - playbook re-rendered at version-tagged filename
+
+`founder-os-playbook.html` re-rendered via the renderer-flow (drift check returned A-bucket only). The render now also emits `founder-os-playbook-v1.32.0.html`, the version-tagged copy, so a shared link signals which release the reader is seeing. Skill count on the playbook updated to 58.
+
+### Cross-cutting
+
+VERSION bumped to `1.32.0`. README Version line and Status narrative updated. Command count (33) and test count (596) unchanged - this release adds a skill and reconciles docs; it does not add tests.
 
 ## v1.31.0 - 2026-05-26
 

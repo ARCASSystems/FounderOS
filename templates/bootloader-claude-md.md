@@ -23,7 +23,7 @@ Every session, the six operating-state files load at boot so behaviour is ground
 5. `cadence/daily-anchors.md` - today's anchor task
 6. `cadence/weekly-commitments.md` - current sprint
 
-Plus `rules/operating-rules.md` for behavioural rules. CLAUDE.md (this file) is read automatically by Claude Code at session start.
+Plus `core/profile.md` - what the OS leads with for this operator (the detected variant, the lead surfaces, the frame), read alongside identity so the OS opens with what this person's situation needs. And `rules/operating-rules.md` for behavioural rules. CLAUDE.md (this file) is read automatically by Claude Code at session start.
 
 `brain/log.md` and `brain/flags.md` load on demand when the task touches history or stall detection.
 
@@ -95,6 +95,7 @@ founder-os/
 ├── CLAUDE.md                   # Bootloader (you're reading it)
 ├── core/
 │   ├── identity.md             # Who the operator is and how they work
+│   ├── profile.md              # What the OS leads with for this operator (variant, lead surfaces, frame)
 │   ├── avatar.md               # Behavioural profile, loaded on demand by skills
 │   ├── voice-profile.yml       # Filled by the voice-interview setup step
 │   └── brand-profile.yml       # Filled by the brand-interview setup step
