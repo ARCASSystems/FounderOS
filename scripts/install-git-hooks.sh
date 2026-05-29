@@ -72,4 +72,16 @@ else
     echo "scripts/private-name-patterns.txt already exists — skipping"
 fi
 
+# Force population: a patterns file with no active (non-comment) lines is theater -
+# the guard scans nothing. Surface it loudly so the operator finishes the install.
+ACTIVE_PATTERNS=$(grep -cvE '^[[:space:]]*(#|$)' "$PATTERNS_DST" 2>/dev/null || true)
+ACTIVE_PATTERNS=${ACTIVE_PATTERNS:-0}
+if [ "$ACTIVE_PATTERNS" -eq 0 ]; then
+    echo ""
+    echo "  !! WARNING: $PATTERNS_DST defines 0 patterns - the privacy guard is INACTIVE."
+    echo "  !! Add at least your own name (e.g.  \\bYourName\\b ) before committing."
+else
+    echo "Privacy guard active: $ACTIVE_PATTERNS pattern(s) loaded."
+fi
+
 echo "Done. Run './scripts/install-git-hooks.sh --dry-run' to verify state."

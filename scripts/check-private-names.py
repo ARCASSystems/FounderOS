@@ -37,9 +37,25 @@ def load_patterns(patterns_file: Path) -> list[re.Pattern[str]]:
     return patterns
 
 
+# A long unbroken base64 run (embedded font/image data URIs). These caused every
+# false positive in the leak audit: a short name regex like \bSam\b can match
+# inside base64 because +, / and = are non-word characters, so \b boundaries fire.
+_BASE64_RUN = re.compile(r"[A-Za-z0-9+/]{200,}={0,2}")
+
+
+def is_base64_blob(line: str) -> bool:
+    """True if the line is dominated by a long base64 run (font/image blob)."""
+    stripped = line.strip()
+    if len(stripped) < 200:
+        return False
+    return _BASE64_RUN.search(stripped) is not None
+
+
 def scan_text(text: str, patterns: list[re.Pattern[str]]) -> list[str]:
     offending: list[str] = []
     for line_num, line in enumerate(text.splitlines(), 1):
+        if is_base64_blob(line):
+            continue
         for pat in patterns:
             if pat.search(line):
                 offending.append(f"  line {line_num}: {line.rstrip()}")
@@ -81,6 +97,15 @@ def main() -> int:
     patterns_file = resolve_patterns_file()
     patterns = load_patterns(patterns_file)
     if not patterns:
+        # Distinguish "file absent" (a contributor who never installed the guard,
+        # stay silent) from "file present but empty of patterns" (the operator ran
+        # the installer but never filled it in, so the guard is theater - say so).
+        if patterns_file.exists():
+            print(
+                f"WARNING: private-name guard is installed ({patterns_file}) but defines "
+                "no patterns. The guard is INACTIVE. Add names to activate it.",
+                file=sys.stderr,
+            )
         return 0
 
     if args[0] == "--staged":

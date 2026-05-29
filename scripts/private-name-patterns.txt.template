@@ -1,12 +1,24 @@
-# Private-name patterns. One regex per line. Lines starting with # are comments.
-# The hook scans staged diffs and commit messages against this file.
-# This file is gitignored once filled in; only the .template is tracked.
+# Private-name patterns - one regex per line. Lines starting with # are comments.
 #
-# Add patterns for names that must not appear in commits.
-# Examples (uncomment and fill in):
+# B's pre-commit and commit-msg hooks scan your staged diffs and commit messages
+# against these patterns and BLOCK the commit on any match. This stops a private
+# name, client, email, or phone number from leaking into a public push.
+#
+# This file (scripts/private-name-patterns.txt) is gitignored - your names never
+# leave your machine. Only this .template is tracked in the repo.
+#
+# IMPORTANT: until you add at least one pattern below, the guard is INACTIVE and
+# every commit prints a one-line warning. Add your names to turn it on.
+#
+# FORMAT - one Python regex per line:
+#   \bSam\b               a single name, word-boundary matched (recommended)
+#   \bSam\s+Rivera\b      a full name (use \s+ between words)
+#   \byour\.email@example\.com\b
+#
+# CURATION TIP: block distinctive names alone, but block common first names only
+# as full-name combos. A lone \bSam\b or \bLee\b will block legitimate commits.
+#
+# Uncomment and edit these, then add your own:
 # \bYourFirstName\b
 # \bYourPartnerName\b
 # \byour-client-name\b
-#
-# Replace the placeholders with the actual names you want to protect.
-# Add more lines below as needed.
