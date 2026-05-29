@@ -1,6 +1,6 @@
 # Forking FounderOS
 
-FounderOS ships a deliberate baseline. If you need something beyond what ships — a specific industry skill, a vendor integration the baseline skipped, a company or team layer on top of the single-user core — fork it.
+FounderOS ships a deliberate baseline. If you need something beyond what ships - a specific industry skill, a vendor integration the baseline skipped, a company or team layer on top of the single-user core - fork it.
 
 This guide explains when to fork, what the extension points are, which rules to preserve, and how to keep your fork sync-able with future releases.
 

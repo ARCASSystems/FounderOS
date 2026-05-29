@@ -409,7 +409,7 @@ After both files are written, ask:
 
 > Optional - Visual identity.
 >
-> Brand voice and positioning are saved. Want to capture the visual identity too (logo, colors, fonts)? It takes 5 to 10 minutes and unlocks branded visual outputs (proposals, decks, one-pagers in this brand's look).
+> Brand voice and positioning are saved. Want to capture the visual identity too (logo, colors, fonts)? It takes 5 to 10 minutes and gives you branded visual outputs (proposals, decks, one-pagers in this brand's look).
 >
 > Options: yes-now / yes-later / not-needed.
 

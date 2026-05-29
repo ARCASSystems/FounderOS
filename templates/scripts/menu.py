@@ -121,6 +121,22 @@ DAY_ONE_ORDER = [
     "ingest",
 ]
 
+# Operator-variant lead surfaces (from skills/profile-router/SKILL.md), intersected
+# with the capabilities this menu can actually surface. When core/profile.md sets a
+# variant, these capabilities sort ahead of their peers WITHIN the same fired/unfired
+# tier - a state-urgent (fired) capability always still beats a variant lead. The map
+# is a no-op when no variant is set, so behaviour is unchanged on installs without a
+# profile. Lead surfaces that are not menu capabilities (queue, decisions, clients,
+# knowledge-capture, meeting-prep) are served by the bootloader and orientation, not here.
+KNOWN_VARIANTS = {"founder", "career-mover", "builder", "student", "team-internal"}
+VARIANT_LEADS = {
+    "founder": frozenset({"priority-triage", "weekly-review", "today"}),
+    "career-mover": frozenset({"ingest", "today"}),
+    "builder": frozenset({"forcing-questions", "today"}),
+    "student": frozenset({"ingest", "dream"}),
+    "team-internal": frozenset({"priority-triage", "weekly-review", "today"}),
+}
+
 CLOSING_LINE = (
     "These are tailored to your current state. Say any of the natural-language "
     "phrases above. Or ask Claude anything in plain English - most of FounderOS "
@@ -139,6 +155,7 @@ NEW_INITIATIVE = re.compile(
 )
 OVERWHELM = re.compile(r"\b(overwhelm|stuck|too many|drowning|swamped)\b", re.IGNORECASE)
 AUDIT_MENTION = re.compile(r"\b/?audit\b", re.IGNORECASE)
+PROFILE_VARIANT = re.compile(r"^\s*-\s*\*\*variant:\*\*\s*(.+?)\s*$", re.MULTILINE)
 
 
 # ---------------------------------------------------------------------------
@@ -292,6 +309,23 @@ def read_primary_channel(root: Path) -> str | None:
         return val if isinstance(val, str) and val else None
     except (json.JSONDecodeError, AttributeError):
         return None
+
+
+def read_profile_variant(root: Path) -> str | None:
+    """Return the operator variant from core/profile.md, or None if unset/unknown.
+
+    The wizard writes a `- **variant:** <name>` line. Until it is set the template
+    ships `[NOT SET]`, which is not a known variant and yields None, so the menu
+    behaves exactly as it did before the profile layer existed.
+    """
+    body = safe_read(root / "core" / "profile.md")
+    if not body:
+        return None
+    m = PROFILE_VARIANT.search(body)
+    if not m:
+        return None
+    val = m.group(1).strip().lower()
+    return val if val in KNOWN_VARIANTS else None
 
 
 def drafts_recent(root: Path, today: date) -> int:
@@ -484,6 +518,7 @@ def collect_state(root: Path, today: date) -> dict:
         "drafts_24h": drafts_recent(root, today),
         "primary_channel": read_primary_channel(root),
         "unprocessed_rants": unprocessed_rant_count(root),
+        "variant": read_profile_variant(root),
     }
 
 
@@ -501,24 +536,28 @@ def build_menu(state: dict, prefix: str) -> list[str]:
             rows.append(render_row(name, why, prefix))
         return rows
 
-    scored: list[tuple[int, int, str, str]] = []
+    lead_set = VARIANT_LEADS.get(state.get("variant"), frozenset())
+    scored: list[tuple[int, int, int, str, str]] = []
     for order_index, (name, rule) in enumerate(RULES):
         fired, why_now = rule(state)
-        scored.append((1 if fired else 0, -order_index, name, why_now))
+        is_lead = 1 if name in lead_set else 0
+        scored.append((1 if fired else 0, is_lead, order_index, name, why_now))
 
-    # Sort: fired first, then original order.
-    scored.sort(key=lambda x: (-x[0], -x[1]))
+    # Sort: fired first, then the operator's profile-variant leads, then original
+    # order. The variant key is 0 for every row when no profile variant is set, so
+    # this reduces to the original (fired, original-order) sort on profile-less installs.
+    scored.sort(key=lambda x: (-x[0], -x[1], x[2]))
 
     fired_rows = [r for r in scored if r[0] == 1]
     fallback_rows = [r for r in scored if r[0] == 0]
 
-    chosen: list[tuple[int, int, str, str]] = []
+    chosen: list[tuple[int, int, int, str, str]] = []
     chosen.extend(fired_rows[:7])
     if len(chosen) < 5:
         chosen.extend(fallback_rows[: 5 - len(chosen)])
     chosen = chosen[:7]
 
-    return [render_row(name, why_now, prefix) for _, _, name, why_now in chosen]
+    return [render_row(name, why_now, prefix) for _, _, _, name, why_now in chosen]
 
 
 def render_output(rows: list[str]) -> str:

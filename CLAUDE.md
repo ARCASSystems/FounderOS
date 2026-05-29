@@ -44,6 +44,8 @@ Two more files (`brain/log.md` and `brain/flags.md`) load on demand when you ask
 
 `core/avatar.md` is your behavioral profile. Skills load it on demand when behavioral context matters. It is not boot-loaded.
 
+`core/profile.md` is the meet-the-human layer. The setup wizard reads which of five operator variants fits you (founder, career-mover, builder, student, team-internal) and writes what the OS should lead with for your situation. It is read at session start alongside identity, so the OS opens with what your situation needs instead of a generic menu. Nothing locks: every skill stays available to every variant, and the variant only changes what you see first. Say "update my profile" to change it any time.
+
 The brain layer also holds two capture surfaces and a knowledge store. `brain/rants/` captures raw voice dumps via `/rant`. `/dream` distils unprocessed rants into patterns, flags, parked decisions, and client signals. `brain/knowledge/` holds distilled notes from books, calls, and articles, which `proposal-writer` and `strategic-analysis` read back when relevant.
 
 A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` (set up by the wizard) holds behavioral guards that persist across every session. Add a guard whenever you correct Claude on something that would otherwise come up again.
@@ -200,7 +202,7 @@ If you have not installed the scheduled-tasks MCP, ignore this section. Nothing 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks are bring-your-own.
 
-## Skills (52 total; selected list below, full set in `docs/skills.md`)
+## Skills (58 total; selected list below, full set in `docs/skills.md`)
 
 | Skill | Purpose |
 |-------|---------|

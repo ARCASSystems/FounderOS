@@ -76,7 +76,7 @@ under an `mcpServers` or similar key.
 
 Outcome:
 - Configured MCPs found -> `[PASS] MCP availability (<N> configured: <names>)`
-- No MCPs configured -> `[WARN] MCP availability (0 configured - optional but unlocks Gmail, Calendar, Notion integrations)`
+- No MCPs configured -> `[WARN] MCP availability (0 configured - optional but adds Gmail, Calendar, Notion integrations)`
 - MCPs referenced but none configured -> `[WARN] MCP availability (referenced in docs but none configured)`
 
 Do NOT fail if MCPs are unconfigured. MCP setup is optional.
@@ -147,7 +147,7 @@ Plain text. Maximum 30 lines including the header. Exactly this shape:
 FounderOS v<version> - health check
 <YYYY-MM-DD HH:MM>
 
-[PASS] Plugin surface (45 skills / 27 commands, counts agree)
+[PASS] Plugin surface (58 skills / 33 commands, counts agree)
 [WARN] Hooks installed (SessionStart present, PostToolUse not enabled)
 [PASS] Scripts present (7/7 compile cleanly)
 [PASS] MCP availability (3 configured: Notion, Gmail, Calendar)

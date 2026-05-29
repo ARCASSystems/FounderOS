@@ -377,6 +377,7 @@ Create the full folder structure. Read each template before generating the perso
 ├── brain/archive/               # Empty dir. /dream and weekly-review move month-old brain entries here.
 ├── companies/                   # Empty dir. business-context-loader writes per-company files here.
 ├── scripts/
+│   ├── _common.py              # From templates/scripts/_common.py (shared helpers; wiki-build.py + query.py import from it - copy first or they hard-error)
 │   ├── wiki-build.py            # From templates/scripts/wiki-build.py (extracts [[wikilinks]] into brain/relations.yaml)
 │   ├── query.py                 # From templates/scripts/query.py (plain-file graph query)
 │   ├── brain-snapshot.py        # From templates/scripts/brain-snapshot.py (writes brain/.snapshot.md - runtime context for output skills)
@@ -427,15 +428,17 @@ Create the full folder structure. Read each template before generating the perso
         ├── session-close-revenue-check.sh   # Copied from <plugin-root>/.claude/hooks/session-close-revenue-check.sh
         ├── session-close-revenue-check.ps1  # Copied from <plugin-root>/.claude/hooks/session-close-revenue-check.ps1
         ├── post-tool-use-observation.sh     # Copied from <plugin-root>/.claude/hooks/post-tool-use-observation.sh (opt-in, off until FOUNDER_OS_OBSERVATIONS=1)
-        └── post-tool-use-observation.ps1    # Copied from <plugin-root>/.claude/hooks/post-tool-use-observation.ps1 (opt-in, off until FOUNDER_OS_OBSERVATIONS=1)
+        ├── post-tool-use-observation.ps1    # Copied from <plugin-root>/.claude/hooks/post-tool-use-observation.ps1 (opt-in, off until FOUNDER_OS_OBSERVATIONS=1)
+        └── session_start_brief.py           # Copied from <plugin-root>/.claude/hooks/session_start_brief.py (Python helper that session-start-brief.sh calls on Linux/Mac)
 ```
 
 Show the full list of files that will be created. Get approval. Then create them all.
 
-**Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, user-prompt capture, and post-tool-use observation hooks live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Resolve the plugin source path the same way Phase 2.2 already does (one of the three named install methods: Plugin, Git clone, or Curl), then copy all ten hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. The ten hook files are: `session-start-brief.sh`, `session-start-brief.ps1`, `session-start-liveness.sh`, `session-start-liveness.ps1`, `user-prompt-capture.sh`, `user-prompt-capture.ps1`, `session-close-revenue-check.sh`, `session-close-revenue-check.ps1`, `post-tool-use-observation.sh`, `post-tool-use-observation.ps1`. This must match every script referenced by `settings.json` across all hook events (SessionStart, UserPromptSubmit, Stop, PostToolUse); if any are missing from the founder's `.claude/hooks/`, the SessionStart brief and capture hooks fail silently. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, UserPromptSubmit, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
+**Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, user-prompt capture, and post-tool-use observation hooks live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Resolve the plugin source path the same way Phase 2.2 already does (one of the three named install methods: Plugin, Git clone, or Curl), then copy all eleven hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. The eleven hook files are: `session-start-brief.sh`, `session-start-brief.ps1`, `session-start-liveness.sh`, `session-start-liveness.ps1`, `user-prompt-capture.sh`, `user-prompt-capture.ps1`, `session-close-revenue-check.sh`, `session-close-revenue-check.ps1`, `post-tool-use-observation.sh`, `post-tool-use-observation.ps1`, and `session_start_brief.py` (the Python helper that `session-start-brief.sh` calls on Linux/Mac to compute the staleness, decay, and tip sections of the brief; the `.ps1` inlines this logic so Windows does not strictly need it, but copy it so cross-platform installs get the full brief). This must match every script referenced by `settings.json` across all hook events (SessionStart, UserPromptSubmit, Stop, PostToolUse); if any are missing from the founder's `.claude/hooks/`, the SessionStart brief and capture hooks fail silently. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, UserPromptSubmit, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
-**Scripts copy step (mandatory).** Copy all fourteen Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
+**Scripts copy step (mandatory).** Copy all fifteen Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
 
+- `templates/scripts/_common.py` → `scripts/_common.py` (shared helper module - `wiki-build.py` and `query.py` both `import` from it; if it is missing, `/founder-os:wiki-build` and `/founder-os:query` hard-error with `ModuleNotFoundError` on first run)
 - `templates/scripts/wiki-build.py` → `scripts/wiki-build.py` (used by `/founder-os:wiki-build`)
 - `templates/scripts/query.py` → `scripts/query.py` (used by `/founder-os:query`)
 - `templates/scripts/brain-snapshot.py` → `scripts/brain-snapshot.py` (writes `brain/.snapshot.md`, read at task time by nine output-producing skills)
@@ -455,7 +458,7 @@ Also copy `templates/scripts/private-name-patterns.txt.template` → `scripts/pr
 
 Offer to auto-write the captured founder name as the first uncommented pattern in `scripts/private-name-patterns.txt`: `\b<FOUNDER_NAME>\b`. This gives the new install one working guard out of the box without forcing the founder to learn regex syntax on day one.
 
-These are not personalized templates. Copy contents exactly. Do not edit. Verify all fourteen `.py` copies plus `scripts/private-name-patterns.txt` exist on disk before continuing. If any are missing, the brain-snapshot, brain-pass, wiki-build, menu, observation-rollup, preflight-gate, observation-capture, or private-name guard helpers will fail silently or hard-error.
+These are not personalized templates. Copy contents exactly. Do not edit. Verify all fifteen `.py` copies plus `scripts/private-name-patterns.txt` exist on disk before continuing. If `templates/scripts/` ever holds a `.py` helper not named above, copy it too - the founder's `scripts/` set must equal the `templates/scripts/` set, since helpers import each other. If any are missing, the brain-snapshot, brain-pass, wiki-build, query, menu, observation-rollup, preflight-gate, observation-capture, or private-name guard helpers will fail silently or hard-error.
 
 **{{role_noun}} substitution.** The `templates/bootloader-claude-md.md` file contains `{{role_noun}}` placeholders in two places. When writing the bootloader CLAUDE.md, substitute based on the role captured in Phase 0.2.1:
 
@@ -503,6 +506,12 @@ Guard: check if a `.git/` directory already exists in the Founder OS root before
 
 - If `.git/` exists (the common case, because the install folder is already a git clone), SKIP `git init`. Log: "Folder is already a git repository. Skipping git init." Move on.
 - If `.git/` does not exist (rare case, user copied files manually instead of cloning), run `git init` and create an initial commit: "Founder OS initialized."
+
+**Wire the privacy guard (so it is active, not just installed).** The private-name guard only fires if `git config core.hooksPath` points at `.githooks`. A fresh `git clone` does not inherit that setting, so without this step the guard is copied but dormant. After the git guard above:
+
+1. Make sure `.githooks/pre-commit`, `.githooks/commit-msg`, and `scripts/install-git-hooks.sh` exist in the founder's OS root. If the install method scaffolded into a fresh directory (Plugin or Curl paths) rather than a clone, copy these three from the plugin source resolved in Phase 2.2.
+2. Activate the guard. On Linux/Mac (or Windows with Bash): run `bash scripts/install-git-hooks.sh`. On Windows without Bash: run `git config core.hooksPath .githooks`. Either way the pre-commit and commit-msg hooks now fire on every commit.
+3. Confirm with the founder that the guard is live, and that it stays INACTIVE until `scripts/private-name-patterns.txt` has at least one pattern (their own name was offered in the scripts copy step above). The file is gitignored, so their names never leave the machine.
 
 ### 2.4 First Weekly Sprint
 Ask: "Let's set your first weekly sprint. You mentioned these priorities: [list from 0.4]. Which of these are MUST DO this week (max 3), which are SHOULD DO, and which can wait?"

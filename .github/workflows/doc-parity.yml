@@ -1,0 +1,29 @@
+name: Doc and Install Parity
+
+# Fails the build when a skill or command count drifts out of sync across the shipped
+# doc surfaces, or when the setup wizard references a source that is missing or omits a
+# script or hook a fresh install needs. Pure stdlib Python, no deps, no secrets.
+# The test suite (tests/) is gitignored and absent here, so these guards check only
+# what ships; the maintainer-local test_readme_invariants.py owns the test-count claim.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    name: Skill/command count + install completeness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Doc-parity guard (counts agree across surfaces)
+        run: python3 .github/scripts/check_doc_parity.py
+
+      - name: Install-completeness smoke test (wizard copy contract holds)
+        run: python3 .github/scripts/check_install_completeness.py

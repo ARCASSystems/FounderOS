@@ -4,7 +4,7 @@ Founder OS is a derived product. The source-of-truth lives in a private repo and
 
 ## Release posture
 
-FounderOS ships in deliberate increments. Each release closes a gap the previous one made visible. New features land when there is a real gap worth closing — not on a calendar. The upstream private repo holds the source of truth and ports out manually.
+FounderOS ships in deliberate increments. Each release closes a gap the previous one made visible. New features land when there is a real gap worth closing - not on a calendar. The upstream private repo holds the source of truth and ports out manually.
 
 ### Issues we will respond to
 

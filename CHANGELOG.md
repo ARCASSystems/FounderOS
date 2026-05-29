@@ -2,6 +2,49 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.33.0 - 2026-05-29
+
+v1.33 is the completeness and clean-release pass over the public product. No new skills. The work makes the existing 58 self-contained, installable from a clean clone with nothing missing, and consistent across every surface a reader checks. It also adds two CI guards so the kinds of drift this pass fixed cannot return silently.
+
+### Fix - install completeness (a fresh clone now scaffolds a working brain)
+
+Two source files the setup wizard relied on were never named in its copy steps, so a fresh install was quietly missing them:
+
+- `scripts/_common.py` - the shared helper that `wiki-build.py` and `query.py` both import. Without it, `/wiki-build` and `/query` failed with `ModuleNotFoundError` on first run. It is now first in the scripts copy list, and the scaffold tree names it.
+- `.claude/hooks/session_start_brief.py` - the Python helper that `session-start-brief.sh` calls on Linux and Mac to compute the staleness, decay, and tip sections of the brief. It is now in the hook copy list. The PowerShell hook already inlined this logic, so Windows installs were unaffected.
+
+The wizard also wires the privacy guard now instead of only copying it. A fresh `git clone` does not inherit `core.hooksPath`, so the pre-commit private-name blocker sat dormant until the operator wired it by hand. The wizard now runs `scripts/install-git-hooks.sh` (or sets `core.hooksPath` on Windows) so the guard is live on install, and reminds the operator it stays inactive until they add at least their own name to the pattern file.
+
+### Fix - count truth across every surface
+
+The skill count had drifted to "52" in four current-state statements (`README.md`, `skills/index.md`, `CLAUDE.md`, `docs/tools-and-mcps.md`) while the real count is 58. All four now say 58. Historical counts in the changelog and the recent-versions block are release records and stay as written.
+
+### Feature - the menu leads with your profile variant
+
+`scripts/menu.py` now reads `core/profile.md` and, when a variant is set, surfaces that variant's lead capabilities ahead of their peers within the same tier. A state-urgent suggestion still wins; the variant only orders the rest. The engine stays deterministic with no model call, and the weighting is a no-op on installs without a profile, so behaviour is unchanged where no variant is set.
+
+### Docs and cross-agent
+
+- `GEMINI.md` added at the repo root as a thin bridge for Gemini CLI, pointing back to `CLAUDE.md` as canonical and `AGENTS.md` as the full cross-agent reference.
+- The profile layer is now narrated where a new reader meets it: the README setup ladder, `docs/first-day.md`, and the `CLAUDE.md` "How It Works" section all describe variant detection and the seeded day-one brain.
+
+### Guards - CI doc-parity and install-completeness
+
+Two stdlib-only checks now run in CI on every push and pull request (`.github/workflows/doc-parity.yml`):
+
+- `check_doc_parity.py` fails the build when a skill or command count drifts out of sync across the shipped surfaces. This is what would have caught the "52 skills" drift.
+- `check_install_completeness.py` fails when the wizard references a missing source or omits a script or hook a fresh install needs. This is what would have caught the `_common.py` gap.
+
+The test suite is gitignored and maintainer-local, so it is not in a CI checkout; these guards check only what ships, and the local `test_readme_invariants.py` still owns the test-count claim.
+
+### Writing style
+
+Em dashes removed from `CHANGELOG.md`, `CONTRIBUTING.md`, and `docs/forking.md`. Two banned-verb usages and one banned-noun usage replaced across `brand-voice-interview`, `verify`, and `skills/index.md`.
+
+### Cross-cutting
+
+VERSION bumped to `1.33.0`. Skill count (58) and command count (33) unchanged. Test count `596 -> 611`: a variant-map test for `profile-router` and profile-weighting tests for the menu. `founder-os-playbook.html` re-rendered via renderer-flow (the drift check returned no drift before the version bump) and a version-tagged `founder-os-playbook-v1.33.0.html` emitted.
+
 ## v1.32.0 - 2026-05-29
 
 v1.32 makes the OS meet the human on first contact, and reconciles the skill registry so every surface tells the same truth. The headline is the out-of-box brain: the OS now reads who is operating it and what it should lead with, instead of assuming everyone is a founder.
@@ -36,7 +79,7 @@ When `[[<slug>]]` matches both `companies/<slug>.md` (operator) and `companies/p
 
 The fix replaces the early-return loop with a collect-all-matches pattern, then prefers any match that is NOT under a `prospects/` subdirectory. When no operator-side file exists, the resolver falls back to the prospect file as before. The behavior for slugs that match exactly one file is unchanged.
 
-Lands in both `scripts/query.py` and `templates/scripts/query.py` (F38 parity guard requires byte-identical copies). The `tests/test_wikilink_operator_first.py::test_operator_first_for_widget_co` test loses its `@unittest.expectedFailure` decorator and now asserts the operator-first contract directly. 577 passed, 19 skipped, 0 failed (596 total, unchanged from v1.30 — the widget-co test simply flipped from xfail to pass).
+Lands in both `scripts/query.py` and `templates/scripts/query.py` (F38 parity guard requires byte-identical copies). The `tests/test_wikilink_operator_first.py::test_operator_first_for_widget_co` test loses its `@unittest.expectedFailure` decorator and now asserts the operator-first contract directly. 577 passed, 19 skipped, 0 failed (596 total, unchanged from v1.30 - the widget-co test simply flipped from xfail to pass).
 
 ### Cross-cutting
 
@@ -330,11 +373,11 @@ The `<private>` discovery test in `tests/test_private_tag.py` matches any skill 
 
 ## v1.24.0 - 2026-05-15
 
-Before this release, if you asked a writing skill to draft something without your voice profile set up, it would produce a generic draft — and it would do so silently, without telling you it was working blind. v1.24 changes that. Writing and reasoning skills now run a Python preflight before they produce anything. If a required file is missing or still contains template placeholders, the skill stops and tells you exactly why in one line. You can say "proceed anyway" and get a draft that's clearly labelled as running without your data. The label is the point.
+Before this release, if you asked a writing skill to draft something without your voice profile set up, it would produce a generic draft - and it would do so silently, without telling you it was working blind. v1.24 changes that. Writing and reasoning skills now run a Python preflight before they produce anything. If a required file is missing or still contains template placeholders, the skill stops and tells you exactly why in one line. You can say "proceed anyway" and get a draft that's clearly labelled as running without your data. The label is the point.
 
 ### Voice gate
 
-`scripts/check-voice-ready.py` runs before any voice-coupled output: LinkedIn posts, emails, client updates, proposals, and repurposed content. If `core/voice-profile.yml` is missing or still has template defaults (`[CHOOSE`, `[NOT SET]`, `{{`, `[example:`), the skill stops. If you want a draft anyway, say so — you get one that's labelled as using Claude defaults rather than your voice.
+`scripts/check-voice-ready.py` runs before any voice-coupled output: LinkedIn posts, emails, client updates, proposals, and repurposed content. If `core/voice-profile.yml` is missing or still has template defaults (`[CHOOSE`, `[NOT SET]`, `{{`, `[example:`), the skill stops. If you want a draft anyway, say so - you get one that's labelled as using Claude defaults rather than your voice.
 
 ### Identity gate
 
@@ -348,7 +391,7 @@ These gates exit in code. The model cannot drift past an exit code the way it ca
 
 ### Skill reliability table
 
-Run `/founder-os:verify` to see every writing and reasoning skill mapped to its gate type — Python-enforced (deterministic) or instruction-only (model-dependent). `docs/calibrating-your-os.md` explains what that distinction means in practice. If you want to test a specific instruction-only skill yourself, the doc includes a five-step trace recipe: a spec, three to five real inputs, and 30 minutes per skill. No framework, no API call required.
+Run `/founder-os:verify` to see every writing and reasoning skill mapped to its gate type - Python-enforced (deterministic) or instruction-only (model-dependent). `docs/calibrating-your-os.md` explains what that distinction means in practice. If you want to test a specific instruction-only skill yourself, the doc includes a five-step trace recipe: a spec, three to five real inputs, and 30 minutes per skill. No framework, no API call required.
 
 45 skills, 27 commands, 335 tests.
 
@@ -356,9 +399,9 @@ Run `/founder-os:verify` to see every writing and reasoning skill mapped to its 
 
 Three hardening patches shipped together.
 
-**Privacy on shared machines.** If your OS folder lives somewhere that gets synced, backed up, or eventually forked, your brain and context files may contain names and paths that should stay local. `scripts/check-private-names.py` lets you define a list of patterns to protect. Any staged diff or commit message that matches a pattern blocks the commit before it goes out. Git hooks for pre-commit and commit-msg install with one command (`scripts/install-git-hooks.sh`). Your patterns file is gitignored — only a blank template is tracked, so the list stays on your machine. Five tests in `tests/test_private_name_hook.py`.
+**Privacy on shared machines.** If your OS folder lives somewhere that gets synced, backed up, or eventually forked, your brain and context files may contain names and paths that should stay local. `scripts/check-private-names.py` lets you define a list of patterns to protect. Any staged diff or commit message that matches a pattern blocks the commit before it goes out. Git hooks for pre-commit and commit-msg install with one command (`scripts/install-git-hooks.sh`). Your patterns file is gitignored - only a blank template is tracked, so the list stays on your machine. Five tests in `tests/test_private_name_hook.py`.
 
-**Capture precision.** The v1.23 capture hook used proximity matching — a capitalized name within 80 characters of a meeting verb was enough to trigger a log suggestion. That was too loose. "I called the Python function", "I had a meeting with the Marketing team", "I spoke to God this morning" all fired. v1.23.1 requires three signals in the same sentence: a preposition after the meeting verb (with / to / from), the candidate name within 30 characters, and a first-person token (I / we / me / my). All three must be present. 12 behavioral tests and an 80-line annotated corpus (`tests/fixtures/founder_utterances.txt`) verify the gate holds.
+**Capture precision.** The v1.23 capture hook used proximity matching - a capitalized name within 80 characters of a meeting verb was enough to trigger a log suggestion. That was too loose. "I called the Python function", "I had a meeting with the Marketing team", "I spoke to God this morning" all fired. v1.23.1 requires three signals in the same sentence: a preposition after the meeting verb (with / to / from), the candidate name within 30 characters, and a first-person token (I / we / me / my). All three must be present. 12 behavioral tests and an 80-line annotated corpus (`tests/fixtures/founder_utterances.txt`) verify the gate holds.
 
 **CI on three platforms.** Every push now runs `python -m unittest discover tests -v` across Ubuntu, macOS, and Windows on Python 3.11 and 3.12. Tests badge is in the README. The matrix confirmed the suite is clean cross-platform before this release shipped.
 
@@ -366,7 +409,7 @@ Three hardening patches shipped together.
 
 ## v1.23.0 - 2026-05-15
 
-FounderOS is built around capture. But before this release, capture only worked if you knew the slash commands. If you just talked — the way a founder actually uses a tool when they are in flow — nothing was captured. v1.23 closes that gap.
+FounderOS is built around capture. But before this release, capture only worked if you knew the slash commands. If you just talked - the way a founder actually uses a tool when they are in flow - nothing was captured. v1.23 closes that gap.
 
 ### Added - natural-language capture path
 
@@ -414,7 +457,7 @@ Four tracks shipped together in the build-out session before the public release.
 
 **Setup wizard adapts to your role.** The wizard now asks whether you are a founder, operator, or team-of-one. Positioning questions and menu capabilities branch by role. B2C operators get a subscriber-list option on the CRM prompt. The primary marketing channel you declare during setup routes the menu toward relevant content skills.
 
-**Privacy tag.** Wrap any text in `<private>...</private>` and it is stripped before FounderOS writes anything to disk — brain-log, knowledge-capture, rant files, dream processing, auto-memory. Case-insensitive. Closes the gap where a rant or log entry might contain context that is useful in the moment but should not survive the session.
+**Privacy tag.** Wrap any text in `<private>...</private>` and it is stripped before FounderOS writes anything to disk - brain-log, knowledge-capture, rant files, dream processing, auto-memory. Case-insensitive. Closes the gap where a rant or log entry might contain context that is useful in the moment but should not survive the session.
 
 **Observation rollup.** `scripts/observation-rollup.py` compresses weekly observation files once a week has at least 7 days of data and ended at least 3 days ago. Source files are deleted only after the rollup is verified written. SessionStart surfaces a nudge when JSONL files older than 10 days are waiting.
 
@@ -464,7 +507,7 @@ if the snapshot exists. Snapshot is optional context - skill proceeds without it
 
 ## v1.20.3 - 2026-05-10
 
-Your voice profile could already capture what you tend to write — rhythm, preferred words, tone. It could not capture what you would never write: the structural patterns AI models produce naturally that you find generic or off-brand. v1.20.3 adds that layer.
+Your voice profile could already capture what you tend to write - rhythm, preferred words, tone. It could not capture what you would never write: the structural patterns AI models produce naturally that you find generic or off-brand. v1.20.3 adds that layer.
 
 ### Changed - voice profiles now carry anti-examples
 
@@ -480,7 +523,7 @@ Your voice profile could already capture what you tend to write — rhythm, pref
 
 ## v1.20.2 - 2026-05-10
 
-Setup, voice interview, and brand interview were useful on their own — but after running all three, the writing skills still drafted generically. The data you entered was not flowing into the output. v1.20.2 closes that gap: buyer, offer, pain, buyer language, and brand proof now feed directly into every writing skill that needs them.
+Setup, voice interview, and brand interview were useful on their own - but after running all three, the writing skills still drafted generically. The data you entered was not flowing into the output. v1.20.2 closes that gap: buyer, offer, pain, buyer language, and brand proof now feed directly into every writing skill that needs them.
 
 ### Changed - intake now feeds output
 
@@ -503,7 +546,7 @@ Setup, voice interview, and brand interview were useful on their own — but aft
 
 ## v1.20.1 - 2026-05-10
 
-Two structural fixes from the v1.20.0 release. The menu scoring algorithm belonged in code, not in the model — `scripts/menu.py` (stdlib, no LLM call) now owns the logic. The SessionStart tip was surfacing on fresh installs with no log history; it now requires at least 10 log entries spanning 30 days before suggesting anything, so new users get useful prompts instead of capability pitches for features they have not had time to use.
+Two structural fixes from the v1.20.0 release. The menu scoring algorithm belonged in code, not in the model - `scripts/menu.py` (stdlib, no LLM call) now owns the logic. The SessionStart tip was surfacing on fresh installs with no log history; it now requires at least 10 log entries spanning 30 days before suggesting anything, so new users get useful prompts instead of capability pitches for features they have not had time to use.
 
 ### Changed - menu has a real engine
 
