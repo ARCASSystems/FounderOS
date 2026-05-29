@@ -98,7 +98,7 @@ Four install paths. Simplest first. Full step-by-step for each in [docs/install.
 curl -fsSL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/install.sh | bash
 ```
 
-Downloads FounderOS, copies hooks, and prints the natural-language next step. Requires bash, git, and Python 3.11+. Re-running the same command on an existing install offers an update instead.
+Clones FounderOS (hook scripts and `settings.json` come along in the clone), then prints the natural-language next step. Requires bash, git, and Python 3.11+. Re-running the same command on an existing install offers an update instead.
 
 **When to choose:** You are on macOS or Linux (or git-bash on Windows), you want one command and you are done.
 

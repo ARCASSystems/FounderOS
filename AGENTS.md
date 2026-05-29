@@ -34,7 +34,7 @@ The user's actual operating context (after they run setup) lives in:
 A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` holds behavioral guards that persist across every session in this project.
 
 The system layer (do not edit per-user) lives in:
-- `skills/` - 52 skills, each in its own folder with a `SKILL.md`
+- `skills/` - 57 skills, each in its own folder with a `SKILL.md`
 - `scripts/` - Python helpers (wiki-build, query, brain-snapshot, brain-pass-log, memory-diff, menu, observation-rollup, user-prompt-capture)
 - `templates/` - source templates for files the setup wizard generates
 - `.claude/commands/` - 33 slash commands
@@ -55,7 +55,7 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 
 ---
 
-## Slash Commands (30)
+## Slash Commands (33)
 - `/founder-os:menu` - show 5 to 7 capability suggestions tailored to current state.
 - `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files. Run on first install.
 - `/founder-os:voice-interview` - capture how you write into `core/voice-profile.yml`.

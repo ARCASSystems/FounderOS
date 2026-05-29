@@ -27,6 +27,22 @@ Plus `rules/operating-rules.md` for behavioural rules. CLAUDE.md (this file) is 
 
 `brain/log.md` and `brain/flags.md` load on demand when the task touches history or stall detection.
 
+### Stale-Context Rule (mandatory, run before advising)
+
+Before making ANY recommendation about what to do today or this week, compare the current date against the date headers in `cadence/daily-anchors.md` (`## Today:`) and `cadence/weekly-commitments.md` (`## Week of`). If either is stale:
+
+- Daily stale = current date is past `## Today:`
+- Weekly stale = current date is more than 6 days past the `## Week of` date
+
+If stale, refresh the cadence files FIRST, scaled to which file is stale:
+
+- **Daily stale (cheap, sub-minute):** bump the `## Today:` header to the current date and roll the previous one-line anchor into "Previous Anchor." That is all a stale daily requires. Do NOT trigger the full weekly retro for a stale daily - that all-or-nothing tax is exactly what makes the rule easy to skip.
+- **Weekly stale:** run the weekly-review flow (say "run my weekly review") - roll the current week into "Previous Week Retro" and force a keep/kill/escalate decision on every open stall flag. The keep/kill/escalate pass is gated to the weekly retro, not the daily bump.
+
+Only then proceed with the requested work.
+
+This is non-negotiable. A stale cadence file silently lies about current priorities, and acting on it is the most common way a solo operator's OS drifts out of sync with reality. The SessionStart brief surfaces staleness; this rule is what makes you act on it before advising, not just report it.
+
 Then:
 - Chief of Staff stall detection scan: check priorities.md for 2+ week rolls, decisions.md for triggered parked items, brain/flags.md for unaddressed flags. Surface findings silently unless something needs attention.
 - Default to COO mode. See `roles/index.md` for switching rules.
