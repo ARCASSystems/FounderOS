@@ -45,6 +45,11 @@ Em dashes removed from `CHANGELOG.md`, `CONTRIBUTING.md`, and `docs/forking.md`.
 
 VERSION bumped to `1.33.0`. Skill count (58) and command count (33) unchanged. Test count `596 -> 611`: a variant-map test for `profile-router` and profile-weighting tests for the menu. `founder-os-playbook.html` re-rendered via renderer-flow (the drift check returned no drift before the version bump) and a version-tagged `founder-os-playbook-v1.33.0.html` emitted.
 
+### Post-release correction (2026-05-30)
+
+- **Manifest version fields corrected from 1.32.0 to 1.33.0** in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (both `metadata.version` and `plugins[0].version`). The count-truth pass reconciled the manifest description strings but not the version fields, so a plugin install reported 1.32.0 while running 1.33.0 content. The doc-parity guard checks counts, not the version field, which is why it did not catch this.
+- **Install-completeness note reworded** in `check_install_completeness.py`: `scrape.py` (web-fetch-extract) and `cross-link.py` (cross-link) are fallback-only by policy - plugin-repo-only deterministic helpers whose skills both ship an inline keyless fallback - not an install gap. They stay out of `templates/scripts/` so no founder is forced to install httpx or selectolax to run a fresh scaffold.
+
 ## v1.32.0 - 2026-05-29
 
 v1.32 makes the OS meet the human on first contact, and reconciles the skill registry so every surface tells the same truth. The headline is the out-of-box brain: the OS now reads who is operating it and what it should lead with, instead of assuming everyone is a founder.

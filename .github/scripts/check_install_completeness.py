@@ -80,7 +80,12 @@ def main() -> int:
 
     # 4. scripts/ and templates/scripts/ must hold the same .py set: the wizard copies
     #    templates/scripts/ into the founder's scripts/. Extras in scripts/ that the
-    #    wizard does not ship (e.g. scrape.py) are a note, not a failure.
+    #    wizard does not ship are a note, not a failure - this is the documented policy,
+    #    not an oversight. scrape.py (web-fetch-extract) and cross-link.py (cross-link)
+    #    are deterministic helpers that ship plugin-repo-only; both skills document an
+    #    inline keyless fallback and run without the script, so they are deliberately
+    #    NOT in templates/scripts/. Do not "fix" this by force-adding them to the copy
+    #    list - that would push httpx/selectolax deps onto every free-tier install.
     if TEMPLATE_SCRIPTS.is_dir() and LIVE_SCRIPTS.is_dir():
         live = {p.name for p in LIVE_SCRIPTS.glob("*.py")}
         tmpl = {p.name for p in TEMPLATE_SCRIPTS.glob("*.py")}
@@ -89,7 +94,7 @@ def main() -> int:
         if only_tmpl:
             failures.append(f"templates/scripts/ has .py missing from scripts/: {only_tmpl}")
         if only_live:
-            notes.append(f"scripts/ has .py not in templates/scripts/ (not wizard-copied): {only_live}")
+            notes.append(f"scripts/ has .py not in templates/scripts/ (fallback-only by policy): {only_live}")
 
     for n in notes:
         print(f"note: {n}")
