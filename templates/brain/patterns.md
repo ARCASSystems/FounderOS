@@ -16,7 +16,7 @@ Every new entry gets a stable ID per `rules/entry-conventions.md` (channel: `pat
 id: pattern-YYYY-MM-DD-NNN
 First observed: [YYYY-MM-DD]
 Last seen: [YYYY-MM-DD]
-Decay after: 90d
+Decay after: <Nd, e.g. 90d>
 Evidence: [list of log entries or dates]
 Impact: [what this pattern is causing]
 Status: active | addressed | resolved

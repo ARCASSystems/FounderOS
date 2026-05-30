@@ -37,8 +37,8 @@ Things the OS (Claude) should be doing differently. Captured when the founder co
 ```
 [YYYY-MM-DD] [FLAG] [what the issue is] | [what should change]
 id: flag-YYYY-MM-DD-NNN
-Status: OPEN. Severity Week 1.
-Decay after: 14d
+Status: <OPEN | ESCALATED | RESOLVED>. Severity Week <N>.
+Decay after: <Nd, e.g. 14d>
 Trigger to escalate: [specific condition]
 ```
 
@@ -49,8 +49,8 @@ Things in the founder's work that are stuck, stalling, or creating drag. Capture
 ```
 [YYYY-MM-DD] [STALL] [what's stalled] | [last known status] | [suggested prompt]
 id: flag-YYYY-MM-DD-NNN
-Status: OPEN. Severity Week 1.
-Decay after: 14d
+Status: <OPEN | ESCALATED | RESOLVED>. Severity Week <N>.
+Decay after: <Nd, e.g. 14d>
 Trigger to escalate: [specific condition]
 ```
 
