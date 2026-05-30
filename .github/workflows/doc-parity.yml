@@ -1,8 +1,10 @@
 name: Doc and Install Parity
 
 # Fails the build when a skill or command count drifts out of sync across the shipped
-# doc surfaces, or when the setup wizard references a source that is missing or omits a
-# script or hook a fresh install needs. Pure stdlib Python, no deps, no secrets.
+# doc surfaces, when the setup wizard references a source that is missing or omits a
+# script or hook a fresh install needs, when the release version drifts across VERSION /
+# the manifests / the README status line, or when a template example block would inflate
+# a fresh install's first SessionStart brief. Pure stdlib Python, no deps, no secrets.
 # The test suite (tests/) is gitignored and absent here, so these guards check only
 # what ships; the maintainer-local test_readme_invariants.py owns the test-count claim.
 
@@ -27,3 +29,9 @@ jobs:
 
       - name: Install-completeness smoke test (wizard copy contract holds)
         run: python3 .github/scripts/check_install_completeness.py
+
+      - name: Version-parity guard (VERSION, manifests, README status line agree)
+        run: python3 .github/scripts/check_version_parity.py
+
+      - name: Brief-cleanliness guard (template examples do not inflate the first brief)
+        run: python3 .github/scripts/check_brief_cleanliness.py

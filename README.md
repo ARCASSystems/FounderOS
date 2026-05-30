@@ -270,7 +270,7 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.33.0. Public release. 58 skills, 33 commands, 611 tests.
+Version 1.33.0. Public release. 58 skills, 33 commands, 616 tests.
 
 v1.33 is the completeness pass. It closes two fresh-install gaps (the wizard now copies `scripts/_common.py` and the `session_start_brief.py` hook helper, and it wires the private-name guard on install instead of only copying it), corrects the skill count to 58 everywhere it had drifted to 52, adds a `GEMINI.md` thin bridge for Gemini CLI, teaches the menu to lead with your profile variant, and adds two CI guards so count and install drift cannot return silently. Full release history in [CHANGELOG.md](CHANGELOG.md).
 

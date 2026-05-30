@@ -50,6 +50,16 @@ VERSION bumped to `1.33.0`. Skill count (58) and command count (33) unchanged. T
 - **Manifest version fields corrected from 1.32.0 to 1.33.0** in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (both `metadata.version` and `plugins[0].version`). The count-truth pass reconciled the manifest description strings but not the version fields, so a plugin install reported 1.32.0 while running 1.33.0 content. The doc-parity guard checks counts, not the version field, which is why it did not catch this.
 - **Install-completeness note reworded** in `check_install_completeness.py`: `scrape.py` (web-fetch-extract) is fallback-only by policy - a plugin-repo-only deterministic helper whose skill ships an inline keyless fallback - not an install gap. It stays out of `templates/scripts/` so no founder is forced to install httpx or selectolax to run a fresh scaffold.
 
+### Hardening (2026-05-30)
+
+More post-release corrections on 1.33.0. No version bump, no playbook re-render.
+
+- **Decisions phantom-count fixed.** `templates/context/decisions.md` shipped a `### Format` heading and a fenced `### [Decision Name]` example under `## Pending`, and the line-based pending-decisions counter in the SessionStart brief read both as live entries, so a brand-new install's first brief reported `Decisions: 2 pending` off the template. The format reference is now bullet fields with no `###` heading lines, so a fresh install reports zero pending decisions. Real decisions still use a `###` heading and still count. This is the same class commit `8d65990` fixed in `flags.md` and `patterns.md` but missed here.
+- **Brief-cleanliness guard added** (`.github/scripts/check_brief_cleanliness.py`, wired into `doc-parity.yml`). It mirrors each brief counter against all three template families - `decisions.md`, `flags.md`, and `patterns.md` - and fails the build if any format-spec or example block would be miscounted as a live flag, decision, or past-decay entry. The intentional dated demo entries stay allowed. This stops a fourth instance of the class.
+- **Version-parity guard added** (`.github/scripts/check_version_parity.py`, wired into `doc-parity.yml`). It asserts the `VERSION` file, both manifest version fields in `plugin.json` and `marketplace.json`, and the README status-line version are identical. This is what would have caught the 1.32.0 / 1.33.0 manifest drift the earlier hotfix corrected; the doc-parity guard checks counts, not the version field. The playbook sidebar version is deliberately out of scope, so a patch never forces a playbook re-render.
+- **PowerShell note** added to the `founder-os-setup` privacy-guard write step: on Windows or PowerShell, write the `\b<FOUNDER_NAME>\b` pattern with the file-write tool or `Set-Content`, never a shell echo.
+- Test count `611 -> 616`: the brief-cleanliness maintainer test (`tests/test_brief_cleanliness.py`). README status line updated to match.
+
 ## v1.32.0 - 2026-05-29
 
 v1.32 makes the OS meet the human on first contact, and reconciles the skill registry so every surface tells the same truth. The headline is the out-of-box brain: the OS now reads who is operating it and what it should lead with, instead of assuming everyone is a founder.
