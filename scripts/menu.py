@@ -148,7 +148,7 @@ WEEKLY_HEADER = re.compile(r"^##\s+Week\s+of\s+(\d{4}-\d{2}-\d{2})\s*$", re.MULT
 DAILY_HEADER = re.compile(r"^##\s+(\d{4}-\d{2}-\d{2})\s*$", re.MULTILINE)
 STATUS_OPEN = re.compile(r"Status:\s*\**\s*OPEN", re.IGNORECASE)
 ROLLED_FORWARD = re.compile(r"Week\s+[2-9]\+|Week\s+\d{2,}\+", re.IGNORECASE)
-TEMPLATE_DEFAULT = re.compile(r"\{\{[^}]+\}\}|\[[A-Z][A-Z _-]+\]")
+TEMPLATE_DEFAULT = re.compile(r"\{\{[^}]+\}\}|\[[A-Z][A-Z _-]+\]|\[CHOOSE:[^\]]*\]|\[#X+\]")
 NEW_INITIATIVE = re.compile(
     r"\b(new initiative|scope expansion|should I start|new idea|starting a new)\b",
     re.IGNORECASE,
