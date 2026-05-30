@@ -145,6 +145,8 @@ No new wikilinks to propose. File is already current with the convention.
 
 ---
 
+<!-- private-tag: not applicable: writes structured wikilink edges and a computed `cross-link: <file> +N edges` log line, not user-provided speech, so the <private> exclusion filter does not apply. -->
+
 ## Companion to wiki-build
 
 Cross-link writes the edges into a file. Wiki-build extracts the edges into `brain/relations.yaml`. The two together close the loop:

@@ -88,6 +88,8 @@ On **NO** or **SKIP**: leave unchanged.
 
 ### 5. Log
 
+<!-- private-tag: not applicable: writes a structured, computed audit summary (counts of checked/updated/expired entries), not user-provided speech, so the <private> exclusion filter does not apply. -->
+
 Append one line to `brain/log.md`:
 
 ```
