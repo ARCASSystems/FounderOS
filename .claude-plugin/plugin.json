@@ -7,5 +7,6 @@
   },
   "version": "1.33.0",
   "homepage": "https://github.com/ARCASSystems/FounderOS",
-  "repository": "https://github.com/ARCASSystems/FounderOS"
+  "repository": "https://github.com/ARCASSystems/FounderOS",
+  "commands": "./.claude/commands/"
 }
