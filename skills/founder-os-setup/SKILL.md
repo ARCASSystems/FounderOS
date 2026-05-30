@@ -458,6 +458,8 @@ Also copy `templates/scripts/private-name-patterns.txt.template` → `scripts/pr
 
 Offer to auto-write the captured founder name as the first uncommented pattern in `scripts/private-name-patterns.txt`: `\b<FOUNDER_NAME>\b`. This gives the new install one working guard out of the box without forcing the founder to learn regex syntax on day one.
 
+Write `\b` as a literal two-character backslash-b, not an escape. A shell `printf`/`echo -e` path turns `\b` into a backspace byte (0x08) and ships a dead privacy guard that looks installed but matches nothing. Use `printf '%s\n' '\b<FOUNDER_NAME>\b'` or a single-quoted heredoc, then verify with a throwaway commit that the guard actually blocks the name before continuing.
+
 These are not personalized templates. Copy contents exactly. Do not edit. Verify all fifteen `.py` copies plus `scripts/private-name-patterns.txt` exist on disk before continuing. If `templates/scripts/` ever holds a `.py` helper not named above, copy it too - the founder's `scripts/` set must equal the `templates/scripts/` set, since helpers import each other. If any are missing, the brain-snapshot, brain-pass, wiki-build, query, menu, observation-rollup, preflight-gate, observation-capture, or private-name guard helpers will fail silently or hard-error.
 
 **{{role_noun}} substitution.** The `templates/bootloader-claude-md.md` file contains `{{role_noun}}` placeholders in two places. When writing the bootloader CLAUDE.md, substitute based on the role captured in Phase 0.2.1:
@@ -495,6 +497,7 @@ If no founder name was captured, fall through to the universal pass and write `[
 **Seed brain content (so the first brief is not a blank screen).** The brain templates ship one worked example each so a brand-new install has something to look at on day one. Empty states kill the first run. Date-stamp the seeds to the install so they read as current, not as two-year-old samples:
 
 - `brain/flags.md` ships one example flag dated `2024-01-01`. Replace that date with a date about 20 days before today, so it surfaces as Review Due on the first SessionStart brief - that surfacing is the demo. Give it a real ID per `rules/entry-conventions.md` (channel `flag`).
+- `brain/patterns.md` ships one example pattern with `First observed:` and `Last seen:` dated `2024-01-01`. Replace both with a date about 100 days before today, so it passes the 90d default decay and surfaces as Review Due on the first SessionStart brief - that surfacing is the demo. Give it a real ID per `rules/entry-conventions.md` (channel `pattern`).
 - `brain/decisions-parked.md` ships one example parked decision dated `2024-01-01`. Replace `Date parked:` with today's date and give it a real `parked-` ID.
 - `brain/log.md` ships its worked examples inside an HTML comment. Plant ONE live worked entry dated today so the brief's "last 3 log entries" is not empty. Use a neutral entry: `### [<today>] #context Installed Founder OS and ran setup. First real entry. (log-<today>-001)`. Leave the commented examples in place as a format reference.
 
