@@ -711,6 +711,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** Before any client contract, when a regulatory deadline surfaces, or when jurisdiction-specific guidance is needed.
 - **Follow-up.** `/founder-os:legal-add-source` to add primary sources. `/founder-os:legal-update` to refresh source freshness.
 
+### linkedin-network-scan
+
+- **Say.** "scan my linkedin network", "who in my network fits my ICP", "build my outreach list from my connections", or share your LinkedIn export ZIP.
+- **Outcome.** A ranked outreach worklist scored against an ICP you define, written to files outside any repo. The assistant reads only a compact ranked digest, never the raw export.
+- **Reads.** Your LinkedIn data-export ZIP or folder (`Connections.csv`, `messages.csv` metadata only, `Invitations.csv`) and your ICP config. Of the outputs, it reads only `network-scan.md`.
+- **Writes.** `network-scan.html` / `.md` / `.csv` / `.json` and `inbound-invites.csv` into an output folder you choose (keep it outside any repo - it holds real names and URLs).
+- **Voice rules.** No.
+- **Prereqs.** A LinkedIn data export (Settings -> Data Privacy -> Get a copy of your data). Python (standard library only, no `pip install`). Free LinkedIn plan is enough.
+- **When to run.** When you want to find who in your existing network matches a target customer, hiring, or partnership profile, before a week of manual outreach.
+- **Follow-up.** Copy `icp.example.yaml`, edit it, and re-run with `--icp` to narrow the list. Open `network-scan.html` to browse; `network-scan.csv` has the full rows.
+
 ---
 
 ## Notes for skill authors

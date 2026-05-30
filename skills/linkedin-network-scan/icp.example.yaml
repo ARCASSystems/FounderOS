@@ -1,0 +1,74 @@
+# ICP config for linkedin-network-scan.
+#
+# Copy this to your own file (e.g. my-icp.yaml), edit it, and pass it with:
+#   python scan.py <export.zip> <output-folder> --icp my-icp.yaml
+#
+# This is a deliberately SIMPLE YAML. The scanner has no external dependencies, so
+# it only understands:
+#   - blank lines and `# comments`
+#   - `key: value`        (a scalar - a word or a number)
+#   - a key followed by indented `- item` lines (a list)
+# Nothing else (no nesting, no inline {}/[], no multi-line strings). If you want a
+# richer config, write it as JSON with the same keys and pass --icp my-icp.json.
+#
+# Every field is OPTIONAL. Omit a list to switch that filter off. With nothing set,
+# the scan returns any decision-maker and tells you it did not narrow anything.
+
+# A label that shows up in the report header, so you know which ICP produced it.
+label: "Founders and operators in professional services"
+
+# Title keywords that earn an ICP-role bonus (+15). Plain substrings, case-insensitive.
+roles:
+  - founder
+  - owner
+  - ceo
+  - managing director
+  - head of operations
+
+# Industry / domain words matched against title AND company (+8).
+industries:
+  - consulting
+  - agency
+  - professional services
+  - advisory
+
+# Company-name keywords (+10). Use these for the kinds of companies you sell to.
+company_keywords:
+  - studio
+  - partners
+  - consulting
+  - ventures
+
+# OPTIONAL region filter. Tokens matched against company + title; a hit adds +8 and
+# tags the row "Region match". Leave this list out entirely for no region bias.
+# These are just examples - replace with your own market's tokens, or delete the block.
+region_tokens:
+  - dubai
+  - uae
+  - london
+  - singapore
+
+# Title/company words that DISQUALIFY a connection outright (score -100). The scanner
+# already excludes students, interns, "open to work", retired, etc. by default - add
+# your own here (e.g. competitors, internal teammates).
+exclude:
+  - recruiter
+  - student
+
+# Minimum seniority floor. One of: ic | manager | director | vp | c_suite | founder.
+# Anything scoring below this title tier is dropped before ICP bonuses are applied.
+#   ic        every title
+#   manager   manager / lead / principal and up
+#   director  director and up
+#   vp        VP / head-of / GM and up
+#   c_suite   C-level / MD / president and up
+#   founder   founders / owners only
+min_seniority: manager
+
+# Score a connection must reach to make the ranked list. Default 30. Raise it to
+# tighten the worklist, lower it to widen.
+threshold: 30
+
+# How many ranked rows to show in the HTML and the compact markdown digest.
+# The CSV always contains every qualified row.
+show_n: 40

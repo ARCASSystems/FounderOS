@@ -38,14 +38,21 @@ import sys
 from typing import Optional
 from urllib.parse import urljoin, urlparse
 
-import httpx
-from selectolax.parser import HTMLParser
-from tenacity import (
-    retry,
-    retry_if_exception_type,
-    stop_after_attempt,
-    wait_exponential,
-)
+try:
+    import httpx
+    from selectolax.parser import HTMLParser
+    from tenacity import (
+        retry,
+        retry_if_exception_type,
+        stop_after_attempt,
+        wait_exponential,
+    )
+except ImportError:
+    sys.stderr.write(
+        "scrape.py needs three packages: pip install httpx selectolax tenacity "
+        "(else this skill falls back to WebFetch).\n"
+    )
+    sys.exit(1)
 
 
 CHROME_UA = (

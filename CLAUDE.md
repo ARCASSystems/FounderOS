@@ -202,7 +202,7 @@ If you have not installed the scheduled-tasks MCP, ignore this section. Nothing 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks are bring-your-own.
 
-## Skills (58 total; selected list below, full set in `docs/skills.md`)
+## Skills (59 total; selected list below, full set in `docs/skills.md`)
 
 | Skill | Purpose |
 |-------|---------|

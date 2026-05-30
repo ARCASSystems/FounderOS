@@ -2,6 +2,21 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.34.0 - 2026-05-31
+
+### Add - `linkedin-network-scan` (rank your own network against your ICP, without burning context)
+
+A new skill that turns your own LinkedIn data export into a ranked outreach worklist scored against an ICP you define. The point is token efficiency: a LinkedIn connections export is thousands of rows and tens of thousands of tokens, so a deterministic local script (`scan.py`, Python standard library only - no `pip install`) does the scoring and collapses the export to a compact ranked digest. The assistant reads only that small digest, never the raw `Connections.csv` or `messages.csv`.
+
+- ZIP-gated: the skill's first move is to confirm you have your LinkedIn export, and walk you through requesting it if not. It reads straight from the ZIP - no need to unzip.
+- ICP is yours: roles, industries, company keywords, a named seniority floor, an optional region filter, and an exclusion list, all from a config file you edit (`icp.example.yaml` ships as the template; JSON also accepted). Omit it for a permissive default, which the output states plainly.
+- Scoring carries the hard-won fixes from the private engine: UTF-8 throughout (emoji and accented names do not crash on Windows), direction-aware warmth (a real incoming reply counts as warm, a one-way send does not), recency-aware warmth (a year-stale thread is dormant, not hot), title demotions (analysts, front-line "advisors", and property agents do not inflate to decision-maker), and a separate pending-invitations list.
+- Free plan only. No scrapers, no paid tools, no API calls. Message content is never read - metadata only. Output files (HTML, CSV, JSON, compact digest) are written outside any repo, each with a "keep this local, do not commit" header. Nothing is sent; the outreach is manual by design.
+
+### Fix - `scrape.py` imports fail clearly on a clean machine
+
+`scripts/scrape.py` imported `httpx`, `selectolax`, and `tenacity` at module level, so a fresh machine without them threw a raw `ModuleNotFoundError` while the `web-fetch-extract` skill documents that it "errors clearly" and falls back to `WebFetch`. The three imports are now guarded with a one-line install hint and a clean exit, matching what the skill promises.
+
 ## v1.33.0 - 2026-05-29
 
 v1.33 is the completeness and clean-release pass over the public product. No new skills. The work makes the existing 58 self-contained, installable from a clean clone with nothing missing, and consistent across every surface a reader checks. It also adds two CI guards so the kinds of drift this pass fixed cannot return silently.
