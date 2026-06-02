@@ -202,7 +202,7 @@ If you have not installed the scheduled-tasks MCP, ignore this section. Nothing 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks are bring-your-own.
 
-## Skills (59 total; selected list below, full set in `docs/skills.md`)
+## Skills (62 total; selected list below, full set in `docs/skills.md`)
 
 | Skill | Purpose |
 |-------|---------|
@@ -255,6 +255,9 @@ All fabric pieces are optional. The slash commands ship active. Hooks register i
 | strategic-read | 5-section state-of-the-OS read across identity, commitments, decisions, flags, and recommended moves. Accepts an optional section key to scope to one section. Routed via `/founder-os:strategic-read`. |
 | log-reply | Ingests a pasted conversational thread into `brain/log.md` with proposed updates to `context/clients.md` and `context/leads.md`. Routed via `/founder-os:log-reply`. |
 | since-last-session | Reports what shifted since the last run from `brain/.last-session`. Hours elapsed, new log entries, decayed flags, overdue commitments, modified `context/` files. Routed via `/founder-os:since-last-session`. |
+| reconnect-prompt | Turns an expired-token or 401 into one reconnect prompt and logs it to the quarantine catch-net. Never retries, never asks for credentials. |
+| list-pruner | Cleans a contact list before outreach: de-dupes, flags missing fields, scores each row. Composes with `linkedin-network-scan`. |
+| finance-import | Parses a finance CSV export into a normalized markdown summary, totalled by category. Read-only at the source. |
 
 ## Philosophy
 

@@ -685,6 +685,39 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** When a workflow you repeat is worth capturing as a skill, or when an existing skill triggers on the wrong prompts.
 - **Follow-up.** Run the test prompts the skill proposes, review the results, iterate. No dedicated slash command.
 
+### reconnect-prompt
+
+- **Say.** "the integration broke", "my token expired", "reconnect <tool>", or "I got a 401".
+- **Outcome.** One copy-paste reconnect prompt for the tool that failed, the `stack.json` key that broke, and a `Status: ACTIVE` entry in the quarantine catch-net so the dead connector surfaces at the next session. Never retries, never asks for credentials.
+- **Reads.** `stack.json` to resolve the failed placeholder. `system/quarantine.md` (or its template) for the catch-net path.
+- **Writes.** `system/quarantine.md` (one ACTIVE entry; flips to RESOLVED when you confirm the reconnect). Falls back to a one-line `brain/log.md` note if no catch-net file exists.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete. Called by any integration-touching skill that hits an auth failure.
+- **When to run.** When a connected tool returns a 401, an expired token, an invalid grant, or revoked consent.
+- **Follow-up.** Reconnect the tool in its own settings, confirm, then rerun the skill that failed. Slash command: `/founder-os:reconnect-prompt`.
+
+### list-pruner
+
+- **Say.** "prune this list", "clean my contact list", "remove duplicates", or "score this list".
+- **Outcome.** A clean markdown table with duplicates removed, missing fields flagged, and each row scored High / Medium / Low. A CSV file only if you ask for one.
+- **Reads.** A CSV path or a pasted table from your prompt.
+- **Writes.** Read-only by default. Writes a clean CSV only on request and only after you confirm the path. Appends a one-line `#acted` trace to `brain/log.md`.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete. A contact list pasted in chat or available at a path.
+- **When to run.** Before an outreach push, when a list assembled by hand or from another source may hold duplicates or half-filled rows.
+- **Follow-up.** Add the High-scored rows to `context/leads.md` as new leads, then `email-drafter` for the outreach. Composes with `linkedin-network-scan`. Slash command: `/founder-os:list-pruner`.
+
+### finance-import
+
+- **Say.** "import this finance export", "parse this finance CSV", or "summarize this finance export".
+- **Outcome.** A normalized markdown summary of a finance CSV with totals by category and warnings for missing fields, written to `finance/<period>/summary.md`. Read-only at the source - it never writes back to your accounting tool.
+- **Reads.** A finance CSV path plus a reporting period (`YYYY-MM`) from your prompt.
+- **Writes.** `finance/<period>/summary.md` (after you confirm the path), plus a one-line trace in `brain/log.md`.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete. A finance CSV export available at a path or pasteable.
+- **When to run.** When you want financial context in the OS for planning, or to feed real numbers into `unit-economics`. PDF input is a manual path until a per-format parser is tested.
+- **Follow-up.** `unit-economics` to run margins on the totals, or `strategic-analysis` to cite the mirror. Standalone - no upstream finance skill required. Slash command: `/founder-os:finance-import`.
+
 ---
 
 ### verify

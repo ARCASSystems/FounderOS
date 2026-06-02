@@ -34,7 +34,7 @@ The user's actual operating context (after they run setup) lives in:
 A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` holds behavioral guards that persist across every session in this project.
 
 The system layer (do not edit per-user) lives in:
-- `skills/` - 59 skills, each in its own folder with a `SKILL.md`
+- `skills/` - 62 skills, each in its own folder with a `SKILL.md`
 - `scripts/` - Python helpers (wiki-build, query, brain-snapshot, brain-pass-log, memory-diff, menu, observation-rollup, user-prompt-capture, scrape)
 - `templates/` - source templates for files the setup wizard generates
 - `.claude/commands/` - 33 slash commands

@@ -2,6 +2,30 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.35.0 - 2026-06-02
+
+### Add - three generic operating skills (`reconnect-prompt`, `list-pruner`, `finance-import`)
+
+Three skills ported from the private source and made vendor-neutral. They bring the public set to 62 skills; command count stays at 33.
+
+- `reconnect-prompt` - turns an expired-token or 401 failure into one copy-paste reconnect prompt and logs the failed call to the `system/quarantine.md` catch-net so a dead connector does not stay silent until the next session notices missing data. It stops the failing action, never retries, and never asks for credentials. Resolves the `stack.json` placeholder that broke (`{calendar}`, `{email_platform}`, `{knowledge_base}`, etc.) and degrades to a one-line `brain/log.md` note on installs without the catch-net. Called by any integration-touching skill on auth failure.
+- `list-pruner` - cleans a contact list before outreach: normalizes and de-duplicates emails, flags missing fields, and scores each row High / Medium / Low. Accepts a CSV path or a pasted table and returns a clean markdown table; writes a CSV only on request. Composes with `linkedin-network-scan` (which builds the list) and surfaces High-scored rows as candidates for `context/leads.md`. Free-tier safe - paste the CSV, get the table back.
+- `finance-import` - parses a finance CSV export into a normalized markdown summary at `finance/<period>/summary.md`, totalled by category with warnings for missing fields. Read-only at the source: it never writes back to your accounting tool. Detects amount, date, account, category, and memo columns and stops to ask for redaction if it finds confidential identifiers. Feeds `unit-economics`. PDF input is a documented manual path until a per-format parser is tested.
+
+### Cross-cutting
+
+VERSION bumped to 1.35.0. Both manifest version fields, the README status line, and every canonical skill-count statement (README, CLAUDE.md, AGENTS.md, skills/index.md, plugin.json, marketplace.json, docs/skills.md) updated from 59 to 62. Command count unchanged at 33.
+
+## v1.34.1 - 2026-05-31
+
+### Add - career / talent ICP example for `linkedin-network-scan`
+
+The scanner shipped with one example ICP aimed at sales and partnership targeting. This release adds a second example, `icp.career.example.yaml`, for the people axis: the recruiters, talent leaders, and hiring managers in your network who can refer you, hire you, or help you hire, plus the decision-makers at the companies you are targeting. The engine is unchanged - the career lens is pure config. `min_seniority: ic` so a junior recruiter or sourcer at a target company is not dropped, a lower threshold (18) so role-matched recruiter and talent titles clear the bar on their own, and a roles list seeded with recruiter, talent acquisition, sourcer, hiring manager, head of people, plus the senior titles that own the hiring decision. Same privacy contract: ZIP-gated, raw CSVs never enter context, message content never read, nothing sent. The SKILL body now offers both examples and asks which goal you are on (selling / partnering, or hiring / job search) when both fit.
+
+### Cross-cutting
+
+VERSION bumped to 1.34.1. Both manifest version fields and the README status line updated to match. Skill count (59) and command count (33) unchanged - this adds an example config to an existing skill, not a new skill.
+
 ## v1.34.0 - 2026-05-31
 
 ### Add - `linkedin-network-scan` (rank your own network against your ICP, without burning context)
