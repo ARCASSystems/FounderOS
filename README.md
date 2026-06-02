@@ -8,7 +8,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 ---
 
-**New here? [Read the Founder OS Playbook first](founder-os-playbook.html)** - explains the problem, the three parts, how to start, and what not to do. 15 minutes. Opens in any browser.
+**New here? [Read the Founder OS Playbook first](https://arcassystems.com/founder-os)** - a visual walkthrough with screenshots: the problem, the three parts, how to start, and what not to do. Opens framed in any browser, about 15 minutes. (Also ships in this repo as `founder-os-playbook.html` - open the downloaded file in any browser to read it offline.)
 
 **[Download Founder OS](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip)** - or install via one-line curl, plugin marketplace, or git clone. See [Install](#install) below.
 

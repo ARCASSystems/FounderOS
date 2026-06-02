@@ -1,0 +1,36 @@
+# Founder OS
+
+> A local-first operating layer for the person running the business. Six markdown files hold the live state of your company, and Claude Code reads them every session: it routes by role, tracks commitments, surfaces what has stalled, and pushes back before you ship something half-baked. Free and MIT-licensed. You bring one AI subscription. Your files are owned by you, with no server and no lock-in.
+
+Project home: https://arcassystems.com/founder-os - built by ARCAS Systems. The source repository is https://github.com/ARCASSystems/FounderOS.
+
+Founder OS runs inside Claude Code, and works partially in other AI CLIs and in Claude Cowork. It is built for owners, operators, agency leads, consultancy heads, and heads of department - anyone where the buck stops with them. It is a personal system, not a team tool, and not always-on.
+
+The system is plain markdown in three layers. Operating files hold priorities, clients, decisions, today, and the week. A brain layer holds the log, flags, patterns, parked decisions, and distilled knowledge. A wiki layer adds `[[cross-references]]` between files plus a source archive for articles and transcripts. Skills read and write across all three. Four roles (COO, BD, CMO, Chief of Staff) act as behavioural modes that switch based on what you are actually doing.
+
+## Start here
+
+- [Founder OS Playbook](https://arcassystems.com/founder-os): a visual walkthrough with screenshots - the problem it solves, the three parts, how to start, and what not to do. Opens in any browser, about 15 minutes. The same playbook also ships in the repo as a self-contained `founder-os-playbook.html`.
+- [README](https://github.com/ARCASSystems/FounderOS/blob/main/README.md): the full product picture - who it is for, what it costs, what ships in the repo, and the setup ladder.
+- [Install guide](https://github.com/ARCASSystems/FounderOS/blob/main/docs/install.md): one-line curl, the Claude Code plugin marketplace, or a manual git clone.
+- [First day](https://github.com/ARCASSystems/FounderOS/blob/main/docs/first-day.md): what to do in your first session.
+
+## How it works
+
+- [CLAUDE.md](https://github.com/ARCASSystems/FounderOS/blob/main/CLAUDE.md): the bootloader that tells Claude how the OS behaves every session.
+- [Skills catalog (62)](https://github.com/ARCASSystems/FounderOS/blob/main/docs/skills.md): every skill, what it does, and how to trigger it in natural language.
+- [Slash commands (33)](https://github.com/ARCASSystems/FounderOS/blob/main/docs/commands.md): every command and what it returns.
+- [Tools and MCPs](https://github.com/ARCASSystems/FounderOS/blob/main/docs/tools-and-mcps.md): which integrations activate which skills, and how the OS degrades gracefully to zero MCPs.
+- [Calibrating your OS](https://github.com/ARCASSystems/FounderOS/blob/main/docs/calibrating-your-os.md): how to tune the system to how you actually work after install.
+
+## For other AI agents
+
+- [AGENTS.md](https://github.com/ARCASSystems/FounderOS/blob/main/AGENTS.md): the cross-agent guide for Codex, Gemini CLI, and other non-Claude agents - repo map, roles, commands, and what not to do.
+- [GEMINI.md](https://github.com/ARCASSystems/FounderOS/blob/main/GEMINI.md): the Gemini CLI context bridge.
+
+## About
+
+- [Forking](https://github.com/ARCASSystems/FounderOS/blob/main/docs/forking.md): how to make the OS your own.
+- [Contributing](https://github.com/ARCASSystems/FounderOS/blob/main/CONTRIBUTING.md): how to propose changes.
+- [Security](https://github.com/ARCASSystems/FounderOS/blob/main/SECURITY.md): the local-first, no-server security posture.
+- [License](https://github.com/ARCASSystems/FounderOS/blob/main/LICENSE): MIT.
