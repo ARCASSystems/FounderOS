@@ -2,8 +2,9 @@
 name: skill-creator
 description: >
   Create new skills, modify and improve existing skills, and measure skill performance. Use when the user wants to create a skill from scratch, edit or improve an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or tune a skill's description for better triggering accuracy. Triggers on "create a skill", "make a skill for", "turn this into a skill", "improve this skill", "why isn't my skill triggering", "test this skill", or "tune the description".
-why: "A skill that never triggers, or triggers on the wrong prompts, is dead weight - this skill makes the description (the only thing the model sees before loading a skill) something you test rather than guess at."
+why: "A skill that never triggers, or triggers on the wrong prompts, is dead weight - this makes the description, the only thing the model sees before loading a skill, something you test rather than guess at."
 enhance: "Run the description length check at every edit, not just at creation - a tuning pass that scores well on triggering can quietly push the description past the install ceiling and the skill silently stops loading."
+summary: "Create, improve, and measure skills - and tune why they trigger."
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
 mcp_requirements: []
 ---

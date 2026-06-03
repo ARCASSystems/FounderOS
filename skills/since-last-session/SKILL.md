@@ -2,8 +2,8 @@
 name: since-last-session
 description: >
   Report what changed in the OS since the last time this skill ran. Say "what changed since last session", "what did I miss", "catch me up since I was last here", "since last session", "what is new since yesterday" (or run `/since-last-session`). Reads a marker file at `brain/.last-session`, computes elapsed time, and reports five things: hours elapsed, brain/log.md entries added, flags decayed per the `Decay after:` convention, commitments now overdue from the cadence files, and files modified in `context/` (git diff names only). Updates the marker at the end of the run. First run with no marker prints a one-line note and seeds the marker; no delta report on the first run. Free-tier accessible: filesystem read plus a single git call, no external API.
-why: "Without a session-to-session anchor, the operator boots blind to what shifted while they were away. The skill turns that gap into a five-line report by reading the file layer at task time, not by running a daemon."
-enhance: "Run this skill at the start of every working session, before any planning work. The marker advances each time it runs, so the next session's report is scoped to the gap since the last run rather than since install."
+why: "Without a session-to-session anchor, you boot blind to what shifted while you were away. The skill turns that gap into a five-line report by reading the file layer at task time, not by running a daemon."
+enhance: "Run it at the start of every working session, before any planning. The marker advances each run, so the next report is scoped to the gap since you were last here rather than since install."
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
 mcp_requirements: []
 ---

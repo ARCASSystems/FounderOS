@@ -2,6 +2,8 @@
 name: profile-router
 description: >
   Decide who is operating the OS and what it should lead with for them. Fires during setup (the wizard calls it to infer a variant and write core/profile.md) and any time the operator says "update my profile", "what should the OS lead with for me", "set my profile", or "re-detect my profile". Maps five operator variants - founder, career-mover, builder, student, team-internal - to the surfaces the OS opens with and the frame it speaks in. Reads core/profile.md and core/identity.md. Never forks the OS: every skill stays available to every variant. The variant only changes what leads.
+why: "The same OS serves a founder, a career-mover, a builder, a student, and an internal team member differently - the variant changes what the system opens with, without ever removing a skill from anyone."
+enhance: "Keep core/identity.md current so re-detection has real signal - the router infers the variant from who you actually are, not from a one-time setup answer."
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep"]
 mcp_requirements: []
 ---

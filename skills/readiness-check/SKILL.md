@@ -4,6 +4,7 @@ description: >
   Score the OS install across six buckets and name the next 3 moves. Trigger on "check my OS readiness", "how am I doing", "what's my OS state", "readiness check", "how's the system", or "where are the gaps" (or run /founder-os:status). For a full composite health report across all five checks, use /founder-os:audit instead. Returns a 0-100% score across Core, Voice and Brand, Cadence, Business Context, Brain Layer, and Queue. Read-only.
 why: "Shows exactly which files and buckets are holding your score down so you can fix the right things rather than assuming setup is done when it is not."
 enhance: "Run voice-interview and brand-interview first - Voice and Brand carries 25% weight each and is the single fastest way to move the score once Core files exist."
+summary: "Score the OS install across five buckets and name the next 3 moves."
 allowed-tools: ["Read", "Glob", "Grep"]
 mcp_requirements: []
 ---

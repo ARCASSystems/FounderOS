@@ -2,6 +2,9 @@
 name: cross-link
 description: >
   Propose [[wikilink]] insertions for backtick-quoted paths and unquoted prose path mentions in a single markdown file. Read-only by default. Say "cross-link this file", "wikilink the references in", "convert backticks to wikilinks", "retrofit links in", or run /founder-os:cross-link <file>. Use after a session edits a file that names other wiki nodes in prose. Companion to wiki-build - cross-link writes the edges, wiki-build extracts them.
+why: "Turns flat path mentions into a connected wiki graph so query and lint can traverse what your files reference - backtick paths alone produce no graph edges."
+enhance: "Run after any session that adds path mentions to an operating file, then run wiki-build - cross-link writes the edges, wiki-build extracts them into the graph."
+summary: "Propose [[wikilink]] insertions for paths a file names in prose."
 allowed-tools: ["Bash", "Read", "Edit"]
 mcp_requirements: []
 ---

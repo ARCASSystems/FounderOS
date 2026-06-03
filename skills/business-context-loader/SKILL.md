@@ -1,9 +1,10 @@
 ---
 name: business-context-loader
 description: >
- Load and progressively fill the business-context file for a company you run (operator companies only). Say "load context for <company>", "what's next on <company>", "what's stale on <company>", or "give me an action on <company>". Reads `companies/<slug>-business.md` (derived from `templates/business-context.template.md`). Adapts to whatever state the file is in (empty, partial, mostly-filled, stale) and routes the founder to the next highest-impact move. Mirrors the brand-interview / voice-interview pattern but for company context, not personal voice. For prospect companies (companies you sell to or watch), use `prospect-init` instead - the path convention is `companies/prospects/<slug>.md`.
+  Load and progressively fill the business-context file for a company you run (operator companies only). Say "load context for <company>", "what's next on <company>", "what's stale on <company>", or "give me an action on <company>". Reads `companies/<slug>-business.md` (derived from `templates/business-context.template.md`). Adapts to whatever state the file is in (empty, partial, mostly-filled, stale) and routes the founder to the next highest-impact move. Mirrors the brand-interview / voice-interview pattern but for company context, not personal voice. For prospect companies (companies you sell to or watch), use `prospect-init` instead - the path convention is `companies/prospects/<slug>.md`.
 why: "Fills in the ICP, offer, and pricing context that proposal-writer and strategic-analysis need - without it those skills produce generic output not tied to your actual business."
 enhance: "Walk sections 1-7 in order at least once per business; ICP and offer (sections 4 and 5) have the highest downstream impact on any output skill that reads this file."
+summary: "Load the founder's business context (ICP, offer, pricing) into the session."
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep"]
 mcp_requirements: []
 ---

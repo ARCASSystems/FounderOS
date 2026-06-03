@@ -3,7 +3,8 @@ name: log-reply
 description: >
   Capture a pasted thread (WhatsApp export, Telegram dump, email body, voice memo transcript) and structure it into the brain layer. Trigger on "log this reply", "log this thread", "I got a reply", "they responded", "here is the reply", "log this conversation", "capture this exchange", or run `/log-reply`. Extracts participants, dates, key updates, commitments, action items, and person or company mentions. Writes one structured entry to `brain/log.md` per conversation. Proposes (never auto-writes) updates to `context/clients.md` and `context/leads.md`. Different from `capture-meeting`, which is for a named meeting you ran. Different from `brain-log`, which is for free-form thoughts.
 why: "Replies and threads carry the most decay-prone information in the OS. Without a fast ingest path, the commitments inside them get lost and the next session boots blind to what has changed."
-enhance: "Fill `context/clients.md` and `context/leads.md` with at least the people you talk to often. The skill cross-references names against those files and surfaces a propose-add suggestion only for unknown contacts, which keeps the noise low and the signal high."
+enhance: "Fill context/clients.md and context/leads.md with at least the people you talk to often. The skill cross-references names against those files and proposes an add only for unknown contacts, which keeps the noise low and the signal high."
+summary: "Capture a pasted thread and structure it into the brain layer."
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep"]
 mcp_requirements: []
 ---

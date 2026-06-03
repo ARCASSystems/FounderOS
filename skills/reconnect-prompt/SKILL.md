@@ -2,6 +2,8 @@
 name: reconnect-prompt
 description: Turn an expired-token or 401 failure into one copy-paste reconnect prompt and log the failed call. Say "the integration broke", "my token expired", "reconnect <tool>", "I got a 401", or run /founder-os:reconnect-prompt. Stops the failing action, never retries, never asks for credentials. Routes the failure to the quarantine catch-net so a dead connector does not stay silent.
 why: "A connected tool that quietly stops working is the worst failure in an integrated OS - the next run looks fine until you notice a week of missing data. This turns a silent 401 into one visible prompt and one logged entry."
+summary: "Turn an expired-token or 401 failure into one copy-paste reconnect prompt."
+enhance: "Run it the moment a tool throws a 401 rather than retrying blind - the logged entry is what lets stall detection see the outage instead of mistaking it for a quiet week."
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep"]
 mcp_requirements: []
 ---

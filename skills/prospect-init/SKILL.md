@@ -3,7 +3,7 @@ name: prospect-init
 description: >
   Create a new prospect record for a company you sell to or watch. Trigger on "add a prospect", "track <company> as a prospect", "start tracking <company>", "new prospect <company>", or run `/founder-os:prospect-init <slug>`. Creates `companies/prospects/<slug>.md` from `templates/prospect-context.template.md` after asking 3 to 5 questions. Different from `business-context-loader`, which is for companies you run.
 why: "Captures the minimum prospect intel in one short flow so the next time you write a proposal or run strategic analysis, the context exists at a predictable path instead of scattered across your notes."
-enhance: "Fill the operator business-context for your own company first - ICP and anti-ICP fields in your business-context-loader output make this flow sharper because it can flag the prospect against your fit signals."
+enhance: "Fill your own business-context first - the ICP and anti-ICP fields let this flow flag a new prospect against your fit signals as you add them."
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Bash"]
 mcp_requirements: []
 ---

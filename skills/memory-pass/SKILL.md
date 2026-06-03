@@ -6,6 +6,9 @@ description: >
   memory claim. Audits Active Project Context entries in MEMORY.md against brain/log.md,
   context/clients.md, context/decisions.md. Never touches Behavioral Guards. Say "run a memory
   pass", "check my memory", "is my memory stale", or run /founder-os:memory-pass.
+why: "Memory that silently goes stale is worse than no memory - a closed deal still listed as open, or a paused contact still surfaced as live, quietly skews every skill that reads it."
+enhance: "Run it after any seven-day-plus gap or any close, block, or unblock event - those are the moments memory most often drifts from what is actually true."
+summary: "Audit memory entries for stale claims after a gap or a status change."
 allowed-tools: ["Read", "Grep", "Edit"]
 mcp_requirements: []
 ---

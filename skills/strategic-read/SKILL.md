@@ -2,7 +2,7 @@
 name: strategic-read
 description: >
   Produce a state-of-the-OS report from the current file layer. Say "give me a strategic read", "where am I", "what's the state of my OS", "read across my brain and tell me where I stand" (or run `/founder-os:strategic-read`). Reads identity, priorities, decisions, clients, leads, cadence, flags, and the recent log, then returns a 5-section report: Identity anchor, Active commitments and pipeline, Open decisions, Active flags, Next 3 recommended moves. Pass a section key (`/founder-os:strategic-read flags`) to produce only that section when you do not need the full report. Read-only. Free-tier accessible: file read plus in-session synthesis, no external API call, no paid model required.
-why: "Produces a one-shot orientation across the operating files instead of asking you to remember which file holds which piece of state."
+why: "Produces a one-shot orientation across your operating files instead of asking you to remember which file holds which piece of state."
 enhance: "Keep cadence/daily-anchors.md and cadence/weekly-commitments.md current. If those headers are stale, the report flags it and recommends a refresh before any synthesis lands."
 allowed-tools: ["Read", "Glob", "Grep"]
 mcp_requirements: []

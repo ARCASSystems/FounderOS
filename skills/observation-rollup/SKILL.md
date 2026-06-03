@@ -4,6 +4,7 @@ description: >
   Compresses observation logs into weekly summaries. Rolls completed weeks once they are 3+ days past week-end AND have ≥7 days of data. Say "roll up observations" or "compress old logs" (or run /founder-os:observation-rollup). Archives the source JSONL files. Idempotent and recoverable - safe to run anytime.
 why: "Prevents the brain/observations/ folder from accumulating thousands of raw JSONL lines by compressing old weeks into readable summaries you can actually review."
 enhance: "Set FOUNDER_OS_OBSERVATIONS=1 in your shell to generate JSONL files in the first place - the rollup has nothing to process if observation logging is off."
+summary: "Roll up weekly observation logs."
 allowed-tools: ["Read", "Bash"]
 mcp_requirements: []
 ---
