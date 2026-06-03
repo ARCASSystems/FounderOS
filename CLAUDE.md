@@ -8,6 +8,12 @@ Founder OS is a Claude Code plugin that installs an operating system for one fou
 
 It is NOT a framework. It is NOT a multi-tenant AI platform. It is a product you install once and run every day.
 
+## Positioning non-negotiables
+
+- The public Founder OS product is single-founder software. ARCAS's enterprise offering has a separate company and per-employee layer. Do not conflate the two, and do not frame the public product as team or collaboration software.
+- Target runtime is Claude Pro / Claude Code, not ChatGPT. Do not build skills packs or instructions for ChatGPT Projects unless explicitly asked.
+- Keep the product's established hook framing. Do not invent demo-length claims, and do not paste private brand internals into this public repo. Match the wording already used elsewhere in this repo.
+
 ## Quick Start
 
 Run the setup wizard to personalize this for your situation:

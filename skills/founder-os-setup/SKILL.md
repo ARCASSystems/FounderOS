@@ -452,7 +452,7 @@ Show the full list of files that will be created. Get approval. Then create them
 - `templates/scripts/check-log-has-history.py` → `scripts/check-log-has-history.py` (preflight gate for brain-pass and linkedin-post when prior context is required)
 - `templates/scripts/list-brands.py` → `scripts/list-brands.py` (lists brand slugs under `brands/`, used by your-voice, campaign-from-theme, review-responder)
 - `templates/scripts/user-prompt-capture.py` → `scripts/user-prompt-capture.py` (writes user prompts to `brain/observations/` when `FOUNDER_OS_OBSERVATIONS=1`)
-- `templates/scripts/check-private-names.py` → `scripts/check-private-names.py` (called by `.githooks/pre-commit` and `.githooks/commit-msg` to block leaked private names)
+- `templates/scripts/check-private-names.py` → `scripts/check-private-names.py` (called by `.githooks/pre-commit` and `.githooks/commit-msg` to block leaked private names, em-dashes / en-dashes, and AI-attribution trailers)
 
 Also copy `templates/scripts/private-name-patterns.txt.template` → `scripts/private-name-patterns.txt` (NOTE: drop the `.template` suffix on the destination filename). The pre-commit hook and `install-git-hooks.sh` both look for `scripts/private-name-patterns.txt` exactly. The `.template` suffix marks the source-of-truth example, not the runtime file.
 

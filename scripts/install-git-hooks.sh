@@ -48,7 +48,7 @@ if [ -n "$ACTION_HOOKS" ]; then
     git config core.hooksPath .githooks
     echo "Set core.hooksPath to .githooks"
 else
-    echo "core.hooksPath already set to .githooks — skipping"
+    echo "core.hooksPath already set to .githooks - skipping"
 fi
 
 for hook in "$REPO_ROOT/.githooks/pre-commit" "$REPO_ROOT/.githooks/commit-msg"; do
@@ -69,7 +69,7 @@ if [ -n "$ACTION_PATTERNS" ]; then
     echo "Created $PATTERNS_DST from template."
     echo "Edit it to add your private-name patterns before committing sensitive work."
 else
-    echo "scripts/private-name-patterns.txt already exists — skipping"
+    echo "scripts/private-name-patterns.txt already exists - skipping"
 fi
 
 # Force population: a patterns file with no active (non-comment) lines is theater -

@@ -1,0 +1,47 @@
+# Commit guardian (L3, blocking) - the push-time gate that runs on every push
+# and PR from every source (laptop, cloud, cron, CI, contributors). Runs the
+# SAME scanner as the local .githooks (one scanner, three front-ends) so the
+# layers cannot drift. A violation fails the check (non-zero exit); this is a
+# blocking gate, not the weekly digest (founderos-audit.yml stays for slow drift).
+#
+# Coverage: em/en dash + AI-attribution are checked universally (no config
+# needed). Private-name leaks are checked only when the
+# FOUNDEROS_PRIVATE_AUDIT_PATTERNS secret is set (the same secret the weekly
+# digest uses); a fork without the secret still gets voice + attribution gating
+# and cannot leak the operator's private names anyway.
+name: guardian
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  guardian:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history so the commit range resolves)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine commit range
+        id: range
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "range=${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "range=${{ github.event.before }}..${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Load private-name patterns from secret (if present)
+        env:
+          PAT: ${{ secrets.FOUNDEROS_PRIVATE_AUDIT_PATTERNS }}
+        run: |
+          if [ -n "$PAT" ]; then
+            python3 -c "import json,os; data=json.loads(os.environ['PAT']); open(os.environ['RUNNER_TEMP']+'/patterns.txt','w').write(chr(10).join(d['pattern'] for d in data))"
+            echo "PRIVATE_NAME_PATTERNS_FILE=$RUNNER_TEMP/patterns.txt" >> "$GITHUB_ENV"
+          fi
+
+      - name: Scan commit range (private-name + em/en dash + attribution)
+        run: python3 scripts/check-private-names.py --range "${{ steps.range.outputs.range }}"

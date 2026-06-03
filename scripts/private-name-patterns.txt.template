@@ -1,6 +1,6 @@
 # Private-name patterns - one regex per line. Lines starting with # are comments.
 #
-# B's pre-commit and commit-msg hooks scan your staged diffs and commit messages
+# The pre-commit and commit-msg hooks scan your staged diffs and commit messages
 # against these patterns and BLOCK the commit on any match. This stops a private
 # name, client, email, or phone number from leaking into a public push.
 #
