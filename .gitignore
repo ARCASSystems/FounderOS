@@ -81,6 +81,11 @@ playbook.template.html
 playbook.manifest.json
 scripts/screenshot-playbook.py
 
+# Archived playbook version snapshots. Kept locally for review, never shipped.
+# The repo ships the single current founder-os-playbook.html + the-second-brain-playbook.html;
+# every prior version-tagged copy lives here, out of the tracked tree.
+/archive/
+
 # Execution plans (internal release scaffolding - Codex reads locally, never commits)
 plans/
 
