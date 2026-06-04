@@ -58,6 +58,20 @@ A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` (se
 
 When Claude knows all of this, it can give you recommendations instead of asking you to explain context every time.
 
+## How the OS gives opinions
+
+When the OS gives you an opinion that matters - a recommendation, a go/no-go, a pick between options, a yes or no on a send or a spend - it does not just hand you the answer. It attaches a counter-case, a confidence level, what evidence is missing, and what happens if you do nothing. This is on purpose.
+
+There is no bias-free advice. The model running this OS is a bias engine, the same way your own judgment is. The honest move is not to pretend the bias is gone. It is to name the most likely bias and argue the other side out loud, so you decide with the counter in front of you instead of without it.
+
+### Why your OS pushes back
+
+You cannot see your own bias, because from the inside it looks exactly like normal thinking. A second set of eyes can see it, which is why founders hire advisors and why a good one disagrees with them sometimes. This OS plays that role. When it backs your plan, it tells you when it is backing the plan mainly because the plan is already yours. When a famous name or a confident source is doing the persuading, it separates the name from the evidence. When doing something feels better than waiting, it still names what waiting would cost.
+
+If the OS hands you a counter-case to your own idea, it is not broken and it is not being difficult. It is doing the one job a yes-machine cannot.
+
+Run it on demand against any claim or decision with `/founder-os:devil`. The full guard is in `rules/biases.md`.
+
 ## Empty-state behavior
 
 If any of the 6 context files above is missing on session start, the OS is not yet set up. Do not fabricate context, do not invent past decisions, do not pretend to know the founder. Reply with this exact message and stop:
@@ -173,6 +187,7 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/founder-os:brain-pass "<question>"` - synthesised answer across the brain layer with stable-ID citations.
 - `/founder-os:audit` - composite health report across readiness, lint, wiki, brain, and voice.
 - `/founder-os:forcing-questions <initiative>` - six-question gate before new work starts.
+- `/founder-os:devil <claim>` - devil's advocate; runs the output bias self-check (`rules/biases.md`) against a claim or decision. Read-only.
 - `/founder-os:ship-deliverable <path>` - final read-only gate before an external deliverable is sent.
 - `/founder-os:legal-setup` - set up legal-compliance for the founder's jurisdiction.
 - `/founder-os:legal-add-source <source>` - add a legal source URL or PDF path to the loaded jurisdiction.

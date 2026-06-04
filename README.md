@@ -150,7 +150,7 @@ After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-scr
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
-### Slash commands (33)
+### Slash commands (34)
 
 Every command has a natural-language equivalent - slash commands are speed shortcuts for power users, not the primary surface. Full reference with outcomes, args, and follow-ups in [`docs/commands.md`](docs/commands.md).
 
@@ -270,9 +270,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.35.0. Public release. 62 skills, 33 commands, 616 tests.
+Version 1.36.0. Public release. 62 skills, 34 commands, 641 tests.
 
-v1.33 is the completeness pass. It closes two fresh-install gaps (the wizard now copies `scripts/_common.py` and the `session_start_brief.py` hook helper, and it wires the private-name guard on install instead of only copying it), corrects the skill count to 58 everywhere it had drifted to 52, adds a `GEMINI.md` thin bridge for Gemini CLI, teaches the menu to lead with your profile variant, and adds two CI guards so count and install drift cannot return silently. Full release history in [CHANGELOG.md](CHANGELOG.md).
+v1.36 adds the output bias self-check. The OS now runs a check on its own reasoning before it gives an opinion of consequence, attaching a counter-case, a confidence level, what evidence is absent, and the do-nothing option, so advice is named-and-countered instead of confidently biased. It ships as `rules/biases.md`, a `/founder-os:devil` command to run it on demand, a boot rule plus a plain-language explanation of why the OS pushes back, and a one-line decision-prompt nudge in the capture hook. Full release history in [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

@@ -2,6 +2,21 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.36.0 - 2026-06-04
+
+### Add - output bias self-check (`rules/biases.md` + `/founder-os:devil`)
+
+The OS now runs a check on its OWN reasoning before it gives an opinion of consequence, so advice ships named-and-countered instead of confidently biased. There is no bias-free advice - the model running the OS is itself a bias engine - so the honest target is to name the most likely bias and argue the other side, not to claim none exists.
+
+- `rules/biases.md` - the six output biases (sycophancy/confirmation, authority, recency, action bias, absence blindness, narrative coherence) and the output contract: a counter-case, a confidence level, what evidence is absent, and the do-nothing option, attached to any recommendation, go/no-go, pick between options, or yes/no on a send or spend. Carries the anti-theater rule: a check that always says "no bias found" launders confidence, so an empty counter means "low confidence, thin evidence", never "all clear". Ships in `templates/rules/` too, so a fresh setup gets it.
+- `/founder-os:devil <claim>` - runs the self-check on demand against any claim or decision. Names the one most-likely bias, builds the counter-case, and gives an honest read on whether the position survives. Read-only.
+- Boot rule plus a plain-language "Why your OS pushes back" section in `CLAUDE.md` (and the generated bootloader), mirrored into `AGENTS.md` and `GEMINI.md` for non-Claude agents. The frame is the human analogue: you cannot see your own bias because from the inside it looks like normal thinking, so a good advisor names it for you. The setup wizard tells new users this during onboarding.
+- A one-line `[bias-check]` decision-prompt nudge folded into the existing `UserPromptSubmit` capture hook (`scripts/user-prompt-capture.py`): when a prompt asks for a decision or opinion, it reminds the model to run the self-check before answering, and stays silent on plain tasks. It matches phrasing not intent, so it misses some decision-asks by design.
+
+### Cross-cutting
+
+VERSION bumped to 1.36.0. Both manifest version fields and the README status line updated to match. Command count 33 to 34 (the new `/founder-os:devil`); count statements updated across README, AGENTS.md, skills/index.md, plugin.json, marketplace.json, the verify example, and docs/commands.md. Skill count unchanged at 62. Test count updated to 641.
+
 ## v1.35.0 - 2026-06-02
 
 ### Add - three generic operating skills (`reconnect-prompt`, `list-pruner`, `finance-import`)

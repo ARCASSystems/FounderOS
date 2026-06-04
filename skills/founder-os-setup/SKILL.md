@@ -410,6 +410,7 @@ Create the full folder structure. Read each template before generating the perso
 ├── rules/
 │   ├── operating-rules.md       # Personalized from 0.7
 │   ├── writing-style.md         # From templates/rules/writing-style.md
+│   ├── biases.md                # From templates/rules/biases.md (verbatim - the output bias self-check the OS runs on its own opinions)
 │   ├── entry-conventions.md     # From templates/rules/entry-conventions.md (bi-temporal + decay convention for flags/patterns/decisions)
 │   └── approval-gates.md        # From templates/rules/approval-gates.md (what auto-runs vs requires explicit yes)
 ├── network/
@@ -678,6 +679,8 @@ You never need to use the OS terms. Say what feels natural.
 **When you have a post / email / proposal to write:** Just ask. After the voice profile is filled, every output is in your voice.
 
 **When making decisions:** Say "help me decide" - Claude walks you through a structured framework.
+
+**When the OS gives you an opinion:** It comes with a counter-case and a confidence level on purpose. The OS argues the other side of your own plan so you decide with the counter in front of you, the way a good advisor disagrees with you sometimes. That is the OS working, not the OS being difficult. To turn that lens on any claim or decision yourself, say "play devil's advocate" (or run `<prefix>devil`).
 
 **End of every session:** Claude commits changes. Your repo is your memory.
 

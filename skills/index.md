@@ -69,7 +69,7 @@
 
 ## Commands
 
-This plugin ships 33 slash commands:
+This plugin ships 34 slash commands:
 
 | Command | Purpose |
 |---------|---------|
@@ -88,6 +88,7 @@ This plugin ships 33 slash commands:
 | [/founder-os:brain-pass](../.claude/commands/brain-pass.md) | Synthesise an answer across the brain layer with citations. Use when a question spans multiple brain files. |
 | [/founder-os:audit](../.claude/commands/audit.md) | Composite OS health report across readiness, lint, wiki, brain staleness, and voice completeness. |
 | [/founder-os:forcing-questions](../.claude/commands/forcing-questions.md) | Six-question gate before any new initiative, scope expansion, or fresh idea is started. |
+| [/founder-os:devil](../.claude/commands/devil.md) | Devil's advocate. Runs the output bias self-check (`rules/biases.md`) against a claim or decision. Read-only. |
 | [/founder-os:ship-deliverable](../.claude/commands/ship-deliverable.md) | Final read-only gate before any external deliverable leaves your machine. |
 | [/founder-os:legal-setup](../.claude/commands/legal-setup.md) | Set up legal-compliance for the founder's jurisdiction. |
 | [/founder-os:legal-add-source](../.claude/commands/legal-add-source.md) | Add a legal source URL or PDF path to the loaded jurisdiction. |

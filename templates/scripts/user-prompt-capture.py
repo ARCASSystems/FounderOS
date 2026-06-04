@@ -20,6 +20,10 @@ or MEMORY.md if a false positive fires). The actual writes still go
 through Claude + the user's confirmation, per the bootloader routing
 table.
 
+Independently of the four capture shapes, the script also emits a one-line
+`[bias-check]` nudge when the prompt asks for a decision or opinion, pointing
+at the output bias self-check in rules/biases.md before the model answers.
+
 Free-tier accessible. No LLM call. Stdlib only.
 
 Hook contract:
@@ -191,6 +195,46 @@ PRIVATE_BLOCK = re.compile(r"<private>.*?</private>", re.IGNORECASE | re.DOTALL)
 
 
 # ---------------------------------------------------------------------------
+# Decision / opinion nudge. Independent of the capture classifier above: when
+# the prompt asks for a decision, recommendation, or opinion, emit a one-line
+# reminder to run the output bias self-check (rules/biases.md) before the model
+# answers. An opinion is not a tool call, so no PreToolUse hook can intercept
+# it; this raises the reminder at the moment a decision-prompt arrives. Known
+# limit: it pattern-matches phrasing, not intent, so it WILL miss some
+# decision-asks. Tight on purpose - firing on every prompt is the "slow and
+# preachy" failure the self-check itself warns against.
+# ---------------------------------------------------------------------------
+
+DECISION_PATTERNS = [
+    r"\bshould (i|we|it|they|you)\b",
+    r"\bwhat should\b",
+    r"\bwhich (one|option|way|approach|is better|do you|would)\b",
+    r"\bis it worth\b",
+    r"\bworth (it|doing|building|the)\b",
+    r"\b(what|whats|what's) your (take|opinion|read|call|view)\b",
+    r"\bdo you think\b",
+    r"\bwhat would you do\b",
+    r"\brecommend(ation)?\b",
+    r"\bbetter to\b",
+    r"\bare you sure\b",
+    r"\b(help me )?(decide|choose)\b",
+    r"\bchoose between\b",
+    r"\bpros and cons\b",
+    r"\btrade ?-?offs?\b",
+    r"\bgo or no.?go\b",
+    r"\bversus\b",
+    r"\bvs\.?\b",
+]
+DECISION_RX = re.compile("|".join(DECISION_PATTERNS), re.IGNORECASE)
+
+BIAS_NUDGE = (
+    "[bias-check] Decision/opinion ask - before you answer, run rules/biases.md: "
+    "counter-case, confidence level, what evidence is absent, and the do-nothing "
+    "option. Flag if you are agreeing mainly because it is the user's existing plan."
+)
+
+
+# ---------------------------------------------------------------------------
 # Detection.
 # ---------------------------------------------------------------------------
 
@@ -289,6 +333,14 @@ def detect_shape(prompt: str) -> str | None:
         return "rant"
 
     return None
+
+
+def is_decision_prompt(prompt: str) -> bool:
+    """Return True if the prompt is asking for a decision, recommendation, or
+    opinion. Drives the output bias self-check nudge. Independent of
+    detect_shape - a plain decision question matches no capture shape but still
+    warrants the nudge."""
+    return bool(prompt and DECISION_RX.search(prompt))
 
 
 # ---------------------------------------------------------------------------
@@ -479,16 +531,20 @@ def main() -> int:
         return 0
 
     shape = detect_shape(prompt)
-    if shape is None:
-        return 0
 
     capture_path: Path | None = None
     if shape == "rant":
         capture_path = eager_capture_rant(repo, prompt)
 
-    note = render_note(shape, capture_path, repo)
-    if note:
-        print(note)
+    if shape is not None:
+        note = render_note(shape, capture_path, repo)
+        if note:
+            print(note)
+
+    # Independent of the capture classifier: nudge the output bias self-check
+    # when the prompt is asking for a decision or opinion (rules/biases.md).
+    if is_decision_prompt(prompt):
+        print(BIAS_NUDGE)
 
     return 0
 

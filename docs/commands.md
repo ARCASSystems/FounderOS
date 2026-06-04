@@ -290,6 +290,16 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **When to run.** Before starting any new initiative, or when scope is creeping mid-task.
 - **Follow-up.** If the verdict is start, document the initiative in `context/priorities.md`. If kill or postpone, log it.
 
+### `/founder-os:devil <claim>`
+
+- **Or say.** "challenge this" / "play devil's advocate" / "what's the counter" / "am I just agreeing with myself"
+- **Outcome.** The strongest honest case against the claim or decision, the one bias most likely loading it, a confidence level, what evidence is absent, and what happens if you do nothing. A one-line read on whether the position survives.
+- **Args.** The claim, recommendation, or decision to challenge. If empty, it challenges the most recent opinion in the conversation.
+- **Writes.** Read-only. Runs the output bias self-check in `rules/biases.md` against the position.
+- **Prereqs.** None. Works on a fresh install.
+- **When to run.** Before committing to a consequential call, or any time you want the other side argued.
+- **Follow-up.** Decide with the counter-case in front of you. The full guard is in `rules/biases.md`.
+
 ### `/founder-os:ship-deliverable <path>`
 
 - **Or say.** "is this ready to send" / "ship-check this"

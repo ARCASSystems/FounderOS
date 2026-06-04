@@ -37,7 +37,7 @@ The system layer (do not edit per-user) lives in:
 - `skills/` - 62 skills, each in its own folder with a `SKILL.md`
 - `scripts/` - Python helpers (wiki-build, query, brain-snapshot, brain-pass-log, memory-diff, menu, observation-rollup, user-prompt-capture, scrape)
 - `templates/` - source templates for files the setup wizard generates
-- `.claude/commands/` - 33 slash commands
+- `.claude/commands/` - 34 slash commands
 - `.claude/hooks/` - SessionStart brief, session-close revenue check, opt-in PostToolUse observation log, UserPromptSubmit capture (v1.23)
 - `rules/` - behavioural rules including writing-style, commit-naming, approval-gates
 - `system/` - quarantine catch-net for silent hook failures
@@ -55,7 +55,15 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 
 ---
 
-## Slash Commands (33)
+## How the OS gives opinions
+
+Before you give an opinion of consequence - a recommendation, a go/no-go, a pick between options, a yes or no on a send or a spend - attach four things: the strongest counter-case, a confidence level (high / medium / low), what evidence is absent, and what happens if the operator does nothing. There is no bias-free advice; the honest move is to name the most likely bias and argue the other side, not to claim none exists. Flag when you are agreeing mainly because the plan is already the operator's, and separate evidence from authority when a name or a confident source is doing the persuading.
+
+The full guard is in `rules/biases.md`. The operator can invoke it on demand with `/founder-os:devil` (Claude Code only). As a non-Claude agent, follow `rules/biases.md` by hand.
+
+---
+
+## Slash Commands (34)
 - `/founder-os:menu` - show 5 to 7 capability suggestions tailored to current state.
 - `/founder-os:setup` - interactive setup wizard. Generates your identity, priorities, decisions, cadence files. Run on first install.
 - `/founder-os:voice-interview` - capture how you write into `core/voice-profile.yml`.
@@ -68,6 +76,7 @@ Switch roles based on the work the founder is doing, not on what they say. If th
 - `/founder-os:brain-pass "<question>"` - synthesised answer across the brain layer with stable-ID citations.
 - `/founder-os:audit` - composite health report across readiness, lint, wiki, brain, and voice.
 - `/founder-os:forcing-questions <initiative>` - six-question gate before new work starts.
+- `/founder-os:devil <claim>` - devil's advocate; runs the output bias self-check (`rules/biases.md`) against a claim or decision. Read-only.
 - `/founder-os:ship-deliverable <path>` - final read-only gate before an external deliverable is sent.
 - `/founder-os:legal-setup` - set up legal-compliance for the founder's jurisdiction.
 - `/founder-os:legal-add-source <source>` - add a legal source URL or PDF path to the loaded jurisdiction.
