@@ -35,6 +35,8 @@ Invoke when you provide a CSV, a pasted table, or a path to a contact list befor
 8. Write a clean CSV only if you ask for a file. If writing, confirm the output path first.
 9. Append a one-line trace to `brain/log.md` (`#acted` tag) recording input rows, clean rows, and duplicates removed.
 
+<!-- private-tag: not applicable: the brain/log.md write is a computed run trace (row counts and duplicates removed), not user-provided speech, so the private-tag filter does not apply here. -->
+
 ## Output schema
 
 ```yaml

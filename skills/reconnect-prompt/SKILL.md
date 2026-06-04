@@ -45,6 +45,8 @@ The public OS has a silent-failure catch-net at `system/quarantine.md` (template
 
 If neither `system/quarantine.md` nor its template exists on this install, degrade gracefully: produce the reconnect prompt and append a one-line note to `brain/log.md` instead. Do not invent a quarantine file - one line in the log is enough to keep the failure visible.
 
+<!-- private-tag: not applicable: the brain/log.md fallback write is a computed failure trace (the logged 401/auth error), not user-provided speech, so the private-tag filter does not apply here. -->
+
 When the operator confirms the reconnect worked, update that quarantine entry's `Status: ACTIVE` to `Status: RESOLVED <YYYY-MM-DD>` so it stops surfacing.
 
 ## Output schema

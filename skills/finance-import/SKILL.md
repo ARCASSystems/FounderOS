@@ -32,6 +32,8 @@ Invoke when you have a finance CSV export and want a clean markdown mirror in th
 6. Print a one-line `WROTE:` confirmation with the path, byte count, and a short description.
 7. Append a one-line trace to `brain/log.md` recording the period and record count.
 
+<!-- private-tag: not applicable: the brain/log.md write is a computed import trace (period and record count), not user-provided speech, so the private-tag filter does not apply here. -->
+
 ## Output schema
 
 ```yaml
