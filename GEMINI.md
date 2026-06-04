@@ -2,14 +2,14 @@
 
 Context loader for Gemini CLI and other non-Claude agents operating in this repo.
 
-This file is a thin bridge, not a separate rulebook. The canonical instruction file is `CLAUDE.md`. The full cross-agent reference (repo map, roles, slash commands, substrate, hooks, what-not-to-do) lives in `AGENTS.md`, which already addresses Gemini directly. Read both at session start.
+This file is a thin bridge, not a separate rulebook. The canonical instruction file is `CLAUDE.md` - the full cross-agent reference (repo map, roles, slash commands, substrate, hooks, what-not-to-do) lives there. `AGENTS.md` is a peer bridge that carries the same cross-agent deltas for Codex-style agents. Read `CLAUDE.md` at session start.
 
 ---
 
 ## Read first
 
-1. `CLAUDE.md` - the source of truth for how this OS behaves.
-2. `AGENTS.md` - the detailed cross-agent guide. Everything a non-Claude agent needs is there.
+1. `CLAUDE.md` - the source of truth for how this OS behaves, and the full cross-agent reference (repo map, roles, skills, commands, hooks, substrate).
+2. `AGENTS.md` - a peer bridge listing the same cross-agent deltas (slash commands not executable, skills as procedural reference, do not claim hooks ran).
 3. `README.md` - the product picture and setup path.
 
 Do not duplicate or override those files here. If anything in this file ever disagrees with `CLAUDE.md`, `CLAUDE.md` wins.

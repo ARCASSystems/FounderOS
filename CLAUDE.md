@@ -58,6 +58,8 @@ A separate auto-memory layer at `~/.claude/projects/<slug>/memory/MEMORY.md` (se
 
 When Claude knows all of this, it can give you recommendations instead of asking you to explain context every time.
 
+Founder OS is built for dictation - you talk to Claude more than you type. Write back so it parses cleanly when read aloud: lead with the answer, and avoid deeply nested syntax that breaks a spoken back-and-forth.
+
 ## How the OS gives opinions
 
 When the OS gives you an opinion that matters - a recommendation, a go/no-go, a pick between options, a yes or no on a send or a spend - it does not just hand you the answer. It attaches a counter-case, a confidence level, what evidence is missing, and what happens if you do nothing. This is on purpose.
@@ -99,6 +101,8 @@ Founder OS models the operating functions of a business as four behavioural mode
 - **BD** - pipeline, outreach, deals
 - **CMO** - content, brand, marketing, social
 - **Chief of Staff** - weekly retro, stall detection, meta-layer
+
+Switch modes based on the work in front of you, not on what the operator names. Drafting a LinkedIn post is CMO mode whether they said so or not.
 
 CFO, CSO, and CTO are not shipped as default modes. Financial questions route through the unit-economics skill. Tech and automation questions are best handled by Claude Code itself. If you want a CFO or CTO lens added later, copy an existing `skills/<name>/` folder and modify the SKILL.md.
 
@@ -223,62 +227,11 @@ If you have not installed the scheduled-tasks MCP, ignore this section. Nothing 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks are bring-your-own.
 
-## Skills (62 total; selected list below, full set in `docs/skills.md`)
+## Skills (62 total)
 
-| Skill | Purpose |
-|-------|---------|
-| founder-os-setup | Interactive setup wizard. |
-| readiness-check | OS health audit. Routed via `/founder-os:status`. |
-| ingest | File a source into `raw/` with provenance. Routed via `/founder-os:ingest`. |
-| lint | Read-only audit of wiki integrity. Routed via `/founder-os:lint`. |
-| wiki-build | Walk markdown, extract `[[wikilinks]]`, refresh `brain/relations.yaml`. |
-| query | Graph and file retrieval. Routed via `/founder-os:query`. |
-| brain-snapshot | Writes `brain/.snapshot.md`, the runtime context payload nine output skills read at task time. |
-| brain-pass | Synthesised answer across the brain layer with stable-ID citations. Routed via `/founder-os:brain-pass`. |
-| audit | Composite health report. Routed via `/founder-os:audit`. |
-| menu | Capability discovery. Say "show me what you can do" or run `/founder-os:menu`. |
-| today | One-screen daily brief. Say "what's on for today?" or run `/today`. |
-| weekly-review | Structured weekly retro and sprint roll. |
-| priority-triage | Cut the list to what actually matters. |
-| brain-log | Session logging and pattern capture. |
-| decision-framework | Structured decision-making for founders. |
-| forcing-questions | Gate before new initiatives start. |
-| session-handoff | End-of-session state capture for continuity. |
-| handoff-protocol | Human or role-to-role handoff artifact. |
-| context-persistence | Source-backed context lookup before asking the user to repeat. |
-| meeting-prep | Pre-meeting brief and post-meeting debrief. |
-| knowledge-capture | Distilled notes in `brain/knowledge/`. |
-| email-drafter | Emails in your voice. |
-| sop-writer | Processes turned into delegation-ready docs. |
-| founder-coaching | Bias toolkit, bottleneck check, zones. |
-| bottleneck-diagnostic | Founder dependency diagnostic. |
-| unit-economics | Business math, margins, break-even. |
-| content-repurposer | One piece, multiple formats. |
-| strategic-analysis | Market sizing, competitor analysis, opportunity assessment. |
-| pre-send-check | Hard gate before any client-facing deliverable leaves your machine. |
-| blind-spot-review | Second-pass review before pre-send. |
-| ship-deliverable | Final deliverable ship gate. |
-| approval-gates | Auto-run, ask-first, or refuse gate checks. |
-| data-security | Data class and tool-safety check. |
-| legal-compliance | Jurisdiction-aware legal reference layer. |
-| voice-interview | Captures your writing voice into core/voice-profile.yml. |
-| brand-interview | Captures your visual brand into core/brand-profile.yml. |
-| your-voice | Applies your voice profile to any written output. Every voice-coupled writing skill calls it. |
-| your-deliverable-template | Produces branded documents from core/brand-profile.yml. |
-| business-context-loader | Loads and completes per-company business context. |
-| linkedin-post | Voice-coupled LinkedIn post writer. |
-| client-update | Voice-coupled client status update writer. |
-| proposal-writer | Voice and brand-coupled proposal writer. |
-| queue | Execution queue with 3-item ACTIVE cap. Say "what's on my plate" or run `/founder-os:queue`. |
-| verify | Read-only substrate health check across 8 checks. Say "verify the OS" or run `/founder-os:verify`. |
-| observation-rollup | Compresses old `brain/observations/*.jsonl` into weekly markdown rollups. Say "roll up observations" or run `/founder-os:observation-rollup`. |
-| prospect-init | Creates a prospect file at `companies/prospects/<slug>.md` from a 3 to 5 question intake. Operator-side `business-context-loader` stays for companies you run. |
-| strategic-read | 5-section state-of-the-OS read across identity, commitments, decisions, flags, and recommended moves. Accepts an optional section key to scope to one section. Routed via `/founder-os:strategic-read`. |
-| log-reply | Ingests a pasted conversational thread into `brain/log.md` with proposed updates to `context/clients.md` and `context/leads.md`. Routed via `/founder-os:log-reply`. |
-| since-last-session | Reports what shifted since the last run from `brain/.last-session`. Hours elapsed, new log entries, decayed flags, overdue commitments, modified `context/` files. Routed via `/founder-os:since-last-session`. |
-| reconnect-prompt | Turns an expired-token or 401 into one reconnect prompt and logs it to the quarantine catch-net. Never retries, never asks for credentials. |
-| list-pruner | Cleans a contact list before outreach: de-dupes, flags missing fields, scores each row. Composes with `linkedin-network-scan`. |
-| finance-import | Parses a finance CSV export into a normalized markdown summary, totalled by category. Read-only at the source. |
+The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 62 skills and 34 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
+
+`founder-os-setup` is the entry point. Every other skill activates from natural language ("set up my voice", "what's on for today", "help me decide") or via `/founder-os:<command>`. Say "show me what you can do" (or run `/founder-os:menu`) for a shortlist tailored to your current state.
 
 ## Philosophy
 

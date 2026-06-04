@@ -1,6 +1,8 @@
 # Founder OS Skills Reference
 
-The full reference for every skill. The README's three skill tables tell you the **outcome** in one line. This file tells you everything else: how to invoke each skill in plain English, what it reads, what it writes, whether it inherits your voice, what must exist before it works, and what to run after.
+> Long-form mirror of the canonical registry in [`../skills/index.md`](../skills/index.md). That registry is the single source for the skill list and the counts; this file expands each skill into the eight labels below. If the two ever disagree, `skills/index.md` wins - update it first, then mirror the change here.
+
+The full reference for every skill. The registry in [`../skills/index.md`](../skills/index.md) names the **outcome** in one line; this file tells you everything else: how to invoke each skill in plain English, what it reads, what it writes, whether it inherits your voice, what must exist before it works, and what to run after.
 
 **You do not memorize commands. You talk to Claude.** Most skills auto-trigger from natural-language phrases like "set up my voice profile" or "what should I focus on next." The slash command appears at the end of each entry as an optional shortcut, not the primary way in. The new `/founder-os:menu` (or "show me what FounderOS can do") returns a tailored shortlist when you don't know what to ask for.
 
@@ -762,5 +764,5 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - Skills live under `skills/<name>/SKILL.md` with YAML frontmatter (`name`, `description`, optional `allowed-tools`, `mcp_requirements`).
 - Voice-coupled skills must read `core/voice-profile.yml` and degrade with a one-line warning if it contains template defaults.
 - Output-producing skills should consume `brain/.snapshot.md` if present (see `skills/brain-snapshot/SKILL.md` for the pattern).
-- New skills must be added to this file, plus the README's three skill tables, plus `skills/index.md`.
+- New skills go into `skills/index.md` first (the single source for the registry and counts), then get mirrored here. CLAUDE.md and the README only carry pointers, so they need no per-skill row.
 - Voice rules and anti-AI baseline live in `your-voice/SKILL.md`. Any new writer skill calls it internally.
