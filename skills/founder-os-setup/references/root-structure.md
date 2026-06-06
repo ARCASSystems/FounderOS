@@ -7,7 +7,14 @@ Load this when identity and the global layer are done. It builds the full folder
 ## PHASE 2: FOUNDER OS ROOT
 
 ### 2.1 Choose Location
-Ask: "Where do you want your Founder OS folder? This is your operating headquarters - priorities, decisions, brain log, weekly planning all live here. Default: ~/founder-os/"
+
+The founder must end up with ONE folder they think of as "my OS." Where it lands depends on how setup was reached. Detect which case you are in before asking anything:
+
+- **Setup is running inside the cloned repo** (the curl or git-clone paths - the current working directory contains both `.claude-plugin/` and `.git/`): set up IN PLACE, right here. This folder becomes the single folder the founder owns - their data, the hooks, and the commands all live together. Do NOT ask for a different location and do NOT create a second folder. Confirm in plain language: "Setting up your OS in this folder: [cwd]. This is yours - a normal git repo you can back up, move, or fork. Nothing phones home." Then build the structure below into the current folder.
+
+- **Setup is running from the installed plugin** (no repo in the current folder - the engine is installed under `~/.claude/plugins/founder-os/`, a tool-managed path that is wiped on plugin update and is NOT where data should live): create the OS folder fresh. Ask: "Where do you want your Founder OS folder? This is your headquarters - priorities, decisions, brain log, weekly planning all live here. Default: ~/founder-os/" Build the tree there. The plugin stays the invisible engine; this new folder is the one the founder owns and opens every day.
+
+Either way, the outcome is the same single owned folder. Never leave the founder with their data in one folder and the hooks wired to another. The plugin (if present) is just the Claude engine that operates on this folder; the folder itself is plain markdown the founder keeps even if they remove the plugin.
 
 ### 2.2 Create Structure
 Create the full folder structure. Read each template before generating the personalized version:

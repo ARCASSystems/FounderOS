@@ -15,10 +15,13 @@ set -euo pipefail
 
 # ---- constants ---------------------------------------------------------------
 
-DEFAULT_TARGET="$HOME/.claude/plugins/founder-os"
+DEFAULT_TARGET="$HOME/founder-os"
+# Pre-v1.37 installs landed here. Detected below so uninstall still finds an
+# older install when the default moved to ~/founder-os.
+LEGACY_TARGET="$HOME/.claude/plugins/founder-os"
 
 # install.sh stopped copying hooks to ~/.claude/hooks/ in v1.24.1; hooks now live
-# inside the plugin install directory at $TARGET/.claude/hooks/ and are removed
+# inside the install directory at $TARGET/.claude/hooks/ and are removed
 # along with the install directory below. Do NOT re-introduce a global hook
 # removal step here: a sibling PersonalOS install shares ~/.claude/hooks/.
 
@@ -54,7 +57,7 @@ Usage:
   bash uninstall.sh [options]
 
 Options:
-  --target <path>  Uninstall from a custom path instead of ~/.claude/plugins/founder-os
+  --target <path>  Uninstall from a custom path instead of ~/founder-os
   --dry-run        List what would be removed without removing anything
   --help           Show this help
 
@@ -89,7 +92,15 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-[[ -z "$TARGET" ]] && TARGET="$DEFAULT_TARGET"
+if [[ -z "$TARGET" ]]; then
+  # Prefer the current default ~/founder-os. Fall back to the legacy
+  # ~/.claude/plugins/founder-os only if that is where the install actually is.
+  if [[ -d "$LEGACY_TARGET" && ! -d "$DEFAULT_TARGET" ]]; then
+    TARGET="$LEGACY_TARGET"
+  else
+    TARGET="$DEFAULT_TARGET"
+  fi
+fi
 
 # ---- helpers -----------------------------------------------------------------
 

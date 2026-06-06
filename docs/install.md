@@ -34,6 +34,8 @@ If `/founder-os:setup` is not recognised after install, run `/reload-plugins` (o
 
 **Verifying it worked:** Open `/plugin` and check the Installed tab. You should see `founder-os` listed. Then `/founder-os:setup` should appear in the slash command palette. If the command is missing, run `/reload-plugins` first.
 
+**Where your files live.** The plugin is the engine - it installs under `~/.claude/plugins/` where Claude Code manages it, updates through `/plugin update`, and you never have to open it. When you run setup, it builds your actual OS in a folder you own (default `~/founder-os/`): priorities, decisions, brain log, the lot. That folder is plain markdown and yours to keep, back up, or fork. If you ever remove the plugin, your OS folder stays exactly where it is. Engine and data are separate on purpose: the engine is swappable, your files are not.
+
 **Verify the install:** Say "verify the OS" (or run `/founder-os:verify`).
 
 ---
@@ -55,12 +57,12 @@ curl -fsSL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/install
 The installer:
 
 1. Checks that bash, git, and Python 3.11+ are present. If any are missing, it prints install instructions for that specific tool and exits.
-2. Clones FounderOS to `~/.claude/plugins/founder-os/` (override with `--target <path>`).
-3. Prints a one-screen confirmation with the next step (`cd` into the install directory, open Claude Code, say "set up Founder OS"). Hooks register through the plugin's own `.claude/settings.json` inside the install directory - see "How hooks fire on Path E" below.
+2. Clones FounderOS to `~/founder-os/` (override with `--target <path>`). This is one folder you own - your data, the hooks, and the commands all live together. It is a plain git repo: back it up, move it, fork it. Nothing phones home.
+3. Prints a one-screen confirmation with the next step (`cd` into `~/founder-os`, open Claude Code, say "set up Founder OS"). Hooks register through the `.claude/settings.json` inside that folder - see "How hooks fire on Path E" below.
 
-If FounderOS is already installed, re-running the same command asks whether to update instead of cloning again.
+If FounderOS is already installed, re-running the same command asks whether to update instead of cloning again. (Installs from before v1.37 that still live at `~/.claude/plugins/founder-os` are detected and kept in place, so you are never left with two copies.)
 
-**How hooks fire on Path E.** Claude Code discovers hooks through a `.claude/settings.json` file in the working directory. The curl install lands one inside `~/.claude/plugins/founder-os/`, so the SessionStart brief and Stop revenue-check fire when you open Claude Code IN that folder. If you open Claude Code in a different project folder, those hooks do not fire there. To get hooks across every project, use Path A (Claude Code plugin) - the plugin namespace activates the hooks globally.
+**How hooks fire on Path E.** Claude Code discovers hooks through a `.claude/settings.json` file in the working directory. The curl install lands one inside `~/founder-os/`, so the SessionStart brief and Stop revenue-check fire when you open Claude Code IN your OS folder. If you open Claude Code in a different project folder, those hooks do not fire there. To get hooks across every project, also add Path A (the Claude Code plugin) - the plugin engine activates the commands and hooks globally and stays out of your OS folder.
 
 **Pros**
 - One command, no decisions.

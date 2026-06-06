@@ -104,7 +104,7 @@ Four install paths. The one that needs no terminal comes first. Full step-by-ste
 
 Then say "set up Founder OS" (or run `/founder-os:setup`). If setup is not recognised, run `/reload-plugins` first.
 
-**When to choose:** You want the gentlest path. Two commands typed inside Claude Code, no terminal install step, and auto-updates via `/founder-os:update`. Needs Claude Code with a paid Claude plan.
+**When to choose:** You want the gentlest path. Two commands typed inside Claude Code, no terminal install step, and auto-updates via `/founder-os:update`. Needs Claude Code with a paid Claude plan. The plugin is the engine and stays out of your way under `~/.claude/plugins/`; setup builds your OS in a folder you own (default `~/founder-os/`). Engine and data are separate - your files are yours even if you remove the plugin.
 
 ### One-line curl (fastest if you live in a terminal)
 
@@ -112,7 +112,7 @@ Then say "set up Founder OS" (or run `/founder-os:setup`). If setup is not recog
 curl -fsSL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/install.sh | bash
 ```
 
-Clones FounderOS (hook scripts and `settings.json` come along in the clone), then prints the natural-language next step. Requires git, Python 3.11+, and bash (on Windows, install git-bash first). Re-running the same command on an existing install offers an update instead.
+Clones FounderOS to `~/founder-os` (hook scripts and `settings.json` come along in the clone) and sets up in place, so your data, hooks, and commands live in one folder you own. Then prints the natural-language next step. Requires git, Python 3.11+, and bash (on Windows, install git-bash first). Re-running the same command on an existing install offers an update instead.
 
 **When to choose:** You are comfortable in a terminal on macOS or Linux (or git-bash on Windows) and want one command.
 

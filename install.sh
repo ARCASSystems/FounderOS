@@ -16,7 +16,14 @@ set -euo pipefail
 # ---- constants ---------------------------------------------------------------
 
 REPO_URL="https://github.com/ARCASSystems/FounderOS.git"
-DEFAULT_TARGET="$HOME/.claude/plugins/founder-os"
+# The OS folder is the one folder the founder owns. It lands in a plain,
+# visible path they control - not a tool-managed cache dir. The Claude plugin
+# (Path A) is a separate, invisible engine under ~/.claude/plugins/; this curl
+# path sets up the whole OS in one place the user owns.
+DEFAULT_TARGET="$HOME/founder-os"
+# Pre-v1.37 curl installs landed here. Detected below so an existing user is
+# never left with two divergent copies after the default moved.
+LEGACY_TARGET="$HOME/.claude/plugins/founder-os"
 
 # ---- argument parsing --------------------------------------------------------
 
@@ -31,7 +38,7 @@ Usage:
   bash install.sh [options]
 
 Options:
-  --target <path>  Install to a custom path instead of ~/.claude/plugins/founder-os
+  --target <path>  Install to a custom path instead of ~/founder-os
   --dry-run        Print what would happen without making any changes
   --help           Show this help
 
@@ -65,7 +72,17 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-[[ -z "$TARGET" ]] && TARGET="$DEFAULT_TARGET"
+if [[ -z "$TARGET" ]]; then
+  # Default to the user-owned ~/founder-os. If a pre-v1.37 install already
+  # exists at the legacy ~/.claude/plugins/founder-os path (and the new default
+  # is not yet a repo), keep using the legacy one so the user keeps a single
+  # source of truth instead of ending up with two divergent copies.
+  if [[ -d "$LEGACY_TARGET/.git" && ! -d "$DEFAULT_TARGET/.git" ]]; then
+    TARGET="$LEGACY_TARGET"
+  else
+    TARGET="$DEFAULT_TARGET"
+  fi
+fi
 
 # ---- helpers -----------------------------------------------------------------
 
@@ -210,20 +227,24 @@ fi
 
 echo ""
 echo "======================================================"
-echo "  FounderOS installed successfully"
+echo "  Founder OS installed"
 echo "======================================================"
 echo ""
-echo "  Location: $TARGET"
+echo "  Your OS lives here: $TARGET"
 echo ""
-echo "  Open Claude Code INSIDE that folder to use Founder OS."
-echo "  Hooks and slash commands only activate when Claude Code"
-echo "  is opened in the install directory (see docs/install.md"
-echo "  Path E for detail; use Path A plugin install for global"
-echo "  activation across every project folder)."
+echo "  This folder is yours. It is a normal git repo - back it up,"
+echo "  move it, fork it. Nothing phones home, and your files stay"
+echo "  plain markdown you can read in any tool. Founder OS just runs"
+echo "  on top of them. One folder, owned by you."
 echo ""
-echo "  Next step:"
-echo "  cd $TARGET && claude"
-echo "  Then Say \"set up Founder OS\" (or run /founder-os:setup)."
+echo "  Next step - open Claude Code in this folder:"
+echo "    cd $TARGET && claude"
+echo "  Then Say \"set up Founder OS\" (or run /setup) to personalise it."
+echo ""
+echo "  Want the commands and SessionStart brief in every project, not"
+echo "  just this folder? Add the plugin engine too (it stays out of"
+echo "  your way - your files never depend on it):"
+echo "    /plugin marketplace add ARCASSystems/FounderOS"
 echo ""
 echo "  Full docs: $TARGET/docs/first-day.md"
 echo "======================================================"
