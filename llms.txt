@@ -6,11 +6,11 @@ Project home: https://arcassystems.com/founder-os - built by ARCAS Systems. The 
 
 Founder OS runs inside Claude Code, and works partially in other AI CLIs and in Claude Cowork. It is built for owners, operators, agency leads, consultancy heads, and heads of department - anyone where the buck stops with them. It is a personal system, not a team tool, and not always-on.
 
-The system is plain markdown in three layers. Operating files hold priorities, clients, decisions, today, and the week. A brain layer holds the log, flags, patterns, parked decisions, and distilled knowledge. A wiki layer adds `[[cross-references]]` between files plus a source archive for articles and transcripts. Skills read and write across all three. Four roles (COO, BD, CMO, Chief of Staff) act as behavioural modes that switch based on what you are actually doing.
+The system has four layers, the same four the Founder OS Playbook draws on a napkin. The Brain is the memory: plain markdown you own, holding the six operating files (priorities, clients, decisions, today, the week), a brain layer (log, flags, patterns, parked decisions, distilled knowledge), and a wiki layer of `[[cross-references]]` plus a source archive for articles and transcripts. The Skills are the abilities the brain has, and they read and write across it. The Hands are the tools the skills reach for - calendar, inbox, notes, transcriber - kept optional. The Heartbeat is the rhythm that keeps it current: a daily anchor, a weekly retro, and a SessionStart brief that surfaces what has stalled. Four roles (COO, BD, CMO, Chief of Staff) act as behavioural modes that switch based on what you are actually doing.
 
 ## Start here
 
-- [Founder OS Playbook](https://arcassystems.com/founder-os): a visual walkthrough with screenshots - the problem it solves, the three parts, how to start, and what not to do. Opens in any browser, about 15 minutes. The same playbook also ships in the repo as a self-contained `founder-os-playbook.html`.
+- [Founder OS Playbook](https://arcassystems.com/founder-os): a visual walkthrough with screenshots - the problem it solves, the three parts, how to start, and what not to do. Opens in any browser, about 15 minutes. It lives on the web, not in the repo, so it never drifts.
 - [README](https://github.com/ARCASSystems/FounderOS/blob/main/README.md): the full product picture - who it is for, what it costs, what ships in the repo, and the setup ladder.
 - [Install guide](https://github.com/ARCASSystems/FounderOS/blob/main/docs/install.md): one-line curl, the Claude Code plugin marketplace, or a manual git clone.
 - [First day](https://github.com/ARCASSystems/FounderOS/blob/main/docs/first-day.md): what to do in your first session.

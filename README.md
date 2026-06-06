@@ -8,7 +8,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 ---
 
-**New here? [Read the Founder OS Playbook first](https://arcassystems.com/playbook/founder-os)** - a visual walkthrough with screenshots: the problem, the three parts, how to start, and what not to do. Opens framed in any browser, about 15 minutes. (Also ships in this repo as `founder-os-playbook.html` - open the downloaded file in any browser to read it offline.)
+**New here? [Read the Founder OS Playbook first](https://arcassystems.com/playbook)** - a visual walkthrough with screenshots: the problem, the three parts, how to start, and what not to do. Opens framed in any browser, about 15 minutes. It lives on the web so it never drifts out of date; there is no copy shipped in this repo.
 
 **[Download Founder OS](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip)** - or install via one-line curl, plugin marketplace, or git clone. See [Install](#install) below.
 
@@ -41,11 +41,12 @@ You are not installing a template. You are installing an operating layer. It lis
 
 ## What you actually get
 
-Three layers, in plain English. Skills read and write across all of them.
+Four layers, the same four the Founder OS Playbook draws on a napkin. Each does one job. Remove any one and the whole thing breaks.
 
-- **Operating files** - priorities, clients, decisions, today, weekly. The state of the business right now.
-- **Brain layer** - log, flags, patterns, parked decisions, rants, knowledge. The memory that captures what happened, what is stuck, and what is worth reusing.
-- **Wiki layer** - `[[cross-references]]` between files plus a source archive (`raw/`) for articles, transcripts, and anything you want preserved.
+- **The Brain** - memory and judgment, all plain markdown you own. The six operating files (priorities, clients, decisions, today, the week) hold the state of the business right now. The brain layer (log, flags, patterns, parked decisions, knowledge) holds what happened, what is stuck, and what is worth reusing. A wiki layer adds `[[cross-references]]` between files plus a source archive (`raw/`) for articles and transcripts.
+- **The Skills** - the abilities the brain has: draft a follow-up, prep a meeting, write a proposal, run the weekly retro. They read and write across the Brain, so the output lands like you, not like a chat window.
+- **The Hands** - the tools the skills reach for: calendar, inbox, notes, transcriber, voice capture. Wired through optional MCPs; nothing hard-fails when one is missing.
+- **The Heartbeat** - the rhythm that keeps it current: a daily anchor at the start of the day, a weekly retro at the end of the week, and a SessionStart brief that surfaces stalls and stale cadence.
 
 **Four roles as behavioural modes:** COO (default), BD, CMO, Chief of Staff. Claude switches mode based on what you are actually doing.
 

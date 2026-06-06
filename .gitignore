@@ -73,17 +73,19 @@ audit-*.md
 notes/
 
 # Public playbook build/workbench artifacts.
-# The public repo should ship founder-os-playbook.html only; these are generated
-# from the private OS maintenance flow and stay local when present.
+# The playbooks now live on the web (arcassystems.com/playbook); the public repo
+# ships no rendered playbook HTML. These build artifacts stay local when present.
 skills.html
 playbook.html
 playbook.template.html
 playbook.manifest.json
+founder-os-playbook.html
+the-second-brain-playbook.html
 scripts/screenshot-playbook.py
 
 # Archived playbook version snapshots. Kept locally for review, never shipped.
-# The repo ships the single current founder-os-playbook.html + the-second-brain-playbook.html;
-# every prior version-tagged copy lives here, out of the tracked tree.
+# The rendered playbooks live on the web, not in this repo; every prior
+# version-tagged copy lives here, out of the tracked tree.
 /archive/
 
 # Execution plans (internal release scaffolding - Codex reads locally, never commits)
