@@ -32,6 +32,8 @@ The `## Positioning` section is load-bearing. Populate:
 
 If any positioning answer was skipped, write `[NOT SET]` for that line. Do not invent a buyer, offer, or pain.
 
+The `## Basics` section also takes a discovery answer: populate `**Time zone:**` from the Phase 0.5.5 timezone answer. If it was skipped, write `[NOT SET]`. Leave `**Jurisdiction:**` as the shipped `[NOT SET - run /founder-os:legal-setup]` default - `legal-setup` fills it on first run.
+
 Show the draft. Get approval. Don't write yet.
 
 ### 1.1.5 Profile (what the OS leads with)

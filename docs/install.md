@@ -1,16 +1,48 @@
 # Install paths
 
-Four ways to install FounderOS. Pick the one that matches your stack. None of them lock you in - if you outgrow one path, you can move to another without losing your data.
+Four ways to install FounderOS. The plugin path (Path A) needs no terminal and comes first; pick whichever matches how you work. None of them lock you in - if you outgrow one path, you can move to another without losing your data.
+
+**Not comfortable in a terminal?** Use Path A (Claude Code plugin). It runs entirely inside Claude Code, with no terminal commands to type.
 
 If you get stuck, email `solutions@arcassystems.com` with the path you tried and the error you hit.
 
 ---
 
-## Path E - One-line curl (simplest)
+## Path A - Claude Code plugin (no terminal, cleanest)
+
+Two commands, typed inside Claude Code. No terminal needed. Auto-updates available. Cleanest first-run experience.
+
+**Best for:** Anyone not comfortable in a terminal, and anyone with a Claude Pro or Max plan who already uses Claude Code.
+
+**Steps:**
+
+```
+/plugin marketplace add ARCASSystems/FounderOS
+/plugin install founder-os@founder-os-marketplace
+```
+
+If `/founder-os:setup` is not recognised after install, run `/reload-plugins` (or restart Claude Code) so the plugin namespace activates, then try again.
+
+**Pros**
+- Two commands and you are set up, with no terminal install step.
+- Plugin updates flow through `/plugin update`.
+- Slash commands and hooks register automatically, across every project.
+
+**Cons**
+- Requires Claude Code with a paid Claude plan.
+- Plugin marketplace behaviour can vary by Claude Code version. If the install does not work, fall back to Path B or Path E.
+
+**Verifying it worked:** Open `/plugin` and check the Installed tab. You should see `founder-os` listed. Then `/founder-os:setup` should appear in the slash command palette. If the command is missing, run `/reload-plugins` first.
+
+**Verify the install:** Say "verify the OS" (or run `/founder-os:verify`).
+
+---
+
+## Path E - One-line curl (fastest if you live in a terminal)
 
 One command. Works on macOS, Linux, and git-bash on Windows.
 
-**Best for:** Anyone who wants the fastest path to a working install without reading install docs.
+**Best for:** Anyone comfortable in a terminal who wants the fastest path to a working install.
 
 **Requirements:** bash, git, and Python 3.11+.
 
@@ -39,36 +71,6 @@ If FounderOS is already installed, re-running the same command asks whether to u
 - Requires bash. On Windows, install git-bash first.
 - The install script requires internet access for the initial clone.
 - Hooks fire only when Claude Code is opened in the cloned folder. Use Path A for hooks that activate everywhere.
-
-**Verify the install:** Say "verify the OS" (or run `/founder-os:verify`).
-
----
-
-## Path A - Claude Code plugin (cleanest)
-
-Two commands. Auto-updates available. Cleanest first-run experience inside Claude Code.
-
-**Best for:** Anyone with a Claude Pro or Max plan who already uses Claude Code in their terminal or IDE.
-
-**Steps:**
-
-```
-/plugin marketplace add ARCASSystems/FounderOS
-/plugin install founder-os@founder-os-marketplace
-```
-
-If `/founder-os:setup` is not recognised after install, run `/reload-plugins` (or restart Claude Code) so the plugin namespace activates, then try again.
-
-**Pros**
-- Two commands and you are set up.
-- Plugin updates flow through `/plugin update`.
-- Slash commands and hooks register automatically.
-
-**Cons**
-- Requires Claude Code with a paid Claude plan.
-- Plugin marketplace behaviour can vary by Claude Code version. If the install does not work, fall back to Path B or Path E.
-
-**Verifying it worked:** Open `/plugin` and check the Installed tab. You should see `founder-os` listed. Then `/founder-os:setup` should appear in the slash command palette. If the command is missing, run `/reload-plugins` first.
 
 **Verify the install:** Say "verify the OS" (or run `/founder-os:verify`).
 
@@ -146,8 +148,8 @@ Full surface-by-surface compatibility detail in [docs/tools-and-mcps.md](tools-a
 
 | You have... | Pick |
 |---|---|
-| bash + git + Python 3.11+ | Path E (curl) |
-| Claude Code + Pro/Max plan | Path A (plugin) |
+| Claude Code + Pro/Max plan, or you would rather not touch a terminal | Path A (plugin) |
+| bash + git + Python 3.11+ and you like the terminal | Path E (curl) |
 | Claude Code, plugin install failed | Path B (git clone) |
 | FounderOS installed, want Cowork too | Path D (Cowork) |
 

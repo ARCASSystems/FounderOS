@@ -143,6 +143,13 @@ If role was not captured or defaulted, use `founder`.
 
 If no founder name was captured, fall through to the universal pass and write `[NOT SET]`. Do NOT leave literal `{{FOUNDER_NAME}}` on disk.
 
+**{{CONTENT_CHANNELS}} and {{CONTENT_CADENCE}} substitution (roles/cmo.md).** `templates/roles/cmo.md` carries two tokens the rest of the role tree does not feed. Substitute them like every other token, before the universal pass, so they never reach the founder's disk as literal `{{...}}`:
+
+- `{{CONTENT_CHANNELS}}` - if the founder named a primary channel in Phase 0.5 Q5 (`primary_channel` in `stack.json`), seed it here, e.g. `LinkedIn (add any other channels you use)`. If `primary_channel` is `null` or was skipped, substitute the graceful default `your main channels (fill these in)`.
+- `{{CONTENT_CADENCE}}` - no discovery question captures posting cadence this phase, so substitute the graceful default `your posting rhythm (fill this in)`.
+
+Do NOT write `[NOT SET]` for these two, and do NOT hardcode the default into `cmo.md` itself. Keeping the tokens in the template and the value in this substitution layer means a future wizard pass can personalize them the moment a real content-channels question exists. A natural-language default reads better to a founder than `[NOT SET]` for a section they are meant to fill in themselves.
+
 **Universal placeholder pass (always run last).** After every template copy completes in Phase 2.2 (and any later phase that copies a template), grep the destination file for any remaining `{{...}}` placeholder. Replace every match with `[NOT SET]`. This is the same rule already applied to `cadence/weekly-commitments.md`. It must apply universally: `rules/operating-rules.md`, `rules/writing-style.md`, `roles/*.md`, `global-claude-md.md`, `context/priorities.md`, and any future template all go through this pass. The named substitutions above MUST run before the universal pass so they don't get overwritten with `[NOT SET]`.
 
 **{{TODAY}} substitution.** The `templates/brain/relations.yaml` file contains the literal placeholder `{{TODAY}}`. When copying to `brain/relations.yaml`, replace every occurrence of `{{TODAY}}` with today's date in `YYYY-MM-DD` format (use `date -u +%Y-%m-%d` via Bash to get it).

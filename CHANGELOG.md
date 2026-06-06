@@ -2,6 +2,22 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.36.1 - 2026-06-06
+
+### Fix - CI gate, CMO role token, setup fields, install steer, and provider honesty
+
+A patch release that clears a red CI gate and tightens five rough edges an audit surfaced. No new skills or commands.
+
+- **CI gate fixed so contributors can push.** `check_install_completeness.py` read only `skills/founder-os-setup/SKILL.md`, but a docs refactor had moved the wizard's script and hook copy lists into `references/root-structure.md`. The guard then reported every runtime script and wired hook as named nowhere and failed every push to main. It now reads the whole setup-skill surface (`SKILL.md` plus `references/*.md`), so it sees what the wizard actually names. A new local test (`tests/test_ci_guards_pass_on_clean_tree.py`) runs every `.github/scripts/check_*.py` guard on the clean tree and asserts each exits 0, so a future doc move cannot silently break a guard while the test suite stays green.
+- **CMO role no longer ships an unfilled token.** `templates/roles/cmo.md` carried `{{CONTENT_CHANNELS}}` and `{{CONTENT_CADENCE}}` with no entry in the wizard's substitution map, so they were the only tokens that could land on a founder's disk as literal `{{...}}`. The wizard now substitutes both like every other token: it seeds channels from the primary channel captured in discovery when present, and otherwise fills a plain-language default a founder can edit, instead of a bare `[NOT SET]`.
+- **Setup captures timezone.** `meeting-prep` reads a timezone from `core/identity.md`, but discovery never asked for one, so it shipped blank. Discovery now asks a single skip-able timezone question and writes it into the identity file. Jurisdiction stays opt-in and is collected by `legal-setup` on first run, which discovery now states so the unset field reads as intentional.
+- **Non-technical founders are steered to the no-terminal install.** The install section led with the one-line curl labelled simplest, which actually needs git, Python, and bash. It now leads with the plugin install, which runs entirely inside Claude Code with no terminal step, and every path states its real prerequisites. `docs/install.md` mirrors the new order.
+- **Provider claim now matches what actually runs.** The README said the AI subscription could be Claude, OpenAI, or Google, but the wizard, the slash commands, and the hooks are Claude Code only. The cost section now leads with built for Claude Code and keeps the honest portability note: the files are plain markdown you can read in any AI, but the product runs in Claude Code. `llms.txt` command count corrected from 33 to 34.
+
+### Cross-cutting
+
+VERSION bumped to 1.36.1. Both manifest version fields and the README status line updated to match. Test count updated to 643 (the new CI-guard self-test). Skill count unchanged at 62, command count unchanged at 34.
+
 ## v1.36.0 - 2026-06-04
 
 ### Add - output bias self-check (`rules/biases.md` + `/founder-os:devil`)

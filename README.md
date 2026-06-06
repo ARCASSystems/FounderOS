@@ -60,13 +60,13 @@ A **SessionStart brief** runs on every Claude Code session open and surfaces sta
 
 ## What it costs
 
-One AI subscription. Everything else is free.
+One Claude subscription. Everything else is free.
 
 - **Founder OS** (this repo) - free, MIT licence
 - **Claude Code** (the interface) - free to install
-- **AI subscription** - Claude, OpenAI, or Google. Any plan with 100K+ context tokens. Most paid plans are $20-100/month.
+- **Claude subscription** - any paid Claude plan with enough context (100K+ tokens). Most plans are $20-100/month.
 
-Free tiers usually don't have enough context for this to work well. A paid AI subscription is the only real cost. If you already pay for Copilot, Gemini Pro, or GPT-4, try those first. The files travel with you. You are not locked in.
+Founder OS is built for Claude Code: the setup wizard, the slash commands, and the SessionStart and Stop hooks all run there. A paid Claude plan is the only real cost - free tiers usually don't have the context for this to work well. The files themselves are plain markdown and travel with you, so you can read them in any AI you paste them into, but the wizard, commands, and hooks run in Claude Code. You are not locked in.
 
 ---
 
@@ -75,7 +75,7 @@ Free tiers usually don't have enough context for this to work well. A paid AI su
 You need four things:
 
 - **Claude Code** - free. Download at [claude.ai/code](https://claude.ai/code). Desktop app for Mac and Windows.
-- **A paid AI subscription** - Claude Pro, Claude Max, or equivalent. Free tiers lack sufficient context.
+- **A paid Claude plan** - Claude Pro or Claude Max. Free tiers lack sufficient context.
 - **Git** - version 2.x or later. Run `git --version` to check.
 - **Python 3.11+** - for the runtime scripts. Run `python3 --version` to check.
 
@@ -91,19 +91,11 @@ The OS routes on natural language. Say what you need ("set up my voice profile",
 
 ## Install
 
-Four install paths. Simplest first. Full step-by-step for each in [docs/install.md](docs/install.md).
+Four install paths. The one that needs no terminal comes first. Full step-by-step for each in [docs/install.md](docs/install.md).
 
-### One-line curl (simplest)
+**Not comfortable in a terminal?** Start with the plugin install below. It runs entirely inside Claude Code, with no terminal commands to type.
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/install.sh | bash
-```
-
-Clones FounderOS (hook scripts and `settings.json` come along in the clone), then prints the natural-language next step. Requires bash, git, and Python 3.11+. Re-running the same command on an existing install offers an update instead.
-
-**When to choose:** You are on macOS or Linux (or git-bash on Windows), you want one command and you are done.
-
-### Plugin marketplace (cleanest Claude Code experience)
+### Plugin marketplace (no terminal, cleanest Claude Code experience)
 
 ```
 /plugin marketplace add ARCASSystems/FounderOS
@@ -112,7 +104,17 @@ Clones FounderOS (hook scripts and `settings.json` come along in the clone), the
 
 Then say "set up Founder OS" (or run `/founder-os:setup`). If setup is not recognised, run `/reload-plugins` first.
 
-**When to choose:** You already use Claude Code with a Pro or Max plan and want auto-updates via `/founder-os:update`.
+**When to choose:** You want the gentlest path. Two commands typed inside Claude Code, no terminal install step, and auto-updates via `/founder-os:update`. Needs Claude Code with a paid Claude plan.
+
+### One-line curl (fastest if you live in a terminal)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/install.sh | bash
+```
+
+Clones FounderOS (hook scripts and `settings.json` come along in the clone), then prints the natural-language next step. Requires git, Python 3.11+, and bash (on Windows, install git-bash first). Re-running the same command on an existing install offers an update instead.
+
+**When to choose:** You are comfortable in a terminal on macOS or Linux (or git-bash on Windows) and want one command.
 
 ### Manual git clone (most reliable)
 
@@ -120,7 +122,7 @@ Then say "set up Founder OS" (or run `/founder-os:setup`). If setup is not recog
 git clone --depth 1 https://github.com/ARCASSystems/FounderOS.git ~/founder-os
 ```
 
-Open Claude Code in the cloned folder, then say "set up Founder OS" (or run `/setup`). Commands use bare names on this path - no `/founder-os:` prefix.
+Open Claude Code in the cloned folder, then say "set up Founder OS" (or run `/setup`). Requires git and Python 3.11+. Commands use bare names on this path - no `/founder-os:` prefix.
 
 **When to choose:** The plugin install fails, or you want full control of the local copy and manual `git pull` updates.
 
@@ -271,7 +273,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.36.0. Public release. 62 skills, 34 commands, 641 tests.
+Version 1.36.1. Public release. 62 skills, 34 commands, 643 tests.
+
+v1.36.1 is a patch: it clears a red CI gate, stops the CMO role shipping an unfilled token, captures your timezone at setup, steers non-technical founders to the no-terminal install, and corrects the provider claim to match what actually runs (Claude Code).
 
 v1.36 adds the output bias self-check. The OS now runs a check on its own reasoning before it gives an opinion of consequence, attaching a counter-case, a confidence level, what evidence is absent, and the do-nothing option, so advice is named-and-countered instead of confidently biased. It ships as `rules/biases.md`, a `/founder-os:devil` command to run it on demand, a boot rule plus a plain-language explanation of why the OS pushes back, and a one-line decision-prompt nudge in the capture hook. Full release history in [CHANGELOG.md](CHANGELOG.md).
 

@@ -133,6 +133,16 @@ The other eight `stack.json` fields (`automation_platform`, `file_storage`, `mee
 
 These fields populate `stack.json`, which sop-writer, meeting-prep, email-drafter, and other skills read at runtime to tailor output to the founder's actual stack. The full write happens in Phase 5.0.
 
+### 0.5.5 Time Zone
+
+Ask: "What time zone are you in? A city or a UTC offset both work (e.g. Dubai, London, GST, UTC+4). You can say skip."
+
+Record the answer as `timezone` internally. Keep whatever the founder gives, city name or offset. If the user says "skip", record `null`; the identity write then leaves the field as `[NOT SET]`.
+
+This populates `**Time zone:**` in `core/identity.md`, which `meeting-prep` reads to get call and scheduling times right.
+
+**Jurisdiction note.** Do not ask for legal jurisdiction here. The legal layer is opt-in, so `core/identity.md` ships `**Jurisdiction:** [NOT SET - run /founder-os:legal-setup]` and `legal-setup` collects the jurisdiction the first time the founder runs it. The unset field is intentional, not a gap.
+
 ### 0.6 Existing Setup Audit
 Before proceeding, scan the filesystem silently:
 - Read `~/.claude/CLAUDE.md` if it exists

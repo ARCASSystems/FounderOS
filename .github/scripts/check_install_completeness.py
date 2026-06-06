@@ -24,6 +24,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent.parent
 WIZARD = REPO / "skills" / "founder-os-setup" / "SKILL.md"
+WIZARD_DIR = REPO / "skills" / "founder-os-setup"
 SETTINGS = REPO / ".claude" / "settings.json"
 TEMPLATE_SCRIPTS = REPO / "templates" / "scripts"
 HOOKS_DIR = REPO / ".claude" / "hooks"
@@ -37,7 +38,15 @@ def main() -> int:
     if not WIZARD.exists():
         print(f"FAIL: wizard not found at {WIZARD}")
         return 1
-    wizard_text = WIZARD.read_text(encoding="utf-8")
+    # The wizard is a progressive-disclosure skill: SKILL.md is a thin router and the
+    # per-phase procedure - including the script and hook copy lists - lives in
+    # references/*.md. Read the whole skill surface so this parity check sees every file
+    # the wizard names, not just the router. A 2026-06-05 refactor moved the copy lists
+    # into references/root-structure.md and silently broke this guard while it still read
+    # SKILL.md alone; reading the full surface is what stops that from recurring.
+    wizard_text = "\n".join(
+        p.read_text(encoding="utf-8") for p in sorted(WIZARD_DIR.glob("**/*.md"))
+    )
 
     # 1. Every source path the wizard names must exist in the repo, so a fresh clone
     #    contains every file the copy steps reference.
