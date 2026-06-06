@@ -1,0 +1,89 @@
+# ICP config for linkedin-network-scan - CAREER / TALENT edition.
+#
+# Use this when your goal is PEOPLE, not customers: the recruiters, talent leaders,
+# and hiring managers in your network who can refer you, hire you, or - if you are
+# the one hiring - help you find talent. Plus the senior decision-makers at the
+# companies you are targeting.
+#
+# Copy it, edit the lists for your own target companies and function, then run:
+#   python scan.py <export.zip> <output-folder> --icp icp.career.example.yaml
+#
+# Same simple YAML rules as icp.example.yaml: blank lines, `# comments`,
+# `key: value`, and a key followed by indented `- item` lines. Nothing else
+# (no nesting, no inline {}/[]). Every field is optional.
+
+# Shows up in the report header so you know which lens produced the list.
+label: "Recruiters, hiring managers, and target-company people"
+
+# Title keywords that earn the +15 role bonus. Two groups are seeded here:
+#   (1) the talent gatekeepers who refer and hire,
+#   (2) the senior people who own the decision at companies you want in.
+# Edit freely - add the function you are targeting (e.g. "product manager",
+# "head of design", "engineering manager").
+roles:
+  - recruiter
+  - technical recruiter
+  - talent acquisition
+  - talent partner
+  - talent
+  - sourcer
+  - headhunter
+  - people partner
+  - hr business partner
+  - head of talent
+  - head of people
+  - head of hr
+  - hiring manager
+  - head of
+  - director
+  - founder
+  - ceo
+  - managing director
+
+# Industry / domain words matched against title AND company (+8). Replace these
+# with the industries you are targeting.
+industries:
+  - technology
+  - software
+  - consulting
+  - financial services
+  - recruitment
+
+# Company-name keywords (+10). PUT YOUR TARGET EMPLOYERS HERE - the companies you
+# actually want to work for, or hire from. For a job search this is the single
+# highest-signal field, so it is worth filling in properly.
+company_keywords:
+  - example company
+  - your target employer
+
+# OPTIONAL region filter. Tokens matched against company + title; a hit adds +8.
+# These are just examples - replace with your own market, or delete the block for
+# no region bias.
+region_tokens:
+  - london
+  - new york
+  - singapore
+  - remote
+
+# Title/company words that DISQUALIFY outright (score -100). Students, interns,
+# "open to work", retired, etc. are already excluded by default. Note this list
+# does NOT exclude "recruiter" the way the sales ICP does - here recruiters are
+# the target. Add your current employer if you do not want internal colleagues in.
+exclude:
+  - student
+
+# Minimum seniority floor. Keep this at `ic` for a career / talent search: a junior
+# recruiter or a sourcer at your target company is still a valuable contact, and the
+# `manager` floor would drop them. One of: ic | manager | director | vp | c_suite | founder.
+min_seniority: ic
+
+# Score a connection must reach to make the ranked list. Lowered to 18 (from the
+# sales-ICP default of 30) on purpose: recruiter, sourcer, and talent titles score
+# at the generic seniority floor, so the +15 role bonus alone (4 + 15 = 19) is what
+# clears the bar for them. Target-company hiring managers clear it via the +10
+# company-keyword bonus. Raise it to tighten the list, lower it to widen.
+threshold: 18
+
+# How many ranked rows to show in the HTML and the compact markdown digest.
+# The CSV always contains every qualified row.
+show_n: 40

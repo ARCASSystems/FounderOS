@@ -3,7 +3,8 @@ name: linkedin-network-scan
 description: >
   Rank your own LinkedIn network against an ICP you define, without burning context on raw CSVs. Point it at your LinkedIn data-export ZIP; a deterministic local script scores every connection (seniority with demotions, ICP role/industry/company match, connection recency, reply-warmth, optional region) and writes a compact ranked worklist. The assistant reads only the small ranked digest, never the 2,000-row export. Free plan only - no scrapers, no paid tools, no API calls. Message content is never read. Use when someone says "scan my linkedin network", "who in my network fits my ICP", "build my outreach list from my connections", or shares a LinkedIn export ZIP for targeting.
 why: "A LinkedIn connections export is tens of thousands of tokens; reading it raw wastes context and money. A deterministic script collapses it to a ranked top-N first, so the model only ever sees a small worklist - and real names and URLs never leave the machine."
-enhance: "Write a real ICP file before running (roles, industries, company keywords, min seniority, optional region) instead of taking the permissive default - a narrowed ICP turns a long flat list into a short, ranked, actually-actionable worklist."
+enhance: "Write a real ICP file before running (roles, industries, company keywords, min seniority, optional region) instead of taking the permissive default - a narrowed ICP turns a long flat list into a short, ranked, actionable worklist."
+summary: "Rank your own LinkedIn network against an ICP you define."
 allowed-tools: ["Bash", "Read"]
 mcp_requirements: []
 ---
@@ -40,7 +41,12 @@ Only continue once they have the file.
 
 ## Step 2 - get the ICP
 
-Ask whether they have an ICP config, or want to define one now. Offer the template at `icp.example.yaml` in this skill folder - they copy it, edit the lists (roles, industries, company keywords, min seniority, optional region tokens, exclusions), and save it as their own file.
+Ask whether they have an ICP config, or want to define one now. Two example ICPs ship in this skill folder - copy whichever fits, edit the lists (roles, industries, company keywords, min seniority, optional region tokens, exclusions), and save it as their own file:
+
+- `icp.example.yaml` - sales and partnership targeting (founders, owners, and the decision-makers you sell to or partner with).
+- `icp.career.example.yaml` - the people axis: recruiters, talent leaders, and hiring managers who can refer you, hire you, or help you hire, plus decision-makers at the companies you are targeting. Tuned for a job search or a hiring push (`min_seniority: ic` and a lower threshold so recruiter and talent titles are not dropped).
+
+If both fit, ask which goal the user is on right now (selling / partnering, or hiring / job search) and pick the matching example.
 
 If they have no ICP and do not want to build one, run with the permissive default (any decision-maker, no industry/region filter) and tell them explicitly that nothing was narrowed, so the ranking is seniority + warmth only.
 
@@ -89,4 +95,5 @@ Every file carries a header reminding the user not to commit or share it.
 ## Files
 
 - `scan.py` - the deterministic scanner (stdlib only).
-- `icp.example.yaml` - documented ICP template to copy and edit.
+- `icp.example.yaml` - documented ICP template (sales / partnership) to copy and edit.
+- `icp.career.example.yaml` - documented ICP template (recruiters / hiring / job search) to copy and edit.
