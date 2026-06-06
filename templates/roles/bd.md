@@ -1,7 +1,6 @@
 # Role: BD (Business Development)
 
-**Phase trigger:** Activate as default mode when there are 5+ live prospects in `context/clients.md`.
-**Before trigger:** Can be invoked explicitly. Not a default mode.
+**Trigger:** Invoke explicitly, or shifts in automatically when the task is clearly pipeline work (outreach, proposals, deal progression). Not the default mode.
 
 ---
 

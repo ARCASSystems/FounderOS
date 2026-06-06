@@ -2,7 +2,7 @@
 
 A thin bridge for Codex, Cursor, Windsurf, Gemini, and other non-Claude agents operating in this repo.
 
-The canonical instruction file is `CLAUDE.md`. It is the source of truth for how this OS behaves: what the repo is, the repo map, the four role modes, the full skill and command lists, the brain substrate, the hooks, the wiki conventions, and what not to do. Read it in full. This file only carries the deltas a non-Claude agent needs on top of it. If anything here ever disagrees with `CLAUDE.md`, `CLAUDE.md` wins.
+The canonical instruction file is `CLAUDE.md`. It is the source of truth for how this OS behaves: what the repo is, the repo map, the six role modes (four active, two reference-until-invoked), the full skill and command lists, the brain substrate, the hooks, the wiki conventions, and what not to do. Read it in full. This file only carries the deltas a non-Claude agent needs on top of it. If anything here ever disagrees with `CLAUDE.md`, `CLAUDE.md` wins.
 
 ---
 

@@ -2,6 +2,28 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.37.0 - 2026-06-06
+
+### Add - one folder you own, plus two more role modes
+
+A minor release with two user-facing wins: the OS now installs into a folder you own instead of a hidden cache dir, and the role system gains the two modes the docs used to wave away.
+
+#### Install into one folder you own
+
+- **The OS lands in a folder you own, not an app cache.** Install used to clone into `~/.claude/plugins/founder-os`, a tool-managed path that reads like a cache and gets wiped on plugin update, while the wizard built your living data somewhere else. The result was split-brain: your files in one place, the hooks wired to another. Now the curl and git-clone paths set up in place, so your data, your hooks, and your commands all live in one folder you own (default `~/founder-os`). The plugin path still keeps its engine where Claude Code needs it to discover commands and hooks, but the wizard builds your OS in the folder you own and names the engine as separate, invisible plumbing.
+- **Engine and data are named as the separate things they are.** The install message and the docs now say it plainly: the folder is yours, a normal git repo you can back up, move, or fork, and nothing phones home. The plugin (if you use that path) is just the Claude engine that operates on the folder.
+- **An existing install is detected, not duplicated.** A pre-v1.37 install at the old cache path is found and kept, so re-running setup does not leave you with a divergent second copy.
+
+#### The role system is real now
+
+- **Two new role modes: CSO and CTO.** They ship as files in `templates/roles/` and the setup wizard installs them, so the OS now carries six role modes instead of four. CSO holds the portfolio view across everything you run (entity health, time and attention balance, catching strategy that is really just motion). CTO keeps your tool stack and automations coherent (an infrastructure registry, a smallest-viable-option automation protocol, and health monitoring). Both are reference-until-invoked: they stay out of default routing so they never compete with COO for everyday work, and they activate only when you ask ("act as CSO", "switch to CTO"). The docs used to tell you to copy a skill folder to get these. That was wrong. They are roles, and now they are shipped as roles.
+- **The BD trigger is honest.** BD claimed it became the default mode once you had "5+ live prospects", but nothing in the product reads that count, so the flip never happened. The copy now says what is true: invoke BD explicitly, or it shifts in when the task is clearly pipeline work. No documented automatic behavior the product does not deliver.
+- **You are told how to switch lens.** The README roles block now states the plain phrase: say "switch to CMO" (or any role) to change lens yourself, because a non-technical founder will not guess it.
+
+### Cross-cutting
+
+VERSION bumped to 1.37.0. Both manifest version fields and the README status line updated to match. Role-mode count statements reconciled from four to six across `README.md`, `CLAUDE.md`, `AGENTS.md`, `llms.txt`, both manifests, the bootloader template, and `roles/index.md`. Skill count unchanged at 62, command count unchanged at 34, test count unchanged at 643 (no new tests; the new role files are markdown the wizard copies). The two new role files were checked against the private-name, em-dash, and vendor-leak guards before commit.
+
 ## v1.36.1 - 2026-06-06
 
 ### Fix - CI gate, CMO role token, setup fields, install steer, and provider honesty

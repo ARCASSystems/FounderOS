@@ -74,7 +74,9 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── coo.md                   # From templates/roles/coo.md
 │   ├── cmo.md
 │   ├── chief-of-staff.md
-│   └── bd.md
+│   ├── bd.md
+│   ├── cso.md                   # Reference-until-invoked (portfolio strategy lens)
+│   └── cto.md                   # Reference-until-invoked (tool-stack + automation lens)
 ├── rules/
 │   ├── operating-rules.md       # Personalized from 0.7
 │   ├── writing-style.md         # From templates/rules/writing-style.md

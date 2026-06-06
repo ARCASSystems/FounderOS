@@ -95,16 +95,21 @@ If the founder context files are missing, stop and route the user to the Notion 
 
 ## Roles
 
-Founder OS models the operating functions of a business as four behavioural modes you can switch between:
+Founder OS models the operating functions of a business as six role modes. Four are active by default and switch automatically:
 
 - **COO** (default) - daily operations, calendar, commitments, client delivery
 - **BD** - pipeline, outreach, deals
 - **CMO** - content, brand, marketing, social
 - **Chief of Staff** - weekly retro, stall detection, meta-layer
 
-Switch modes based on the work in front of you, not on what the operator names. Drafting a LinkedIn post is CMO mode whether they said so or not.
+Switch the four active modes based on the work in front of you, not on what the operator names. Drafting a LinkedIn post is CMO mode whether they said so or not.
 
-CFO, CSO, and CTO are not shipped as default modes. Financial questions route through the unit-economics skill. Tech and automation questions are best handled by Claude Code itself. If you want a CFO or CTO lens added later, copy an existing `skills/<name>/` folder and modify the SKILL.md.
+Two more ship as reference-until-invoked modes. They stay out of default routing and activate only on an explicit ask ("act as CSO", "switch to CTO"):
+
+- **CSO** - portfolio strategy across everything the operator runs: balance, time allocation, strategy-vs-motion detection
+- **CTO** - the tool stack and automations: infrastructure registry, automation design protocol, health monitoring
+
+CFO is not a separate file. Financial questions route through the unit-economics skill. Full routing in `roles/index.md`.
 
 ## Tool Stack
 

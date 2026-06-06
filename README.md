@@ -48,7 +48,7 @@ Four layers, the same four the Founder OS Playbook draws on a napkin. Each does 
 - **The Hands** - the tools the skills reach for: calendar, inbox, notes, transcriber, voice capture. Wired through optional MCPs; nothing hard-fails when one is missing.
 - **The Heartbeat** - the rhythm that keeps it current: a daily anchor at the start of the day, a weekly retro at the end of the week, and a SessionStart brief that surfaces stalls and stale cadence.
 
-**Four roles as behavioural modes:** COO (default), BD, CMO, Chief of Staff. Claude switches mode based on what you are actually doing.
+**Six role modes.** Four switch automatically based on what you are doing: COO (default), BD, CMO, Chief of Staff. Two more are there when you need them and you invoke explicitly: CSO for the portfolio view across everything you run, CTO for your tool stack and automations. To change lens yourself, just say "switch to CMO" (or any role).
 
 A **SessionStart brief** runs on every Claude Code session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up. You do not need to think about it. The brief, the Stop hook, and slash commands are Claude Code-only - on Cowork or Cloud Claude they do not fire. Details under [Substrate details](#substrate-details) below if curious. Surface-by-surface compatibility table in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
@@ -273,7 +273,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.36.1. Public release. 62 skills, 34 commands, 643 tests.
+Version 1.37.0. Public release. 62 skills, 34 commands, 643 tests.
+
+v1.37.0 does two things. It installs the OS into one folder you own (default `~/founder-os`) instead of a hidden cache dir, names the engine and your data as the separate things they are, and detects an existing install so you never end up with two copies. And it makes the role system real: it adds two role modes you can reach when you need them, CSO for the portfolio view across everything you run and CTO for your tool stack and automations, makes the BD trigger honest (you invoke it, it does not silently flip on a count nothing reads), and tells you the plain phrase to switch lens yourself ("switch to CMO").
 
 v1.36.1 is a patch: it clears a red CI gate, stops the CMO role shipping an unfilled token, captures your timezone at setup, steers non-technical founders to the no-terminal install, and corrects the provider claim to match what actually runs (Claude Code).
 
