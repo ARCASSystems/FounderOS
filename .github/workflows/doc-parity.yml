@@ -35,3 +35,6 @@ jobs:
 
       - name: Brief-cleanliness guard (template examples do not inflate the first brief)
         run: python3 .github/scripts/check_brief_cleanliness.py
+
+      - name: Role-parity guard (roles agree across disk, index, and wizard copy list)
+        run: python3 .github/scripts/check_role_parity.py

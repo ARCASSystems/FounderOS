@@ -22,7 +22,7 @@ A minor release with two user-facing wins: the OS now installs into a folder you
 
 ### Cross-cutting
 
-VERSION bumped to 1.37.0. Both manifest version fields and the README status line updated to match. Role-mode count statements reconciled from four to six across `README.md`, `CLAUDE.md`, `AGENTS.md`, `llms.txt`, both manifests, the bootloader template, and `roles/index.md`. Skill count unchanged at 62, command count unchanged at 34, test count unchanged at 643 (no new tests; the new role files are markdown the wizard copies). The two new role files were checked against the private-name, em-dash, and vendor-leak guards before commit.
+VERSION bumped to 1.37.0. Both manifest version fields and the README status line updated to match. Role-mode count statements reconciled from four to six across `README.md`, `CLAUDE.md`, `AGENTS.md`, `llms.txt`, both manifests, the bootloader template, and `roles/index.md`. A new CI guard, `.github/scripts/check_role_parity.py` (wired into the doc-parity workflow), asserts every role file on disk is named by `roles/index.md` and the setup wizard's copy list, so a future doc refactor cannot silently drop a role from the wizard while CI stays green. Skill count unchanged at 62, command count unchanged at 34, test count unchanged at 643 (no new tests; the new role files are markdown the wizard copies). The two new role files were checked against the private-name, em-dash, and vendor-leak guards before commit.
 
 ## v1.36.1 - 2026-06-06
 
