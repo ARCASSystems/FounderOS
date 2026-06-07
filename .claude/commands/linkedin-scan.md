@@ -1,5 +1,5 @@
 ---
-description: Turn your own LinkedIn export into a ranked outreach worklist, free and local. Fires on "scan my LinkedIn network", "rank my LinkedIn connections", "who in my network fits my ICP", "build my outreach list from my connections", or a dropped LinkedIn export ZIP (or run /founder-os:linkedin-scan <export.zip or folder>). Scores every connection locally against an ICP you set and writes a ranked CSV plus an interactive HTML, with an anonymised demo view safe to share. No Sales Navigator, no Apollo, no scraper, message content never read.
+description: Turn your own LinkedIn export into a ranked outreach worklist, free and local. Fires on "scan my LinkedIn network", "rank my LinkedIn connections", "who in my network fits my ICP", "build my outreach list from my connections", or a dropped LinkedIn export ZIP (or run /founder-os:linkedin-scan <export.zip or folder>). Scores every connection locally against an ICP you set and writes a ranked CSV plus an interactive HTML, with an anonymised demo view safe to share. No scraper, no automated actions, message content never read.
 argument-hint: "<export.zip | export-folder> [--icp my-icp.yaml]"
 allowed-tools: ["Bash", "Read", "Write", "Edit"]
 ---

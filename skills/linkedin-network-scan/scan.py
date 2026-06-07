@@ -732,7 +732,7 @@ body.annotated .anno{display:block;animation:fadein .35s ease;}
 <header class="hero">
   <div class="brand">__LOGO_TAG__</div>
   <h1>From <span class="hl">__TOTAL__</span> LinkedIn connections, here are the <span class="hl">__SHOWN__</span> worth acting on</h1>
-  <p class="sub">No Sales Navigator. No scraper. No paid tool. Your own export, scored locally against the ICP you set, and sorted into a worklist.</p>
+  <p class="sub">No scraper. No paid tool. No automated actions. Your own export, scored locally against the ICP you set, and sorted into a worklist.</p>
   <div class="statrow" id="herostats"></div>
 </header>
 <div class="panel"><div class="wrap">

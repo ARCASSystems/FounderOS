@@ -1,7 +1,7 @@
 ---
 name: linkedin-network-scan
 description: >
-  Turn your own LinkedIn export into a ranked, ready-to-work outreach list, for free. Point it at the data-export ZIP LinkedIn gives you; a deterministic local script scores every connection against an ICP you set and writes a short worklist plus an interactive page you can filter. No Sales Navigator, no Apollo, no scraper, no paid tool, no API call. Message content is never read - only who you spoke to, the direction, and when. The assistant reads only the small ranked digest, never the 2,000-row export, and your names and links stay on your machine. Use when someone says "scan my linkedin network", "rank my linkedin connections", "who in my network fits my ICP", "build my outreach list from my connections", or shares a LinkedIn export ZIP.
+  Turn your own LinkedIn export into a ranked, ready-to-work outreach list, for free. Point it at the data-export ZIP LinkedIn gives you; a deterministic local script scores every connection against an ICP you set and writes a short worklist plus an interactive page you can filter. No scraper, no paid tool, no API call, and no automated actions that could get your account restricted. Message content is never read - only who you spoke to, the direction, and when. The assistant reads only the small ranked digest, never the 2,000-row export, and your names and links stay on your machine. Use when someone says "scan my linkedin network", "rank my linkedin connections", "who in my network fits my ICP", "build my outreach list from my connections", or shares a LinkedIn export ZIP.
 why: "A LinkedIn connections export is tens of thousands of tokens; reading it raw wastes context and money. A deterministic script collapses it to a ranked top-N first, so the model only ever sees a small worklist - and real names and URLs never leave the machine."
 enhance: "Write a real ICP file before running (roles, industries, company keywords, min seniority, optional region, optional demote keywords) instead of taking the permissive default - a narrowed ICP turns a long flat list into a short, ranked, actionable worklist."
 summary: "Rank your own LinkedIn network against an ICP you define."
@@ -15,7 +15,7 @@ Runs on: local-exec - runs a local script; on a cloud surface I read the results
 
 Turn your own LinkedIn export into a real worklist. You bring the file LinkedIn already lets you download; a local script reads it, scores every connection against the ideal-customer (or ideal-contact) profile you set, and hands back a short ranked list and an interactive page you can filter by fit, region, and warmth.
 
-No Sales Navigator. No Apollo. No scraper. No paid tool. The whole thing runs on a free LinkedIn account and Python's standard library, on your own machine. The raw CSVs never enter the conversation - the script collapses them to a compact digest first, so the assistant reads a few hundred lines instead of two thousand rows, and your names and profile links never leave your disk.
+No scraper. No paid tool. No automated actions that could get your account restricted. The whole thing runs on a free LinkedIn account and Python's standard library, on your own machine. The raw CSVs never enter the conversation - the script collapses them to a compact digest first, so the assistant reads a few hundred lines instead of two thousand rows, and your names and profile links never leave your disk.
 
 ## When to use
 
@@ -27,7 +27,7 @@ No Sales Navigator. No Apollo. No scraper. No paid tool. The whole thing runs on
 
 - To analyse someone else's export they did not personally download. Refuse on consent grounds.
 - To write the outreach messages. That is a separate writing task.
-- To scrape LinkedIn or use a paid Sales Navigator seat. This skill is export-only, free-plan only.
+- To scrape LinkedIn or run automated outreach. This skill is export-only and free-plan only, and stays within LinkedIn's terms.
 
 ## Step 1 - the ZIP gate (do this FIRST, before anything else)
 

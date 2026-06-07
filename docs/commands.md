@@ -287,7 +287,7 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **Args.** `<export.zip | export-folder>` - the path to your own LinkedIn data export. Point it straight at the .zip, no need to unzip. `--icp <file>` optional; omit it for the permissive default.
 - **Writes.** Read-only on your OS folder. The scan writes its outputs (`network-scan.md`, two HTML views, `network-scan.csv`, `network-scan.json`, `inbound-invites.csv`) to an output folder you choose OUTSIDE any git repo, because they hold real names and URLs.
 - **Prereqs.** Your own LinkedIn data export. Request the larger data archive (Settings -> Data privacy -> Get a copy of your data -> Download larger data archive); it bundles your Connections file and usually arrives within 24 hours. The quick select-files route is unreliable for Connections, so use the larger archive. `/founder-os:setup` is not required.
-- **When to run.** When you want a manual-outreach or hiring worklist from your existing network, free and local, with no Sales Navigator or scraper.
+- **When to run.** When you want a manual-outreach or hiring worklist from your existing network, free and local, with no scraper and no automated actions.
 - **Follow-up.** `list-pruner` to clean the resulting CSV before outreach, or `linkedin-post` to write the content. See `skills/linkedin-network-scan/SKILL.md`.
 
 ---
