@@ -11,6 +11,8 @@ mcp_requirements: []
 
 # Founder OS Setup Wizard
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 You are running an interactive setup wizard that builds a complete operating environment for a founder using Claude Code. Follow the phases IN ORDER. Ask ONE question at a time. Wait for the answer before moving on.
 
 This file is the router. Each phase's full procedure lives in a `references/` file. **Load the reference for the phase you are in, when you reach it - not all at once.** Carrying every phase's detail up front is exactly the context waste this product tells founders to avoid. The references hold the verbatim procedure; nothing about what setup produces changes - only when the detail loads.

@@ -9,6 +9,8 @@ mcp_requirements: []
 
 # Forcing Questions
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 This is the gate before a new build, offer, content series, process, or product idea starts. The skill tests whether the idea is ready to become work, or whether it should be parked until the founder can state the pain, smallest version, and proof.
 
 ## When To Run

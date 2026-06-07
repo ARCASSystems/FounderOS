@@ -185,13 +185,26 @@ Note: claude-mem is AGPL-3.0. We cannot vendor any of its code into FounderOS wi
 
 ---
 
-## Surface compatibility table
+## Surfaces and the runtime-capability matrix
 
-| Surface | Reads markdown | Skills | Slash commands | Hooks | MCPs | Auto-memory |
-|---|---|---|---|---|---|---|
-| Claude Code (terminal) | Yes | Yes | Yes | Yes | Yes | `~/.claude/projects/<slug>/memory/MEMORY.md` |
-| Claude Cowork (desktop) | Yes | Partial | Partial | No | Yes (account-level) | Separate Cowork memory, not shared with Claude Code |
-| Obsidian | Yes (viewer) | No | No | No | No | No |
-| claude-mem | Reads via tool-call telemetry only | No (separate plugin) | No | Yes (own hooks) | Yes (own MCP server) | Own SQLite + Chroma store |
+What changes by surface is per-skill capability, not whether the OS works. Every skill declares its runtime class on a `Runs on:` line (see the `Runs on:` contract in `CLAUDE.md`): `reasoning` (read and reason), `local-writes` (create or edit OS files), `local-exec` (run a local script). Surfaces fall into three buckets:
 
-Use Claude Code as the OS layer. Use Obsidian as the viewer. Use Cowork for desktop knowledge-work pointed at the same folder. Add claude-mem if you want tool-call telemetry on top.
+- **Local-CLI** - runs scripts, writes files, fires slash commands and hooks. Claude Code is the reference; Codex and other local CLIs are covered by the bridge-file redirect (`AGENTS.md`, `GEMINI.md`).
+- **Desktop folder-attached** - reads and writes the files when opened in the folder; no slash commands or hooks; script execution depends on the surface. Cowork, Antigravity.
+- **Web-only** - reads and reasons; no local writes, no script execution. Cloud Claude, any browser LLM.
+
+Only the Claude Code row below is validated by a real run. The other rows describe what each bucket's capability implies through the bridge-file redirect. They are covered by design, not separately tested per agent.
+
+| Surface (bucket) | `reasoning` | `local-writes` | `local-exec` | Slash commands | Hooks |
+|---|---|---|---|---|---|
+| Claude Code (local-CLI) - validated | Yes | Yes | Yes | Yes | Yes |
+| Cowork, Antigravity (desktop folder-attached) - redirect-covered, not separately validated | Yes | Yes, with folder write access | Depends on the surface; with no script-exec it reads the produced artifacts | No - say so | No - say so |
+| Cloud Claude, browser LLM (web-only) - redirect-covered, not separately validated | Yes | No - drafts the change for you to apply | No - reads the produced artifacts and helps you act | No - say so | No - say so |
+
+Apply the honest-degradation rule from `CLAUDE.md`: on a surface that cannot do what a skill's `Runs on:` class needs, say so in one sentence and offer the path you can do. Never claim a slash command, script run, hook, or local write happened where it did not.
+
+**Auto-memory:** Claude Code reads `~/.claude/projects/<slug>/memory/MEMORY.md` at session start. Cowork keeps its own memory, not shared with Claude Code. Web-only surfaces and Obsidian have none.
+
+**Obsidian and claude-mem** are not agent surfaces. Obsidian reads and edits the markdown but runs no skills, slash commands, or hooks (see the Obsidian section above). claude-mem is a separate tool-call telemetry plugin (see above).
+
+Use Claude Code as the OS layer. Use Obsidian as the viewer. Use Cowork or Antigravity for desktop knowledge-work pointed at the same folder. Add claude-mem if you want tool-call telemetry on top.

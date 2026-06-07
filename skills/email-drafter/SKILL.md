@@ -10,6 +10,8 @@ mcp_requirements: [optional: gmail]
 
 # Email Drafter
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Apply the voice and writing rules from `core/identity.md`, `rules/writing-style.md`, and `core/voice-profile.yml` (via the `your-voice` skill). Emails are conversations, not content pieces. The anti-AI self-check is relaxed here, but the voice rules still apply.
 
 ## Voice routing (operator or brand?)

@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Ingest
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Files a source into the OS with provenance. The raw layer is the immutable archive. The wiki layer holds extracted content with cross-links back to the source.
 
 This skill must:

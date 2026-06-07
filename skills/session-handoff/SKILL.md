@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Session Handoff
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 The goal: the receiving session picks up without re-explaining anything, regardless of whether it has installed skills, memory, or prior context.
 
 ---

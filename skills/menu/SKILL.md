@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Menu
 
+Runs on: local-exec - runs a local script; on a cloud surface I read the results, I do not run it.
+
 Discovery entry for FounderOS. Returns a small, ranked list of capabilities the founder is most likely to want right now, scored against current state. Natural-language phrasing is primary, slash commands appear parenthetically only for capabilities that have a real command file.
 
 ## How this skill runs

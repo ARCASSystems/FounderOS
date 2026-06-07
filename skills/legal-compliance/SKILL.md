@@ -10,6 +10,8 @@ allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep", "WebFetch", "WebSearch"
 
 # Legal & Compliance
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Loads the user's jurisdiction reference set, checks deadlines against today's date, routes to the right domain reference, and flags when professional counsel is needed.
 
 This skill is **reference-driven**, not memorised. It quotes from documents loaded under `skills/legal-compliance/references/<jurisdiction>/`. It will not invent law. If a question is not covered by loaded references, it says so and tells the user which source to add.

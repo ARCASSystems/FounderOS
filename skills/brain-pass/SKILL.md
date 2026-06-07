@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Brain Pass
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 The user asks a question. You pick the relevant files, scan them, and return a synthesised answer with entry-ID citations - not a list of matches.
 
 ## When to use

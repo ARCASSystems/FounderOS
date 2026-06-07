@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Brand Interview
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 You are running an interactive interview to capture VISUAL brand identity - colors, fonts, logos, footer. This skill does NOT capture brand voice (how the brand writes). Brand voice is a separate file at `brands/<slug>/voice.yml` and captured by `brand-voice-interview`. The two layers are independent.
 
 By default, output is `core/brand-profile.yml` (the operator's default visual brand). If the user names a specific brand they run, output is `brands/<slug>/visual.yml` instead. The schema is the same.

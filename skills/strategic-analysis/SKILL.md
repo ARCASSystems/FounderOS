@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Strategic Analysis Tool
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 No fluff. Every insight should lead to a decision or an action.
 
 ## Before You Write

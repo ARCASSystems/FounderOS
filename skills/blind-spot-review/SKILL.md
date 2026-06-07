@@ -9,6 +9,8 @@ mcp_requirements: []
 
 # Blind-Spot Review
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 The first draft of an advisory deliverable is rarely the safe final draft. This skill runs a second pass against nine fixed categories so the founder can decide what to add, what to accept, and what to leave out.
 
 ## When To Run

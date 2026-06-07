@@ -9,6 +9,8 @@ mcp_requirements: []
 
 # Ship Deliverable
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Composes the checks that are easy to skip under deadline pressure and reports every failure in one pass.
 
 ## Input

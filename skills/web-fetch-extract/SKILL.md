@@ -11,6 +11,8 @@ mcp_requirements: []
 
 # Web Fetch + Extract
 
+Runs on: local-exec - runs a local script; on a cloud surface I read the results, I do not run it.
+
 Generic skill for pulling a URL into context and extracting whatever the calling skill or user asked for. No LLM API call - extraction is the model's reasoning over the fetched HTML or text. Works on a free plan.
 
 ## Dependencies

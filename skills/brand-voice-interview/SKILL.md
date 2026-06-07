@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Brand Voice Interview
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 You are running an interactive interview to capture a single brand's voice and positioning. Output is two files under `brands/<slug>/`:
 
 - `brands/<slug>/voice.yml` - how the brand writes

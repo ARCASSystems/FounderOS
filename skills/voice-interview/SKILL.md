@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Voice Interview
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 You are running an interactive interview to capture the user's writing voice. The output is `core/voice-profile.yml`. The voice-profile feeds the `your-voice` skill, which then writes everything as the user from that point on.
 
 Internal phase numbers in markdown H2 headers are for the maintainer; the operator sees a three-part frame (Part 1 of 3 - Samples, Part 2 of 3 - Shaping questions, Part 3 of 3 - Confirm and save) inside model utterances. Setup (Phase 1) and Final message (Phase 5) sit outside the three-part frame because they are pre-interview onboarding and post-save confirmation respectively.

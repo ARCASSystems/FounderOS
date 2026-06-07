@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # SOP Writer
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 The goal: someone who has never done this task before should be able to complete it by following this document. No phone calls to the founder.
 
 ## Before You Write

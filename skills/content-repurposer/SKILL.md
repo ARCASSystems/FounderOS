@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Content Repurposer
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Apply the voice and writing rules from `core/identity.md`, `rules/writing-style.md`, and `core/voice-profile.yml` (via the `your-voice` skill) to all output. Keep the founder's voice consistent across every channel.
 
 ## Voice routing (operator or brand?)

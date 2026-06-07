@@ -12,6 +12,8 @@ mcp_requirements: []
 
 # Verify
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Read-only health check across 8 substrate checks. Returns one screen. Never auto-fixes.
 
 ## The eight checks

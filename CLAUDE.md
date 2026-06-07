@@ -11,7 +11,7 @@ It is NOT a framework. It is NOT a multi-tenant AI platform. It is a product you
 ## Positioning non-negotiables
 
 - The public Founder OS product is single-founder software. ARCAS's enterprise offering has a separate company and per-employee layer. Do not conflate the two, and do not frame the public product as team or collaboration software.
-- Target runtime is Claude Pro / Claude Code, not ChatGPT. Do not build skills packs or instructions for ChatGPT Projects unless explicitly asked.
+- Founder OS is plain markdown any capable agent can read and drive. Claude Code is the reference runtime we validate against, and where slash commands and hooks run. We do not ship a separate product per agent: no ChatGPT-Projects pack, no per-agent skills pack. The same markdown OS is read by whatever agent the user brings. See "Runtime honesty" below for the per-skill `Runs on:` contract.
 - Keep the product's established hook framing. Do not invent demo-length claims, and do not paste private brand internals into this public repo. Match the wording already used elsewhere in this repo.
 
 ## Quick Start
@@ -82,16 +82,41 @@ If any of the 6 context files above is missing on session start, the OS is not y
 
 This rule is non-negotiable. A wrong recommendation built on hallucinated context is worse than no recommendation at all.
 
-## Cloud or Web Claude Behavior
+## Runtime honesty - any capable agent can drive this OS
 
-Founder OS has two supported surfaces:
+Founder OS is plain markdown. Any capable agent that can read your files can drive it. The real constraint is per-skill capability, not which agent you bring or whether it runs in the cloud. We do not ship a separate product per agent; the same markdown OS is read by whatever agent you point at it.
 
-- Notion Starter Kit for Claude web or desktop Projects
-- Claude Code plugin for local markdown, commands, hooks, and git history
+### The `Runs on:` contract
 
-If this repo is opened in Claude web, desktop, a cloud IDE, or another assistant that cannot run Claude Code slash commands, treat it as a system layer only. Do not claim that `/founder-os:setup`, `/founder-os:update`, hooks, or local writes have run unless the environment actually supports them.
+Every skill declares one runtime class on a `Runs on:` line near the top of its `SKILL.md`. Three classes:
 
-If the founder context files are missing, stop and route the user to the Notion quickstart or the Claude Code setup command. Do not invent identity, clients, revenue, priorities, decisions, commitments, or past business context.
+- `reasoning` - reads your files and reasons, then writes a reply. Every capable agent can run it.
+- `local-writes` - creates or edits files in your OS folder. Any agent pointed at the folder with write access can run it: Claude Code, or a folder-attached desktop surface like Cowork or Antigravity. A read-only surface drafts the change for you to apply.
+- `local-exec` - runs a local script against your files. A local-runtime agent runs it (Claude Code is the reference). A cloud surface reads the produced artifacts instead and says so.
+
+The class is the highest capability the skill's happy path needs (exec over writes over reasoning). A skill that reads a cache and may rewrite it is `local-writes` even though it often only reads.
+
+### Invocation
+
+Natural language is the universal surface: say what you want and the matching skill runs on any surface that can read the files. Slash commands are an optional shortcut and are Claude-Code-only (the plugin runtime). On Cowork, Antigravity, or Cloud Claude a slash command does not fire - say what you want in words and the same skill runs, or for a `local-exec` skill the agent reads the produced results and helps you act.
+
+### The honest-degradation rule
+
+Before you claim a result, check whether your surface can do what the skill needs. If it cannot (a slash command on a non-Claude-Code surface, a script run on a cloud surface, a file write where you have no write access), say so in one sentence and offer the path you CAN do: read the produced artifacts and help act, or replicate the lighter work from templates. Never claim a local write or a script run happened when it did not.
+
+This is the single source for runtime honesty across the OS. `AGENTS.md` and `GEMINI.md` point here rather than restating it.
+
+## Surfaces
+
+Founder OS runs on any capable agent that can read the files. What changes by surface is capability, not whether the OS works. Three buckets (full matrix in `docs/tools-and-mcps.md`):
+
+- **Local-CLI (Claude Code is the reference):** runs `reasoning`, `local-writes`, and `local-exec` skills, plus slash commands and hooks. Codex and other local CLIs are covered by the bridge-file redirect (`AGENTS.md`, `GEMINI.md`).
+- **Desktop folder-attached (Cowork, Antigravity):** reads and writes the files when opened in the folder, so it runs `reasoning` and `local-writes` skills. Slash commands and hooks do not fire; `local-exec` depends on whether the surface can run a script.
+- **Web-only (Cloud Claude, a browser LLM):** reads and reasons, runs `reasoning` skills. It cannot write locally or run scripts, so for `local-writes` it drafts the change for you to apply and for `local-exec` it reads the produced artifacts and helps you act.
+
+Apply the honest-degradation rule above: never claim a slash command, a script run, a hook, or a local write happened on a surface that cannot do it. The per-skill `Runs on:` line says what each skill needs.
+
+If the founder context files are missing, the OS is not set up. Do not invent identity, clients, revenue, priorities, decisions, commitments, or past business context. Route the user to `/founder-os:setup` (or, on a surface without slash commands, to bootstrapping from `templates/`).
 
 ## Roles
 

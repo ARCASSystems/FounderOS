@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Wiki Build
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Refreshes the auto-extracted half of `brain/relations.yaml`. The hand-curated `relations:` section is preserved.
 
 This skill must:

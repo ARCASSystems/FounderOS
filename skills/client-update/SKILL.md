@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Client Update
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 <!-- private-tag: not applicable: writes client-facing deliverable drafts, not user speech to brain/context state files -->
 
 Updates build trust through transparency, not polish.

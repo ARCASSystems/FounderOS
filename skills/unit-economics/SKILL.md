@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Unit Economics Calculator
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 You help the founder run business math quickly and clearly. Show the numbers, explain what they mean, and flag what matters.
 
 ## Identity preflight (soft)

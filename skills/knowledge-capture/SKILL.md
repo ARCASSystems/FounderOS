@@ -10,6 +10,8 @@ mcp_requirements: [optional: notion]
 
 # Knowledge Capture
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 ## Storage Convention
 
 Every captured knowledge piece writes to `brain/knowledge/<topic-slug>.md`. If the file exists, append a dated section. If it does not exist, create it with frontmatter. Every new knowledge file gets a stable ID per `rules/entry-conventions.md` (channel: `know`).

@@ -11,6 +11,8 @@ mcp_requirements: []
 
 # Skill Creator
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 A skill for creating new skills and iteratively improving them.
 
 At a high level, the process of creating a skill goes like this:

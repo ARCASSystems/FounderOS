@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Your Deliverable Template
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Every document that carries a name and visual identity follows the rules in this file plus the brand-specific values from a visual brand profile. There are two visual layers:
 
 - **Operator brand** at `core/brand-profile.yml` - the user's personal visual identity. Default for personal output (CV, personal proposals, your one-pager).

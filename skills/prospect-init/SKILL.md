@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Prospect Init
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Captures a lightweight prospect record at `companies/prospects/<slug>.md`. Companion to `business-context-loader` (which handles companies you run, not prospects).
 
 This skill must:

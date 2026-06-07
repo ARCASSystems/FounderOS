@@ -9,6 +9,8 @@ mcp_requirements: ["optional: knowledge_base", "optional: project_management"]
 
 # Handoff Protocol
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Work drops when context moves through chat alone. A handoff artifact gives the receiver the task, the reason, the constraints, and the source trail without asking the sender to repeat everything.
 
 ## When To Run

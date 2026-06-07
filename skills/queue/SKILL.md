@@ -13,6 +13,8 @@ mcp_requirements: []
 
 # Queue
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 The queue lives at `cadence/queue.md`. Three lifecycle states: ACTIVE, BACKLOG, DONE.
 
 ## What it reads

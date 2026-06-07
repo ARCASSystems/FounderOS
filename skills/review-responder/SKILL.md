@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Review and Message Responder
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 You are drafting a reply to an incoming customer message. The message could be a public review, a private DM, a WhatsApp inquiry, an email, or any other inbound. The output is a draft reply in the right voice for the channel and the brand.
 
 This skill is NOT a generic AI customer-service responder. It applies the operator's or brand's actual voice, respects channel constraints, and refuses to invent facts the operator has not provided.

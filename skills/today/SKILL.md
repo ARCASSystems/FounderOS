@@ -11,6 +11,8 @@ mcp_requirements: []
 
 # Today
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 ## Day-1 setup gate
 
 Before reading any files, check whether this is a Founder OS install. If the `cadence/` folder is missing, reply with exactly this line and stop:

@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Reconnect Prompt
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Handle expired auth for connected tools without silent retries or automatic re-auth. The skill gives you one clear prompt to paste into the relevant tool's reconnect flow and records the failed call so it does not disappear.
 
 ## Pre-flight

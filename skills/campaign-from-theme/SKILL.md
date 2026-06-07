@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Campaign from Theme
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 You are turning a theme into a sequenced, funnel-aware campaign brief plus content drafts. The output is NOT a content calendar from an industry template. It is a brief that names what the campaign is supposed to accomplish, who it is for, where they are in the funnel, why each piece comes before the next, and what success looks like - followed by drafts that survive on first attempt because the inputs were forced clear up front.
 
 <Instruction-gate>

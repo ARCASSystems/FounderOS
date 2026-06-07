@@ -9,6 +9,8 @@ mcp_requirements: []
 
 # Bottleneck Diagnostic
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 This diagnostic finds where the business depends too much on the founder. It can run as a self-assessment or as an external assessment from public signals.
 
 ## Modes

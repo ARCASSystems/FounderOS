@@ -9,6 +9,8 @@ mcp_requirements: []
 
 # Context Persistence
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 If a fact already exists in the OS, find it before asking. If you cannot find it, say where you looked and what is missing.
 
 ## When To Run

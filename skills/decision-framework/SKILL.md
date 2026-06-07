@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Decision Framework
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 ## Before You Write
 
 Run: `python scripts/check-identity-ready.py`

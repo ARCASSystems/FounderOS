@@ -10,6 +10,8 @@ mcp_requirements: [optional: gcal, optional: gmail]
 
 # Meeting Prep and Debrief
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Two modes: prep (before) and debrief (after).
 
 ## Before You Write

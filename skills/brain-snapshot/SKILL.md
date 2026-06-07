@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Brain Snapshot
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 The brain snapshot is a small markdown payload (~200 tokens) that captures what is true right now: voice rules, brand fields, open flags, this week's commitments, recent decisions, and staleness state. Skills read it at task time so their output reflects the latest state of the OS instead of starting cold.
 
 ## Where it lives

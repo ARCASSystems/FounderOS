@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Brain Log
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Three modes for incoming thoughts, plus flags and parked decisions.
 
 ## Routing

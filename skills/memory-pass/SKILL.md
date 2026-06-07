@@ -15,6 +15,8 @@ mcp_requirements: []
 
 # Memory Pass
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Cross-checks Active Project Context memory entries against current file state. Surfaces contradictions, proposes targeted edits, writes nothing without confirmation.
 
 **Failure this addresses:** the agent loads MEMORY.md and treats every entry as current. A memory line says a relationship is "paused" while `brain/log.md` shows you re-opened it last week. A memory line says a deal is "exploratory" while the log shows it closed the same day. Neither contradiction surfaces until you mention it. This skill makes the contradiction visible before it costs you.

@@ -9,6 +9,8 @@ mcp_requirements: []
 
 # Data Security
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Block unsafe data movement before it leaves the user's control.
 
 ## When To Run

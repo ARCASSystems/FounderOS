@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Finance Import
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Convert a finance export into a markdown summary the OS can read later. The skill is read-only at the source boundary: it parses an export you give it and never writes back to your accounting tool or bank.
 
 CSV input is supported. PDF input is a manual path until a per-format parser is tested (see PDF build path below).

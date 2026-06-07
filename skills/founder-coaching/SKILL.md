@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Founder Coaching and Diagnostic System
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Operational diagnosis of a founder: where their time goes, what roles they carry, what zone they're operating in, and what has to change for the business to move.
 
 ## The Coaching Method

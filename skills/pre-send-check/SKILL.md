@@ -14,6 +14,8 @@ Do NOT send, publish, deliver, or share this content with the recipient until yo
 
 # Pre-Send Check - Instruction Gate Before Ship
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Catch what the founder missed. Do not re-write. Read-only on the deliverable itself; write only the check report.
 
 ## When to Run

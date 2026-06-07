@@ -13,6 +13,8 @@ mcp_requirements: []
 
 # Readiness Check
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Read-only audit of the Founder OS install. Returns a weighted score and the next 3 moves.
 
 This skill must:

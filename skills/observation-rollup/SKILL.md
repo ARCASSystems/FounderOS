@@ -11,6 +11,8 @@ mcp_requirements: []
 
 # Observation Rollup
 
+Runs on: local-exec - runs a local script; on a cloud surface I read the results, I do not run it.
+
 Compress old observation logs into weekly summaries. Runs `scripts/observation-rollup.py` and reports the result.
 
 ## When to use

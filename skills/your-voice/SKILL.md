@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Your Voice
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 This skill writes in the right voice for the task. There are two voice layers:
 
 - **Operator voice** at `core/voice-profile.yml` - how the user writes as a person. Default for personal output (personal LinkedIn, your CV, emails from you).

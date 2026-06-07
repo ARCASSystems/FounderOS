@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Priority Triage - Cut Through the Noise
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 The founder is overwhelmed. Find the ONE thing that unblocks the most, and recommend it. One thing.
 
 ## Identity preflight (soft)

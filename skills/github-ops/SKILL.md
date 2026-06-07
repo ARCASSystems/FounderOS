@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # GitHub Operations
 
+Runs on: local-exec - runs a local script; on a cloud surface I read the results, I do not run it.
+
 Fast GitHub operations on any repo your `gh` CLI is authenticated against.
 
 ## Trigger

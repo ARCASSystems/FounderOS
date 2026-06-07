@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Proposal Writer
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 The proposal must reflect the founder's voice, brand, and the specifics of the prospect. It must not sound like a template.
 
 ## Voice routing (operator or brand?)

@@ -9,6 +9,8 @@ mcp_requirements: []
 
 # Approval Gates
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 ## Pre-Read
 
 Read `rules/approval-gates.md`. If the installed OS has no customized copy, read `templates/rules/approval-gates.md` as the fallback.

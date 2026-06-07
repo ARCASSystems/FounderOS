@@ -11,6 +11,8 @@ mcp_requirements: []
 
 # Cross-Link
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Propose wikilink insertions for one markdown file at a time. Deterministic regex over the filesystem index. No LLM call, no semantic guessing - free-tier accessible.
 
 This skill must:

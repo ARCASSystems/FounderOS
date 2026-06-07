@@ -11,6 +11,8 @@ mcp_requirements: []
 
 # Business Context Loader
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Scans state, reports gaps, picks the next question, and suggests an action based on what's already filled.
 
 The companion file is `templates/business-context.template.md` (the schema). Filled instances live at `companies/<slug>-business.md`.

@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Weekly Review - Sprint Roll and Retro
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Two modes: retro (look back) and planning (look forward). Usually both in one session.
 
 ## Step 0: Identity gate

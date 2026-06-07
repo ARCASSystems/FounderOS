@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Strategic Read
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 A user runs `/founder-os:strategic-read` (no arguments) for the full 5-section report, or `/founder-os:strategic-read <section>` for a single named section. The report is the output. Nothing is written. No file is modified.
 
 ## Section argument (optional)

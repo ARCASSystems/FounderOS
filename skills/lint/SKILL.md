@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Lint
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Read-only audit of the wiki layer. Returns a structured report. Never modifies files.
 
 This skill must:

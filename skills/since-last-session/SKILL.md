@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # Since Last Session
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 A user runs `/founder-os:since-last-session` (no arguments). The skill reports what changed since the last marker time, then updates the marker. Read the file layer, do the math, render the report, write the marker. Nothing else.
 
 ## When to use

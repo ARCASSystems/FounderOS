@@ -9,6 +9,8 @@ mcp_requirements: []
 
 # Query
 
+Runs on: local-exec - runs a local script; on a cloud surface I read the results, I do not run it.
+
 This skill retrieves OS nodes for a question by walking markdown files and `brain/relations.yaml`. It uses plain files only. No vector database, no embeddings, no external service.
 
 ## Pre-Flight

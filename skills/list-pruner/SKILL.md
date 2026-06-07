@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # List Pruner
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Prepare a contact list for outreach planning. The skill removes duplicate emails, flags missing fields, assigns a quality score, and returns a clean markdown table or CSV-ready output.
 
 ## Pre-flight

@@ -9,6 +9,8 @@ mcp_requirements: []
 
 # Audit
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 This skill returns one Founder OS health report. It composes five checks that can also run on their own.
 
 ## Pre-Flight

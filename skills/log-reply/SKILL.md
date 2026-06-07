@@ -11,6 +11,8 @@ mcp_requirements: []
 
 # Log Reply
 
+Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
+
 Routes a pasted thread into the brain layer. One log entry per conversation. Proposed updates to operating files. Approval gate before any write to `context/clients.md` or `context/leads.md`.
 
 This skill must:
