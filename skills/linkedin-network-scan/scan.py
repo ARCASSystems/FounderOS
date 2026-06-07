@@ -25,6 +25,7 @@ or industry filter) and that is stated in the output so you know nothing was nar
 """
 
 import argparse
+import base64
 import csv
 import datetime
 import html
@@ -36,6 +37,9 @@ import sys
 import zipfile
 from collections import defaultdict
 from pathlib import Path
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ARCAS_URL = "https://arcassystems.com"
 
 # ----------------------------------------------------------------------------
 # Title taxonomy (generic - no industry or region is baked in here; ICP filters
@@ -780,6 +784,12 @@ footer{background:var(--card);color:var(--ink);margin-top:34px;padding:32px 22px
 footer .l1{font-weight:600;font-size:16px;}
 footer .l2{font-weight:600;font-size:16px;color:var(--accent);}
 footer .meta{color:var(--muted);font-size:12px;margin-top:12px;}
+.arccredit{display:inline-flex;align-items:center;gap:11px;margin-top:20px;padding:11px 18px;border:1px solid var(--line);border-radius:var(--r-pill);background:#fff;text-decoration:none;color:var(--ink);transition:border-color .15s;}
+.arccredit:hover{border-color:var(--accent);}
+.arccredit .arcmark{display:block;border-radius:6px;flex:0 0 auto;}
+.arccredit .arcdot{width:10px;height:10px;border-radius:var(--r-pill);background:var(--accent);flex:0 0 auto;}
+.arccredit .arctext{font-size:12.5px;line-height:1.45;text-align:left;color:var(--muted);}
+.arccredit .arctext b{color:var(--ink);font-weight:600;}
 @media(max-width:820px){
   .layout{grid-template-columns:1fr;}
   .hero h1{font-size:26px;}
@@ -841,6 +851,7 @@ footer .meta{color:var(--muted);font-size:12px;margin-top:12px;}
   <div class="l1">This is your network.</div>
   <div class="l2">Now it is a worklist.</div>
   <div class="meta">Built locally from your own LinkedIn export &middot; __GEN_DATE__</div>
+  __ARCAS_CREDIT__
 </footer>
 <div class="cornermark">__CORNER_TAG__</div>
 <script id="data" type="application/json">__DATA_JSON__</script>
@@ -1110,6 +1121,28 @@ def build_v3_blob(leads, anonymise, known_companies=()):
     return blob
 
 
+def _arcas_logo_data_uri():
+    """Inline the ARCAS mark as a data-URI so the page stays fully offline (no
+    network request on load). Returns '' if the asset is not alongside this
+    script - the footer then shows a text-only credit with the brand dot."""
+    try:
+        with open(os.path.join(HERE, "arcas-logomark.png"), "rb") as fh:
+            return "data:image/png;base64," + base64.b64encode(fh.read()).decode("ascii")
+    except OSError:
+        return ""
+
+
+def _arcas_credit_html():
+    """A small footer credit and soft CTA back to ARCAS Systems. This is the only
+    ARCAS-branded element in the output; the header stays the user's own --brand."""
+    uri = _arcas_logo_data_uri()
+    mark = (f'<img class="arcmark" src="{uri}" width="26" height="26" alt="ARCAS Systems"/>'
+            if uri else '<span class="arcdot"></span>')
+    return (f'<a class="arccredit" href="{ARCAS_URL}" target="_blank" rel="noopener">{mark}'
+            '<span class="arctext"><b>Built with Founder OS by ARCAS Systems</b><br/>'
+            'More for anyone who wants it &middot; arcassystems.com</span></a>')
+
+
 def render_html_v3(
     path,
     leads,
@@ -1141,6 +1174,7 @@ def render_html_v3(
             .replace("__TOTAL__", str(totals["total"]))
             .replace("__SHOWN__", str(len(blob)))
             .replace("__GEN_DATE__", as_of.isoformat())
+            .replace("__ARCAS_CREDIT__", _arcas_credit_html())
             .replace("__DATA_JSON__", data_json))
     with open(path, "w", encoding="utf-8") as f:
         f.write(page)

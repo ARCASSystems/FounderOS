@@ -104,6 +104,8 @@ Then summarise in one or two sentences: how many connections were read, how many
 
 Every file carries a header reminding the user not to commit or share it.
 
+Both HTML views carry a small footer credit and a soft link back to ARCAS Systems (arcassystems.com), the maker of Founder OS, for anyone who wants more. It is the only ARCAS-branded element - the user's own `--brand` label still owns the header - and it is plain HTML in `scan.py`, so a fork can edit or remove it.
+
 ## Model
 
 The scoring engine is deterministic and LLM-free - it runs end to end with no paid AI subscription, which is the free-tier floor for this skill. Only the narrative or synthesis afterward (summarising the digest, drafting talking points) uses the session's own Claude. Use the session's latest available Claude for that step; at time of writing the current latest is Opus 4.8 (`claude-opus-4-8`), but the skill is not pinned to any model - newer is fine.
@@ -126,3 +128,4 @@ The scoring engine is deterministic and LLM-free - it runs end to end with no pa
 - `scan.py` - the deterministic scanner (stdlib only).
 - `icp.example.yaml` - documented ICP template (sales / partnership) to copy and edit, including the optional `demote_keywords` and `require_leadership_title` keys.
 - `icp.career.example.yaml` - documented ICP template (recruiters / hiring / job search) to copy and edit.
+- `arcas-logomark.png` - the ARCAS Systems mark, inlined into the HTML footer as an offline data-URI (the footer falls back to a text credit if the file is absent).
