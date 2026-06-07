@@ -418,6 +418,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 
 ## Writers (voice-coupled)
 
+### linkedin-start
+
+- **Say.** "help me with my LinkedIn", "what can I do with my LinkedIn", or "give me my LinkedIn data".
+- **Outcome.** You pick an outcome - leads, a better job, a louder brand, or a healthier network - and the OS aims your own LinkedIn export at it, then hands back a roadmap from your real baseline. The front door to the whole LinkedIn pack.
+- **Reads.** `core/identity.md` and `core/profile.md` if present (to reuse what the OS already knows), then your LinkedIn export.
+- **Writes.** Read-only, except one optional breadcrumb (`brain/.linkedin.md`) written only if you accept full setup.
+- **Voice rules.** No. It routes; the skill it routes to owns any writing.
+- **Prereqs.** Your LinkedIn data export (larger data archive). None other - a cold install can use it.
+- **When to run.** Any open-ended LinkedIn ask, when you have not yet picked a specific job.
+- **Follow-up.** Routes to `linkedin-network-scan`, `linkedin-power-audit`, `linkedin-brand-direction`, or `linkedin-warm-revival`. No dedicated slash command.
+
 ### linkedin-post
 
 - **Say.** "write a LinkedIn post", "turn this into a post", or "post about this".

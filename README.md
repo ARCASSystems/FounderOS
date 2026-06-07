@@ -150,7 +150,7 @@ After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-scr
 
 ## What ships in this repo
 
-### Skills (69)
+### Skills (70)
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
@@ -206,7 +206,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 ## Tools and MCPs
 
-Founder OS does not assume your stack. Most of the 69 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+Founder OS does not assume your stack. Most of the 70 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 ---
 
@@ -274,7 +274,7 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.37.0. Public release. 69 skills, 35 commands, 651 tests.
+Version 1.37.0. Public release. 70 skills, 35 commands, 656 tests.
 
 v1.37.0 does two things. It installs the OS into one folder you own (default `~/founder-os`) instead of a hidden cache dir, names the engine and your data as the separate things they are, and detects an existing install so you never end up with two copies. And it makes the role system real: it adds two role modes you can reach when you need them, CSO for the portfolio view across everything you run and CTO for your tool stack and automations, makes the BD trigger honest (you invoke it, it does not silently flip on a count nothing reads), and tells you the plain phrase to switch lens yourself ("switch to CMO").
 
