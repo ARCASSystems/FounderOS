@@ -1,0 +1,66 @@
+{
+  "post_themes": {
+    "ai_future_tech": ["\\bai\\b", "artificial intelligence", "machine learning", "\\bml\\b", "automation", "\\bllm\\b", "claude", "\\bgpt\\b", "agentic", "future of work"],
+    "youth_education_careers": ["youth", "career", "students?", "graduates?", "first job", "internship", "education", "university"],
+    "events_community": ["event", "summit", "festival", "conference", "register", "rsvp", "join us", "community", "meetup"],
+    "calls_to_action": ["dm me", "drop a comment", "reach out", "let's connect", "register here", "click", "sign up", "learn more"],
+    "partnerships_ecosystem": ["partner(ship)?s?", "collaboration", "ecosystem", "stakeholders?", "together"],
+    "metrics_proof_points": ["\\b\\d{2,}%", "\\b\\d{3,} (registrations?|attendees?|hires?|jobs?)", "results?", "outcomes?"],
+    "marketing_storytelling": ["story", "narrative", "brand", "marketing", "positioning"],
+    "awards_recognition": ["award", "nominated", "recognised", "recognized", "honor(ed)?", "30 under 30", "fortune"],
+    "founder_journey": ["my journey", "lessons (learned|i learned)", "why i", "how i", "looking back"],
+    "leadership_mentorship": ["leadership", "leader", "mentor", "mentoring", "coaching"],
+    "operations_systems": ["systems?", "process(es)?", "operating", "operations?", "scale", "scaling"],
+    "anti_ai_writing_humility": ["i don'?t know", "still learning", "i'?m wrong", "got it wrong", "honest"]
+  },
+  "post_theme_labels": {
+    "ai_future_tech": "AI / future tech",
+    "youth_education_careers": "Youth / education / careers",
+    "events_community": "Events / community",
+    "calls_to_action": "Calls to action",
+    "partnerships_ecosystem": "Partnerships / community",
+    "metrics_proof_points": "Metrics / proof points",
+    "marketing_storytelling": "Marketing / storytelling",
+    "awards_recognition": "Awards / recognition",
+    "founder_journey": "Founder journey",
+    "leadership_mentorship": "Leadership / mentorship",
+    "operations_systems": "Operations / systems",
+    "anti_ai_writing_humility": "Humility / honesty"
+  },
+  "message_theme_proxies_by_role_cluster": {
+    "career_help": ["education_student", "hr_talent", "manager", "marketing"],
+    "events_community": ["events_hospitality"],
+    "introductions_access": ["founder", "ceo_md_chairman", "head_vp", "director"],
+    "partnerships_sponsors": ["sales_bd", "marketing"],
+    "media_visibility": ["marketing"],
+    "internal_operations": []
+  },
+  "message_theme_labels": {
+    "career_help": "Career help / mentoring",
+    "events_community": "Events / community",
+    "introductions_access": "Introductions / senior access",
+    "partnerships_sponsors": "Partnerships / sponsors",
+    "media_visibility": "Media / visibility",
+    "internal_operations": "Internal / operations"
+  },
+  "follow_theme_buckets": {
+    "ai_tech_innovation": ["\\bai\\b", "tech", "innovation", "future", "digital"],
+    "youth_careers_talent": ["youth", "career", "talent", "hr", "recruit"],
+    "government_institutions": ["government", "ministry", "public sector", "regulator", "authority"],
+    "marketing_media_brand": ["marketing", "media", "brand", "creative"],
+    "skills_personal_growth": ["learning", "skills", "personal", "growth", "leadership"],
+    "consumer_beauty_lifestyle": ["beauty", "fashion", "lifestyle", "consumer"],
+    "education_community": ["education", "university", "school", "community"],
+    "events_experiences": ["event", "hospitality", "experience"]
+  },
+  "follow_theme_labels": {
+    "ai_tech_innovation": "AI / tech / innovation",
+    "youth_careers_talent": "Youth / careers / talent",
+    "government_institutions": "Government / public institutions",
+    "marketing_media_brand": "Marketing / media / brand",
+    "skills_personal_growth": "Skills / personal growth",
+    "consumer_beauty_lifestyle": "Consumer / lifestyle",
+    "education_community": "Education / community",
+    "events_experiences": "Events / experiences"
+  }
+}

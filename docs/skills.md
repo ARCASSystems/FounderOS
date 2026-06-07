@@ -440,6 +440,28 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** Before a content push, when you want the lane your network actually rewards instead of generic advice.
 - **Follow-up.** `linkedin-post` reads the direction automatically on the next post request. No dedicated slash command.
 
+### linkedin-power-audit
+
+- **Say.** "audit my LinkedIn", "analyse my whole LinkedIn", or "where is my network thin".
+- **Outcome.** A deep, deterministic `audit.json`: network composition (role clusters, stakeholder buckets, industries, top companies, founder pool), message warmth, content lanes, plus an optional network-gap read. The input the brand and revival skills need.
+- **Reads.** Your UNZIPPED LinkedIn export folder (Complete export for the full audit).
+- **Writes.** `audit.json` in an output folder you choose (outside any repo).
+- **Voice rules.** No. Deterministic extract; any narrative you add applies voice separately.
+- **Prereqs.** The unzipped export. Python (stdlib only, no pip install).
+- **When to run.** When you want the whole shape of your network, not just a ranked list. Before `linkedin-brand-direction` or `linkedin-warm-revival`.
+- **Follow-up.** `linkedin-warm-revival` and `linkedin-brand-direction` both read the `audit.json`. No dedicated slash command.
+
+### linkedin-warm-revival
+
+- **Say.** "who should I reconnect with", "revive my dormant contacts", or "who have I gone cold with".
+- **Outcome.** A ranked list of dormant-but-valuable contacts who replied to you before, each with a one-line personal reopener. Nothing sent; outreach stays manual.
+- **Reads.** `audit.json` from `linkedin-power-audit` (its prerequisite) - the message counterparties, warmth, and network composition.
+- **Writes.** Read-only.
+- **Voice rules.** Light - the reopeners should sound like you, grounded in real metadata only.
+- **Prereqs.** `linkedin-power-audit` run first (on the Complete export, so warmth data exists).
+- **When to run.** When you want to reactivate relationships that already exist instead of cold outreach.
+- **Follow-up.** Send the reopeners manually. No dedicated slash command.
+
 ### linkedin-post
 
 - **Say.** "write a LinkedIn post", "turn this into a post", or "post about this".

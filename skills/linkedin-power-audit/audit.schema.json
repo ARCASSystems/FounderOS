@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "founder-os/linkedin-power-audit/audit.schema.json",
+  "title": "LinkedIn Power Audit - audit.json",
+  "description": "Deterministic output of the LinkedIn Power Audit (extract + classify). Downstream pack skills (linkedin-warm-revival, linkedin-brand-direction) depend on this contract.",
+  "type": "object",
+  "required": ["_meta", "profile", "metrics", "activity_timeline", "network", "messages", "invitations", "content", "skills", "positions", "education"],
+  "properties": {
+    "_meta": {
+      "type": "object",
+      "required": ["schema_version", "generated_at", "owner", "source_export_folder", "csv_files_present"],
+      "properties": {
+        "schema_version": { "type": "string" },
+        "generated_at": { "type": "string" },
+        "source_export_folder": { "type": "string" },
+        "owner": { "type": "object" },
+        "csv_files_present": { "type": "array", "items": { "type": "string" } },
+        "csv_files_skipped": { "type": "array", "items": { "type": "string" } },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "first_name": { "type": ["string", "null"] },
+        "last_name": { "type": ["string", "null"] },
+        "headline": { "type": ["string", "null"] },
+        "summary_word_count": { "type": "integer" },
+        "industry": { "type": ["string", "null"] },
+        "location": { "type": ["string", "null"] }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "connections": { "type": "integer" },
+        "posts": { "type": "integer" },
+        "comments": { "type": "integer" },
+        "reactions": { "type": "integer" },
+        "reposts": { "type": "integer" },
+        "member_follows": { "type": "integer" },
+        "company_follows": { "type": "integer" },
+        "hashtag_follows": { "type": "integer" },
+        "job_postings": { "type": "integer" },
+        "searches": { "type": "integer" },
+        "recommendations_received": { "type": "integer" },
+        "dm_messages": { "type": "integer" },
+        "dm_counterparties": { "type": "integer" },
+        "conversations": { "type": "integer" },
+        "invites_in": { "type": "integer" },
+        "invites_out": { "type": "integer" },
+        "skills_count": { "type": "integer" },
+        "endorsements_count": { "type": "integer" }
+      }
+    },
+    "activity_timeline": {
+      "type": "object",
+      "properties": {
+        "posts_by_year": { "type": "array" },
+        "searches_by_year": { "type": "array" },
+        "dm_messages_by_month": { "type": "array" },
+        "connections_by_month": { "type": "array" }
+      }
+    },
+    "network": {
+      "type": "object",
+      "properties": {
+        "role_clusters": { "type": "array" },
+        "stakeholder_buckets": { "type": "array" },
+        "industry_buckets": { "type": "array" },
+        "company_clusters": { "type": "array" },
+        "founder_pool": { "type": "object" }
+      }
+    },
+    "messages": {
+      "type": "object",
+      "properties": {
+        "counterparties": { "type": "array" },
+        "warmth_distribution": { "type": "object" },
+        "monthly_activity": { "type": "array" },
+        "themes": { "type": "array" }
+      }
+    },
+    "invitations": {
+      "type": "object",
+      "properties": {
+        "incoming": { "type": "integer" },
+        "outgoing": { "type": "integer" },
+        "monthly_breakdown": { "type": "array" }
+      }
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "posting_themes": { "type": "array" },
+        "follow_themes": { "type": "array" },
+        "hashtag_follows": { "type": "array" }
+      }
+    },
+    "skills": { "type": "array" },
+    "endorsements_by_skill_cluster": { "type": "array" },
+    "learning_themes": { "type": "array" },
+    "events": { "type": "array" },
+    "jobs_posted": { "type": "array" },
+    "search_behaviour": { "type": "object" },
+    "positions": { "type": "array" },
+    "education": { "type": "array" },
+    "recommendations": { "type": "object" }
+  }
+}
