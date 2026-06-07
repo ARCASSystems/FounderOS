@@ -26,11 +26,19 @@ Check-sets:
                   Checked on every line, every mode. Line-start anchored so rule
                   documentation and regex literals do not self-trigger. NOT
                   bypassed by ALLOW_EMDASH.
+    secret        Token-shaped strings (Telegram bot token, sk-/sk-ant- keys,
+                  Slack/GitHub/AWS/Google/Stripe tokens, PEM private-key headers)
+                  and API-KEY / TOKEN / SECRET / PASSWORD style assignments set to
+                  a high-entropy value. Always on, not gated on the patterns file,
+                  NOT bypassed by ALLOW_EMDASH. The matched value is never echoed.
+                  This is the out-of-the-box half of the guard: even with an empty
+                  patterns file a stray secret in a tracked file is blocked.
 
 Graceful no-op: the .githooks wrappers exit 0 when Python is absent, so this
 never breaks a user's `git commit`. With Python present but no patterns file,
-the name check is skipped (voice + attribution still run). Exit 1 on any
-violation in every mode; exit 0 when clean.
+only the name check is skipped (secret + em-dash + attribution still run, so the
+guard does useful work out of the box). Exit 1 on any violation in every mode;
+exit 0 when clean.
 """
 
 from __future__ import annotations
@@ -98,15 +106,87 @@ def is_base64_blob(line: str) -> bool:
     return _BASE64_RUN.search(stripped) is not None
 
 
+# --- Secret detection (always on; not gated on the patterns file, not bypassable
+# by ALLOW_EMDASH). A secret in a tracked file is the failure the privacy work
+# exists to prevent, so the check ships active out of the box. Patterns are
+# written so this scanner's own regex source cannot self-trigger (no literal here
+# forms a complete secret of its own shape).
+SECRET_SHAPE_PATTERNS = [
+    # Telegram BotFather token: <8-10 digits>:<35+ url-safe chars>.
+    ("telegram-bot-token", re.compile(r"\b\d{8,10}:[A-Za-z0-9_-]{35,}")),
+    # Anthropic / OpenAI keys. The ant-/proj- markers are rare literals, so a
+    # hyphenated body is safe; plain sk- needs 40 contiguous alnum so hyphenated
+    # slugs (sk-related-thing) cannot false-trip.
+    ("anthropic-key", re.compile(r"\bsk-ant-[A-Za-z0-9_-]{20,}")),
+    ("openai-proj-key", re.compile(r"\bsk-proj-[A-Za-z0-9_-]{20,}")),
+    ("openai-key", re.compile(r"\bsk-[A-Za-z0-9]{40,}\b")),
+    # Slack tokens (xoxb-, xoxp-, xoxa-, xoxr-, xoxs-).
+    ("slack-token", re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{10,}\b")),
+    # GitHub tokens.
+    ("github-token", re.compile(r"\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36,}\b")),
+    ("github-pat", re.compile(r"\bgithub_pat_[A-Za-z0-9_]{40,}\b")),
+    # AWS access key id.
+    ("aws-access-key", re.compile(r"\bAKIA[0-9A-Z]{16}\b")),
+    # Google API key.
+    ("google-api-key", re.compile(r"\bAIza[0-9A-Za-z_-]{35}\b")),
+    # Stripe live / test keys.
+    ("stripe-key", re.compile(r"\b[rs]k_(?:live|test)_[A-Za-z0-9]{16,}\b")),
+    # PEM private key header.
+    ("private-key-block", re.compile(r"-----BEGIN (?:RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----")),
+]
+
+# Secret-NAMED assignment: an API-KEY / TOKEN / SECRET / PASSWORD style name set
+# to a long, high-entropy value. The value is validated (not a placeholder, mixed
+# letters and digits) so docs and example lines do not false-trip.
+_SECRET_NAME = re.compile(
+    r"(?i)\b[a-z0-9_]*(?:api[_-]?key|secret[_-]?key|access[_-]?key|access[_-]?token"
+    r"|auth[_-]?token|bot[_-]?token|api[_-]?token|client[_-]?secret|private[_-]?key"
+    r"|secret|passwd|password)\b\s*[:=]\s*"
+)
+_SECRET_VALUE = re.compile(r"['\"]?([^\s'\"#,;]{16,})")
+_PLACEHOLDER = re.compile(
+    r"(?i)(your|example|placeholder|change[_-]?me|xxx|<[^>]*>|\.\.\.|todo|redact"
+    r"|fill|here|none|null|true|false|enabled|disabled|sample|dummy"
+    r"|\$\{|\$\(|%[a-z_]+%)"
+)
+
+
+def _looks_like_real_secret(value: str) -> bool:
+    """A captured assignment value is a likely real secret only when it mixes
+    letters and digits (high entropy) and is not an obvious placeholder. The 16+
+    length floor is already enforced by the value regex. Requiring both letters
+    and digits keeps prose, paths, and bare URLs from false-tripping."""
+    if _PLACEHOLDER.search(value):
+        return False
+    has_alpha = any(c.isalpha() for c in value)
+    has_digit = any(c.isdigit() for c in value)
+    return has_alpha and has_digit
+
+
+def find_secret(line: str) -> str | None:
+    """Return a short kind-label if the line carries a likely secret, else None."""
+    for kind, pat in SECRET_SHAPE_PATTERNS:
+        if pat.search(line):
+            return kind
+    m = _SECRET_NAME.search(line)
+    if m:
+        tail = line[m.end():]
+        v = _SECRET_VALUE.match(tail)
+        if v and _looks_like_real_secret(v.group(1)):
+            return "named-secret-assignment"
+    return None
+
+
 def scan_text(
     text: str,
     patterns: list[re.Pattern[str]],
     *,
     allow_emdash: bool = False,
     check_dashes: bool = True,
+    check_secrets: bool = True,
 ) -> list[str]:
-    """Scan text line by line for all three check-sets. Returns rendered
-    offending lines tagged with the kind."""
+    """Scan text line by line for all four check-sets. Returns rendered offending
+    lines tagged with the kind. Secret values are never echoed back."""
     offending: list[str] = []
     for line_num, raw in enumerate(text.splitlines(), 1):
         if is_base64_blob(raw):
@@ -122,6 +202,12 @@ def scan_text(
             if ap.search(raw):
                 offending.append(f"  [attribution] line {line_num}: {line}")
                 break
+        if check_secrets:
+            kind = find_secret(raw)
+            if kind:
+                offending.append(
+                    f"  [secret:{kind}] line {line_num}: possible secret detected (value hidden)"
+                )
     return offending
 
 
@@ -206,7 +292,7 @@ def _report(header: str, offending: list[str]) -> None:
         print(line, file=sys.stderr)
     print("", file=sys.stderr)
     print(
-        "Escape hatch: ALLOW_EMDASH=1 bypasses em/en dash (not private-name or attribution).",
+        "Escape hatch: ALLOW_EMDASH=1 bypasses em/en dash (not private-name, attribution, or secret).",
         file=sys.stderr,
     )
 
@@ -269,8 +355,8 @@ def main() -> int:
     if not patterns and patterns_file.exists():
         print(
             f"WARNING: private-name guard is installed ({patterns_file}) but defines no "
-            "patterns. Name check INACTIVE (em-dash + attribution still enforced). "
-            "Add names to activate it.",
+            "patterns. Name check INACTIVE (secret, em-dash, and attribution checks still "
+            "enforced). Add names to activate the name check too.",
             file=sys.stderr,
         )
 

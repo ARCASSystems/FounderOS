@@ -49,6 +49,14 @@
           {
             "type": "command",
             "command": "powershell -NonInteractive -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-close-revenue-check.ps1\""
+          },
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-close-autosave.sh\""
+          },
+          {
+            "type": "command",
+            "command": "powershell -NonInteractive -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-close-autosave.ps1\""
           }
         ]
       }

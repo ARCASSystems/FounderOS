@@ -57,7 +57,8 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── check-brand-voice-ready.py # From templates/scripts/check-brand-voice-ready.py (preflight gate for brand-voice path)
 │   ├── check-identity-ready.py  # From templates/scripts/check-identity-ready.py (preflight gate for 4 reasoning skills)
 │   ├── check-log-has-history.py # From templates/scripts/check-log-has-history.py (preflight gate for brain-pass + linkedin-post)
-│   └── list-brands.py           # From templates/scripts/list-brands.py (lists brand slugs under brands/)
+│   ├── list-brands.py           # From templates/scripts/list-brands.py (lists brand slugs under brands/)
+│   └── caveman_git.py           # From templates/scripts/caveman_git.py (invisible version control: the save, history, restore, backup verbs)
 ├── cadence/
 │   ├── daily-anchors.md         # From templates/cadence/daily-anchors.md
 │   ├── weekly-commitments.md    # Personalized with their current priorities
@@ -99,6 +100,8 @@ Create the full folder structure. Read each template before generating the perso
         ├── user-prompt-capture.ps1  # Copied from <plugin-root>/.claude/hooks/user-prompt-capture.ps1
         ├── session-close-revenue-check.sh   # Copied from <plugin-root>/.claude/hooks/session-close-revenue-check.sh
         ├── session-close-revenue-check.ps1  # Copied from <plugin-root>/.claude/hooks/session-close-revenue-check.ps1
+        ├── session-close-autosave.sh        # Copied from <plugin-root>/.claude/hooks/session-close-autosave.sh (records a local version at session end when the name guard is active)
+        ├── session-close-autosave.ps1       # Copied from <plugin-root>/.claude/hooks/session-close-autosave.ps1
         ├── post-tool-use-observation.sh     # Copied from <plugin-root>/.claude/hooks/post-tool-use-observation.sh (opt-in, off until FOUNDER_OS_OBSERVATIONS=1)
         ├── post-tool-use-observation.ps1    # Copied from <plugin-root>/.claude/hooks/post-tool-use-observation.ps1 (opt-in, off until FOUNDER_OS_OBSERVATIONS=1)
         └── session_start_brief.py           # Copied from <plugin-root>/.claude/hooks/session_start_brief.py (Python helper that session-start-brief.sh calls on Linux/Mac)
@@ -108,7 +111,7 @@ Show the full list of files that will be created. Get approval. Then create them
 
 **Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, user-prompt capture, and post-tool-use observation hooks live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Resolve the plugin source path the same way Phase 2.2 already does (one of the three named install methods: Plugin, Git clone, or Curl), then copy all eleven hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. The eleven hook files are: `session-start-brief.sh`, `session-start-brief.ps1`, `session-start-liveness.sh`, `session-start-liveness.ps1`, `user-prompt-capture.sh`, `user-prompt-capture.ps1`, `session-close-revenue-check.sh`, `session-close-revenue-check.ps1`, `post-tool-use-observation.sh`, `post-tool-use-observation.ps1`, and `session_start_brief.py` (the Python helper that `session-start-brief.sh` calls on Linux/Mac to compute the staleness, decay, and tip sections of the brief; the `.ps1` inlines this logic so Windows does not strictly need it, but copy it so cross-platform installs get the full brief). This must match every script referenced by `settings.json` across all hook events (SessionStart, UserPromptSubmit, Stop, PostToolUse); if any are missing from the founder's `.claude/hooks/`, the SessionStart brief and capture hooks fail silently. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, UserPromptSubmit, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
-**Scripts copy step (mandatory).** Copy all fifteen Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
+**Scripts copy step (mandatory).** Copy all sixteen Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
 
 - `templates/scripts/_common.py` → `scripts/_common.py` (shared helper module - `wiki-build.py` and `query.py` both `import` from it; if it is missing, `/founder-os:wiki-build` and `/founder-os:query` hard-error with `ModuleNotFoundError` on first run)
 - `templates/scripts/wiki-build.py` → `scripts/wiki-build.py` (used by `/founder-os:wiki-build`)
@@ -124,7 +127,8 @@ Show the full list of files that will be created. Get approval. Then create them
 - `templates/scripts/check-log-has-history.py` → `scripts/check-log-has-history.py` (preflight gate for brain-pass and linkedin-post when prior context is required)
 - `templates/scripts/list-brands.py` → `scripts/list-brands.py` (lists brand slugs under `brands/`, used by your-voice, campaign-from-theme, review-responder)
 - `templates/scripts/user-prompt-capture.py` → `scripts/user-prompt-capture.py` (writes user prompts to `brain/observations/` when `FOUNDER_OS_OBSERVATIONS=1`)
-- `templates/scripts/check-private-names.py` → `scripts/check-private-names.py` (called by `.githooks/pre-commit` and `.githooks/commit-msg` to block leaked private names, em-dashes / en-dashes, and AI-attribution trailers)
+- `templates/scripts/check-private-names.py` → `scripts/check-private-names.py` (called by `.githooks/pre-commit` and `.githooks/commit-msg` to block leaked private names, em-dashes / en-dashes, AI-attribution trailers, and committed secrets)
+- `templates/scripts/caveman_git.py` → `scripts/caveman_git.py` (the invisible version-control engine behind the save, history, restore, and backup verbs; also used by the session-close-autosave hook)
 
 Also copy `templates/scripts/private-name-patterns.txt.template` → `scripts/private-name-patterns.txt` (NOTE: drop the `.template` suffix on the destination filename). The pre-commit hook and `install-git-hooks.sh` both look for `scripts/private-name-patterns.txt` exactly. The `.template` suffix marks the source-of-truth example, not the runtime file.
 
@@ -193,7 +197,7 @@ Guard: check if a `.git/` directory already exists in the Founder OS root before
 
 1. Make sure `.githooks/pre-commit`, `.githooks/commit-msg`, and `scripts/install-git-hooks.sh` exist in the founder's OS root. If the install method scaffolded into a fresh directory (Plugin or Curl paths) rather than a clone, copy these three from the plugin source resolved in Phase 2.2.
 2. Activate the guard. On Linux/Mac (or Windows with Bash): run `bash scripts/install-git-hooks.sh`. On Windows without Bash: run `git config core.hooksPath .githooks`. Either way the pre-commit and commit-msg hooks now fire on every commit.
-3. Confirm with the founder that the guard is live, and that it stays INACTIVE until `scripts/private-name-patterns.txt` has at least one pattern (their own name was offered in the scripts copy step above). The file is gitignored, so their names never leave the machine.
+3. Confirm with the founder that the guard is live. Out of the box it already blocks committed secrets (API keys, tokens, bot tokens, PEM private keys), em/en dashes, and AI-attribution trailers. The NAME check stays inactive until `scripts/private-name-patterns.txt` has at least one pattern (their own name was offered in the scripts copy step above), so adding their name turns on name-leak blocking too. The file is gitignored, so their names never leave the machine.
 
 ### 2.4 First Weekly Sprint
 Ask: "Let's set your first weekly sprint. You mentioned these priorities: [list from 0.4]. Which of these are MUST DO this week (max 3), which are SHOULD DO, and which can wait?"

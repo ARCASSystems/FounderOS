@@ -21,6 +21,54 @@ If a skill has a slash command that wraps it, that command is named at the end a
 
 ---
 
+## Version control (invisible git)
+
+### save
+
+- **Say.** "save my work", "save this", "save my progress", or "checkpoint this".
+- **Outcome.** Your current work is recorded as a new version. The OS stages every changed file by path and commits locally. You see what was saved in plain language.
+- **Reads.** `git status` for the changed files.
+- **Writes.** A local git commit. Never pushes.
+- **Voice rules.** No.
+- **Prereqs.** Founder OS set up. `scripts/caveman_git.py` present.
+- **When to run.** Any time you want a restore point, and often. The auto-save hook also saves at session end once your name guard is active.
+- **Follow-up.** `history` to see versions, `restore` to undo. Say "save my work".
+
+### history
+
+- **Say.** "what changed", "show my history", "version history", or "what did I save".
+- **Outcome.** Your saved versions as readable dated events, newest first, grouped by day. No SHAs.
+- **Reads.** The git log.
+- **Writes.** Read-only.
+- **Voice rules.** No.
+- **Prereqs.** Founder OS set up. Handles a fresh repo with nothing saved yet.
+- **When to run.** Before an undo, or to confirm your work is being saved.
+- **Follow-up.** `restore` to undo to one of the versions. Say "what changed".
+
+### restore
+
+- **Say.** "undo to before this morning", "restore to yesterday", "roll back", or "go back to last week".
+- **Outcome.** Your OS is returned to an earlier version, non-destructively. It safety-saves your current work first, aborts if that save is blocked, and records the undo as a new version so it is itself reversible.
+- **Reads.** The git log and the target version.
+- **Writes.** A safety commit, then a new commit recording the undo. Never rewrites history, never `git reset --hard`, never loses work.
+- **Voice rules.** No.
+- **Prereqs.** Founder OS set up. At least one saved version to return to.
+- **When to run.** When you want to undo a session, a day, or a stretch of changes.
+- **Follow-up.** `history` to confirm the prior state is still recoverable. Say "undo to ...".
+
+### backup
+
+- **Say.** "back this up", "back up my OS", "set up a backup", or "mirror this offsite".
+- **Outcome.** An offsite copy of your OS, to a destination you choose: GitHub (recommended), OneDrive, Notion (reference mirror only), or stay local. On command only.
+- **Reads.** Your OS folder and git state.
+- **Writes.** Depends on the destination. The GitHub path reuses `github-ops` to create a private repo you own and push. Never force-pushes, never without your yes.
+- **Voice rules.** No.
+- **Prereqs.** Founder OS set up. For GitHub, the `gh` CLI authenticated.
+- **When to run.** After a big session, once you have picked a backup destination. Optional: local version control works fully without it.
+- **Follow-up.** Re-run after future sessions to keep the offsite copy current. Say "back this up".
+
+---
+
 ## Setup and identity
 
 ### founder-os-setup

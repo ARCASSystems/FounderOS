@@ -36,6 +36,7 @@ You are not installing a template. You are installing an operating layer. It lis
 - **Plan A defines Plan B.** This product is a derivative of an actual founder's daily use. Features graduate from personal use into the product only after surviving contact with live P&L.
 - **Talk to it.** Built around dictation. Claude Code's built-in dictation is the primary input. Wispr Flow is an optional power-user upgrade. Claude Code is desktop-only today. There is no native mobile execution surface.
 - **Decay-driven keep/kill.** Set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires. The OS does not auto-kill, you decide.
+- **Invisible version control.** Full history and undo, no git command ever typed. Say "save my work", "what changed", or "undo to before this morning" and the OS wraps git for you. Local by default; nothing pushes anywhere unless you ask. Undo is fail-safe: it saves your current work first and can never lose it.
 
 ---
 
@@ -76,7 +77,7 @@ You need four things:
 
 - **Claude Code** - free. Download at [claude.ai/code](https://claude.ai/code). Desktop app for Mac and Windows.
 - **A paid Claude plan** - Claude Pro or Claude Max. Free tiers lack sufficient context.
-- **Git** - version 2.x or later. Run `git --version` to check.
+- **Git** - version 2.x or later. Run `git --version` to check. You install it once and never type a git command: the OS wraps git behind plain verbs, so version control needs no new tool and no account. Say "save my work", "what changed", or "undo to before this morning".
 - **Python 3.11+** - for the runtime scripts. Run `python3 --version` to check.
 
 That is it. No database. No server. No Notion account required.
@@ -149,7 +150,7 @@ After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-scr
 
 ## What ships in this repo
 
-### Skills (62)
+### Skills (66)
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
@@ -205,7 +206,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 ## Tools and MCPs
 
-Founder OS does not assume your stack. Most of the 62 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+Founder OS does not assume your stack. Most of the 66 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 ---
 
@@ -273,7 +274,7 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.37.0. Public release. 62 skills, 34 commands, 643 tests.
+Version 1.37.0. Public release. 66 skills, 34 commands, 643 tests.
 
 v1.37.0 does two things. It installs the OS into one folder you own (default `~/founder-os`) instead of a hidden cache dir, names the engine and your data as the separate things they are, and detects an existing install so you never end up with two copies. And it makes the role system real: it adds two role modes you can reach when you need them, CSO for the portfolio view across everything you run and CTO for your tool stack and automations, makes the BD trigger honest (you invoke it, it does not silently flip on a count nothing reads), and tells you the plain phrase to switch lens yourself ("switch to CMO").
 
