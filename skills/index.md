@@ -85,7 +85,7 @@ A logical pack (not a folder): every member is named `linkedin-*` and shares one
 
 ## Commands
 
-This plugin ships 34 slash commands:
+This plugin ships 35 slash commands:
 
 | Command | Purpose |
 |---------|---------|

@@ -85,14 +85,21 @@ If `skills/brain-pass/SKILL.md` is missing (older install), fall back to `python
 
 This section adds personalisation and algorithm-awareness on top of the existing voice flow. It never removes or weakens the voice routing, the preflight gates, or the anti-AI self-check. If both inputs below are absent (older install, no LinkedIn pack), this section is a no-op and the skill drafts exactly as before.
 
-1. **Brand direction (personalisation).** Look for a `brand-direction.json` (written by `linkedin-brand-direction`, usually in the user's scan/audit output folder). If the user points to one, or one is in an obvious output folder, read it. When present, let it shape the draft: write in its `topic_lane`, take the `positioning_angle`, prefer a format from its `format_mix`, and if the user has no specific idea, seed the draft from one of its `first_three_posts`. Do not contradict the evidence-backed lane with a generic angle.
+1. **Brand direction (personalisation).** First read `~/.founder-os/linkedin-pack-state.json` when it exists and follow its `brand_direction` path. A user-supplied `brand-direction.json` path overrides the pointer. Validate the fixed contract from `skills/linkedin-brand-direction/brand-direction.schema.json`, then consume every field:
+   - Use `goal` to keep the post aimed at clients, hiring, or category recognition.
+   - Stay inside `topic_lane`.
+   - Build the argument from `positioning_angle`.
+   - Pick the requested asset from `format_mix`.
+   - Return the `cadence` as a publishing note.
+   - Use `first_three_posts` when the user has not supplied a specific idea.
+   - Use `evidence` to support factual notes and cut any claim it cannot support.
 
 2. **Algorithm reference (format and structure).** Read `skills/linkedin-pack-references/linkedin-algorithm.md` if present. If it is missing, say "algorithm reference not found, using conservative defaults" and continue with format-and-cadence basics only. When present, apply the data-backed facts to the draft:
-   - Build for dwell time: a first line that earns the "see more" tap, short lines, white space, a reason to read slowly.
-   - Favor the format ladder (document carousel and native video over text-only for reach), unless the message genuinely wants text and the writing carries the dwell.
-   - Keep it around 800 to 1000 characters, simple language, max 3 hashtags.
-   - No external link in the body (it cuts reach by around 60%, and the first-comment workaround is throttled). If a link must go out, tell the user the reach cost or to add it as a later edit.
-   - Suggest the cadence and golden-hour reply habit to the user as a note, not as part of the post body.
+   - Earn the mobile "see more" tap in the opening roughly 140 characters.
+   - Use documents/carousels for explainers, images for reliable engagement, and text when the writing carries the idea. Do not assume video ranks second.
+   - Match length to the idea. Current studies disagree on a universal ideal, so do not force every post into one character range.
+   - Avoid unsupported fixed link-penalty percentages. Current evidence supports caution with external video links, not a universal 60% body-link claim.
+   - Suggest the conservative 2 to 4 posts per week cadence and first-hour reply habit as a note, not as part of the post body.
 
 Carry the algorithm reference's known-limitation line if you assert a specific algorithm fact: these are reverse-engineered and dated.
 
@@ -115,5 +122,5 @@ Run the full anti-AI self-check:
 8. **Negation-contrast check:** Any "It's not X - it's Y" or "That's not X. That's Y" or "Not just X, but Y"? Rewrite as a direct statement. This is the single most common AI pattern that slips through. Catch it every time.
 9. **Count check:** If the post says "three things" or any specific number, count the list. Fix before posting.
 10. Compare against `voice.samples` from the profile. If it doesn't sound like the samples, rewrite.
-11. **Body-link check (additive).** Is there an external link in the post body? It cuts reach by around 60% and the first-comment workaround is throttled. Move it out, or tell the user the reach cost so they choose with open eyes.
+11. **Body-link check (additive).** Is there an external link in the post body? Do not quote a fixed penalty. Flag that current evidence is clearest for external video links and let the user decide whether the link is worth the distribution risk.
 12. **Lane check (additive).** If a `brand-direction.json` was in hand, does the draft stay in its evidence-backed `topic_lane`? If it drifted to a generic angle, pull it back to the lane the network rewards.

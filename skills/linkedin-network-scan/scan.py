@@ -28,12 +28,14 @@ import argparse
 import csv
 import datetime
 import html
+import io
 import json
 import os
 import re
 import sys
 import zipfile
 from collections import defaultdict
+from pathlib import Path
 
 # ----------------------------------------------------------------------------
 # Title taxonomy (generic - no industry or region is baked in here; ICP filters
@@ -156,7 +158,6 @@ def seniority_points(position, company=""):
 # Dates and names
 # ----------------------------------------------------------------------------
 
-TODAY = datetime.date.today()
 _MSG_DATE = re.compile(r"(\d{4})[-/](\d{1,2})[-/](\d{1,2})")
 YEAR_RX = re.compile(r"(\d{4})")
 # "14 May 2026", "May 14, 2026" style dates LinkedIn writes in Connected On.
@@ -351,12 +352,14 @@ class ExportSource:
         self.zip = None
         self._zip_index = {}
         self._zip_dates = {}
+        self.warnings = []
+        self._resolved = {}
         if os.path.isfile(path) and path.lower().endswith(".zip"):
             self.zip = zipfile.ZipFile(path)
-            for info in self.zip.infolist():
+            for info in sorted(self.zip.infolist(), key=lambda item: item.filename.casefold()):
                 base = os.path.basename(info.filename).lower()
-                if base and base not in self._zip_index:
-                    self._zip_index[base] = info.filename
+                if base:
+                    self._zip_index.setdefault(base, []).append(info.filename)
                     try:
                         self._zip_dates[base] = datetime.date(*info.date_time[:3])
                     except (ValueError, TypeError):
@@ -364,56 +367,119 @@ class ExportSource:
         elif not os.path.isdir(path):
             raise SystemExit(f"export path is neither a folder nor a .zip: {path}")
 
+    @staticmethod
+    def _candidate_pattern(basename):
+        stem, ext = os.path.splitext(basename)
+        return re.compile(rf"^{re.escape(stem)}(?:_\d+)?{re.escape(ext)}$", re.I)
+
+    def resolve(self, basename):
+        if basename in self._resolved:
+            return self._resolved[basename]
+        pattern = self._candidate_pattern(basename)
+        if self.zip is not None:
+            candidates = sorted(
+                [
+                    member
+                    for base, members in self._zip_index.items()
+                    if pattern.match(base)
+                    for member in members
+                ],
+                key=str.casefold,
+            )
+        else:
+            candidates = []
+            for root, dirs, files in os.walk(self.path):
+                dirs.sort(key=str.casefold)
+                depth = len(Path(root).relative_to(self.path).parts)
+                if depth > 2:
+                    dirs[:] = []
+                    continue
+                for filename in sorted(files, key=str.casefold):
+                    if pattern.match(filename):
+                        candidates.append(os.path.join(root, filename))
+            candidates.sort(key=str.casefold)
+        if len(candidates) > 1:
+            self.warnings.append(
+                f"multiple CSV candidates for {basename}; selected {os.path.basename(candidates[0])} deterministically"
+            )
+        self._resolved[basename] = candidates[0] if candidates else None
+        return self._resolved[basename]
+
     def read_text(self, basename):
         """Return file text (utf-8-sig tolerant) or None if absent."""
+        resolved = self.resolve(basename)
+        if not resolved:
+            return None
         if self.zip is not None:
-            name = self._zip_index.get(basename.lower())
-            if not name:
-                return None
-            data = self.zip.read(name)
+            data = self.zip.read(resolved)
             return data.decode("utf-8-sig", errors="replace")
-        # folder: search top level then one level down (some unzippers nest)
-        for c in self._folder_candidates(basename):
-            if os.path.exists(c):
-                return open(c, encoding="utf-8-sig", errors="replace").read()
-        return None
-
-    def _folder_candidates(self, basename):
-        candidates = [os.path.join(self.path, basename)]
-        for sub in os.listdir(self.path):
-            subdir = os.path.join(self.path, sub)
-            if os.path.isdir(subdir):
-                candidates.append(os.path.join(subdir, basename))
-        return candidates
+        with open(resolved, encoding="utf-8-sig", errors="replace", newline="") as handle:
+            return handle.read()
 
     def mtime_date(self, basename):
         """Best-effort modification date for a file inside the export, for the
         freshness check. ZIP entries carry their own stored date."""
         if self.zip is not None:
-            return self._zip_dates.get(basename.lower())
-        for c in self._folder_candidates(basename):
-            if os.path.exists(c):
-                return datetime.date.fromtimestamp(os.path.getmtime(c))
+            resolved = self.resolve(basename)
+            return self._zip_dates.get(os.path.basename(resolved).lower()) if resolved else None
+        resolved = self.resolve(basename)
+        if resolved and os.path.exists(resolved):
+            return datetime.date.fromtimestamp(os.path.getmtime(resolved))
         return None
 
     def has(self, basename):
         return self.read_text(basename) is not None
 
 
-def read_rows(src, basename):
-    """Read a LinkedIn CSV, skipping any 'Notes:' preamble before the header."""
+CSV_HEADER_SIGNATURES = {
+    "connections.csv": {"First Name", "Last Name", "Connected On"},
+    "messages.csv": {"CONVERSATION ID", "FROM", "TO", "DATE"},
+    "invitations.csv": {"From", "To", "Sent At"},
+}
+MESSAGE_HEADERS = ("CONVERSATION ID", "FROM", "TO", "DATE", "FOLDER")
+
+
+def _normal_header(value):
+    return (value or "").lstrip("\ufeff").strip().casefold()
+
+
+def read_rows(src, basename, selected_headers=None):
+    """Read a LinkedIn CSV after locating its header by a required signature."""
     text = src.read_text(basename)
     if text is None:
         return []
-    lines = text.splitlines(keepends=True)
-    hdr = 0
-    for i, ln in enumerate(lines):
-        first = ln.split(",")[0].strip().strip('"')
-        if first in ("First Name", "From", "FROM", "CONVERSATION ID"):
-            hdr = i
+    all_rows = list(csv.reader(io.StringIO(text, newline="")))
+    required = {
+        _normal_header(header)
+        for header in CSV_HEADER_SIGNATURES.get(basename.casefold(), set())
+    }
+    header_index = None
+    for index, row in enumerate(all_rows):
+        normalized = {_normal_header(cell) for cell in row if _normal_header(cell)}
+        if required and required.issubset(normalized):
+            header_index = index
             break
-    reader = csv.DictReader(lines[hdr:])
-    return [{(k or "").strip(): (v or "").strip() for k, v in row.items()} for row in reader]
+    if header_index is None:
+        return []
+    headers = [cell.lstrip("\ufeff").strip() for cell in all_rows[header_index]]
+    actual_by_normal = {_normal_header(header): header for header in headers}
+    selected = list(selected_headers or headers)
+    rows = []
+    for row in all_rows[header_index + 1:]:
+        if len(row) != len(headers) or not any((cell or "").strip() for cell in row):
+            continue
+        full = {header: (row[i] or "").strip() for i, header in enumerate(headers)}
+        projected = {}
+        for wanted in selected:
+            actual = actual_by_normal.get(_normal_header(wanted))
+            projected[wanted] = full.get(actual, "") if actual else ""
+        rows.append(projected)
+    return rows
+
+
+def read_message_rows(src):
+    """Read only routing metadata. Subject, content, and attachment fields are skipped."""
+    return read_rows(src, "messages.csv", selected_headers=MESSAGE_HEADERS)
 
 
 def load_connections(src):
@@ -444,7 +510,7 @@ def load_warm_names(src, owner):
 
     `owner` is inferred (most frequent FROM sender) when not supplied, so a generic
     user does not have to hardcode their own name."""
-    rows = read_rows(src, "messages.csv")
+    rows = read_message_rows(src)
     if not rows:
         return {}
     if not owner:
@@ -481,17 +547,18 @@ def load_warm_names(src, owner):
 # ----------------------------------------------------------------------------
 
 def warmth_tier(dm, days_since=None):
-    """'Warm' requires a real reply (in>0). 'In conversation' also requires the
-    thread to be RECENT (<=90d) - a two-way thread that last moved a year ago is
-    dormant, not hot."""
+    """Keep relationship labels aligned with the audit's reply-gated semantics."""
     if not dm:
-        return ("New / cold", "cold")
-    recent = days_since is not None and days_since <= 90
-    if dm["in"] >= 2 and dm["total"] >= 4 and recent:
+        return ("No LinkedIn thread", "light")
+    if dm["in"] >= 2 and dm["total"] >= 3 and days_since is not None and days_since <= 30:
         return ("In conversation", "hot")
+    if dm["in"] >= 1 and days_since is not None and days_since > 180:
+        return ("Dormant relationship", "dormant")
     if dm["in"] >= 1:
         return ("Replied before", "warm")
-    return ("You reached out", "cold")
+    if dm["out"] > 0:
+        return ("Outbound only", "outbound_only")
+    return ("Light signal", "light")
 
 
 def is_demoted(position, company, icp):
@@ -623,21 +690,22 @@ PAGE_V3 = r"""<!DOCTYPE html>
 /* LinkedIn-native, black/white. No web fonts - fully offline, uses the system
    stack LinkedIn itself uses. One restrained accent (LinkedIn blue). */
 :root{
-  --ink:#000000e6; --ink-soft:#000000b3; --muted:#00000099; --muted-light:#00000066;
+  --ink:#000000e6; --ink-soft:#000000b3; --muted:#595959; --muted-light:#595959;
   --line:#e8e6e3; --bg:#f4f2ee; --card:#ffffff; --head:#ffffff;
   --accent:#0a66c2; --accent-dark:#004182;
-  --tier-top:#0a66c2; --tier-strong:#5f5f5f; --tier-match:#b0b0b0;
+  --tier-top:#0a66c2; --tier-strong:#5f5f5f; --tier-match:#6f6f6f;
   --in:#057642; --maybe:#00000066; --out:#0000004d;
-  --hot:#b24020; --warm:#057642; --cold:#00000066;
+  --hot:#b24020; --warm:#057642; --dormant:#8a3b12; --outbound:#595959; --light:#595959;
   --r-sm:8px; --r-md:8px; --r-lg:8px; --r-pill:999px;
   --font:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
+html,body{max-width:100%;overflow-x:hidden;}
 body{font-family:var(--font);color:var(--ink);background:var(--bg);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;}
-.wrap{max-width:1180px;margin:0 auto;padding:0 22px;}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 22px;}
 .markbar{font-size:11.5px;letter-spacing:.5px;text-align:center;padding:7px 10px;font-weight:600;}
-.markbar.demo{background:rgba(31,122,77,.12);color:var(--in);border-bottom:1px solid rgba(31,122,77,.3);}
-.markbar.full{background:rgba(192,57,43,.1);color:var(--hot);border-bottom:1px solid rgba(192,57,43,.3);}
+.markbar.demo{background:rgba(31,122,77,.12);color:#045c33;border-bottom:1px solid rgba(31,122,77,.3);}
+.markbar.full{background:rgba(192,57,43,.1);color:#8f2f19;border-bottom:1px solid rgba(192,57,43,.3);}
 .cornermark{position:fixed;right:14px;bottom:12px;z-index:60;opacity:.85;font-size:11px;font-weight:700;color:var(--muted-light);letter-spacing:1px;text-transform:uppercase;}
 .hero{background:var(--head);color:var(--ink);padding:42px 22px 34px;text-align:center;border-bottom:1px solid var(--line);}
 .brand{display:inline-flex;align-items:center;gap:9px;margin-bottom:16px;}
@@ -660,7 +728,7 @@ body{font-family:var(--font);color:var(--ink);background:var(--bg);font-size:15p
 .chip.on{background:var(--ink);color:#fff;border-color:var(--ink);}
 .chip.on.k-top{background:var(--tier-top);border-color:var(--tier-top);}
 .chip.on.k-strong{background:var(--tier-strong);border-color:var(--tier-strong);}
-.chip.on.k-match{background:var(--tier-match);border-color:var(--tier-match);}
+.chip.on.k-match{background:var(--tier-match);border-color:var(--tier-match);color:#fff;}
 .search{font-family:var(--font);font-size:13px;padding:7px 13px;border:1px solid var(--line);border-radius:var(--r-pill);outline:none;min-width:170px;background:#fff;}
 .search:focus{border-color:var(--accent);}
 .toggle{font-size:12px;font-weight:600;border-radius:var(--r-pill);padding:6px 13px;border:1px solid var(--line);background:#fff;cursor:pointer;}
@@ -703,7 +771,8 @@ tbody tr:hover{background:#eef3fe;}
 .sc.unknown{background:#eef0f3;color:var(--muted);}
 .sc.out{background:#ececec;color:var(--muted);}
 .wm{font-size:11px;font-weight:600;}
-.wm.hot{color:var(--hot);} .wm.warm{color:var(--warm);} .wm.cold{color:var(--muted-light);}
+.wm.hot{color:var(--hot);} .wm.warm{color:var(--warm);} .wm.dormant{color:var(--dormant);}
+.wm.outbound_only{color:var(--outbound);} .wm.light{color:var(--light);}
 .yes{color:var(--in);font-weight:700;} .no{color:var(--muted-light);}
 .note{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:var(--r-md);padding:16px 18px;margin:8px 0 26px;font-size:13px;color:var(--muted);}
 .note b{color:var(--ink);}
@@ -715,6 +784,15 @@ footer .meta{color:var(--muted);font-size:12px;margin-top:12px;}
   .layout{grid-template-columns:1fr;}
   .hero h1{font-size:26px;}
   .activecount{margin-left:0;width:100%;}
+}
+@media(max-width:420px){
+  .wrap{padding-left:12px;padding-right:12px;}
+  .hero{padding-left:12px;padding-right:12px;}
+  .frow{gap:10px;}
+  .fgroup{max-width:100%;}
+  .search{width:100%;min-width:0;}
+  .panel{position:relative;}
+  .tablehead{padding:13px 14px;}
 }
 </style></head>
 <body class="__MODE__">
@@ -772,14 +850,14 @@ footer .meta{color:var(--muted);font-size:12px;margin-top:12px;}
   var MODE = "__MODE__";
   var TOTAL = __TOTAL__;
   var TIER_LABEL = {top:"Top fit", strong:"Strong fit", match:"Match"};
-  var TIER_COLOR = {top:"#0a66c2", strong:"#5f5f5f", match:"#b0b0b0"};
+  var TIER_COLOR = {top:"#0a66c2", strong:"#5f5f5f", match:"#6f6f6f"};
   var SCOPE_LABEL = {in:"Region match", maybe:"Region unknown", unknown:"Region not set", out:"Outside region"};
   var SCOPE_COLOR = {in:"#057642", maybe:"#8a8a8a", unknown:"#8a8a8a", out:"#c0c0c0"};
-  var WARM_LABEL = {hot:"In conversation", warm:"Replied before", cold:"New / cold"};
-  var WARM_COLOR = {hot:"#b24020", warm:"#057642", cold:"#8a8a8a"};
+  var WARM_LABEL = {hot:"In conversation", warm:"Replied before", dormant:"Dormant relationship", outbound_only:"Outbound only", light:"Light signal"};
+  var WARM_COLOR = {hot:"#b24020", warm:"#057642", dormant:"#8a3b12", outbound_only:"#595959", light:"#8a8a8a"};
   var TIER_ORDER = ["top","strong","match"];
   var SCOPE_ORDER = ["in","maybe","unknown","out"];
-  var WARM_ORDER = ["hot","warm","cold"];
+  var WARM_ORDER = ["hot","warm","dormant","outbound_only","light"];
 
   var state = {tier:"all", scope:"all", warm:"all", email:false, q:"", donut:"tier"};
 
@@ -874,7 +952,7 @@ footer .meta{color:var(--muted);font-size:12px;margin-top:12px;}
   }
 
   function renderHeroStats(){
-    var top=0,strong=0,warm=0; RAW.forEach(function(r){ if(r.tier==="top")top++; if(r.tier==="strong")strong++; if(r.warmth!=="cold")warm++; });
+    var top=0,strong=0,warm=0; RAW.forEach(function(r){ if(r.tier==="top")top++; if(r.tier==="strong")strong++; if(r.warmth==="hot"||r.warmth==="warm"||r.warmth==="dormant")warm++; });
     var cells=[[TOTAL,"Connections read"],[RAW.length,"On the worklist"],[top,"Top fit"],[warm,"Replied before"]];
     document.getElementById('herostats').innerHTML = cells.map(function(c){
       return '<div class="stat"><div class="n">'+c[0]+'</div><div class="l">'+c[1]+'</div></div>';
@@ -961,24 +1039,48 @@ def _mask_company(scope):
             "unknown": "a company"}.get(scope, "a company")
 
 
-def _scrub_title(title, company):
+def _company_scrubber(known_companies):
+    companies = {
+        str(value).strip()
+        for value in known_companies
+        if len(str(value).strip()) >= 4
+    }
+    if not companies:
+        return None
+    alternatives = "|".join(
+        re.escape(value)
+        for value in sorted(companies, key=lambda item: (-len(item), item.casefold()))
+    )
+    return re.compile(r"(?<!\w)(?:" + alternatives + r")(?!\w)", re.I)
+
+
+def _scrub_title(title, company, company_scrubber=None):
     """Strip the employer name out of a title for the DEMO blob, so a title like
     'Founder and CEO of <Company>' does not leak the company the masked company
-    field hides. Generic titles ('Founder', 'Managing Director') stay untouched."""
+    field hides. Also strip other export company names mentioned in free-form
+    titles, such as a parent company or client brand."""
     t = title or ""
-    if company and len(company) >= 3:
-        t = re.sub(r"\b" + re.escape(company) + r"\b", "", t, flags=re.I)
+    if company_scrubber is not None:
+        t = company_scrubber.sub("", t)
+    if company and len(company.strip()) >= 3:
+        t = re.sub(
+            r"(?<!\w)" + re.escape(company.strip()) + r"(?!\w)",
+            "",
+            t,
+            flags=re.I,
+        )
     t = re.sub(r"\s*\b(?:at|of|for|with|@)\s*$", "", t.strip(), flags=re.I)
     t = re.sub(r"\s{2,}", " ", t).strip(" ,|-/&")
     return t or "Role withheld"
 
 
-def build_v3_blob(leads, anonymise):
+def build_v3_blob(leads, anonymise, known_companies=()):
     """Build the JSON island. In anonymised demo mode, real names, companies, URLs
     and emails are NEVER written into the blob - only initials and a masked company
     label, and the employer name is scrubbed out of the title. Low-fit 'match'-tier
     rows are dropped from the demo so the safe view leads with the strongest people."""
     blob = []
+    company_scrubber = _company_scrubber(known_companies) if anonymise else None
     for i, ld in enumerate(leads):
         tier = ld["tier"]
         if anonymise and tier == "match":
@@ -995,7 +1097,11 @@ def build_v3_blob(leads, anonymise):
             rec["init"] = _initials(ld.get("first"), ld.get("last"))
             rec["co"] = _mask_company(ld["scope"])
             # scrub the REAL employer token out of the demo title
-            rec["title"] = _scrub_title(ld["position"], ld["company"])
+            rec["title"] = _scrub_title(
+                ld["position"],
+                ld["company"],
+                company_scrubber=company_scrubber,
+            )
         else:
             rec["name"] = ld["name"]
             rec["co"] = ld["company"] or ""
@@ -1004,14 +1110,23 @@ def build_v3_blob(leads, anonymise):
     return blob
 
 
-def render_html_v3(path, leads, totals, brand_name, anonymise=True):
-    blob = build_v3_blob(leads, anonymise)
+def render_html_v3(
+    path,
+    leads,
+    totals,
+    brand_name,
+    anonymise=True,
+    as_of=None,
+    known_companies=(),
+):
+    as_of = as_of or datetime.date.today()
+    blob = build_v3_blob(leads, anonymise, known_companies=known_companies)
     data_json = json.dumps(blob, ensure_ascii=False).replace("</", "<\\/")
     mode = "demo" if anonymise else "full"
     watermark = ("Demo view - names anonymised, safe to record and share"
                  if anonymise else
                  "Local file - not for distribution. Real names and links.")
-    bn = esc(brand_name) if brand_name else ""
+    bn = esc(brand_name) if brand_name and not anonymise else ""
     if bn:
         logo_tag = f'<span class="dot"></span><span class="lab">{bn}</span>'
         corner_tag = bn
@@ -1025,7 +1140,7 @@ def render_html_v3(path, leads, totals, brand_name, anonymise=True):
             .replace("__CORNER_TAG__", corner_tag)
             .replace("__TOTAL__", str(totals["total"]))
             .replace("__SHOWN__", str(len(blob)))
-            .replace("__GEN_DATE__", TODAY.isoformat())
+            .replace("__GEN_DATE__", as_of.isoformat())
             .replace("__DATA_JSON__", data_json))
     with open(path, "w", encoding="utf-8") as f:
         f.write(page)
@@ -1036,10 +1151,11 @@ def render_html_v3(path, leads, totals, brand_name, anonymise=True):
 # Export-freshness check
 # ----------------------------------------------------------------------------
 
-def freshness_check(src, conns):
+def freshness_check(src, conns, as_of=None):
     """Return (newest_date, days_old, warned_text). Newest signal = the most recent
     Connected On date in the export, falling back to the Connections.csv file date.
     A LinkedIn export goes stale: roles change, people move. Warn past ~30 days."""
+    as_of = as_of or datetime.date.today()
     newest = None
     for c in conns:
         d = parse_connected_on(c.get("connected_on", ""))
@@ -1049,7 +1165,7 @@ def freshness_check(src, conns):
         newest = src.mtime_date("Connections.csv")
     if newest is None:
         return (None, None, "")
-    days_old = (TODAY - newest).days
+    days_old = (as_of - newest).days
     if days_old > 30:
         warn = (
             f"WARNING: this export looks {days_old} days old (newest activity {newest.isoformat()}). "
@@ -1074,7 +1190,17 @@ def main():
     ap.add_argument("--icp", default="", help="path to an ICP config (.yaml or .json). Omit for a permissive default.")
     ap.add_argument("--owner", default="", help="your own name as it appears in messages.csv (auto-detected if omitted)")
     ap.add_argument("--brand", default="", help="optional label to show in the HTML header (e.g. your name or company)")
+    ap.add_argument(
+        "--as-of",
+        default=datetime.date.today().isoformat(),
+        help="analysis date in YYYY-MM-DD form; the LinkedIn router supplies today",
+    )
     args = ap.parse_args()
+
+    try:
+        as_of = datetime.date.fromisoformat(args.as_of)
+    except ValueError as exc:
+        raise SystemExit("--as-of must use YYYY-MM-DD") from exc
 
     icp = load_icp(args.icp)
     os.makedirs(args.outdir, exist_ok=True)
@@ -1092,7 +1218,7 @@ def main():
     warm = load_warm_names(src, args.owner)
 
     # freshness check (warn, do not block)
-    newest, days_old, fresh_warn = freshness_check(src, conns)
+    newest, days_old, fresh_warn = freshness_check(src, conns, as_of=as_of)
 
     # normalized warmth index so credentials/emoji in a name still match
     warm_norm = {}
@@ -1134,7 +1260,7 @@ def main():
         if sc < icp["threshold"]:
             continue
         last = dm["last"] if dm else None
-        days_since = (TODAY - last).days if last else None
+        days_since = (as_of - last).days if last else None
         tier_key, tier_label = fit_tier(sc, icp["threshold"])
         scope_key, scope_label = region_scope(region_hit, has_region)
         _, warm_class = warmth_tier(dm, days_since)
@@ -1175,12 +1301,18 @@ def main():
     # ---- JSON ----
     with open(os.path.join(args.outdir, "network-scan.json"), "w", encoding="utf-8") as f:
         json.dump({"_notice": LOCAL_WARNING,
+                   "_meta": {
+                       "analysis_date": as_of.isoformat(),
+                       "generated_at": f"{as_of.isoformat()}T00:00:00+00:00",
+                       "warnings": sorted(set(src.warnings)),
+                   },
                    "icp": {k: v for k, v in icp.items() if not k.startswith("_")},
                    "totals": totals, "incoming_invites": len(incoming),
                    "export_newest": newest.isoformat() if newest else None,
                    "export_days_old": days_old,
                    "leads": [{k: v for k, v in ld.items() if k != "dm"} for ld in qualified]},
-                  f, indent=2, ensure_ascii=False, default=str)
+                  f, indent=2, ensure_ascii=False, default=str, sort_keys=True)
+        f.write("\n")
 
     # ---- compact markdown (the file the assistant reads) ----
     write_markdown(os.path.join(args.outdir, "network-scan.md"),
@@ -1188,15 +1320,16 @@ def main():
 
     # ---- interactive HTML: anonymised demo (default, safe) + watermarked full ----
     demo_n = render_html_v3(os.path.join(args.outdir, "network-scan.html"),
-                            qualified, totals, args.brand, anonymise=True)
+                            qualified, totals, args.brand, anonymise=True, as_of=as_of,
+                            known_companies=[conn["company"] for conn in conns])
     render_html_v3(os.path.join(args.outdir, "network-scan-full.html"),
-                   qualified, totals, args.brand, anonymise=False)
+                   qualified, totals, args.brand, anonymise=False, as_of=as_of,
+                   known_companies=[conn["company"] for conn in conns])
 
     # ---- terminal summary (no row dump) ----
     if fresh_warn:
         print(fresh_warn)
         print("")
-    print(f"ICP             : {icp['label']}")
     print(f"connections read: {len(conns)}")
     if newest:
         print(f"export newest   : {newest.isoformat()} ({days_old}d old)")
@@ -1208,7 +1341,7 @@ def main():
     if icp["demote_keywords"]:
         print(f"   demoted: {demoted_total}", end="")
     print(f"   pending invites: {len(incoming)}")
-    print(f"\noutput written to: {os.path.abspath(args.outdir)}")
+    print("\noutput bundle written")
     print("  network-scan.md        (compact ranked digest - read this one)")
     print(f"  network-scan.html      (anonymised demo, safe to share - {demo_n} rows)")
     print("  network-scan-full.html (real names + links, keep local)")

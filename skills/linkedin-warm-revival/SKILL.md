@@ -29,7 +29,7 @@ Do not guess a dormant list without the audit. The warmth signal lives in the me
 
 Read `audit.json` from the output folder `linkedin-power-audit` wrote. Use:
 
-- `messages.counterparties` - each has `warmth` (hot / warm / dormant / light), `total` messages, `in` (their replies), `last_touch`, and `last_touch_days`.
+- `messages.counterparties` - each has `warmth` (hot / warm / dormant / outbound_only / light), `total` messages, `in` (their replies), `last_touch`, `last_touch_days`, and the matched `title` / `company` when the person exists in Connections.csv.
 - `network.role_clusters` / `stakeholder_buckets` and `founder_pool.sample_records` - to judge which dormant contacts are worth reviving.
 
 If `_meta.export_type` is `basic`, stop and say there is no warmth data to revive from - the Complete export is needed.
@@ -38,7 +38,7 @@ If `_meta.export_type` is `basic`, stop and say there is no warmth data to reviv
 
 A contact is worth reviving when they are **dormant or cold AND valuable AND real**:
 
-- **Dormant or cold:** `warmth` is `dormant`, or a `light` contact whose `last_touch_days` is large (gone quiet) with at least one real reply (`in >= 1`) in the past. A genuine two-way thread that simply went cold, not a one-way cold send you never got a reply to.
+- **Dormant:** `warmth` is `dormant`, which already requires at least one real reply (`in >= 1`) and an old last touch. `outbound_only` is cold outreach, never revival.
 - **Valuable:** their role matters for the user's goal (a decision-maker, a founder, a hiring manager - judge from the title and the network composition).
 - **Real:** they replied to you before (`in >= 1`). Reviving someone who never answered is cold outreach, not revival - keep those out of this list and say so.
 

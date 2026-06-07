@@ -24,7 +24,6 @@ holds real names. linkedin-warm-revival and linkedin-brand-direction read audit.
 import argparse
 import csv
 import datetime
-import io
 import json
 import os
 import re
@@ -32,7 +31,6 @@ import sys
 from collections import OrderedDict
 
 SCHEMA_VERSION = "1.0"
-NOW = datetime.datetime.now(datetime.timezone.utc)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -41,27 +39,83 @@ LOCAL_WARNING = ("This file holds real names from your own LinkedIn export. Keep
 
 
 # ----------------------------------------------------------------------------
-# CSV (port of lib/csv.js): tolerant of a Notes preamble before the header,
-# quoted multi-line fields, and "" escaped quotes. Stdlib csv handles the quoting.
+# CSV: tolerant of a Notes preamble before the header, quoted multi-line fields,
+# BOMs, CRLF, and "" escaped quotes. Header rows are identified by signatures.
 # ----------------------------------------------------------------------------
 
-def read_csv(path):
+CSV_HEADER_SIGNATURES = {
+    "profile.csv": {"First Name", "Last Name"},
+    "positions.csv": {"Company Name", "Title"},
+    "skills.csv": {"Name"},
+    "endorsement_received_info.csv": {"Skill Name", "Endorsement Status"},
+    "connections.csv": {"First Name", "Last Name", "Connected On"},
+    "messages.csv": {"CONVERSATION ID", "FROM", "TO", "DATE"},
+    "invitations.csv": {"From", "To", "Sent At"},
+    "member_follows.csv": {"FullName", "Status"},
+    "company follows.csv": {"Organization", "Followed On"},
+    "hashtag_follows.csv": {"HashTag", "State"},
+    "shares.csv": {"Date", "ShareCommentary"},
+    "comments.csv": {"Date", "Message"},
+    "reactions.csv": {"Date", "Type"},
+    "education.csv": {"School Name"},
+    "learning.csv": {"Content Title"},
+    "searchqueries.csv": {"Time", "Search Query"},
+    "recommendations_received.csv": {"First Name", "Last Name"},
+    "recommendations_given.csv": {"First Name", "Last Name"},
+    "online job postings.csv": {"Company Name", "Title"},
+}
+
+MESSAGE_HEADERS = ("CONVERSATION ID", "FROM", "TO", "DATE", "FOLDER")
+
+
+def _normal_header(value):
+    return (value or "").lstrip("\ufeff").strip().casefold()
+
+
+def _header_signature(name):
+    base = re.sub(r"_\d+(?=\.csv$)", "", os.path.basename(str(name)), flags=re.I)
+    return CSV_HEADER_SIGNATURES.get(base.casefold())
+
+
+def read_csv(path, required_headers=None, selected_headers=None):
     if not os.path.exists(path):
         return {"headers": [], "rows": [], "present": False}
-    raw = open(path, encoding="utf-8-sig", errors="replace").read()
-    all_rows = list(csv.reader(io.StringIO(raw)))
-    header_idx = 0
-    for i in range(min(len(all_rows), 10)):
-        r = all_rows[i]
-        if len(r) > 1 and all(len(c) < 60 and "\n" not in c for c in r):
+    required_headers = required_headers or _header_signature(path)
+    required = {_normal_header(h) for h in (required_headers or [])}
+    with open(path, encoding="utf-8-sig", errors="replace", newline="") as handle:
+        all_rows = list(csv.reader(handle))
+
+    header_idx = None
+    for i, row in enumerate(all_rows):
+        normalized = {_normal_header(cell) for cell in row if _normal_header(cell)}
+        if required and required.issubset(normalized):
             header_idx = i
             break
-    headers = [h.strip() for h in (all_rows[header_idx] if header_idx < len(all_rows) else [])]
+    if header_idx is None:
+        return {"headers": [], "rows": [], "present": True}
+
+    headers = [h.lstrip("\ufeff").strip() for h in all_rows[header_idx]]
+    actual_by_normal = {_normal_header(h): h for h in headers}
+    selected = list(selected_headers or headers)
     rows = []
     for r in all_rows[header_idx + 1:]:
         if len(r) == len(headers) and any((c or "").strip() for c in r):
-            rows.append({h: r[idx] for idx, h in enumerate(headers)})
-    return {"headers": headers, "rows": rows, "present": True}
+            full = {h: r[idx] for idx, h in enumerate(headers)}
+            projected = {}
+            for wanted in selected:
+                actual = actual_by_normal.get(_normal_header(wanted))
+                projected[wanted] = full.get(actual, "") if actual else ""
+            rows.append(projected)
+    return {"headers": selected, "rows": rows, "present": True}
+
+
+def read_message_csv(path):
+    """Read only message routing metadata. Body and attachment columns never enter a row."""
+    return read_csv(
+        path,
+        required_headers=CSV_HEADER_SIGNATURES["messages.csv"],
+        selected_headers=MESSAGE_HEADERS,
+    )
 
 
 def clean_line_quotes(text):
@@ -114,6 +168,9 @@ def parse_date(s):
     m = re.match(r"^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})", t)
     if m:
         return _utc(int(m[1]), int(m[2]), int(m[3]), int(m[4]), int(m[5]), int(m[6]))
+    m = re.match(r"^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?:\s+UTC)?$", t, re.I)
+    if m:
+        return _utc(int(m[1]), int(m[2]), int(m[3]), int(m[4]), int(m[5]))
     m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", t)
     if m:
         return _utc(int(m[1]), int(m[2]), int(m[3]))
@@ -261,7 +318,7 @@ def process_connections(rows, taxonomy):
     role_clusters = sorted([{
         "cluster": k, "label": taxonomy["role_cluster_labels"].get(k, k),
         "count": cnt, "share": round1(cnt / total * 100) if total else 0,
-    } for k, cnt in role_counts.items()], key=lambda x: -x["count"])
+    } for k, cnt in role_counts.items()], key=lambda x: (-x["count"], x["cluster"]))
 
     stakeholder_regex = [(k, compile_patterns(pats)) for k, pats in taxonomy["stakeholder_priority"]]
     stakeholder_counts = {k: 0 for k, _ in taxonomy["stakeholder_priority"]}
@@ -276,7 +333,7 @@ def process_connections(rows, taxonomy):
     stakeholder_buckets = sorted([{
         "bucket": k, "label": taxonomy["stakeholder_priority_labels"].get(k, k),
         "count": cnt, "share": round1(cnt / total * 100) if total else 0,
-    } for k, cnt in stakeholder_counts.items()], key=lambda x: -x["count"])
+    } for k, cnt in stakeholder_counts.items()], key=lambda x: (-x["count"], x["bucket"]))
 
     industry_regex = OrderedDict((k, compile_patterns(v)) for k, v in taxonomy["industry_buckets"].items())
     industry_counts = OrderedDict()
@@ -294,7 +351,7 @@ def process_connections(rows, taxonomy):
     industry_buckets = sorted([{
         "bucket": k, "label": taxonomy["industry_bucket_labels"].get(k, k),
         "count": cnt, "share": round1(cnt / total * 100) if total else 0,
-    } for k, cnt in industry_counts.items()], key=lambda x: -x["count"])
+    } for k, cnt in industry_counts.items()], key=lambda x: (-x["count"], x["bucket"]))
 
     company_map = OrderedDict()
     for c in conns:
@@ -303,7 +360,7 @@ def process_connections(rows, taxonomy):
             continue
         company_map[co] = company_map.get(co, 0) + 1
     company_clusters = [{"company": co, "count": cnt} for co, cnt in
-                        sorted(company_map.items(), key=lambda kv: -kv[1])[:30]]
+                        sorted(company_map.items(), key=lambda kv: (-kv[1], kv[0].casefold()))[:30]]
 
     strict_regex = compile_patterns(taxonomy["founder_pool_keywords"]["strict"])
     broad_extra_regex = compile_patterns(taxonomy["founder_pool_keywords"]["broad_extra"])
@@ -347,9 +404,9 @@ def process_connections(rows, taxonomy):
         "strict_count": strict,
         "broad_count": broad,
         "by_use": sorted([{"bucket": k, "label": taxonomy["commercial_use_labels"].get(k, k), "count": cnt}
-                          for k, cnt in use_counts.items()], key=lambda x: -x["count"]),
+                          for k, cnt in use_counts.items()], key=lambda x: (-x["count"], x["bucket"])),
         "by_industry": sorted([{"bucket": k, "label": taxonomy["industry_bucket_labels"].get(k, k), "count": cnt}
-                               for k, cnt in ind_counts_founders.items()], key=lambda x: -x["count"]),
+                               for k, cnt in ind_counts_founders.items()], key=lambda x: (-x["count"], x["bucket"])),
         "sample_records": founder_records,
     }
 
@@ -368,7 +425,8 @@ def process_connections(rows, taxonomy):
     }
 
 
-def process_messages(rows, owner_name):
+def process_messages(rows, owner_name, as_of=None):
+    as_of = as_of or datetime.date.today()
     owner_low = owner_name.lower().strip()
     counter_map = OrderedDict()
     conversation_set = set()
@@ -411,18 +469,21 @@ def process_messages(rows, owner_name):
         counter_map[counterparty] = cur
 
     def days(ts):
-        return int((NOW.timestamp() - ts) // 86400)
+        touch = datetime.datetime.fromtimestamp(ts, datetime.timezone.utc).date()
+        return (as_of - touch).days
 
     counterparties = []
     for c in counter_map.values():
         dt = days(c["last_touch"]) if c["last_touch"] else None
         warmth = "light"
-        if dt is not None and dt <= 30 and c["total"] >= 3:
+        if c["in"] >= 2 and c["total"] >= 3 and dt is not None and dt <= 30:
             warmth = "hot"
-        elif dt is not None and dt <= 90:
-            warmth = "warm"
-        elif c["total"] >= 5:
+        elif c["in"] >= 1 and dt is not None and dt > 180:
             warmth = "dormant"
+        elif c["in"] >= 1:
+            warmth = "warm"
+        elif c["out"] > 0:
+            warmth = "outbound_only"
         last_touch = (datetime.datetime.fromtimestamp(c["last_touch"], datetime.timezone.utc)
                       .date().isoformat()) if c["last_touch"] else None
         counterparties.append({
@@ -430,9 +491,15 @@ def process_messages(rows, owner_name):
             "conversations": len(c["conv"]), "last_touch": last_touch,
             "last_touch_days": dt, "warmth": warmth,
         })
-    counterparties.sort(key=lambda x: -x["total"])
+    counterparties.sort(key=lambda x: (-x["total"], -x["in"], x["name"].casefold()))
 
-    warmth_distribution = {"hot": 0, "warm": 0, "dormant": 0, "light": 0}
+    warmth_distribution = {
+        "hot": 0,
+        "warm": 0,
+        "dormant": 0,
+        "outbound_only": 0,
+        "light": 0,
+    }
     for c in counterparties:
         warmth_distribution[c["warmth"]] += 1
     monthly_activity = [{"month": k, "count": v} for k, v in sorted(month_map.items())]
@@ -511,7 +578,10 @@ def process_reactions(rows):
         if t:
             by_type[t] = by_type.get(t, 0) + 1
     return {"total": len(rows),
-            "by_type": sorted([{"type": t, "count": c} for t, c in by_type.items()], key=lambda x: -x["count"])}
+            "by_type": sorted(
+                [{"type": t, "count": c} for t, c in by_type.items()],
+                key=lambda x: (-x["count"], x["type"]),
+            )}
 
 
 def process_searches(rows):
@@ -609,7 +679,8 @@ def _load_json(name):
         return json.load(f, object_pairs_hook=OrderedDict)
 
 
-def extract(export_dir):
+def extract(export_dir, as_of=None):
+    as_of = as_of or datetime.date.today()
     warnings = []
     taxonomy = _load_json("taxonomy.json")
 
@@ -629,18 +700,32 @@ def extract(export_dir):
             warnings.append(f"nested folder detected: descended into {subdirs[0]}")
             export_dir = os.path.join(export_dir, subdirs[0])
 
+    resolved_cache = {}
+
     def resolve_csv(name):
+        if name in resolved_cache:
+            return resolved_cache[name]
         exact = os.path.join(export_dir, name)
         if os.path.exists(exact):
+            resolved_cache[name] = exact
             return exact
         base = re.sub(r"\.csv$", "", name, flags=re.I)
         rx = re.compile("^" + re.escape(base) + r"_.+\.csv$", re.I)
         try:
-            for f in os.listdir(export_dir):
-                if rx.match(f):
-                    return os.path.join(export_dir, f)
+            matches = sorted(
+                [f for f in os.listdir(export_dir) if rx.match(f)],
+                key=str.casefold,
+            )
+            if matches:
+                if len(matches) > 1:
+                    warnings.append(
+                        f"multiple CSV candidates for {name}; selected {matches[0]} deterministically"
+                    )
+                resolved_cache[name] = os.path.join(export_dir, matches[0])
+                return resolved_cache[name]
         except OSError:
             pass
+        resolved_cache[name] = exact
         return exact
 
     def has_csv(name):
@@ -648,7 +733,11 @@ def extract(export_dir):
 
     def rd(name, required=False):
         p = resolve_csv(name)
-        result = read_csv(p)
+        result = (
+            read_message_csv(p)
+            if name.casefold() == "messages.csv"
+            else read_csv(p, required_headers=CSV_HEADER_SIGNATURES.get(name.casefold()))
+        )
         if not result["present"]:
             if required:
                 raise MissingCsvError(f"Required CSV missing: {name} at {p}")
@@ -686,9 +775,15 @@ def extract(export_dir):
     skills = process_skills(skills_res["rows"])
     endorse = process_endorsements(endorsements_res["rows"])
     network = process_connections(connections_res["rows"], taxonomy)
-    messages = (process_messages(messages_res["rows"], owner_name) if messages_res["present"]
+    messages = (process_messages(messages_res["rows"], owner_name, as_of=as_of) if messages_res["present"]
                 else {"total": 0, "conversations": 0, "counterparties": [], "counterparties_total": 0,
-                      "warmth_distribution": {"hot": 0, "warm": 0, "dormant": 0, "light": 0},
+                      "warmth_distribution": {
+                          "hot": 0,
+                          "warm": 0,
+                          "dormant": 0,
+                          "outbound_only": 0,
+                          "light": 0,
+                      },
                       "monthly_activity": [], "themes": []})
     invites = (process_invitations(invitations_res["rows"], owner_name) if invitations_res["present"]
                else {"incoming": 0, "outgoing": 0, "monthly_breakdown": []})
@@ -708,13 +803,28 @@ def extract(export_dir):
     recommendations = process_recommendations(recv_res["rows"] if recv_res["present"] else [],
                                               given_res["rows"] if given_res["present"] else [])
 
+    connection_index = {}
+    for row in connections_res["rows"]:
+        name = f"{g(row, 'First Name')} {g(row, 'Last Name')}".strip()
+        key = re.sub(r"[^a-z0-9]+", " ", name.casefold()).strip()
+        if key and key not in connection_index:
+            connection_index[key] = {
+                "title": g(row, "Position") or None,
+                "company": g(row, "Company") or None,
+            }
+    for counterparty in messages["counterparties"]:
+        key = re.sub(r"[^a-z0-9]+", " ", counterparty["name"].casefold()).strip()
+        match = connection_index.get(key, {})
+        counterparty["title"] = match.get("title")
+        counterparty["company"] = match.get("company")
+
     reposts = len([s for s in shares if s["is_repost"]])
     real_posts = len([s for s in shares if not s["is_repost"]])
 
     endorse_by_skill_cluster = [{"skill": s, "count": c} for s, c in
-                                sorted(endorse["by_skill"].items(), key=lambda kv: -kv[1])]
+                                sorted(endorse["by_skill"].items(), key=lambda kv: (-kv[1], kv[0].casefold()))]
     skills_rollup = sorted([{"skill": s, "endorsements": endorse["by_skill"].get(s, 0)} for s in skills],
-                           key=lambda x: -x["endorsements"])
+                           key=lambda x: (-x["endorsements"], x["skill"].casefold()))
 
     theme_kw = _load_json("theme-keywords.json")
     follow_buckets = theme_kw.get("follow_theme_buckets", {})
@@ -725,13 +835,13 @@ def extract(export_dir):
             if matches_any(ht["hashtag"], regs):
                 follow_tagged[k] += 1
     follow_themes = sorted([{"bucket": k, "label": theme_kw["follow_theme_labels"].get(k, k), "count": c}
-                            for k, c in follow_tagged.items()], key=lambda x: -x["count"])
+                            for k, c in follow_tagged.items()], key=lambda x: (-x["count"], x["bucket"]))
 
     posts_year = posts_by_year([s for s in shares if not s["is_repost"]])
 
     if owner_name:
         if any((c.get("name") or "").lower().strip() == owner_name.lower() for c in messages["counterparties"]):
-            warnings.append(f"privacy leak: owner appeared as counterparty ({owner_name}) - dropped")
+            warnings.append("privacy leak: owner appeared as a counterparty and was dropped")
 
     rich_signals = ["messages.csv", "Shares.csv", "Reactions.csv", "Invitations.csv", "Comments.csv"]
     rich_present = [f for f in rich_signals if has_csv(f)]
@@ -741,11 +851,6 @@ def extract(export_dir):
         export_type = "basic"
     else:
         export_type = "partial"
-    folder_name = os.path.basename(export_dir).lower()
-    if export_type == "partial" and re.match(r"^basic_linkedindata", folder_name):
-        export_type = "basic"
-    if export_type == "partial" and re.match(r"^complete_linkedindata", folder_name):
-        export_type = "complete"
 
     if export_type == "basic":
         warnings.insert(0,
@@ -765,7 +870,8 @@ def extract(export_dir):
     audit["_notice"] = LOCAL_WARNING
     audit["_meta"] = {
         "schema_version": SCHEMA_VERSION,
-        "generated_at": NOW.isoformat(),
+        "analysis_date": as_of.isoformat(),
+        "generated_at": f"{as_of.isoformat()}T00:00:00+00:00",
         "source_export_folder": os.path.basename(export_dir),
         "export_type": export_type,
         "owner": {"first_name": (profile or {}).get("first_name", ""),
@@ -840,7 +946,7 @@ def classify(audit):
     audit["content"]["posting_themes"] = sorted([{
         "bucket": k, "label": kw["post_theme_labels"].get(k, k), "count": c,
         "share": round1(c / total * 100) if total else 0,
-    } for k, c in counts.items()], key=lambda x: -x["count"])
+    } for k, c in counts.items()], key=lambda x: (-x["count"], x["bucket"]))
     audit["content"]["_post_theme_coverage"] = round1(tagged_at_least_one / total * 100) if total else 0
 
     proxies = kw.get("message_theme_proxies_by_role_cluster", {})
@@ -859,8 +965,9 @@ def classify(audit):
         theme_out.append({"theme": "internal_operations",
                           "label": labels.get("internal_operations", "Internal / operations"),
                           "proxy_clusters": [], "proxy_signal": 0})
-    theme_out.sort(key=lambda x: -x["proxy_signal"])
+    theme_out.sort(key=lambda x: (-x["proxy_signal"], x["theme"]))
     audit["messages"]["themes"] = theme_out
+    audit.pop("_raw", None)
     return audit
 
 
@@ -921,9 +1028,19 @@ def main():
     ap.add_argument("outdir", help="folder to write audit.json into (keep it OUTSIDE any repo)")
     ap.add_argument("--goal-buckets", default="",
                     help="comma-separated stakeholder buckets your goal needs (adds network.gap)")
+    ap.add_argument(
+        "--as-of",
+        default=datetime.date.today().isoformat(),
+        help="analysis date in YYYY-MM-DD form; the LinkedIn router supplies today",
+    )
     args = ap.parse_args()
 
-    audit = extract(args.export)
+    try:
+        as_of = datetime.date.fromisoformat(args.as_of)
+    except ValueError as exc:
+        raise SystemExit("--as-of must use YYYY-MM-DD") from exc
+
+    audit = extract(args.export, as_of=as_of)
     classify(audit)
     if args.goal_buckets.strip():
         goal = [b.strip() for b in args.goal_buckets.split(",") if b.strip()]
@@ -932,9 +1049,10 @@ def main():
     os.makedirs(args.outdir, exist_ok=True)
     out_path = os.path.join(args.outdir, "audit.json")
     with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(audit, f, indent=2, ensure_ascii=False)
+        json.dump(audit, f, indent=2, ensure_ascii=False, sort_keys=True)
+        f.write("\n")
 
-    print(f"audit.json written: {out_path}")
+    print("audit.json written")
     print(f"  export type : {audit['_meta']['export_type']}")
     print(f"  connections : {audit['metrics']['connections']}")
     print(f"  dm_messages : {audit['metrics']['dm_messages']}")

@@ -3,55 +3,61 @@ title: LinkedIn algorithm reference (shared, dated)
 last_verified: 2026-06-07
 re_verify_after_days: 90
 sources:
-  - "AuthoredUp - large-sample LinkedIn post study (format and engagement)"
-  - "Richard van der Blom - Algorithm Insights Report (annual reverse-engineering)"
+  - "AuthoredUp content strategy, updated 2026-05-04: https://authoredup.com/blog/linkedin-content-strategy"
+  - "AuthoredUp character-limit analysis, 2026: https://authoredup.com/blog/linkedin-character-limit"
+  - "Richard van der Blom 2026 report launch: https://www.linkedin.com/posts/richardvanderblom_rvdbcarousel-algorithm-insights-report-2026-activity-7455148601749729280-AwsY"
 ---
 
 # LinkedIn algorithm reference
 
-The single source of algorithm truth for the LinkedIn pack. The brand and content skills read this file and cite it; they do not restate it inline and drift. If a fact is not here, do not assert it.
+This is the shared, dated reference for the LinkedIn pack. The studies are external and reverse-engineered. They are useful evidence, not LinkedIn documentation.
 
-## Freshness rule (read first)
+## Freshness rule
 
-LinkedIn's ranking is reverse-engineered from public studies, not documented by LinkedIn. It shifts. This file carries a `last_verified` date. **If today is more than `re_verify_after_days` (90) past `last_verified`, web-check the specifics before asserting them**, and prefer the conservative reading until you have re-verified. A consumer skill that cannot find this file degrades gracefully: it says "algorithm reference not found, using conservative defaults" and falls back to format-and-cadence basics only.
+If today is more than `re_verify_after_days` past `last_verified`, re-check every numerical or ranking claim before using it. If a consumer cannot load this file, use conservative format and cadence guidance without numerical claims.
 
-## Data-backed facts (assert these)
+## Data-backed current evidence
 
-These are supported by repeated large-sample external studies. State them plainly.
+### Format
 
-- **Dwell time is the hidden primary driver.** How long a reader stops on a post matters more than the like. The practical threshold is around 30+ seconds of attention. Posts built to be read slowly (a strong first line, white space, a reason to expand "see more") out-perform posts built to be skimmed.
-- **Comments weigh roughly 2x likes.** Engagement is not flat. A thoughtful comment and a save outweigh a like; the like is the weakest signal. Reply to comments in the first hour to compound it.
-- **The golden hour gates expansion.** Early engagement in roughly the first 60 to 90 minutes decides whether the post is shown more widely. Post when your audience is active and be present to reply during that window.
-- **Format ladder (strongest to weakest):** document carousels (PDF-style) top the reach table, native short video next, polls strong, plain image mid, **text-only weakest** for reach (though text can still win on dwell if the writing holds). Pick the format the message deserves, but know the ladder.
-- **Body links cut reach by around 60%.** An external link in the post body suppresses distribution. The old "put the link in the first comment" workaround is now throttled too, so it is not a clean escape. If a link must go out, accept the reach cost or put it in the post later as an edit.
-- **Cadence: 3 to 5 times a week, never more than once per 24 hours.** Posting more than once a day splits your own reach. Consistency over volume.
-- **Length: around 800 to 1000 characters, simple language, max 3 hashtags.** Short, plain sentences read by a wide audience beat dense expert prose. Hashtags past three add nothing.
-- **The interest graph amplifies topic lanes.** LinkedIn increasingly shows posts to people interested in the topic, not just your followers. Posting consistently in one lane trains the graph to carry you to the right strangers. Lane discipline compounds; topic-hopping resets it.
+- Documents and carousels remain strong and underused. AuthoredUp reports 1,198 median reach and 35 median engagements from its March 2025 to February 2026 profile sample. They represent under 5% of posts. Source: [AuthoredUp content strategy](https://authoredup.com/blog/linkedin-content-strategy).
+- Images are the reliable all-round format in the same sample: 1,031 median reach and 36 median engagements. Source: [AuthoredUp content strategy](https://authoredup.com/blog/linkedin-content-strategy).
+- Text leads video on median reach in the current AuthoredUp table: text 921, video 740. Video reach fell 36% year over year in that analysis. Do not describe video as reliably second by reach. Source: [AuthoredUp content strategy](https://authoredup.com/blog/linkedin-content-strategy).
+- The AuthoredUp table gives polls 1,529 median reach, while the article prose calls documents the highest-reach format. Treat that as an internal disagreement. Do not build a poll-first strategy from the table alone.
+- Richard van der Blom's 2026 launch says the report ranks every format, asks what happened to video, and says documents are holding strong. The public launch does not expose the full paid report's measurements, so cite it only for that directional confirmation. Source: [2026 report launch](https://www.linkedin.com/posts/richardvanderblom_rvdbcarousel-algorithm-insights-report-2026-activity-7455148601749729280-AwsY).
 
-## Tool-blog color (do NOT assert as fact; label it)
+Conservative recommendation: use documents or carousels for explainers, images for repeatable engagement, and text when the writing is strong. Use video when the idea benefits from a person speaking, not because of an assumed reach rank.
 
-These circulate in tool-vendor blogs and talks. They are plausible directional color, not study-backed. If you mention any of them, label them as unverified mechanism, never as a number to act on.
+### Topic and opening
 
-- LLM-embedding mechanics behind topic matching ("the feed reads your post with a language model").
-- "Your post starts with ~300M potential reach and the algorithm narrows it to ~2,000."
-- "A comment is worth 15x a like."
+- AuthoredUp says topical consistency helps the system classify expertise. Richard van der Blom describes a shift from a relationship graph toward an interest graph and highlights topic authority. Sources: [AuthoredUp content strategy](https://authoredup.com/blog/linkedin-content-strategy) and [2026 report launch](https://www.linkedin.com/posts/richardvanderblom_rvdbcarousel-algorithm-insights-report-2026-activity-7455148601749729280-AwsY).
+- AuthoredUp says the first two lines decide whether a reader expands the post, and its character-limit analysis places the mobile fold at roughly 140 characters. Sources: [content strategy](https://authoredup.com/blog/linkedin-content-strategy) and [character limits](https://authoredup.com/blog/linkedin-character-limit).
+- AuthoredUp identifies dwell time, thoughtful comments, and saves as stronger quality signals than a simple like. It does not support the old fixed claims that comments are exactly 2x likes or that 30 seconds is a universal threshold. Source: [AuthoredUp content strategy](https://authoredup.com/blog/linkedin-content-strategy).
+- AuthoredUp says the first hour matters for early engagement. Keep "first hour" as directional guidance, not a guaranteed expansion gate. Source: [AuthoredUp content strategy](https://authoredup.com/blog/linkedin-content-strategy).
 
-Use the data-backed comment-weighting (~2x) for any real recommendation. The 15x figure is color.
+### Cadence and length
 
-## Source disagreements (kept conservative)
+- AuthoredUp's current recommendation is 2 to 4 posts per week for most profiles, with consistency more important than bursts. Source: [AuthoredUp content strategy](https://authoredup.com/blog/linkedin-content-strategy).
+- Length evidence disagrees. AuthoredUp's separate 2026 character analysis reports higher median engagement in the 1,301 to 2,500 character bands. Richard van der Blom's launch-page commentary says a growing share of top-performing posts are under 600 characters. Sources: [AuthoredUp character limits](https://authoredup.com/blog/linkedin-character-limit) and [2026 report launch page](https://www.linkedin.com/posts/richardvanderblom_rvdbcarousel-algorithm-insights-report-2026-activity-7455148601749729280-AwsY).
 
-Where studies disagree, design for the worse case:
+Conservative recommendation: make the opening fit inside the mobile fold, then use only the length the idea needs. Do not force a universal 800 to 1,000 character target.
 
-- **External-link reach penalty:** estimates range; treat it as a real and meaningful suppression (~60% is the working figure) rather than debating the exact percent.
-- **Export email coverage:** sources cite anywhere from ~3% to 30 to 50% of connections having an email in the export. Design every downstream skill for **mostly blank** email - never assume the email column is populated.
+### Links and hashtags
 
-## Primary sources to re-check on a refresh
+- The current AuthoredUp strategy page says external YouTube links are throttled. It does not establish a universal fixed 60% penalty for every body link. Source: [AuthoredUp content strategy](https://authoredup.com/blog/linkedin-content-strategy).
+- The public Richard van der Blom launch-page commentary argues that posts without hashtags can outperform posts with them. That is directional commentary on the launch page, not a disclosed methodology section from the paid report.
 
-- AuthoredUp's large-sample post study (format and engagement breakdowns).
-- Richard van der Blom's Algorithm Insights Report (annual, reverse-engineered).
+Conservative recommendation: avoid external video links when reach matters, do not quote a fixed body-link penalty, and use hashtags only when they help a human understand the topic.
 
-When re-verifying, update `last_verified` and reconcile any fact that moved. Forward-only: do not silently rewrite history, note what changed.
+## Claims retired in this refresh - do not assert
 
-## Known-limitation line (consumer skills paste this)
+- "Native video is second by reach."
+- "Body links cut reach by exactly 60%."
+- "Comments are exactly 2x likes."
+- "Thirty seconds is the universal dwell threshold."
+- "Three to five posts per week is the current consensus."
+- "Every post should be 800 to 1,000 characters."
 
-> Algorithm facts are reverse-engineered and dated. If this reference's `last_verified` stamp is over ~90 days old, re-verify before trusting specifics.
+## Known limitation
+
+> Algorithm evidence is reverse-engineered, dated, and sometimes internally inconsistent. Re-check the linked sources after the freshness window and prefer the conservative recommendation when studies disagree.

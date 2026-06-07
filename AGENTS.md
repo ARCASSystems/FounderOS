@@ -17,7 +17,7 @@ The skill registry is `skills/index.md` (73 skills, 35 commands); the long-form 
 
 ## Cross-agent deltas (what differs from a Claude Code session)
 
-- **Slash commands are Claude Code specific.** The 34 commands in `.claude/commands/` cannot be run by a non-Claude agent. Treat them as documented procedures, not executable actions.
+- **Slash commands are Claude Code specific.** The 35 commands in `.claude/commands/` cannot be run by a non-Claude agent. Treat them as documented procedures, not executable actions.
 - **Skills are procedural reference.** Each `skills/<name>/SKILL.md` has trigger frontmatter for Claude's auto-invocation (ignore that) and a protocol body that is portable. Follow the body by hand.
 - **You cannot run hooks, MCP tools, slash commands, or local writes unless your environment actually supports them.** Do not claim that setup, hooks, file writes, MCP authentication, or scheduled routines have run. Say plainly what you can and cannot do in this environment.
 - **Runtime honesty and the per-skill `Runs on:` contract:** every skill declares its runtime class (`reasoning`, `local-writes`, or `local-exec`) on a `Runs on:` line in its `SKILL.md`. The full contract and the honest-degradation rule live in `CLAUDE.md`. Read it there. If your environment can write to the folder you may run a `local-writes` skill; if it cannot run a script you read the produced artifacts for a `local-exec` skill and say so. If anything here disagrees, `CLAUDE.md` wins.

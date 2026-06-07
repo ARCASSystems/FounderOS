@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "founder-os/linkedin-brand-direction/brand-direction.schema.json",
+  "title": "LinkedIn brand direction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "goal",
+    "topic_lane",
+    "positioning_angle",
+    "format_mix",
+    "cadence",
+    "first_three_posts",
+    "evidence"
+  ],
+  "properties": {
+    "goal": { "type": "string", "enum": ["clients", "job", "brand"] },
+    "topic_lane": { "type": "string", "minLength": 1 },
+    "positioning_angle": { "type": "string", "minLength": 1 },
+    "format_mix": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["format", "why"],
+        "properties": {
+          "format": { "type": "string", "minLength": 1 },
+          "why": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "cadence": { "type": "string", "minLength": 1 },
+    "first_three_posts": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["hook", "angle", "format"],
+        "properties": {
+          "hook": { "type": "string", "minLength": 1 },
+          "angle": { "type": "string", "minLength": 1 },
+          "format": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

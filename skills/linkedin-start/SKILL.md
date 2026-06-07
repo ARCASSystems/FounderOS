@@ -11,7 +11,7 @@ mcp_requirements: []
 
 # LinkedIn Start
 
-Runs on: reasoning - I read your files, learn which outcome you want, and route to the skill that runs it. The skill I route to states its own runtime need.
+Runs on: local-exec - the happy path runs one local Python entrypoint against the user's export and writes the completed private bundle outside the repo. On a read-only or cloud surface, explain the same route without claiming the run happened.
 
 This is the front door. You have a LinkedIn data export (or can request one). Underneath that one file sit several outcomes. This skill shows you the honest baseline of your network and aims the same data at the outcome you actually want, without making you learn which skill does what first.
 
@@ -66,9 +66,27 @@ Before routing, say one true thing and only one:
 
 Never imply the scan already knows their intent. It does not. The choice is what aims it.
 
-### 4. Route to the outcome
+### 4. Run the one-input entrypoint
 
-- **Leads** -> `linkedin-network-scan`. Copy `icp.example.yaml` to the user's own file, help them edit the role / industry / company-keyword lists from their positioning, then run the scan against their export. The same run also surfaces pending **inbound invitations** (warm inbound, in `inbound-invites.csv`) - triage those first, they already reached out - and the scan's narrative layer can draft outreach for the top of the worklist.
+Once the user names the outcome, run:
+
+```text
+python skills/linkedin-start/run.py <export.zip-or-folder> --outcome <leads|job|brand|network|revival>
+```
+
+The runner supplies today's analysis date internally, creates a private temporary workspace,
+unwraps nested exports, drafts the ICP from `core/identity.md` and buyer language when those
+files are available, runs both deterministic engines, writes the action-ready bundle under
+`~/FounderOS/outputs/linkedin/<date>/`, refreshes
+`~/.founder-os/linkedin-pack-state.json`, removes the temporary export, and opens the
+anonymized report when a browser is available.
+
+The user may edit `draft-icp.json` and rerun, but never starts from a blank file and never
+needs to see stakeholder taxonomy keys.
+
+### 5. Route to the outcome
+
+- **Leads** -> use the auto-drafted sales lens and deliver `lead-worklist.md`, including ranked contacts, reason, next action, and a draft opener. The same run surfaces pending **inbound invitations** in `inbound-invites.csv`.
 - **A better job** (first-class, not a footnote) -> `linkedin-network-scan` with `icp.career.example.yaml`. Auto-select the career ICP; do not make the user discover it. This lane finds recruiters, hiring managers, and target-company leaders who can refer or hire them.
 - **A louder brand** -> `linkedin-power-audit` first (it reads the network composition and writes `audit.json`), then `linkedin-brand-direction` (it turns that plus their goal plus the algorithm reference into a defined content direction).
 - **A healthier network** -> `linkedin-power-audit` and surface its network-gap read (over and under-representation of the roles your goal needs).
@@ -76,15 +94,15 @@ Never imply the scan already knows their intent. It does not. The choice is what
 
 Follow the skill you route to for the actual run. This skill hands off; it does not re-implement the engine.
 
-### 5. Deliver the roadmap, not a file dump
+### 6. Deliver the roadmap, not a file dump
 
 When the routed skill finishes, frame the result as the path from where they are to the outcome they chose. Not "here is network-scan.md" but "here is your network as it stands, here are the people worth acting on first, here is the next move." Read only the compact digest the routed skill tells you to read (for the scan, that is `network-scan.md` - never the raw CSV).
 
-### 6. Offer more than they asked
+### 7. Offer more than they asked
 
 After delivering, name the outcomes they did not pick, in one line each, and the full OS in plain terms. Invite, never gate. "You came for leads. The same file can also tell you which content lane your network rewards, and where your network is thin for the clients you want. Want either of those? And if you want the OS to hold this and the rest of your week, I can set that up." If they say no, stop cleanly.
 
-### 7. No hallucination, by design
+### 8. No hallucination, by design
 
 This is not a hope, it is a rule the routed engine already enforces and you must not break:
 
@@ -94,7 +112,7 @@ This is not a hope, it is a rule the routed engine already enforces and you must
 
 If the user asks for something the data cannot answer (their connections' email open rates, who is hiring right now, a stranger's profile), say plainly that the export does not carry it and, where a paid tool genuinely would, name that honestly.
 
-### 8. One breadcrumb, only on accept
+### 9. One breadcrumb, only on accept
 
 If - and only if - the user accepts full setup, write the single fact learned (the outcome they chose and the ICP seed) as one line to `brain/.linkedin.md` so the next session opens already knowing their LinkedIn goal. Tell them it is one small file they can delete. If they decline setup, write nothing. They walk away and nothing is left behind to clean up.
 
@@ -116,3 +134,4 @@ Be honest where paid tools genuinely win: enriching stale title-only data, findi
 - `skills/linkedin-brand-direction/SKILL.md` - turns the audit into a content direction.
 - `skills/linkedin-warm-revival/SKILL.md` - dormant-contact revival (needs `audit.json` first).
 - `skills/linkedin-pack-references/linkedin-algorithm.md` - the shared algorithm reference the brand skills read.
+- `skills/linkedin-start/run.py` - the one-input local entrypoint and action-bundle writer.

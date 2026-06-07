@@ -41,6 +41,7 @@ python power_audit.py <unzipped-export-folder> <output-folder> [--goal-buckets a
 - `<unzipped-export-folder>` is the folder with `Profile.csv` and `Connections.csv` in it (the script descends one level automatically if it is nested in a single subfolder, and resolves member-id-suffixed activity files like `Shares_<id>.csv`).
 - `<output-folder>` MUST be outside any git repo - `audit.json` holds real names. A folder in their home directory is fine.
 - `--goal-buckets` is optional. Pass the stakeholder buckets the user's goal needs (comma-separated) to add a `network.gap` read - see Step 4. Valid bucket keys are in `taxonomy.json` under `stakeholder_priority` (e.g. `founder_owner_entrepreneur`, `tech_product_innovation`, `sales_partnerships_bd`, `hr_talent_recruitment`, `operations_general_management`).
+- `--as-of YYYY-MM-DD` is an internal determinism input. `linkedin-start/run.py` supplies today. Tests pass a fixed date.
 
 If `python` is not found, try `python3`. The script refuses a `.zip` path with a clear unzip message.
 
@@ -51,7 +52,7 @@ Read `audit.json` from the output folder. It is structured and compact - safe to
 - **Network composition:** the role clusters and stakeholder buckets - what the network is weighted toward.
 - **Industry and company concentration:** where their connections cluster.
 - **Founder pool:** how many founders/owners, by use and by industry.
-- **Message warmth:** how many hot / warm / dormant / light relationships, from metadata only.
+- **Message warmth:** how many hot / warm / dormant / outbound-only / light relationships, from metadata only. Every relationship label requires at least one inbound reply; outbound-only activity is never revival evidence.
 - **Content lanes:** posting themes and follow themes - what they already play in (feeds `linkedin-brand-direction`).
 - **Export honesty:** if `_meta.export_type` is `basic` or `partial`, say so - the audit is thinner than it looks and a re-run on the Complete export is worth it.
 

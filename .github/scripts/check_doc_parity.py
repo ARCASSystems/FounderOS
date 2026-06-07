@@ -35,19 +35,23 @@ def disk_counts() -> tuple[int, int]:
 
 # Each check: (relative path, regex with one numeric group, "skills"|"commands", label).
 # The regex anchors on a CANONICAL count statement, not loose prose, so historical or
-# example numbers elsewhere in the file are never matched. A check whose file or anchor
-# is absent is reported as a soft note, not a failure (wording is allowed to evolve);
-# a present-but-wrong number is a hard failure.
+# example numbers elsewhere in the file are never matched. Every listed anchor is
+# canonical: a missing file or missing anchor is a hard failure so wording changes
+# cannot silently disable the gate.
 CHECKS = [
     ("README.md", r"###\s+Skills\s*\((\d+)\)", "skills", "README '### Skills (N)'"),
     ("README.md", r"###\s+Slash commands\s*\((\d+)\)", "commands", "README '### Slash commands (N)'"),
     ("README.md", r"(\d+)\s+skills,\s*\d+\s+commands,\s*\d+\s+tests", "skills", "README status line skills"),
     ("README.md", r"\d+\s+skills,\s*(\d+)\s+commands,\s*\d+\s+tests", "commands", "README status line commands"),
     ("CLAUDE.md", r"##\s+Skills\s*\((\d+)\s+total", "skills", "CLAUDE.md '## Skills (N total'"),
-    ("AGENTS.md", r"`skills/`\s*-\s*(\d+)\s+skills", "skills", "AGENTS.md skills line"),
-    ("AGENTS.md", r"`\.claude/commands/`\s*-\s*(\d+)\s+slash commands", "commands", "AGENTS.md commands line"),
-    ("AGENTS.md", r"##\s+Slash Commands\s*\((\d+)\)", "commands", "AGENTS.md '## Slash Commands (N)'"),
+    ("CLAUDE.md", r"all\s+\d+\s+skills\s+and\s+(\d+)\s+commands", "commands", "CLAUDE.md registry command count"),
+    ("AGENTS.md", r"`skills/index\.md`\s*\((\d+)\s+skills,\s*\d+\s+commands\)", "skills", "AGENTS.md registry skill count"),
+    ("AGENTS.md", r"`skills/index\.md`\s*\(\d+\s+skills,\s*(\d+)\s+commands\)", "commands", "AGENTS.md registry command count"),
+    ("AGENTS.md", r"The\s+(\d+)\s+commands\s+in\s+`\.claude/commands/`", "commands", "AGENTS.md slash command count"),
     ("skills/index.md", r"(\d+)\s+skills\s+as of", "skills", "skills/index.md 'N skills as of'"),
+    ("skills/index.md", r"This plugin ships\s+(\d+)\s+slash commands", "commands", "skills/index.md current command count"),
+    ("llms.txt", r"Skills catalog\s+\((\d+)\)", "skills", "llms.txt skills catalog count"),
+    ("llms.txt", r"Slash commands\s+\((\d+)\)", "commands", "llms.txt slash command count"),
     (".claude-plugin/plugin.json", r"(\d+)\s+skills,\s*\d+\s+commands", "skills", "plugin.json description skills"),
     (".claude-plugin/plugin.json", r"\d+\s+skills,\s*(\d+)\s+commands", "commands", "plugin.json description commands"),
     (".claude-plugin/marketplace.json", r"(\d+)\s+skills,\s*\d+\s+commands", "skills", "marketplace.json description skills"),
@@ -64,12 +68,12 @@ def main() -> int:
     for rel, pattern, kind, label in CHECKS:
         path = REPO / rel
         if not path.exists():
-            notes.append(f"{label}: file {rel} not found (skipped)")
+            failures.append(f"{label}: required file {rel} not found")
             continue
         text = path.read_text(encoding="utf-8")
         m = re.search(pattern, text)
         if m is None:
-            notes.append(f"{label}: anchor not found in {rel} (skipped - check wording)")
+            failures.append(f"{label}: required anchor not found in {rel}")
             continue
         found = int(m.group(1))
         if found != expected[kind]:

@@ -2,18 +2,61 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "founder-os/linkedin-power-audit/audit.schema.json",
   "title": "LinkedIn Power Audit - audit.json",
-  "description": "Deterministic output of the LinkedIn Power Audit (extract + classify). Downstream pack skills (linkedin-warm-revival, linkedin-brand-direction) depend on this contract.",
+  "description": "Exact stable contract emitted by power_audit.py after classification.",
   "type": "object",
-  "required": ["_meta", "profile", "metrics", "activity_timeline", "network", "messages", "invitations", "content", "skills", "positions", "education"],
+  "additionalProperties": false,
+  "required": [
+    "_notice",
+    "_meta",
+    "profile",
+    "metrics",
+    "activity_timeline",
+    "network",
+    "messages",
+    "invitations",
+    "content",
+    "skills",
+    "endorsements_by_skill_cluster",
+    "learning_themes",
+    "events",
+    "jobs_posted",
+    "search_behaviour",
+    "positions",
+    "education",
+    "recommendations"
+  ],
   "properties": {
+    "_notice": { "type": "string" },
     "_meta": {
       "type": "object",
-      "required": ["schema_version", "generated_at", "owner", "source_export_folder", "csv_files_present"],
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "analysis_date",
+        "generated_at",
+        "source_export_folder",
+        "export_type",
+        "owner",
+        "csv_files_present",
+        "csv_files_skipped",
+        "warnings"
+      ],
       "properties": {
         "schema_version": { "type": "string" },
+        "analysis_date": { "type": "string" },
         "generated_at": { "type": "string" },
         "source_export_folder": { "type": "string" },
-        "owner": { "type": "object" },
+        "export_type": { "type": "string", "enum": ["basic", "partial", "complete"] },
+        "owner": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["first_name", "last_name", "name"],
+          "properties": {
+            "first_name": { "type": "string" },
+            "last_name": { "type": "string" },
+            "name": { "type": "string" }
+          }
+        },
         "csv_files_present": { "type": "array", "items": { "type": "string" } },
         "csv_files_skipped": { "type": "array", "items": { "type": "string" } },
         "warnings": { "type": "array", "items": { "type": "string" } }
@@ -21,10 +64,12 @@
     },
     "profile": {
       "type": "object",
+      "additionalProperties": false,
+      "required": ["first_name", "last_name", "headline", "summary_word_count", "industry", "location"],
       "properties": {
-        "first_name": { "type": ["string", "null"] },
-        "last_name": { "type": ["string", "null"] },
-        "headline": { "type": ["string", "null"] },
+        "first_name": { "type": "string" },
+        "last_name": { "type": "string" },
+        "headline": { "type": "string" },
         "summary_word_count": { "type": "integer" },
         "industry": { "type": ["string", "null"] },
         "location": { "type": ["string", "null"] }
@@ -32,18 +77,45 @@
     },
     "metrics": {
       "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "connections",
+        "connections_in_export",
+        "connections_private",
+        "posts",
+        "reposts",
+        "comments",
+        "reactions",
+        "member_follows",
+        "company_follows",
+        "hashtag_follows",
+        "job_postings",
+        "searches",
+        "recommendations_received",
+        "recommendations_given",
+        "dm_messages",
+        "dm_counterparties",
+        "conversations",
+        "invites_in",
+        "invites_out",
+        "skills_count",
+        "endorsements_count"
+      ],
       "properties": {
         "connections": { "type": "integer" },
+        "connections_in_export": { "type": "integer" },
+        "connections_private": { "type": "integer" },
         "posts": { "type": "integer" },
+        "reposts": { "type": "integer" },
         "comments": { "type": "integer" },
         "reactions": { "type": "integer" },
-        "reposts": { "type": "integer" },
         "member_follows": { "type": "integer" },
         "company_follows": { "type": "integer" },
         "hashtag_follows": { "type": "integer" },
         "job_postings": { "type": "integer" },
         "searches": { "type": "integer" },
         "recommendations_received": { "type": "integer" },
+        "recommendations_given": { "type": "integer" },
         "dm_messages": { "type": "integer" },
         "dm_counterparties": { "type": "integer" },
         "conversations": { "type": "integer" },
@@ -55,56 +127,365 @@
     },
     "activity_timeline": {
       "type": "object",
+      "additionalProperties": false,
+      "required": ["posts_by_year", "searches_by_year", "dm_messages_by_month", "connections_by_month"],
       "properties": {
-        "posts_by_year": { "type": "array" },
-        "searches_by_year": { "type": "array" },
-        "dm_messages_by_month": { "type": "array" },
-        "connections_by_month": { "type": "array" }
+        "posts_by_year": { "type": "array", "items": { "$ref": "#/definitions/year_count" } },
+        "searches_by_year": { "type": "array", "items": { "$ref": "#/definitions/year_count" } },
+        "dm_messages_by_month": { "type": "array", "items": { "$ref": "#/definitions/month_count" } },
+        "connections_by_month": { "type": "array", "items": { "$ref": "#/definitions/month_count" } }
       }
     },
     "network": {
       "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total",
+        "total_in_export",
+        "private_count",
+        "role_clusters",
+        "stakeholder_buckets",
+        "industry_buckets",
+        "company_clusters",
+        "founder_pool",
+        "connections_by_month"
+      ],
       "properties": {
-        "role_clusters": { "type": "array" },
-        "stakeholder_buckets": { "type": "array" },
-        "industry_buckets": { "type": "array" },
-        "company_clusters": { "type": "array" },
-        "founder_pool": { "type": "object" }
+        "total": { "type": "integer" },
+        "total_in_export": { "type": "integer" },
+        "private_count": { "type": "integer" },
+        "role_clusters": { "type": "array", "items": { "$ref": "#/definitions/cluster_share" } },
+        "stakeholder_buckets": { "type": "array", "items": { "$ref": "#/definitions/bucket_share" } },
+        "industry_buckets": { "type": "array", "items": { "$ref": "#/definitions/bucket_share" } },
+        "company_clusters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["company", "count"],
+            "properties": {
+              "company": { "type": "string" },
+              "count": { "type": "integer" }
+            }
+          }
+        },
+        "founder_pool": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["strict_count", "broad_count", "by_use", "by_industry", "sample_records"],
+          "properties": {
+            "strict_count": { "type": "integer" },
+            "broad_count": { "type": "integer" },
+            "by_use": { "type": "array", "items": { "$ref": "#/definitions/bucket_count" } },
+            "by_industry": { "type": "array", "items": { "$ref": "#/definitions/bucket_count" } },
+            "sample_records": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "company", "title", "connected_on"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "company": { "type": "string" },
+                  "title": { "type": "string" },
+                  "connected_on": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "connections_by_month": { "type": "array", "items": { "$ref": "#/definitions/month_count" } },
+        "gap": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "goal_buckets",
+            "total_connections",
+            "per_bucket",
+            "under_represented",
+            "biggest_gap",
+            "evidence"
+          ],
+          "properties": {
+            "goal_buckets": { "type": "array", "items": { "type": "string" } },
+            "total_connections": { "type": "integer" },
+            "per_bucket": { "type": "array", "items": { "$ref": "#/definitions/gap_bucket" } },
+            "under_represented": { "type": "array", "items": { "$ref": "#/definitions/gap_bucket" } },
+            "biggest_gap": { "anyOf": [{ "$ref": "#/definitions/gap_bucket" }, { "type": "null" }] },
+            "evidence": { "type": "array", "items": { "type": "string" } }
+          }
+        }
       }
     },
     "messages": {
       "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total",
+        "conversations",
+        "counterparties",
+        "counterparties_total",
+        "warmth_distribution",
+        "monthly_activity",
+        "themes"
+      ],
       "properties": {
-        "counterparties": { "type": "array" },
-        "warmth_distribution": { "type": "object" },
-        "monthly_activity": { "type": "array" },
-        "themes": { "type": "array" }
+        "total": { "type": "integer" },
+        "conversations": { "type": "integer" },
+        "counterparties": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "total",
+              "in",
+              "out",
+              "conversations",
+              "last_touch",
+              "last_touch_days",
+              "warmth",
+              "title",
+              "company"
+            ],
+            "properties": {
+              "name": { "type": "string" },
+              "total": { "type": "integer" },
+              "in": { "type": "integer" },
+              "out": { "type": "integer" },
+              "conversations": { "type": "integer" },
+              "last_touch": { "type": ["string", "null"] },
+              "last_touch_days": { "type": ["integer", "null"] },
+              "warmth": {
+                "type": "string",
+                "enum": ["hot", "warm", "dormant", "outbound_only", "light"]
+              },
+              "title": { "type": ["string", "null"] },
+              "company": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "counterparties_total": { "type": "integer" },
+        "warmth_distribution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["hot", "warm", "dormant", "outbound_only", "light"],
+          "properties": {
+            "hot": { "type": "integer" },
+            "warm": { "type": "integer" },
+            "dormant": { "type": "integer" },
+            "outbound_only": { "type": "integer" },
+            "light": { "type": "integer" }
+          }
+        },
+        "monthly_activity": { "type": "array", "items": { "$ref": "#/definitions/month_count" } },
+        "themes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["theme", "label", "proxy_clusters", "proxy_signal"],
+            "properties": {
+              "theme": { "type": "string" },
+              "label": { "type": "string" },
+              "proxy_clusters": { "type": "array", "items": { "type": "string" } },
+              "proxy_signal": { "type": "integer" }
+            }
+          }
+        }
       }
     },
     "invitations": {
       "type": "object",
+      "additionalProperties": false,
+      "required": ["incoming", "outgoing", "monthly_breakdown"],
       "properties": {
         "incoming": { "type": "integer" },
         "outgoing": { "type": "integer" },
-        "monthly_breakdown": { "type": "array" }
+        "monthly_breakdown": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["month", "in", "out"],
+            "properties": {
+              "month": { "type": "string" },
+              "in": { "type": "integer" },
+              "out": { "type": "integer" }
+            }
+          }
+        }
       }
     },
     "content": {
       "type": "object",
+      "additionalProperties": false,
+      "required": ["posting_themes", "follow_themes", "hashtag_follows", "_post_theme_coverage"],
       "properties": {
-        "posting_themes": { "type": "array" },
-        "follow_themes": { "type": "array" },
-        "hashtag_follows": { "type": "array" }
+        "posting_themes": { "type": "array", "items": { "$ref": "#/definitions/bucket_share" } },
+        "follow_themes": { "type": "array", "items": { "$ref": "#/definitions/bucket_count" } },
+        "hashtag_follows": { "type": "array", "items": { "type": "string" } },
+        "_post_theme_coverage": { "type": "number" }
       }
     },
-    "skills": { "type": "array" },
-    "endorsements_by_skill_cluster": { "type": "array" },
-    "learning_themes": { "type": "array" },
-    "events": { "type": "array" },
-    "jobs_posted": { "type": "array" },
-    "search_behaviour": { "type": "object" },
-    "positions": { "type": "array" },
-    "education": { "type": "array" },
-    "recommendations": { "type": "object" }
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["skill", "endorsements"],
+        "properties": {
+          "skill": { "type": "string" },
+          "endorsements": { "type": "integer" }
+        }
+      }
+    },
+    "endorsements_by_skill_cluster": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["skill", "count"],
+        "properties": {
+          "skill": { "type": "string" },
+          "count": { "type": "integer" }
+        }
+      }
+    },
+    "learning_themes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "type", "last_watched"],
+        "properties": {
+          "title": { "type": "string" },
+          "type": { "type": ["string", "null"] },
+          "last_watched": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "events": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "jobs_posted": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": { "type": "string" }
+      }
+    },
+    "search_behaviour": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["person_searches", "company_searches", "ecosystem_searches", "government_searches"],
+      "properties": {
+        "person_searches": { "type": "integer" },
+        "company_searches": { "type": "integer" },
+        "ecosystem_searches": { "type": "integer" },
+        "government_searches": { "type": "integer" }
+      }
+    },
+    "positions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["company", "title", "started_on", "finished_on", "location"],
+        "properties": {
+          "company": { "type": "string" },
+          "title": { "type": "string" },
+          "started_on": { "type": "string" },
+          "finished_on": { "type": "string" },
+          "location": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["school", "degree", "start_date", "end_date"],
+        "properties": {
+          "school": { "type": "string" },
+          "degree": { "type": ["string", "null"] },
+          "start_date": { "type": ["string", "null"] },
+          "end_date": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["received", "given"],
+      "properties": {
+        "received": { "type": "integer" },
+        "given": { "type": "integer" }
+      }
+    }
+  },
+  "definitions": {
+    "year_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["year", "count"],
+      "properties": {
+        "year": { "type": "string" },
+        "count": { "type": "integer" }
+      }
+    },
+    "month_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["month", "count"],
+      "properties": {
+        "month": { "type": "string" },
+        "count": { "type": "integer" }
+      }
+    },
+    "cluster_share": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cluster", "label", "count", "share"],
+      "properties": {
+        "cluster": { "type": "string" },
+        "label": { "type": "string" },
+        "count": { "type": "integer" },
+        "share": { "type": "number" }
+      }
+    },
+    "bucket_share": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bucket", "label", "count", "share"],
+      "properties": {
+        "bucket": { "type": "string" },
+        "label": { "type": "string" },
+        "count": { "type": "integer" },
+        "share": { "type": "number" }
+      }
+    },
+    "bucket_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bucket", "label", "count"],
+      "properties": {
+        "bucket": { "type": "string" },
+        "label": { "type": "string" },
+        "count": { "type": "integer" }
+      }
+    },
+    "gap_bucket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bucket", "label", "count", "share", "status"],
+      "properties": {
+        "bucket": { "type": "string" },
+        "label": { "type": "string" },
+        "count": { "type": "integer" },
+        "share": { "type": "number" },
+        "status": { "type": "string", "enum": ["under", "balanced", "over"] }
+      }
+    }
   }
 }

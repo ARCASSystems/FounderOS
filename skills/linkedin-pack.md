@@ -11,6 +11,11 @@ A logical pack, not a folder. Claude Code discovers skills as top-level director
 
 You bring one file - the LinkedIn data export LinkedIn already lets you download - and the pack turns it into whatever outcome you are actually chasing. The data is the same; the outcome is what you choose. Everything runs locally, on a free LinkedIn account and Python's standard library, within LinkedIn's terms. No scraper, no paid tool, no automated actions, no account-ban risk. Message content is never read.
 
+The local entrypoint is [run.py](linkedin-start/run.py). It accepts the ZIP or folder once,
+unwraps nested exports privately, drafts the targeting lens from available Founder OS
+positioning, runs the pack, writes the completed worklists and first three posts under
+`~/FounderOS/outputs/linkedin/<date>/`, then deletes the temporary extracted data.
+
 ## The front door
 
 [linkedin-start](linkedin-start/SKILL.md) is the entry. It reads what the OS already knows, asks for your export, gives one honest disclaimer, and routes you to the outcome you want. You do not need to know the skill list first - you name the outcome, it aims the data there.
@@ -38,5 +43,5 @@ A LinkedIn export is a strong read of the network you already have, not a prospe
 ## Dependencies between members
 
 - [linkedin-warm-revival](linkedin-warm-revival/SKILL.md) requires `audit.json`, produced by [linkedin-power-audit](linkedin-power-audit/SKILL.md). The front door enforces this: it runs the audit first.
-- [linkedin-brand-direction](linkedin-brand-direction/SKILL.md) reads the audit's network composition plus the algorithm reference. It is a reasoning layer; it never touches the scoring engine.
+- [linkedin-brand-direction](linkedin-brand-direction/SKILL.md) reads the audit's network composition plus the algorithm reference, writes the fixed-schema direction, and updates the local pack-state pointer. It never touches the scoring engine.
 - [linkedin-network-scan](linkedin-network-scan/SKILL.md) owns the scoring engine (`scan.py`). Other members reuse its outputs; they do not re-rank.

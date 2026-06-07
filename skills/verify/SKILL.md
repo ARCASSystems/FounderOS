@@ -102,8 +102,11 @@ Outcome:
 
 Run the lint check logic inline (do not invoke the lint skill recursively):
 
-- Count files in `skills/`, `core/`, `context/`, `cadence/`, `brain/`, `rules/`,
-  `roles/` that contain `[[` wikilink syntax.
+- Load `wiki_layer_files` from `scripts/_common.py` and use that exact result as the
+  file scope. This is the canonical wiki layer: `core/`, `context/`, `cadence/`,
+  `brain/`, `network/`, `companies/`, `roles/`, and `rules/`, with the helper's
+  exclusions applied.
+- Do not scan `skills/`, `docs/`, `templates/`, `raw/`, or other product surfaces.
 - For each `[[target]]` found, verify that a file matching the target exists somewhere
   in the tree.
 

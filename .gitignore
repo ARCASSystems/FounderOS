@@ -61,6 +61,8 @@ node_modules/
 
 # Test suite (dev-only; removed from public repo in v1.28, kept locally for the maintainer)
 tests/
+!.github/tests/
+!.github/tests/*.py
 .pytest_cache/
 
 # Python bytecode

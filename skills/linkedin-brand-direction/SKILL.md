@@ -11,7 +11,7 @@ mcp_requirements: []
 
 # LinkedIn Brand Direction
 
-Runs on: reasoning - reads your audit and the algorithm reference and reasons; any capable agent can run this. It writes one JSON file to your output folder (outside any repo).
+Runs on: local-writes - reads your audit and the algorithm reference, then writes `brand-direction.json` outside the repo and refreshes the local pack-state pointer.
 
 This is the personalisation engine of the LinkedIn pack. It does not give generic advice. It reads the composition of your actual network, your goal, and the dated algorithm facts, and returns a concrete direction tied to evidence from your own data. `linkedin-post` then writes posts from that direction.
 
@@ -49,12 +49,14 @@ Write `brand-direction.json` into the user's scan/audit output folder (the same 
 }
 ```
 
+The machine-readable contract is `brand-direction.schema.json`. Do not add stable fields without updating that schema and the tracked acceptance test.
+
 ### Rules for filling the schema
 
 - **`topic_lane`** must name the lane the data supports and carry the number behind it. Derive it from the role/industry concentration in the composition, not from a guess about the person.
 - **`positioning_angle`** is one line, grounded in the lane plus the goal.
-- **`format_mix`** is ordered by the algorithm reference's format ladder, filtered to what suits the lane. Each entry carries a one-line `why`.
-- **`cadence`** comes from the algorithm reference (3 to 5x/week, never more than once per 24h). State a specific number.
+- **`format_mix`** follows the current evidence: documents/carousels are strong and underused, images are reliable, strong text can work, and video is not assumed to rank second. Each entry carries a one-line `why`.
+- **`cadence`** comes from the algorithm reference's conservative current range of 2 to 4 posts per week. State a specific number.
 - **`first_three_posts`** are three concrete starts, each a hook plus angle plus a format from the mix. The hooks must pass the "see more" test (would a reader tap?).
 - **`evidence`** is the spine. Every claim in the direction traces to either a real number in the composition file or a labelled fact in the algorithm reference. If you cannot trace a claim, cut it. No invented percentages, no made-up audience.
 
@@ -64,11 +66,12 @@ The whole value here is that the direction is real. Do not invent a network comp
 
 ## Handoff
 
-Tell the user the direction is written to `brand-direction.json` and that `linkedin-post` will read it automatically on the next post request, so their posts come out aimed at their lane and the current algorithm. If they want to act now, route straight to `linkedin-post`.
+Write or refresh `~/.founder-os/linkedin-pack-state.json` with `latest_output` and `brand_direction` pointing to the completed bundle. Tell the user the direction is written to `brand-direction.json` and that `linkedin-post` will read the pointer automatically on the next post request. If they want to act now, route straight to `linkedin-post`.
 
 ## Files
 
 - `skills/linkedin-pack-references/linkedin-algorithm.md` - the dated algorithm facts this skill reads.
+- `brand-direction.schema.json` - exact output contract.
 - `linkedin-power-audit` - produces the `audit.json` this skill prefers as input.
 - `linkedin-network-scan` - produces the `network-scan.json` fallback composition.
 - `linkedin-post` - the consumer of `brand-direction.json`.
