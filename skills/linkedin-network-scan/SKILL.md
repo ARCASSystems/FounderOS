@@ -11,6 +11,8 @@ mcp_requirements: []
 
 # LinkedIn Network Scan
 
+Runs on: local-exec - runs a local script; on a cloud surface I read the results, I do not run it.
+
 Turn your own LinkedIn export into a real worklist. You bring the file LinkedIn already lets you download; a local script reads it, scores every connection against the ideal-customer (or ideal-contact) profile you set, and hands back a short ranked list and an interactive page you can filter by fit, region, and warmth.
 
 No Sales Navigator. No Apollo. No scraper. No paid tool. The whole thing runs on a free LinkedIn account and Python's standard library, on your own machine. The raw CSVs never enter the conversation - the script collapses them to a compact digest first, so the assistant reads a few hundred lines instead of two thousand rows, and your names and profile links never leave your disk.
@@ -33,13 +35,19 @@ Ask: **"Do you have your LinkedIn data export downloaded?"**
 
 If no, walk them through requesting it and STOP - do not ingest anything yet:
 
-> LinkedIn -> Settings -> Data Privacy -> "Get a copy of your data" -> tick at least
-> Connections, Messages, and Invitations (or pick the full archive) -> Request archive.
-> LinkedIn emails a download link. The basic file arrives in about 10 minutes; the full
-> archive can take up to 24 hours. Download it, then come back - you can point me at the
-> ZIP directly, no need to unzip.
+> LinkedIn -> Settings -> Data privacy -> "Get a copy of your data" -> choose
+> **"Download larger data archive"** (it bundles your Connections, messages, and
+> invitations) -> Request archive.
+>
+> Request the larger archive, not the quick "select the files you want" route. The quick
+> route is faster but unreliable for Connections - depending on your account it may not
+> offer the Connections file, or may hand back an incomplete one - so the larger archive is
+> the safe choice. LinkedIn emails a download link, usually within 24 hours (longer for very
+> large networks). Request it now and come back with the .zip when it lands. Point me
+> straight at the file you downloaded, no need to unzip.
 
-Only continue once they have the file.
+Only continue once they have the file. The most I need from you is the path to that file and
+your confirmation that it is your own export.
 
 ## Step 2 - get the ICP
 
@@ -74,7 +82,7 @@ The script is Python standard-library only - no `pip install`, nothing to set up
 
 ### Freshness
 
-The script reads the newest connection date in the export. If that is older than about 30 days, it prints a WARNING with re-pull steps and keeps going (it warns, it does not block). A stale export silently mis-ranks people whose roles have changed, so relay the warning before the user acts on the list. To re-pull: LinkedIn -> Settings -> Data Privacy -> Get a copy of your data -> tick Connections + Messages + Invitations -> Request archive. The file arrives in 10 minutes to 24 hours.
+The script reads the newest connection date in the export. If that is older than about 30 days, it prints a WARNING with re-pull steps and keeps going (it warns, it does not block). A stale export silently mis-ranks people whose roles have changed, so relay the warning before the user acts on the list. To re-pull: LinkedIn -> Settings -> Data privacy -> Get a copy of your data -> "Download larger data archive" (it includes Connections) -> Request archive. It usually arrives within 24 hours. The quick "select the files you want" route is unreliable for Connections, so use the larger archive.
 
 ## Step 4 - read ONLY the compact digest
 

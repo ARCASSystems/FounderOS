@@ -10,6 +10,8 @@ mcp_requirements: []
 
 # LinkedIn Post
 
+Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+
 Every post must apply the voice profile in `core/voice-profile.yml`. Before drafting, read `skills/your-voice/SKILL.md` and apply its universal rules in full. The post format, the five post structures, hook priority, closings, the brain-dump workflow, and posting strategy live in `references/post-craft.md` - load it at draft time (after the routing and brain steps below). Then pass the LinkedIn-specific self-check at the bottom of this file.
 
 ## Voice routing (operator or brand?)

@@ -1071,9 +1071,9 @@ def freshness_check(src, conns):
         warn = (
             f"WARNING: this export looks {days_old} days old (newest activity {newest.isoformat()}). "
             "Roles change and people move - re-pull before acting on it. "
-            "LinkedIn -> Settings -> Data Privacy -> Get a copy of your data -> "
-            "tick Connections + Messages + Invitations -> Request archive. "
-            "The file arrives in 10 minutes to 24 hours."
+            "LinkedIn -> Settings -> Data privacy -> Get a copy of your data -> "
+            "Download larger data archive (it includes Connections) -> Request archive. "
+            "It usually arrives within 24 hours; the quick select-files route is unreliable for Connections."
         )
         return (newest, days_old, warn)
     return (newest, days_old, "")
@@ -1099,8 +1099,10 @@ def main():
 
     if not src.has("Connections.csv"):
         raise SystemExit(
-            "No Connections.csv found in the export. Point this at your unzipped LinkedIn "
-            "export folder or the export .zip (Settings -> Data Privacy -> Get a copy of your data)."
+            "No Connections.csv found in the export. Point this straight at the export .zip "
+            "LinkedIn emailed you (no need to unzip). The quick select-files export is "
+            "unreliable for Connections - re-request the larger data archive via Settings -> "
+            "Data privacy -> Get a copy of your data -> Download larger data archive."
         )
 
     conns = load_connections(src)

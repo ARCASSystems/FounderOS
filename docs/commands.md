@@ -278,6 +278,20 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 
 ---
 
+## Network and outreach
+
+### `/founder-os:linkedin-scan <export.zip>`
+
+- **Or say.** "scan my LinkedIn network" / "rank my LinkedIn connections" / "who in my network fits my ICP" / "build my outreach list from my connections"
+- **Outcome.** A ranked outreach worklist scored locally against an ICP you set, plus two interactive pages: an anonymised demo safe to share, and a full local view with real names and links. A one-line summary tells you how many connections were read, how many qualified, how many replied before, and how many invites are pending. The raw CSVs never enter the conversation.
+- **Args.** `<export.zip | export-folder>` - the path to your own LinkedIn data export. Point it straight at the .zip, no need to unzip. `--icp <file>` optional; omit it for the permissive default.
+- **Writes.** Read-only on your OS folder. The scan writes its outputs (`network-scan.md`, two HTML views, `network-scan.csv`, `network-scan.json`, `inbound-invites.csv`) to an output folder you choose OUTSIDE any git repo, because they hold real names and URLs.
+- **Prereqs.** Your own LinkedIn data export. Request the larger data archive (Settings -> Data privacy -> Get a copy of your data -> Download larger data archive); it bundles your Connections file and usually arrives within 24 hours. The quick select-files route is unreliable for Connections, so use the larger archive. `/founder-os:setup` is not required.
+- **When to run.** When you want a manual-outreach or hiring worklist from your existing network, free and local, with no Sales Navigator or scraper.
+- **Follow-up.** `list-pruner` to clean the resulting CSV before outreach, or `linkedin-post` to write the content. See `skills/linkedin-network-scan/SKILL.md`.
+
+---
+
 ## Ship gate
 
 ### `/founder-os:forcing-questions <initiative>`

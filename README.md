@@ -154,7 +154,7 @@ After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-scr
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
-### Slash commands (34)
+### Slash commands (35)
 
 Every command has a natural-language equivalent - slash commands are speed shortcuts for power users, not the primary surface. Full reference with outcomes, args, and follow-ups in [`docs/commands.md`](docs/commands.md).
 
@@ -274,7 +274,7 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.37.0. Public release. 69 skills, 34 commands, 643 tests.
+Version 1.37.0. Public release. 69 skills, 35 commands, 651 tests.
 
 v1.37.0 does two things. It installs the OS into one folder you own (default `~/founder-os`) instead of a hidden cache dir, names the engine and your data as the separate things they are, and detects an existing install so you never end up with two copies. And it makes the role system real: it adds two role modes you can reach when you need them, CSO for the portfolio view across everything you run and CTO for your tool stack and automations, makes the BD trigger honest (you invoke it, it does not silently flip on a count nothing reads), and tells you the plain phrase to switch lens yourself ("switch to CMO").
 
