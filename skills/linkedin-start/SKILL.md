@@ -68,7 +68,7 @@ Never imply the scan already knows their intent. It does not. The choice is what
 
 ### 4. Route to the outcome
 
-- **Leads** -> `linkedin-network-scan`. Copy `icp.example.yaml` to the user's own file, help them edit the role / industry / company-keyword lists from their positioning, then run the scan against their export.
+- **Leads** -> `linkedin-network-scan`. Copy `icp.example.yaml` to the user's own file, help them edit the role / industry / company-keyword lists from their positioning, then run the scan against their export. The same run also surfaces pending **inbound invitations** (warm inbound, in `inbound-invites.csv`) - triage those first, they already reached out - and the scan's narrative layer can draft outreach for the top of the worklist.
 - **A better job** (first-class, not a footnote) -> `linkedin-network-scan` with `icp.career.example.yaml`. Auto-select the career ICP; do not make the user discover it. This lane finds recruiters, hiring managers, and target-company leaders who can refer or hire them.
 - **A louder brand** -> `linkedin-power-audit` first (it reads the network composition and writes `audit.json`), then `linkedin-brand-direction` (it turns that plus their goal plus the algorithm reference into a defined content direction).
 - **A healthier network** -> `linkedin-power-audit` and surface its network-gap read (over and under-representation of the roles your goal needs).
