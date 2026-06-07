@@ -1,9 +1,9 @@
 ---
 name: linkedin-network-scan
 description: >
-  Rank your own LinkedIn network against an ICP you define, without burning context on raw CSVs. Point it at your LinkedIn data-export ZIP; a deterministic local script scores every connection (seniority with demotions, ICP role/industry/company match, connection recency, reply-warmth, optional region) and writes a compact ranked worklist. The assistant reads only the small ranked digest, never the 2,000-row export. Free plan only - no scrapers, no paid tools, no API calls. Message content is never read. Use when someone says "scan my linkedin network", "who in my network fits my ICP", "build my outreach list from my connections", or shares a LinkedIn export ZIP for targeting.
+  Turn your own LinkedIn export into a ranked, ready-to-work outreach list, for free. Point it at the data-export ZIP LinkedIn gives you; a deterministic local script scores every connection against an ICP you set and writes a short worklist plus an interactive page you can filter. No Sales Navigator, no Apollo, no scraper, no paid tool, no API call. Message content is never read - only who you spoke to, the direction, and when. The assistant reads only the small ranked digest, never the 2,000-row export, and your names and links stay on your machine. Use when someone says "scan my linkedin network", "rank my linkedin connections", "who in my network fits my ICP", "build my outreach list from my connections", or shares a LinkedIn export ZIP.
 why: "A LinkedIn connections export is tens of thousands of tokens; reading it raw wastes context and money. A deterministic script collapses it to a ranked top-N first, so the model only ever sees a small worklist - and real names and URLs never leave the machine."
-enhance: "Write a real ICP file before running (roles, industries, company keywords, min seniority, optional region) instead of taking the permissive default - a narrowed ICP turns a long flat list into a short, ranked, actionable worklist."
+enhance: "Write a real ICP file before running (roles, industries, company keywords, min seniority, optional region, optional demote keywords) instead of taking the permissive default - a narrowed ICP turns a long flat list into a short, ranked, actionable worklist."
 summary: "Rank your own LinkedIn network against an ICP you define."
 allowed-tools: ["Bash", "Read"]
 mcp_requirements: []
@@ -11,11 +11,13 @@ mcp_requirements: []
 
 # LinkedIn Network Scan
 
-Turn your own LinkedIn connections export into a ranked outreach worklist scored against an ICP you control. Deterministic, local, free-plan only. The raw CSVs never enter the conversation - the script collapses them to a compact ranked digest first.
+Turn your own LinkedIn export into a real worklist. You bring the file LinkedIn already lets you download; a local script reads it, scores every connection against the ideal-customer (or ideal-contact) profile you set, and hands back a short ranked list and an interactive page you can filter by fit, region, and warmth.
+
+No Sales Navigator. No Apollo. No scraper. No paid tool. The whole thing runs on a free LinkedIn account and Python's standard library, on your own machine. The raw CSVs never enter the conversation - the script collapses them to a compact digest first, so the assistant reads a few hundred lines instead of two thousand rows, and your names and profile links never leave your disk.
 
 ## When to use
 
-- A user wants to find who in their existing network matches a target customer / hiring / partnership profile.
+- A user wants to find who in their existing network matches a target customer, hiring, or partnership profile.
 - They have (or can request) their LinkedIn data export.
 - They want a manual-outreach worklist, not automated sending.
 
@@ -31,24 +33,31 @@ Ask: **"Do you have your LinkedIn data export downloaded?"**
 
 If no, walk them through requesting it and STOP - do not ingest anything yet:
 
-> LinkedIn Settings -> Data Privacy -> "Get a copy of your data" -> pick the full archive
-> (the "Download larger data archive") -> Request archive. LinkedIn emails a download link.
-> The basic file arrives in minutes; the complete archive (with messages and invitations)
-> can take up to 24 hours. Download it, then come back - you can point me at the ZIP directly,
-> no need to unzip.
+> LinkedIn -> Settings -> Data Privacy -> "Get a copy of your data" -> tick at least
+> Connections, Messages, and Invitations (or pick the full archive) -> Request archive.
+> LinkedIn emails a download link. The basic file arrives in about 10 minutes; the full
+> archive can take up to 24 hours. Download it, then come back - you can point me at the
+> ZIP directly, no need to unzip.
 
 Only continue once they have the file.
 
 ## Step 2 - get the ICP
 
-Ask whether they have an ICP config, or want to define one now. Two example ICPs ship in this skill folder - copy whichever fits, edit the lists (roles, industries, company keywords, min seniority, optional region tokens, exclusions), and save it as their own file:
+Ask whether they have an ICP config, or want to define one now. Two example ICPs ship in this skill folder - copy whichever fits, edit the lists, and save it as their own file:
 
-- `icp.example.yaml` - sales and partnership targeting (founders, owners, and the decision-makers you sell to or partner with).
-- `icp.career.example.yaml` - the people axis: recruiters, talent leaders, and hiring managers who can refer you, hire you, or help you hire, plus decision-makers at the companies you are targeting. Tuned for a job search or a hiring push (`min_seniority: ic` and a lower threshold so recruiter and talent titles are not dropped).
+- `icp.example.yaml` - sales and partnership targeting (founders, owners, and the decision-makers you sell to or partner with). Documents every option including the two optional ICP-hygiene keys below.
+- `icp.career.example.yaml` - the people axis: recruiters, talent leaders, and hiring managers who can refer you, hire you, or help you hire, plus decision-makers at the companies you are targeting. Tuned for a job search or a hiring push.
 
 If both fit, ask which goal the user is on right now (selling / partnering, or hiring / job search) and pick the matching example.
 
 If they have no ICP and do not want to build one, run with the permissive default (any decision-maker, no industry/region filter) and tell them explicitly that nothing was narrowed, so the ranking is seniority + warmth only.
+
+### Optional ICP-hygiene keys (generic, off by default)
+
+Both are optional. If the keys are absent from the ICP file, behaviour is unchanged.
+
+- `demote_keywords:` - a list of words that push a match DOWN a tier (not disqualify). Use it to demote a cluster who would just do the job themselves for your offer (for a done-for-you service, the self-serve / in-house crowd is the wrong fit). Generic - you set the words; nothing is hardcoded.
+- `require_leadership_title: true` - drops anyone without a real leadership title (founder, owner, C-level, MD, partner, director, VP, head of, GM, president, chair) before scoring. Useful when you only want decision-makers.
 
 ## Step 3 - run the scan
 
@@ -59,8 +68,13 @@ python scan.py <export.zip OR export-folder> <output-folder> --icp <their-icp.ya
 - `<export.zip>` can be the ZIP itself or an unzipped folder. The script reads `Connections.csv`, `messages.csv` (metadata only), and `Invitations.csv` from inside it.
 - `<output-folder>` MUST be outside any git repo - it holds real names and profile URLs. A folder in their home directory or Desktop is fine.
 - `--icp` is optional; omit it for the permissive default.
+- `--brand "<label>"` is optional; it puts a neutral label in the HTML header (the user's own name or company). The page ships with a plain neutral palette they can rebrand.
 
 The script is Python standard-library only - no `pip install`, nothing to set up, works on a free plan. If `python` is not found, try `python3`.
+
+### Freshness
+
+The script reads the newest connection date in the export. If that is older than about 30 days, it prints a WARNING with re-pull steps and keeps going (it warns, it does not block). A stale export silently mis-ranks people whose roles have changed, so relay the warning before the user acts on the list. To re-pull: LinkedIn -> Settings -> Data Privacy -> Get a copy of your data -> tick Connections + Messages + Invitations -> Request archive. The file arrives in 10 minutes to 24 hours.
 
 ## Step 4 - read ONLY the compact digest
 
@@ -68,32 +82,38 @@ When the script finishes, **read only `network-scan.md`** from the output folder
 
 **Do NOT read `network-scan.csv`, `network-scan.json`, the export's `Connections.csv`, or `messages.csv`** - those are the full raw rows and reading them is exactly the token waste this skill exists to avoid. They are deliverables for the user to open, not for the model to ingest.
 
-Then summarise in one or two sentences: how many connections were read, how many qualified for their ICP, how many have actually replied to them before (warm), and how many pending inbound invitations are waiting. Point them at `network-scan.html` to browse and `network-scan.csv` for the full list with emails and URLs.
+Then summarise in one or two sentences: how many connections were read, how many qualified for their ICP, how many have actually replied to them before (warm), and how many pending inbound invitations are waiting. Point them at the two HTML views and at `network-scan.csv` for the full list with emails and URLs.
 
 ## What the script outputs (all in the output folder)
 
 - `network-scan.md` - compact ranked digest (the only file the assistant reads).
-- `network-scan.html` - browsable ranked worklist with warmth and region chips.
+- `network-scan.html` - **anonymised demo**: an interactive, offline page (vanilla JS, no libraries) with live filter chips, an inline-SVG donut that recomputes as you filter, and a "showing X of Y" table. Names are reduced to initials, companies are masked, links are removed, and the weakest rows are dropped. Safe to screen-record and share - no real names exist in its source.
+- `network-scan-full.html` - same interactive page with **real names, companies, and profile links**, watermarked "Local file - not for distribution".
 - `network-scan.csv` - every qualified row with email + LinkedIn URL.
 - `network-scan.json` - the same data plus the ICP used, for tooling.
 - `inbound-invites.csv` - people who sent a connection request still pending (warm inbound).
 
 Every file carries a header reminding the user not to commit or share it.
 
+## Model
+
+The scoring engine is deterministic and LLM-free - it runs end to end with no paid AI subscription, which is the free-tier floor for this skill. Only the narrative or synthesis afterward (summarising the digest, drafting talking points) uses the session's own Claude. Use the session's latest available Claude for that step; at time of writing the current latest is Opus 4.8 (`claude-opus-4-8`), but the skill is not pinned to any model - newer is fine.
+
 ## Privacy
 
 - Message **content** is never read. The script uses only metadata: who messaged whom, the direction, the count, and the date - enough to tell a real two-way relationship from a one-way cold send.
 - Nothing leaves the machine. No API calls, no scrapers, no third-party services.
-- The output holds real names and URLs. The script writes a "keep this local, do not commit" warning into every file; repeat it to the user.
+- The output holds real names and URLs. The script writes a "keep this local, do not commit" warning into every file; repeat it to the user. The anonymised `network-scan.html` is the one safe to share - the full file and the CSV are not.
 
 ## Honest limitations (state these, do not hide them)
 
-- **Seniority and region are inferred from one title string.** A serious-consultancy founder and a side-hustle "founder" can score alike; a UAE company that does not say "Dubai" in its name will miss a `dubai` region token. The ranking is a strong first cut, not a verdict - skim the top of the list before acting on it.
-- **Warmth only sees export metadata.** A thread that moved off LinkedIn (to email or WhatsApp) looks cold here even if the relationship is warm.
+- **Seniority and region are inferred from one title string.** A serious-consultancy founder and a side-hustle "founder" can score alike; a region token only matches when it appears in the company or title. The ranking is a strong first cut, not a verdict - skim the top of the list before acting on it.
+- **A LinkedIn export carries no location field.** Region is inferred only from the tokens you set. With no region tokens, location is labelled unknown for everyone. "Region unknown" means kept, not excluded.
+- **Warmth only sees export metadata.** A thread that moved off LinkedIn (to email or another app) looks cold here even if the relationship is warm.
 - **Nothing is sent.** This produces a worklist. The outreach is manual, by design.
 
 ## Files
 
 - `scan.py` - the deterministic scanner (stdlib only).
-- `icp.example.yaml` - documented ICP template (sales / partnership) to copy and edit.
+- `icp.example.yaml` - documented ICP template (sales / partnership) to copy and edit, including the optional `demote_keywords` and `require_leadership_title` keys.
 - `icp.career.example.yaml` - documented ICP template (recruiters / hiring / job search) to copy and edit.

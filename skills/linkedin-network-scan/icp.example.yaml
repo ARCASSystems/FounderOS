@@ -43,10 +43,10 @@ company_keywords:
 # tags the row "Region match". Leave this list out entirely for no region bias.
 # These are just examples - replace with your own market's tokens, or delete the block.
 region_tokens:
-  - dubai
-  - uae
   - london
+  - new york
   - singapore
+  - remote
 
 # Title/company words that DISQUALIFY a connection outright (score -100). The scanner
 # already excludes students, interns, "open to work", retired, etc. by default - add
@@ -54,6 +54,26 @@ region_tokens:
 exclude:
   - recruiter
   - student
+
+# OPTIONAL won't-DIY demotion. Words here do NOT disqualify - they push a match DOWN
+# (score -12), so a connection who would just build the thing themselves or do it
+# in-house falls below buyers who would not. Use it to demote a self-serve cluster
+# for YOUR offer: if you sell a done-for-you service, the people who would DIY are
+# the wrong fit. Matched against title AND company, case-insensitive substrings.
+# Leave the block out entirely to switch the demotion off (default behaviour).
+# These tokens are examples only - set the ones that fit your own market and offer.
+demote_keywords:
+  - agency
+  - freelance
+  - automation
+  - no-code
+
+# OPTIONAL. Set to true to require a real leadership title (founder, owner, C-level,
+# MD, partner, director, VP, head of, GM, president, chair). Anyone without one is
+# dropped before scoring. Useful when you only want decision-makers and the
+# min_seniority floor alone is letting through too many senior individual
+# contributors. Default false - omit the line to leave it off.
+require_leadership_title: false
 
 # Minimum seniority floor. One of: ic | manager | director | vp | c_suite | founder.
 # Anything scoring below this title tier is dropped before ICP bonuses are applied.
