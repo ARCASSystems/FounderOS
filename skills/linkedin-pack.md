@@ -22,7 +22,7 @@ You bring one file - the LinkedIn data export LinkedIn already lets you download
 | Front door (pick your outcome) | `linkedin-start` | Ready |
 | Leads (rank your network vs a sales ICP) | `linkedin-network-scan` + `icp.example.yaml` | Ready |
 | A better job (rank vs a career ICP) | `linkedin-network-scan` + `icp.career.example.yaml` | Ready |
-| A louder brand (content lane your network rewards) | `linkedin-power-audit` then `linkedin-brand-direction` | Building (this release) |
+| A louder brand (content lane your network rewards) | `linkedin-power-audit` then `linkedin-brand-direction` | Audit building; direction Ready |
 | A healthier network (role gaps vs your goal) | `linkedin-power-audit` network-gap read | Building (this release) |
 | Revive dormant contacts | `linkedin-warm-revival` (needs `audit.json` from the audit) | Building (this release) |
 | Content execution (write the post) | `linkedin-post` (algorithm-aware) | Ready |

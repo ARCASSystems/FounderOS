@@ -429,6 +429,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** Any open-ended LinkedIn ask, when you have not yet picked a specific job.
 - **Follow-up.** Routes to `linkedin-network-scan`, `linkedin-power-audit`, `linkedin-brand-direction`, or `linkedin-warm-revival`. No dedicated slash command.
 
+### linkedin-brand-direction
+
+- **Say.** "what should I post on LinkedIn", "what's my content lane", or "give me a LinkedIn content direction".
+- **Outcome.** A personalised, algorithm-aware content direction written to `brand-direction.json`: your topic lane (with the number behind it), positioning angle, format mix, cadence, and three concrete first posts - all traced to your real network and the dated algorithm facts.
+- **Reads.** `linkedin-power-audit`'s `audit.json` if present (else the `network-scan.json` composition), `skills/linkedin-pack-references/linkedin-algorithm.md`, and your goal.
+- **Writes.** `brand-direction.json` in your scan/audit output folder (outside any repo).
+- **Voice rules.** No. It sets the direction; `linkedin-post` applies voice when it writes from it.
+- **Prereqs.** Run `linkedin-power-audit` first for the richest input (or at least `linkedin-network-scan`).
+- **When to run.** Before a content push, when you want the lane your network actually rewards instead of generic advice.
+- **Follow-up.** `linkedin-post` reads the direction automatically on the next post request. No dedicated slash command.
+
 ### linkedin-post
 
 - **Say.** "write a LinkedIn post", "turn this into a post", or "post about this".
