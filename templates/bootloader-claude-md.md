@@ -176,7 +176,7 @@ All three operations are opt-in. The OS works the same with or without them.
 Three additions sit underneath the daily files. None require setup beyond the initial setup wizard.
 
 - **`rules/entry-conventions.md`** - bi-temporal + decay convention for entries in `context/decisions.md`, `context/priorities.md`, and the brain layer. Add `Decay after: 14d` (or a date) to a flag and the SessionStart brief surfaces it for keep/kill review when it expires. Add `Superseded by:` + `Invalidated on:` to a decision instead of overwriting it. Convention is forward-only (no backfill). Scanner only fires on entries with explicit `Decay after:` field.
-- **`system/quarantine.md`** - catch-net for silent hook and scheduled-task failures. Helper functions for PowerShell and bash are in the file. SessionStart counts ACTIVE entries. Hooks fail silently by design; quarantine makes failure visible without blocking the session.
+- **`system/quarantine.md`** - catch-net for silent hook and cron-job failures. Helper functions for PowerShell and bash are in the file. SessionStart counts ACTIVE entries. Hooks fail silently by design; quarantine makes failure visible without blocking the session.
 - **`rules/approval-gates.md`** - explicit list of what auto-runs (brain/log appends, wiki-build, archive moves), what requires explicit yes (identity edits, decision supersession, sends, public pushes), and what is blocked outright (force push, hard reset, AI attribution in commits). Customize to match how the operator wants the OS to behave.
 
 The SessionStart brief (`.claude/hooks/session-start-brief.sh`, registered on `SessionStart` in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.

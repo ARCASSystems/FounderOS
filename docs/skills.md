@@ -285,6 +285,28 @@ If a skill has a slash command that wraps it, that command is named at the end a
 
 ## Cadence and review
 
+### what-to-change
+
+- **Say.** "what should I change", "what to change in my business", "what's the most important thing to fix", or "monthly review".
+- **Outcome.** The flagship routine: exactly three ranked changes worth making now, each in a plain-language urgent/important matrix and each carrying a resolvable `[source: file#anchor]` you can open. If fewer than three have real dated signal it says so rather than padding. Closes by proposing one concrete skill improvement for you to approve.
+- **Reads.** `scripts/what-to-change.py gather` (the deterministic candidate gatherer: dated signal from `brain/flags.md` OPEN/ESCALATED and recent `brain/log.md`, with parked / paused / resolved items and everything in `brain/decisions-parked.md` excluded). `core/identity.md`.
+- **Writes.** Read-only. Never auto-edits a skill - the recursive prompt proposes and waits for your yes.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete. `scripts/what-to-change.py` present. Some dated signal in the brain layer (otherwise it honestly says nothing qualifies).
+- **When to run.** Monthly, or whenever you feel busy but unsure what matters.
+- **Follow-up.** Say "more on 1/2/3" to drill into the evidence and first step. `routines` to see the whole heartbeat. No dedicated slash command - say "what should I change".
+
+### routines
+
+- **Say.** "what are my routines", "what runs automatically", "run my morning brief", "turn on the weekly review", or "how does the heartbeat work".
+- **Outcome.** A plain-English map of your routines and how each runs: the on-open daily brief (automatic), weekly-review and the what-to-change flagship on demand, and the opt-in unattended remote upgrade. Triggers any routine you name.
+- **Reads.** `core/identity.md`. Routes to the relevant routine skill.
+- **Writes.** Read-only itself; the routine it triggers does its own writes.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete.
+- **When to run.** When you want to know what the OS does on its own, or to fire a routine by name.
+- **Follow-up.** Wrap a routine with `/loop` to repeat it in a session. `backup` to start the sync path for unattended runs. No dedicated slash command - say "what are my routines".
+
 ### weekly-review
 
 - **Say.** "run my weekly review", "weekly retro", or "roll the sprint".

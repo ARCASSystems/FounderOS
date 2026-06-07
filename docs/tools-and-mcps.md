@@ -2,7 +2,7 @@
 
 Founder OS does not assume your stack. The OS is a set of files and skills. Each skill declares which Model Context Protocol (MCP) servers it can use, and degrades gracefully when those MCPs are not available.
 
-You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run most of the 67 skills end-to-end. The four skills that produce noticeably better output with the relevant MCP connected are `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`. They still function without one, but with reduced context.
+You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run most of the 69 skills end-to-end. The four skills that produce noticeably better output with the relevant MCP connected are `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`. They still function without one, but with reduced context.
 
 This doc covers three things: which MCPs activate which skills, which editors and surfaces (Obsidian, Claude Cowork, claude-mem) pair well with the OS, and what works under each surface.
 
@@ -157,12 +157,12 @@ When you first open the founder-os folder as an Obsidian vault, the graph view w
 
 ### Claude Cowork (Anthropic's desktop knowledge-work surface)
 
-Cowork is Anthropic's desktop agent for non-coding work. It can open local folders, read markdown, run MCPs, and execute scheduled tasks. Pair it with FounderOS for knowledge-work execution while keeping Claude Code as the OS layer.
+Cowork is Anthropic's desktop agent for non-coding work. It can open local folders, read markdown, run MCPs, and run timed jobs. Pair it with FounderOS for knowledge-work execution while keeping Claude Code as the OS layer.
 
 What works in Cowork:
 - Reading the file tree, CLAUDE.md as context (manually attached or via Cowork's "Folder instructions").
 - MCP connectors at the account level.
-- Scheduled tasks via `/schedule`.
+- Timed runs via `/schedule`.
 - Markdown reads and writes.
 
 What does not work in Cowork (yet):

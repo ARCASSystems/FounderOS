@@ -1,10 +1,10 @@
 # Quarantine
 
-When a hook, scheduled task, or self-healing attempt fails, write the failure here. The SessionStart brief surfaces the count of `Status: ACTIVE` entries so failures are not silent.
+When a hook, cron job, or self-healing attempt fails, write the failure here. The SessionStart brief surfaces the count of `Status: ACTIVE` entries so failures are not silent.
 
 ## Why this exists
 
-Hooks and scheduled tasks fail silently by design (`set +e` in bash, `$ErrorActionPreference = 'SilentlyContinue'` in PowerShell). That is correct: a broken hook should never block a session. But silent failure compounds: a scheduled task can be dead for weeks before anyone notices.
+Hooks and cron jobs fail silently by design (`set +e` in bash, `$ErrorActionPreference = 'SilentlyContinue'` in PowerShell). That is correct: a broken hook should never block a session. But silent failure compounds: a cron job can be dead for weeks before anyone notices.
 
 This file is the catch-net. Anything that fails writes here. SessionStart counts active entries and surfaces them.
 

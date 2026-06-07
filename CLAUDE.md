@@ -169,7 +169,7 @@ All wiki operations are opt-in. The OS works the same with or without them.
 Three additions sit underneath the daily files. None require setup beyond running `/founder-os:setup` once.
 
 - **`rules/entry-conventions.md`** - bi-temporal + decay convention for entries in `context/decisions.md`, `context/priorities.md`, and the brain layer. Add `Decay after: 14d` (or a date) to a flag and the SessionStart brief surfaces it for keep/kill review when it expires. Add `Superseded by:` + `Invalidated on:` to a decision instead of overwriting it. Convention is forward-only (no backfill).
-- **`system/quarantine.md`** - catch-net for silent hook and scheduled-task failures. Helper functions for PowerShell and bash are in the file. SessionStart counts ACTIVE entries. Hooks fail silently by design. Quarantine makes failure visible without blocking the session.
+- **`system/quarantine.md`** - catch-net for silent hook and cron-job failures. Helper functions for PowerShell and bash are in the file. SessionStart counts ACTIVE entries. Hooks fail silently by design. Quarantine makes failure visible without blocking the session.
 - **`rules/approval-gates.md`** - explicit list of what auto-runs (brain/log appends, wiki-build, archive moves), what requires your yes (identity edits, decision supersession, sends, public pushes), and what is blocked outright (force push, hard reset, AI attribution in commits). Customize to match how you want the OS to behave.
 
 The SessionStart brief (`.claude/hooks/session-start-brief.sh` on Mac/Linux/git-bash, `.claude/hooks/session-start-brief.ps1` on Windows, both registered in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.
@@ -204,7 +204,7 @@ No other config needed. Founder OS skills and commands work the same way. The fl
 
 **Source:** https://github.com/victordelrosal/agent-teams-claude-code is the field manual for this feature. Read it before you flip the flag on a real deliverable.
 
-## Fabric (hooks, commands, scheduled tasks)
+## Fabric (hooks, commands, routines)
 
 Founder OS ships with a thin fabric layer that makes the files behave like an operating system, not just documentation.
 
@@ -249,18 +249,17 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 
 **Windows note:** Hooks ship in both bash and PowerShell variants. `.claude/settings.json` wires both automatically. If you have PowerShell installed (every modern Windows install does), the SessionStart brief and the Stop revenue-check fire without any extra setup. Git-bash is optional - useful if you also want the bash variants to run, but not required.
 
-**Scheduled tasks** (optional, configured by you via the scheduled-tasks MCP if you install it). Founder OS does not ship any scheduled tasks out of the box. Two patterns founders commonly add once their cadence is established:
+**Routines (the heartbeat).** Founder OS checks in when you open it and runs any routine on demand when you ask - the local floor, no account needed. The SessionStart brief is the on-open daily heartbeat. The `routines` skill lists everything and triggers each in plain English ("what are my routines", "run my weekly review", "what should I change this month"). Wrap any routine with `/loop` to repeat it in a session.
 
-- A weekly LinkedIn draft pass that reads your story bank and writes drafts to your content pipeline
-- A weekly insights brief that synthesises last-week patterns, stalls, and revenue-loop health
+The flagship is `what-to-change`: the three changes worth making now, each gated on a dated source and filtered against parked items so it never manufactures urgency. `weekly-review` rolls the sprint; the daily brief surfaces flags, stale cadence, and connectors not set up.
 
-If you have not installed the scheduled-tasks MCP, ignore this section. Nothing in Founder OS depends on it.
+Unattended while-you-sleep runs are an opt-in upgrade: sync your OS to a remote (start with `backup`), then run a remote claude.ai routine against the synced copy. Native in-session scheduling (`CronCreate`) is session-only and a recurring job expires after 7 days, so the OS does not promise unattended local cron - it gives you the on-open and on-demand floor, and the remote upgrade once you sync. The `routines` skill carries the full glossary.
 
-All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks are bring-your-own.
+All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Routines run on-open and on-demand out of the box; unattended is the opt-in remote upgrade.
 
-## Skills (67 total)
+## Skills (69 total)
 
-The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 67 skills and 34 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
+The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 69 skills and 34 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
 
 `founder-os-setup` is the entry point. Every other skill activates from natural language ("set up my voice", "what's on for today", "help me decide") or via `/founder-os:<command>`. Say "show me what you can do" (or run `/founder-os:menu`) for a shortlist tailored to your current state.
 

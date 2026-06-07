@@ -120,7 +120,7 @@ Open Claude Code in that folder, then say "set up Founder OS" (or run `/setup`).
 
 ## Path D - Claude Cowork (partial, desktop knowledge work)
 
-Claude Cowork is Anthropic's desktop surface for non-coding work. It reads markdown, runs MCPs, and executes scheduled tasks - but hooks and the `/founder-os:*` slash command namespace do not fire there. Pair it with FounderOS for drafting and scheduled execution. Keep Claude Code as the OS layer.
+Claude Cowork is Anthropic's desktop surface for non-coding work. It reads markdown, runs MCPs, and runs timed jobs - but hooks and the `/founder-os:*` slash command namespace do not fire there. Pair it with FounderOS for drafting and timed execution. Keep Claude Code as the OS layer.
 
 **Best for:** Founders who already have FounderOS installed via Path A, B, or E, and want Cowork available as a drafting surface with OS context.
 
