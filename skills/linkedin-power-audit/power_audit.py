@@ -36,6 +36,9 @@ NOW = datetime.datetime.now(datetime.timezone.utc)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
+LOCAL_WARNING = ("This file holds real names from your own LinkedIn export. Keep it on "
+                 "your machine - do NOT commit it to a repo or share it.")
+
 
 # ----------------------------------------------------------------------------
 # CSV (port of lib/csv.js): tolerant of a Notes preamble before the header,
@@ -759,6 +762,7 @@ def extract(export_dir):
     network_out = {k: v for k, v in network.items()}
 
     audit = OrderedDict()
+    audit["_notice"] = LOCAL_WARNING
     audit["_meta"] = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": NOW.isoformat(),
