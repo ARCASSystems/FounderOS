@@ -22,6 +22,7 @@ The system has four layers, the same four the Founder OS Playbook draws on a nap
 - [Slash commands (34)](https://github.com/ARCASSystems/FounderOS/blob/main/docs/commands.md): every command and what it returns.
 - [Tools and MCPs](https://github.com/ARCASSystems/FounderOS/blob/main/docs/tools-and-mcps.md): which integrations activate which skills, and how the OS degrades gracefully to zero MCPs.
 - [Calibrating your OS](https://github.com/ARCASSystems/FounderOS/blob/main/docs/calibrating-your-os.md): how to tune the system to how you actually work after install.
+- [Voice extension](https://github.com/ARCASSystems/FounderOS/blob/main/docs/voice-extension.md): optional and do-it-yourself - give the OS a mouth (text to speech) and ears (speech to text) with free local tools. The OS is complete as text without it.
 
 ## For other AI agents
 
