@@ -174,6 +174,23 @@ if (Test-Path $Clients) {
   if ($fill -gt 0) { Write-Output "Clients: $fill [FILL] rows awaiting data" }
 }
 
+# --- Connector status ---
+# Surfaces tools the user has not connected yet so a skipped connector does not
+# stay silent. Written by the `connect` skill to connectors/status.md (no
+# secrets; gitignored per-user state). Quiet exit when the file is absent.
+$Connectors = Join-Path $Repo 'connectors\status.md'
+if (Test-Path $Connectors) {
+  $notConnected = Get-Content $Connectors -Encoding UTF8 | Select-String -Pattern '^- (.+?):\s*not connected'
+  if ($notConnected) {
+    Write-Output ""
+    Write-Output "Connectors not set up:"
+    foreach ($m in ($notConnected | Select-Object -First 5)) {
+      $name = $m.Matches[0].Groups[1].Value
+      Write-Output "  - $name - say `"connect $name`""
+    }
+  }
+}
+
 # --- Unprocessed rants ---
 # Surfaces the rant-to-action gap. Without this line, rants captured via
 # /rant sit in brain/rants/ until the user remembers /dream exists (15-25%

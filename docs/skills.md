@@ -735,6 +735,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** When a workflow you repeat is worth capturing as a skill, or when an existing skill triggers on the wrong prompts.
 - **Follow-up.** Run the test prompts the skill proposes, review the results, iterate. No dedicated slash command.
 
+### connect
+
+- **Say.** "connect Telegram", "connect my calendar", "connect my email", "set up notifications", or "hook up <tool>".
+- **Outcome.** The named tool is linked the right way for its type. env-key tools (Telegram, ElevenLabs) get their key stored in the gitignored `.env` with a live reachability check; account-level MCP tools (calendar, email) are guided to the Claude Code MCP setup because the OS cannot hold their tokens; manual-link tools store a reference URL. A skipped or connected tool is recorded in `connectors/status.md`, which the SessionStart brief surfaces.
+- **Reads.** `scripts/connect.py registry` for the connector list. `.env` (to check for an existing key, never echoed). `docs/tools-and-mcps.md` for the MCP-add steps.
+- **Writes.** A secret only to the gitignored `.env` (the writer refuses any non-gitignored target). `connectors/status.md` (no secrets, gitignored per-user state). Never a tracked file.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete. `scripts/connect.py` present. A local runtime for env-key connectors (web-only agents guide but cannot store the key).
+- **When to run.** The first time you want a tool linked, or to re-record a connector you skipped. For a 401 on an already-connected tool, use `reconnect-prompt` instead.
+- **Follow-up.** Confirm the test message arrived for env-key tools. If a connected tool later fails auth, `reconnect-prompt`. Slash command: none - say "connect <tool>".
+
 ### reconnect-prompt
 
 - **Say.** "the integration broke", "my token expired", "reconnect <tool>", or "I got a 401".

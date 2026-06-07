@@ -258,9 +258,9 @@ If you have not installed the scheduled-tasks MCP, ignore this section. Nothing 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Scheduled tasks are bring-your-own.
 
-## Skills (66 total)
+## Skills (67 total)
 
-The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 66 skills and 34 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
+The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 67 skills and 34 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
 
 `founder-os-setup` is the entry point. Every other skill activates from natural language ("set up my voice", "what's on for today", "help me decide") or via `/founder-os:<command>`. Say "show me what you can do" (or run `/founder-os:menu`) for a shortlist tailored to your current state.
 

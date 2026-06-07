@@ -181,6 +181,20 @@ if [ -f "$CLIENTS" ]; then
   fi
 fi
 
+# --- Connector status ---
+# Surfaces tools the user has not connected yet so a skipped connector does not
+# stay silent. Written by the `connect` skill to connectors/status.md (no
+# secrets; gitignored per-user state). Quiet exit when the file is absent.
+CONNECTORS="$REPO/connectors/status.md"
+if [ -f "$CONNECTORS" ]; then
+  NOT_CONNECTED=$(grep -E '^- .*:[[:space:]]*not connected' "$CONNECTORS" 2>/dev/null)
+  if [ -n "$NOT_CONNECTED" ]; then
+    echo ""
+    echo "Connectors not set up:"
+    printf '%s\n' "$NOT_CONNECTED" | sed -E 's/^- ([^:]+):.*/  - \1 - say "connect \1"/' | head -5
+  fi
+fi
+
 # --- Unprocessed rants ---
 # Surfaces the rant-to-action gap. Without this line, rants captured via
 # /rant sit in brain/rants/ until the user remembers /dream exists (15-25%

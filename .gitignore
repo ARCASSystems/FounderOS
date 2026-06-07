@@ -31,6 +31,10 @@ reports/
 .env.*
 *.key
 
+# Connector status (per-user state written by the `connect` skill; NO secrets,
+# but machine-specific - the connect skill regenerates it. Secrets stay in .env.)
+connectors/
+
 # Local Claude settings (per-user, not shareable)
 CLAUDE.local.md
 AGENTS.local.md
