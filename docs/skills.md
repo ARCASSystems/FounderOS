@@ -882,6 +882,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** When you want to find who in your existing network matches a target customer, hiring, or partnership profile, before a week of manual outreach.
 - **Follow-up.** Copy `icp.example.yaml`, edit it, and re-run with `--icp` to narrow the list. Open `network-scan.html` to browse; `network-scan.csv` has the full rows.
 
+### add-voice
+
+- **Say.** "add voice", "let me talk to my OS", "voice mode", "I want to speak to it", or "set up voice".
+- **Outcome.** A working local voice loop: you speak, the OS answers out loud. The default tier (Tier 0) holds the accessibility floor - no extra API key, no paid service - using your browser's built-in speech (ears and mouth) plus the reasoning CLI you already run the OS in (brain). Fully-local (faster-whisper + Piper) and realtime (a free Google AI Studio key) are opt-in upgrades.
+- **Reads.** `core/identity.md` (a small head slice, for a lean brain context), the skill's `runtime/` templates and `references/`.
+- **Writes.** A gitignored `voice/` runtime on your machine (`server.py`, `index.html`, `config.json` bound to your port and reasoning command, and a local-only `runtime-log.jsonl`). On "save", appends a line to `brain/log.md`.
+- **Voice rules.** No.
+- **Prereqs.** A local runtime (Python; runs and serves a local page - so Claude Code or any local-runtime agent). The no-key brain needs the reasoning CLI you run the OS in on PATH; without it, ears and save-to-brain still work. Chrome or Edge for built-in speech input.
+- **When to run.** When you want to talk to your OS instead of typing, or hear answers while your hands and eyes are busy. The OS is complete as text; this is an optional sensory layer.
+- **Follow-up.** Read `skills/add-voice/references/tiers.md` to go fully-local or add realtime; `voice-model-disclaimer.md` for the cost-and-accuracy trade; `troubleshooting.md` if the page will not reach the server.
+
 ---
 
 ## Notes for skill authors

@@ -35,6 +35,12 @@ reports/
 # but machine-specific - the connect skill regenerates it. Secrets stay in .env.)
 connectors/
 
+# Voice runtime (per-machine, written by the `add-voice` skill's setup.py: server.py
+# + index.html copied from the tracked skill template, config.json bound to this machine,
+# and runtime-log.jsonl which holds what you said. The skill folder skills/add-voice/ is
+# tracked and ships; this generated runtime stays local.)
+voice/
+
 # Local Claude settings (per-user, not shareable)
 CLAUDE.local.md
 AGENTS.local.md

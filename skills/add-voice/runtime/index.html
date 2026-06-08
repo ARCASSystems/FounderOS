@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!--
+  Founder OS - Tier-0 voice page (the "Add voice" capability, default tier).
+  Ears: the browser's built-in speech recognition. Mouth: the browser's built-in
+  speech synthesis. Brain: your local server's /brain, which uses the reasoning CLI
+  you already run the OS in - no extra API key.
+
+  HONESTY NOTE (load-bearing, not decoration): in Chrome and Edge the built-in speech
+  recognition sends your audio to the browser vendor (Google / Microsoft) to transcribe
+  it. It needs no key and no payment, but it is NOT local. For fully-local speech, add
+  the faster-whisper upgrade documented in the add-voice skill's references/tiers.md.
+  The banner below says this on screen so it is never hidden.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Founder OS - voice (Tier 0)</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    margin: 0; padding: 1.5rem; max-width: 720px; margin-inline: auto;
+    line-height: 1.5;
+  }
+  h1 { font-size: 1.25rem; margin: 0 0 0.25rem; }
+  .sub { opacity: 0.7; font-size: 0.85rem; margin: 0 0 1rem; }
+  .banner {
+    border: 1px solid #c9a227; background: #fbf4d9; color: #5a4a00;
+    padding: 0.7rem 0.9rem; border-radius: 12px; font-size: 0.82rem; margin-bottom: 1rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    .banner { background: #2a2410; color: #e8d48a; border-color: #6b5a1e; }
+  }
+  .row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  button {
+    font: inherit; padding: 0.6rem 1.1rem; border-radius: 999px; border: 1px solid currentColor;
+    background: transparent; cursor: pointer;
+  }
+  button.primary { background: #1463ff; color: #fff; border-color: #1463ff; }
+  button[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .panel { border: 1px solid rgba(127,127,127,0.3); border-radius: 12px; padding: 0.9rem; margin-bottom: 0.8rem; }
+  .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6; margin-bottom: 0.3rem; }
+  .you { min-height: 1.4em; }
+  .brain { min-height: 1.4em; font-weight: 500; }
+  .state { font-size: 0.8rem; opacity: 0.7; height: 1.2em; }
+  .fallback { display: none; gap: 0.5rem; margin-top: 0.6rem; }
+  .fallback input { flex: 1; font: inherit; padding: 0.5rem; border-radius: 8px; border: 1px solid rgba(127,127,127,0.4); background: transparent; color: inherit; }
+</style>
+</head>
+<body>
+  <h1>Founder OS - voice</h1>
+  <p class="sub">Tier 0 - the default. No extra key, no paid service. Your one subscription answers; your browser hears and speaks.</p>
+
+  <div class="banner" id="banner">
+    Heads up: your browser's speech recognition may send your audio to your browser vendor
+    (Google or Microsoft) to turn it into text. It needs no key and costs nothing, but it is
+    not fully local. For fully-local speech, add the faster-whisper upgrade (see the add-voice
+    skill's tiers note). Your brain - your files and answers - stays on this machine either way.
+  </div>
+
+  <div class="row">
+    <button id="talk" class="primary">Hold to talk</button>
+    <button id="save">Save last to brain</button>
+    <span class="state" id="state"></span>
+  </div>
+
+  <div class="panel">
+    <div class="label">You said</div>
+    <div class="you" id="you"></div>
+    <div class="fallback" id="fallback">
+      <input id="textin" placeholder="Type here (your browser has no built-in speech recognition)" />
+      <button id="send">Ask</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="label">Brain</div>
+    <div class="brain" id="brain"></div>
+  </div>
+
+<script>
+(function () {
+  var youEl = document.getElementById("you");
+  var brainEl = document.getElementById("brain");
+  var stateEl = document.getElementById("state");
+  var talkBtn = document.getElementById("talk");
+  var saveBtn = document.getElementById("save");
+  var fallback = document.getElementById("fallback");
+  var textin = document.getElementById("textin");
+  var sendBtn = document.getElementById("send");
+
+  var lastSaid = "";
+
+  function setState(s) { stateEl.textContent = s || ""; }
+
+  function speak(text) {
+    try {
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.rate = 1.0;
+      window.speechSynthesis.speak(u);
+    } catch (e) { /* no mouth available - the text on screen is the fallback */ }
+  }
+  function stopSpeaking() {
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+  }
+
+  // Ask the brain. Backchannel so a slow turn is never silent (concurrency principle:
+  // the front keeps the user engaged while the back works).
+  function askBrain(text) {
+    lastSaid = text;
+    youEl.textContent = text;
+    brainEl.textContent = "";
+    setState("thinking...");
+    var spokeBackchannel = false;
+    var timer = setTimeout(function () {
+      spokeBackchannel = true;
+      speak("Give me a moment.");
+    }, 650);
+
+    fetch("/brain", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text })
+    }).then(function (r) { return r.json(); })
+      .then(function (data) {
+        clearTimeout(timer);
+        if (spokeBackchannel) stopSpeaking();
+        var answer = (data && data.answer) || "No answer.";
+        brainEl.textContent = answer;
+        setState(data && data.latency_ms ? (Math.round(data.latency_ms) + " ms") : "");
+        speak(answer);
+      })
+      .catch(function (err) {
+        clearTimeout(timer);
+        brainEl.textContent = "Could not reach the local server. Is it running?";
+        setState("offline");
+      });
+  }
+
+  function saveLast() {
+    if (!lastSaid) { setState("nothing to save yet"); return; }
+    setState("saving...");
+    fetch("/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: lastSaid })
+    }).then(function (r) { return r.json(); })
+      .then(function (data) {
+        var msg = (data && data.answer) || "Saved.";
+        brainEl.textContent = msg;
+        setState("");
+        speak(msg);
+      })
+      .catch(function () { setState("save failed - server offline?"); });
+  }
+  saveBtn.addEventListener("click", saveLast);
+
+  // Ears: the browser's built-in speech recognition, if present.
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SR) {
+    var rec = new SR();
+    rec.lang = "en-US";
+    rec.interimResults = true;
+    rec.continuous = false;
+    var finalText = "";
+
+    rec.onresult = function (ev) {
+      var interim = "";
+      finalText = "";
+      for (var i = ev.resultIndex; i < ev.results.length; i++) {
+        var t = ev.results[i][0].transcript;
+        if (ev.results[i].isFinal) finalText += t; else interim += t;
+      }
+      youEl.textContent = finalText || interim;
+    };
+    rec.onerror = function (ev) { setState("mic error: " + ev.error); };
+    rec.onend = function () {
+      talkBtn.textContent = "Hold to talk";
+      if (finalText.trim()) askBrain(finalText.trim());
+    };
+
+    var listening = false;
+    function startListening() {
+      if (listening) return;
+      listening = true; finalText = "";
+      stopSpeaking();
+      setState("listening...");
+      talkBtn.textContent = "Listening - release to ask";
+      try { rec.start(); } catch (e) {}
+    }
+    function stopListening() {
+      if (!listening) return;
+      listening = false;
+      try { rec.stop(); } catch (e) {}
+    }
+    // press-and-hold (mouse + touch)
+    talkBtn.addEventListener("mousedown", startListening);
+    talkBtn.addEventListener("mouseup", stopListening);
+    talkBtn.addEventListener("mouseleave", stopListening); // releasing off the button still stops
+    talkBtn.addEventListener("touchstart", function (e) { e.preventDefault(); startListening(); });
+    talkBtn.addEventListener("touchend", function (e) { e.preventDefault(); stopListening(); });
+  } else {
+    // No built-in speech recognition (Firefox, Safari). Never dead-end: type instead.
+    talkBtn.disabled = true;
+    talkBtn.textContent = "No mic STT in this browser";
+    fallback.style.display = "flex";
+    document.getElementById("banner").textContent =
+      "Your browser has no built-in speech recognition, so type your turn below. The mouth " +
+      "(read-aloud) and the brain still work. For spoken input, use Chrome or Edge, or add the " +
+      "faster-whisper upgrade (see the add-voice skill's tiers note).";
+  }
+
+  function sendTyped() {
+    var t = (textin.value || "").trim();
+    if (t) { askBrain(t); textin.value = ""; }
+  }
+  sendBtn.addEventListener("click", sendTyped);
+  textin.addEventListener("keydown", function (e) { if (e.key === "Enter") sendTyped(); });
+
+  // Tell the user honestly if the brain CLI is not reachable.
+  fetch("/health").then(function (r) { return r.json(); }).then(function (h) {
+    if (h && h.brain_available === false) {
+      brainEl.textContent =
+        "Ready to hear you and save to your brain. Conversational answers need the reasoning " +
+        "CLI on this machine's PATH - see the troubleshooting note. Saving works now.";
+    }
+  }).catch(function () {});
+})();
+</script>
+</body>
+</html>

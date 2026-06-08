@@ -2,6 +2,19 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## Unreleased (develop)
+
+Work accumulating on the `develop` branch, not yet cut to a release.
+
+### Add - give your OS a voice (the first installable capability of the modular scaffold)
+
+- **`add-voice` skill - say "add voice" and talk to your OS out loud.** The OS ships as a complete text brain; this adds an optional mouth and ears on top of the same brain. It is the first of the "add a part" capabilities (voice, then a mouth, then hands) that plug into the brain.
+- **The default needs no extra key.** Tier 0 holds the accessibility floor: your browser's built-in speech recognition (ears) and speech (mouth) plus the reasoning CLI you already run the OS in (brain, `claude -p` by default - no API key, it uses the subscription you already have). A small local Python setup (`skills/add-voice/setup.py`, standard library only, no pip install) wires a gitignored `voice/` runtime bound to your machine. Run `python voice/server.py` and a local page lets you hold-to-talk and hear the answer; "save" appends what you said to `brain/log.md`.
+- **One honest disclaimer, stated up front.** In Chrome and Edge the browser sends your audio to its vendor to transcribe - no key and no cost, but not fully local. The page and the docs say so. The fully-local upgrade (faster-whisper + Piper) and the realtime upgrade (Gemini Live on a free Google AI Studio key) are opt-in, each with its cost-and-accuracy trade stated before you commit. A premium ElevenLabs mouth is a deliberate paid choice, never a default.
+- **Tier 1 realtime is wired - say "add voice --realtime".** A sub-second streaming conversation on a free Google AI Studio key: a realtime model (Gemini Live) hears you, takes turns, and speaks back in its OWN native voice, while the no-key reasoning CLI you already run stays the back-brain that reads your files. Two models, two jobs. `skills/add-voice/setup_realtime.py` prints the cost-and-accuracy disclaimer first, installs the two deps (google-genai, websockets), copies the realtime page and bridge into the gitignored `voice/`, and inherits the Tier-0 brain command; the key is stored only in `.env` via the connect flow (`connect gemini`). It engages instantly on every turn and pauses only when you say "thinking" out loud; the brain reads run off the audio loop so they never freeze the voice; every turn is recorded locally to `voice/live-log.md`. The realtime tools read the OS and make one safe append (save to log) - sending and computer control stay a separate, gated "add hands". The honest disclaimer is load-bearing: a free key has a free daily quota on Flash models and heavy realtime use can move onto paid per-token rates, stated before you commit.
+- **Built to degrade, never dead-end.** No reasoning CLI on PATH -> ears and save-to-brain still work. No browser speech (Firefox, Safari) -> a text box keeps the loop working. Every turn logs to a local-only `voice/runtime-log.jsonl` so failures are visible. The brain context is kept deliberately lean (a short preamble plus a small identity slice, never the whole repo) so a long session does not bloat and fail.
+- **Docs.** `docs/voice-extension.md` updated from "DIY, no command" to point at the skill while keeping its honest posture (text is the whole product; voice is optional). Skill count moved 73 -> 74 across every parity surface.
+
 ## v1.37.0 - 2026-06-06
 
 ### Add - one folder you own, plus two more role modes
