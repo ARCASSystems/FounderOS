@@ -107,6 +107,30 @@ CAPABILITIES = {
         "always_bare": False,
         "phrase": "process my rants",
     },
+    # Role-pack front doors. Each is a router skill (no command file) discovered by
+    # natural language. They render natural-language only and surface as discovery
+    # options, sorted ahead of their peers when the operator's profile variant leads
+    # with the matching role (see VARIANT_LEADS).
+    "pipeline-start": {
+        "command": None,
+        "always_bare": False,
+        "phrase": "turn this name into a tracked deal",
+    },
+    "content-start": {
+        "command": None,
+        "always_bare": False,
+        "phrase": "turn one idea into a week of content",
+    },
+    "delivery-start": {
+        "command": None,
+        "always_bare": False,
+        "phrase": "get me ready to deliver this client work",
+    },
+    "decisions-start": {
+        "command": None,
+        "always_bare": False,
+        "phrase": "help me decide or cut my list to one",
+    },
 }
 
 ALWAYS_BARE_NAMES = {
@@ -130,11 +154,15 @@ DAY_ONE_ORDER = [
 # knowledge-capture, meeting-prep) are served by the bootloader and orientation, not here.
 KNOWN_VARIANTS = {"founder", "career-mover", "builder", "student", "team-internal"}
 VARIANT_LEADS = {
-    "founder": frozenset({"priority-triage", "weekly-review", "today"}),
-    "career-mover": frozenset({"ingest", "today"}),
-    "builder": frozenset({"forcing-questions", "today"}),
+    "founder": frozenset(
+        {"priority-triage", "weekly-review", "today", "pipeline-start", "delivery-start", "decisions-start"}
+    ),
+    "career-mover": frozenset({"ingest", "today", "content-start", "decisions-start"}),
+    "builder": frozenset({"forcing-questions", "today", "decisions-start"}),
     "student": frozenset({"ingest", "dream"}),
-    "team-internal": frozenset({"priority-triage", "weekly-review", "today"}),
+    "team-internal": frozenset(
+        {"priority-triage", "weekly-review", "today", "pipeline-start", "delivery-start", "decisions-start"}
+    ),
 }
 
 CLOSING_LINE = (
@@ -464,6 +492,25 @@ def rule_content_repurposer(state: dict) -> tuple[bool, str]:
     return False, "adapts one piece of content across LinkedIn, Instagram, YouTube, email, and more."
 
 
+# Role-pack front doors. These are discovery routers, not state-urgent actions, so they
+# do not fire on their own signal; they surface as fallbacks and sort ahead of their peers
+# when the operator's profile variant leads with the matching role (see VARIANT_LEADS).
+def rule_pipeline_start(state: dict) -> tuple[bool, str]:
+    return False, "turn a name or lead into a tracked deal and route to the next move."
+
+
+def rule_content_start(state: dict) -> tuple[bool, str]:
+    return False, "turn one idea into a post, a week of content, or a full campaign in your voice."
+
+
+def rule_delivery_start(state: dict) -> tuple[bool, str]:
+    return False, "get client work prepped, produced, and checked before it ships."
+
+
+def rule_decisions_start(state: dict) -> tuple[bool, str]:
+    return False, "get unstuck: weigh a choice, cut your list to one, or read where you stand."
+
+
 RULES = [
     ("voice-interview", rule_voice_interview),
     ("brand-interview", rule_brand_interview),
@@ -478,6 +525,10 @@ RULES = [
     ("linkedin-post", rule_linkedin_post),
     ("content-repurposer", rule_content_repurposer),
     ("dream", rule_dream),
+    ("pipeline-start", rule_pipeline_start),
+    ("content-start", rule_content_start),
+    ("delivery-start", rule_delivery_start),
+    ("decisions-start", rule_decisions_start),
 ]
 
 

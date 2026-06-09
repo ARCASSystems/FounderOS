@@ -906,6 +906,56 @@ If a skill has a slash command that wraps it, that command is named at the end a
 
 ---
 
+## Role packs (front doors)
+
+Each pack is a function a solo founder covers alone, opened by one front-door wedge skill that routes into the members. The four below join the existing `linkedin-start`; `unit-economics` is the Money pack front door. Full pack map in `skills/index.md` and per-pack manifests at `skills/<pack>-pack.md`.
+
+### pipeline-start
+
+- **Say.** "turn this name into a deal", "track this prospect", or "help me with my pipeline".
+- **Outcome.** A name becomes a tracked deal: the OS captures the person as a record and routes you to the next move (capture, research, reach out, prep the call, or propose). The Pipeline pack front door.
+- **Reads.** `core/identity.md`, `companies/prospects/<slug>.md` if present, `brain/log.md`.
+- **Writes.** Read-only itself; the move it routes to (e.g. `prospect-init`) writes the record. Drafts and tracks, never sends.
+- **Voice rules.** No. It routes; the writer it routes to owns the voice.
+- **Prereqs.** A name and ideally a company. None other - a cold install can use it.
+- **When to run.** Any open-ended "I have a name, now what" business-development ask.
+- **Follow-up.** Routes to `prospect-init`, `business-context-loader`, `email-drafter`, `meeting-prep`, `proposal-writer`, `list-pruner`, `reconnect-prompt`. No dedicated slash command.
+
+### content-start
+
+- **Say.** "turn this idea into content", "one idea into a week of content", or "help me with content".
+- **Outcome.** One idea becomes the format you need: a single post, the same idea across channels, a sequenced campaign, or a reply. The OS checks your voice first. The Content pack front door.
+- **Reads.** `core/voice-profile.yml`, `brands/<slug>/voice.yml` if a brand, `brain/.snapshot.md`.
+- **Writes.** Read-only itself; the writer it routes to produces the draft. Drafts in your voice, never publishes.
+- **Voice rules.** Routes through the voice-coupled writers, which apply `your-voice` internally.
+- **Prereqs.** A voice profile makes output yours; without it, drafts fall back to anti-AI defaults and the skill says so.
+- **When to run.** Any open-ended "I have something to say, help me post it" ask.
+- **Follow-up.** Routes to `linkedin-post`, `content-repurposer`, `campaign-from-theme`, `review-responder`, `voice-interview`, `brand-voice-interview`. No dedicated slash command.
+
+### delivery-start
+
+- **Say.** "get me ready to deliver this", "I have client work due", or "ready this for the client".
+- **Outcome.** Client work gets prepped, produced, and checked: the OS routes you to the session brief, the update, the SOP, the branded document, or the ship gate, and always offers the second-pair-of-eyes check before anything ships. The Delivery pack front door.
+- **Reads.** `context/clients.md`, `companies/`, `core/brand-profile.yml` for branded output.
+- **Writes.** Read-only itself; the step it routes to produces or checks. Readies and checks, never sends to the client.
+- **Voice rules.** Routes through voice-coupled writers (`client-update`, `sop-writer`) where they apply.
+- **Prereqs.** Client history and a brand profile sharpen the output; neither blocks a delivery.
+- **When to run.** Any open-ended "I owe a client something" ask.
+- **Follow-up.** Routes to `meeting-prep`, `client-update`, `sop-writer`, `your-deliverable-template`, `ship-deliverable` (which composes `blind-spot-review` + `pre-send-check`). No dedicated slash command.
+
+### decisions-start
+
+- **Say.** "help me decide", "cut my list to one", or "I'm stuck".
+- **Outcome.** The block clears: the OS reads your own state to see which kind of stuck you are in (a choice, a list, a shiny idea, a fog) and routes you to the move that clears it. The Decisions pack front door.
+- **Reads.** `context/priorities.md`, `context/decisions.md`, `brain/flags.md`, `cadence/weekly-commitments.md`.
+- **Writes.** Read-only itself; some moves it routes to write back (a parked decision, a re-cut list, a rolled sprint), and it reports what changed.
+- **Voice rules.** No. Reasoning only; the call stays yours, with the counter-case attached.
+- **Prereqs.** None. The decision skills get sharper as your state files fill.
+- **When to run.** Any open-ended "I'm stuck" ask that is a block on a choice or a list, not a specific task.
+- **Follow-up.** Routes to `decision-framework`, `forcing-questions`, `priority-triage`, `queue`, `strategic-read`, `strategic-analysis`, `weekly-review`. No dedicated slash command.
+
+---
+
 ## Notes for skill authors
 
 - Skills live under `skills/<name>/SKILL.md` with YAML frontmatter (`name`, `description`, optional `allowed-tools`, `mcp_requirements`).

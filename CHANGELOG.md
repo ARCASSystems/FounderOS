@@ -6,6 +6,14 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 Work accumulating on the `develop` branch, not yet cut to a release.
 
+### Add - role packs (the flat skill list becomes functions a founder covers alone)
+
+- **The skills are now organised into role packs, each opened by one front-door wedge.** A pack is a function a solo founder runs alone (Pipeline, Content, Delivery, Money, Decisions, and the existing LinkedIn), and each opens with one skill that asks for the outcome you want and routes you to the member that delivers it. You arrive for one job and the front door invites you into the rest, never forces you. A pack is a naming convention plus a manifest, not a folder: every skill stays a top-level directory and every skill stays available to everyone, so packing changes discovery, not access.
+- **Four new front-door wedge skills.** `pipeline-start` (turn a name into a tracked deal), `content-start` (one idea into a week of content), `delivery-start` (get ready to deliver client work and gate it before it ships), and `decisions-start` (get unstuck on a choice or a list). Each reads what the OS already knows, gives one honest disclaimer, routes to the existing member skills, and never re-implements an engine. They join the existing `linkedin-start`; `unit-economics` is the Money pack's front door, so no fifth wedge was needed.
+- **Five new pack manifests.** `skills/pipeline-pack.md`, `content-pack.md`, `delivery-pack.md`, `money-pack.md`, and `decisions-pack.md`, each naming the front door, the members, the shared input or discipline, the honest limits, and the inter-member dependencies. They follow the existing `skills/linkedin-pack.md` pattern: a link hub that reads the pack as one connected unit.
+- **Discovery wiring.** The `menu` engine gained the four front doors as discovery capabilities (natural-language only, no invented slash forms), and `profile-router` now leads each operator variant with the pack front doors that fit it: a founder is invited into Pipeline, Delivery, and Decisions, a career-mover into Content and Decisions, a builder into Decisions. Nothing is locked; the variant only changes what surfaces first.
+- **No new member skills, no new dependencies.** The wedges route to skills that already shipped, so the packs add reach without adding paid tools or breaking the free-tier floor. Skill count moved 75 -> 79 across every parity surface. The brain and meta skills and the voice scaffold stay shared substrate, not packed.
+
 ### Add - give your OS a voice (the first installable capability of the modular scaffold)
 
 - **`add-voice` skill - say "add voice" and talk to your OS out loud.** The OS ships as a complete text brain; this adds an optional mouth and ears on top of the same brain. It is the first of the "add a part" capabilities (voice, then a mouth, then hands) that plug into the brain.

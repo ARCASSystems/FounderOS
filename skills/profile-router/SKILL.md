@@ -40,18 +40,20 @@ Default when signals are thin: **founder** if they named a business, **builder**
 
 Each variant resolves to lead surfaces, a frame, and a technical-comfort default. Write these into `core/profile.md`.
 
+Lead surfaces now include role-pack front doors where they fit the variant. A pack is a function a solo founder covers alone (Pipeline, Content, Delivery, Money, Decisions), each opened by one front-door skill that routes to the members. Naming a front door as a lead surface invites the operator into the pack their situation needs first; it never removes the others, and every pack stays available to every variant. The `menu` engine reads the same variant-to-front-door wiring so the right pack also surfaces in the capability list. Full pack list: `skills/pipeline-pack.md`, `skills/content-pack.md`, `skills/delivery-pack.md`, `skills/money-pack.md`, `skills/decisions-pack.md`, and `skills/linkedin-pack.md`.
+
 ### founder
-- **lead surfaces:** `context/priorities.md`, `cadence/weekly-commitments.md`, `context/decisions.md`, `context/clients.md`, `cadence/queue.md`
+- **lead surfaces:** `context/priorities.md`, `cadence/weekly-commitments.md`, `context/decisions.md`, `context/clients.md`, `cadence/queue.md`, plus the Pipeline (`pipeline-start`), Delivery (`delivery-start`), and Decisions (`decisions-start`) role-pack front doors
 - **frame:** Stop being the bottleneck. The brain holds what you cannot.
 - **technical comfort:** medium
 
 ### career-mover
-- **lead surfaces:** `core/identity.md` positioning, a proof-of-value record in `brain/knowledge/`, an application tracker, `decision-framework`, `meeting-prep` for interviews
+- **lead surfaces:** `core/identity.md` positioning, a proof-of-value record in `brain/knowledge/`, an application tracker, `decision-framework`, `meeting-prep` for interviews, plus the Content (`content-start`) and Decisions (`decisions-start`) role-pack front doors
 - **frame:** Carry your leverage between jobs. The brain is yours, not the employer's.
 - **technical comfort:** medium
 
 ### builder
-- **lead surfaces:** `cadence/queue.md` (three-item cap), `forcing-questions`, `today`, `ship-deliverable`
+- **lead surfaces:** `cadence/queue.md` (three-item cap), `forcing-questions`, `today`, `ship-deliverable`, plus the Decisions (`decisions-start`) role-pack front door
 - **frame:** One thing at a time. The brain parks the rest so you finish.
 - **technical comfort:** high
 

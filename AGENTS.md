@@ -11,7 +11,7 @@ The canonical instruction file is `CLAUDE.md`. It is the source of truth for how
 1. `CLAUDE.md` - the source of truth for behaviour, structure, roles, skills, commands, hooks, and substrate.
 2. `README.md` - the product picture and the setup path.
 
-The skill registry is `skills/index.md` (75 skills, 35 commands); the long-form per-skill reference is `docs/skills.md`. Read those for the lists rather than expecting them duplicated here.
+The skill registry is `skills/index.md` (79 skills, 35 commands); the long-form per-skill reference is `docs/skills.md`. Read those for the lists rather than expecting them duplicated here.
 
 ---
 
