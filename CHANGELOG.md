@@ -20,6 +20,11 @@ Work accumulating on the `develop` branch, not yet cut to a release.
 - **The Session Protocol now governs a long session, not just the boot load.** The bootloader already said "load only what you need" at session start. It now adds the rule that was missing: across a long session, do not re-read a whole file you already hold, retrieve narrowly (grep the line or read the one section) for a small answer, and treat the SessionStart brief plus `brain/.snapshot.md` as the always-on desk while the rest of the repo is a filing cabinet opened only for the task in hand. This is the named fix for an OS that slows down and starts to error many turns into a session as context fills.
 - **`log-archive` skill - say "archive my log".** The running log had a documented 300-line cap and a `brain/archive/` folder, but nothing implemented the aging. Now a deterministic script (`scripts/log-archive.py`, standard library only, no LLM call) moves the oldest entries out of `brain/log.md` into monthly `brain/archive/log-YYYY-MM.md` files and leaves a one-line pointer behind. The pointer is the cache summary: history exists and is one hop away, without sitting in the file every skill reads. It never splits an entry, never archives an entry it cannot date, conserves every entry, and is idempotent. Preview with `--dry-run`. Skill count moved 74 -> 75 across every parity surface.
 
+### Fix - realtime voice could not connect its key on a fresh install
+
+- **The gemini connector now ships to fresh installs.** The realtime voice tier added the gemini connector to `scripts/connect.py` but not to the `templates/scripts/` copy the setup wizard places in a new install, so a freshly installed OS could not run `connect gemini` and the realtime key path was dead on a clean clone. The template now matches the live script.
+- **Adding a second free key is documented as an explicit step.** `references/realtime-architecture.md` now spells out how to add `GEMINI_API_KEY2` for quota headroom: create another free AI Studio key (optionally in a second Google account for a separate daily quota) and store it with `connect.py set-secret GEMINI_API_KEY2` on stdin. The front rotates to it automatically on quota.
+
 ## v1.37.0 - 2026-06-06
 
 ### Add - one folder you own, plus two more role modes

@@ -68,6 +68,12 @@ REGISTRY: dict[str, dict[str, str]] = {
         "setup": "Create an API key in your ElevenLabs profile settings.",
         "revoke": "Delete the key in the ElevenLabs dashboard.",
     },
+    "gemini": {
+        "class": "env-key",
+        "secret_keys": "GEMINI_API_KEY (add GEMINI_API_KEY2 for free-tier headroom)",
+        "setup": "Tier-1 realtime voice (add-voice --realtime) uses this. Create a FREE key at https://aistudio.google.com/apikey. A free key carries a free daily quota on Flash models; heavy realtime use can move you onto paid per-token rates. Read skills/add-voice/references/voice-model-disclaimer.md before you commit. A second key (GEMINI_API_KEY2) is optional headroom the realtime front rotates to if the first hits its quota.",
+        "revoke": "Delete or regenerate the key in Google AI Studio (aistudio.google.com/apikey).",
+    },
     # mcp-class: account-level, outside this repo. The OS guides, it cannot
     # store the token or run the OAuth.
     "calendar": {

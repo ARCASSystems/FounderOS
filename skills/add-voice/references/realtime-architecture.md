@@ -88,10 +88,23 @@ next step, not built into Tier 1 yet.
 
 ## Keys and cost control
 
-One free Google AI Studio key is enough. A second key (`GEMINI_API_KEY2`) is optional headroom: the
-front rotates to it automatically if the first hits its quota. Add either with `connect gemini`
-(stored only in the gitignored `.env`). Watch usage with `python voice/live_server.py --summary`,
-which reports the audio-token count that drives cost.
+One free Google AI Studio key is enough to start. A second key (`GEMINI_API_KEY2`) is optional
+headroom: the realtime front rotates to it automatically the moment the first hits its daily quota,
+so a long session does not stall on a `RESOURCE_EXHAUSTED` error mid-conversation.
+
+To add the second free key for headroom:
+
+1. Create another free key at https://aistudio.google.com/apikey. It can be a second key in the
+   same Google account, or a key in a second Google account for a separate daily quota.
+2. Store it the same gitignored-only way as the first, under the second name:
+   `python scripts/connect.py set-secret GEMINI_API_KEY2` and paste the key when prompted (it reads
+   from stdin so the key never lands in your shell history or the command line).
+3. That is all. The front reads both keys at the next start and rotates to the second on quota;
+   there is nothing else to configure. The keys live only in the gitignored `.env` and are never
+   committed.
+
+Watch usage with `python voice/live_server.py --summary`, which reports the audio-token count that
+drives cost.
 
 ## Files
 
