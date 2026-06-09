@@ -2,9 +2,16 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
-## Unreleased (develop)
+## v1.38.0 - 2026-06-10
 
-Work accumulating on the `develop` branch, not yet cut to a release.
+The Ease release. The front door, the heartbeat, and the optional voice scaffold, cut from `develop` to a release. Every core path holds the accessibility floor: one paid Claude plan, no extra API key, no paid service.
+
+### Add - the voice scaffold tail (an optional mouth, optional hands, and a tuning loop)
+
+- **`add-mouth` - say "add a mouth" to have an answer read aloud or rendered to an audio file, from any skill, without the full conversational loop.** The default mouth is your operating system's own voice (Windows SAPI, macOS say, Linux espeak) - no key, no paid service, no install, and your text never leaves the machine. A free fully-local upgrade (Piper) gives a better voice offline; ElevenLabs is the one paid mouth, never a default and never auto-selected. `say.py` prints which engine spoke and whether it was local every time, so a "local" claim is never silent. It speaks what it is given; it does not generate content or send the audio anywhere.
+- **`add-hands` - say "add hands" to let the OS do things, behind a confirm gate.** Safe, reversible, local actions run freely: open a file, folder, app, or link; save a note to your log. Anything irreversible stops for an explicit yes and shows you the action first - the shipped example is running a command, which is OFF until you turn it on and still asks every time. Sending, posting, and computer control are named honestly as not built; the dispatcher refuses them rather than improvising, and when they land they arrive in the confirm class behind the same gate. The gate is the design, not a wrapper: the OS never takes an action you cannot undo without asking.
+- **`tune` - say "tune" and it reads your local voice telemetry and proposes the next instant handler.** It reads the gitignored turn logs the voice skills already write (which routes you use, how slow each was, and on the realtime tier what you tend to ask), and surfaces the recurring request that is not yet an instant handler so it stops being slow. It is propose-only: it never edits a handler or a config, and it says so plainly when there is too little data to recommend anything. Free and fully local, no key, no external call.
+- **Voice stays optional and is not a headline.** The OS is complete as text. These three skills plug a mouth, hands, and a tuning loop into the same brain for anyone who wants them, each opt-in, each with its cost and locality stated before you commit. Skill count moved 79 -> 82 across every parity surface. `docs/voice-extension.md` keeps its honest posture unchanged - text is the whole product.
 
 ### Add - role packs (the flat skill list becomes functions a founder covers alone)
 

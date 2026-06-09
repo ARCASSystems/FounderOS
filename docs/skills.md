@@ -906,6 +906,45 @@ If a skill has a slash command that wraps it, that command is named at the end a
 
 ---
 
+### add-mouth
+
+- **Say.** "add a mouth", "add mouth", "read this out loud", "let it speak", or "set up text-to-speech".
+- **Outcome.** The OS can read an answer aloud or render it to an audio file, from any skill, without the full conversational loop. The default is your operating system's own voice (Windows SAPI, macOS say, Linux espeak) - no key, no paid service, no install, and your text never leaves the machine. Piper is a free fully-local upgrade; ElevenLabs is the one paid mouth, never a default. It speaks what it is given; it does not generate content.
+- **Reads.** `voice/mouth-config.json` (the chosen engine), `.env` only if you pick ElevenLabs (for the key), the skill's `runtime/` and `references/`.
+- **Writes.** A gitignored `voice/` runtime (`say.py`, `mouth-config.json`). Renders audio files only where you ask with `--out`.
+- **Voice rules.** No.
+- **Prereqs.** A local runtime (Python; runs your machine's speech tools - so Claude Code or any local-runtime agent). The default needs nothing else; Piper needs the binary on PATH and a voice model; ElevenLabs needs a paid key stored via `connect`.
+- **When to run.** When you want answers read back while your hands and eyes are busy, or a draft heard aloud before you send it. Optional - the OS is complete as text.
+- **Follow-up.** `skills/add-mouth/references/mouth-options.md` for the exact install and the cost-and-locality trade of each engine.
+
+---
+
+### add-hands
+
+- **Say.** "add hands", "let it do things", "give it hands", "let it take actions", or "set up actions".
+- **Outcome.** The OS can act, behind a confirm gate. Safe, reversible, local actions run freely: open a file, folder, app, or link; save a note to your log. Irreversible actions stop for an explicit yes and show you the action first - running a command is the shipped example, OFF until you turn it on and still asking every time. Sending, posting, and computer control are named as not built; the dispatcher refuses them rather than improvising, and when they land they arrive behind the same gate.
+- **Reads.** `voice/hands-config.json` (the action classes and which are enabled), the skill's `runtime/` and `references/`.
+- **Writes.** A gitignored `voice/` runtime (`hands.py`, `hands-config.json`). The `note` action appends a line to `brain/log.md` (reversible). No outward writes.
+- **Voice rules.** No.
+- **Prereqs.** A local runtime (Python; opens local apps and files - so Claude Code or any local-runtime agent). No key, no paid service for the default hands.
+- **When to run.** When you want the OS to open things and capture notes for you, and you want a gate on anything riskier. Optional.
+- **Follow-up.** `skills/add-hands/references/hands-and-the-confirm-gate.md` for the three action classes, how to enable the command runner, and what is not built yet.
+
+---
+
+### tune
+
+- **Say.** "tune", "tune my voice", "tune the handlers", "what should I pre-program", or "make the voice faster".
+- **Outcome.** It reads your local voice telemetry and proposes the next instant handler to pre-program - the request you make often that is not yet answered instantly - so it stops going through the slow reasoning path. Propose-only: it never edits a handler or a config, and it says so plainly when there is too little data to recommend anything.
+- **Reads.** The gitignored `voice/runtime-log.jsonl` (Tier 0) and `voice/live-telemetry.jsonl` (realtime) the voice skills already write.
+- **Writes.** Nothing. It reads and proposes.
+- **Voice rules.** No.
+- **Prereqs.** A local runtime (Python) and some voice usage to read. No voice telemetry yet means nothing to tune - it says so and points at `add-voice`.
+- **When to run.** After using the voice loop for a while, when you want it fitted to how you actually talk. Optional.
+- **Follow-up.** If a proposed handler is worth adding, that is a separate, deliberate change you confirm; `tune` only points.
+
+---
+
 ## Role packs (front doors)
 
 Each pack is a function a solo founder covers alone, opened by one front-door wedge skill that routes into the members. The four below join the existing `linkedin-start`; `unit-economics` is the Money pack front door. Full pack map in `skills/index.md` and per-pack manifests at `skills/<pack>-pack.md`.
