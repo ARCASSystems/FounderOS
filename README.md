@@ -34,7 +34,7 @@ You are not installing a template. You are installing an operating layer. It lis
 - **Revenue loop enforcement.** Every outreach or content action must log same-session. Catches the gap between "I'll do X" and "I did X."
 - **Role as router.** COO, BD, CMO, Chief of Staff are behavioural modes, not personas. The right mode activates based on what you are actually doing.
 - **Plan A defines Plan B.** This product is a derivative of an actual founder's daily use. Features graduate from personal use into the product only after surviving contact with live P&L.
-- **Talk to it.** Built around dictation. Claude Code's built-in dictation is the primary input. Wispr Flow is an optional power-user upgrade. Claude Code is desktop-only today. There is no native mobile execution surface.
+- **Talk to it.** Built around dictation. Claude Code's built-in dictation is the primary input. Any voice-to-text tool you already use works just as well. Claude Code is desktop-only today. There is no native mobile execution surface.
 - **Decay-driven keep/kill.** Set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires. The OS does not auto-kill, you decide.
 - **Invisible version control.** Full history and undo, no git command ever typed. Say "save my work", "what changed", or "undo to before this morning" and the OS wraps git for you. Local by default; nothing pushes anywhere unless you ask. Undo is fail-safe: it saves your current work first and can never lose it.
 
