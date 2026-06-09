@@ -48,6 +48,8 @@ After setup, every Claude Code session starts with this CLAUDE.md loaded. Claude
 
 Two more files (`brain/log.md` and `brain/flags.md`) load on demand when you ask Claude to scan history or check what is being avoided.
 
+That is the whole point. A small desk loads every session, and the rest of the repo is a filing cabinet Claude opens only for the task in front of it. Across a long session it does not reload what it already holds and retrieves narrowly for small answers, so context stays lean and the OS does not degrade after many turns. When `brain/log.md` grows past its cap, old entries age into `brain/archive/` and the running log stays small.
+
 `core/avatar.md` is your behavioral profile. Skills load it on demand when behavioral context matters. It is not boot-loaded.
 
 `core/profile.md` is the meet-the-human layer. The setup wizard reads which of five operator variants fits you (founder, career-mover, builder, student, team-internal) and writes what the OS should lead with for your situation. It is read at session start alongside identity, so the OS opens with what your situation needs instead of a generic menu. Nothing locks: every skill stays available to every variant, and the variant only changes what you see first. Say "update my profile" to change it any time.
@@ -257,9 +259,9 @@ Unattended while-you-sleep runs are an opt-in upgrade: sync your OS to a remote 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Routines run on-open and on-demand out of the box; unattended is the opt-in remote upgrade.
 
-## Skills (74 total)
+## Skills (75 total)
 
-The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 74 skills and 35 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
+The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 75 skills and 35 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
 
 `founder-os-setup` is the entry point. Every other skill activates from natural language ("set up my voice", "what's on for today", "help me decide") or via `/founder-os:<command>`. Say "show me what you can do" (or run `/founder-os:menu`) for a shortlist tailored to your current state.
 

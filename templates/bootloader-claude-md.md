@@ -52,6 +52,17 @@ If they open with a task, do the task. Don't narrate your startup sequence. Just
 
 If you need to check something before answering, check it silently.
 
+### Across a long session (keep context lean)
+
+The boot load above runs once. During the session, do not reload what you already hold:
+
+- Do not re-read a whole file you read earlier this session unless it changed. Trust what is already in context.
+- For a small answer, retrieve narrowly. Grep for the line or read the one section, not the whole file. Pulling a large file in for one fact is the main way a long session slows down and starts to error after many turns.
+- The SessionStart brief and `brain/.snapshot.md` are your always-on desk: small, current, enough to orient. The rest of the repo is the filing cabinet. Open a drawer for the task in front of you, then move on.
+- When `brain/log.md` grows past its cap, age old entries into `brain/archive/` so the running log stays small (say "archive my log"). The cache keeps summaries and pointers, not the full history.
+
+This is what keeps the OS responsive across a long working session instead of degrading as context fills.
+
 ---
 
 ## First-time setup routing

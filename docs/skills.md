@@ -189,6 +189,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** After adding cross-references in a session. Before `lint`.
 - **Follow-up.** `lint` to verify. `query` to traverse. Slash command: `/founder-os:wiki-build`.
 
+### log-archive
+
+- **Say.** "archive my log", "my log is getting long", or "trim the brain log".
+- **Outcome.** The oldest entries in `brain/log.md` move into monthly archives at `brain/archive/log-YYYY-MM.md`, the most recent entries stay, and a one-line pointer is left at the foot of the log. Keeps the file every skill reads small as the install ages. Deterministic, no LLM call, free-tier safe.
+- **Reads.** `brain/log.md`.
+- **Writes.** `brain/archive/log-YYYY-MM.md` (per month) and a trimmed `brain/log.md` with a pointer footer. `--dry-run` writes nothing.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete (the script ships to `scripts/log-archive.py`).
+- **When to run.** When the log grows past its 300-line cap, or a long session feels heavy. Idempotent: a re-run while under the cap does nothing.
+- **Follow-up.** None. The pointer names where history went. Run `python scripts/log-archive.py` or say "archive my log".
+
 ### observation-rollup
 
 - **Say.** "roll up observations" or "compress old logs".

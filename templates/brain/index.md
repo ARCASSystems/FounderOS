@@ -59,8 +59,13 @@ Run `/dream` whenever the brain feels noisy. Weekly as part of the retro is a go
 
 ## Archive Protocol
 
-When `log.md` hits 300 lines:
-1. Move all entries to `archive/log-[YYYY-MM].md`
-2. Clear `log.md`
-3. Add a one-line summary at the top of the new `log.md`: "Archived [month] log. Key threads: [list]"
-4. Carry forward any #xref entries that are still open
+`log.md` is capped at 300 lines so the file every skill reads stays small as the install ages. When it grows past the cap, age the oldest entries out instead of carrying months of history in the hot file. This is the running-log half of the Session Protocol context discipline: a small desk, the rest of the history in the filing cabinet.
+
+The safe path is the deterministic script (say "archive my log", or run `python scripts/log-archive.py`):
+1. The oldest entries move to `archive/log-[YYYY-MM].md`, grouped by month.
+2. The most recent entries stay in `log.md`.
+3. A one-line pointer is left at the foot of `log.md` saying where the history went. The pointer is the cache summary: it says history exists and where, without carrying the detail.
+
+The script never splits an entry, never archives an entry it cannot date, and is idempotent (a re-run while under the cap does nothing). Preview with `python scripts/log-archive.py --dry-run` first.
+
+On a surface that cannot run the script, do the same by hand: move the oldest entries to `archive/log-[YYYY-MM].md`, keep the recent ones, and leave the pointer line. Do not clear the whole log. Keep the most recent entries so the desk still has current context, and carry forward any open `#xref` threads.
