@@ -1,7 +1,7 @@
 ---
 name: prospect-init
 description: >
-  Create a new prospect record for a company you sell to or watch. Trigger on "add a prospect", "track <company> as a prospect", "start tracking <company>", "new prospect <company>", or run `/founder-os:prospect-init <slug>`. Creates `companies/prospects/<slug>.md` from `templates/prospect-context.template.md` after asking 3 to 5 questions. Different from `business-context-loader`, which is for companies you run.
+  Create a new prospect record for a company you sell to or watch. Trigger on "add a prospect", "track <company> as a prospect", "start tracking <company>", or "new prospect <company>". Creates `companies/prospects/<slug>.md` from `templates/prospect-context.template.md` after asking 3 to 5 questions. Different from `business-context-loader`, which is for companies you run.
 why: "Captures the minimum prospect intel in one short flow so the next time you write a proposal or run strategic analysis, the context exists at a predictable path instead of scattered across your notes."
 enhance: "Fill your own business-context first - the ICP and anti-ICP fields let this flow flag a new prospect against your fit signals as you add them."
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Bash"]
@@ -31,7 +31,7 @@ This skill must:
 
 Detect what the user passed:
 
-- **Argument present** (e.g. `/founder-os:prospect-init widgetco` or "track widgetco as a prospect"): use `<slug>` directly. Sanitise: lowercase, replace spaces with hyphens, strip punctuation.
+- **Company named in prompt** (e.g. "track widgetco as a prospect"): use `<slug>` directly. Sanitise: lowercase, replace spaces with hyphens, strip punctuation.
 - **No argument**: ask `What is the company called?` and derive the slug from the answer.
 
 Check `companies/prospects/<slug>.md` does not already exist. If it does, surface:

@@ -97,7 +97,7 @@ ACTIVE matches actual human capacity for parallel work. The gate forces a decisi
 - **`/founder-os:status`** - Queue bucket in the weighted readiness score (5% weight).
   Full credit if ACTIVE > 0 and DONE in last 7 days > 0. Half credit if only one.
   Zero if both empty.
-- **`/founder-os:weekly-review`** - DONE rolloff and stuck-item review. Items in DONE
+- **`weekly-review`** - DONE rolloff and stuck-item review. Items in DONE
   older than 7 days are moved to `brain/log.md`. Items in ACTIVE older than 14 days
   surface for a keep/park decision.
 

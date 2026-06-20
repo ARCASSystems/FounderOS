@@ -138,7 +138,7 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **Writes.** Read-only. Nothing is modified.
 - **Prereqs.** `/founder-os:setup` complete.
 - **When to run.** Returning after a gap and needing one orientation pass. Before a planning session. When a question spans priorities, pipeline, decisions, and flags at once.
-- **Follow-up.** `/founder-os:priority-triage` if the read shows overload, or `/today` for the day view.
+- **Follow-up.** Ask for priority triage if the read shows overload, or run `/today` for the day view.
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: github-ops
-description: Fast GitHub operations via the gh CLI. Use when the user mentions GitHub issues, PRs, repos, actions, releases, or types "/founder-os:github-ops" - creating or triaging issues, opening or reviewing pull requests, managing branches, inspecting repo state, checking CI. Works on any repo the operator's gh CLI is authenticated against.
+description: Fast GitHub operations via the gh CLI. Use when the user mentions GitHub issues, PRs, repos, actions, releases, creating or triaging issues, opening or reviewing pull requests, managing branches, inspecting repo state, or checking CI. Works on any repo the operator's gh CLI is authenticated against.
 why: "Keeps repo work in the same place you think and write, so triaging an issue or opening a pull request does not pull you out of the OS into a browser tab."
 enhance: "Authenticate the gh CLI once before first use - the skill drives gh directly, so an unauthenticated CLI is the one thing that stops it cold."
 summary: "Run GitHub operations through the gh CLI - issues, PRs, branches, releases."
@@ -16,7 +16,7 @@ Fast GitHub operations on any repo your `gh` CLI is authenticated against.
 
 ## Trigger
 
-When the operator asks about GitHub issues, PRs, repos, actions, or releases, or runs `/founder-os:github-ops`.
+When the operator asks about GitHub issues, PRs, repos, actions, or releases.
 
 ## Interface: gh CLI is canonical
 

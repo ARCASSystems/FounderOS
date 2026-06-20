@@ -1,6 +1,6 @@
 ---
 name: list-pruner
-description: Clean a contact list before outreach - remove duplicate emails, flag missing fields, and score each row High / Medium / Low. Say "prune this list", "clean my contact list", "remove duplicates", "score this list", or run /founder-os:list-pruner. Accepts a CSV path or a pasted table. Returns a clean markdown table; writes a file only if you ask.
+description: Clean a contact list before outreach - remove duplicate emails, flag missing fields, and score each row High / Medium / Low. Say "prune this list", "clean my contact list", "remove duplicates", or "score this list". Accepts a CSV path or a pasted table. Returns a clean markdown table; writes a file only if you ask.
 why: "A list full of duplicates and half-filled rows turns a focused outreach week into busywork. Scoring and de-duping it up front means every row you contact is worth contacting."
 summary: "Clean a contact list before outreach - de-dupe, flag gaps, score each row."
 enhance: "Run it before any outreach push, not after - the High, Medium, Low score is most useful when it decides who you contact first, not when you are already halfway down the list."

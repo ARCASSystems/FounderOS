@@ -220,7 +220,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete. The target file exists.
 - **When to run.** After a session edits a file whose prose names another wiki node by path. One file per run, not a back-catalog sweep.
-- **Follow-up.** `wiki-build` to refresh `brain/relations.yaml`, then `lint` to catch broken refs. Slash command: `/founder-os:cross-link <file>`.
+- **Follow-up.** `wiki-build` to refresh `brain/relations.yaml`, then `lint` to catch broken refs. No dedicated slash command.
 
 ### memory-pass
 
@@ -231,7 +231,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete (it sets up the auto-memory file).
 - **When to run.** First session after a 7-day-plus gap. After any close, block, unblock, or relationship reversal. When something said in chat contradicts what memory claims.
-- **Follow-up.** None. The corrected memory is on disk. Slash command: `/founder-os:memory-pass`.
+- **Follow-up.** None. The corrected memory is on disk. No dedicated slash command.
 
 ### since-last-session
 
@@ -766,7 +766,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete.
 - **When to run.** When you first start tracking a company you are selling to or watching. Different from `business-context-loader`, which is for companies you run.
-- **Follow-up.** `proposal-writer`, `strategic-analysis`, or `client-update` will read this file when they need company-specific context. Slash command: `/founder-os:prospect-init <slug>`.
+- **Follow-up.** `proposal-writer`, `strategic-analysis`, or `client-update` will read this file when they need company-specific context. No dedicated slash command.
 
 ### ingest
 
@@ -810,7 +810,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete. `scripts/scrape.py` plus its Python packages (`httpx`, `selectolax`, `tenacity`) for the default path. Playwright only for the `--render` flag on JS-walled pages.
 - **When to run.** When any task needs data from a public page. Never on a URL you did not supply, and it does not follow links unless the goal says to.
-- **Follow-up.** Feed the extracted data into the skill that needed it. Slash command: `/founder-os:scrape`.
+- **Follow-up.** Feed the extracted data into the skill that needed it. No dedicated slash command ships for this skill.
 
 ### github-ops
 
@@ -821,7 +821,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Voice rules.** No.
 - **Prereqs.** `gh` CLI installed and authenticated (`gh auth login`). The target repo identified, or `--repo owner/name` passed.
 - **When to run.** Any time you want a fast GitHub action without leaving the session.
-- **Follow-up.** Depends on the operation. Slash command: `/founder-os:github-ops`.
+- **Follow-up.** Depends on the operation. No dedicated slash command.
 
 ### skill-creator
 
@@ -854,7 +854,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete. Called by any integration-touching skill that hits an auth failure.
 - **When to run.** When a connected tool returns a 401, an expired token, an invalid grant, or revoked consent.
-- **Follow-up.** Reconnect the tool in its own settings, confirm, then rerun the skill that failed. Slash command: `/founder-os:reconnect-prompt`.
+- **Follow-up.** Reconnect the tool in its own settings, confirm, then rerun the skill that failed. No dedicated slash command.
 
 ### list-pruner
 
@@ -865,7 +865,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete. A contact list pasted in chat or available at a path.
 - **When to run.** Before an outreach push, when a list assembled by hand or from another source may hold duplicates or half-filled rows.
-- **Follow-up.** Add the High-scored rows to `context/leads.md` as new leads, then `email-drafter` for the outreach. Composes with `linkedin-network-scan`. Slash command: `/founder-os:list-pruner`.
+- **Follow-up.** Add the High-scored rows to `context/leads.md` as new leads, then `email-drafter` for the outreach. Composes with `linkedin-network-scan`. No dedicated slash command.
 
 ### finance-import
 
@@ -876,7 +876,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete. A finance CSV export available at a path or pasteable.
 - **When to run.** When you want financial context in the OS for planning, or to feed real numbers into `unit-economics`. PDF input is a manual path until a per-format parser is tested.
-- **Follow-up.** `unit-economics` to run margins on the totals, or `strategic-analysis` to cite the mirror. Standalone - no upstream finance skill required. Slash command: `/founder-os:finance-import`.
+- **Follow-up.** `unit-economics` to run margins on the totals, or `strategic-analysis` to cite the mirror. Standalone - no upstream finance skill required. No dedicated slash command.
 
 ---
 

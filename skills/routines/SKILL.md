@@ -32,7 +32,7 @@ We never promise unattended local cron, and never claim a routine ran where it d
 | Routine | What it does | How it runs |
 |---|---|---|
 | Daily brief | Flags, stale cadence, decisions, quarantine, decay, connectors not set up | On-open (the SessionStart brief, automatic) + on-demand: say "run my brief" or `/founder-os:today` |
-| Weekly review | Rolls the sprint, forces a verdict on every open flag | On-demand or on-open when a week has passed: say "run my weekly review" or `/founder-os:weekly-review` |
+| Weekly review | Rolls the sprint, forces a verdict on every open flag | On-demand or on-open when a week has passed: say "run my weekly review" |
 | Monthly flagship | The three changes worth making now, each with a dated source | On-demand: say "what should I change" (the `what-to-change` skill). Freshness nag in the brief when a month has passed since the last run |
 
 To run any routine now, just say its name in plain English, or use the slash command in the table. To run one repeatedly in a session, wrap it with `/loop` (for example `/loop weekly run my weekly review`).

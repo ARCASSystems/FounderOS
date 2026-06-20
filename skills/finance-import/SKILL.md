@@ -1,6 +1,6 @@
 ---
 name: finance-import
-description: Parse a finance CSV export into a normalized markdown summary the OS can read later. Say "import this finance export", "parse this finance CSV", "summarize this finance export", or run /founder-os:finance-import. Read-only at the source - it never writes back to your accounting tool. Detects amount, date, account, category, and memo columns and totals by category.
+description: Parse a finance CSV export into a normalized markdown summary the OS can read later. Say "import this finance export", "parse this finance CSV", or "summarize this finance export". Read-only at the source - it never writes back to your accounting tool. Detects amount, date, account, category, and memo columns and totals by category.
 why: "A bank or accounting CSV is unreadable to the OS as-is, so financial context never makes it into your operating layer. This turns one export into a clean markdown mirror your other skills can cite without ever touching the source system."
 summary: "Parse a finance CSV export into a markdown summary the OS can read."
 enhance: "Re-run after each new export so the markdown mirror stays current - skills like unit-economics and proposal-writer are only as accurate as the last import."

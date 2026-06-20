@@ -5,7 +5,7 @@ description: >
   unblock event, or when a person or project mentioned in conversation contradicts an existing
   memory claim. Audits Active Project Context entries in MEMORY.md against brain/log.md,
   context/clients.md, context/decisions.md. Never touches Behavioral Guards. Say "run a memory
-  pass", "check my memory", "is my memory stale", or run /founder-os:memory-pass.
+  pass", "check my memory", or "is my memory stale".
 why: "Memory that silently goes stale is worse than no memory - a closed deal still listed as open, or a paused contact still surfaced as live, quietly skews every skill that reads it."
 enhance: "Run it after any seven-day-plus gap or any close, block, or unblock event - those are the moments memory most often drifts from what is actually true."
 summary: "Audit memory entries for stale claims after a gap or a status change."
@@ -36,7 +36,7 @@ MEMORY.md is organised into sections. This skill only ever touches **Active Proj
 - Any session where the operator mentions someone whose status feels different from what memory says
 - First session after a 7+ day gap
 - After any close, block, unblock, or relationship reversal
-- On demand via `/founder-os:memory-pass`
+- On demand when the operator asks for a memory pass.
 
 **Never run on:** Behavioral Guards (permanent TTL - these are rules, not factual claims about current state).
 

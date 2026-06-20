@@ -138,7 +138,7 @@ If `rules/approval-gates.md` is not present, default to the auto-run path for th
 ## Composition with other skills
 
 - `/founder-os:strategic-read` is the full state-of-the-OS read. This skill is the delta version. Run since-last-session first for the gap, then strategic-read if a fuller orientation is still needed.
-- `/founder-os:weekly-review` consumes the marker indirectly: a long elapsed time since last session is a signal the retro should ask whether the missing days had off-system commitments worth logging.
+- `weekly-review` consumes the marker indirectly: a long elapsed time since last session is a signal the retro should ask whether the missing days had off-system commitments worth logging.
 - `/founder-os:log-reply` writes to `brain/log.md`. Those writes show up as Section 2 entries on the next since-last-session run.
 
 ## Voice rules
