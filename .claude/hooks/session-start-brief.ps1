@@ -396,6 +396,52 @@ if (Test-Path $MemoryDiff) {
   }
 }
 
+# --- Founder next move (propose-engine nudge) ---
+# Fires only when core/identity.md carries a ## Founder Snapshot (founder /
+# team_of_one installs). READY means the brain can propose a real move; THIN
+# names the field still needed. Keeps the propose engine discoverable daily.
+$IdentityFile = Join-Path $Repo 'core\identity.md'
+if (Test-Path $IdentityFile) {
+  $idLines = Get-Content $IdentityFile -Encoding UTF8
+  $inSnap = $false
+  $fsFields = @{}
+  foreach ($line in $idLines) {
+    if ($line -match '^##\s+(.+?)\s*$') {
+      $inSnap = ($matches[1].Trim().ToLower() -eq 'founder snapshot')
+      continue
+    }
+    if (-not $inSnap) { continue }
+    if ($line -match '^\*\*(Venture|Customer|Stage \(seed\)|Biggest blocker):\*\*\s*(.*?)\s*$') {
+      $fsFields[$matches[1]] = $matches[2].Trim()
+    }
+  }
+  if ($fsFields.Count -gt 0) {
+    $isSet = {
+      param($v)
+      if (-not $v) { return $false }
+      $t = $v.Trim()
+      if (-not $t) { return $false }
+      if ($t.StartsWith('{{')) { return $false }
+      if ($t.StartsWith('[') -and $t.EndsWith(']')) { return $false }
+      return $true
+    }
+    $hasCustomer = & $isSet $fsFields['Customer']
+    $hasStage = & $isSet $fsFields['Stage (seed)']
+    $hasBlocker = & $isSet $fsFields['Biggest blocker']
+    if ($hasCustomer -and ($hasStage -or $hasBlocker)) {
+      Write-Output ""
+      Write-Output "Your brain is ready - say `"what should I focus on next?`" for your move toward a paying customer."
+    } else {
+      $missing = @()
+      if (-not $hasCustomer) { $missing += 'customer' }
+      if ((-not $hasStage) -and (-not $hasBlocker)) { $missing += 'biggest blocker' }
+      $missingText = ($missing -join ' and ')
+      Write-Output ""
+      Write-Output "Almost ready to propose - tell me your $missingText in one line and I can name your next move."
+    }
+  }
+}
+
 # --- Tip (rotates weekly, surfaces one underused capability) ---
 # Scans brain/log.md for explicit action tags only. Counts `#used-<capability>`
 # or `#acted` lines that name the capability. Picks a capability not

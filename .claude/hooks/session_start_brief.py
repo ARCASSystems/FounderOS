@@ -291,6 +291,59 @@ def section_tip(repo: Path, today: date) -> list[str]:
     return [eligible[idx][1]]
 
 
+FOUNDER_FIELD_RE = re.compile(
+    r"^\*\*(Venture|Customer|Stage \(seed\)|Biggest blocker):\*\*\s*(.*?)\s*$"
+)
+H2_RE = re.compile(r"^##\s+(.+?)\s*$")
+
+
+def section_founder_move(repo: Path, today: date) -> list[str]:
+    """Read core/identity.md ## Founder Snapshot and report whether the brain
+    is functional enough to propose. The section exists only for founder /
+    team_of_one installs, so its presence is the founder gate. Emits:
+      READY        -> customer set plus at least one of stage / blocker
+      THIN|<gap>   -> section present but missing a core field
+      (nothing)    -> no Founder Snapshot section (non-founder install)
+    """
+    text = read_text(repo / "core" / "identity.md")
+    if text is None:
+        return []
+    in_section = False
+    fields: dict[str, str] = {}
+    for line in text.splitlines():
+        h = H2_RE.match(line)
+        if h:
+            in_section = h.group(1).strip().lower() == "founder snapshot"
+            continue
+        if not in_section:
+            continue
+        m = FOUNDER_FIELD_RE.match(line)
+        if m:
+            fields[m.group(1)] = m.group(2).strip()
+    if not fields:
+        return []
+
+    def is_set(label: str) -> bool:
+        v = fields.get(label, "").strip()
+        if not v or v.startswith("{{"):
+            return False
+        if v.startswith("[") and v.endswith("]"):
+            return False
+        return True
+
+    customer = is_set("Customer")
+    stage = is_set("Stage (seed)")
+    blocker = is_set("Biggest blocker")
+    if customer and (stage or blocker):
+        return ["READY"]
+    missing: list[str] = []
+    if not customer:
+        missing.append("customer")
+    if not stage and not blocker:
+        missing.append("biggest blocker")
+    return [f"THIN|{' and '.join(missing)}"]
+
+
 def section_observations(repo: Path, today: date) -> list[str]:
     obs_dir = repo / "brain" / "observations"
     if not obs_dir.is_dir():
@@ -329,6 +382,7 @@ def main() -> int:
     emit("weekly", section_weekly(repo, today))
     emit("compliance", section_compliance(repo, today))
     emit("decay", section_decay(repo, today))
+    emit("founder_move", section_founder_move(repo, today))
     emit("tip", section_tip(repo, today))
     if want_observations:
         emit("observations", section_observations(repo, today))

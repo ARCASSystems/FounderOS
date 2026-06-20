@@ -150,7 +150,7 @@ After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-scr
 
 ## What ships in this repo
 
-### Skills (82)
+### Skills (84)
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
@@ -210,7 +210,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 ## Tools and MCPs
 
-Founder OS does not assume your stack. Most of the 82 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+Founder OS does not assume your stack. Most of the 84 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 ---
 
@@ -278,7 +278,7 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.38.0. Public release. 82 skills, 35 commands, 689 tests.
+Version 1.39.0. Public release. 84 skills, 35 commands, 737 tests.
 
 v1.38.0 is the Ease release. It finishes the front door and the heartbeat: the skills are grouped into role packs, each opened by one front-door wedge so you arrive for one job and are invited into the rest; the OS owns git for you (say "save my work", "what changed", "undo to before this morning"); it connects a tool when you ask ("connect Telegram", "connect my calendar"); and it runs daily, weekly, and monthly routines, with a flagship that returns the three changes to make in your business now. It also completes the optional voice scaffold: on top of "add voice", you can now "add a mouth" (have answers read aloud, free and local by default), "add hands" (let it open things and save notes, with a confirm gate that stops every irreversible action for an explicit yes), and "tune" (it reads your local voice usage and proposes the next instant handler, never changing anything on its own). Voice stays optional - the OS is complete as text.
 
@@ -295,6 +295,8 @@ v1.36 adds the output bias self-check. The OS now runs a check on its own reason
 FounderOS ships in deliberate increments. Each release closes a specific gap that the previous one made visible. v1.21 added the visible queue and health check. v1.22 added the privacy tag and observation rollup. v1.23 added the natural-language capture path. v1.24 added Python preflight gates so writing and reasoning skills fail visibly when their data is not set up, rather than producing generic output silently. New releases land when there is a real gap worth closing, not on a calendar.
 
 Community forks are encouraged. If you build something on top of FounderOS, open a discussion thread linking your fork. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for what we accept and [`docs/forking.md`](docs/forking.md) for extension points.
+
+**The technical lane is left open on purpose, not built.** Founder OS is plain markdown a coder can fork and extend: turn an idea into a buildable spec, wire deeper automation through the hands layer, or add vector retrieval over the brain. None of that ships by default, because most founders do not write code and the OS does not pre-build for a user who is not in the room. The files are open if you are that user. The brain stays plain markdown either way, so nothing you add locks you in.
 
 ## Contributing and security
 

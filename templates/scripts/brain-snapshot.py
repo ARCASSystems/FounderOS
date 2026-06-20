@@ -24,6 +24,7 @@ LIST_LINE = re.compile(r"^\s*(?:[-*]|\d+\.)\s+(.+?)\s*$")
 STATUS_OPEN = re.compile(r"Status:\s*\**OPEN", re.IGNORECASE)
 H2_HEADER = re.compile(r"^##\s+(.+?)\s*$")
 H3_HEADER = re.compile(r"^###\s+(.+?)\s*$")
+FOUNDER_FIELD = re.compile(r"^\*\*(Venture|Customer|Stage \(seed\)|Biggest blocker):\*\*\s*(.*?)\s*$")
 
 
 def safe_read(path: Path) -> str:
@@ -165,6 +166,45 @@ def brand_section(root: Path) -> list[str]:
         f"- primary_color: {'[NOT SET]' if is_unset(primary_color) else primary_color}",
         f"- primary_font: {'[NOT SET]' if is_unset(primary_font) else primary_font}",
     ]
+
+
+def founder_snapshot(root: Path) -> list[str]:
+    """Read core/identity.md ## Founder Snapshot - the four fields the propose
+    engine reads (venture, customer, stage seed, biggest blocker). Returns the
+    field lines, or [] when identity.md or the section is absent (e.g. a
+    non-founder install), so the snapshot stays silent rather than emitting an
+    empty header.
+    """
+    path = root / "core" / "identity.md"
+    if not path.exists():
+        return []
+    text = safe_read(path)
+    if not text:
+        return []
+
+    in_section = False
+    fields: dict[str, str] = {}
+    for line in text.splitlines():
+        header = H2_HEADER.match(line)
+        if header:
+            in_section = header.group(1).strip().lower() == "founder snapshot"
+            continue
+        if not in_section:
+            continue
+        match = FOUNDER_FIELD.match(line)
+        if match:
+            fields[match.group(1)] = match.group(2).strip()
+
+    if not fields:
+        return []
+
+    out: list[str] = []
+    for label in ("Venture", "Customer", "Stage (seed)", "Biggest blocker"):
+        value = fields.get(label, "")
+        if value.startswith("{{"):
+            value = ""
+        out.append(f"- {label}: {'[NOT SET]' if is_unset(value) else value}")
+    return out
 
 
 def open_flags(root: Path, limit: int = 3) -> list[str]:
@@ -326,6 +366,12 @@ def build_snapshot(root: Path, today: date) -> str:
 
     out.extend(brand_section(root))
     out.append("")
+
+    fs = founder_snapshot(root)
+    if fs:
+        out.append("## Founder Snapshot")
+        out.extend(fs)
+        out.append("")
 
     flags = open_flags(root)
     out.append("## Open flags (top 3)")

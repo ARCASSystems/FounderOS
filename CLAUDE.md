@@ -259,9 +259,9 @@ Unattended while-you-sleep runs are an opt-in upgrade: sync your OS to a remote 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Routines run on-open and on-demand out of the box; unattended is the opt-in remote upgrade.
 
-## Skills (82 total)
+## Skills (84 total)
 
-The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 82 skills and 35 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
+The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 84 skills and 35 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
 
 `founder-os-setup` is the entry point. Every other skill activates from natural language ("set up my voice", "what's on for today", "help me decide") or via `/founder-os:<command>`. Say "show me what you can do" (or run `/founder-os:menu`) for a shortlist tailored to your current state.
 

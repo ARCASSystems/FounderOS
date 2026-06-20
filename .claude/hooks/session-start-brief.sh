@@ -288,6 +288,25 @@ if [ -f "$MEMORY_DIFF" ] && [ -n "$PYTHON" ]; then
   $PYTHON "$MEMORY_DIFF" "$REPO" 2>/dev/null
 fi
 
+# --- Founder next move (propose-engine nudge) ---
+# Fires only when core/identity.md carries a ## Founder Snapshot (founder /
+# team_of_one installs). READY means the brain can propose a real move; THIN
+# names the field still needed. Keeps the propose engine discoverable daily.
+FOUNDER_MOVE=$(get_section founder_move)
+if [ -n "$FOUNDER_MOVE" ]; then
+  case "$FOUNDER_MOVE" in
+    READY)
+      echo ""
+      echo "Your brain is ready - say \"what should I focus on next?\" for your move toward a paying customer."
+      ;;
+    THIN\|*)
+      MISSING=$(printf '%s' "$FOUNDER_MOVE" | cut -d'|' -f2)
+      echo ""
+      echo "Almost ready to propose - tell me your $MISSING in one line and I can name your next move."
+      ;;
+  esac
+fi
+
 # --- Tip (rotates weekly, surfaces one underused capability) ---
 # Backed by the consolidated Python pass above. Fresh-install gate, last-used
 # tracking, and weekly rotation logic all live in session_start_brief.py.

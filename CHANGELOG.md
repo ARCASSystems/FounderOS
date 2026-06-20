@@ -2,6 +2,31 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.39.0 - 2026-06-20
+
+The propose release. The OS stops waiting to be asked. Once a founder's brain holds enough, it reads where they are and names the single next move toward a paying customer, then attacks the plan behind it. Every path holds the accessibility floor: one Claude plan, no extra key, no paid service.
+
+### Add - the propose engine (`founder-next-move`)
+
+- **Say "what should I focus on next?" and the OS proposes one move, not a list.** It reads the founder's brain (the four-field Founder Snapshot, the log, the pipeline), infers their current stage (pre-idea, idea-validation, building, first-customer, revenue, mrr-scale), picks the single highest-leverage move toward a paying customer, and closes with three things they can do today: one big, two small, so they never leave with a blank screen. The North Star every proposal optimises against is the first paying customer.
+- **Stage is inferred and kept current, never a static field.** The onboarding "where are you now" answer seeds it; the engine re-reads the log every run and re-infers, so a founder who just closed a sale is read as having moved on the next morning. The six-stage model is the OS's internal lens for choosing the move, not a curriculum delivered to the founder.
+- **It handles a thin brain instead of stalling.** With a customer and a stage or a blocker it proposes a real move; with less it proposes the capture move that unlocks the rest, and never invents a customer, a stage, or a blocker. Empty states do not dead-end.
+- **Fires two ways.** On demand, and as a one-line nudge in the SessionStart brief once the brain is functional. `/next` now routes a founder to the propose engine and keeps the existing ranking for everyone else.
+
+### Add - the scope challenge (`founder-scope-challenge`)
+
+- **Say "challenge my plan" and the OS attacks the plan, not the person.** Three modes it runs on a founder's plan: Expand (the plan is too small, name the bigger move being avoided), Hold (the plan is right-sized, defend it against the next shiny thing), and Reduce (the plan is bloated, cut to the one move that reaches a customer). Brutal on the plan, human on the person. One test decides every challenge: does this reach a paying customer faster.
+
+### Add - the founder front door at setup
+
+- **The setup wizard captures the four fields the OS proposes from.** Venture in one line, who the customer is, where the founder is now, and the single biggest blocker, asked in founder-journey language, reusing what the founder already said rather than re-asking. They land in `core/identity.md` under a Founder Snapshot block, which `brain-snapshot` now surfaces so every reasoning skill reads them from the same runtime payload.
+- **A post-setup tour replaces the silent finish.** After the wizard, the OS shows the founder the files they now own, reflects their Founder Snapshot back, and gives three things to say next, so a non-technical founder is never left at a blank screen wondering what setup created.
+
+### Change - one OS, one voice for a founder
+
+- **The coaching speaks the same human-support layer as the propose engine.** First paying customer as the North Star, UAE-market ground truth where the market is the UAE (the trade moves on the ground, not just the screen), and an honest jobs off-ramp for the founder who is genuinely rethinking the venture. Brutal on the plan, human on the person, across both surfaces.
+- **Skill count moved 82 -> 84 across every parity surface.** The two new skills are reasoning-only and free-tier: they read files and reason, no key, no paid tool. The forkable technical lane (an idea-to-spec path, deeper automation, vector retrieval) stays documented as a provision for the few who code, not pre-built for a user who is not in the room.
+
 ## v1.38.0 - 2026-06-10
 
 The Ease release. The front door, the heartbeat, and the optional voice scaffold, cut from `develop` to a release. Every core path holds the accessibility floor: one paid Claude plan, no extra API key, no paid service.

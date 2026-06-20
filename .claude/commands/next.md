@@ -8,6 +8,14 @@ Recommend ONE next action across everything the founder is currently doing. This
 
 ## Procedure (in order)
 
+### Step 0. Route by operator type
+
+Before ranking, check who this is for. Read `core/profile.md` (the `variant` field) and the `## Founder Snapshot` block in `core/identity.md`, if they exist.
+
+If the variant is `founder` or `team_of_one` AND a `## Founder Snapshot` block exists in `core/identity.md`, do NOT run the generic ranking below. Run the `founder-next-move` propose engine instead. It reads the same files, infers the founder's current stage, and names the single highest-leverage move toward a paying customer with a three-option close. The engine handles a thin snapshot itself - it proposes a capture move when fields are missing - so route to it whenever the snapshot exists, even half-filled. Never send a founder who has a snapshot to the generic ranking.
+
+For every other case (no profile, a `student` / `career-mover` / `operator` variant, or no Founder Snapshot at all), continue with the ranking in Steps 1 to 5 below.
+
 ### Step 1. Verify setup
 
 Read `context/priorities.md`. If the file does not exist or only contains template placeholders, reply:

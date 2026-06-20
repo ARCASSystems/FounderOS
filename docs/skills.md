@@ -646,6 +646,28 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** Quarterly. Or when you feel like everything routes through you.
 - **Follow-up.** `sop-writer` for the shed candidate. `handoff-protocol` for the receiver. No dedicated slash command.
 
+### founder-next-move
+
+- **Say.** "what should I do next", "what's my next move", or "propose my next move".
+- **Outcome.** The single highest-leverage move toward your next paying customer, with a three-option close (one big, two small) so you always leave with a step you can start today.
+- **Reads.** `brain/.snapshot.md` (the four-field Founder Snapshot), `core/identity.md`, `core/profile.md`, `brain/log.md`, `context/clients.md`, `context/priorities.md`, `cadence/`, `brain/flags.md`.
+- **Writes.** Read-only.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete with a Founder Snapshot. Founder and team_of_one variants. A thin snapshot still proposes a capture move.
+- **When to run.** Any morning, or any time you are unsure what to do next. Also surfaced as a nudge in the SessionStart brief once the brain is functional, and through `/next` for founders.
+- **Follow-up.** `founder-scope-challenge` to stress-test the plan, or `decision-framework` for a structured choice. No dedicated slash command (reached via `/next` or natural language).
+
+### founder-scope-challenge
+
+- **Say.** "challenge my plan", "stress test this", "am I doing too much", or "talk me out of this".
+- **Outcome.** A brutal read of the plan in one of three modes - Expand (too small), Hold (right-sized, defend it), or Reduce (bloated, cut to the one move) - against one test: does this reach a paying customer faster. Brutal on the plan, never on the person.
+- **Reads.** `brain/.snapshot.md` (the Founder Snapshot), `cadence/weekly-commitments.md`, `context/priorities.md`, `brain/log.md`, `brain/flags.md`, or the plan you paste.
+- **Writes.** Read-only.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete. Founder and team_of_one variants.
+- **When to run.** Before committing weeks to a plan, or when you suspect it is too small, too bloated, or about to be abandoned for the next idea.
+- **Follow-up.** `founder-next-move` for the immediate step on the rewritten plan, `decision-framework` to weigh a direction change, or `forcing-questions` before a brand-new initiative. No dedicated slash command.
+
 ---
 
 ## Ship gate

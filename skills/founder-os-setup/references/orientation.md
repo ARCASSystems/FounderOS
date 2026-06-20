@@ -9,6 +9,43 @@ Load this last. It commits the build, detects the command prefix, opens with the
 ### 6.1 Final Commit
 Commit all company and project folders: "Add company folders and first project setup."
 
+### 6.2.0 Post-setup tour (show them what they now own)
+
+Setup just created a few dozen files silently. A non-technical founder will not go looking for them and will not trust a system they cannot see. Before the longer orientation, run a short tour that makes the new OS visible and proves the brain captured something real. Keep it warm and concrete. Do not list all forty files - list the handful they will actually touch.
+
+**1. Reflect the Founder Snapshot back (founder / team_of_one only).** If Phase 0.2.6 ran, read the four fields you just wrote to `core/identity.md` `## Founder Snapshot` and say them back in plain language. This is the moment the founder sees their own brain on the page:
+
+> "Here is what your OS now knows about you and your venture:
+> - Venture: [venture one-liner]
+> - Customer: [customer]
+> - Where you are: [stage in plain words]
+> - Biggest blocker: [biggest blocker]
+>
+> That is enough for the OS to start proposing real moves. It gets sharper every time you use it."
+
+If any of the four is `[NOT SET]`, say so honestly and offer the one-line fix: "Your biggest blocker is still blank - tell me in one line any time and I will add it." Do not paper over a blank with a guess. For non-founder variants (no Founder Snapshot), skip this point.
+
+**2. Show the six files they now own.** Name them with a one-line, plain-English purpose each. These are the files a founder actually opens, not the engine files:
+
+> "Six files run your day. They are plain text on your machine - yours to read, edit, back up, or move:
+> - `core/identity.md` - who you are and your venture snapshot
+> - `context/priorities.md` - what matters right now
+> - `cadence/weekly-commitments.md` - this week's plan
+> - `brain/log.md` - your running journal, the OS's memory
+> - `context/clients.md` - your customers and pipeline
+> - `brain/flags.md` - open loops and things to come back to
+>
+> You never have to edit these by hand. Just talk to the OS and it keeps them current. But they are there, in the open, whenever you want to look."
+
+**3. The three things to say next.** Give the founder exactly three next moves, in natural language, so they leave with something to do instead of a blank screen:
+
+> "Three things to try right now:
+> 1. Ask 'what should I focus on next?' (or run `/next`) - the OS gives you one recommended move toward your next paying customer.
+> 2. Ask 'what's on for today?' (or run `/today`) - a one-screen view of your day.
+> 3. Say 'set up my voice' - a 10-minute step so every post, email, and proposal the OS writes sounds like you, not like a robot. (The exact command is in the next message.)"
+
+Keep the three to three. More than three next steps is the overwhelm this OS exists to remove. The voice step is also covered in 6.2 Step 1 with the path-correct command, so here it stays natural-language only and does not need the prefix.
+
 ### 6.2 Orient the User
 Show the user what they have AND the next two profile steps. The wizard creates the operating layer, but the writing skills are gated on the voice and brand profiles - tell them this directly.
 

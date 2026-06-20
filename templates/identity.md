@@ -31,6 +31,17 @@
 
 ---
 
+## Founder Snapshot
+
+> The four fields the OS reads before it proposes a next move. Thin on day one, sharper as the brain fills. Keep these current - they are what the OS reasons over. Founder and team_of_one variants only; the setup wizard omits this whole section for other operators.
+
+**Venture:** {{VENTURE_ONELINER}} (what you are building, in one line)
+**Customer:** {{FOUNDER_CUSTOMER}} (who it is for - who you are trying to win first)
+**Stage (seed):** {{STAGE_SEED}} (one of: pre-idea, idea-validation, building, first-customer, revenue, mrr-scale. Seeded at setup from your own words. The OS re-reads your log and re-infers your stage each time it proposes, so this is a starting read, not a fixed label.)
+**Biggest blocker:** {{BIGGEST_BLOCKER}} (the single thing between you and your next paying customer)
+
+---
+
 ## How They Work
 
 **Work style:** {{WORK_STYLE}} (e.g. sequential tasks, parallel threads, deep work blocks)

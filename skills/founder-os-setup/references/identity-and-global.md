@@ -32,6 +32,15 @@ The `## Positioning` section is load-bearing. Populate:
 
 If any positioning answer was skipped, write `[NOT SET]` for that line. Do not invent a buyer, offer, or pain.
 
+The `## Founder Snapshot` section is the block the OS reads before it proposes a next move. It only exists for the `founder` and `team_of_one` variants - if Phase 0.2.6 was skipped (operator / student / career-mover), omit the whole section. When 0.2.6 ran, populate the four fields from it:
+
+- `**Venture:**` from the 0.2.6 venture one-liner (the confirmed one-line version of 0.1).
+- `**Customer:**` from the 0.2.6 customer answer. This is the same source as `## Positioning` `**Sells to:**` for a founder; write it in both places so each block stands alone.
+- `**Stage (seed):**` as `<token> - <the founder's own words>`, where the token is the `stage` value mapped in 0.2.6 (pre-idea / idea-validation / building / first-customer / revenue / mrr-scale). Keep the line that says the OS re-infers stage each run - it tells the propose engine this is a seed, not a fixed field.
+- `**Biggest blocker:**` from the 0.2.6 `biggest_blocker`, verbatim.
+
+If any of the four was skipped, write `[NOT SET]` for that line. Do not invent a venture, customer, stage, or blocker - a thin-but-honest snapshot is what the propose engine is built to handle.
+
 The `## Basics` section also takes a discovery answer: populate `**Time zone:**` from the Phase 0.5.5 timezone answer. If it was skipped, write `[NOT SET]`. Leave `**Jurisdiction:**` as the shipped `[NOT SET - run /founder-os:legal-setup]` default - `legal-setup` fills it on first run.
 
 Show the draft. Get approval. Don't write yet.

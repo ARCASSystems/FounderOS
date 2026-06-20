@@ -96,6 +96,41 @@ These answers populate `core/identity.md` under `## Positioning`, which `linkedi
 
 **Backward compatibility (parse-everything-at-once path).** If the founder answers with all three in one reply ("I sell to UAE SMEs, I sell brand and web projects, they feel embarrassed by a website that no longer matches the business"), parse all three, mark the section answered, and skip the remaining prompts in this phase. Confirm what was captured in one line. Do not re-ask.
 
+### 0.2.6 The Founder Snapshot
+
+This is the part the OS proposes from. Four fields make the brain "functional enough to propose": **the venture in one line, who the customer is, where the founder is right now, and the single biggest blocker.** The OS proposes off these four even when they are thin and sharpens as the brain fills. Capturing them here is what lets the OS name a real first move instead of returning generic advice.
+
+**Run this for the `founder` and `team_of_one` roles** (captured in 0.2.1). For `operator`, `student`, or `career-mover` variants, skip this phase - the four fields are founder-journey fields and do not fit those operators. Log the skip and move on.
+
+Two of the four are usually already answered. Do NOT re-ask. Reuse and confirm:
+
+- **Venture (one line):** reuse the one-sentence business from 0.1. If it is already a clean one-liner, confirm it in one line: "So the venture in one line is: [their words]. That right?" Only ask fresh if 0.1 was vague or covered several businesses: "If you had to put the main venture in one line, what is it?"
+- **Customer:** reuse 0.2.5 question 1 ("who do you sell to"). If they answered it, confirm in the same breath as the venture. If they skipped it, ask gently in founder language: "Who is your first customer - who are you trying to win first? You can say skip."
+
+Then ask the two new fields, one at a time. One question, one line. Both skip-able.
+
+**Q1 - Where are you now?** "Where are you on the journey right now? Pick the closest: just had the idea / testing if people want it / building it / chasing the first paying customer / already have paying customers / growing steady revenue. You can say skip."
+
+Map the answer to a `stage` token (this SEEDS the stage - the propose engine re-infers it from the log on every run, so it is a starting read, never a fixed label):
+
+- "just had the idea" / "still an idea" / "thinking about it" -> `pre-idea`
+- "testing if people want it" / "validating" / "talking to people" / "no product yet" -> `idea-validation`
+- "building it" / "making the product" / "pre-launch" / "heads down building" -> `building`
+- "chasing the first paying customer" / "trying to sell" / "no revenue yet" / "launched, no customers" -> `first-customer`
+- "have paying customers" / "made some sales" / "early revenue" -> `revenue`
+- "growing steady revenue" / "recurring revenue" / "scaling" / "MRR" -> `mrr-scale`
+- unclear or skipped -> `[NOT SET]` (do not guess a stage)
+
+Keep the founder's own words too. The stage seed is written as `<token> - <their words>` so the propose engine has both the lens and the texture.
+
+**Q2 - Biggest blocker.** "What is the single biggest thing standing between you and your next paying customer right now? One line. You can say skip."
+
+Record the answer verbatim as `biggest_blocker`. If they skip, record `[NOT SET]`. Do not invent a blocker.
+
+These four fields write to `core/identity.md` under `## Founder Snapshot` in Phase 1.1. The propose engine reads that block before it names a move, so a skipped field shows as `[NOT SET]` rather than a guess.
+
+**Backward compatibility (parse-everything-at-once path).** If the founder already gave you the venture, customer, stage, and blocker across earlier answers ("I'm building a pomegranate import business, supply is sorted from Afghanistan, I just need to crack the UAE market"), parse all of it - venture, customer, an inferred stage, and the blocker - mark the section answered, and skip the prompts. Confirm what was captured in one line. Do not re-ask.
+
 ### 0.3 Active Workstreams
 For EACH business: "What are you actively working on right now in [business name]? Examples: website, email campaigns, lead generation, content, product development, client delivery, hiring."
 
