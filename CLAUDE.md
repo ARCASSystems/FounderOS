@@ -199,7 +199,7 @@ You do not need Agent Teams to run Founder OS. Subagents are the stable default 
 **How to enable:**
 
 1. Set the environment variable: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
-2. Use Opus 4.6 as your model
+2. Use Opus 4.8 as your model
 3. Restart Claude Code
 
 No other config needed. Founder OS skills and commands work the same way. The flag only changes how multi-agent workflows execute under the hood.

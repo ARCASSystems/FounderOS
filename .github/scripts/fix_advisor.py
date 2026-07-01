@@ -139,8 +139,9 @@ def main() -> None:
     client = anthropic.Anthropic(api_key=api_key)
 
     message = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-sonnet-5",
         max_tokens=1024,
+        thinking={"type": "disabled"},
         system=[
             {
                 "type": "text",
@@ -165,7 +166,7 @@ def main() -> None:
 {recommendation}
 
 ---
-*Fix advisor powered by Claude (`claude-sonnet-4-6`). \
+*Fix advisor powered by Claude (`claude-sonnet-5`). \
 Audit script: `.github/scripts/audit.py`*
 """
 
