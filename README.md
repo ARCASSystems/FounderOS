@@ -69,6 +69,8 @@ One Claude subscription. Everything else is free.
 
 Founder OS is built for Claude Code: the setup wizard, the slash commands, and the SessionStart and Stop hooks all run there. A paid Claude plan is the only real cost - free tiers usually don't have the context for this to work well. The files themselves are plain markdown and travel with you, so you can read them in any AI you paste them into, but the wizard, commands, and hooks run in Claude Code. You are not locked in.
 
+**Which model?** Any current Claude model runs the OS - Opus for judgment-heavy work, Sonnet for everyday speed, Haiku for quick mechanical tasks. It is not pinned to a model, so newer is always fine. To match the model to the task, see [docs/model-routing.md](docs/model-routing.md).
+
 ---
 
 ## Before you install
