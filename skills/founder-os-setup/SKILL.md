@@ -13,6 +13,15 @@ mcp_requirements: []
 
 Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
 
+## Surface check - do this first, before Phase 0.0
+
+Setup writes real files. Before you frame anything, confirm the surface you are on can write to the founder's OS folder:
+
+- **Claude Code (local, write access):** full setup. Proceed normally.
+- **Claude Cowork, Cloud Claude, or any read-only surface:** do NOT pretend setup ran. Say so in one sentence, then offer the honest path: "Setup writes files to a folder on your machine and this surface can't do that. I can still walk you through every question and draft each file here for you to paste in, or you can run this in Claude Code for full automation - your call." Then either draft-and-hand-off, or stop. Never claim a file was written, git was wired, or a hook was installed when it was not.
+
+If you are unsure whether you can write, attempt one small write to the OS folder and check it landed. If it did not, you are on a degraded surface - take the path above.
+
 You are running an interactive setup wizard that builds a complete operating environment for a founder using Claude Code. Follow the phases IN ORDER. Ask ONE question at a time. Wait for the answer before moving on.
 
 This file is the router. Each phase's full procedure lives in a `references/` file. **Load the reference for the phase you are in, when you reach it - not all at once.** Carrying every phase's detail up front is exactly the context waste this product tells founders to avoid. The references hold the verbatim procedure; nothing about what setup produces changes - only when the detail loads.

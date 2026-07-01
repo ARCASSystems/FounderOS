@@ -115,8 +115,20 @@ You never need to use the OS terms. Say what feels natural.
 - Open `[company]/[project]/` for execution work
 - Claude loads the right context based on where you are."
 
-### 6.3 Backlog
+### 6.3 Backlog and finish line
 Show any skipped or deferred items from the setup. Save them to `core/setup-backlog.md` as a simple markdown list under the heading `## Setup Backlog`. Create the file if it does not exist. Do not scatter deferred items across other files.
+
+Echo the backlog back in the session, split so the founder knows what actually blocks them versus what can wait:
+
+> "A few things we skipped, saved to `core/setup-backlog.md`:
+> - **Worth doing before your first proposal or post:** [any `[NOT SET]` positioning, voice, or brand items]
+> - **Whenever you like:** [observation logging, the private-name guard, other optional items]"
+
+If nothing was skipped, say so in one line and move on. Do not invent backlog items to fill the list.
+
+**Then close with an explicit finish line.** A non-technical founder needs to be told they are done, or they wait for a next step that never comes:
+
+> "That is setup. Your Founder OS is live. Next time you open Claude Code in this folder, the SessionStart brief surfaces your week in one screen. You are ready to work - ask 'what should I focus on next?' whenever you are."
 
 ---
 

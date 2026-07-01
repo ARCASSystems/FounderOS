@@ -12,6 +12,9 @@ Early conversations. Not yet scoped.
 | Name / Company | Context | Next step | Last contact |
 |---------------|---------|-----------|-------------|
 | [FILL] | [FILL] | [FILL] | [FILL] |
+<!-- Shape of a real row (delete this line once you add your own): one-line context, one concrete next action, ISO date. e.g. | Acme Studio | Referral from a past client, ~15 people, wants a brand refresh | Discovery call booked Tue 2pm | 2026-06-24 | -->
+
+The other four stages use the same shape: keep Context/Scope to one line, make Next step a concrete action, and date the Last contact.
 
 ### Scoped
 Needs have been understood. A proposal or offer is possible.
