@@ -33,7 +33,7 @@ The `add-voice` skill installs it in tiers, and the default holds the accessibil
 - **Tier 1 (realtime, free key):** sub-second spoken conversation - say "add voice --realtime". A realtime model speaks in its own voice while the no-key CLI you already run stays the back-brain that reads your files. Opt-in: the free Google AI Studio key has a free daily quota on Flash models and heavy use can move onto paid rates, stated before you commit.
 - **Tier 2 (premium mouth, paid):** ElevenLabs for broadcast-quality voice out. A deliberate spend, never a default.
 
-Full detail lives in the skill: `skills/add-voice/references/tiers.md` and `voice-model-disclaimer.md`.
+Full detail lives in the skill: `skills/add-voice/references/tiers.md` and `voice-model-disclaimer.md`. If you go realtime (Tier 1), read `skills/add-voice/references/realtime-architecture.md` first - especially the section on state the realtime front does not have (it has no clock and no memory across wakes; the real time and the real context get injected at every session boundary, never guessed).
 
 ## The honest shape of it
 

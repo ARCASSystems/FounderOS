@@ -23,6 +23,34 @@ This split is why a long answer never freezes the voice, and why business facts 
 files instead of guessed. It is the public, persona-free form of the same architecture the private
 build proved.
 
+## State the front does not have (inject it, never let it guess)
+
+The front holds only the live session. It has zero memory across wakes, and it has no clock. But a
+spoken persona invites it to SOUND continuous, so left alone it fabricates the state it is missing:
+a time of day, a "him" or "that" from a conversation it never saw, a fact it half-remembers. The
+private build hit exactly this - on a 2 a.m. wake the voice cheerfully announced it was half past
+nine and offered the morning brief, because no real clock had been handed to it and the greeting
+assumed morning.
+
+The fix is plumbing, not a smarter model, and it is the same shape every time: make the missing
+state explicit and hand it over at the boundary.
+
+- **Clock: injected per wake.** Every new realtime session gets the real local date and time
+  prepended to its instructions, recomputed at that moment - never cached at server start, or the
+  clock freezes at whenever the server came up. The instruction states plainly: this is the real
+  current time, use it, never state any other time.
+- **Continuity: lives in the files, never in the model's head.** The front is a fresh session every
+  wake. Anything that must survive - what was said, what was decided, who "him" refers to - is
+  written to the brain files and read back through `query_brain`, not trusted to session memory.
+- **The desk model.** Think of the front as the desk: only what is placed on it this session
+  exists. The repo of markdown files is the filing cabinet: everything durable lives there, and the
+  back-brain reads from it fresh on every call. The desk is rebuilt from the cabinet at every
+  boundary, so nothing depends on the desk remembering.
+
+If you extend the voice layer, keep this rule: any state the front needs, inject it at session
+start or fetch it through a tool. A front that guesses state it does not have will state it with
+full confidence, and a confident wrong time is worse than a pause.
+
 ## Engage instantly. Pause only when you ask.
 
 Realtime changes the rule. In Tier 0 a slow turn says "give me a moment". In Tier 1 that is the
