@@ -222,6 +222,7 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/founder-os:query <question>` - return the top 3 to 5 OS nodes for a question.
 - `/founder-os:brain-pass "<question>"` - synthesised answer across the brain layer with stable-ID citations.
 - `/founder-os:audit` - composite health report across readiness, lint, wiki, brain, and voice.
+- `/founder-os:housekeeping [fix]` - one maintenance sweep. Detect (default): every debt item with its fix command, read-only. `fix`: reversible fixes in dependency order plus a judgment punch-list. Say "run housekeeping".
 - `/founder-os:forcing-questions <initiative>` - six-question gate before new work starts.
 - `/founder-os:devil <claim>` - devil's advocate; runs the output bias self-check (`rules/biases.md`) against a claim or decision. Read-only.
 - `/founder-os:ship-deliverable <path>` - final read-only gate before an external deliverable is sent.
@@ -261,9 +262,9 @@ Unattended while-you-sleep runs are an opt-in upgrade: sync your OS to a remote 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Routines run on-open and on-demand out of the box; unattended is the opt-in remote upgrade.
 
-## Skills (86 total)
+## Skills (87 total)
 
-The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 86 skills and 37 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
+The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 87 skills and 38 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
 
 `founder-os-setup` is the entry point. Every other skill activates from natural language ("set up my voice", "what's on for today", "help me decide") or via `/founder-os:<command>`. Say "show me what you can do" (or run `/founder-os:menu`) for a shortlist tailored to your current state.
 

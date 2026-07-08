@@ -2,6 +2,36 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.40.1 - 2026-07-08
+
+The Second Brain release, wave two: memory that provably survives, retrieval that stays cheap as the brain grows, and money math that speaks the operator's business model. Same accessibility floor: one Claude plan, no key, no paid service, no git required.
+
+### Add - save before you forget (PreCompact memory flush)
+
+- **A PreCompact hook fires when the session context is about to be compacted.** It instructs the model to carry every unwritten decision, commitment, status change, and captured fact through the summary and write them to the brain files immediately after - `brain/log.md`, `brain/flags.md`, `context/clients.md`, `brain/decisions-parked.md`. Continuity lives in the files, never in summary prose. Ships as a .sh/.ps1 pair, wired in `settings.json`, copied by setup, quiet outside a set-up install.
+
+### Add - the housekeeping sweep (retrieval quality IS memory quality)
+
+- **Say "run housekeeping" and every piece of accumulated OS debt lands on one screen**, each line with its severity and exact fix command: stale cadence, rants aging unprocessed, log past its cap, stale wiki graph and snapshot, broken links, decay-due flags, client folders with no memory entry, ACTIVE quarantine entries, and skill health. Detect mode is read-only, always.
+- **"housekeeping fix" clears the reversible half in dependency order** - anchor bump, dream, log archive, unambiguous pointer repoints, wiki-build, snapshot refresh - narrating each step, then hands back a punch-list of the judgment calls and a verify table filled by re-reading each side-effect, never by trusting an exit code. Judgment items (the weekly review, link triage, keep/kill calls) are never run unattended.
+- **New `scripts/skill_health.py`** detects description bloat (over 900 chars warn, over 1024 fail - the silent-install risk) and dead skill pointers. Its first run against this repo caught a real dead pointer in `log-reply`, now fixed.
+
+### Change - boot from the snapshot once the brain has grown
+
+- **Measured day-one boot at ~8k tokens against a ~5k target**, most of it in files that grow with use. The bootloader now orients from `brain/.snapshot.md` when it is fresh (open flags, must-do, recent decisions, staleness in a few hundred tokens) and opens `context/decisions.md`, `context/clients.md`, `brain/flags.md`, and `brain/log.md` only when the task touches that domain. A stale snapshot falls back to full reads and offers the refresh - it is never treated as current state.
+- **The provenance rule is now stated in `rules/approval-gates.md`:** authored files (identity, voice, brand, rules) are yours and the OS only proposes; accumulated memory (log, flags, MEMORY.md facts) is the OS's write zone and what memory-pass audits; dated working notes are written once and aged out. The gates existed; now the rule they enforce has a name.
+- **The SessionStart brief's silence contract is documented:** sections print only when they have something to report, so a clean OS opens near-silent and anything the brief says deserves attention.
+
+### Add - the OS knows how the business makes money
+
+- **A `business_model` axis in `stack.json`** (service / ecommerce / saas_software / marketplace / content_creator / regulated_deep_tech / other), captured at setup by inference-and-confirm rather than a cold question, never guessed. Role said who; stage said where; this says how the money works.
+- **`unit-economics` leads with the model's numbers:** utilization and day rate for services, contribution margin and inventory turns for ecommerce, MRR and churn for SaaS, GMV, take rate, and liquidity for marketplaces, RPM and income concentration for creators. Textbook-stable mappings - determinism is honest here.
+- **The domain-honesty rule for regulated and deep-tech operators**, stated once at setup and enforced in the money layer: the OS carries capture, decisions, cadence, memory, and accounting-level math for any business; it does not generate compliance, science, or clinical judgment, and it routes those to the operator's own expertise instead of improvising. A confident wrong domain assumption survives review precisely because it looks like the other numbers - so it is never produced.
+
+### Cross-cutting
+
+- Skill count 86 -> 87, command count 37 -> 38 across every parity surface. Everything new is free-tier: file reads, local scripts, no key, no paid tool. `memory-pass` was already ported in v1.32; this wave audited it rather than duplicating it.
+
 ## v1.40.0 - 2026-07-08
 
 The Second Brain release. It attacks the value equation directly: less effort to own the system (install is three steps and nothing typed), less delay before it earns its keep (capture works from your phone the same day), and more proof it deserves trust (an undo floor with no prerequisites, a security story with receipts). Every path holds the accessibility floor: one Claude plan, no extra key, no paid service, and now - no git.

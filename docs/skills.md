@@ -178,6 +178,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** Weekly. Or before a major rebuild.
 - **Follow-up.** Each failed section names the skill that fixes it. Slash command: `/founder-os:audit`.
 
+### housekeeping
+
+- **Say.** "run housekeeping", "clean up the OS", or "what maintenance is due".
+- **Outcome.** Detect mode (default): one read-only screen of every piece of accumulated debt - stale cadence, aging rants, log bloat, stale wiki graph and snapshot, broken links, decay-due flags, memory gaps, quarantine, skill health - each with severity and the exact fix command. Fix mode ("housekeeping fix"): the reversible fixes run in dependency order, then a punch-list of the judgment calls plus a verify table filled by re-reading each side-effect.
+- **Reads.** Cadence headers, `brain/rants/`, `brain/log.md`, `brain/relations.yaml`, `brain/flags.md`, `system/quarantine.md`, `brain/.snapshot.md`; runs `scripts/memory-diff.py` and `scripts/skill_health.py`.
+- **Writes.** Detect: nothing. Fix: only the reversible AUTO items (anchor bump, dream, log archive, unambiguous pointer repoints, wiki-build, snapshot refresh).
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete.
+- **When to run.** Weekly, a natural pair with the weekly review. Detect any time.
+- **Follow-up.** Clear the punch-list items yourself - the skill never makes judgment calls. Slash command: `/founder-os:housekeeping [fix]`.
+
 ### lint
 
 - **Say.** "lint the wiki", "find broken links", or "what's stale".

@@ -163,7 +163,7 @@ After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-scr
 
 ## What ships in this repo
 
-### Skills (86)
+### Skills (87)
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
@@ -171,7 +171,7 @@ The skills are organised into **role packs**, each a function a solo founder cov
 
 One to call out is the **LinkedIn pack**: say "help me with my LinkedIn", pick an outcome (leads, a better job, a louder brand, or a healthier network), and the OS aims your own data export at it - a ranked outreach worklist, a deep network audit, dormant-contact revival, and an algorithm-aware content direction. All local, free-plan, within LinkedIn's terms - no scraper, no automated actions, message content never read.
 
-### Slash commands (37)
+### Slash commands (38)
 
 Every command has a natural-language equivalent - slash commands are speed shortcuts for power users, not the primary surface. Full reference with outcomes, args, and follow-ups in [`docs/commands.md`](docs/commands.md).
 
@@ -223,7 +223,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 ## Tools and MCPs
 
-Founder OS does not assume your stack. Most of the 86 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+Founder OS does not assume your stack. Most of the 87 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 ---
 
@@ -295,7 +295,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.40.0. Public release. 86 skills, 37 commands. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.40.1. Public release. 87 skills, 38 commands. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+
+v1.40.1 is the Second Brain release's second wave: memory and money. A PreCompact hook flushes unsaved session facts into the brain files before the context is compacted, so nothing load-bearing dies in a summary. Boot got cheaper on grown installs - the OS orients from a compact snapshot and opens the full files only when the task needs them. A housekeeping sweep keeps a months-old brain honest: one screen of accumulated debt with a fix command per line, and a supervised fix mode for the reversible half. And the OS now knows how your business makes money - a business-model axis captured at setup drives which numbers lead in every money conversation, with a plainly stated honesty rule for regulated and deep-tech operators: accounting math yes, invented domain assumptions never.
 
 v1.40.0 is the Second Brain release. It attacks the distance between you and owning the system. Install is now three steps and nothing typed: download the ZIP, extract, say "set up Founder OS" - git is gone from the prerequisites, and when you want full version history the OS installs and wires git itself on one consent-gated yes ("own my history"). Until then a pre-git undo floor covers you: every file the OS touches is snapshotted before every write, and "what did you change" returns the per-session manifest with a one-command restore per file. Capture now works away from the laptop: drop phone dictations, voice-note exports, or pasted saved-messages piles anywhere they can land as text, say "catch up", and the OS files them into the brain through a self-teaching names glossary that corrects known mis-hearings and never guesses unknown ones. The local-first security story is now written down with the 2026 record as the counterfactual (docs/why-local-first.md), and CI gained a hooks-parity gate so every hook provably ships for both bash and PowerShell.
 

@@ -90,6 +90,16 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **When to run.** Weekly, or whenever the OS feels stale, or before a major rebuild.
 - **Follow-up.** Each failed section names the skill that fixes it (`lint`, `wiki-build`, `dream`, `voice-interview`).
 
+### `/founder-os:housekeeping [fix]`
+
+- **Or say.** "run housekeeping" / "clean up the OS" / "what maintenance is due"
+- **Outcome.** Default: a read-only DETECT block - every piece of accumulated OS debt on one screen, each line with severity and its exact fix command. With `fix`: the reversible fixes run in dependency order, then a punch-list of judgment calls and a verify table.
+- **Args.** Optional `fix`.
+- **Writes.** Detect: read-only. Fix: only reversible AUTO items (anchor bump, rant processing, log archive, unambiguous pointer repoints, wiki graph, snapshot refresh).
+- **Prereqs.** `/founder-os:setup` complete.
+- **When to run.** Weekly, alongside the weekly review. Detect mode any time you wonder what has piled up.
+- **Follow-up.** Work the punch-list. `/founder-os:audit` for the composite health view.
+
 ### `/founder-os:lint`
 
 - **Or say.** tool invocation (run `/founder-os:lint` directly)

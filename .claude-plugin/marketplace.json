@@ -7,7 +7,7 @@
   },
   "metadata": {
     "description": "Founder OS plugin and operating-system tools for owners",
-    "version": "1.40.0"
+    "version": "1.40.1"
   },
   "plugins": [
     {
@@ -16,8 +16,8 @@
         "source": "github",
         "repo": "ARCASSystems/FounderOS"
       },
-      "description": "Operating system for owners: 6 role modes, 86 skills, 37 commands, zero-git ZIP install with a consent-gated graduation to full version history (\"own my history\"), per-session change snapshots with one-command restore, capture-anywhere inbox with a self-teaching names glossary, invisible version control (say \"save my work\", \"what changed\", \"undo to before this morning\", \"back this up\"), on-demand liveness reads (/strategic-read for a 5-section state-of-the-OS report, /log-reply for thread ingest, /since-last-session for the delta since the marker), brand voice layer (operator voice + per-brand voice for multi-brand ecosystems), campaign-from-theme with funnel gating, review-responder for incoming customer messages, execution queue with 3-item ACTIVE cap, substrate health check, voice and brand profiles, business-context loader, brain log, knowledge notes, stable entry IDs, token-aware progressive query, opt-in observation log, weekly observation rollup, private-tag exclusion filter, graph query, audit report, stall detection, revenue loop enforcement, readiness check, source ingest, wiki lint, wiki graph builder, approval gates, delivery ship checks, legal reference layer, runtime brain snapshot, brain-pass synthesis, today brief wrapper, and a natural-language menu of capabilities tailored to current state",
-      "version": "1.40.0",
+      "description": "Operating system for owners: 6 role modes, 87 skills, 38 commands, zero-git ZIP install with a consent-gated graduation to full version history (\"own my history\"), per-session change snapshots with one-command restore, capture-anywhere inbox with a self-teaching names glossary, invisible version control (say \"save my work\", \"what changed\", \"undo to before this morning\", \"back this up\"), on-demand liveness reads (/strategic-read for a 5-section state-of-the-OS report, /log-reply for thread ingest, /since-last-session for the delta since the marker), brand voice layer (operator voice + per-brand voice for multi-brand ecosystems), campaign-from-theme with funnel gating, review-responder for incoming customer messages, execution queue with 3-item ACTIVE cap, substrate health check, voice and brand profiles, business-context loader, brain log, knowledge notes, stable entry IDs, token-aware progressive query, opt-in observation log, weekly observation rollup, private-tag exclusion filter, graph query, audit report, stall detection, revenue loop enforcement, readiness check, source ingest, wiki lint, wiki graph builder, approval gates, delivery ship checks, legal reference layer, runtime brain snapshot, brain-pass synthesis, today brief wrapper, and a natural-language menu of capabilities tailored to current state",
+      "version": "1.40.1",
       "strict": true
     }
   ]
