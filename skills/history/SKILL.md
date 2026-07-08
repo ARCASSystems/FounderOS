@@ -18,6 +18,7 @@ Show the founder their saved versions as readable, dated events. Wraps git log s
 
 - If `core/identity.md` does not exist, stop with: `Founder OS not set up here. Run /founder-os:setup first.`
 - If `scripts/caveman_git.py` does not exist, stop with: `Version control helper not found. Run /founder-os:update to install it.`
+- If git is not installed or the folder has no `.git/` directory (a ZIP install that has not graduated yet), do not error. Show what the session-change tracker knows instead (`python scripts/session_changes.py --print`), then say: `That is this session's changes. For a full permanent timeline, say "own my history" and I will set it up for you.`
 
 ## Procedure
 

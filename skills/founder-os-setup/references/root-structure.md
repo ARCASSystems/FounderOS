@@ -61,7 +61,8 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── caveman_git.py           # From templates/scripts/caveman_git.py (invisible version control: the save, history, restore, backup verbs)
 │   ├── connect.py               # From templates/scripts/connect.py (connector helper: gitignored-only secret writer + Telegram reachability check, for the connect skill)
 │   ├── what-to-change.py        # From templates/scripts/what-to-change.py (deterministic candidate gatherer for the what-to-change flagship routine: parked filter + dated gate + resolvable citations)
-│   └── log-archive.py           # From templates/scripts/log-archive.py (ages brain/log.md past its cap into brain/archive/log-YYYY-MM.md - the running-log half of the context discipline)
+│   ├── log-archive.py           # From templates/scripts/log-archive.py (ages brain/log.md past its cap into brain/archive/log-YYYY-MM.md - the running-log half of the context discipline)
+│   └── session_changes.py       # From templates/scripts/session_changes.py (session-changes tracker: snapshot-before-write, per-session manifest, /changes, one-command restore)
 ├── cadence/
 │   ├── daily-anchors.md         # From templates/cadence/daily-anchors.md
 │   ├── weekly-commitments.md    # Personalized with their current priorities
@@ -107,14 +108,18 @@ Create the full folder structure. Read each template before generating the perso
         ├── session-close-autosave.ps1       # Copied from <plugin-root>/.claude/hooks/session-close-autosave.ps1
         ├── post-tool-use-observation.sh     # Copied from <plugin-root>/.claude/hooks/post-tool-use-observation.sh (opt-in, off until FOUNDER_OS_OBSERVATIONS=1)
         ├── post-tool-use-observation.ps1    # Copied from <plugin-root>/.claude/hooks/post-tool-use-observation.ps1 (opt-in, off until FOUNDER_OS_OBSERVATIONS=1)
+        ├── pre-tool-use-snapshot.sh         # Copied from <plugin-root>/.claude/hooks/pre-tool-use-snapshot.sh (session-changes tracker: snapshot before every write)
+        ├── pre-tool-use-snapshot.ps1        # Copied from <plugin-root>/.claude/hooks/pre-tool-use-snapshot.ps1
+        ├── session-close-changes.sh         # Copied from <plugin-root>/.claude/hooks/session-close-changes.sh (renders the per-session change manifest at Stop)
+        ├── session-close-changes.ps1        # Copied from <plugin-root>/.claude/hooks/session-close-changes.ps1
         └── session_start_brief.py           # Copied from <plugin-root>/.claude/hooks/session_start_brief.py (Python helper that session-start-brief.sh calls on Linux/Mac)
 ```
 
 Show the full list of files that will be created. Get approval. Then create them all.
 
-**Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, session-close autosave, user-prompt capture, and post-tool-use observation hooks live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Resolve the plugin source path the same way Phase 2.2 already does (one of the three named install methods: Plugin, Git clone, or Curl), then copy all thirteen hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. The thirteen hook files are: `session-start-brief.sh`, `session-start-brief.ps1`, `session-start-liveness.sh`, `session-start-liveness.ps1`, `user-prompt-capture.sh`, `user-prompt-capture.ps1`, `session-close-revenue-check.sh`, `session-close-revenue-check.ps1`, `session-close-autosave.sh`, `session-close-autosave.ps1`, `post-tool-use-observation.sh`, `post-tool-use-observation.ps1`, and `session_start_brief.py` (the Python helper that `session-start-brief.sh` calls on Linux/Mac to compute the staleness, decay, and tip sections of the brief; the `.ps1` inlines this logic so Windows does not strictly need it, but copy it so cross-platform installs get the full brief). This must match every script referenced by `settings.json` across all hook events (SessionStart, UserPromptSubmit, Stop, PostToolUse); if any are missing from the founder's `.claude/hooks/`, the SessionStart brief, capture hooks, or Stop hooks fail silently. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, UserPromptSubmit, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
+**Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, session-close autosave, user-prompt capture, and post-tool-use observation hooks live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Resolve the plugin source path the same way Phase 2.2 already does (one of the named install methods: Plugin, Git clone, Curl, or ZIP), then copy all seventeen hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. The seventeen hook files are: `session-start-brief.sh`, `session-start-brief.ps1`, `session-start-liveness.sh`, `session-start-liveness.ps1`, `user-prompt-capture.sh`, `user-prompt-capture.ps1`, `session-close-revenue-check.sh`, `session-close-revenue-check.ps1`, `session-close-autosave.sh`, `session-close-autosave.ps1`, `session-close-changes.sh`, `session-close-changes.ps1`, `pre-tool-use-snapshot.sh`, `pre-tool-use-snapshot.ps1`, `post-tool-use-observation.sh`, `post-tool-use-observation.ps1`, and `session_start_brief.py` (the Python helper that `session-start-brief.sh` calls on Linux/Mac to compute the staleness, decay, and tip sections of the brief; the `.ps1` inlines this logic so Windows does not strictly need it, but copy it so cross-platform installs get the full brief). This must match every script referenced by `settings.json` across all hook events (PreToolUse, SessionStart, UserPromptSubmit, Stop, PostToolUse); if any are missing from the founder's `.claude/hooks/`, the SessionStart brief, capture hooks, snapshot tracker, or Stop hooks fail silently. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the SessionStart, Stop, UserPromptSubmit, and PostToolUse hook entries. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
-**Scripts copy step (mandatory).** Copy all nineteen Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
+**Scripts copy step (mandatory).** Copy all twenty Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
 
 - `templates/scripts/_common.py` → `scripts/_common.py` (shared helper module - `wiki-build.py` and `query.py` both `import` from it; if it is missing, `/founder-os:wiki-build` and `/founder-os:query` hard-error with `ModuleNotFoundError` on first run)
 - `templates/scripts/wiki-build.py` → `scripts/wiki-build.py` (used by `/founder-os:wiki-build`)
@@ -135,6 +140,7 @@ Show the full list of files that will be created. Get approval. Then create them
 - `templates/scripts/connect.py` → `scripts/connect.py` (connector helper behind the `connect` skill: the gitignored-only secret writer and the Telegram reachability check; without it `connect` cannot store a key or run its test send)
 - `templates/scripts/what-to-change.py` → `scripts/what-to-change.py` (deterministic candidate gatherer behind the `what-to-change` flagship routine: it excludes parked items, gates on dated signal, and returns resolvable citations; without it the routine cannot filter false urgency mechanically)
 - `templates/scripts/log-archive.py` → `scripts/log-archive.py` (the engine behind the `log-archive` skill: ages `brain/log.md` past its 300-line cap into `brain/archive/log-YYYY-MM.md` and leaves a pointer, so the running log every skill reads stays small as the install ages)
+- `templates/scripts/session_changes.py` → `scripts/session_changes.py` (the session-changes tracker behind the PreToolUse snapshot hook, the session-close manifest, and the `/changes` command; the pre-git undo floor on ZIP installs and a second net everywhere else)
 
 Also copy `templates/scripts/private-name-patterns.txt.template` → `scripts/private-name-patterns.txt` (NOTE: drop the `.template` suffix on the destination filename). The pre-commit hook and `install-git-hooks.sh` both look for `scripts/private-name-patterns.txt` exactly. The `.template` suffix marks the source-of-truth example, not the runtime file.
 
@@ -194,10 +200,14 @@ Keep all three generic. Do not invent business facts. They are labelled as examp
 
 ### 2.3 Initialize Git
 
-Guard: check if a `.git/` directory already exists in the Founder OS root before running `git init`.
+First check whether git exists at all: run `git --version`.
+
+**If git is NOT installed (the normal state of a ZIP-download install):** do not error, do not send the founder to a download page, and do not make setup wait on it. Say plainly: "Version history is off for now - git is not on this machine, and you do not need it today. Every file the OS touches is still snapshotted each session with a one-command restore. When you want the full timeline, say 'own my history' and I will install and wire git for you - one yes, nothing for you to type." Skip the rest of 2.3 (including the privacy-guard wiring - it is a git hook and has nothing to attach to yet; the own-your-history skill wires it before the first commit). Continue to 2.4.
+
+**If git IS installed,** guard: check if a `.git/` directory already exists in the Founder OS root before running `git init`.
 
 - If `.git/` exists (the common case, because the install folder is already a git clone), SKIP `git init`. Log: "Folder is already a git repository. Skipping git init." Move on.
-- If `.git/` does not exist (rare case, user copied files manually instead of cloning), run `git init` and create an initial commit: "Founder OS initialized."
+- If `.git/` does not exist (ZIP or manual-copy install on a machine that happens to have git), run `git init` and create an initial commit: "Founder OS initialized."
 
 **Wire the privacy guard (so it is active, not just installed).** The private-name guard only fires if `git config core.hooksPath` points at `.githooks`. A fresh `git clone` does not inherit that setting, so without this step the guard is copied but dormant. After the git guard above:
 

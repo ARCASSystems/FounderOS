@@ -9,6 +9,8 @@ Load this last. It commits the build, detects the command prefix, opens with the
 ### 6.1 Final Commit
 Commit all company and project folders: "Add company folders and first project setup."
 
+If version history is off (no git on the machine - Phase 2.3 already said so), skip the commit silently. The tour below makes the one graduation offer; do not nag about git anywhere else.
+
 ### 6.2.0 Post-setup tour (show them what they now own)
 
 Setup just created a few dozen files silently. A non-technical founder will not go looking for them and will not trust a system they cannot see. Before the longer orientation, run a short tour that makes the new OS visible and proves the brain captured something real. Keep it warm and concrete. Do not list all forty files - list the handful they will actually touch.
@@ -36,6 +38,12 @@ If any of the four is `[NOT SET]`, say so honestly and offer the one-line fix: "
 > - `brain/flags.md` - open loops and things to come back to
 >
 > You never have to edit these by hand. Just talk to the OS and it keeps them current. But they are there, in the open, whenever you want to look."
+
+**2.5 Own your history (only when version history is off).** If the machine has no git (Phase 2.3 skipped init), make the graduation offer exactly once, here, in the tour - warm, consent-gated, zero pressure:
+
+> "One optional thing, whenever you are ready: full version history. Right now every change the OS makes is snapshotted per session, so undo works. If you also want a permanent timeline - 'undo to before this morning', a full history of every save - just say 'own my history'. I will install the version tool quietly and set it all up myself. One yes, nothing for you to type, and nothing leaves your machine. No rush; the OS is complete either way."
+
+If they say yes on the spot, run the `own-your-history` skill now and return to the tour when it finishes. If they say nothing or move on, drop it - the offer stays available as a plain sentence forever.
 
 **3. The three things to say next.** Give the founder exactly three next moves, in natural language, so they leave with something to do instead of a blank screen:
 

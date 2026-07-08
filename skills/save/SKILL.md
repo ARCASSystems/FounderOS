@@ -18,6 +18,7 @@ Record the founder's current work as a new version. Wraps git so they never see 
 
 - If `core/identity.md` does not exist, stop with: `Founder OS not set up here. Run /founder-os:setup first.`
 - If `scripts/caveman_git.py` does not exist, stop with: `Version control helper not found. Run /founder-os:update to install it.`
+- If git is not installed or the folder has no `.git/` directory (a ZIP install that has not graduated yet), do not error. Say: `Version history is not on yet - your changes are still covered by session snapshots (say "what did you change" to see them). Want the full timeline? Say "own my history" and I will set it up for you.` Then stop, or run the `own-your-history` skill if they say yes.
 
 ## Procedure
 

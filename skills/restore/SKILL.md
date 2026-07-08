@@ -27,6 +27,7 @@ Never work around these. Never run `git reset --hard`, `git checkout` that disca
 
 - If `core/identity.md` does not exist, stop with: `Founder OS not set up here. Run /founder-os:setup first.`
 - If `scripts/caveman_git.py` does not exist, stop with: `Version control helper not found. Run /founder-os:update to install it.`
+- If git is not installed or the folder has no `.git/` directory (a ZIP install that has not graduated yet), do not error. Session snapshots still cover this session: run `python scripts/session_changes.py --print` to show what changed, and restore any single file with `python scripts/session_changes.py --restore <path>`. For undo across sessions, offer "own my history".
 
 ## Procedure
 
