@@ -38,3 +38,6 @@ jobs:
 
       - name: Role-parity guard (roles agree across disk, index, and wizard copy list)
         run: python3 .github/scripts/check_role_parity.py
+
+      - name: Hooks-parity guard (every hook ships and registers a .sh/.ps1 pair)
+        run: python3 .github/scripts/check_hooks_parity.py
