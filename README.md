@@ -10,7 +10,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 **New here? [Read the Founder OS Playbook first](https://arcassystems.com/playbook)** - a visual walkthrough with screenshots: the problem, the three parts, how to start, and what not to do. Opens framed in any browser, about 15 minutes. It lives on the web so it never drifts out of date; there is no copy shipped in this repo.
 
-**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip)** - or install via one-line curl, plugin marketplace, or git clone. See [Install](#install) below.
+**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip)** - unzip it, open the folder in Claude Code, say "set up Founder OS". No git, no terminal, no curl. Or install via plugin marketplace, one-line curl, or git clone. See [Install](#install) below.
 
 ---
 
@@ -36,7 +36,7 @@ You are not installing a template. You are installing an operating layer. It lis
 - **Plan A defines Plan B.** This product is a derivative of an actual founder's daily use. Features graduate from personal use into the product only after surviving contact with live P&L.
 - **Talk to it, from anywhere.** Built around dictation. Claude Code's built-in dictation is the primary input, and any voice-to-text tool you already use works just as well. Claude Code runs locally as a CLI and through the cloud app (claude.ai/code), so you can start and drive a full session from your phone too. A cloud session runs in a remote sandbox on a branch rather than on your local disk, so the local-first path stays your machine while the cloud path is there when you are away from it.
 - **Decay-driven keep/kill.** Set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires. The OS does not auto-kill, you decide.
-- **Invisible version control.** Full history and undo, no git command ever typed. Say "save my work", "what changed", or "undo to before this morning" and the OS wraps git for you. Local by default; nothing pushes anywhere unless you ask. Undo is fail-safe: it saves your current work first and can never lose it.
+- **Invisible version control.** Full history and undo, no git command ever typed. Say "save my work", "what changed", or "undo to before this morning" and the OS wraps git for you. Local by default; nothing pushes anywhere unless you ask. Undo is fail-safe: it saves your current work first and can never lose it. Git itself is optional at install: without it the OS still snapshots every file it touches, every session (`/changes` lists them, one command restores any of them), and when you want full history you say yes once and the OS installs and wires git itself - nothing for you to type.
 
 ---
 
@@ -75,14 +75,15 @@ Founder OS is built for Claude Code: the setup wizard, the slash commands, and t
 
 ## Before you install
 
-You need four things:
+You need three things:
 
 - **Claude Code** - free. Download at [claude.ai/code](https://claude.ai/code). Desktop app for Mac and Windows.
 - **A paid Claude plan** - Claude Pro or Claude Max. Free tiers lack sufficient context.
-- **Git** - version 2.x or later. Run `git --version` to check. You install it once and never type a git command: the OS wraps git behind plain verbs, so version control needs no new tool and no account. Say "save my work", "what changed", or "undo to before this morning".
 - **Python 3.11+** - for the runtime scripts. Run `python3 --version` to check.
 
-That is it. No database. No server. No Notion account required.
+That is it. No git. No database. No server. No Notion account required.
+
+Git is deliberately not on the list. The OS runs without it, and every session's file changes are still snapshotted with a one-command restore. When you want full version history, say "own my history" and the OS installs git and wires it up itself - you say yes once and never type a git command.
 
 ---
 
@@ -94,9 +95,19 @@ The OS routes on natural language. Say what you need ("set up my voice profile",
 
 ## Install
 
-Four install paths. The one that needs no terminal comes first. Full step-by-step for each in [docs/install.md](docs/install.md).
+Five install paths. The one that needs nothing new installed comes first. Full step-by-step for each in [docs/install.md](docs/install.md).
 
-**Not comfortable in a terminal?** Start with the plugin install below. It runs entirely inside Claude Code, with no terminal commands to type.
+**Not comfortable in a terminal?** Start with the ZIP download below - three steps, nothing typed - or the plugin install after it. Neither needs a terminal.
+
+### Download ZIP (nothing to install, own it in 10 minutes)
+
+1. **[Download the ZIP](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip)**
+2. Right-click, **Extract All** (Windows) or double-click it (Mac). Put the folder wherever you keep your work.
+3. Open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
+
+That is the whole install. No git, no curl, no terminal command, no account beyond the Claude plan you already have. Updates work the same way: say "update Founder OS" and the OS re-downloads the ZIP itself, refreshes its own engine files, and never touches your data.
+
+**When to choose:** You want the fastest path from zero to owning the system, with nothing new installed on your machine. The folder is yours from the first second - plain markdown you can read, back up, or delete. Version history is off at first; the OS still snapshots every change each session, and when you want full history you say "own my history" and it wires git for you.
 
 ### Plugin marketplace (no terminal, cleanest Claude Code experience)
 
@@ -139,7 +150,7 @@ Open the FounderOS folder in Cowork and attach `CLAUDE.md` as folder instruction
 
 ## Setup ladder (40 min total, do in this order)
 
-1. **Install** - pick an [install path](#install) above (5 min). Run `./scripts/install-git-hooks.sh` to wire the privacy pre-commit hook (operator-only). Out of the box it already blocks committed secrets (API keys, tokens, bot tokens, PEM private keys), em/en dashes, and AI-attribution trailers - no config needed. To also block your private names, open `scripts/private-name-patterns.txt` and add at least your own name (`\bYourName\b`); the name check stays off until that file has a pattern, while the secret and voice checks run regardless. The file is gitignored, so your names never leave your machine.
+1. **Install** - pick an [install path](#install) above (5 min). If your install uses git (curl or clone paths, or after "own my history"), run `./scripts/install-git-hooks.sh` to wire the privacy pre-commit hook (operator-only). Out of the box it already blocks committed secrets (API keys, tokens, bot tokens, PEM private keys), em/en dashes, and AI-attribution trailers - no config needed. To also block your private names, open `scripts/private-name-patterns.txt` and add at least your own name (`\bYourName\b`); the name check stays off until that file has a pattern, while the secret and voice checks run regardless. The file is gitignored, so your names never leave your machine. On a ZIP install this step waits until you turn on version history - there is nothing to wire before then.
 2. **Say "set up Founder OS"** (or run `/founder-os:setup`) - the wizard builds your operating layer from your answers (15 min). It reads which kind of operator you are (founder, career-mover, builder, student) so the OS leads with what your situation needs, and seeds your brain with a starter flag, parked decision, and log entry so your first session is not a blank screen.
 3. **Say "set up my voice profile"** (or run `/founder-os:voice-interview`) - so every writing skill sounds like you, not Claude (10 min)
 4. **Say "set up my brand profile"** (or run `/founder-os:brand-interview`) - so every deliverable looks like you (10 min)

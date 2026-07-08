@@ -1,10 +1,43 @@
 # Install paths
 
-Four ways to install FounderOS. The plugin path (Path A) needs no terminal and comes first; pick whichever matches how you work. None of them lock you in - if you outgrow one path, you can move to another without losing your data.
+Five ways to install FounderOS. The ZIP download (Path 0) needs nothing installed and comes first; pick whichever matches how you work. None of them lock you in - if you outgrow one path, you can move to another without losing your data.
 
-**Not comfortable in a terminal?** Use Path A (Claude Code plugin). It runs entirely inside Claude Code, with no terminal commands to type.
+**Not comfortable in a terminal?** Use Path 0 (ZIP download) or Path A (Claude Code plugin). Both run without a single terminal command.
 
 If you get stuck, email `solutions@arcassystems.com` with the path you tried and the error you hit.
+
+---
+
+## Path 0 - Download ZIP (nothing to install, no git, no terminal)
+
+Three steps, nothing typed. The gentlest path there is.
+
+**Best for:** Anyone who wants to own the system in ten minutes with nothing new installed. Anyone who does not have git and does not want to think about it.
+
+**Requirements:** Claude Code with a paid Claude plan, and Python 3.11+ (most machines have it; the setup wizard checks and tells you plainly if not).
+
+**Steps:**
+
+1. [Download the ZIP](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip).
+2. Right-click the file and choose **Extract All** (Windows) or double-click it (Mac). Move the extracted folder wherever you keep your work and rename it if you like (`founder-os` is a good name).
+3. Open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
+
+Commands use bare names on this path (`/setup`, `/today`), same as the git-clone path.
+
+**Updates:** say "update Founder OS" (or run `/update`). The OS re-downloads the ZIP itself, refreshes only its own engine files (skills, commands, scripts, docs), and never touches your data. You approve before anything is applied.
+
+**Version history on this path:** off at first, by design - there is no git on the machine yet. You are still covered: the OS snapshots every file it touches, every session, and `/changes` shows exactly what changed with a one-command restore per file. When you want full history ("undo to before this morning", a complete timeline), say **"own my history"** - with your yes, the OS installs git itself, turns the folder into a repository, and wires the privacy guard. You never type a git command.
+
+**Pros**
+- Nothing to install first. No git, no curl, no terminal.
+- The folder is yours from the first second - plain markdown, no hidden state.
+- Updates and version history are both one sentence away, handled for you.
+
+**Cons**
+- Version history starts off until you graduate it on (session snapshots cover you meanwhile).
+- Slash commands use bare names (`/setup`), not the `/founder-os:` namespace.
+
+**Verify the install:** Say "verify the OS" (or run `/verify`).
 
 ---
 
@@ -122,13 +155,13 @@ Open Claude Code in that folder, then say "set up Founder OS" (or run `/setup`).
 
 Claude Cowork is Anthropic's desktop surface for non-coding work. It reads markdown, runs MCPs, and runs timed jobs - but hooks and the `/founder-os:*` slash command namespace do not fire there. Pair it with FounderOS for drafting and timed execution. Keep Claude Code as the OS layer.
 
-**Best for:** Founders who already have FounderOS installed via Path A, B, or E, and want Cowork available as a drafting surface with OS context.
+**Best for:** Founders who already have FounderOS installed via Path 0, A, B, or E, and want Cowork available as a drafting surface with OS context.
 
-**Note:** Cowork is not a setup surface. Install via one of the three paths above first.
+**Note:** Cowork is not a setup surface. Install via one of the paths above first.
 
 **Setup recipe:**
 
-1. Install via Path A, B, or E first.
+1. Install via Path 0, A, B, or E first.
 2. In Cowork, open the FounderOS folder you set up.
 3. Attach `CLAUDE.md` as folder instructions (or use Cowork's "Folder instructions" if available on your version).
 4. If `brain/.snapshot.md` exists, attach it too. Skills produced this snapshot from your current state - it is the cheapest way to give Cowork live context.
@@ -150,7 +183,8 @@ Full surface-by-surface compatibility detail in [docs/tools-and-mcps.md](tools-a
 
 | You have... | Pick |
 |---|---|
-| Claude Code + Pro/Max plan, or you would rather not touch a terminal | Path A (plugin) |
+| Nothing but Claude Code + a Pro/Max plan, and you want the fastest ownership path | Path 0 (ZIP) |
+| Claude Code + Pro/Max plan, and you want commands and hooks active across every project | Path A (plugin) |
 | bash + git + Python 3.11+ and you like the terminal | Path E (curl) |
 | Claude Code, plugin install failed | Path B (git clone) |
 | FounderOS installed, want Cowork too | Path D (Cowork) |
@@ -163,8 +197,8 @@ You can switch paths anytime. The OS is your files - they are the same regardles
 
 All paths converge on the same six files. Whichever path you picked, the next steps are the same. You can run the slash command or ask Claude in plain English - both work.
 
-1. **Start the wizard.** Say "set up Founder OS" (or run `/founder-os:setup` on Path A, `/setup` on Path B). Path D: skip until you have set up locally.
-   Run `./scripts/install-git-hooks.sh` to activate the privacy pre-commit hook (operator-only).
+1. **Start the wizard.** Say "set up Founder OS" (or run `/founder-os:setup` on Path A, `/setup` on Path 0 and Path B). Path D: skip until you have set up locally.
+   If your install uses git (Paths B and E, or Path 0 after "own my history"), run `./scripts/install-git-hooks.sh` to activate the privacy pre-commit hook (operator-only). On a fresh ZIP install there is no git yet, so this step waits until you turn version history on.
 2. **Add your voice.** Say "set up my voice profile" (or run `/founder-os:voice-interview` on Path A, `/voice-interview` on Path B). Captures how you write so every writing skill sounds like you.
 3. **Add your brand.** Say "set up my brand profile" (or run `/founder-os:brand-interview` on Path A, `/brand-interview` on Path B). Captures colors, fonts, logo so every branded deliverable looks like you.
 4. **See your day.** Ask "what's on for today?" (or run `/today`). Ask "what should I focus on next?" (or run `/next`).
@@ -176,7 +210,9 @@ If anything breaks in the first 24 hours, email `solutions@arcassystems.com` wit
 
 ## Known platform notes
 
-**Windows users.** Both hooks ship with bash and PowerShell variants. `.claude/settings.json` wires both automatically. If you have PowerShell installed (all modern Windows systems do), both the SessionStart brief and the Stop revenue-check will fire without any extra setup. If you also have git-bash, both variants run - they fail gracefully if the other shell is absent, so there is no double-output risk.
+**Windows users.** Every hook ships with bash and PowerShell variants. `.claude/settings.json` wires both automatically. If you have PowerShell installed (all modern Windows systems do), the full hook set fires without any extra setup - no bash, no git-bash required. If you also have git-bash, both variants run - they fail gracefully if the other shell is absent, so there is no double-output risk.
+
+**Git-less installs (Path 0).** Every hook degrades quietly when git is absent: the session brief still runs, the auto-save hook stays silent instead of erroring, and the per-session change snapshots do not need git at all. Nothing errors, nothing nags. Version history activates when you say "own my history".
 
 **Mac, Linux.** Hooks run through bash with no extra setup.
 

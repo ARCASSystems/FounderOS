@@ -1,5 +1,5 @@
 ---
-description: Update Founder OS. Say "update Founder OS" or "pull the latest" (or run /founder-os:update). Pulls the latest System Layer files without touching your personal data. Subcommands: check (dry-run), rollback (revert).
+description: Update Founder OS. Say "update Founder OS" or "pull the latest" (or run /founder-os:update). Pulls the latest System Layer files without touching your personal data. Works on git installs (pull) and ZIP installs with no git (re-download and overlay). Subcommands: check (dry-run), rollback (revert).
 argument-hint: "[check | rollback]"
 ---
 
@@ -39,7 +39,9 @@ Argument: `$ARGUMENTS` - optional. One of: `check`, `rollback`, or empty.
 - `docs/` (user-facing documentation)
 - `CLAUDE.md` (root bootloader)
 - `AGENTS.md` (cross-agent instructions)
+- `GEMINI.md` (cross-agent bridge)
 - `README.md`
+- `CHANGELOG.md` (release history - the Step 10 digest reads it)
 - `VERSION`
 
 **User Layer (NEVER update):**
@@ -74,6 +76,15 @@ Strip whitespace. Call this `REMOTE_VERSION`.
 
 If both fail, reply: `Cannot reach GitHub. Check your network or gh auth status. Update aborted.` Stop.
 
+### Step 2.5. Detect install mode
+
+Determine which of two modes this install runs in. Every later step that differs branches on this.
+
+- **GIT mode:** a `.git/` directory exists at the install root AND `git --version` succeeds.
+- **ZIP mode:** no `.git/` directory, or git is not installed. This is the normal state of a ZIP-download install that has not yet run "own my history".
+
+State the detected mode in one line when an update is actually applied (Step 8). Do not mention it on `check`.
+
 ### Step 3. Handle arguments
 
 **If `$ARGUMENTS` is `check`:**
@@ -90,7 +101,14 @@ If update available, add one line: `Run /founder-os:update to install.` Stop.
 
 **If `$ARGUMENTS` is `rollback`:**
 
-Restore System Layer paths from the most recent backup branch. Backup branches are named `founder-os-update-backup-<ISO-timestamp>` and are created in Step 7 before every update, so a backup exists for any successful update regardless of whether the tree was clean or dirty at update time.
+**ZIP mode:** restore from the newest backup folder instead of a branch.
+
+1. List directories matching `state/.update-backup-*` and take the newest by name (the name embeds an ISO timestamp, so lexical order is chronological). Call this `BACKUP_DIR`.
+2. If none exist, reply: `No prior update backup found. Cannot rollback automatically.` Stop.
+3. Copy every path inside `BACKUP_DIR` back over the install root, preserving relative paths. Everything in it is System Layer by construction (Step 7 only backs up System Layer paths), so no User Layer file can be touched.
+4. Reply: `Rolled back System Layer from <BACKUP_DIR>. User Layer untouched. The backup folder is kept; delete it when no longer needed.`
+
+**GIT mode:** restore System Layer paths from the most recent backup branch. Backup branches are named `founder-os-update-backup-<ISO-timestamp>` and are created in Step 7 before every update, so a backup exists for any successful update regardless of whether the tree was clean or dirty at update time.
 
 1. Run `git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/heads/founder-os-update-backup-*` and take the first entry. Call this `BACKUP_REF`.
 2. If no entry is returned, reply: `No prior update backup branch found. Cannot rollback automatically. Use git reflog to find the last good commit manually.` Stop.
@@ -128,7 +146,7 @@ Incoming: v<REMOTE_VERSION>
 
 This will update System Layer files only:
 - .claude/, .claude-plugin/, skills/, scripts/, templates/, notion-package/, rules/, docs/
-- CLAUDE.md, AGENTS.md, README.md, VERSION
+- CLAUDE.md, AGENTS.md, GEMINI.md, README.md, CHANGELOG.md, VERSION
 
 Your User Layer files will NOT be touched:
 - core/identity.md
@@ -141,9 +159,18 @@ Wait for reply. If not a clear `yes`, reply: `Update dismissed. Run /founder-os:
 
 ### Step 7. Back up current state
 
-Before applying anything, create a backup branch so `rollback` works on any tree state:
+Before applying anything, create a backup so `rollback` works on any tree state.
 
-1. Run `git rev-parse --is-inside-work-tree` to confirm the install is a git repo. If it is not, reply: `Install is not under git. Initialize with git init and commit current state before updating, so rollback is possible.` Stop.
+**ZIP mode:** back up to a folder, since there is no git to branch.
+
+1. Create `state/.update-backup-<ISO-timestamp>/` (timestamp format `YYYYMMDDTHHMMSSZ`, UTC).
+2. Copy every System Layer path that currently exists (per the Layer definitions above, including `VERSION`) into that folder, preserving relative paths.
+3. Keep only the three newest `state/.update-backup-*` folders; delete older ones.
+4. Report inline: `Backup folder created: state/.update-backup-<ts>/.` Then skip to Step 8.
+
+**GIT mode:** create a backup branch.
+
+1. Run `git rev-parse --is-inside-work-tree` to confirm the install is a git repo (it is, in this mode - this is a sanity check).
 2. Generate an ISO timestamp: `BACKUP_REF="founder-os-update-backup-$(date -u +%Y%m%dT%H%M%SZ)"`.
 3. Run `git branch "$BACKUP_REF"`. This creates a branch pointer at the current HEAD without changing the working tree or HEAD. Branch creation works on a clean tree (unlike `git stash push`, which silently no-ops when there are no local changes and was the previous mechanism). The branch captures the entire pre-update state - every System Layer path can be restored later with `git checkout "$BACKUP_REF" -- <path>`.
 4. If branch creation fails because the name already exists (two updates within the same second, very rare), append a `-2` suffix and retry. If it still fails, reply: `Could not create backup branch. Run git branch to inspect, then retry.` Stop.
@@ -151,16 +178,25 @@ Before applying anything, create a backup branch so `rollback` works on any tree
 
 ### Step 8. Apply updates
 
-Pull each System Layer path from the remote main branch. Prefer git if available:
+State the detected mode in one line, then apply.
+
+**ZIP mode:** re-download the repo archive and overlay only the System Layer.
+
+1. Download `https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip` to a temp file. Use `curl -sL -o <tmp>/founderos-main.zip <url>` where curl exists, or PowerShell `Invoke-WebRequest -Uri <url> -OutFile <tmp>\founderos-main.zip` on Windows.
+2. Extract it in the temp location: `tar -xf founderos-main.zip` works on modern Windows, macOS, and Linux; PowerShell `Expand-Archive` is the fallback. The archive extracts to a `FounderOS-main/` folder.
+3. For each System Layer path in the Layer definitions above: copy it from `FounderOS-main/<path>` over the install's `<path>`, replacing files that exist in both. Do NOT delete local files the remote no longer has (log them; removal is the founder's call). Do NOT copy any path that is not on the System Layer list - the archive also contains User Layer seeds (`stack.json`, `brain/`, sample content) and those must never overwrite the founder's live data.
+4. Delete the temp download and extraction.
+
+**GIT mode:** pull each System Layer path from the remote main branch:
 
 1. `git fetch https://github.com/ARCASSystems/FounderOS.git main`
 2. For each System Layer path: `git checkout FETCH_HEAD -- <path>`
 
-If git is unavailable, fall back to per-file fetch via `gh api repos/ARCASSystems/FounderOS/contents/<path>` with recursive tree walk. Write each fetched file to its exact path.
+If the fetch fails, fall back to per-file fetch via `gh api repos/ARCASSystems/FounderOS/contents/<path>` with recursive tree walk. Write each fetched file to its exact path.
 
 Skip any path that does not exist in the remote (remote may have removed it; log it, do not delete locally unless the founder opts in).
 
-NEVER fetch or write to User Layer paths. If a fetched tree entry resolves to a User Layer path, STOP and report it.
+Either mode: NEVER fetch or write to User Layer paths. If an incoming tree entry resolves to a User Layer path, STOP and report it.
 
 ### Step 9. Write new VERSION
 
@@ -178,6 +214,8 @@ User Layer files untouched.
 
 To rollback: /founder-os:update rollback
 ```
+
+After that block, add a short "what changed" digest: read the local `CHANGELOG.md` (just refreshed in Step 8) and summarize the entries between `LOCAL_VERSION` and `REMOTE_VERSION` in at most 6 plain-language lines. The founder should see what they just received without opening a file.
 
 ## Rules
 
