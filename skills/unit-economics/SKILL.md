@@ -34,6 +34,22 @@ Then read it. If the snapshot script is also missing (older install), proceed us
 
 The snapshot tells you what flags are open, what the user is working on this week, and what the latest staleness state is. Apply this context to your output where it is relevant. Do not surface every snapshot field in every output - use judgment. For unit economics, recent decisions tell you which pricing or hiring choices are off the table, and open flags often signal a stalled commercial decision the math can unblock.
 
+## Lead with the business model's numbers
+
+Read `business_model` from `stack.json` before framing anything. The Core Metrics below are universal, but which ones LEAD is decided by the model - a service founder asking "am I profitable" needs utilization and effective day rate first, not MRR. These mappings are textbook-stable, so branching on them is honest determinism:
+
+- **`service`** - lead with: utilization rate, effective hourly / day rate, delivery margin per engagement, capacity (how many engagements the team can hold before quality slips). Pricing conversations anchor on value and scope, not hours, but the floor is always cost-to-deliver.
+- **`ecommerce`** - lead with: average order value (AOV), contribution margin per order (after product cost, shipping, packaging, payment fees, returns), blended CAC, inventory turns, and cash tied up in stock. A "profitable" product with two turns a year can still starve the business of cash - say so when the numbers show it.
+- **`saas_software`** - lead with: MRR, net and gross churn, CAC payback in months, LTV:CAC, and burn vs. months of runway. Growth claims mean nothing next to churn - check churn first.
+- **`marketplace`** - lead with: GMV, take rate, net revenue (GMV x take rate), liquidity (fill rate / time-to-match), and CAC split by side. Name which side is the constraint before any spend recommendation.
+- **`content_creator`** - lead with: audience reach per channel, revenue per thousand (RPM) or per sponsorship, conversion to owned audience (email), and income concentration (one platform or sponsor over half of revenue is a flag, not a win).
+- **`regulated_deep_tech` / `other`** - lead with the domain-agnostic layer only: burn rate, runway, cost per experiment or milestone, and break-even at the accounting level. Then apply the domain-honesty rule below.
+- **`null` (not set)** - ask one question ("how does the business make money?") and proceed with the closest set. Suggest capturing it: "say 'update my stack' and I will remember the model."
+
+## Domain-honesty rule (regulated_deep_tech and other)
+
+The accounting-level math above is safe for any business - cash in, cash out, runway, margins. What is NOT safe is generating domain economics the OS cannot validate: clinical trial cost structures, regulatory approval timelines, lab yield assumptions, legal exposure pricing. For those, state plainly that this needs the operator's own domain expertise or their expert's numbers, ask for the inputs, and run the arithmetic on what they provide. Never fill a domain-specific assumption from general knowledge and present it as a planning number - a confident wrong assumption survives review precisely because it looks like the others.
+
 ## Core Metrics
 
 ### Revenue Math
