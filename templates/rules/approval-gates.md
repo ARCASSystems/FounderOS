@@ -62,6 +62,18 @@ Even with a previous "yes," these require a fresh explicit instruction every tim
 
 ---
 
+## Authored vs accumulated (the memory provenance rule)
+
+Every file in the OS belongs to one of three provenance classes, and the class decides who may write it. This is the rule the gates above enforce; here it is in plain terms.
+
+- **Authored - you write it, the OS asks first.** `core/identity.md`, `core/profile.md`, `core/voice-profile.yml`, `core/brand-profile.yml`, `rules/` (including this file). These files ARE you: who you are, how you sound, how you want the OS to behave. The OS never edits them without an explicit yes (the Confirm rows above). When the OS learns something that contradicts an authored file, it surfaces the contradiction - it does not fix the file.
+- **Accumulated - the OS writes it as work happens.** `brain/log.md`, `brain/flags.md`, `brain/patterns.md`, `brain/decisions-parked.md`, `context/clients.md` rows, MEMORY.md facts. This is what the OS has observed and captured. It is the OS's write zone (the Auto rows above), and it is where memory can drift - which is why `memory-pass` audits it against the live files, and why every accumulated claim should be checkable against a dated source.
+- **Dated working notes - written once, then aged.** `brain/rants/`, `brain/handoffs/`, `brain/.snapshot.md`, archives. Point-in-time artifacts. Never edited after the fact; they age out via decay and the archive protocol instead.
+
+The asymmetry is the point: you can rewrite anything the OS accumulated, any time, and the OS treats your version as truth. The OS can only propose changes to what you authored. Memory that cannot tell these apart ends up letting an agent quietly rewrite who you are.
+
+---
+
 ## How this matrix interacts with other rules
 
 - The **stale-context rule** (operating-rules.md) is upstream of this matrix. Before any time-anchored action, refresh the cadence files first. The matrix governs WHAT to confirm; the stale-context rule governs WHEN to refresh inputs.
