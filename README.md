@@ -245,6 +245,10 @@ Not a workflow engine. Not a webhook server. Not a cloud tool that stores your d
 
 Your Notion. Your Claude. Your files on your disk if you want them there. If you want to delete it, run `/founder-os:uninstall` or just delete the folder. Nothing to unsubscribe from.
 
+## Why local-first is the security story
+
+2026's defining AI-agent security incident (135,000+ exposed instances, plaintext key files, a poisoned skills marketplace) needed three doors: a server listening on a port, a stored API key, a third-party skill registry. Founder OS has none of the three - nothing listens, your subscription sign-in replaces key files, and every skill ships in this repo as markdown you can read before it runs. Your brain stays on your disk; deleting the OS is deleting a folder. The full record with sources, plus the honest limits: [docs/why-local-first.md](docs/why-local-first.md).
+
 If you need crons, webhooks, offline triggers, or anything that fires while you sleep, that is a different tool (n8n, Make, whatever you use). Founder OS holds the thinking layer. You stay in charge of the rest.
 
 ---
