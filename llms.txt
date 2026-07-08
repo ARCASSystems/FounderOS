@@ -18,8 +18,8 @@ The system has four layers, the same four the Founder OS Playbook draws on a nap
 ## How it works
 
 - [CLAUDE.md](https://github.com/ARCASSystems/FounderOS/blob/main/CLAUDE.md): the bootloader that tells Claude how the OS behaves every session.
-- [Skills catalog (84)](https://github.com/ARCASSystems/FounderOS/blob/main/docs/skills.md): every skill, what it does, and how to trigger it in natural language.
-- [Slash commands (35)](https://github.com/ARCASSystems/FounderOS/blob/main/docs/commands.md): every command and what it returns.
+- [Skills catalog (86)](https://github.com/ARCASSystems/FounderOS/blob/main/docs/skills.md): every skill, what it does, and how to trigger it in natural language.
+- [Slash commands (37)](https://github.com/ARCASSystems/FounderOS/blob/main/docs/commands.md): every command and what it returns.
 - [Tools and MCPs](https://github.com/ARCASSystems/FounderOS/blob/main/docs/tools-and-mcps.md): which integrations activate which skills, and how the OS degrades gracefully to zero MCPs.
 - [Calibrating your OS](https://github.com/ARCASSystems/FounderOS/blob/main/docs/calibrating-your-os.md): how to tune the system to how you actually work after install.
 - [Voice extension](https://github.com/ARCASSystems/FounderOS/blob/main/docs/voice-extension.md): optional and do-it-yourself - give the OS a mouth (text to speech) and ears (speech to text) with free local tools. The OS is complete as text without it.

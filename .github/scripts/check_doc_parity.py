@@ -41,8 +41,8 @@ def disk_counts() -> tuple[int, int]:
 CHECKS = [
     ("README.md", r"###\s+Skills\s*\((\d+)\)", "skills", "README '### Skills (N)'"),
     ("README.md", r"###\s+Slash commands\s*\((\d+)\)", "commands", "README '### Slash commands (N)'"),
-    ("README.md", r"(\d+)\s+skills,\s*\d+\s+commands,\s*\d+\s+tests", "skills", "README status line skills"),
-    ("README.md", r"\d+\s+skills,\s*(\d+)\s+commands,\s*\d+\s+tests", "commands", "README status line commands"),
+    ("README.md", r"Public release\.\s+(\d+)\s+skills,\s*\d+\s+commands", "skills", "README status line skills"),
+    ("README.md", r"Public release\.\s+\d+\s+skills,\s*(\d+)\s+commands", "commands", "README status line commands"),
     ("CLAUDE.md", r"##\s+Skills\s*\((\d+)\s+total", "skills", "CLAUDE.md '## Skills (N total'"),
     ("CLAUDE.md", r"all\s+\d+\s+skills\s+and\s+(\d+)\s+commands", "commands", "CLAUDE.md registry command count"),
     ("AGENTS.md", r"`skills/index\.md`\s*\((\d+)\s+skills,\s*\d+\s+commands\)", "skills", "AGENTS.md registry skill count"),

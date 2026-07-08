@@ -212,6 +212,16 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 
 ## Capture and processing
 
+### `/founder-os:catch-up`
+
+- **Or say.** "catch up" / "process my inbox" / "I sent myself some notes"
+- **Outcome.** Every away-from-laptop capture filed into the brain: `capture/inbox/` drops, pasted text, and connected meeting-notes transcripts land in `brain/rants/` with provenance and `processed: false`. Names are checked against `context/names.md`; unknowns stay marked `(sp?)` and are asked about once, in one batch. Ends by offering `/founder-os:dream`.
+- **Args.** None required. Pasted capture text may follow the command.
+- **Writes.** `brain/rants/<date>-<slug>.md` per capture; swept files move to `capture/inbox/.processed/`; confirmed name corrections append to `context/names.md`.
+- **Prereqs.** `/founder-os:setup` complete.
+- **When to run.** First session back after time away from the desk, or whenever the inbox has files.
+- **Follow-up.** `/founder-os:dream` to distil. Channel guide: [docs/capture-anywhere.md](capture-anywhere.md).
+
 ### `/founder-os:rant`
 
 - **Or say.** "I want to rant" / "let me dump something"
@@ -371,6 +381,16 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **Prereqs.** `/founder-os:setup` complete.
 - **When to run.** Whenever you read or watch something worth preserving with provenance.
 - **Follow-up.** `knowledge-capture` to distil the takeaways, or `/founder-os:wiki-build` to refresh the graph.
+
+### `/founder-os:changes`
+
+- **Or say.** "what did you change" / "show me this session's changes"
+- **Outcome.** The per-session change manifest: every file the OS wrote this session, the action (create or modify), the change size, and a one-command restore per file. Works with or without git - on a ZIP install before "own my history" this IS the undo surface; after git it runs as a second net.
+- **Args.** None.
+- **Writes.** Read-only apart from the tracker's own runtime state under `state/`.
+- **Prereqs.** The session-changes hooks wired (they ship in `.claude/settings.json`; setup copies them).
+- **When to run.** Any time you want to see exactly what a session touched, or before trusting a session's work.
+- **Follow-up.** `python scripts/session_changes.py --restore <path> --session <sid>` to put any file back (the manifest prints the exact command per file).
 
 ### `/founder-os:update`
 

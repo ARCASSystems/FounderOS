@@ -67,6 +67,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** After a big session, once you have picked a backup destination. Optional: local version control works fully without it.
 - **Follow-up.** Re-run after future sessions to keep the offsite copy current. Say "back this up".
 
+### own-your-history
+
+- **Say.** "own my history", "turn on version history", "turn on full history", or "install git".
+- **Outcome.** A git-less install (usually the ZIP path) graduates to full version history: with your explicit yes, the OS installs git itself, turns the folder into a repository, wires the privacy guard before the first commit, and records version one. You never type a git command.
+- **Reads.** `core/identity.md` for the history identity; the install's git state.
+- **Writes.** The git install (consent-gated, exact command shown first), `git init`, local git config, the first commit.
+- **Voice rules.** No.
+- **Prereqs.** Founder OS set up. Only does anything when version history is off.
+- **When to run.** Once the OS has proven useful - usually week one. Until then, session snapshots cover undo.
+- **Follow-up.** `save`, `history`, and `restore` now run at full power. Say "own my history".
+
 ---
 
 ## Setup and identity
@@ -391,6 +402,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 ---
 
 ## Meeting and capture
+
+### catch-up
+
+- **Say.** "catch up", "process my inbox", "I sent myself some notes", or paste a pile of raw phone captures.
+- **Outcome.** Everything captured away from the laptop lands in the brain: `capture/inbox/` drops, pasted text, and (when connected) meeting-notes transcripts are filed to `brain/rants/` with provenance and `processed: false`, names checked against your glossary, unknowns marked `(sp?)` and asked about once, in one batch.
+- **Reads.** `capture/inbox/`, `context/names.md`, `stack.json` for a bound meeting-notes tool.
+- **Writes.** `brain/rants/<date>-<slug>.md` per capture; swept inbox files move to `capture/inbox/.processed/`; confirmed corrections append to `context/names.md`.
+- **Voice rules.** No. Your words are filed raw, never rewritten.
+- **Prereqs.** `founder-os-setup` complete.
+- **When to run.** First session back at the desk after time away. Any time the inbox has files.
+- **Follow-up.** `/founder-os:dream` to distil the filed rants. Run via `/founder-os:catch-up`. Channel guide: `docs/capture-anywhere.md`.
 
 ### meeting-prep
 

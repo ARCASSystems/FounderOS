@@ -163,7 +163,7 @@ After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-scr
 
 ## What ships in this repo
 
-### Skills (84)
+### Skills (86)
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
@@ -171,7 +171,7 @@ The skills are organised into **role packs**, each a function a solo founder cov
 
 One to call out is the **LinkedIn pack**: say "help me with my LinkedIn", pick an outcome (leads, a better job, a louder brand, or a healthier network), and the OS aims your own data export at it - a ranked outreach worklist, a deep network audit, dormant-contact revival, and an algorithm-aware content direction. All local, free-plan, within LinkedIn's terms - no scraper, no automated actions, message content never read.
 
-### Slash commands (35)
+### Slash commands (37)
 
 Every command has a natural-language equivalent - slash commands are speed shortcuts for power users, not the primary surface. Full reference with outcomes, args, and follow-ups in [`docs/commands.md`](docs/commands.md).
 
@@ -295,7 +295,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.39.0. Public release. 84 skills, 35 commands. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.40.0. Public release. 86 skills, 37 commands. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+
+v1.40.0 is the Second Brain release. It attacks the distance between you and owning the system. Install is now three steps and nothing typed: download the ZIP, extract, say "set up Founder OS" - git is gone from the prerequisites, and when you want full version history the OS installs and wires git itself on one consent-gated yes ("own my history"). Until then a pre-git undo floor covers you: every file the OS touches is snapshotted before every write, and "what did you change" returns the per-session manifest with a one-command restore per file. Capture now works away from the laptop: drop phone dictations, voice-note exports, or pasted saved-messages piles anywhere they can land as text, say "catch up", and the OS files them into the brain through a self-teaching names glossary that corrects known mis-hearings and never guesses unknown ones. The local-first security story is now written down with the 2026 record as the counterfactual (docs/why-local-first.md), and CI gained a hooks-parity gate so every hook provably ships for both bash and PowerShell.
 
 v1.38.0 is the Ease release. It finishes the front door and the heartbeat: the skills are grouped into role packs, each opened by one front-door wedge so you arrive for one job and are invited into the rest; the OS owns git for you (say "save my work", "what changed", "undo to before this morning"); it connects a tool when you ask ("connect Telegram", "connect my calendar"); and it runs daily, weekly, and monthly routines, with a flagship that returns the three changes to make in your business now. It also completes the optional voice scaffold: on top of "add voice", you can now "add a mouth" (have answers read aloud, free and local by default), "add hands" (let it open things and save notes, with a confirm gate that stops every irreversible action for an explicit yes), and "tune" (it reads your local voice usage and proposes the next instant handler, never changing anything on its own). Voice stays optional - the OS is complete as text.
 

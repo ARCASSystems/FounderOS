@@ -2,6 +2,42 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.40.0 - 2026-07-08
+
+The Second Brain release. It attacks the value equation directly: less effort to own the system (install is three steps and nothing typed), less delay before it earns its keep (capture works from your phone the same day), and more proof it deserves trust (an undo floor with no prerequisites, a security story with receipts). Every path holds the accessibility floor: one Claude plan, no extra key, no paid service, and now - no git.
+
+### Add - the ZIP install path (own it in 10 minutes)
+
+- **Path 0: download the ZIP, extract, say "set up Founder OS".** No git, no curl, no terminal command. Git left the prerequisites entirely - the README asks for three things now (Claude Code, a paid plan, Python), and the install doc leads with the path that needs nothing installed.
+- **`/founder-os:update` works without git.** On a ZIP install it re-downloads the archive itself, overlays only System Layer paths against the User Layer protect list, backs up to a folder instead of a branch (rollback included), and ends with a plain-language digest of what changed between your version and the new one. `CHANGELOG.md` and `GEMINI.md` joined the System Layer list so the digest and the agent bridges stay current.
+- **Setup and every hook degrade honestly when git is absent.** Phase 2.3 skips init with a plain sentence instead of an error, the auto-save hook stays silent, and nothing nags.
+
+### Add - own your history (git as a graduation, not a prerequisite)
+
+- **Say "own my history" and the OS installs git itself - one consent-gated yes, nothing for you to type.** It names the exact install command before you agree, initializes the repository, wires the privacy guard BEFORE the first commit so no version predates it, and records version one with the same engine every later save uses. `save`, `history`, and `restore` now route here instead of erroring on a git-less install, and the post-setup tour makes the offer exactly once, warmly, with zero pressure.
+
+### Add - the session-changes undo floor (undo before git exists)
+
+- **Every file the OS touches is snapshotted before every write.** A PreToolUse hook copies the pre-edit bytes on first touch per session; a Stop hook renders a per-session manifest; the new `/founder-os:changes` command shows it on demand: every file, the action, the change size, and a one-command restore per file. No git required - on a ZIP install this IS the undo surface, and after graduation it keeps running as a second net. Failures land in `system/quarantine.md`, never silently swallowed, and the recorder always exits 0 so it can never block a write.
+
+### Add - capture anywhere (feed the brain from your phone)
+
+- **`capture/inbox/` plus the `catch-up` skill.** Drop phone dictations, voice-note exports, emailed notes, or pasted saved-messages piles anywhere they can land as text; say "catch up" and the OS files each into `brain/rants/` with provenance and `processed: false`, so the existing `/dream` flow takes over. Raw in, raw kept - your words are never rewritten at capture time. The setup wizard now asks how you will capture away from the laptop, and `docs/capture-anywhere.md` ranks the channels by friction.
+- **A names glossary makes transcription errors a handled convention.** `context/names.md` holds canonical spellings and observed mis-hearings. Known names correct silently; unknown names stay as heard, marked `(sp?)`, and are asked about once, in one batch; every correction appends to the glossary so the same mishearing never survives twice. Numbers and facts the OS is unsure of are never silently "fixed". `capture-meeting` runs the same name pass, and dual-source captures reconcile by a fixed hierarchy (a document beats agreement, agreement beats a single source, your correction beats everything).
+
+### Add - the local-first security story, with receipts
+
+- **`docs/why-local-first.md`.** The 2026 agent-framework incident as the counterfactual: 135,000+ exposed instances, plaintext key files, a poisoned skills marketplace - every failure mode needed a listening server, a stored API key, or a third-party registry, and the OS has none of the three. Sources cited, honest limits stated (your laptop is the perimeter, connectors are your choice, cloud sessions are a different posture), and the repo-as-sync-contract pattern documented for power users.
+
+### Fix - honest badges and claims
+
+- **The README badge row now points at CI gates that exist** (doc and install parity, guardian, LinkedIn pack acceptance) instead of a `test.yml` workflow that never shipped, and the status line stopped claiming a test count the public repo cannot verify.
+- **The voice scaffold learned the missing-state lesson.** The realtime front has no clock and no memory across wakes; the architecture doc now documents per-wake clock injection, files-as-continuity, and the desk-and-filing-cabinet model, so nobody wiring voice repeats the confident-wrong-time bug the private build hit.
+
+### Cross-cutting
+
+- **CI gained a hooks-parity gate:** every hook must ship and register a .sh/.ps1 pair, enforced instead of trusted. Skill count moved 84 -> 86 and command count 35 -> 37 across every parity surface. New skills (`own-your-history`, `catch-up`) and commands (`/founder-os:changes`, `/founder-os:catch-up`) are free-tier: local files, local scripts, no key, no paid tool.
+
 ## v1.39.0 - 2026-06-20
 
 The propose release. The OS stops waiting to be asked. Once a founder's brain holds enough, it reads where they are and names the single next move toward a paying customer, then attacks the plan behind it. Every path holds the accessibility floor: one Claude plan, no extra key, no paid service.
