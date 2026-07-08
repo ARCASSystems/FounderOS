@@ -14,18 +14,20 @@ Read `core/identity.md` for who they are. Your job is to reduce cognitive load w
 
 **Context budget is sacred.** Load only what you need.
 
-Every session, the six operating-state files load at boot so behaviour is grounded in current context:
+Every session, the always-small files load at boot so behaviour is grounded in current context:
 
 1. `core/identity.md` - who the person running this OS is and how they work
-2. `context/priorities.md` - what matters this week and quarter
-3. `context/decisions.md` - open, parked, resolved
-4. `context/clients.md` - prospects, active, won
-5. `cadence/daily-anchors.md` - today's anchor task
-6. `cadence/weekly-commitments.md` - current sprint
+2. `core/profile.md` - what the OS leads with for this operator (variant, lead surfaces, frame)
+3. `rules/operating-rules.md` - behavioural rules
+4. `cadence/daily-anchors.md` - today's anchor task
+5. `cadence/weekly-commitments.md` - current sprint
+6. `context/priorities.md` - what matters this week and quarter
 
-Plus `core/profile.md` - what the OS leads with for this operator (the detected variant, the lead surfaces, the frame), read alongside identity so the OS opens with what this person's situation needs. And `rules/operating-rules.md` for behavioural rules. CLAUDE.md (this file) is read automatically by Claude Code at session start.
+CLAUDE.md (this file) is read automatically by Claude Code at session start.
 
-`brain/log.md` and `brain/flags.md` load on demand when the task touches history or stall detection.
+For the files that grow with use, boot from the snapshot instead of the full read: if `brain/.snapshot.md` exists and its date is within 3 days, read IT for orientation - it carries the open flags, this week's must-do, the recent decisions, and staleness in a few hundred tokens. Then read `context/decisions.md`, `context/clients.md`, `brain/flags.md`, or `brain/log.md` in full ONLY when the task actually touches that domain (a decision call, a client question, stall detection, history). This is what keeps boot cheap on a months-old install where those files have grown.
+
+If `brain/.snapshot.md` is missing or older than 3 days, fall back to reading `context/decisions.md` and `context/clients.md` at boot as before, and offer once: "your snapshot is stale - say 'refresh my snapshot' and boots get cheaper." Never treat a stale snapshot as current state.
 
 ### Stale-Context Rule (mandatory, run before advising)
 
@@ -196,7 +198,7 @@ The SessionStart brief (`.claude/hooks/session-start-brief.sh`, registered on `S
 
 ## Fabric (hooks, commands)
 
-- **SessionStart brief** - one-screen surfacing at every session open: open flags + Week 3+ severity, daily/weekly cadence staleness, decisions count, [FILL] client rows, ACTIVE quarantine entries, Review Due (past `Decay after:`), Decay anchor missing, `clients/<slug>/` folders without an auto-memory entry (v1.12), and a final `Observations:` line stating whether `FOUNDER_OS_OBSERVATIONS=1` is set so the silent-disable case is visible (v1.15). Quietly skips if not in a Founder OS install.
+- **SessionStart brief** - one-screen surfacing at every session open: open flags + Week 3+ severity, daily/weekly cadence staleness, decisions count, [FILL] client rows, ACTIVE quarantine entries, Review Due (past `Decay after:`), Decay anchor missing, `clients/<slug>/` folders without an auto-memory entry (v1.12), and a final `Observations:` line stating whether `FOUNDER_OS_OBSERVATIONS=1` is set so the silent-disable case is visible (v1.15). Quietly skips if not in a Founder OS install. Silence is the contract: sections print only when they have something to report, so a clean OS opens near-silent and anything the brief does say deserves attention.
 - **Session-close revenue-loop check** - warns if outreach verbs appear in recent brain/log.md without a matching context/clients.md update.
 
 Both hooks fail gracefully and never block the session.
