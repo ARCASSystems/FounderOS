@@ -1,6 +1,6 @@
 # Founder OS
 
-![tests](https://github.com/ARCASSystems/FounderOS/actions/workflows/test.yml/badge.svg)
+![Doc and Install Parity](https://github.com/ARCASSystems/FounderOS/actions/workflows/doc-parity.yml/badge.svg) ![guardian](https://github.com/ARCASSystems/FounderOS/actions/workflows/guardian.yml/badge.svg) ![LinkedIn Pack Acceptance](https://github.com/ARCASSystems/FounderOS/actions/workflows/linkedin-pack.yml/badge.svg)
 
 The operating layer for the person running the business. Six files run your company. Claude reads them every session.
 
@@ -280,7 +280,7 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.39.0. Public release. 84 skills, 35 commands, 737 tests.
+Version 1.39.0. Public release. 84 skills, 35 commands. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
 v1.38.0 is the Ease release. It finishes the front door and the heartbeat: the skills are grouped into role packs, each opened by one front-door wedge so you arrive for one job and are invited into the rest; the OS owns git for you (say "save my work", "what changed", "undo to before this morning"); it connects a tool when you ask ("connect Telegram", "connect my calendar"); and it runs daily, weekly, and monthly routines, with a flagship that returns the three changes to make in your business now. It also completes the optional voice scaffold: on top of "add voice", you can now "add a mouth" (have answers read aloud, free and local by default), "add hands" (let it open things and save notes, with a confirm gate that stops every irreversible action for an explicit yes), and "tune" (it reads your local voice usage and proposes the next instant handler, never changing anything on its own). Voice stays optional - the OS is complete as text.
 
