@@ -131,6 +131,22 @@ These four fields write to `core/identity.md` under `## Founder Snapshot` in Pha
 
 **Backward compatibility (parse-everything-at-once path).** If the founder already gave you the venture, customer, stage, and blocker across earlier answers ("I'm building a pomegranate import business, supply is sorted from Afghanistan, I just need to crack the UAE market"), parse all of it - venture, customer, an inferred stage, and the blocker - mark the section answered, and skip the prompts. Confirm what was captured in one line. Do not re-ask.
 
+### 0.2.7 Business model (the third axis)
+
+Role (0.2.1) says who the operator is; stage (0.2.6) says where they are. This captures HOW the business makes money, because the money math differs by model: a service founder lives on utilization and day rate, an ecommerce founder on contribution margin and inventory turns, a SaaS founder on MRR and churn. One deterministic answer here makes every later number conversation start in the right frame.
+
+**Run for `founder`, `team_of_one`, and `operator` roles.** Skip for `student` and `career-mover` (no business to model; record `null`).
+
+Usually you already know. Infer it from 0.1/0.2.5 first ("you sell brand projects to SMEs - that is a service business, right?") and confirm in one line instead of asking cold. Ask fresh only when the answers so far do not settle it:
+
+"How does the business make money? Pick the closest: selling services or projects / selling physical products / software subscriptions / a marketplace connecting buyers and sellers / content and audience / something regulated or deep-tech (biotech, medical, legal, hardware R&D) / something else."
+
+Map to the `business_model` token in `stack.json`: `service` / `ecommerce` / `saas_software` / `marketplace` / `content_creator` / `regulated_deep_tech` / `other`. Unclear or skipped -> `null`, never a guess. A hybrid ("products AND a service arm") -> pick what pays most of the bills today, note the other in the backlog.
+
+**If the answer is `regulated_deep_tech` or `other`, say the honesty line once, plainly:** "One thing worth saying now: I can carry your capture, decisions, cadence, memory, and the accounting-level math for any business. What I will not do is generate the domain expertise - compliance, science, clinical or legal judgment stays with you and your experts, and I will route those questions to you rather than improvise them. Everything else works the same."
+
+That sentence is the contract. Never let a later skill quietly break it by producing confident domain guidance for a field the OS cannot validate.
+
 ### 0.3 Active Workstreams
 For EACH business: "What are you actively working on right now in [business name]? Examples: website, email campaigns, lead generation, content, product development, client delivery, hiring."
 
