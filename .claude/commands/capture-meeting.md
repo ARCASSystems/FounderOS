@@ -28,6 +28,12 @@ Argument: `$ARGUMENTS` (the person or meeting name).
 
 4. Read `context/clients.md`. If the person exists, note their current row. If not, you will create one.
 
+4.5. **Name pass (mandatory on transcript input).** Dictation and meeting recorders mangle proper nouns. Before extracting meaning, read `context/names.md` (the names glossary) if it exists and check every person, company, and product name in the input:
+   - A name matching a glossary entry or a listed mishearing: use the canonical spelling.
+   - A name matching nothing: keep it as heard, marked `(sp?)`, and ask about all unknowns in one batch before writing to any file. Never guess a fuller identity for an unmatched name, and never overwrite an existing person's record on a near-match - a heard name that is close to two known people is a question, not a pick.
+   - Append every correction the founder makes to the glossary's mishearings column.
+   Numbers, prices, and dates you are unsure of stay as captured, marked - never silently "fixed".
+
 5. Parse the input for:
    - **Key decisions made** (things settled or ruled out)
    - **Commitments the founder made** (things they owe, verbs like "I'll send / share / do / book")

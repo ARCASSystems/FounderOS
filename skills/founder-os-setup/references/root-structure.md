@@ -73,7 +73,11 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── priorities.md            # Personalized from 0.4
 │   ├── decisions.md             # From templates/context/decisions.md
 │   ├── companies.md             # Personalized from 0.1/0.2
-│   └── clients.md               # From templates/context/clients.md
+│   ├── clients.md               # From templates/context/clients.md
+│   └── names.md                 # From templates/context/names.md (names glossary - replace {{FOUNDER_NAME}} and {{COMPANY_NAME}}; capture passes read it before writing any name)
+├── capture/
+│   └── inbox/
+│       └── README.md            # From templates/capture/inbox/README.md (drop zone for away-from-laptop captures; swept by catch-up)
 ├── roles/
 │   ├── index.md                 # From templates/roles/index.md
 │   ├── coo.md                   # From templates/roles/coo.md
@@ -165,6 +169,7 @@ If role was not captured or defaulted, use `founder`.
 - `templates/identity.md` → `core/identity.md`.
 - `templates/avatar.md` → `core/avatar.md` (already covered above; do not double-substitute).
 - `templates/business-context.template.md` → `companies/<slug>-business.md` (substitutes `{{COMPANY_NAME}}` with the company name from Phase 0.1).
+- `templates/context/names.md` → `context/names.md` (substitutes both `{{FOUNDER_NAME}}` and `{{COMPANY_NAME}}` - the glossary's first two seed rows).
 
 If no founder name was captured, fall through to the universal pass and write `[NOT SET]`. Do NOT leave literal `{{FOUNDER_NAME}}` on disk.
 

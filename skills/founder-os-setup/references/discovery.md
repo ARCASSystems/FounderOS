@@ -168,6 +168,18 @@ The other eight `stack.json` fields (`automation_platform`, `file_storage`, `mee
 
 These fields populate `stack.json`, which sop-writer, meeting-prep, email-drafter, and other skills read at runtime to tailor output to the founder's actual stack. The full write happens in Phase 5.0.
 
+### 0.5.2 Capture away from the laptop
+
+Ask one question after the tool stack: "Last one on tools: how will you capture thoughts when you are NOT at this laptop? A voice-notes app / dictation into a synced folder / email to yourself / saved messages (Telegram, WhatsApp to self) / I won't, I remember things / skip."
+
+Handle the answer:
+
+- A named voice-notes or meeting-notes tool -> record it in `meeting_notes` in `stack.json` if it maps to an allowed value, else log the tool name to the backlog. Mention that connecting it later ("connect my notes tool") lets the OS pull transcripts itself.
+- Any other channel (synced folder, email to self, saved messages) -> one sentence of confirmation naming the loop: "Good - dump it there, and when you are back just say 'catch up'. The OS files everything into your brain and checks the names." No configuration is needed for these.
+- "I won't" or "skip" -> accept without pushback, and plant the seed in one line: "If that changes, the inbox is `capture/inbox/` and the word is 'catch up'."
+
+Do not demo the flow here. The point of the question is that the founder leaves setup knowing capture-away-from-the-desk exists and costs nothing to use. Full channel guide: `docs/capture-anywhere.md`.
+
 ### 0.5.5 Time Zone
 
 Ask: "What time zone are you in? A city or a UTC offset both work (e.g. Dubai, London, GST, UTC+4). You can say skip."
