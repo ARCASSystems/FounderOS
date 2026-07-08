@@ -208,7 +208,7 @@ Before producing output, read `brain/.snapshot.md` if it exists. The open-flags 
 ## Cross-reference
 
 - `skills/brain-log/SKILL.md` - the underlying brain capture primitive. log-reply is a wrapper that adds thread parsing and a propose-update flow on top.
-- `skills/capture-meeting/SKILL.md` - the sister skill for a meeting you ran. Use that one when you have a transcript or brain dump from a meeting; use this one when you have a thread reply.
+- `.claude/commands/capture-meeting.md` - the sister flow for a meeting you ran. Use that one when you have a transcript or brain dump from a meeting; use this one when you have a thread reply.
 - `skills/approval-gates/SKILL.md` - the gate classifier that downstream skills call.
 - `rules/approval-gates.md` (or `templates/rules/approval-gates.md`) - the gate matrix this skill cites.
 - `templates/rules/entry-conventions.md` - ID stamping and Stage convention for `context/leads.md` rows.
