@@ -26,7 +26,7 @@ Commands use bare names on this path (`/setup`, `/today`), same as the git-clone
 
 **Updates:** say "update Founder OS" (or run `/update`). The OS re-downloads the ZIP itself, refreshes only its own engine files (skills, commands, scripts, docs), and never touches your data. You approve before anything is applied.
 
-**Version history on this path:** off at first, by design - there is no git on the machine yet. You are still covered: the OS snapshots every file it touches, every session, and `/changes` shows exactly what changed with a one-command restore per file. When you want full history ("undo to before this morning", a complete timeline), say **"own my history"** - with your yes, the OS installs git itself, turns the folder into a repository, and wires the privacy guard. You never type a git command.
+**Version history on this path:** off at first, by design - there is no git on the machine yet. You are still covered: the OS snapshots every file it touches, every session, and `/changes` shows exactly what changed with a one-command restore per file. When you want full history ("undo to before this morning", a complete timeline), say **"own my history"** - with your yes, the OS installs git itself, turns the folder into a repository, and wires the privacy guard. You never type a git command. This is the recommended steady state: once git is on, updates flow through it instead of ZIP re-downloads, and git maintains itself - the ZIP was the door, not the destination.
 
 **Pros**
 - Nothing to install first. No git, no curl, no terminal.
