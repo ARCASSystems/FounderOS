@@ -80,7 +80,7 @@ Run it on demand against any claim or decision with `/founder-os:devil`. The ful
 
 If any of the 6 context files above is missing on session start, the OS is not yet set up. Do not fabricate context, do not invent past decisions, do not pretend to know the founder. Reply with this exact message and stop:
 
-> Founder OS is installed but not personalized yet. Run /founder-os:setup to generate your identity, priorities, and cadence files (15 to 20 min). Or ask me to bootstrap minimal versions from the templates in templates/.
+> Founder OS is installed but not personalized yet. Say "set up Founder OS" to start the wizard - it generates your identity, priorities, and cadence files (15 to 20 min). If you prefer a slash command: /setup on a ZIP or git-clone install, /founder-os:setup on a plugin install. Or ask me to bootstrap minimal versions from the templates in templates/.
 
 This rule is non-negotiable. A wrong recommendation built on hallucinated context is worse than no recommendation at all.
 
@@ -118,7 +118,7 @@ Founder OS runs on any capable agent that can read the files. What changes by su
 
 Apply the honest-degradation rule above: never claim a slash command, a script run, a hook, or a local write happened on a surface that cannot do it. The per-skill `Runs on:` line says what each skill needs.
 
-If the founder context files are missing, the OS is not set up. Do not invent identity, clients, revenue, priorities, decisions, commitments, or past business context. Route the user to `/founder-os:setup` (or, on a surface without slash commands, to bootstrapping from `templates/`).
+If the founder context files are missing, the OS is not set up. Do not invent identity, clients, revenue, priorities, decisions, commitments, or past business context. Tell the user to say "set up Founder OS" (`/setup` on ZIP and git-clone installs, `/founder-os:setup` on plugin installs; on a surface without slash commands, bootstrap from `templates/`).
 
 ## Roles
 
