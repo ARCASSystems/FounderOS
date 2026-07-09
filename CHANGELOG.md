@@ -2,6 +2,23 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.41.0 - 2026-07-09
+
+The proof-and-payoff patch on the Second Brain release: setup proves it wired up before it says "done", and session one now hands the founder something they can see. Same floor: one Claude plan, no key, nothing leaves the machine.
+
+### Add - setup proves itself before the finish line
+
+- **The setup wizard now runs the `verify` health check automatically** at the end of Phase 6, before it tells the founder they are done, and reads the eight-check result back in one plain line. A partial install - a script that did not copy, a missing Python, an unwired hook - now surfaces in the last minute of setup instead of days later mid-task. A FAIL blocks the finish line until it is named and fixed. This is the "never say ready without a check that says so" rule, lived by the product rather than left to the user to invoke.
+
+### Add - a showable card in session one
+
+- **`templates/founder-card.html`** is a self-contained, dependency-free one-page card that opens the same offline as online. The setup tour and `founder-next-move` fill it from the founder's own Founder Snapshot and proposal, then write `your-next-move.html` to the OS root: venture, customer, where you are, biggest blocker, the single next move, and the one step to start today.
+- **`founder-next-move` renders the card on demand** ("show my card", "make my founder card"), and setup renders it automatically in the post-setup tour for the founder and team_of_one variants. It is the one visible artifact a first-timer can screenshot or stick on a wall, and it refreshes every time they ask for their next move. A thin brain with no customer set skips the card rather than render a hollow one.
+
+### Change - engagement framed as a floor with a payback, not a chore
+
+- **The "who this is NOT for" note now names the exchange:** drop a thought in when it happens, glance at the brief on open, and the OS stops you re-remembering the same open loops and re-deciding the same calls. The honest filter stays - if you will not talk to it at all, it sits unused - but the daily-and-weekly floor now reads as the low-cost, admin-subtracting trade it is.
+
 ## v1.40.1 - 2026-07-08
 
 The Second Brain release, wave two: memory that provably survives, retrieval that stays cheap as the brain grows, and money math that speaks the operator's business model. Same accessibility floor: one Claude plan, no key, no paid service, no git required.

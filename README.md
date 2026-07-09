@@ -235,7 +235,7 @@ You need shared state across a team. Founder OS is single-user. The Company OS l
 
 You want push notifications, automated triggers, or anything that fires while you sleep. Founder OS is the thinking layer. n8n, Make, Zapier, or your own scripts handle offline triggers.
 
-You want a tool you install and forget. This is an operating layer that needs you to engage daily and review weekly. If you are not going to do that, this will sit unused like every other system.
+You want a tool you install and forget. Founder OS earns its keep the other way round: you drop a thought in when it happens, glance at the brief when you open Claude Code, and in return it stops you re-remembering the same open loops and re-deciding the same calls. The floor is low, capture takes seconds, but it is not zero. If you will not talk to it at all, it sits unused like every other system, and that part is honest.
 
 ---
 
@@ -295,7 +295,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.40.1. Public release. 87 skills, 38 commands. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.41.0. Public release. 87 skills, 38 commands. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+
+v1.41.0 is the proof-and-payoff patch on the Second Brain release. Setup now ends by running its own health check automatically and reading the result back to you, so you never leave on trust that the wiring landed - a partial install shows up in the last minute of setup instead of days later mid-task. And session one now produces something you can see: a one-page card (`your-next-move.html`) with your venture, your customer, where you are, and the single move to make next, rendered from your own brain and refreshed any time you ask for your next move. Same floor: one Claude plan, no key, nothing leaves your machine.
 
 v1.40.1 is the Second Brain release's second wave: memory and money. A PreCompact hook flushes unsaved session facts into the brain files before the context is compacted, so nothing load-bearing dies in a summary. Boot got cheaper on grown installs - the OS orients from a compact snapshot and opens the full files only when the task needs them. A housekeeping sweep keeps a months-old brain honest: one screen of accumulated debt with a fix command per line, and a supervised fix mode for the reversible half. And the OS now knows how your business makes money - a business-model axis captured at setup drives which numbers lead in every money conversation, with a plainly stated honesty rule for regulated and deep-tech operators: accounting math yes, invented domain assumptions never.
 
