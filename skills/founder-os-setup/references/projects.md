@@ -73,15 +73,16 @@ If they don't have a task yet (no active clients, pre-revenue, just starting), s
 
 ### 5.0 Write Tool Stack to stack.json
 
-Take the tool-stack answers captured in Phase 0.5 (knowledge base, email, calendar, automation, CRM, file storage, meeting notes, voice input, server, prospecting DB, video tool, booking, primary channel) and write them to `stack.json` at the Founder OS root.
+Take the tool-stack answers captured in Phase 0.5 (knowledge base, email, calendar, automation, CRM, file storage, meeting notes, voice input, server, prospecting DB, video tool, booking, primary channel) plus the business model confirmed in Phase 0.2.7, and write them to `stack.json` at the Founder OS root.
 
 Steps:
 1. Read the existing `stack.json`. Preserve the `_description`, `_wizard_version`, `_allowed_values`, and `_notes` fields.
 2. Set `_generated` to today's date in `YYYY-MM-DD` format.
 3. For each field the user answered in 0.5, set the value to the exact lowercase token from `_allowed_values` (e.g. `notion`, `gmail`, `google_calendar`, `n8n`). If the user named a tool not in `_allowed_values`, ask them to pick the closest match or set the value to `null` and log the actual tool name in the backlog.
-4. For fields the user did not answer, leave the value as `null`.
-5. Validate the file is parseable JSON before writing. If parse fails, stop and surface the error.
-6. Confirm to the user: "Wrote your tool stack to `stack.json`. Skills that adapt to your tools now read from here."
+4. Set `business_model` to the token confirmed in Phase 0.2.7 (`service` / `ecommerce` / `saas_software` / `marketplace` / `content_creator` / `regulated_deep_tech` / `other`). Write `null` ONLY when 0.2.7 was skipped or left unresolved. The token was captured for exactly this write - leaving it `null` when a confirmed answer exists means `unit-economics` starts every number conversation in the wrong frame.
+5. For fields the user did not answer, leave the value as `null`.
+6. Validate the file is parseable JSON before writing. If parse fails, stop and surface the error.
+7. Confirm to the user: "Wrote your tool stack to `stack.json`. Skills that adapt to your tools now read from here."
 
 ### 5.1 Skeleton Projects
 For each remaining workstream from 0.3 that wasn't built in Phase 4:
