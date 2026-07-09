@@ -6,10 +6,12 @@ argument-hint: "[check | rollback]"
 <Instruction-gate>
 Do NOT modify any file in the User Layer during this update. The User Layer consists of:
 
-- core/identity.md
+- core/ (all files - identity, profile, avatar, voice and brand profiles, setup backlog)
 - context/ (all files)
 - cadence/ (all files)
 - brain/ (all files)
+- capture/ (all files - the founder's inbox drops)
+- brands/ (all files - per-brand voice and positioning)
 - network/ (all files)
 - clients/ (all files)
 - companies/ (all files)
@@ -22,7 +24,7 @@ The User Layer is owned by the founder. If you cannot determine whether a file i
 
 # Founder OS update
 
-Pulls the latest System Layer files from the public repo (ARCASSystems/FounderOS) and applies them to this install. The User Layer (identity, context, cadence, brain, network, clients, local stack bindings) stays untouched.
+Pulls the latest System Layer files from the public repo (ARCASSystems/FounderOS) and applies them to this install. The User Layer (core, context, cadence, brain, capture, brands, network, clients, companies, memory, local stack bindings) stays untouched.
 
 Argument: `$ARGUMENTS` - optional. One of: `check`, `rollback`, or empty.
 
@@ -32,7 +34,7 @@ Argument: `$ARGUMENTS` - optional. One of: `check`, `rollback`, or empty.
 - `.claude/` (commands, hooks, agents, settings)
 - `.claude-plugin/` (plugin.json, marketplace.json)
 - `skills/` (shared skill definitions)
-- `scripts/` (Python helpers: wiki-build.py, query.py, brain-snapshot.py, brain-pass-log.py, memory-diff.py)
+- `scripts/` (all Python helpers shipped by the OS - the full `templates/scripts/` set)
 - `templates/` (structural templates)
 - `notion-package/` (Notion setup assets)
 - `rules/` (commit naming and other shared rules)
@@ -45,10 +47,12 @@ Argument: `$ARGUMENTS` - optional. One of: `check`, `rollback`, or empty.
 - `VERSION`
 
 **User Layer (NEVER update):**
-- `core/identity.md`
+- `core/` (all files)
 - `context/` (all files)
 - `cadence/` (all files)
 - `brain/` (all files)
+- `capture/` (all files)
+- `brands/` (all files)
 - `network/` (all files)
 - `clients/` (all files)
 - `companies/` (all files)
@@ -108,7 +112,7 @@ If update available, add one line: `Run /founder-os:update to install.` Stop.
 3. Copy every path inside `BACKUP_DIR` back over the install root, preserving relative paths. Everything in it is System Layer by construction (Step 7 only backs up System Layer paths), so no User Layer file can be touched.
 4. Reply: `Rolled back System Layer from <BACKUP_DIR>. User Layer untouched. The backup folder is kept; delete it when no longer needed.`
 
-**GIT mode:** restore System Layer paths from the most recent backup branch. Backup branches are named `founder-os-update-backup-<ISO-timestamp>` and are created in Step 7 before every update, so a backup exists for any successful update regardless of whether the tree was clean or dirty at update time.
+**GIT mode:** restore System Layer paths from the most recent backup branch. Backup branches are named `founder-os-update-backup-<ISO-timestamp>` and are created in Step 7 before every update; Step 7 also commits any uncommitted System Layer edits before branching, so the backup captures the full pre-update System Layer state whether the tree was clean or dirty.
 
 1. Run `git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/heads/founder-os-update-backup-*` and take the first entry. Call this `BACKUP_REF`.
 2. If no entry is returned, reply: `No prior update backup branch found. Cannot rollback automatically. Use git reflog to find the last good commit manually.` Stop.
@@ -149,8 +153,8 @@ This will update System Layer files only:
 - CLAUDE.md, AGENTS.md, GEMINI.md, README.md, CHANGELOG.md, VERSION
 
 Your User Layer files will NOT be touched:
-- core/identity.md
-- context/, cadence/, brain/, network/, clients/, stack.json
+- core/, context/, cadence/, brain/, capture/, brands/
+- network/, clients/, companies/, MEMORY.md, stack.json
 
 Proceed? (yes / no)
 ```
@@ -171,10 +175,11 @@ Before applying anything, create a backup so `rollback` works on any tree state.
 **GIT mode:** create a backup branch.
 
 1. Run `git rev-parse --is-inside-work-tree` to confirm the install is a git repo (it is, in this mode - this is a sanity check).
-2. Generate an ISO timestamp: `BACKUP_REF="founder-os-update-backup-$(date -u +%Y%m%dT%H%M%SZ)"`.
-3. Run `git branch "$BACKUP_REF"`. This creates a branch pointer at the current HEAD without changing the working tree or HEAD. Branch creation works on a clean tree (unlike `git stash push`, which silently no-ops when there are no local changes and was the previous mechanism). The branch captures the entire pre-update state - every System Layer path can be restored later with `git checkout "$BACKUP_REF" -- <path>`.
-4. If branch creation fails because the name already exists (two updates within the same second, very rare), append a `-2` suffix and retry. If it still fails, reply: `Could not create backup branch. Run git branch to inspect, then retry.` Stop.
-5. Report inline: `Backup branch created: <BACKUP_REF>.`
+2. Check for uncommitted System Layer edits: run `git status --porcelain` and filter the output to System Layer paths. If any exist, commit them first (stage exactly those paths, commit message `chore: pre-update snapshot of local System Layer edits`) and say so in one line. A branch pointer captures committed state only - without this step, uncommitted System Layer edits would be overwritten by Step 8 with no backup. Uncommitted User Layer changes are left alone (Step 8 never touches those paths).
+3. Generate an ISO timestamp: `BACKUP_REF="founder-os-update-backup-$(date -u +%Y%m%dT%H%M%SZ)"`.
+4. Run `git branch "$BACKUP_REF"`. This creates a branch pointer at the current HEAD without changing the working tree or HEAD. Branch creation works on a clean tree (unlike `git stash push`, which silently no-ops when there are no local changes and was the previous mechanism). Together with the pre-commit in step 2, the branch captures the entire pre-update System Layer state - every System Layer path can be restored later with `git checkout "$BACKUP_REF" -- <path>`.
+5. If branch creation fails because the name already exists (two updates within the same second, very rare), append a `-2` suffix and retry. If it still fails, reply: `Could not create backup branch. Run git branch to inspect, then retry.` Stop.
+6. Report inline: `Backup branch created: <BACKUP_REF>.`
 
 ### Step 8. Apply updates
 

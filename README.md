@@ -2,7 +2,7 @@
 
 ![Doc and Install Parity](https://github.com/ARCASSystems/FounderOS/actions/workflows/doc-parity.yml/badge.svg) ![guardian](https://github.com/ARCASSystems/FounderOS/actions/workflows/guardian.yml/badge.svg) ![LinkedIn Pack Acceptance](https://github.com/ARCASSystems/FounderOS/actions/workflows/linkedin-pack.yml/badge.svg)
 
-The operating layer for the person running the business. Six files run your company. Claude reads them every session.
+The operating layer for the person running the business. Six files run your company. Claude works from them every session.
 
 Owned by you. Runs locally in Claude Code. Talk to it.
 
@@ -120,7 +120,7 @@ That is the whole install. No git, no curl, no terminal command, no account beyo
 
 Then say "set up Founder OS" (or run `/founder-os:setup`). If setup is not recognised, run `/reload-plugins` first.
 
-**When to choose:** You want the gentlest path. Two commands typed inside Claude Code, no terminal install step, and auto-updates via `/founder-os:update`. Needs Claude Code with a paid Claude plan. The plugin is the engine and stays out of your way under `~/.claude/plugins/`; setup builds your OS in a folder you own (default `~/founder-os/`). Engine and data are separate - your files are yours even if you remove the plugin.
+**When to choose:** You want the gentlest path. Two commands typed inside Claude Code, no terminal install step, and auto-updates via `/plugin update`. Needs Claude Code with a paid Claude plan. The plugin is the engine and stays out of your way under `~/.claude/plugins/`; setup builds your OS in a folder you own (default `~/founder-os/`). Engine and data are separate - your files are yours even if you remove the plugin.
 
 ### One-line curl (fastest if you live in a terminal)
 
@@ -153,7 +153,7 @@ Open the FounderOS folder in Cowork and attach `CLAUDE.md` as folder instruction
 ## Setup ladder (40 min total, do in this order)
 
 1. **Install** - pick an [install path](#install) above (5 min). If your install uses git (curl or clone paths, or after "own my history"), run `./scripts/install-git-hooks.sh` to wire the privacy pre-commit hook (operator-only). Out of the box it already blocks committed secrets (API keys, tokens, bot tokens, PEM private keys), em/en dashes, and AI-attribution trailers - no config needed. To also block your private names, open `scripts/private-name-patterns.txt` and add at least your own name (`\bYourName\b`); the name check stays off until that file has a pattern, while the secret and voice checks run regardless. The file is gitignored, so your names never leave your machine. On a ZIP install this step waits until you turn on version history - there is nothing to wire before then.
-2. **Say "set up Founder OS"** (or run `/founder-os:setup`) - the wizard builds your operating layer from your answers (15 min). It reads which kind of operator you are (founder, career-mover, builder, student) so the OS leads with what your situation needs, and seeds your brain with a starter flag, parked decision, and log entry so your first session is not a blank screen.
+2. **Say "set up Founder OS"** (or run `/founder-os:setup`) - the wizard builds your operating layer from your answers (15 min). It reads which kind of operator you are (founder, career-mover, builder, student) so the OS leads with what your situation needs, and seeds your brain with a starter flag, pattern, parked decision, and log entry so your first session is not a blank screen.
 3. **Say "set up my voice profile"** (or run `/founder-os:voice-interview`) - so every writing skill sounds like you, not Claude (10 min)
 4. **Say "set up my brand profile"** (or run `/founder-os:brand-interview`) - so every deliverable looks like you (10 min)
 
@@ -297,7 +297,7 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.41.1. Public release. 87 skills, 38 commands. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.41.2. Public release. 87 skills, 38 commands. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
 v1.41 is the proof patch on the Second Brain release. Setup now ends by running its own health check automatically and reading the result back to you, so you never leave on trust that the wiring landed - a partial install shows up in the last minute of setup instead of days later mid-task. And session one now closes with your first real proposal run in the flow: the OS reads the snapshot it just wrote and names your single next move toward a paying customer, with the plain statement of how it compounds - every session feeds the brain, so the moves sharpen because they are read from your real state, not guessed. (v1.41.1 removed a rendered HTML card that shipped hours earlier in v1.41.0: an artifact you have to open somewhere else adds friction instead of removing it, and the in-flow proposal plus the growing brain files are the real proof. It also names git as the recommended steady state: the ZIP gets you in, and one yes later the OS installs git for you - after which updates and history maintain themselves.) Same floor: one Claude plan, no key, nothing leaves your machine.
 
