@@ -27,11 +27,11 @@ Setup just created a few dozen files silently. A non-technical founder will not 
 
 If any of the four is `[NOT SET]`, say so honestly and offer the one-line fix: "Your biggest blocker is still blank - tell me in one line any time and I will add it." Do not paper over a blank with a guess. For non-founder variants (no Founder Snapshot), skip this point.
 
-**1.5 Hand them a card they can see (founder / team_of_one only).** Text on a terminal is not something a first-time founder can screenshot, save, or show anyone. Give them one visible artifact from session one. Run the `founder-next-move` skill now - it reads the snapshot you just wrote, names the single highest-leverage move toward a paying customer, and (Step 6 of that skill) renders `templates/founder-card.html` filled with the venture, customer, stage, blocker, the move, and the one step to start today, writing it to the OS root as `your-next-move.html`. Then say one line:
+**1.5 Run the first real proposal, in the flow (founder / team_of_one only).** Do not hand them an artifact to open somewhere else - the value is in the flow they are already in. Run the `founder-next-move` skill now: it reads the snapshot you just wrote and names the single highest-leverage move toward a paying customer, closing with one big and two small steps. This is the founder's first taste of the actual product - their own brain producing a decision, thirty seconds after it was born. Then say one line about how it compounds, because compounding IS the product:
 
-> "I have put your session-one card at `your-next-move.html` - open it in any browser and screenshot it. It has your venture, your customer, where you are, and the one move to make next. It refreshes any time you ask 'what should I focus on next?'."
+> "That move came from four lines your brain holds right now. Every session adds to it - what you did, what stalled, what you decided - and the moves get sharper because they are read from your real state, not guessed. Six months from now this same question reads a brain that knows your whole business."
 
-If the snapshot is too thin for a real move (no customer set), skip the card rather than render a hollow one - the founder-next-move skill already handles that by asking for the missing field instead. For non-founder variants, skip this point entirely.
+If the snapshot is too thin for a real move (no customer set), the skill already handles that by asking for the missing field - that ask is the move. For non-founder variants, skip this point entirely.
 
 **2. Show the six files they now own.** Name them with a one-line, plain-English purpose each. These are the files a founder actually opens, not the engine files:
 
