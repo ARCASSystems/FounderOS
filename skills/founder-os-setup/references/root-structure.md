@@ -158,7 +158,7 @@ Also copy `templates/scripts/private-name-patterns.txt.template` → `scripts/pr
 
 Offer to auto-write the captured founder name as the first uncommented pattern in `scripts/private-name-patterns.txt`: `\b<FOUNDER_NAME>\b`. This gives the new install one working guard out of the box without forcing the founder to learn regex syntax on day one.
 
-Write `\b` as a literal two-character backslash-b, not an escape. A shell `printf`/`echo -e` path turns `\b` into a backspace byte (0x08) and ships a dead privacy guard that looks installed but matches nothing. Use `printf '%s\n' '\b<FOUNDER_NAME>\b'` or a single-quoted heredoc, then verify with a throwaway commit that the guard actually blocks the name before continuing. On Windows or PowerShell, write the pattern with the file-write tool or `Set-Content` (PowerShell has no `echo -e`, so the backspace trap does not arise there) - never a shell echo.
+Write `\b` as a literal two-character backslash-b, not an escape. A shell `printf`/`echo -e` path turns `\b` into a backspace byte (0x08) and ships a dead privacy guard that looks installed but matches nothing. Use `printf '%s\n' '\b<FOUNDER_NAME>\b'` or a single-quoted heredoc. Do not try to prove the guard here - there is no git repository yet at this point in setup; Phase 2.3 Step 4 proves the block with a throwaway commit once git exists. On Windows or PowerShell, write the pattern with the file-write tool or `Set-Content` (PowerShell has no `echo -e`, so the backspace trap does not arise there) - never a shell echo.
 
 These are not personalized templates. Copy contents exactly. Do not edit. Verify all twenty-one `.py` copies plus `scripts/private-name-patterns.txt` exist on disk before continuing. If `templates/scripts/` ever holds a `.py` helper not named above, copy it too - the founder's `scripts/` set must equal the `templates/scripts/` set, since helpers import each other. If any are missing, the brain-snapshot, brain-pass, wiki-build, query, menu, observation-rollup, preflight-gate, observation-capture, or private-name guard helpers will fail silently or hard-error.
 
@@ -217,16 +217,25 @@ First check whether git exists at all: run `git --version`.
 
 **If git is NOT installed (the normal state of a ZIP-download install):** do not error, do not send the founder to a download page, and do not make setup wait on it. Say plainly: "Version history is off for now - git is not on this machine, and you do not need it today. Every file the OS touches is still snapshotted each session with a one-command restore. Turning on the full timeline is one yes, later - the tour at the end shows you how." (The trigger phrase itself is pitched exactly once, in the tour - do not pitch it here too.) Skip the rest of 2.3 (including the privacy-guard wiring - it is a git hook and has nothing to attach to yet; the own-your-history skill wires it before the first commit). Continue to 2.4.
 
-**If git IS installed,** guard: check if a `.git/` directory already exists in the Founder OS root before running `git init`.
+**If git IS installed,** run these five steps in this exact order. The order is the point: author identity before any commit is attempted, the guard wired and proven BEFORE the first commit exists, the first commit last. A first commit that lands before the guard is active is exactly the leak this sequence prevents.
 
-- If `.git/` exists (the common case, because the install folder is already a git clone), SKIP `git init`. Log: "Folder is already a git repository. Skipping git init." Move on.
-- If `.git/` does not exist (ZIP or manual-copy install on a machine that happens to have git), run `git init` and create an initial commit: "Founder OS initialized."
+**Step 1 - repository.** Check if a `.git/` directory already exists in the Founder OS root.
 
-**Wire the privacy guard (so it is active, not just installed).** The private-name guard only fires if `git config core.hooksPath` points at `.githooks`. A fresh `git clone` does not inherit that setting, so without this step the guard is copied but dormant. After the git guard above:
+- If `.git/` exists (the common case, because the install folder is already a git clone), no init needed. Log: "Folder is already a git repository."
+- If `.git/` does not exist (ZIP or manual-copy install on a machine that happens to have git), run `git init`. Do NOT create the first commit yet - that happens in Step 5, after the guard is proven live.
 
-1. Make sure `.githooks/pre-commit`, `.githooks/commit-msg`, and `scripts/install-git-hooks.sh` exist in the founder's OS root. If the install method scaffolded into a fresh directory (Plugin or Curl paths) rather than a clone, copy these three from the plugin source resolved in Phase 2.2.
+**Step 2 - author identity.** Check `git config user.name` and `git config user.email`. If either is empty, every commit on this machine fails with "Please tell me who you are" - a wall a non-technical founder should never hit mid-setup. Ask: "One-time setup so version history records you as the author: what name and email should it use? This stays on your machine." Then set both locally in this repo: `git config user.name "<name>"` and `git config user.email "<email>"`. Local config only - never touch their global git config.
+
+**Step 3 - wire the privacy guard (so it is active, not just installed).** The private-name guard only fires if `git config core.hooksPath` points at `.githooks`. A fresh `git clone` does not inherit that setting, so without this step the guard is copied but dormant.
+
+1. Make sure `.githooks/pre-commit`, `.githooks/commit-msg`, and `scripts/install-git-hooks.sh` exist in the founder's OS root. If the install method scaffolded into a fresh directory (Plugin or Curl paths) rather than a clone or ZIP extract, copy these three from the plugin source resolved in Phase 2.2.
 2. Activate the guard. On Linux/Mac (or Windows with Bash): run `bash scripts/install-git-hooks.sh`. On Windows without Bash: run `git config core.hooksPath .githooks`. Either way the pre-commit and commit-msg hooks now fire on every commit.
-3. Confirm with the founder that the guard is live. Out of the box it already blocks committed secrets (API keys, tokens, bot tokens, PEM private keys), em/en dashes, and AI-attribution trailers. The NAME check stays inactive until `scripts/private-name-patterns.txt` has at least one pattern (their own name was offered in the scripts copy step above), so adding their name turns on name-leak blocking too. The file is gitignored, so their names never leave the machine.
+
+**Step 4 - prove the guard blocks (mandatory, never skip).** Write a throwaway file at the OS root (for example `guard-test.tmp`) containing one em dash character, stage it, and attempt a commit with the message "guard test". The commit MUST be blocked - the block is the pass. Then delete the throwaway file and unstage it. If the commit goes THROUGH, the guard is dormant: undo the commit (`git reset --soft HEAD~1` if the repo had prior commits, `git update-ref -d HEAD` if it was the very first), re-run Step 3, and do not continue until the block happens. A guard that looks installed but blocks nothing is worse than no guard, because the founder trusts it.
+
+**Step 5 - first commit.** Only now, and only on the fresh `git init` path from Step 1, create the initial commit: "Founder OS initialized." On the clone path there is nothing to commit here - the repo already has history.
+
+Then confirm with the founder that the guard is live. Out of the box it already blocks committed secrets (API keys, tokens, bot tokens, PEM private keys), em/en dashes, and AI-attribution trailers. The NAME check stays inactive until `scripts/private-name-patterns.txt` has at least one pattern (their own name was offered in the scripts copy step above), so adding their name turns on name-leak blocking too. The file is gitignored, so their names never leave the machine.
 
 ### 2.4 First Weekly Sprint
 Ask: "Let's set your first weekly sprint. You mentioned these priorities: [list from 0.4]. Which of these are MUST DO this week (max 3), which are SHOULD DO, and which can wait?"
