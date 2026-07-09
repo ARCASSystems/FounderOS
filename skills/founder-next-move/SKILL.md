@@ -29,7 +29,7 @@ Then read it. If the snapshot script is also missing (older install), read `core
 The snapshot carries the `## Founder Snapshot` block (venture, customer, stage seed, biggest blocker), open flags, this week's must-do, and recent decisions. Then read, in this order, skipping what is missing:
 
 1. `core/identity.md` - the `## Founder Snapshot` (source of truth if the snapshot is stale) and the `## Basics` location (drives the UAE ground-truth layer below).
-2. `core/profile.md` - the variant. This engine is for the `founder` and `team_of_one` variants. If the variant is `student` or `career-mover`, do not run it; point them at `/next` instead.
+2. `core/profile.md` - what the OS leads with. Context only, never a gate. The gate for this engine lives in `core/identity.md`: a `## Founder Snapshot` block present, plus a `**Role:**` of `founder` or `team_of_one` under `## Basics` (the identity-layer role from setup, not the profile variant - `team_of_one` is a role and never appears in the variant field). When the gate does not pass, do not run this engine; point them at `/next` instead.
 3. `brain/log.md` - the last 5 to 10 entries. This is how you re-infer the stage (below).
 4. `context/clients.md` - active deals, pipeline, last-touched dates.
 5. `context/priorities.md`, `cadence/weekly-commitments.md`, `brain/flags.md`, `brain/needs-input.md` - grounding for what is already in flight.
@@ -135,4 +135,4 @@ If the founder asks "is this the right move" or pushes back on the plan, that is
 - The North Star is a paying customer. Internal polish is almost never the move.
 - Free-tier only. Reads files and reasons. No API key, no paid tool.
 - No em dashes, no en dashes, no banned words.
-- Founder and team_of_one variants only. For other variants, point to `/next`.
+- The gate is identity, not variant: a `## Founder Snapshot` block plus the `founder` or `team_of_one` role in `core/identity.md`. The profile variant never gates this engine. When the gate does not pass, point to `/next`.

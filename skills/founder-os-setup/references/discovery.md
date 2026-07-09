@@ -72,7 +72,7 @@ Record the answer as `role` internally. Map to a token:
 - "3" / "freelancer" / "solo" / "creator" / "independent" / "team of one" → `team_of_one`
 - Unclear or no answer → `founder` (safe default)
 
-Store `role:` in `core/identity.md` under a `## Role` field. This value drives downstream question phrasing and the bootloader `{{role_noun}}` substitution in Phase 2.2.
+Store the role token in `core/identity.md` on the `**Role:**` line under `## Basics` (that is where the template puts it and where downstream skills read it). This value drives downstream question phrasing and the bootloader `{{role_noun}}` substitution in Phase 2.2.
 
 ### 0.2.2 Meet you where you are
 
@@ -118,7 +118,7 @@ These answers populate `core/identity.md` under `## Positioning`, which `linkedi
 
 This is the part the OS proposes from. Four fields make the brain "functional enough to propose": **the venture in one line, who the customer is, where the founder is right now, and the single biggest blocker.** The OS proposes off these four even when they are thin and sharpens as the brain fills. Capturing them here is what lets the OS name a real first move instead of returning generic advice.
 
-**Run this for the `founder` and `team_of_one` roles** (captured in 0.2.1). For `operator`, `student`, or `career-mover` variants, skip this phase - the four fields are founder-journey fields and do not fit those operators. Log the skip and move on.
+**Run this for the `founder` and `team_of_one` roles** (captured in 0.2.1). Skip it for the `operator` role, and skip it when the provisional variant read in 0.2.2 is `student` or `career-mover` - the four fields are founder-journey fields and do not fit those situations. Role and variant are different axes: role (founder / operator / team_of_one) is the identity-layer field from 0.2.1, variant (founder / career-mover / builder / student / team-internal) is the profile-layer read from 0.2.2. Do not mix the two vocabularies. Log the skip and move on.
 
 Two of the four are usually already answered. Do NOT re-ask. Reuse and confirm:
 
@@ -153,7 +153,7 @@ These four fields write to `core/identity.md` under `## Founder Snapshot` in Pha
 
 Role (0.2.1) says who the operator is; stage (0.2.6) says where they are. This captures HOW the business makes money, because the money math differs by model: a service founder lives on utilization and day rate, an ecommerce founder on contribution margin and inventory turns, a SaaS founder on MRR and churn. One deterministic answer here makes every later number conversation start in the right frame.
 
-**Run for `founder`, `team_of_one`, and `operator` roles.** Skip for `student` and `career-mover` (no business to model; record `null`).
+**Run for the `founder`, `team_of_one`, and `operator` roles.** Skip when the provisional variant read in 0.2.2 is `student` or `career-mover` (no business to model; record `null`) - those two are variants, not roles.
 
 Usually you already know. Infer it from 0.1/0.2.5 first ("you sell brand projects to SMEs - that is a service business, right?") and confirm in one line instead of asking cold. Ask fresh only when the answers so far do not settle it:
 
