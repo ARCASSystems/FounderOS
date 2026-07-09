@@ -1,6 +1,6 @@
 # Install paths
 
-Five ways to install FounderOS. The ZIP download (Path 0) needs nothing installed and comes first; pick whichever matches how you work. None of them lock you in - if you outgrow one path, you can move to another without losing your data.
+Five ways to install FounderOS. The ZIP download (Path 0) needs no Git and no terminal and comes first; pick whichever matches how you work. None of them lock you in - if you outgrow one path, you can move to another without losing your data.
 
 **Not comfortable in a terminal?** Use Path 0 (ZIP download) or Path A (Claude Code plugin). Both run without a single terminal command.
 
@@ -8,13 +8,13 @@ If you get stuck, email `solutions@arcassystems.com` with the path you tried and
 
 ---
 
-## Path 0 - Download ZIP (nothing to install, no git, no terminal)
+## Path 0 - Download ZIP (no Git or terminal required)
 
 Three steps, nothing typed. The gentlest path there is.
 
 **Best for:** Anyone who wants to own the system in ten minutes with nothing new installed. Anyone who does not have git and does not want to think about it.
 
-**Requirements:** Claude Code with a paid Claude plan, and Python 3.11+ (most machines have it; the setup wizard checks and tells you plainly if not).
+**Requirements:** Claude Code with a paid Claude plan, and Python 3.11+ (the setup wizard checks for it before asking anything and tells you plainly if it is missing).
 
 **Steps:**
 
@@ -29,7 +29,7 @@ Commands use bare names on this path (`/setup`, `/today`), same as the git-clone
 **Version history on this path:** off at first, by design - there is no git on the machine yet. You are still covered: the OS snapshots every file it touches, every session, and `/changes` shows exactly what changed with a one-command restore per file. When you want full history ("undo to before this morning", a complete timeline), say **"own my history"** - with your yes, the OS installs git itself, turns the folder into a repository, and wires the privacy guard. You never type a git command. This is the recommended steady state: once git is on, updates flow through it instead of ZIP re-downloads, and git maintains itself - the ZIP was the door, not the destination.
 
 **Pros**
-- Nothing to install first. No git, no curl, no terminal.
+- No Git, no curl, no terminal.
 - The folder is yours from the first second - plain markdown, no hidden state.
 - Updates and version history are both one sentence away, handled for you.
 

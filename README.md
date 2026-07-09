@@ -95,11 +95,11 @@ The OS routes on natural language. Say what you need ("set up my voice profile",
 
 ## Install
 
-Five install paths. The one that needs nothing new installed comes first. Full step-by-step for each in [docs/install.md](docs/install.md).
+Five install paths. The one that needs no Git and no terminal comes first. Full step-by-step for each in [docs/install.md](docs/install.md).
 
 **Not comfortable in a terminal?** Start with the ZIP download below - three steps, nothing typed - or the plugin install after it. Neither needs a terminal.
 
-### Download ZIP (nothing to install, own it in 10 minutes)
+### Download ZIP (no Git or terminal, own it in 10 minutes)
 
 1. **[Download the ZIP](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip)**
 2. Right-click, **Extract All** (Windows) or double-click it (Mac). Put the folder wherever you keep your work.
