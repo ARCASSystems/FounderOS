@@ -27,6 +27,12 @@ Setup just created a few dozen files silently. A non-technical founder will not 
 
 If any of the four is `[NOT SET]`, say so honestly and offer the one-line fix: "Your biggest blocker is still blank - tell me in one line any time and I will add it." Do not paper over a blank with a guess. For non-founder variants (no Founder Snapshot), skip this point.
 
+**1.5 Hand them a card they can see (founder / team_of_one only).** Text on a terminal is not something a first-time founder can screenshot, save, or show anyone. Give them one visible artifact from session one. Run the `founder-next-move` skill now - it reads the snapshot you just wrote, names the single highest-leverage move toward a paying customer, and (Step 6 of that skill) renders `templates/founder-card.html` filled with the venture, customer, stage, blocker, the move, and the one step to start today, writing it to the OS root as `your-next-move.html`. Then say one line:
+
+> "I have put your session-one card at `your-next-move.html` - open it in any browser and screenshot it. It has your venture, your customer, where you are, and the one move to make next. It refreshes any time you ask 'what should I focus on next?'."
+
+If the snapshot is too thin for a real move (no customer set), skip the card rather than render a hollow one - the founder-next-move skill already handles that by asking for the missing field instead. For non-founder variants, skip this point entirely.
+
 **2. Show the six files they now own.** Name them with a one-line, plain-English purpose each. These are the files a founder actually opens, not the engine files:
 
 > "Six files run your day. They are plain text on your machine - yours to read, edit, back up, or move:
@@ -123,6 +129,17 @@ You never need to use the OS terms. Say what feels natural.
 - Open `[company]/[project]/` for execution work
 - Claude loads the right context based on where you are."
 
+### 6.2.9 Prove it worked (automatic health check - do not skip)
+
+Setup just built a few dozen files, copied nineteen hook scripts, and wired the substrate. A non-technical founder cannot see whether any of that actually landed, and the hooks fail silently by design - so a half-copied script or a missing Python would stay invisible until a skill breaks days later mid-task. Do not let the founder leave on trust. Run the `verify` skill now, automatically, before the finish line. This is the product living its own rule: no "you are ready" without a check that says so.
+
+Run `verify` and show the founder its one-screen report (the eight substrate checks, each `[PASS]` / `[WARN]` / `[FAIL]`). Then read the result out loud in one plain line:
+
+- **All PASS (or PASS with benign WARNs like no MCPs, cadence not yet set):** "Checked it end to end - your OS is wired correctly and working." Then go to 6.3.
+- **Any FAIL:** name it plainly and fix it before declaring the finish line. A `[FAIL] Scripts present` usually means a script did not copy (re-run the Phase 2 hook/script copy) or Python is not installed (`python3 --version` returns nothing - point them at [python.org/downloads](https://www.python.org/downloads/), 3.11+, then re-run `verify`). A `[FAIL] Hooks installed` means the settings/hook copy did not complete. Do not paper over a FAIL with reassurance - a silent partial install is the one failure this whole OS exists to prevent.
+
+Keep it to the report plus one or two lines of plain reading. Do not turn a clean result into a lecture.
+
 ### 6.3 Backlog and finish line
 Show any skipped or deferred items from the setup. Save them to `core/setup-backlog.md` as a simple markdown list under the heading `## Setup Backlog`. Create the file if it does not exist. Do not scatter deferred items across other files.
 
@@ -136,7 +153,7 @@ If nothing was skipped, say so in one line and move on. Do not invent backlog it
 
 **Then close with an explicit finish line.** A non-technical founder needs to be told they are done, or they wait for a next step that never comes:
 
-> "That is setup. Your Founder OS is live. Next time you open Claude Code in this folder, the SessionStart brief surfaces your week in one screen. You are ready to work - ask 'what should I focus on next?' whenever you are."
+> "That is setup, and it checked out - the health check above confirms the OS is wired correctly. Your Founder OS is live. Next time you open Claude Code in this folder, the SessionStart brief surfaces your week in one screen. You are ready to work - ask 'what should I focus on next?' whenever you are."
 
 ---
 
