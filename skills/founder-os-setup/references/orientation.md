@@ -135,7 +135,7 @@ Setup just built a few dozen files, copied nineteen hook scripts, and wired the 
 
 Run `verify` and show the founder its one-screen report (the eight substrate checks, each `[PASS]` / `[WARN]` / `[FAIL]`). Then read the result out loud in one plain line:
 
-- **All PASS (or PASS with benign WARNs like no MCPs, cadence not yet set):** "Checked it end to end - your OS is wired correctly and working." Then go to 6.3.
+- **All PASS (or PASS with benign WARNs like no MCPs configured or the opt-in observation hook off):** "Checked it end to end - your OS is wired correctly and working." Then go to 6.3.
 - **Any FAIL:** name it plainly and fix it before declaring the finish line. A `[FAIL] Scripts present` usually means a script did not copy (re-run the Phase 2 hook/script copy) or Python is not installed (`python3 --version` returns nothing - point them at [python.org/downloads](https://www.python.org/downloads/), 3.11+, then re-run `verify`). A `[FAIL] Hooks installed` means the settings/hook copy did not complete. Do not paper over a FAIL with reassurance - a silent partial install is the one failure this whole OS exists to prevent.
 
 Keep it to the report plus one or two lines of plain reading. Do not turn a clean result into a lecture.

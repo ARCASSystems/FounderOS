@@ -66,7 +66,7 @@ Run the phases in order. When you reach a phase, read its reference file for the
 | 3 | Company folders + business-context file + company `.mcp.json`. | `references/projects.md` |
 | 4 | Build the top priority as the reference project, with a live test. | `references/projects.md` |
 | 5 | Write `stack.json`, skeleton the remaining workstreams, verify context isolation. | `references/projects.md` |
-| 6 | Final commit, run the post-setup tour (show the files they now own + three next moves), run the automatic `verify` health check (prove the substrate wired up before the finish line), detect the command prefix, open with the operator's profile, walk the natural-language orientation, save the backlog. | `references/orientation.md` |
+| 6 | Final commit, run the post-setup tour (reflect the snapshot, run the first in-flow proposal, show the files they now own + three next moves), detect the command prefix, open with the operator's profile, walk the natural-language orientation, run the automatic `verify` health check before the finish line, save the backlog. | `references/orientation.md` |
 
 ## After every phase
 

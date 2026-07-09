@@ -22,7 +22,11 @@ Run all eight checks. Each produces one of: `[PASS]`, `[WARN]`, or `[FAIL]`.
 
 ### Check 1 - Plugin surface integrity
 
-Verify that the skill and command counts are internally consistent:
+First detect the install shape: if the working directory has no `skills/` directory, this is a data-folder install (Path A plugin - the engine lives under `~/.claude/plugins/`, the founder's folder holds only their data). That is a correct state, not a defect:
+
+- Data-folder install -> `[PASS] Plugin surface (engine runs from the plugin; no local engine copy to count)` and skip the counting below.
+
+Otherwise (git-clone, curl, or ZIP install - the engine is in this folder), verify that the skill and command counts are internally consistent:
 
 - Count `skills/<name>/SKILL.md` files on disk.
 - Count `.claude/commands/*.md` files on disk.
@@ -85,18 +89,16 @@ Do NOT fail if MCPs are unconfigured. MCP setup is optional.
 
 ### Check 5 - Free-tier floor preserved
 
-Grep the working tree for environment variable references that imply a paid API key:
+Grep the CORE script set only - the seven scripts in Check 3 - for environment variable references that imply an API key:
 - `ANTHROPIC_API_KEY`
 - `OPENAI_API_KEY`
 - `GEMINI_API_KEY`
 
-The CORE script set (the seven scripts in Check 3) must not require any paid key.
-Optional skills that call paid APIs are allowed.
+Scope matters: do NOT grep the whole tree. Skills, docs, and connector helpers legitimately MENTION key names when documenting optional opt-in upgrades (add-voice's free Google AI Studio key, connect's gitignored `.env` writer, this file). A mention is not a requirement, and flagging it produces a false warning on a perfect install. The floor this check guards is precise: the seven core scripts must RUN without any key.
 
 Outcome:
-- Core scripts have no paid key references -> `[PASS] Free-tier floor preserved (no core script requires paid keys)`
-- A core script references a paid key -> `[FAIL] Free-tier floor (core script requires paid key - breaks free-tier users)`
-- Only non-core files reference paid keys -> `[WARN] Free-tier floor (optional skill requires paid key: <skill-name>)`
+- No core script references a key -> `[PASS] Free-tier floor preserved (no core script requires an API key)`
+- A core script requires a key to run -> `[FAIL] Free-tier floor (core script requires an API key - breaks free-tier users)`
 
 ### Check 6 - Wiki integrity
 
@@ -152,16 +154,16 @@ Plain text. Maximum 30 lines including the header. Exactly this shape:
 FounderOS v<version> - health check
 <YYYY-MM-DD HH:MM>
 
-[PASS] Plugin surface (62 skills / 34 commands, counts agree)
+[PASS] Plugin surface (<N> skills / <M> commands, counts agree)
 [WARN] Hooks installed (SessionStart present, PostToolUse not enabled)
 [PASS] Scripts present (7/7 compile cleanly)
 [PASS] MCP availability (3 configured: Notion, Gmail, Calendar)
-[PASS] Free-tier floor preserved (no core script requires paid keys)
+[PASS] Free-tier floor preserved (no core script requires an API key)
 [PASS] Wiki integrity (0 issues)
 [FAIL] Cadence staleness (daily-anchors 4 days stale - refresh before planning)
 [PASS] Auto-memory presence (MEMORY.md, 12 entries)
 
-3 PASS - 4 WARN/PASS - 1 FAIL - next: refresh cadence/daily-anchors.md
+6 PASS - 1 WARN - 1 FAIL - next: refresh cadence/daily-anchors.md
 ```
 
 Rules for the output:
@@ -170,7 +172,7 @@ Rules for the output:
 - Brackets + state word + parenthetical for every check line. Exactly this format.
 - Summary footer: count each state, name the single highest-priority next action (first
   FAIL, or first WARN if no FAILs, or "all green" if all PASS).
-- Read the version from the `VERSION` file in the repo root.
+- Read the version from the `VERSION` file in the repo root. On a data-folder install with no `VERSION` file, read the version from the plugin's `.claude-plugin/plugin.json` if reachable; if neither exists, print the header without a version rather than failing.
 - Do not exceed 30 lines total.
 
 ## Skill reliability
