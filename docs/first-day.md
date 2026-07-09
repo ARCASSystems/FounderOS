@@ -18,7 +18,7 @@ Three steps. Each step activates the skills underneath it.
 /founder-os:setup
 ```
 
-Walks you through about 15-20 prompts across 6 phases (identity, business, priorities, voice/brand seed, tool stack, file generation). Early on it reads which of five operator variants fits you (founder, career-mover, builder, student, team-internal) and writes `core/profile.md` - what the OS leads with for your situation. From your answers it generates: identity, profile, priorities, decisions, cadence, brain layer, role files, network stubs. It also seeds the brain with one starter flag, one parked decision, and one log entry dated to today, so your very first SessionStart brief shows something real instead of a blank screen.
+Walks you through about 15-20 prompts across 6 phases (identity, business, priorities, voice/brand seed, tool stack, file generation). Early on it reads which of five operator variants fits you (founder, career-mover, builder, student, team-internal) and writes `core/profile.md` - what the OS leads with for your situation. From your answers it generates: identity, profile, priorities, decisions, cadence, brain layer, role files, network stubs. It also seeds the brain with one starter flag, one pattern, one parked decision, and one log entry dated to the install, so your very first SessionStart brief shows something real instead of a blank screen.
 
 After this step, the OS knows who you are. These skills now work end to end:
 - `/today`, `/next`

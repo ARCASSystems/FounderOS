@@ -1,6 +1,6 @@
 # Founder OS
 
-> A local-first operating layer for the person running the business. Six markdown files hold the live state of your company, and Claude Code reads them every session: it routes by role, tracks commitments, surfaces what has stalled, and pushes back before you ship something half-baked. Free and MIT-licensed. You bring one AI subscription. Your files are owned by you, with no server and no lock-in.
+> A local-first operating layer for the person running the business. Six markdown files hold the live state of your company, and Claude Code works from them every session: it routes by role, tracks commitments, surfaces what has stalled, and pushes back before you ship something half-baked. Free and MIT-licensed. You bring one AI subscription. Your files are owned by you, with no server and no lock-in.
 
 Project home: https://arcassystems.com/founder-os - built by ARCAS Systems. The source repository is https://github.com/ARCASSystems/FounderOS.
 
@@ -10,7 +10,7 @@ The system has four layers, the same four the Founder OS Playbook draws on a nap
 
 ## Start here
 
-- [Founder OS Playbook](https://arcassystems.com/founder-os): a visual walkthrough with screenshots - the problem it solves, the three parts, how to start, and what not to do. Opens in any browser, about 15 minutes. It lives on the web, not in the repo, so it never drifts.
+- [Founder OS Playbook](https://arcassystems.com/playbook): a visual walkthrough with screenshots - the problem it solves, the three parts, how to start, and what not to do. Opens in any browser, about 15 minutes. It lives on the web, not in the repo, so it never drifts.
 - [README](https://github.com/ARCASSystems/FounderOS/blob/main/README.md): the full product picture - who it is for, what it costs, what ships in the repo, and the setup ladder.
 - [Install guide](https://github.com/ARCASSystems/FounderOS/blob/main/docs/install.md): one-line curl, the Claude Code plugin marketplace, or a manual git clone.
 - [First day](https://github.com/ARCASSystems/FounderOS/blob/main/docs/first-day.md): what to do in your first session.

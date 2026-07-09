@@ -2,6 +2,31 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.41.2 - 2026-07-09
+
+A consistency-hardening sweep across the Second Brain release arc. No new features; every claim the OS makes about itself now matches what it does.
+
+### Fix - setup copy steps can no longer under-copy
+
+- **The hook-merge instruction names all six hook events.** Re-running setup over a pre-v1.40 install previously merged only four events into an existing `settings.json`, silently dropping PreToolUse (the undo floor) and PreCompact (the memory flush). Both are now named explicitly, with the consequence of omitting them stated.
+- **The script verify count matches the copy list.** The copy step says twenty-one Python helpers; the verification line said nineteen - a literal reader could pass verification with `session_changes.py` and `skill_health.py` missing. Both now say twenty-one, and the Phase 2.2 file tree lists all twenty-one.
+
+### Fix - update protects everything setup creates
+
+- **The User Layer protect list now covers `core/` in full plus `capture/` and `brands/`.** Previously only `core/identity.md` was named; the founder's profile, avatar, voice and brand profiles, inbox drops, and per-brand voices matched neither layer list, which the instruction-gate treats as refuse-and-ask.
+- **GIT-mode backups capture dirty trees.** Step 7 now commits uncommitted System Layer edits before creating the backup branch, so the rollback claim ("captures the entire pre-update state") is true on a dirty tree instead of quietly false.
+- **Plugin-path updates point at the right command.** The README's marketplace section said `/founder-os:update`, which refuses to run in the data folder that path creates; it now says `/plugin update`, matching the install guide.
+
+### Fix - verify works on every install shape
+
+- **Check 1 and the version header are install-mode aware:** a Path A data folder (engine in the plugin, no local `skills/`) reports PASS instead of a spurious WARN, and a missing `VERSION` falls back to the plugin manifest.
+- **Check 5 greps the seven core scripts, not the whole tree:** documenting an optional key name (add-voice's free-tier upgrade, connect's `.env` writer) is not requiring a key, and a fresh perfect install no longer opens its first health check with a false warning.
+- **The sample output is internally consistent** (footer tally matches the example lines), since the model imitates it at the end of every setup.
+
+### Change - small claim-to-behavior alignments
+
+- Seeded-content lists include the pattern seed; the snapshot-first boot is no longer contradicted by "reads them every session" taglines; the Playbook link is one URL everywhere; the own-your-history follow-up no longer points at itself; setup pitches the git graduation phrase exactly once.
+
 ## v1.41.1 - 2026-07-09
 
 Same-day correction to v1.41.0, applying the product's own bar: a feature earns its place by changing behaviour or compounding, not by looking good once.

@@ -76,7 +76,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Voice rules.** No.
 - **Prereqs.** Founder OS set up. Only does anything when version history is off.
 - **When to run.** Once the OS has proven useful - usually week one. Until then, session snapshots cover undo.
-- **Follow-up.** `save`, `history`, and `restore` now run at full power. Say "own my history".
+- **Follow-up.** `save`, `history`, and `restore` now run at full power. Say "save my work" after your next session.
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: founder-next-move
 description: >
-  Propose the single highest-leverage next move for a founder, aimed at their first paying customer. Trigger on "what should I do next", "what's my next move", "propose my next move", "what should I focus on toward a customer", "where do I push", "I don't know what to do next", "give me one thing to do", or any moment a founder wants the OS to decide the next step instead of listing options. Reads the founder's brain (the four-field Founder Snapshot, the log, the pipeline), infers their current stage, picks the one move with the most leverage toward a paying customer, and closes with three things they can do today (one big, two small). Free-tier, reads files only.
+  Propose the single highest-leverage next move for a founder, aimed at their first paying customer. Trigger on "what should I do next", "what's my next move", "propose my next move", "what should I focus on toward a customer", "where do I push", "I don't know what to do next", "give me one thing to do", or any moment a founder wants the OS to decide the next step instead of listing options. Reads the founder's brain (the four-field Founder Snapshot, the log, the pipeline), infers their current stage, picks the one move with the most leverage toward a paying customer, and closes with three things they can do today (one big, two small). Free-tier; writes nothing to your operating files (it may refresh brain/.snapshot.md when stale).
 why: "A founder drowning in options does not need a list, they need one move. This reads where they actually are and names the single thing that gets them closer to a paying customer, with a step small enough to start today."
 enhance: "Keep brain/log.md current - the stage read and the move both sharpen when the log shows what the founder did this week."
 allowed-tools: ["Read", "Bash"]
@@ -120,7 +120,7 @@ The three-option close is the rule, not a suggestion: one high, two low. The fou
 
 ## After proposing
 
-This skill is read-only by default. It recommends; the founder acts. If the founder then does the move, that gets logged through the normal brain-log flow, not by this skill.
+This skill recommends; the founder acts. It writes nothing to the founder's operating files - the only side effect is refreshing `brain/.snapshot.md` when it is stale or missing. If the founder then does the move, that gets logged through the normal brain-log flow, not by this skill.
 
 If the founder asks "is this the right move" or pushes back on the plan, that is a different job - route to `founder-scope-challenge` to stress-test the plan, or `decision-framework` for a structured choice.
 
