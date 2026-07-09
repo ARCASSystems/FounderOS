@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Founder Card</title>
+<!--
+  Session-one card. Self-contained, no network, no dependency - it opens the same
+  offline as online, which is the whole local-first point. The setup wizard and the
+  founder-next-move skill fill the {{TOKENS}} below from the founder's own brain and
+  write the result to the OS root as your-next-move.html. Nothing here phones home.
+-->
+<style>
+  :root {
+    --bg: #f6f6f4;
+    --card: #ffffff;
+    --ink: #1a1a1a;
+    --muted: #6b6b6b;
+    --line: #e4e4e0;
+    --accent: #2f6f5f;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17181a;
+      --card: #202225;
+      --ink: #f2f2f0;
+      --muted: #9a9a98;
+      --line: #33353a;
+      --accent: #6fbfa8;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    display: flex;
+    justify-content: center;
+    padding: 32px 20px;
+    min-height: 100vh;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    max-width: 640px;
+    width: 100%;
+    padding: 40px 40px 32px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.06);
+  }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  .brand { font-weight: 600; letter-spacing: 0.02em; }
+  .date { color: var(--muted); font-size: 13px; }
+  .venture {
+    font-size: 26px;
+    font-weight: 650;
+    line-height: 1.25;
+    margin: 0 0 24px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 28px;
+    margin-bottom: 28px;
+  }
+  .field .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .field .value { font-size: 15px; }
+  .move {
+    background: linear-gradient(180deg, rgba(47,111,95,0.06), rgba(47,111,95,0.02));
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+  }
+  .move .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .move .text { font-size: 17px; font-weight: 550; }
+  .step {
+    font-size: 14px;
+    color: var(--muted);
+    padding-left: 22px;
+    position: relative;
+    margin-bottom: 24px;
+  }
+  .step::before {
+    content: "\2192";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+  .foot {
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+  @media (max-width: 480px) {
+    .card { padding: 28px 22px 24px; }
+    .grid { grid-template-columns: 1fr; gap: 14px; }
+    .venture { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="top">
+      <span class="brand">Founder OS</span>
+      <span class="date">{{DATE}}</span>
+    </div>
+
+    <h1 class="venture">{{VENTURE}}</h1>
+
+    <div class="grid">
+      <div class="field">
+        <div class="label">Your customer</div>
+        <div class="value">{{CUSTOMER}}</div>
+      </div>
+      <div class="field">
+        <div class="label">Where you are</div>
+        <div class="value">{{STAGE}}</div>
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <div class="label">Biggest blocker</div>
+        <div class="value">{{BLOCKER}}</div>
+      </div>
+    </div>
+
+    <div class="move">
+      <div class="label">Your next move</div>
+      <div class="text">{{NEXT_MOVE}}</div>
+    </div>
+
+    <div class="step">{{FIRST_STEP}}</div>
+
+    <div class="foot">
+      <span>Your second brain, session one.</span>
+      <span>It sharpens every time you use it.</span>
+    </div>
+  </main>
+</body>
+</html>

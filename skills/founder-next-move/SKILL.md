@@ -1,10 +1,10 @@
 ---
 name: founder-next-move
 description: >
-  Propose the single highest-leverage next move for a founder, aimed at their first paying customer. Trigger on "what should I do next", "what's my next move", "propose my next move", "what should I focus on toward a customer", "where do I push", "I don't know what to do next", "give me one thing to do", or any moment a founder wants the OS to decide the next step instead of listing options. Reads the founder's brain (the four-field Founder Snapshot, the log, the pipeline), infers their current stage, picks the one move with the most leverage toward a paying customer, and closes with three things they can do today (one big, two small). Free-tier, reads files only.
+  Propose the single highest-leverage next move for a founder, aimed at their first paying customer. Trigger on "what should I do next", "what's my next move", "propose my next move", "what should I focus on toward a customer", "where do I push", "I don't know what to do next", "give me one thing to do", or any moment a founder wants the OS to decide the next step instead of listing options. Reads the founder's brain (the four-field Founder Snapshot, the log, the pipeline), infers their current stage, picks the one move with the most leverage toward a paying customer, and closes with three things they can do today (one big, two small). Also renders a one-page showable card of the snapshot plus the move on "show my card", "make my founder card", or "render my card". Free-tier, reads files only.
 why: "A founder drowning in options does not need a list, they need one move. This reads where they actually are and names the single thing that gets them closer to a paying customer, with a step small enough to start today."
 enhance: "Keep brain/log.md current - the stage read and the move both sharpen when the log shows what the founder did this week."
-allowed-tools: ["Read", "Bash"]
+allowed-tools: ["Read", "Write", "Bash"]
 mcp_requirements: []
 ---
 
@@ -118,9 +118,29 @@ The three-option close is the rule, not a suggestion: one high, two low. The fou
 
 ---
 
+## Step 6 - render the showable card (on request, or when setup asks)
+
+A founder who leaves with only text on a terminal has nothing to look at, screenshot, or send. The card is the one visible artifact the OS produces in session one - proof the brain holds something real. Render it when the founder says "show my card" / "make my founder card" / "render my card", and whenever the setup wizard calls this skill at the end of setup.
+
+To render:
+
+1. Read `templates/founder-card.html` from the install root (resolve the path the same way other skills do: plugin folder, git-clone root, or curl/ZIP root). If it is missing (older install), skip the card gracefully and just show the text proposal - never block on it.
+2. Substitute every token from the founder's own brain, taken from the same Founder Snapshot and proposal you just built. Do not invent a value. If a field is `[NOT SET]`, write the honest prompt instead of a guess (for `{{BLOCKER}}` use "Not set yet - tell me in one line and I will add it").
+   - `{{DATE}}` - today's date, plain (e.g. `9 Jul 2026`).
+   - `{{VENTURE}}` - the venture one-liner.
+   - `{{CUSTOMER}}` - the customer.
+   - `{{STAGE}}` - the inferred stage in plain words, not the token (e.g. "Chasing the first paying customer").
+   - `{{BLOCKER}}` - the biggest blocker.
+   - `{{NEXT_MOVE}}` - the single move from Step 5, one or two sentences.
+   - `{{FIRST_STEP}}` - the smallest of the three closing steps, the one they can start today.
+3. Write the filled HTML to the founder's OS root as `your-next-move.html` (overwrite a prior copy - it is a snapshot of today, not a log). Do not write it into `templates/`.
+4. Tell them in one line: "Your card is at `your-next-move.html` - open it in any browser, screenshot it, stick it where you will see it. It refreshes whenever you ask for your next move."
+
+Founder and team_of_one variants only, same as the proposal. No em dashes in any substituted value.
+
 ## After proposing
 
-This skill is read-only by default. It recommends; the founder acts. If the founder then does the move, that gets logged through the normal brain-log flow, not by this skill.
+This skill is read-only by default apart from the card it writes to the OS root on request. It recommends; the founder acts. If the founder then does the move, that gets logged through the normal brain-log flow, not by this skill.
 
 If the founder asks "is this the right move" or pushes back on the plan, that is a different job - route to `founder-scope-challenge` to stress-test the plan, or `decision-framework` for a structured choice.
 
