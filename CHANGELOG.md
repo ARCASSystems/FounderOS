@@ -2,6 +2,18 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.41.1 - 2026-07-09
+
+Same-day correction to v1.41.0, applying the product's own bar: a feature earns its place by changing behaviour or compounding, not by looking good once.
+
+### Remove - the session-one HTML card
+
+- **`templates/founder-card.html` and the card render step are gone.** A rendered file the founder must open outside the flow adds friction instead of removing it, does not compound, and does not change what they do next. The session-one proof is now the real thing: the post-setup tour runs the founder's first `founder-next-move` proposal in the flow and states the compounding contract plainly - every session feeds the brain, so the moves sharpen because they are read from real state, not guessed. `founder-next-move` is back to read-only.
+
+### Change - git named as the recommended steady state
+
+- **The ZIP is the door, git is the destination.** README and the install doc now say it: enter with the ZIP, and when settled say "own my history" once - the OS installs and wires git itself (`own-your-history`, shipped in v1.40.0), after which updates flow through git instead of ZIP re-downloads and git maintains itself. ZIP overlay updates remain the fallback for installs that stay git-less.
+
 ## v1.41.0 - 2026-07-09
 
 The proof-and-payoff patch on the Second Brain release: setup proves it wired up before it says "done", and session one now hands the founder something they can see. Same floor: one Claude plan, no key, nothing leaves the machine.
