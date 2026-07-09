@@ -79,7 +79,7 @@ You need three things:
 
 - **Claude Code** - free. Download at [claude.ai/code](https://claude.ai/code). Desktop app for Mac and Windows.
 - **A paid Claude plan** - Claude Pro or Claude Max. Free tiers lack sufficient context.
-- **Python 3.11+** - for the runtime scripts. Run `python3 --version` to check.
+- **Python 3.11+** - for the runtime scripts. Check with `python --version`, then `python3 --version`, then `py -3 --version` - the first one that answers is the one your machine uses. (Bare `python3` is unreliable on Windows.)
 
 That is it. No git. No database. No server. No Notion account required.
 

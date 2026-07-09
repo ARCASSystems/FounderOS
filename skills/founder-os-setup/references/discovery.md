@@ -1,6 +1,24 @@
 # Setup - Phase 0.0 and Phase 0: Frame and Discovery
 
-Load this when you start the wizard. It covers the framing contract and the full discovery interview. Ask ONE question at a time and wait for the answer. Return to the router (`SKILL.md`) for the phase order.
+Load this when you start the wizard. It covers the Python preflight, the framing contract, and the full discovery interview. Ask ONE question at a time and wait for the answer. Return to the router (`SKILL.md`) for the phase order.
+
+---
+
+## Phase 0.P: Python preflight (run before anything else)
+
+Founder OS needs Python 3.11+ for its runtime scripts, and the wizard is about to ask 15 to 20 minutes of questions. Check for Python FIRST, so a missing prerequisite surfaces before the founder invests that time, not after.
+
+Probe in this order and stop at the first one that answers with version 3.11 or higher:
+
+1. `python --version`
+2. `python3 --version`
+3. `py -3 --version`
+
+Three spellings because machines differ: bare `python3` is unreliable on Windows (it often triggers the Microsoft Store stub instead of a real interpreter), and `py` exists only on Windows. Remember WHICH spelling answered and use that same spelling for every script the wizard runs later.
+
+- **One of the three answers with 3.11+:** say nothing about it (a passing preflight is invisible) and continue to Phase 0.0.
+- **One answers but below 3.11:** say plainly: "Your machine has Python [found version], and Founder OS needs 3.11 or newer. Install the current version from python.org/downloads (about two minutes), then say 'set up Founder OS' again. Everything else is ready." Then stop the wizard.
+- **All three miss:** say plainly: "One thing to install before we start: Python, the free engine the Founder OS scripts run on. Download it at python.org/downloads (pick 3.11 or newer; on Windows tick 'Add python.exe to PATH' in the installer), then say 'set up Founder OS' again and we start from here." Then stop the wizard. Do NOT run the interview first - twenty minutes of answers against an engine that cannot run is the wrong order.
 
 ---
 

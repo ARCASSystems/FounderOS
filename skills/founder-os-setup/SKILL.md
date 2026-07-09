@@ -60,7 +60,7 @@ Run the phases in order. When you reach a phase, read its reference file for the
 
 | Phase | What it does | Load |
 |-------|--------------|------|
-| 0.0 + 0 | Frame the second-brain contract, then run discovery: identity, role, variant read, positioning, the founder snapshot (the four fields the OS proposes from), workstreams, priorities, tool stack, work style, privacy, observation opt-in. | `references/discovery.md` |
+| 0.0 + 0 | Python preflight (three probes, stop before the interview if missing), frame the second-brain contract, then run discovery: identity, role, variant read, positioning, the founder snapshot (the four fields the OS proposes from), workstreams, priorities, tool stack, work style, privacy, observation opt-in. | `references/discovery.md` |
 | 1 | Draft `core/identity.md` + `core/profile.md`, write the global `~/.claude/CLAUDE.md`, seed the auto-memory layer, optionally tidy global settings. | `references/identity-and-global.md` |
 | 2 | Create the full folder structure (the file tree), copy hooks + scripts byte-for-byte, run every placeholder substitution, seed brain content, init git + wire the privacy guard, set the first weekly sprint. | `references/root-structure.md` |
 | 3 | Company folders + business-context file + company `.mcp.json`. | `references/projects.md` |
