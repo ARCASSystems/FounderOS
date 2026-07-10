@@ -2,6 +2,57 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.42.0 - 2026-07-10
+
+The install-and-honesty release. It clears the blockers a clean-machine ZIP install hit, replaces the dual-shell hooks with one cross-platform dispatcher, and reconciles every self-claim against what the code actually does. No new skills or commands.
+
+### New - one hook dispatcher instead of a shell pair per event
+
+- **Every hook now runs through `scripts/hooks/dispatch.py`, one settings entry per event.** The OS used to register a bash script and a PowerShell script for each event, so a Windows box with no bash (or a Linux box with no PowerShell) printed an interpreter-not-found error on every fire. Python is already a prerequisite, so a Python dispatcher needs no shell: there is nothing to be missing.
+- **Session-close handlers run in a fixed order.** The revenue check and the change manifest both read the working tree before the auto-save commits it. The old event array did not guarantee that order; the dispatcher does (revenue-check, then changes-manifest, then autosave).
+- **The nine `.sh`/`.ps1` pairs are gone**, the session brief is consolidated into `session_start_brief.py`, and the hooks-parity gate now enforces the dispatcher shape.
+
+### Fix - ZIP is a first-class install path
+
+- **A ZIP extract is detected as its own install and set up in place**, instead of being misread as a plugin install that split the founder's data into a fresh empty folder with no skills or commands.
+- **Git identity is set before the first commit**, and the privacy guard is wired and tested before git init, so the first commit no longer fails on a machine with no configured `user.name`.
+- **A Python check runs before the interview**, not twenty minutes into it, with the same three-probe sequence (`python`, `python3`, `py -3`) everywhere so bare `python3` no longer fails silently on Windows.
+- **The empty-state message leads with the universal phrase "set up Founder OS"** and routes `/setup` vs `/founder-os:setup` by install path.
+
+### Fix - your history and identity stay yours
+
+- **The full User Layer is tracked when you own your history**, via a shipped operator gitignore, so "full version history" covers identity, priorities, decisions, clients, cadence, and brain, not just a rolling snapshot floor.
+- **Remote safety before the first data-tracking commit:** own-your-history renames the public `origin` to `founderos-upstream` and disables its push URL, and a guard refuses to let a User-Layer-tracking repo point a push at the public FounderOS repo. One `git push` can no longer publish your identity.
+
+### Fix - updates propose, they do not overwrite
+
+- **Your `CLAUDE.md`, `rules/`, and `settings.json` are no longer replaced wholesale on update.** Updates land in the `templates/` copies; the flow diffs live against new and proposes a migration you read and accept.
+- **Apply is staged and rollback is real.** Incoming files are staged and verified before activation, two manifests are recorded, and rollback restores the pre-update state and deletes anything the update introduced. Any apply failure auto-triggers rollback.
+
+### Fix - claims match the code
+
+- **The revenue-loop check actually fires.** It reads the per-session change record instead of a `git status` that was always empty on a fresh install (both tracked files are gitignored), so the check no longer silently never runs.
+- **The undo manifest only offers a restore for files it can put back**, quotes paths in printed commands, and restores created files by deleting them on confirm.
+- **The PreCompact line says what the hook does** (it asks the summary to keep unwritten facts and instructs the assistant to file them after compaction; it does not write files itself).
+- **The README no longer claims "nothing leaves your machine" without the plain version:** files stay on your disk, what you read into a session goes to Anthropic under your plan terms, and ARCAS receives nothing, runs no server, keeps no telemetry.
+- **Runs-on labels name the local execution the skills actually do** instead of over-claiming portability.
+
+### Fix - verify catches broken installs
+
+- **A data folder passes only if its plugin engine is reachable** (version read from the plugin manifest); an unreachable engine now FAILs with "engine not found" instead of auto-passing.
+- **The scripts check enumerates the shipped scripts dynamically and compiles every one, including the hook dispatcher.** Missing Python is a hard FAIL, resolving the old WARN/FAIL contradiction.
+- **The hooks check verifies all six events in the dispatcher shape**, not just SessionStart, and the free-tier grep covers the full shipped script set.
+
+### Fix - enum and data-flow hygiene
+
+- **`founder-next-move` gates on the identity role and a present Founder Snapshot**, so a `builder`-variant founder is no longer redirected away from the propose engine.
+- **`business_model` captured at setup is now written to `stack.json`**, so `unit-economics` reads the real model instead of null.
+
+### Change - house voice and history hygiene
+
+- **Every em and en dash across the tracked tree is gone** (194 across 23 files), and a new full-tree baseline gate in the privacy guardian holds the whole repo at zero so a dash can never silently regress.
+- **The commit naming rule now documents release commits:** user-visible present-tense subject, version in the tag and body, never as the subject.
+
 ## v1.41.2 - 2026-07-09
 
 A consistency-hardening sweep across the Second Brain release arc. No new features; every claim the OS makes about itself now matches what it does.
