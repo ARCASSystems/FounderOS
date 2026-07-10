@@ -1,0 +1,46 @@
+# Founder OS - your gitignore.
+# Installed over the shipped developer .gitignore at the moment version history
+# becomes yours (setup with git present, or "own my history" later).
+#
+# The difference matters: the developer gitignore protects the PUBLIC repo by
+# ignoring founder data. This one protects YOU by tracking it. Your identity,
+# priorities, decisions, brain log, clients - all of it goes into your local
+# history, so "full version history" means your data too, not just the engine.
+# Only secrets, runtime state, and per-machine files stay out.
+
+# Secrets. Never tracked, never committed. The connect skill writes keys here
+# and nowhere else.
+.env
+.env.*
+*.key
+
+# Private-name guard patterns. Your names power the pre-commit guard but never
+# enter history, so they can never leave this machine even if you ever push.
+scripts/private-name-patterns.txt
+
+# Runtime state. Session snapshots, change logs, update staging and backups.
+# Regenerated constantly; history would be noise.
+state/
+brain/.snapshot.md
+
+# Connector and voice runtime. Machine-specific; the connect and add-voice
+# skills regenerate these. Secrets live in .env, not here.
+connectors/
+voice/
+
+# Per-machine Claude settings. Local overrides stay local.
+CLAUDE.local.md
+AGENTS.local.md
+GEMINI.local.md
+.mcp.local.json
+.claude/settings.local.json
+
+# Caches and editor noise.
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+.obsidian/
+.vscode/
+.idea/
+*.swp
