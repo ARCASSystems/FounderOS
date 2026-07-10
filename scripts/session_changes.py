@@ -25,8 +25,10 @@ Two mechanisms, one script, wired as Claude Code hooks:
 - --print  (the /changes command)
   Re-render and print the most recent session's manifest on demand.
 
-- --restore <relpath> [--session <sid>]
-  Copy a snapshot back over the working file. The one-command undo.
+- --restore <relpath> [--session <sid>] [--yes]
+  Copy the pre-edit snapshot back over the working file. If the file was CREATED
+  this session there is no snapshot to restore, so undo means deleting it, which
+  prompts for confirmation unless --yes is passed. The one-command undo.
 
 Design rules this script must honour (they are why the feature exists):
 - It must never become invisible work itself. All file IO is explicit UTF-8.
@@ -309,11 +311,15 @@ def aggregate(log_file: Path) -> tuple[str, dict]:
                         "writes": 1,
                         "last_ts": rec.get("ts", ""),
                         "in_repo": rec.get("in_repo", True),
+                        "snapshot": bool(rec.get("snapshot", False)),
                     }
                 else:
                     cur["writes"] += 1
                     cur["last_ts"] = rec.get("ts", cur["last_ts"])
-                    # First-seen action wins (create beats later modify).
+                    # First-seen action wins (create beats later modify). A
+                    # snapshot on ANY record for this path means a pre-edit copy
+                    # exists, so carry the OR of the flag through the aggregate.
+                    cur["snapshot"] = cur["snapshot"] or bool(rec.get("snapshot", False))
     except Exception as exc:
         quarantine(
             "scripts/session_changes.py manifest",
@@ -360,10 +366,16 @@ def render_manifest(log_file: Path) -> str:
         elif meta["action"] == "create":
             adds = count_lines(path)
             dels = 0
-            recover = "new file (delete to undo)"
-        else:
+            # A created file has no pre-edit snapshot; restore means deleting it.
+            recover = f'python scripts/session_changes.py --restore "{path}" --session {sid}'
+        elif meta.get("snapshot"):
             adds, dels = git_numstat(path)
-            recover = f"python scripts/session_changes.py --restore {path} --session {sid}"
+            recover = f'python scripts/session_changes.py --restore "{path}" --session {sid}'
+        else:
+            # Edited but never snapshotted (over the 2 MB cap, or the snapshot
+            # failed): listed for visibility, but there is no copy to restore.
+            adds, dels = git_numstat(path)
+            recover = "over 2 MB - listed, not snapshot-restorable"
         a = "-" if adds is None else str(adds)
         d = "-" if dels is None else str(dels)
         lines.append(f"| `{path}` | {meta['action']} | {a} | {d} | {meta['writes']} | {recover} |")
@@ -372,7 +384,7 @@ def render_manifest(log_file: Path) -> str:
     lines.append("Restore any modified file to its pre-session state:")
     lines.append("")
     lines.append("```")
-    lines.append(f"python scripts/session_changes.py --restore <path> --session {sid}")
+    lines.append(f'python scripts/session_changes.py --restore "<path>" --session {sid}')
     lines.append("```")
     lines.append("")
     return "\n".join(lines)
@@ -468,7 +480,44 @@ def cmd_print() -> int:
     return 0
 
 
-def cmd_restore(relpath: str, session_arg: str | None) -> int:
+def _was_created_this_session(sid: str, relpath: str) -> bool:
+    """True when the session log records relpath's first touch as a create.
+    First-seen action wins, so the first record for the path is authoritative."""
+    log_file = LOG_DIR / f"{sid}.jsonl"
+    if not log_file.is_file():
+        return False
+    try:
+        with log_file.open("r", encoding="utf-8", errors="replace") as fh:
+            for raw in fh:
+                raw = raw.strip()
+                if not raw:
+                    continue
+                try:
+                    rec = json.loads(raw)
+                except Exception:
+                    continue
+                if rec.get("path") == relpath:
+                    return rec.get("action") == "create"
+    except Exception:
+        return False
+    return False
+
+
+def _confirm_delete(relpath: str, assume_yes: bool) -> bool:
+    if assume_yes:
+        return True
+    try:
+        # Non-interactive (agent or hook): never hang on input and never guess a
+        # yes. The caller must pass --yes to delete a created file unattended.
+        if sys.stdin is None or not sys.stdin.isatty():
+            return False
+        ans = input(f"Delete {relpath}? It was created this session, so undo means removing it. (y/N) ")
+        return ans.strip().lower() in ("y", "yes")
+    except Exception:
+        return False
+
+
+def cmd_restore(relpath: str, session_arg: str | None, assume_yes: bool) -> int:
     try:
         if session_arg:
             sid = short_sid(session_arg)
@@ -479,18 +528,31 @@ def cmd_restore(relpath: str, session_arg: str | None) -> int:
             print("No session to restore from.")
             return 1
         snap = SNAP_DIR / sid / relpath
-        if not snap.is_file():
-            print(f"No snapshot for {relpath} in session {sid}. "
-                  "It may have been created this session (delete to undo) or is outside the OS folder.")
-            return 1
-        target = ROOT / relpath
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(snap, target)
-        print(f"Restored {relpath} from session {sid} snapshot.")
+        if snap.is_file():
+            target = ROOT / relpath
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(snap, target)
+            print(f"Restored {relpath} from session {sid} snapshot.")
+            return 0
+        # No snapshot. If the file was CREATED this session, undo means deleting
+        # it - there was no earlier version to put back.
+        if _was_created_this_session(sid, relpath):
+            target = ROOT / relpath
+            if not target.exists():
+                print(f"{relpath} was created this session but is already gone - nothing to undo.")
+                return 0
+            if not _confirm_delete(relpath, assume_yes):
+                print("Left in place. Re-run with --yes to delete it without prompting.")
+                return 1
+            target.unlink()
+            print(f"Deleted {relpath} (created this session; there was no earlier version).")
+            return 0
+        print(f"No snapshot for {relpath} in session {sid}. It was over 2 MB, "
+              "shell-written, or is outside the OS folder - no pre-edit copy exists.")
+        return 1
     except Exception as exc:
         print(f"Restore failed: {exc}")
         return 1
-    return 0
 
 
 def main() -> int:
@@ -500,6 +562,8 @@ def main() -> int:
     ap.add_argument("--print", action="store_true", dest="do_print", help="Print the latest manifest")
     ap.add_argument("--restore", metavar="PATH", help="Restore a file from its session snapshot")
     ap.add_argument("--session", metavar="SID", help="Session id for manifest/restore")
+    ap.add_argument("--yes", action="store_true",
+                    help="Skip the confirm prompt when restoring means deleting a created file")
     args = ap.parse_args()
 
     if args.record:
@@ -509,7 +573,7 @@ def main() -> int:
     if args.do_print:
         return cmd_print()
     if args.restore:
-        return cmd_restore(args.restore, args.session)
+        return cmd_restore(args.restore, args.session, args.yes)
     ap.print_help()
     return 0
 
