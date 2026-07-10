@@ -112,22 +112,19 @@ If update available, add one line: `Run /founder-os:update to install.` Stop.
 
 **If `$ARGUMENTS` is `rollback`:**
 
-**ZIP mode:** restore from the newest backup folder instead of a branch.
+A real rollback does two things: restores every file the update CHANGED, and removes every file the update INTRODUCED. Restoring changed files while leaving new ones behind is not a rollback, it is a mix of two releases. The manifests written in Steps 7 and 8b make both halves exact.
 
-1. List directories matching `state/.update-backup-*` and take the newest by name (the name embeds an ISO timestamp, so lexical order is chronological). Call this `BACKUP_DIR`.
-2. If none exist, reply: `No prior update backup found. Cannot rollback automatically.` Stop.
-3. Copy every path inside `BACKUP_DIR` back over the install root, preserving relative paths. Everything in it is System Layer by construction (Step 7 only backs up System Layer paths), so no User Layer file can be touched.
-4. Reply: `Rolled back System Layer from <BACKUP_DIR>. User Layer untouched. The backup folder is kept; delete it when no longer needed.`
+1. Find the newest manifest pair: `state/.update-manifests/<ts>/` containing both `pre.txt` and `incoming.txt` (the dir name embeds an ISO timestamp; lexical order is chronological).
+2. Find the matching backup by the SAME timestamp: `state/.update-backup-<ts>/` in ZIP mode, branch `founder-os-update-backup-<ts>` in GIT mode (a `-2` suffix from a same-second name collision still counts as a match). A mismatched pair means a corrupted state - stop and report rather than restore the wrong snapshot.
+3. **No manifest pair found** (the last update predates the manifest system): fall back to the legacy restore. ZIP mode: take the newest `state/.update-backup-*` folder and copy every path in it back over the install root, preserving relative paths. GIT mode: take the newest `founder-os-update-backup-*` branch and `git checkout <BACKUP_REF> -- <path>` every System Layer path that exists on it, then commit. Either way, close with the honest caveat: `Restored from backup. This update predates the manifest system, so files the update ADDED could not be identified and remain in place. Your User Layer was not touched either way.` Stop here on this path.
+4. **Restore changed files:** every path listed in `pre.txt` is restored from the backup. ZIP mode: copy from the backup folder. GIT mode: `git checkout <BACKUP_REF> -- <path>`. Skip the three protected live files for now (step 6 below handles them).
+5. **Delete introduced files:** every path in `incoming.txt` that is NOT in `pre.txt` was created by the update - delete it from disk. (No User Layer path can appear in either manifest: Step 8b refuses to stage them, so this delete can never touch the founder's data.)
+6. **Protected live files:** diff live `CLAUDE.md`, `rules/`, and `.claude/settings.json` against their copies in the backup. If they differ (Step 8.5 migrations were applied), ask ONE question: "The update also changed CLAUDE.md / rules / settings.json with your approval. Undo those too? (yes / no)". On yes, restore those from the backup as well. On no, leave them.
+7. **Verify:** re-hash every restored path and compare against the hashes recorded in `pre.txt`. If any mismatch, report exactly which files did not restore cleanly - never claim success on a partial restore.
+8. GIT mode only: stage the restored and deleted paths explicitly and commit with message `chore: rollback System Layer to <BACKUP_REF>`.
+9. Reply: `Rolled back: <n> files restored, <m> update-introduced files removed, hashes verified. User Layer untouched. The backup is kept; delete it when no longer needed.`
 
-**GIT mode:** restore System Layer paths from the most recent backup branch. Backup branches are named `founder-os-update-backup-<ISO-timestamp>` and are created in Step 7 before every update; Step 7 also commits any uncommitted System Layer edits before branching, so the backup captures the full pre-update System Layer state whether the tree was clean or dirty.
-
-1. Run `git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/heads/founder-os-update-backup-*` and take the first entry. Call this `BACKUP_REF`.
-2. If no entry is returned, reply: `No prior update backup branch found. Cannot rollback automatically. Use git reflog to find the last good commit manually.` Stop.
-3. For each System Layer path listed in the Layer definitions section above, run `git checkout "$BACKUP_REF" -- <path>` if that path exists on the backup branch. Skip paths that do not exist on the backup (they were not present at update time).
-4. Stage the restored paths and commit with message `chore: rollback System Layer to <BACKUP_REF>`. User Layer paths are not touched.
-5. Reply: `Rolled back System Layer to <BACKUP_REF>. User Layer untouched. The backup branch is kept; delete with: git branch -D <BACKUP_REF> when no longer needed.`
-
-This restores only System Layer paths. User Layer files modified since the update remain as-is. The backup branch persists until manually deleted, so a rollback can be re-run safely.
+The backup and manifests persist until manually deleted, so a rollback can be re-run safely.
 
 **If `$ARGUMENTS` is empty:** proceed to Step 4.
 
@@ -171,47 +168,73 @@ Proceed? (yes / no)
 
 Wait for reply. If not a clear `yes`, reply: `Update dismissed. Run /founder-os:update again later.` Stop.
 
-### Step 7. Back up current state
+### Step 7. Back up current state and record the pre-update manifest
 
-Before applying anything, create a backup so `rollback` works on any tree state.
+Before applying anything, create a backup so `rollback` works on any tree state. The backup set is every System Layer path that currently exists (per the Layer definitions above, including `VERSION`) PLUS the three protected live files (`CLAUDE.md`, `rules/`, `.claude/settings.json`) - protected files are never overwritten by Step 8, but Step 8.5 migrations may edit them on the founder's yes, and rollback must be able to undo that too.
+
+Generate ONE ISO timestamp for this whole update (format `YYYYMMDDTHHMMSSZ`, UTC). Call it `<ts>`. The backup, the manifests, and the staging dir all embed the same `<ts>` so rollback can pair them.
 
 **ZIP mode:** back up to a folder, since there is no git to branch.
 
-1. Create `state/.update-backup-<ISO-timestamp>/` (timestamp format `YYYYMMDDTHHMMSSZ`, UTC).
-2. Copy every System Layer path that currently exists (per the Layer definitions above, including `VERSION`) into that folder, preserving relative paths.
+1. Create `state/.update-backup-<ts>/`.
+2. Copy every path in the backup set into that folder, preserving relative paths.
 3. Keep only the three newest `state/.update-backup-*` folders; delete older ones.
-4. Report inline: `Backup folder created: state/.update-backup-<ts>/.` Then skip to Step 8.
+4. Report inline: `Backup folder created: state/.update-backup-<ts>/.`
 
 **GIT mode:** create a backup branch.
 
 1. Run `git rev-parse --is-inside-work-tree` to confirm the install is a git repo (it is, in this mode - this is a sanity check).
-2. Check for uncommitted System Layer edits: run `git status --porcelain` and filter the output to System Layer paths. If any exist, commit them first (stage exactly those paths, commit message `chore: pre-update snapshot of local System Layer edits`) and say so in one line. A branch pointer captures committed state only - without this step, uncommitted System Layer edits would be overwritten by Step 8 with no backup. Uncommitted User Layer changes are left alone (Step 8 never touches those paths).
-3. Generate an ISO timestamp: `BACKUP_REF="founder-os-update-backup-$(date -u +%Y%m%dT%H%M%SZ)"`.
-4. Run `git branch "$BACKUP_REF"`. This creates a branch pointer at the current HEAD without changing the working tree or HEAD. Branch creation works on a clean tree (unlike `git stash push`, which silently no-ops when there are no local changes and was the previous mechanism). Together with the pre-commit in step 2, the branch captures the entire pre-update System Layer state - every System Layer path can be restored later with `git checkout "$BACKUP_REF" -- <path>`.
+2. Check for uncommitted System Layer or protected-file edits: run `git status --porcelain` and filter the output to the backup set. If any exist, commit them first (stage exactly those paths, commit message `chore: pre-update snapshot of local System Layer edits`) and say so in one line. A branch pointer captures committed state only - without this step, uncommitted edits would be overwritten by Step 8 with no backup. Uncommitted User Layer changes are left alone (Step 8 never touches those paths).
+3. Set `BACKUP_REF="founder-os-update-backup-<ts>"`.
+4. Run `git branch "$BACKUP_REF"`. This creates a branch pointer at the current HEAD without changing the working tree or HEAD. Branch creation works on a clean tree (unlike `git stash push`, which silently no-ops when there are no local changes and was the previous mechanism). Together with the pre-commit in step 2, the branch captures the entire pre-update state - every backed-up path can be restored later with `git checkout "$BACKUP_REF" -- <path>`.
 5. If branch creation fails because the name already exists (two updates within the same second, very rare), append a `-2` suffix and retry. If it still fails, reply: `Could not create backup branch. Run git branch to inspect, then retry.` Stop.
 6. Report inline: `Backup branch created: <BACKUP_REF>.`
 
-### Step 8. Apply updates
+**Both modes - record the pre-update manifest.** Create `state/.update-manifests/<ts>/` and write `pre.txt` inside it: one line per file currently on disk in the backup set, format `<sha256>  <relative-path>`. Use Python for the hashing (it is a hard prerequisite of the OS), for example:
 
-State the detected mode in one line, then apply.
+```
+python -c "import hashlib,sys;[print(hashlib.sha256(open(p,'rb').read()).hexdigest(),'',p) for p in sys.argv[1:]]" <files...>
+```
 
-**ZIP mode:** re-download the repo archive and overlay only the System Layer.
+or an equivalent short script over the file list. Keep only the three newest `state/.update-manifests/*` dirs; delete older ones. This manifest is half of what makes rollback exact; `incoming.txt` in Step 8b is the other half.
+
+### Step 8. Apply updates (staged - nothing goes live until the whole release arrived intact)
+
+State the detected mode in one line. Both modes follow the same three beats: stage the incoming files under `state/.update-staging/<ts>/` (same `<ts>` as Step 7), verify the staging is complete, then activate by copying into place. Copy-in-place with no staging was the old design; a half-downloaded or half-applied release left the install a mix of two versions with no record of what landed. Staging plus the two manifests removes that failure mode.
+
+**8a. Stage the incoming release.**
+
+The staging set is: every System Layer path from the Layer definitions, PLUS the incoming versions of the three protected live files (root `CLAUDE.md`, `rules/`, `.claude/settings.json`) - those are staged for the Step 8.5 diff only, never for direct copy.
+
+ZIP mode:
 
 1. Download `https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip` to a temp file. Use `curl -sL -o <tmp>/founderos-main.zip <url>` where curl exists, or PowerShell `Invoke-WebRequest -Uri <url> -OutFile <tmp>\founderos-main.zip` on Windows.
 2. Extract it in the temp location: `tar -xf founderos-main.zip` works on modern Windows, macOS, and Linux; PowerShell `Expand-Archive` is the fallback. The archive extracts to a `FounderOS-main/` folder.
-3. For each System Layer path in the Layer definitions above: copy it from `FounderOS-main/<path>` over the install's `<path>`, replacing files that exist in both. Do NOT delete local files the remote no longer has (log them; removal is the founder's call). Do NOT copy any path that is not on the System Layer list - the archive also contains User Layer seeds (`stack.json`, `brain/`, sample content) and those must never overwrite the founder's live data.
-4. Delete the temp download and extraction.
+3. Copy each path in the staging set from `FounderOS-main/<path>` into `state/.update-staging/<ts>/<path>`, preserving relative paths. Do NOT stage any path outside the staging set - the archive also contains User Layer seeds (`stack.json`, `brain/`, sample content) and those must never reach the founder's live data.
+4. Delete the temp download and extraction. The staging dir stays until Step 10.
 
-**GIT mode:** pull each System Layer path from the remote main branch:
+GIT mode:
 
-1. Fetch the release: if a `founderos-upstream` remote exists (installed by setup or own-your-history - its push URL is disabled, fetch still works), run `git fetch founderos-upstream main`. Otherwise fall back to the direct URL: `git fetch https://github.com/ARCASSystems/FounderOS.git main`. Never push to either.
-2. For each System Layer path: `git checkout FETCH_HEAD -- <path>`
+1. Fetch the release: if a `founderos-upstream` remote exists (installed by setup or own-your-history - its push URL is disabled, fetch still works), run `git fetch founderos-upstream main`. Otherwise fall back to the direct URL: `git fetch https://github.com/ARCASSystems/FounderOS.git main`. Never push to either. If the fetch fails, stage via the ZIP-mode beats above instead (download the archive with curl; staging and verification are identical from there).
+2. List what the release actually contains: `git ls-tree -r --name-only FETCH_HEAD`, filtered to the staging set. A path on the staging set but absent from the release is a skip, not an error (the release may have removed it; log it, never delete it locally unless the founder opts in).
+3. Materialize those paths into the staging dir: `git archive FETCH_HEAD <paths...> | tar -x -C state/.update-staging/<ts>/`. Where tar is unavailable, fall back to writing each file with `git show FETCH_HEAD:<path>` to `state/.update-staging/<ts>/<path>`.
 
-If the fetch fails, fall back to per-file fetch via `gh api repos/ARCASSystems/FounderOS/contents/<path>` with recursive tree walk. Write each fetched file to its exact path.
+**8b. Verify the staging.** All four checks pass or the update aborts with the install untouched:
 
-Skip any path that does not exist in the remote (remote may have removed it; log it, do not delete locally unless the founder opts in).
+1. `state/.update-staging/<ts>/VERSION` exists and its content equals `REMOTE_VERSION`.
+2. The staged tree is structurally complete: `.claude-plugin/`, `skills/`, `templates/`, `scripts/`, and `.claude/commands/` are all present and non-empty.
+3. No staged file is 0 bytes (a truncated download shows up as empty files).
+4. No staged path resolves to a User Layer path. This one is an error, not a skip: if it happens, STOP and report the path.
 
-Either mode: NEVER fetch or write to User Layer paths. If an incoming tree entry resolves to a User Layer path, STOP and report it. NEVER copy over the three protected live files: skip root `CLAUDE.md`, skip everything under `rules/`, and when copying `.claude/` skip `settings.json`. Their incoming versions are handled in Step 8.5.
+On any failure: delete the staging dir, keep the backup and manifests, reply `Update aborted before touching your install: <reason>. Nothing changed.` Stop.
+
+Then write the incoming manifest: `state/.update-manifests/<ts>/incoming.txt`, one `<sha256>  <relative-path>` line per staged file, same format and hashing as `pre.txt`. Write it BEFORE activation so a mid-activation failure already has both manifests on disk.
+
+**8c. Activate.**
+
+Copy every staged file over its live path, preserving relative paths - EXCEPT the three protected live files, which stay in staging for Step 8.5. Do NOT delete local files the release no longer ships (log them; removal is the founder's call).
+
+If ANY copy fails mid-activation, do not continue and do not hand the founder a mixed install: run the rollback procedure from Step 3 immediately (this update's own backup and manifests make it exact), then reply `Update failed while activating <path>. Rolled back - your install is back to v<LOCAL_VERSION>.` Stop.
 
 ### Step 8.5. Propose migrations for the protected live files
 
@@ -235,7 +258,9 @@ Do NOT attempt to merge hook entries inside `settings.json` mechanically in this
 
 Write `REMOTE_VERSION` (plus a trailing newline) to the local `VERSION` file.
 
-### Step 10. Report
+### Step 10. Clean up and report
+
+Delete `state/.update-staging/<ts>/` - Step 8.5 was the last reader. The backup and both manifests stay (they are what `rollback` runs on).
 
 Reply with exactly:
 
