@@ -20,6 +20,8 @@ Do NOT modify any file in the User Layer during this update. The User Layer cons
 - VERSION does NOT count as User Layer - it is the System Layer marker.
 
 The User Layer is owned by the founder. If you cannot determine whether a file is User Layer or System Layer, REFUSE the update and report the ambiguous path. Do not guess. Do not silently overwrite the founder's data. Better to refuse than corrupt.
+
+The same discipline applies to the three PROTECTED LIVE FILES (root `CLAUDE.md`, `rules/`, `.claude/settings.json`): the update may PROPOSE changes to them and apply on an explicit yes, but never overwrite them wholesale. They carry the founder's personalization and edits.
 </Instruction-gate>
 
 # Founder OS update
@@ -31,20 +33,25 @@ Argument: `$ARGUMENTS` - optional. One of: `check`, `rollback`, or empty.
 ## Layer definitions (memorize before running)
 
 **System Layer (safe to update):**
-- `.claude/` (commands, hooks, agents, settings)
+- `.claude/` (commands, hooks, agents - but NOT `settings.json`, see Protected live files)
 - `.claude-plugin/` (plugin.json, marketplace.json)
 - `skills/` (shared skill definitions)
 - `scripts/` (all Python helpers shipped by the OS - the full `templates/scripts/` set)
-- `templates/` (structural templates)
+- `templates/` (structural templates - incoming bootloader and rules changes land here)
 - `notion-package/` (Notion setup assets)
-- `rules/` (commit naming and other shared rules)
 - `docs/` (user-facing documentation)
-- `CLAUDE.md` (root bootloader)
 - `AGENTS.md` (cross-agent instructions)
 - `GEMINI.md` (cross-agent bridge)
 - `README.md`
 - `CHANGELOG.md` (release history - the Step 10 digest reads it)
 - `VERSION`
+
+**Protected live files (update PROPOSES, never overwrites):**
+- `CLAUDE.md` (root bootloader - personalized at setup with the founder's name and role, and often hand-edited since)
+- `rules/` (operating-rules.md is personalized at setup; the founder may have edited any rule)
+- `.claude/settings.json` (may carry the founder's own hook customisations)
+
+Overwriting these silently destroys founder-authored changes - that is the blocker this list exists to fix. Incoming versions still arrive with every update: the bootloader as `templates/bootloader-claude-md.md`, the rules as `templates/rules/`, and `settings.json` in the update staging area. Step 8.5 diffs each live file against its incoming version and proposes a migration the founder approves per file. No yes, no change.
 
 **User Layer (NEVER update):**
 - `core/` (all files)
@@ -149,8 +156,11 @@ Current:  v<LOCAL_VERSION>
 Incoming: v<REMOTE_VERSION>
 
 This will update System Layer files only:
-- .claude/, .claude-plugin/, skills/, scripts/, templates/, notion-package/, rules/, docs/
-- CLAUDE.md, AGENTS.md, GEMINI.md, README.md, CHANGELOG.md, VERSION
+- .claude/ (except settings.json), .claude-plugin/, skills/, scripts/, templates/, notion-package/, docs/
+- AGENTS.md, GEMINI.md, README.md, CHANGELOG.md, VERSION
+
+Files you may have edited get a proposal, never an overwrite:
+- CLAUDE.md, rules/, .claude/settings.json (you see the diff, you say yes per file)
 
 Your User Layer files will NOT be touched:
 - core/, context/, cadence/, brain/, capture/, brands/
@@ -201,7 +211,25 @@ If the fetch fails, fall back to per-file fetch via `gh api repos/ARCASSystems/F
 
 Skip any path that does not exist in the remote (remote may have removed it; log it, do not delete locally unless the founder opts in).
 
-Either mode: NEVER fetch or write to User Layer paths. If an incoming tree entry resolves to a User Layer path, STOP and report it.
+Either mode: NEVER fetch or write to User Layer paths. If an incoming tree entry resolves to a User Layer path, STOP and report it. NEVER copy over the three protected live files: skip root `CLAUDE.md`, skip everything under `rules/`, and when copying `.claude/` skip `settings.json`. Their incoming versions are handled in Step 8.5.
+
+### Step 8.5. Propose migrations for the protected live files
+
+The founder may have edited these three; the incoming release may have improved them. Reconcile by proposal, not replacement. For each pair:
+
+1. Live `CLAUDE.md` vs incoming `templates/bootloader-claude-md.md`
+2. Each live file under `rules/` vs its incoming `templates/rules/` twin (plus any rules file that is new in the incoming release)
+3. Live `.claude/settings.json` vs the incoming `.claude/settings.json`
+
+Procedure per pair:
+
+- Diff live against incoming. Ignore pure personalization differences (the founder's name and role substituted where the template has `{{...}}` tokens) - those are not drift, they are the point.
+- If there is no meaningful difference beyond personalization: say nothing, move on.
+- If the incoming version changed: summarize what the release changes in plain language (2-4 lines), show the relevant diff hunks, and ask: "Apply this to your live file? Your own edits stay - I merge the release change in around them. (yes / no / show me the whole file)"
+- On yes: apply the incoming change to the live file as a careful edit that preserves every founder-authored line. On no: leave the live file untouched and move on. Never batch the three into one yes.
+- A rules file that exists in the incoming release but not live is safe to add on yes (nothing founder-authored is at risk); say what it is first.
+
+Do NOT attempt to merge hook entries inside `settings.json` mechanically in this step - if the settings diff touches hooks, show it and let the founder decide, noting they can skip and nothing breaks (the old hooks keep running).
 
 ### Step 9. Write new VERSION
 
