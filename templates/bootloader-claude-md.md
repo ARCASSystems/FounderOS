@@ -192,7 +192,7 @@ Three additions sit underneath the daily files. None require setup beyond the in
 - **`system/quarantine.md`** - catch-net for silent hook and cron-job failures. Helper functions for PowerShell and bash are in the file. SessionStart counts ACTIVE entries. Hooks fail silently by design; quarantine makes failure visible without blocking the session.
 - **`rules/approval-gates.md`** - explicit list of what auto-runs (brain/log appends, wiki-build, archive moves), what requires explicit yes (identity edits, decision supersession, sends, public pushes), and what is blocked outright (force push, hard reset, AI attribution in commits). Customize to match how the operator wants the OS to behave.
 
-The SessionStart brief (`.claude/hooks/session-start-brief.sh`, registered on `SessionStart` in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.
+The SessionStart brief (`.claude/hooks/session_start_brief.py`, run by the cross-platform hook dispatcher `scripts/hooks/dispatch.py` on `SessionStart`, registered in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.
 
 ---
 
@@ -220,7 +220,7 @@ Both hooks fail gracefully and never block the session.
 
 The Founder OS exists to capture what the operator says so nothing slips. The "don't update files unless asked" rule above has explicit exemptions for capture-class writes - because if the operator has to remember to ask for capture, the capture loop is broken.
 
-A UserPromptSubmit hook at `.claude/hooks/user-prompt-capture.sh` (and `.ps1`) classifies every incoming prompt against four shapes and emits a `[capture-suggestion]` system note before you respond. When you see one of these notes in your context, follow the routing below.
+A UserPromptSubmit hook - the cross-platform dispatcher `scripts/hooks/dispatch.py` running `scripts/user-prompt-capture.py` - classifies every incoming prompt against four shapes and emits a `[capture-suggestion]` system note before you respond. When you see one of these notes in your context, follow the routing below.
 
 **Shape 1 - Rant.** Long unstructured dump (~200+ words), first-person, no clear question. The hook EAGERLY writes the rant to `brain/rants/<YYYY-MM-DD>.md` with `processed: false` so the text is safe on disk. Your job: acknowledge in one short line that the rant was captured, then offer routing: `Want to act on it now? Say decision, draft, plan, or log - or ignore and /dream will pick it up later.` Do not summarise the rant content. Do not interview.
 

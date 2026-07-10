@@ -170,7 +170,7 @@ Three additions sit underneath the daily files. None require setup beyond runnin
 - **`system/quarantine.md`** - catch-net for silent hook and cron-job failures. Helper functions for PowerShell and bash are in the file. SessionStart counts ACTIVE entries. Hooks fail silently by design. Quarantine makes failure visible without blocking the session.
 - **`rules/approval-gates.md`** - explicit list of what auto-runs (brain/log appends, wiki-build, archive moves), what requires your yes (identity edits, decision supersession, sends, public pushes), and what is blocked outright (force push, hard reset, AI attribution in commits). Customize to match how you want the OS to behave.
 
-The SessionStart brief (`.claude/hooks/session-start-brief.sh` on Mac/Linux/git-bash, `.claude/hooks/session-start-brief.ps1` on Windows, both registered in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.
+The SessionStart brief (`.claude/hooks/session_start_brief.py`, run by the cross-platform hook dispatcher `scripts/hooks/dispatch.py` on the `SessionStart` event registered in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.
 
 ### Runtime brain context (v1.10)
 

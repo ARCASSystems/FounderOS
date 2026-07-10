@@ -86,7 +86,7 @@ When invoked, the skill computes days-to-deadline against today and:
 - **≤30 days:** mention the upcoming deadline in the response if relevant to the question
 - **Past due:** surface immediately with a "this is overdue - file or escalate today" prompt
 
-The SessionStart hook (`.claude/hooks/session-start-brief.sh` / `.ps1`) does the daily surfacing. This skill handles in-conversation deadlines.
+The SessionStart hook (the cross-platform dispatcher `scripts/hooks/dispatch.py`, which runs `.claude/hooks/session_start_brief.py`) does the daily surfacing. This skill handles in-conversation deadlines.
 
 ---
 

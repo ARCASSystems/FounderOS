@@ -32,7 +32,7 @@ Fields:
 
 ## Platform behavior
 
-Both `post-tool-use-observation.sh` and `post-tool-use-observation.ps1` are wired in `.claude/settings.json` so the hook fires regardless of which shell Claude Code launches. To prevent double-writes on Windows, the bash hook exits silently when it detects MINGW, MSYS, or Cygwin and defers to the PowerShell hook. On macOS and Linux only the bash hook runs. Net effect: exactly one append per tool call on every platform.
+The PostToolUse observation is handled by the cross-platform hook dispatcher `scripts/hooks/dispatch.py` (wired on `PostToolUse` in `.claude/settings.json`), which runs one Python handler on every platform. There is no shell hook to double-fire, so a tool call appends exactly once everywhere.
 
 ## Privacy
 
