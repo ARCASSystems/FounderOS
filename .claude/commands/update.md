@@ -194,7 +194,7 @@ State the detected mode in one line, then apply.
 
 **GIT mode:** pull each System Layer path from the remote main branch:
 
-1. `git fetch https://github.com/ARCASSystems/FounderOS.git main`
+1. Fetch the release: if a `founderos-upstream` remote exists (installed by setup or own-your-history - its push URL is disabled, fetch still works), run `git fetch founderos-upstream main`. Otherwise fall back to the direct URL: `git fetch https://github.com/ARCASSystems/FounderOS.git main`. Never push to either.
 2. For each System Layer path: `git checkout FETCH_HEAD -- <path>`
 
 If the fetch fails, fall back to per-file fetch via `gh api repos/ARCASSystems/FounderOS/contents/<path>` with recursive tree walk. Write each fetched file to its exact path.
