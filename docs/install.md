@@ -210,10 +210,10 @@ If anything breaks in the first 24 hours, email `solutions@arcassystems.com` wit
 
 ## Known platform notes
 
-**Windows users.** Every hook ships with bash and PowerShell variants. `.claude/settings.json` wires both automatically. If you have PowerShell installed (all modern Windows systems do), the full hook set fires without any extra setup - no bash, no git-bash required. If you also have git-bash, both variants run - they fail gracefully if the other shell is absent, so there is no double-output risk.
+**Windows users.** Every hook event runs through one cross-platform Python dispatcher (`scripts/hooks/dispatch.py`), wired by `.claude/settings.json`. There is no shell to be missing - no bash, no PowerShell, no git-bash required. Python 3.11+ (already a prerequisite of the OS) is the only thing the hooks need; if the bare `python` command is not on your PATH, setup writes the interpreter it discovered (`python3` or `py -3`) into the hook commands for you.
 
 **Git-less installs (Path 0).** Every hook degrades quietly when git is absent: the session brief still runs, the auto-save hook stays silent instead of erroring, and the per-session change snapshots do not need git at all. Nothing errors, nothing nags. Version history activates when you say "own my history".
 
-**Mac, Linux.** Hooks run through bash with no extra setup.
+**Mac, Linux.** Same Python dispatcher, no extra setup.
 
 **Cloud Claude (web, desktop).** Cloud Claude cannot run slash commands or write to local disk. It is a read-only surface. If you want the OS to remember your context across sessions, you need one of the local paths above.

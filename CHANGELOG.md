@@ -15,7 +15,7 @@ The install-and-honesty release. It clears the blockers a clean-machine ZIP inst
 ### Fix - ZIP is a first-class install path
 
 - **A ZIP extract is detected as its own install and set up in place**, instead of being misread as a plugin install that split the founder's data into a fresh empty folder with no skills or commands.
-- **Git identity is set before the first commit**, and the privacy guard is wired and tested before git init, so the first commit no longer fails on a machine with no configured `user.name`.
+- **Git identity is set before the first commit**, and the privacy guard is wired and proven live between `git init` and that first commit, so the commit no longer fails on a machine with no configured `user.name` and can never land unguarded.
 - **A Python check runs before the interview**, not twenty minutes into it, with the same three-probe sequence (`python`, `python3`, `py -3`) everywhere so bare `python3` no longer fails silently on Windows.
 - **The empty-state message leads with the universal phrase "set up Founder OS"** and routes `/setup` vs `/founder-os:setup` by install path.
 
@@ -23,6 +23,8 @@ The install-and-honesty release. It clears the blockers a clean-machine ZIP inst
 
 - **The full User Layer is tracked when you own your history**, via a shipped operator gitignore, so "full version history" covers identity, priorities, decisions, clients, cadence, and brain, not just a rolling snapshot floor.
 - **Remote safety before the first data-tracking commit:** own-your-history renames the public `origin` to `founderos-upstream` and disables its push URL, and a guard refuses to let a User-Layer-tracking repo point a push at the public FounderOS repo. One `git push` can no longer publish your identity.
+- **The remote-safety guard checks every push destination on a remote** - all pushurl values if any are set, otherwise all url values, because git pushes to every one of them. A second push URL can no longer hide a public one.
+- **The git privacy hooks find Python the same way setup does** (`python`, then `python3`, then `py -3`), so a Windows machine with only the py launcher gets a live guard instead of a silent pass.
 
 ### Fix - updates propose, they do not overwrite
 
@@ -36,11 +38,14 @@ The install-and-honesty release. It clears the blockers a clean-machine ZIP inst
 - **The PreCompact line says what the hook does** (it asks the summary to keep unwritten facts and instructs the assistant to file them after compaction; it does not write files itself).
 - **The README no longer claims "nothing leaves your machine" without the plain version:** files stay on your disk, what you read into a session goes to Anthropic under your plan terms, and ARCAS receives nothing, runs no server, keeps no telemetry.
 - **Runs-on labels name the local execution the skills actually do** instead of over-claiming portability.
+- **The setup tour's version-history offer says what is true** - the history lives in the folder on your disk - instead of a blanket "nothing leaves your machine".
+- **The release floor names its one pip exception:** the optional scrape helper asks for three packages and falls back to the built-in fetcher without them; every other shipped script is standard library only.
+- **The last doc references to the retired bash/PowerShell hook pairs are gone** - CLAUDE.md and the install and forking guides now describe the dispatcher.
 
 ### Fix - verify catches broken installs
 
 - **A data folder passes only if its plugin engine is reachable** (version read from the plugin manifest); an unreachable engine now FAILs with "engine not found" instead of auto-passing.
-- **The scripts check enumerates the shipped scripts dynamically and compiles every one, including the hook dispatcher.** Missing Python is a hard FAIL, resolving the old WARN/FAIL contradiction.
+- **The scripts check enumerates the shipped scripts dynamically and syntax-checks every one, including the hook dispatcher**, with a parse that writes nothing to disk so the skill's read-only claim holds. Missing Python is a hard FAIL, resolving the old WARN/FAIL contradiction. The report example's footer now matches its rows.
 - **The hooks check verifies all six events in the dispatcher shape**, not just SessionStart, and the free-tier grep covers the full shipped script set.
 
 ### Fix - enum and data-flow hygiene
@@ -50,7 +55,7 @@ The install-and-honesty release. It clears the blockers a clean-machine ZIP inst
 
 ### Change - house voice and history hygiene
 
-- **Every em and en dash across the tracked tree is gone** (194 across 23 files), and a new full-tree baseline gate in the privacy guardian holds the whole repo at zero so a dash can never silently regress.
+- **Every em and en dash across the tracked tree is gone** (194 across 23 files), and a new full-tree baseline gate in the privacy guardian holds the whole repo at zero so a dash can never silently regress. The gate enumerates files NUL-delimited and skips binaries by NUL-byte detection, so an unusual filename or a UTF-8-valid binary cannot break the scan.
 - **The commit naming rule now documents release commits:** user-visible present-tense subject, version in the tag and body, never as the subject.
 
 ## v1.41.2 - 2026-07-09

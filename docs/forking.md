@@ -24,7 +24,7 @@ You do not need to fork to add your own skills, voice profile, or brand profile.
 
 **2. Slash commands.** Drop a `.claude/commands/<your-command>.md` file. Use the existing commands in `.claude/commands/` as templates. Commands run on invocation; they do not need to be registered anywhere else.
 
-**3. Hooks.** Drop a script in `.claude/hooks/` and register the event and path in `.claude/settings.json`. Ship bash and PowerShell variants using the `session-start-brief.*` pair as the reference pattern. Hooks fail silently by design - add a quarantine write if you want failures to be visible.
+**3. Hooks.** All six events route through one Python dispatcher, `scripts/hooks/dispatch.py`. To extend an event, add a handler function and wire it into the `EVENTS` table at the bottom of that file (each handler runs inside a wrapper that quarantines failures instead of blocking the session), or register an additional command for the event in `.claude/settings.json`. Keep new handlers stdlib-only and cross-platform - the dispatcher is the reason the OS needs no bash or PowerShell.
 
 **4. Templates.** Edit or add files in `templates/`. The setup wizard reads from there when generating a user's operating files. If you change a template, update the corresponding skill or wizard phase that references it.
 

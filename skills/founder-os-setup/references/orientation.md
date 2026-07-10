@@ -47,7 +47,7 @@ If the snapshot is too thin for a real move (no customer set), the skill already
 
 **2.5 Own your history (only when version history is off).** If the machine has no git (Phase 2.3 skipped init), make the graduation offer exactly once, here, in the tour - warm, consent-gated, zero pressure:
 
-> "One optional thing, whenever you are ready: full version history. Right now every change the OS makes is snapshotted per session, so undo works. If you also want a permanent timeline - 'undo to before this morning', a full history of every save - just say 'own my history'. I will install the version tool quietly and set it all up myself. One yes, nothing for you to type, and nothing leaves your machine. No rush; the OS is complete either way."
+> "One optional thing, whenever you are ready: full version history. Right now every change the OS makes is snapshotted per session, so undo works. If you also want a permanent timeline - 'undo to before this morning', a full history of every save - just say 'own my history'. I will install the version tool quietly and set it all up myself. One yes, nothing for you to type, and the whole history lives in this folder on your disk - version history sends nothing anywhere. No rush; the OS is complete either way."
 
 If they say yes on the spot, run the `own-your-history` skill now and return to the tour when it finishes. If they say nothing or move on, drop it - the offer stays available as a plain sentence forever.
 
