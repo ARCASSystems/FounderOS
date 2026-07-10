@@ -47,6 +47,8 @@ Create the full folder structure. Read each template before generating the perso
 ├── brain/archive/               # Empty dir. /dream and weekly-review move month-old brain entries here.
 ├── companies/                   # Empty dir. business-context-loader writes per-company files here.
 ├── scripts/
+│   ├── hooks/
+│   │   └── dispatch.py         # From <plugin-root>/scripts/hooks/dispatch.py (cross-platform hook dispatcher wired by .claude/settings.json; pure stdlib Python, no shell)
 │   ├── _common.py              # From templates/scripts/_common.py (shared helpers; wiki-build.py + query.py import from it - copy first or they hard-error)
 │   ├── wiki-build.py            # From templates/scripts/wiki-build.py (extracts [[wikilinks]] into brain/relations.yaml)
 │   ├── query.py                 # From templates/scripts/query.py (plain-file graph query)
@@ -103,32 +105,22 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── mentors.md               # Stub
 │   └── team.md                  # Personalized from 0.2 (team members mentioned)
 └── .claude/
-    ├── settings.json            # Copied from <plugin-root>/.claude/settings.json (wires all six hook events: PreToolUse, SessionStart, UserPromptSubmit, PreCompact, Stop, PostToolUse)
+    ├── settings.json            # Copied from <plugin-root>/.claude/settings.json (wires all six hook events to scripts/hooks/dispatch.py: PreToolUse, SessionStart, UserPromptSubmit, PreCompact, Stop, PostToolUse; the leading `python` token in each command is swapped for the interpreter Phase 0 discovered)
     └── hooks/
-        ├── session-start-brief.sh   # Copied from <plugin-root>/.claude/hooks/session-start-brief.sh
-        ├── session-start-brief.ps1  # Copied from <plugin-root>/.claude/hooks/session-start-brief.ps1
-        ├── session-start-liveness.sh   # Copied from <plugin-root>/.claude/hooks/session-start-liveness.sh
-        ├── session-start-liveness.ps1  # Copied from <plugin-root>/.claude/hooks/session-start-liveness.ps1
-        ├── user-prompt-capture.sh   # Copied from <plugin-root>/.claude/hooks/user-prompt-capture.sh
-        ├── user-prompt-capture.ps1  # Copied from <plugin-root>/.claude/hooks/user-prompt-capture.ps1
-        ├── session-close-revenue-check.sh   # Copied from <plugin-root>/.claude/hooks/session-close-revenue-check.sh
-        ├── session-close-revenue-check.ps1  # Copied from <plugin-root>/.claude/hooks/session-close-revenue-check.ps1
-        ├── session-close-autosave.sh        # Copied from <plugin-root>/.claude/hooks/session-close-autosave.sh (records a local version at session end when the name guard is active)
-        ├── session-close-autosave.ps1       # Copied from <plugin-root>/.claude/hooks/session-close-autosave.ps1
-        ├── post-tool-use-observation.sh     # Copied from <plugin-root>/.claude/hooks/post-tool-use-observation.sh (opt-in, off until FOUNDER_OS_OBSERVATIONS=1)
-        ├── post-tool-use-observation.ps1    # Copied from <plugin-root>/.claude/hooks/post-tool-use-observation.ps1 (opt-in, off until FOUNDER_OS_OBSERVATIONS=1)
-        ├── pre-tool-use-snapshot.sh         # Copied from <plugin-root>/.claude/hooks/pre-tool-use-snapshot.sh (session-changes tracker: snapshot before every write)
-        ├── pre-tool-use-snapshot.ps1        # Copied from <plugin-root>/.claude/hooks/pre-tool-use-snapshot.ps1
-        ├── pre-compact-flush.sh             # Copied from <plugin-root>/.claude/hooks/pre-compact-flush.sh (save-before-forget: flush unsaved session facts to brain files at compaction)
-        ├── pre-compact-flush.ps1            # Copied from <plugin-root>/.claude/hooks/pre-compact-flush.ps1
-        ├── session-close-changes.sh         # Copied from <plugin-root>/.claude/hooks/session-close-changes.sh (renders the per-session change manifest at Stop)
-        ├── session-close-changes.ps1        # Copied from <plugin-root>/.claude/hooks/session-close-changes.ps1
-        └── session_start_brief.py           # Copied from <plugin-root>/.claude/hooks/session_start_brief.py (Python helper that session-start-brief.sh calls on Linux/Mac)
+        └── session_start_brief.py           # Copied from <plugin-root>/.claude/hooks/session_start_brief.py (the SessionStart brief renderer the dispatcher runs)
 ```
 
 Show the full list of files that will be created. Get approval. Then create them all.
 
-**Hook copy step (mandatory).** The SessionStart brief, session-close revenue check, session-close autosave, user-prompt capture, and post-tool-use observation hooks live in the plugin's `.claude/hooks/` and are wired by `.claude/settings.json` via `$CLAUDE_PROJECT_DIR/.claude/hooks/...`. For these to fire in the founder's working directory, the hook scripts AND `settings.json` must exist at the founder's project root. Resolve the plugin source path the same way Phase 2.2 already does (one of the named install methods: Plugin, Git clone, Curl, or ZIP), then copy all nineteen hook files plus `settings.json` from the plugin's `.claude/` to the founder's `.claude/`. The nineteen hook files are: `session-start-brief.sh`, `session-start-brief.ps1`, `session-start-liveness.sh`, `session-start-liveness.ps1`, `user-prompt-capture.sh`, `user-prompt-capture.ps1`, `session-close-revenue-check.sh`, `session-close-revenue-check.ps1`, `session-close-autosave.sh`, `session-close-autosave.ps1`, `session-close-changes.sh`, `session-close-changes.ps1`, `pre-tool-use-snapshot.sh`, `pre-tool-use-snapshot.ps1`, `pre-compact-flush.sh`, `pre-compact-flush.ps1`, `post-tool-use-observation.sh`, `post-tool-use-observation.ps1`, and `session_start_brief.py` (the Python helper that `session-start-brief.sh` calls on Linux/Mac to compute the staleness, decay, and tip sections of the brief; the `.ps1` inlines this logic so Windows does not strictly need it, but copy it so cross-platform installs get the full brief). This must match every script referenced by `settings.json` across all hook events (PreToolUse, SessionStart, UserPromptSubmit, PreCompact, Stop, PostToolUse); if any are missing from the founder's `.claude/hooks/`, the SessionStart brief, capture hooks, snapshot tracker, or Stop hooks fail silently. Do NOT modify file contents. If a `.claude/settings.json` already exists in the founder's repo (from a prior install), merge by adding the hook entries for ALL six events: PreToolUse (the session-changes snapshot - the undo floor), SessionStart, UserPromptSubmit, PreCompact (the memory flush), Stop, and PostToolUse. Omitting PreToolUse or PreCompact silently disables the undo floor and save-before-forget on upgraded installs. Do not overwrite the user's other hook customisations. The PostToolUse hook is opt-in - it stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
+**Hook copy step (mandatory).** All six hook events (PreToolUse, SessionStart, UserPromptSubmit, PreCompact, Stop, PostToolUse) route through ONE cross-platform Python dispatcher - `scripts/hooks/dispatch.py` - wired by `.claude/settings.json` as `python "$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py" <Event>`. Python is a hard prerequisite (Phase 0 preflight checks it first), so there is no shell hook and nothing can be missing on a bash-less Windows box or a PowerShell-less Linux box. For the hooks to fire in the founder's working directory, resolve the plugin source path the same way Phase 2.2 already does (Plugin, Git clone, Curl, or ZIP), then copy these three files, byte-for-byte:
+
+- `scripts/hooks/dispatch.py` from the plugin's `scripts/hooks/` to the founder's `scripts/hooks/` (the dispatcher itself; pure stdlib Python).
+- `.claude/hooks/session_start_brief.py` from the plugin's `.claude/hooks/` (the SessionStart brief renderer the dispatcher runs).
+- `.claude/settings.json` from the plugin's `.claude/`.
+
+The dispatcher delegates the record, manifest, capture, and autosave work to Python helpers the Scripts copy step already places (`session_changes.py`, `user-prompt-capture.py`, `caveman_git.py`, `memory-diff.py`), so no `.sh` or `.ps1` hook file ships. If any of the three above are missing from the founder's install, the SessionStart brief, capture hook, snapshot tracker, or Stop hooks fail silently.
+
+**Interpreter token in settings.json (mandatory).** The shipped `settings.json` calls the dispatcher with the bare token `python`. On a machine where that spelling is wrong the hooks silently never fire. Substitute the interpreter Phase 0 preflight actually discovered - `python`, `python3`, or `py -3` - for the leading `python` token in every one of the six hook commands when writing the founder's `settings.json`. Bare `python3` is unreliable on Windows; `py -3` is the Windows fallback. Do NOT modify anything else in the file. If a `.claude/settings.json` already exists (a prior install), merge by ensuring all six events (PreToolUse - the undo floor, SessionStart, UserPromptSubmit, PreCompact - the memory flush, Stop, PostToolUse) point at the dispatcher with the discovered interpreter; omitting PreToolUse or PreCompact silently disables the undo floor and save-before-forget. Do not overwrite the user's other hook customisations. The PostToolUse observation stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
 **Scripts copy step (mandatory).** Copy all twenty-one Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
 

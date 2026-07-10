@@ -6,11 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-tool-use-snapshot.sh\""
-          },
-          {
-            "type": "command",
-            "command": "powershell -NonInteractive -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-tool-use-snapshot.ps1\""
+            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py\" PreToolUse"
           }
         ]
       }
@@ -21,19 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start-brief.sh\""
-          },
-          {
-            "type": "command",
-            "command": "powershell -NonInteractive -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start-brief.ps1\""
-          },
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start-liveness.sh\""
-          },
-          {
-            "type": "command",
-            "command": "powershell -NonInteractive -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start-liveness.ps1\""
+            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py\" SessionStart"
           }
         ]
       }
@@ -44,11 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/user-prompt-capture.sh\""
-          },
-          {
-            "type": "command",
-            "command": "powershell -NonInteractive -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/user-prompt-capture.ps1\""
+            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py\" UserPromptSubmit"
           }
         ]
       }
@@ -59,27 +39,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-close-revenue-check.sh\""
-          },
-          {
-            "type": "command",
-            "command": "powershell -NonInteractive -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-close-revenue-check.ps1\""
-          },
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-close-autosave.sh\""
-          },
-          {
-            "type": "command",
-            "command": "powershell -NonInteractive -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-close-autosave.ps1\""
-          },
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-close-changes.sh\""
-          },
-          {
-            "type": "command",
-            "command": "powershell -NonInteractive -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-close-changes.ps1\""
+            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py\" Stop"
           }
         ]
       }
@@ -90,11 +50,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-compact-flush.sh\""
-          },
-          {
-            "type": "command",
-            "command": "powershell -NonInteractive -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-compact-flush.ps1\""
+            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py\" PreCompact"
           }
         ]
       }
@@ -105,11 +61,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-tool-use-observation.sh\""
-          },
-          {
-            "type": "command",
-            "command": "powershell -NonInteractive -ExecutionPolicy Bypass -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-tool-use-observation.ps1\""
+            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py\" PostToolUse"
           }
         ]
       }

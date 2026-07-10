@@ -252,7 +252,7 @@ Procedure per pair:
 - On yes: apply the incoming change to the live file as a careful edit that preserves every founder-authored line. On no: leave the live file untouched and move on. Never batch the three into one yes.
 - A rules file that exists in the incoming release but not live is safe to add on yes (nothing founder-authored is at risk); say what it is first.
 
-Do NOT attempt to merge hook entries inside `settings.json` mechanically in this step - if the settings diff touches hooks, show it and let the founder decide, noting they can skip and nothing breaks (the old hooks keep running).
+Do NOT attempt to merge hook entries inside `settings.json` mechanically in this step - show the settings diff and let the founder decide. The v1.42 release is the case worth naming to them: it replaces the old per-event `.sh`/`.ps1` hook pairs with one `scripts/hooks/dispatch.py <Event>` command per event. Skipping is safe - the shell hooks retained from the prior install keep running (the shipped `session_start_brief.py` stays backward-compatible with them), and accepting switches every event to the single cross-platform Python dispatcher. Either way nothing breaks; the dispatcher is the cleaner steady state.
 
 ### Step 9. Write new VERSION
 
