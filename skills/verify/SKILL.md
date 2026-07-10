@@ -12,7 +12,7 @@ mcp_requirements: []
 
 # Verify
 
-Runs on: local-exec - runs `python -m py_compile` on the shipped scripts as part of the check; on a cloud or read-only surface I report the checks I can read and mark the exec ones as not run.
+Runs on: local-exec - runs a stdlib syntax check (`ast.parse`, writes nothing to disk) on the shipped scripts as part of the check; on a cloud or read-only surface I report the checks I can read and mark the exec ones as not run.
 
 Read-only health check across 8 substrate checks. Returns one screen. Never auto-fixes.
 
@@ -77,19 +77,23 @@ set grows - and confirm each parses cleanly.
   data-folder install.
 - Glob `<engine>/scripts/*.py` AND `<engine>/scripts/hooks/*.py`. The second glob
   is not optional: `scripts/hooks/dispatch.py` is the hook dispatcher every
-  session event runs through, so a machine that cannot compile it has a broken
-  install. It must be in the compile set. If the glob returns no
+  session event runs through, so a machine that cannot parse it has a broken
+  install. It must be in the checked set. If the glob returns no
   `scripts/hooks/dispatch.py`, that is itself a FAIL.
 - Python is a hard prerequisite for the OS (README requires 3.11+). Probe
   `python --version`, then `python3 --version`, then `py -3 --version`. If none
   resolve -> `[FAIL] Scripts present (Python not found - it is a hard prerequisite; install python.org 3.11+)`
-  and do not attempt the compiles.
-- With Python resolved, run `python -m py_compile <path>` (or `python3`/`py -3`,
-  whichever resolved) on every globbed script.
+  and do not attempt the parses.
+- With Python resolved, syntax-check every globbed script with a parse that
+  writes nothing to disk (`py_compile` would write `__pycache__` bytecode,
+  which would break this skill's read-only rule):
+  `python -c "import ast, sys; ast.parse(open(sys.argv[1], 'rb').read(), sys.argv[1])" <path>`
+  (swap `python` for `python3`/`py -3`, whichever resolved). A `SyntaxError`
+  is a failed parse.
 
 Outcome:
-- All present and compile -> `[PASS] Scripts present (<N>/<N> compile cleanly, incl. hooks/dispatch.py)`
-- Any missing or compile error -> `[FAIL] Scripts present (<N>/<M> compile - list the failing ones)`
+- All present and parse -> `[PASS] Scripts present (<N>/<N> parse cleanly, incl. hooks/dispatch.py)`
+- Any missing or parse error -> `[FAIL] Scripts present (<N>/<M> parse - list the failing ones)`
 - `scripts/hooks/dispatch.py` absent -> `[FAIL] Scripts present (hook dispatcher scripts/hooks/dispatch.py missing - every session event is broken)`
 
 ### Check 4 - MCP availability
@@ -186,8 +190,8 @@ FounderOS v<version> - health check
 
 [PASS] Plugin surface (<N> skills / <M> commands, counts agree)
 [PASS] Hooks installed (6/6 events wired to dispatch.py)
-[PASS] Scripts present (23/23 compile cleanly, incl. hooks/dispatch.py)
-[PASS] MCP availability (3 configured: Notion, Gmail, Calendar)
+[PASS] Scripts present (23/23 parse cleanly, incl. hooks/dispatch.py)
+[WARN] MCP availability (0 configured - optional but adds Gmail, Calendar, Notion integrations)
 [PASS] Free-tier floor preserved (no shipped script requires an API key)
 [PASS] Wiki integrity (0 issues)
 [FAIL] Cadence staleness (daily-anchors 4 days stale - refresh before planning)
