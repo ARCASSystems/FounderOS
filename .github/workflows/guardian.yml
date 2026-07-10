@@ -45,3 +45,6 @@ jobs:
 
       - name: Scan commit range (private-name + em/en dash + attribution)
         run: python3 scripts/check-private-names.py --range "${{ steps.range.outputs.range }}"
+
+      - name: Baseline full-tree em/en dash gate (whole tree, not just added lines)
+        run: python3 scripts/check-private-names.py --baseline

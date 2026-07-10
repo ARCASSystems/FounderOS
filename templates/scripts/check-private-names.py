@@ -8,6 +8,12 @@ Modes:
     --message <path>      Scan a commit-message file (L2 commit-msg hook).
     --range <BASE..HEAD>  Scan every commit in a range (L3 CI). Exit 1 on any
                           violation so the check fails the build.
+    --baseline            Scan every tracked file's full content for em/en dashes
+                          (L3 CI). The diff and range scans only see ADDED lines, so
+                          a dash that predates the range slips through; this full-tree
+                          gate asserts the whole repo stays dash-clean and can never
+                          silently regress. Dash check-set only: private-name, secret,
+                          attribution, and remote-safety keep their own modes.
 
 Check-sets:
     private-name  Regexes from scripts/private-name-patterns.txt (one per line;
@@ -193,6 +199,7 @@ def scan_text(
     allow_emdash: bool = False,
     check_dashes: bool = True,
     check_secrets: bool = True,
+    check_attribution: bool = True,
 ) -> list[str]:
     """Scan text line by line for all four check-sets. Returns rendered offending
     lines tagged with the kind. Secret values are never echoed back."""
@@ -207,10 +214,11 @@ def scan_text(
                 break
         if check_dashes and not allow_emdash and (EM_DASH in raw or EN_DASH in raw):
             offending.append(f"  [emdash] line {line_num}: {line}")
-        for ap in ATTRIBUTION_PATTERNS:
-            if ap.search(raw):
-                offending.append(f"  [attribution] line {line_num}: {line}")
-                break
+        if check_attribution:
+            for ap in ATTRIBUTION_PATTERNS:
+                if ap.search(raw):
+                    offending.append(f"  [attribution] line {line_num}: {line}")
+                    break
         if check_secrets:
             kind = find_secret(raw)
             if kind:
@@ -389,10 +397,52 @@ def run_range(rng: str, patterns: list[re.Pattern[str]], allow_emdash: bool) -> 
     return 0
 
 
+def run_baseline(allow_emdash: bool) -> int:
+    """Full-tree em/en dash gate. Reads every tracked file's whole content (not
+    just added diff lines) so a dash that predates any commit range cannot hide.
+    Dash check-set only - private-name, secret, and attribution stay on their own
+    modes, and remote-safety (staged only) is untouched. Binary and unreadable
+    files are skipped. Exit 1 on any dash, 0 when the tree is clean."""
+    listing = _git_text(["git", "ls-files"])
+    total = 0
+    for rel in listing.splitlines():
+        rel = rel.strip()
+        if not rel:
+            continue
+        path = Path(rel)
+        try:
+            if not path.is_file():
+                continue
+            text = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            continue  # binary or unreadable file: nothing to scan
+        offending = scan_text(
+            text,
+            [],
+            allow_emdash=allow_emdash,
+            check_secrets=False,
+            check_attribution=False,
+        )
+        if offending:
+            print(f"BLOCKED: em/en dash in {rel}:", file=sys.stderr)
+            for line in offending:
+                print(line, file=sys.stderr)
+            total += len(offending)
+    if total:
+        print("", file=sys.stderr)
+        print(
+            f"baseline: {total} em/en dash(es) across the tree. The house voice "
+            "bans them. Escape hatch: ALLOW_EMDASH=1.",
+            file=sys.stderr,
+        )
+        return 1
+    return 0
+
+
 def main() -> int:
     _force_utf8_streams()
     args = sys.argv[1:]
-    usage = "Usage: check-private-names.py --staged | --message <path> | --range <BASE..HEAD>"
+    usage = "Usage: check-private-names.py --staged | --message <path> | --range <BASE..HEAD> | --baseline"
     if not args:
         print(usage, file=sys.stderr)
         return 1
@@ -415,6 +465,8 @@ def main() -> int:
         return run_message(args[1], patterns, allow_emdash)
     if args[0] == "--range" and len(args) >= 2:
         return run_range(args[1], patterns, allow_emdash)
+    if args[0] == "--baseline":
+        return run_baseline(allow_emdash)
 
     print(usage, file=sys.stderr)
     return 1
