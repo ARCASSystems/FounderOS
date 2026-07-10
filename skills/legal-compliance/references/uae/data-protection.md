@@ -7,7 +7,7 @@
 - **Federal PDPL executive regulations STILL pending** as of Q1 2025 verification. Federal-level penalty schedule still not specified. UAE Data Office continues to issue guidance via announcements.
 - Compliance expectation: align with PDPL principles proactively; do not wait for executive regulations to act.
 
-Re-verify monthly. ADGM and DIFC publish amendments separately from federal — check all three regimes when advising on a specific entity.
+Re-verify monthly. ADGM and DIFC publish amendments separately from federal - check all three regimes when advising on a specific entity.
 
 ## Table of Contents
 1. [Key Legislation](#key-legislation)
@@ -66,13 +66,13 @@ Freely given, specific, informed, unambiguous. Affirmative action (no pre-ticked
 ## Practical Compliance Checklist
 
 ### For Every Business (7 Items)
-1. **Privacy policy** — publish on website. Must include: who you are, what data, why, how long, who you share with, data subject rights, how to complain. Template: `templates/data-templates.md`
-2. **Data processing records** — what data, why, lawful basis, who has access, retention periods, security measures
-3. **Consent mechanisms** — if relying on consent: opt-in forms, consent logs
-4. **Security measures** — encryption, access controls, staff training, incident response plan
-5. **Data subject rights process** — handle access, correction, deletion, portability requests. Response: 14-30 days (web search for current PDPL requirements)
-6. **Data processing agreements** — DPAs with all processors (cloud providers, SaaS, outsourced services). Template: `templates/data-templates.md`
-7. **Data breach plan** — assess severity, notify authorities (timeline varies — web search), notify individuals if high risk
+1. **Privacy policy** - publish on website. Must include: who you are, what data, why, how long, who you share with, data subject rights, how to complain. Template: `templates/data-templates.md`
+2. **Data processing records** - what data, why, lawful basis, who has access, retention periods, security measures
+3. **Consent mechanisms** - if relying on consent: opt-in forms, consent logs
+4. **Security measures** - encryption, access controls, staff training, incident response plan
+5. **Data subject rights process** - handle access, correction, deletion, portability requests. Response: 14-30 days (web search for current PDPL requirements)
+6. **Data processing agreements** - DPAs with all processors (cloud providers, SaaS, outsourced services). Template: `templates/data-templates.md`
+7. **Data breach plan** - assess severity, notify authorities (timeline varies - web search), notify individuals if high risk
 
 ## Sensitive Data
 
@@ -81,12 +81,12 @@ Includes: health, biometric, genetic, racial/ethnic origin, political opinions, 
 ## Cross-Border Transfers
 
 Any time personal data leaves the UAE (cloud storage abroad, overseas parent company, foreign SaaS tools). PDPL restricts transfers. Allowed if:
-1. Destination country has adequate protection (list to be published by UAE Data Office — web search for status)
+1. Destination country has adequate protection (list to be published by UAE Data Office - web search for status)
 2. Appropriate safeguards in place (contractual clauses, binding corporate rules)
 3. Data subject explicitly consented
 4. Necessary for contract, legal claims, vital interests, or public interest
 
-**DIFC/ADGM:** Own transfer mechanisms (similar to GDPR — adequacy, SCCs, BCRs).
+**DIFC/ADGM:** Own transfer mechanisms (similar to GDPR - adequacy, SCCs, BCRs).
 
 **Practical reality:** Most UAE businesses use international cloud (AWS, Google, Microsoft). Ensure DPAs in place and understand where data is stored.
 

@@ -8,7 +8,7 @@
 - **Unsponsored 5-year visa:** new **US$4,000 minimum bank-balance** requirement.
 - **Golden Visa eligibility expanded:** creatives and charity donors now qualify.
 - **Four new visit-visa sub-categories:** AI experts, cruise-line crew, entertainers, luxury yacht crew.
-- Grace-period clock starts on visa **expiry date**, not cancellation date — if visa expires May 1 and cancelled May 10, grace begins May 1.
+- Grace-period clock starts on visa **expiry date**, not cancellation date - if visa expires May 1 and cancelled May 10, grace begins May 1.
 
 Re-verify monthly via ICP. Visa rules shift quarterly.
 
@@ -28,10 +28,10 @@ Re-verify monthly via ICP. Visa rules shift quarterly.
 ---
 
 ## Key Authorities
-- **ICP** (Federal Authority for Identity, Citizenship, Customs and Port Security) — Federal immigration
-- **GDRFA Dubai** — Dubai residency and foreigners affairs
-- **MOHRE** — Issues work permits (linked to employment visas)
-- **Free zone authorities** — Process visas for free zone employees
+- **ICP** (Federal Authority for Identity, Citizenship, Customs and Port Security) - Federal immigration
+- **GDRFA Dubai** - Dubai residency and foreigners affairs
+- **MOHRE** - Issues work permits (linked to employment visas)
+- **Free zone authorities** - Process visas for free zone employees
 
 ## Visa Types Overview
 
@@ -49,8 +49,8 @@ Re-verify monthly via ICP. Visa rules shift quarterly.
 ## Employment Visa Process
 
 1. **Employer applies for work permit** via MOHRE (mainland) or free zone portal
-2. **Entry permit issued** — valid 60 days to enter UAE (or status change if already in UAE)
-3. **Medical fitness test** at approved centre (tests for TB, HIV, hepatitis — positive results may lead to denial)
+2. **Entry permit issued** - valid 60 days to enter UAE (or status change if already in UAE)
+3. **Medical fitness test** at approved centre (tests for TB, HIV, hepatitis - positive results may lead to denial)
 4. **Emirates ID biometrics** at ICP service centre
 5. **Residence visa** stamped in passport (or e-visa)
 
@@ -63,7 +63,7 @@ Re-verify monthly via ICP. Visa rules shift quarterly.
 ### Categories
 **Investors:** Property AED 2M+ in UAE, or bank deposit AED 2M+, or company capital AED 2M+.
 **Entrepreneurs:** Startup worth AED 500K+, or accredited incubator approval, or patent registered with Ministry of Economy.
-**Specialized Talent:** Physicians, scientists, engineers, IT specialists, executives, athletes, artists — minimum salary threshold + bachelor's or higher + endorsement. Web search for current thresholds.
+**Specialized Talent:** Physicians, scientists, engineers, IT specialists, executives, athletes, artists - minimum salary threshold + bachelor's or higher + endorsement. Web search for current thresholds.
 **Outstanding Students:** Secondary GPA 95%+, or university GPA 3.75/4.0+, from UAE-accredited institutions.
 
 ### Benefits
@@ -124,7 +124,7 @@ Web search specific free zone for current packages and costs.
 **Cancellation:** Initiate → Visa cancelled → **30-day grace period** → Must exit, transfer, or change status
 **Status change:** Tourist/visit → Employment/residence: possible without leaving UAE (not all types allow in-country change)
 **Overstay:** Daily fines. Prolonged overstay → potential visa ban + deportation. Address promptly.
-**Visa ban:** Can result from absconding, overstay, criminal conviction, employer complaint. Duration varies. Some can be lifted through MOHRE/ICP. **RED escalation — always recommend professional help.**
+**Visa ban:** Can result from absconding, overstay, criminal conviction, employer complaint. Duration varies. Some can be lifted through MOHRE/ICP. **RED escalation - always recommend professional help.**
 
 ## DIFC and ADGM
 

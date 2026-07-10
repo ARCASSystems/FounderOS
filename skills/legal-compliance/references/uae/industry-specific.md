@@ -1,6 +1,6 @@
 # UAE Industry-Specific Regulations
 
-**Last verified: 2026-04-25** (header refresh only — per-industry deep audit not run at this refresh). Industry-specific regulations (KHDA, DHA, TDRA, ESMA, etc.) update on their own cadences. Always web search the relevant authority portal before quoting industry-specific fees, permit requirements, or processing timelines.
+**Last verified: 2026-04-25** (header refresh only - per-industry deep audit not run at this refresh). Industry-specific regulations (KHDA, DHA, TDRA, ESMA, etc.) update on their own cadences. Always web search the relevant authority portal before quoting industry-specific fees, permit requirements, or processing timelines.
 
 ## Table of Contents
 1. [Cross-Industry Requirements](#cross-industry-requirements)
@@ -36,7 +36,7 @@ Web search: visitdubai.com, dubaipolice.gov.ae
 ### When You Need a Permit
 Any public/semi-public event: conferences, exhibitions, concerts, product launches, corporate events, festivals, pop-ups. Private internal team events generally don't need DTCM permit but may need venue approvals.
 
-### Permit Process (Dubai — DTCM)
+### Permit Process (Dubai - DTCM)
 Apply through DTCM (online) → submit event details → obtain NOCs from relevant authorities (Police, Civil Defence, Municipality, Sports Council as needed) → approval → post-event reporting (some permits).
 
 **Timeline:** Apply minimum **2-4 weeks** before (6-8 weeks for large events).
@@ -44,7 +44,7 @@ Apply through DTCM (online) → submit event details → obtain NOCs from releva
 ### Key Compliance
 - Crowd safety/security (scales with attendance)
 - Fire safety (Civil Defence clearance)
-- Food safety (if serving food — Municipality food permit)
+- Food safety (if serving food - Municipality food permit)
 - Alcohol (venue must have liquor license; temporary possible)
 - Content (cannot violate UAE public morals)
 - Insurance (public liability recommended/sometimes required)
@@ -93,13 +93,13 @@ If your tech touches money, you likely need regulatory approval:
 | Crowdfunding | SCA / DFSA / FSRA |
 | Insurtech | Insurance Authority / DFSA / FSRA |
 
-**Sandboxes:** DIFC Innovation Testing License, ADGM RegLab, Central Bank Sandbox — test before full licensing.
+**Sandboxes:** DIFC Innovation Testing License, ADGM RegLab, Central Bank Sandbox - test before full licensing.
 
 ### Virtual Assets / Crypto
 **Dubai (VARA):** All virtual asset service providers must be VARA-licensed. Covers exchanges, brokers, custodians, lending, management, issuance. Does not apply to DIFC or ADGM.
 **ADGM (FSRA):** First comprehensive virtual asset framework. Institutional-grade.
 **DIFC (DFSA):** Crypto token regime, more limited scope.
-Web search for current status — fastest-moving area of UAE law.
+Web search for current status - fastest-moving area of UAE law.
 
 ### AI
 No specific licensing yet. AI ethics guidelines published but not mandatory for private sector. Sector-specific AI rules may apply (healthcare, financial). Web search for developments.
@@ -108,7 +108,7 @@ No specific licensing yet. AI ethics guidelines published but not mandatory for 
 
 ## Consulting & Professional Services
 
-**Lightest-regulated sector.** Most consulting needs only a trade license with correct activity code — no special permits.
+**Lightest-regulated sector.** Most consulting needs only a trade license with correct activity code - no special permits.
 
 ### When Consulting Becomes Regulated
 
@@ -143,7 +143,7 @@ Web search: det.gov.ae, consumerrights.ae
 Must clearly display: legal identity (name, license, address), contact details, accurate product descriptions, total price including taxes and delivery, payment methods, delivery terms, return/refund policy, privacy policy.
 
 ### Consumer Rights
-Return within specified period (varies by product — web search), full transparency on pricing, cancel before delivery for full refund, defective goods: replace/repair/refund.
+Return within specified period (varies by product - web search), full transparency on pricing, cancel before delivery for full refund, defective goods: replace/repair/refund.
 
 ### Payment and Social Media
 PCI DSS compliance for card payments. Cash on delivery common in UAE. Payment gateway must be UAE-licensed/recognized. Social media selling (Instagram, WhatsApp, TikTok) still requires license (E-Trader minimum) + all consumer protection rules + advertising disclosure for influencer partnerships.

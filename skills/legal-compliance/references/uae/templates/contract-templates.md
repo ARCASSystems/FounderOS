@@ -33,7 +33,7 @@ Represented by: [Name], [Title]
 ### 1. SCOPE OF SERVICES
 
 1.1. The Service Provider shall provide the following services ("Services"):
-[Describe services in detail — deliverables, milestones, acceptance criteria]
+[Describe services in detail - deliverables, milestones, acceptance criteria]
 
 1.2. Any changes to the scope of Services shall be agreed in writing by both Parties through a Change Order signed by authorized representatives.
 
@@ -136,7 +136,7 @@ Represented by: [Name], [Title]
 
 ### 10. GOVERNING LAW AND DISPUTE RESOLUTION
 
-10.1. This Agreement shall be governed by and construed in accordance with the laws of the United Arab Emirates [/ the laws of the DIFC / the laws of the ADGM — choose based on entity types].
+10.1. This Agreement shall be governed by and construed in accordance with the laws of the United Arab Emirates [/ the laws of the DIFC / the laws of the ADGM - choose based on entity types].
 
 10.2. Any dispute arising out of or in connection with this Agreement shall be resolved as follows:
 (a) **Negotiation:** The Parties shall attempt to resolve the dispute through good faith negotiation within [30] days;
@@ -210,7 +210,7 @@ Registered Address: [Full Address]
 
 ### 1. PURPOSE
 
-The Parties intend to explore [describe the purpose — e.g., a potential business relationship, partnership, transaction, engagement] (the "Purpose"). In connection with the Purpose, each Party may disclose Confidential Information to the other.
+The Parties intend to explore [describe the purpose - e.g., a potential business relationship, partnership, transaction, engagement] (the "Purpose"). In connection with the Purpose, each Party may disclose Confidential Information to the other.
 
 ---
 

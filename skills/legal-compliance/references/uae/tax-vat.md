@@ -3,16 +3,16 @@
 **Last verified: 2026-05-14** against tax.gov.ae, mof.gov.ae, and Ministry of Finance Decisions index. Sources: FTA VAT page, FTA Guides index (196 documents), MOF VAT page. This is the canonical UAE tax reference for the Founder OS legal-compliance skill.
 
 **Material changes since March 2026 baseline:**
-- **Ministerial Decision No. 229 of 2025** (Aug 28, 2025) — third-generation Free Zone tax framework; expanded QFZP qualifying activities, treasury services scope expanded, commodity-trading Quoted Price requirement.
-- **Ministerial Decision No. 230 of 2025** (Aug 28, 2025) — companion to MD 229.
-- **Ministerial Decision No. 84 of 2025** — audited financial statements required for QFZP/tax groups (effective tax periods on/after 1 Jan 2025). Tax groups: audited regardless of revenue. Standalone: audited if revenue >AED 50M OR if claiming QFZP benefits.
-- **Cabinet Decision No. 55 of 2025** — exempts certain persons (qualifying public benefit entities, qualifying investment funds in defined cases) from CT.
+- **Ministerial Decision No. 229 of 2025** (Aug 28, 2025) - third-generation Free Zone tax framework; expanded QFZP qualifying activities, treasury services scope expanded, commodity-trading Quoted Price requirement.
+- **Ministerial Decision No. 230 of 2025** (Aug 28, 2025) - companion to MD 229.
+- **Ministerial Decision No. 84 of 2025** - audited financial statements required for QFZP/tax groups (effective tax periods on/after 1 Jan 2025). Tax groups: audited regardless of revenue. Standalone: audited if revenue >AED 50M OR if claiming QFZP benefits.
+- **Cabinet Decision No. 55 of 2025** - exempts certain persons (qualifying public benefit entities, qualifying investment funds in defined cases) from CT.
 - **Transfer pricing disclosure thresholds (per MD 97/2023):** related-party schedule when intra-group transactions >AED 40M; itemized category disclosures for transactions >AED 4M.
 - **Small Business Relief NOT extended** beyond 31 Dec 2026 as of verification date.
-- **VATP044 (May 27, 2025)** — FTA Public Clarification on concerned services: output tax accounting, invoicing, and input tax recovery for service providers.
-- **VAT Administrative Exceptions Guide (Dec 5, 2025)** — circumstances where standard VAT procedures receive administrative relief.
-- **Profit Margin Scheme Guide VATGPM1 (Jan 5, 2026)** — profit margin valuation methodology for specific transactions.
-- **VATGRH1 (Apr 10, 2026)** — VAT refund guide for UAE nationals building new residences.
+- **VATP044 (May 27, 2025)** - FTA Public Clarification on concerned services: output tax accounting, invoicing, and input tax recovery for service providers.
+- **VAT Administrative Exceptions Guide (Dec 5, 2025)** - circumstances where standard VAT procedures receive administrative relief.
+- **Profit Margin Scheme Guide VATGPM1 (Jan 5, 2026)** - profit margin valuation methodology for specific transactions.
+- **VATGRH1 (Apr 10, 2026)** - VAT refund guide for UAE nationals building new residences.
 - **Q1 2026 VAT return filing deadline: June 1, 2026** (FTA announcement as of 2026-05-14).
 
 Re-verify monthly. FTA cabinet/ministerial decisions land continuously.
@@ -63,7 +63,7 @@ Register via EmaraTax (emaratax.gov.ae) using UAEPass login. FTA issues TRN (Tax
 | Standard | 5% | Most goods and services |
 | Zero-rated | 0% | Exports, international transport, first residential property sale, certain education/healthcare, investment-grade precious metals, crude oil/gas |
 | Exempt | N/A | Bare land, local passenger transport, certain financial services (life insurance, loan interest), residential property (lease/subsequent sale) |
-| Designated zones | Import VAT on goods to mainland | Parts of Jebel Ali Free Zone and others — treated as outside UAE for goods VAT |
+| Designated zones | Import VAT on goods to mainland | Parts of Jebel Ali Free Zone and others - treated as outside UAE for goods VAT |
 
 ### Filing and Payment
 - **Quarterly** (or monthly for large taxpayers as directed by FTA)
@@ -112,15 +112,15 @@ Government entities, extractive industries, qualifying investment funds, qualify
 ## Qualifying Free Zone Person (QFZP)
 
 ### All 6 Conditions Must Be Met (Cabinet Decision 37/2023)
-1. **Adequate substance** — employees, premises, expenditure in UAE proportionate to activities
-2. **Qualifying income** — transactions with other FZ persons, certain services, foreign-source income (defined categories)
-3. **No excluded activities** income — banking/insurance (regulated), transactions with natural persons (B2C with exceptions), immovable property (with exceptions)
+1. **Adequate substance** - employees, premises, expenditure in UAE proportionate to activities
+2. **Qualifying income** - transactions with other FZ persons, certain services, foreign-source income (defined categories)
+3. **No excluded activities** income - banking/insurance (regulated), transactions with natural persons (B2C with exceptions), immovable property (with exceptions)
 4. **Audited financial statements**
 5. **Transfer pricing compliance**
 6. **Not elected out** of QFZP regime
 
 ### Non-Qualifying Income
-Taxed at 9%. If total non-qualifying income exceeds de minimis (lower of AED 5M or 5% of total revenue), entity may lose QFZP status entirely — ALL income taxed at 9%.
+Taxed at 9%. If total non-qualifying income exceeds de minimis (lower of AED 5M or 5% of total revenue), entity may lose QFZP status entirely - ALL income taxed at 9%.
 
 **This is complex and evolving. Web search tax.gov.ae for latest CTP public clarifications before advising.**
 
@@ -142,15 +142,15 @@ Cabinet Decision 100/2023. Related party and connected person transactions must 
 
 ## Common Scenarios
 
-**"Do I charge VAT on services to clients outside UAE?"** Generally zero-rated (export). But "place of supply" rules matter — services related to UAE real estate or performed in UAE may be UAE-taxable.
+**"Do I charge VAT on services to clients outside UAE?"** Generally zero-rated (export). But "place of supply" rules matter - services related to UAE real estate or performed in UAE may be UAE-taxable.
 
 **"Free zone company selling to mainland client"** Standard rated at 5%. Free zone to mainland = domestic supply. Designated zone exception applies only to goods, specific zones.
 
 **"Forgot to register, over threshold"** Register immediately. Late registration penalty. Liable for VAT since date you exceeded threshold. Consider voluntary disclosure.
 
-**"I'm a freelancer — do I owe corporate tax?"** Only if business turnover exceeds AED 1M/year. Salary and personal investments: not taxable.
+**"I'm a freelancer - do I owe corporate tax?"** Only if business turnover exceeds AED 1M/year. Salary and personal investments: not taxable.
 
-**"I'm in a free zone — do I register for corporate tax?"** Yes. All free zone entities must register regardless of QFZP status.
+**"I'm in a free zone - do I register for corporate tax?"** Yes. All free zone entities must register regardless of QFZP status.
 
 **"Revenue below AED 375K"** You owe 0% corporate tax but must still register and file. Consider small business relief if under AED 3M.
 
@@ -174,11 +174,11 @@ All UAE tax filings go through **EmaraTax** (emaratax.gov.ae). UAEPass login is 
 **MOF VAT contact:** taxenquiries@mof.gov.ae
 
 **Official guides index:** tax.gov.ae/en/taxes/Vat/guides.references.aspx (196 documents as of 2026-05-14). Key guides to know:
-- VATGRH1 — VAT refund for UAE nationals building residences (Apr 2026)
-- VATGPM1 — Profit Margin Scheme (Jan 2026)
+- VATGRH1 - VAT refund for UAE nationals building residences (Apr 2026)
+- VATGPM1 - Profit Margin Scheme (Jan 2026)
 - VAT Administrative Exceptions Guide (Dec 2025)
-- VATP044 — Concerned services: output tax, invoicing, input recovery (May 2025)
-- TPGPC1 — Private clarifications framework (Jul 2025)
+- VATP044 - Concerned services: output tax, invoicing, input recovery (May 2025)
+- TPGPC1 - Private clarifications framework (Jul 2025)
 
 **Physical support:** Tas'heel Centers for in-person assistance. Registered Tax Agents for professional help with complex filings.
 

@@ -67,7 +67,7 @@ EMOTIONAL_VERBS = re.compile(
 # Named-entity mention: three-signal AND-gate (v1.23.1).
 #
 # Signal A: meeting verb with mandatory preposition. The preposition (with /
-# to / from) is required — bare verbs like "called", "met", "emailed" fire
+# to / from) is required - bare verbs like "called", "met", "emailed" fire
 # too widely without an anchor.
 #
 # Signal B: capitalized-name-immediately-after. Within 0-30 characters of

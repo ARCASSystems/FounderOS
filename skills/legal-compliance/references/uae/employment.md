@@ -5,7 +5,7 @@
 **Material changes since March 2026 baseline:**
 - Emiratisation 2026 target confirmed: **10% by 31 Dec 2026** (50+ employee firms, skilled jobs)
 - **Emirati minimum wage AED 6,000/month effective 1 Jan 2026** (private sector)
-- 2024 amendments to Federal Decree-Law 33/2021 in full effect: MOHRE binding authority for disputes ≤AED 50,000; permit/dues fines AED 100,000–AED 1,000,000
+- 2024 amendments to Federal Decree-Law 33/2021 in full effect: MOHRE binding authority for disputes ≤AED 50,000; permit/dues fines AED 100,000 - AED 1,000,000
 
 Re-verify monthly via web search.
 
@@ -29,10 +29,10 @@ Re-verify monthly via web search.
 ## Key Legal Framework
 
 **Primary legislation:**
-- Federal Decree-Law No. 33/2021 — UAE Labour Law (effective Feb 2, 2022; replaced 1980 law)
-- Cabinet Decision No. 1/2022 — Implementing regulations
-- Ministerial Decree No. 46/2022 — Work permits and labour mobility
-- Ministerial Decree No. 48/2023 — Emiratisation targets and penalties
+- Federal Decree-Law No. 33/2021 - UAE Labour Law (effective Feb 2, 2022; replaced 1980 law)
+- Cabinet Decision No. 1/2022 - Implementing regulations
+- Ministerial Decree No. 46/2022 - Work permits and labour mobility
+- Ministerial Decree No. 48/2023 - Emiratisation targets and penalties
 
 **Applies to:** All private sector employees in the UAE.
 **Excludes:** DIFC and ADGM employees (separate laws), federal/local government, domestic workers (Decree-Law 9/2022), armed forces/police.
@@ -131,12 +131,12 @@ All employees with 1+ years continuous service. **No gratuity if:** <1 year serv
 ### With Notice (Article 43)
 - Minimum 30 days, maximum 90 days (per contract). Written notice. Employee continues working and getting paid. 1 paid day off/week during notice to seek new employment. Garden leave allowed (paid, not working).
 
-### Without Notice — Gross Misconduct (Article 44)
+### Without Notice - Gross Misconduct (Article 44)
 Employer may terminate immediately if employee: (1) assumes false identity/forged documents; (2) commits error causing substantial loss (report to MOHRE within 7 days); (3) violates safety instructions (after written warning); (4) fails basic duties (after written warning + investigation); (5) discloses employer secrets causing damage; (6) intoxication/drugs during work; (7) assault on employer/manager/colleagues; (8) absent without valid reason >20 non-consecutive days or >7 consecutive days/year (after written warning at 10/5 days).
 
 **Even for Article 44:** Document thoroughly, conduct investigation, give employee opportunity to respond, issue in writing citing specific ground.
 
-### By Employee — Resignation
+### By Employee - Resignation
 **With notice (Article 43):** Written notice per contract (30-90 days). Must continue working during notice. Full gratuity (no reduction under new law).
 **Without notice (Article 45):** Allowed if employer fails obligations, assaults employee, or dangerous working conditions.
 
@@ -158,7 +158,7 @@ Termination for reasons unrelated to work = arbitrary. Court may award up to 3 m
 ## Emiratisation and Nafis
 
 ### Who Must Comply
-Private sector companies with **50+ employees** in 14 designated economic activities, registered with MOHRE (mainland). **Exempt:** <50 employees, free zone companies (generally — evolving), DIFC/ADGM.
+Private sector companies with **50+ employees** in 14 designated economic activities, registered with MOHRE (mainland). **Exempt:** <50 employees, free zone companies (generally - evolving), DIFC/ADGM.
 
 ### Targets
 2% annual increase in Emirati employees in skilled roles (secondary school certificate or higher).
@@ -175,7 +175,7 @@ Verified 2026-04-25. Re-check mohre.gov.ae before advising any client on year-sp
 **AED 6,000/month effective 1 January 2026.** Applies to UAE nationals in the private sector. Set by MOHRE Cabinet decision. Verify current rate before quoting in any offer letter.
 
 ### Penalties
-Monthly financial contributions per missing Emirati employee — currently AED 9,000/month per missing position (AED 108,000/year). 2024 amendments to Federal Decree-Law 33/2021 also raised general permit/dues fines to **AED 100,000–AED 1,000,000** for hiring without valid permits or failing to settle dues. **Always web search for current amounts before advising.**
+Monthly financial contributions per missing Emirati employee - currently AED 9,000/month per missing position (AED 108,000/year). 2024 amendments to Federal Decree-Law 33/2021 also raised general permit/dues fines to **AED 100,000 - AED 1,000,000** for hiring without valid permits or failing to settle dues. **Always web search for current amounts before advising.**
 
 ### For Companies Under 50 Employees
 Not subject to mandatory quotas. Can access Nafis subsidies if hiring Emiratis. May gain preferential treatment in procurement. Future expansion to smaller companies is possible.
@@ -194,7 +194,7 @@ Fake Emiratisation (paper hires), minimum wage gaming, quick-hire-quick-fire cyc
 
 ## Anti-Discrimination and Equal Pay
 
-**Article 4:** Prohibits discrimination based on race, colour, sex, religion, national origin, social origin, or disability in all employment practices. Women entitled to same pay for same/equal value work. Harassment (sexual, bullying, verbal/physical/psychological violence) prohibited — can trigger disciplinary action, termination, criminal liability.
+**Article 4:** Prohibits discrimination based on race, colour, sex, religion, national origin, social origin, or disability in all employment practices. Women entitled to same pay for same/equal value work. Harassment (sexual, bullying, verbal/physical/psychological violence) prohibited - can trigger disciplinary action, termination, criminal liability.
 
 ## DIFC and ADGM
 

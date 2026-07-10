@@ -1,6 +1,6 @@
 # Employment Offer Letter Template
 
-**Usage:** Adapt for new hire offers. This is a pre-contract document — the formal employment contract (registered with MOHRE) follows acceptance. Replace bracketed fields with actual details.
+**Usage:** Adapt for new hire offers. This is a pre-contract document - the formal employment contract (registered with MOHRE) follows acceptance. Replace bracketed fields with actual details.
 
 ---
 
@@ -15,7 +15,7 @@ Date: [Date]
 [Employee Full Name]
 [Employee Address]
 
-**Subject: Offer of Employment — [Job Title]**
+**Subject: Offer of Employment - [Job Title]**
 
 Dear [Employee First Name],
 
@@ -55,11 +55,11 @@ We are pleased to offer you the position of **[Job Title]** at **[Company Name]*
 ### Benefits
 
 - **Annual Leave:** 30 calendar days per year (pro-rated in first year)
-- **Sick Leave:** As per UAE Labour Law (90 days — 15 full pay, 30 half pay, 45 unpaid)
+- **Sick Leave:** As per UAE Labour Law (90 days - 15 full pay, 30 half pay, 45 unpaid)
 - **Health Insurance:** [Company-provided / Details]
 - **Air Ticket:** [Annual return ticket to home country / Details]
 - **Visa:** Employment visa sponsored by the company
-- **[Other benefits — e.g., education allowance, phone, etc.]**
+- **[Other benefits - e.g., education allowance, phone, etc.]**
 
 ---
 
@@ -72,7 +72,7 @@ We are pleased to offer you the position of **[Job Title]** at **[Company Name]*
 
 ### Other Terms
 
-- This offer is contingent on: [successful background check / medical fitness / valid passport / security clearance — as applicable]
+- This offer is contingent on: [successful background check / medical fitness / valid passport / security clearance - as applicable]
 - You will be required to sign a formal employment contract, which will be registered with MOHRE
 - [If applicable: Non-compete clause of [duration] within [geographic scope] will apply]
 - [If applicable: You will be required to sign a separate confidentiality/NDA agreement]
@@ -126,7 +126,7 @@ Employee ID: [ID Number]
 Department: [Department]
 Job Title: [Job Title]
 
-**Subject: [First / Second / Final] Written Warning — [Brief Description of Violation]**
+**Subject: [First / Second / Final] Written Warning - [Brief Description of Violation]**
 
 ---
 
@@ -137,7 +137,7 @@ This letter serves as a **[first / second / final] written warning** regarding y
 ### Incident Details
 
 **Date of incident:** [Date]
-**Description:** [Factual, objective description of what happened. Include: what the employee did or failed to do, when, where, and the impact on the business or colleagues. Stick to facts — avoid subjective language.]
+**Description:** [Factual, objective description of what happened. Include: what the employee did or failed to do, when, where, and the impact on the business or colleagues. Stick to facts - avoid subjective language.]
 
 **Relevant policy/contract clause:** [Reference the specific company policy, employment contract provision, or legal requirement that was violated.]
 
@@ -148,9 +148,9 @@ This letter serves as a **[first / second / final] written warning** regarding y
 ### Expected Improvement
 
 You are required to:
-[Specific, measurable actions the employee must take — e.g., "attend all scheduled shifts on time", "complete assigned tasks by deadline", "refrain from using personal phone during working hours"]
+[Specific, measurable actions the employee must take - e.g., "attend all scheduled shifts on time", "complete assigned tasks by deadline", "refrain from using personal phone during working hours"]
 
-**Improvement must be demonstrated by:** [Date — typically 30 days]
+**Improvement must be demonstrated by:** [Date - typically 30 days]
 
 ### Consequences
 
@@ -158,7 +158,7 @@ Failure to improve or any repetition of this conduct may result in further disci
 
 ### Employee Acknowledgement
 
-By signing below, you acknowledge receipt of this warning. Your signature does not indicate agreement with the contents — you have the right to submit a written response within [5/7] working days, which will be attached to this warning in your personnel file.
+By signing below, you acknowledge receipt of this warning. Your signature does not indicate agreement with the contents - you have the right to submit a written response within [5/7] working days, which will be attached to this warning in your personnel file.
 
 ---
 
@@ -213,19 +213,19 @@ Date of Joining: [Start Date]
 
 Dear [Employee First Name],
 
-## [OPTION A — Standard Termination with Notice]
+## [OPTION A - Standard Termination with Notice]
 
 We regret to inform you that your employment with **[Company Name]** will be terminated effective **[Last Working Day]**, subject to a notice period of **[30/60/90] days** commencing from the date of this letter, in accordance with your employment contract.
 
-**Reason for termination:** [Brief, factual statement of the reason — e.g., "business restructuring", "role redundancy", "performance-related following documented performance improvement process"]
+**Reason for termination:** [Brief, factual statement of the reason - e.g., "business restructuring", "role redundancy", "performance-related following documented performance improvement process"]
 
 ---
 
-## [OPTION B — Termination Without Notice (Article 44)]
+## [OPTION B - Termination Without Notice (Article 44)]
 
 We hereby terminate your employment with **[Company Name]** with immediate effect, effective **[today's date]**, without notice, pursuant to Article 44 of Federal Decree-Law No. 33/2021 (UAE Labour Law).
 
-**Ground for immediate termination:** [Cite the specific Article 44 sub-clause and factual basis — e.g., "Article 44(2): committing an error resulting in substantial material loss to the employer, namely [describe incident]. This incident was reported to MOHRE on [date]."]
+**Ground for immediate termination:** [Cite the specific Article 44 sub-clause and factual basis - e.g., "Article 44(2): committing an error resulting in substantial material loss to the employer, namely [describe incident]. This incident was reported to MOHRE on [date]."]
 
 ---
 

@@ -1,6 +1,6 @@
 # UAE Dispute Resolution
 
-**Last verified: 2026-04-25.** Material change: **MOHRE now has binding decision authority for employment disputes ≤AED 50,000** (2024 amendments to Federal Decree-Law 33/2021, in full effect through 2026). For employment disputes under that threshold, MOHRE is the first and binding forum, not the courts. Above AED 50K, court route still applies. No other material 2025-2026 dispute-resolution amendments audited at this refresh — verify dc.gov.ae, difccourts.ae, diac.ae for current fees and procedural updates.
+**Last verified: 2026-04-25.** Material change: **MOHRE now has binding decision authority for employment disputes ≤AED 50,000** (2024 amendments to Federal Decree-Law 33/2021, in full effect through 2026). For employment disputes under that threshold, MOHRE is the first and binding forum, not the courts. Above AED 50K, court route still applies. No other material 2025-2026 dispute-resolution amendments audited at this refresh - verify dc.gov.ae, difccourts.ae, diac.ae for current fees and procedural updates.
 
 ## Table of Contents
 1. [Court System](#court-system)
@@ -35,9 +35,9 @@
 
 | Method | Binding? | Typical Use |
 |---|---|---|
-| **Negotiation** | Only if settlement signed | First step — always try |
+| **Negotiation** | Only if settlement signed | First step - always try |
 | **Mediation** | Only if settlement signed | Before formal proceedings |
-| **Arbitration** | Yes — final and enforceable | Commercial, international contracts |
+| **Arbitration** | Yes - final and enforceable | Commercial, international contracts |
 | **Expert determination** | As agreed | Valuation, technical disagreements |
 
 ## Labour Disputes
@@ -45,11 +45,11 @@
 **Most common dispute type for SME founders.**
 
 ### Process
-1. **Internal resolution** — try to resolve directly (documentation matters)
-2. **MOHRE complaint** — employee files through MOHRE app/service centre. MOHRE attempts conciliation within **14 days**
-3. **Labour Court referral** — if conciliation fails, case referred to Labour Court (part of Court of First Instance)
-4. **Hearing** — court examines evidence, issues judgment
-5. **Appeal** — either party can appeal
+1. **Internal resolution** - try to resolve directly (documentation matters)
+2. **MOHRE complaint** - employee files through MOHRE app/service centre. MOHRE attempts conciliation within **14 days**
+3. **Labour Court referral** - if conciliation fails, case referred to Labour Court (part of Court of First Instance)
+4. **Hearing** - court examines evidence, issues judgment
+5. **Appeal** - either party can appeal
 
 ### Key Points
 - MOHRE conciliation is **mandatory** before court
@@ -102,10 +102,10 @@
 ## Debt Collection
 
 ### For Unpaid Invoices
-1. **Formal demand letter** (registered mail — creates evidence)
+1. **Formal demand letter** (registered mail - creates evidence)
 2. **Payment order** (summary process for undisputed debts)
 3. **Full court proceedings** (if disputed)
-4. **Execution** — apply to Execution Court to enforce judgment
+4. **Execution** - apply to Execution Court to enforce judgment
 
 **Bounced cheques:** Criminal offense (though recent amendments have somewhat decriminalized). Bounced cheque serves as evidence of debt and expedites enforcement.
 
@@ -138,6 +138,6 @@ Rough ranges. Actual depends on claim value, complexity, lawyer fees, duration. 
 
 ## Escalation
 
-🟡 **Amber — Guidance + Recommend Lawyer:** Understanding options, timeline expectations, cost estimates, process explanations, MOHRE complaint process, informal negotiation strategies, demand letter guidance.
+🟡 **Amber - Guidance + Recommend Lawyer:** Understanding options, timeline expectations, cost estimates, process explanations, MOHRE complaint process, informal negotiation strategies, demand letter guidance.
 
-🔴 **Red — Lawyer Required:** Filing any court case, responding to any claim, arbitration proceedings, enforcement applications, injunctions, criminal complaints, appeals, anything DIFC/ADGM.
+🔴 **Red - Lawyer Required:** Filing any court case, responding to any claim, arbitration proceedings, enforcement applications, injunctions, criminal complaints, appeals, anything DIFC/ADGM.

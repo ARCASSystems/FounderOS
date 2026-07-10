@@ -10,7 +10,7 @@ two produces silent disagreement between the on-disk graph (relations.yaml)
 and the in-memory graph (query). Defining the scope here once eliminates
 the drift class.
 
-Pure stdlib. No new install dependency — the free-tier accessibility floor
+Pure stdlib. No new install dependency - the free-tier accessibility floor
 stays intact. See plans/v1.27-f38-rglob-consolidation-2026-05-22.md.
 """
 
@@ -69,8 +69,8 @@ def wiki_layer_files(root: Path, include_rants: bool = False) -> list[Path]:
     """All wiki-layer .md files under root, deterministically sorted.
 
     Walks each prefix folder via rglob and filters with is_wiki_layer_path.
-    Does NOT include CLAUDE.md or other DEFAULT_FILES — those are query-local
-    score seeds, not graph edges. Does NOT include .yaml/.yml — only .md.
+    Does NOT include CLAUDE.md or other DEFAULT_FILES - those are query-local
+    score seeds, not graph edges. Does NOT include .yaml/.yml - only .md.
     """
     found: set[Path] = set()
     for prefix in WIKI_LAYER_PREFIXES:

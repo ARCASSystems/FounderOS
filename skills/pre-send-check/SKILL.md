@@ -9,7 +9,7 @@ mcp_requirements: []
 ---
 
 <Instruction-gate>
-Do NOT send, publish, deliver, or share this content with the recipient until you have walked through every check below and reported PASS or FAIL on each. This is an instructional stop, not a runtime-enforced one — but treat it as a hard stop in your own behavior. "It looks fine" is not the same as having checked. The gate fires for every client-facing deliverable: emails, proposals, decks, contracts, posts, invoices, status updates.
+Do NOT send, publish, deliver, or share this content with the recipient until you have walked through every check below and reported PASS or FAIL on each. This is an instructional stop, not a runtime-enforced one - but treat it as a hard stop in your own behavior. "It looks fine" is not the same as having checked. The gate fires for every client-facing deliverable: emails, proposals, decks, contracts, posts, invoices, status updates.
 </Instruction-gate>
 
 # Pre-Send Check - Instruction Gate Before Ship

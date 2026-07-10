@@ -1,6 +1,6 @@
 # UAE Intellectual Property & Trademarks
 
-**Last verified: 2026-04-25** (header refresh only — no material 2025-2026 IP amendments audited at this refresh). UAE IP regime is relatively stable but moec.gov.ae fee schedules and processing times update annually. Always web search before quoting registration fees or timelines.
+**Last verified: 2026-04-25** (header refresh only - no material 2025-2026 IP amendments audited at this refresh). UAE IP regime is relatively stable but moec.gov.ae fee schedules and processing times update annually. Always web search before quoting registration fees or timelines.
 
 ## Table of Contents
 1. [Key Legislation](#key-legislation)
@@ -27,17 +27,17 @@
 ## Trademarks
 
 ### What Can Be Trademarked
-Words, names, letters, numbers, shapes, colours, holograms, sounds, smells, or any combination — if distinctive and capable of identifying goods/services.
+Words, names, letters, numbers, shapes, colours, holograms, sounds, smells, or any combination - if distinctive and capable of identifying goods/services.
 
 ### Registration Process (6 Steps)
-1. **Search** — Ministry of Economy portal (moec.gov.ae) for conflicts
-2. **Application** — file through Ministry e-services. Specify mark, goods/services classes (Nice Classification), applicant details
-3. **Examination** — distinctiveness and conflict check
-4. **Publication** — Trademarks Bulletin for 30 days (opposition period)
-5. **Registration certificate** — if no opposition (or resolved)
+1. **Search** - Ministry of Economy portal (moec.gov.ae) for conflicts
+2. **Application** - file through Ministry e-services. Specify mark, goods/services classes (Nice Classification), applicant details
+3. **Examination** - distinctiveness and conflict check
+4. **Publication** - Trademarks Bulletin for 30 days (opposition period)
+5. **Registration certificate** - if no opposition (or resolved)
 6. **Duration:** 10 years from filing, renewable indefinitely for 10-year periods
 
-### Nice Classification — Common Classes
+### Nice Classification - Common Classes
 
 | Class | Covers | Typical SME Use |
 |---|---|---|
@@ -67,7 +67,7 @@ Words, names, letters, numbers, shapes, colours, holograms, sounds, smells, or a
 Every 10 years. Apply within last year or within 6 months after expiry (late fee).
 
 ### GCC and International
-UAE marks protect only in UAE. GCC: register separately per country (no unified system yet). International: **Madrid Protocol** (UAE member) — one application through WIPO designating multiple countries.
+UAE marks protect only in UAE. GCC: register separately per country (no unified system yet). International: **Madrid Protocol** (UAE member) - one application through WIPO designating multiple countries.
 
 ### Common Rejection Reasons
 Too descriptive ("Best Consulting"), confusingly similar to existing mark, contains national flags/symbols/government emblems, generic terms.
@@ -75,7 +75,7 @@ Too descriptive ("Best Consulting"), confusingly similar to existing mark, conta
 ## Copyright
 
 ### Automatic Protection
-Arises upon creation — no registration required. Protects: literary, artistic, music, film, software, databases, architectural, photographs — any original creative expression.
+Arises upon creation - no registration required. Protects: literary, artistic, music, film, software, databases, architectural, photographs - any original creative expression.
 
 ### Registration (Optional but Recommended)
 Through Ministry of Economy. Creates presumption of ownership (useful in disputes). Recommended for high-value works.
@@ -89,7 +89,7 @@ Lifetime of author + 50 years. Works by legal entities: 50 years from first publ
 
 ## Patents and Industrial Designs
 
-**Patents:** Ministry of Economy. 20-year protection. Must be novel, inventive, industrially applicable. UAE is PCT member — international filing available.
+**Patents:** Ministry of Economy. 20-year protection. Must be novel, inventive, industrially applicable. UAE is PCT member - international filing available.
 
 **Industrial Designs:** Ornamental/aesthetic aspect. 10 years (5+5 renewal). Ministry registration.
 
@@ -105,7 +105,7 @@ Protected under Federal Law 11/2021 if: (1) secret (not generally known), (2) ha
 |---|---|
 | Employee creates work as part of job | Employer (Decree-Law 38/2021) |
 | Contractor creates work for client | **Contractor retains** |
-| Joint work | Co-owned — each needs consent of others |
+| Joint work | Co-owned - each needs consent of others |
 | Commissioned work | Commissioner has limited usage rights; creator retains copyright |
 
 **Always use contracts.** Default rules rarely match expectations. See contracts-commercial reference for clause guidance.
@@ -125,7 +125,7 @@ Tax efficiency (licensing royalties), asset protection, licensing flexibility, v
 | ADGM entity | International licensing, common law governance |
 | JAFZA/RAK offshore | Cost-effective, international invoicing |
 | DIFC entity | Financial/tech IP, investor-facing |
-| Free zone operating company | Simple — hold and operate in same entity |
+| Free zone operating company | Simple - hold and operate in same entity |
 
 **Tax note:** Royalty payments between related entities must be arm's length (transfer pricing). See tax-vat reference.
 

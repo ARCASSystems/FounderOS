@@ -1,6 +1,6 @@
 # UAE Company Formation & Licensing
 
-**Last verified: 2026-04-25** (header refresh only — substantive 2025-2026 amendments not deeply audited at this refresh). Free zone offerings continue to evolve quarterly; QFZP framework received major updates in 2025 (see `tax-vat.md` for MD 229/230/84). Always web search det.gov.ae, moec.gov.ae, and the specific free zone portal before quoting fees, license categories, or activity codes — these change without notice.
+**Last verified: 2026-04-25** (header refresh only - substantive 2025-2026 amendments not deeply audited at this refresh). Free zone offerings continue to evolve quarterly; QFZP framework received major updates in 2025 (see `tax-vat.md` for MD 229/230/84). Always web search det.gov.ae, moec.gov.ae, and the specific free zone portal before quoting fees, license categories, or activity codes - these change without notice.
 
 ## Table of Contents
 1. [Quick Decision Framework](#quick-decision-framework)
@@ -23,7 +23,7 @@
 | Business Type | Likely Best Fit | Why |
 |---|---|---|
 | Selling to UAE government / local companies | Mainland (DET/DED) | Many tenders require mainland license |
-| Professional services / consulting | Either — depends on visa needs and cost | Free zones cheaper; mainland gives wider trading rights |
+| Professional services / consulting | Either - depends on visa needs and cost | Free zones cheaper; mainland gives wider trading rights |
 | Tech / SaaS / digital | Free zone (in5, DMCC, IFZA) | Lower cost, simpler setup, sufficient for digital |
 | Trading / import-export | Mainland or DMCC | Physical goods need customs and warehousing |
 | Financial services | DIFC or ADGM | Regulated activities require financial free zone |
@@ -33,18 +33,18 @@
 
 ### Step 2: Mainland vs Free Zone
 
-**Mainland** — Trade anywhere in UAE, bid on government contracts, open physical shops. Regulated by DET (Dubai) or equivalent. Post-2020: 100% foreign ownership for most activities.
+**Mainland** - Trade anywhere in UAE, bid on government contracts, open physical shops. Regulated by DET (Dubai) or equivalent. Post-2020: 100% foreign ownership for most activities.
 
-**Free Zone** — Simplified setup, always 100% foreign ownership, tax benefits for qualifying income. Limited to trading within zone or internationally — selling to mainland requires distributor or dual license.
+**Free Zone** - Simplified setup, always 100% foreign ownership, tax benefits for qualifying income. Limited to trading within zone or internationally - selling to mainland requires distributor or dual license.
 
-**Offshore** — No physical presence, no visas, no UAE trading. Used for holding structures, international invoicing, asset protection. Available in JAFZA, RAK ICC, ADGM.
+**Offshore** - No physical presence, no visas, no UAE trading. Used for holding structures, international invoicing, asset protection. Available in JAFZA, RAK ICC, ADGM.
 
 ## Mainland vs Free Zone vs Offshore
 
 | Criteria | Mainland | Free Zone | Offshore |
 |---|---|---|---|
 | **Foreign ownership** | 100% most activities (some strategic sectors need Emirati partner) | 100% always | 100% always |
-| **Trade within UAE** | Yes — anywhere | Limited — within zone + internationally | No |
+| **Trade within UAE** | Yes - anywhere | Limited - within zone + internationally | No |
 | **Physical office** | Required (virtual options exist for some activities) | Flexi-desk to warehouse depending on zone | Not required |
 | **Visa allocation** | Based on office size (~1 visa per 9 sqm in Dubai) | Included in package (1-6, expandable) | None |
 | **Government tenders** | Eligible | Generally not eligible | Not eligible |
@@ -56,15 +56,15 @@
 
 ## Entity Types (Mainland)
 
-**LLC (Limited Liability Company)** — Most common for SMEs. 1-50 shareholders. No minimum capital for most activities. 100% foreign ownership post-2020 (Federal Decree-Law 26/2020; Cabinet Decision 55/2021 lists strategic activities still requiring 51% Emirati). Requires notarized MOA. Must register UBO.
+**LLC (Limited Liability Company)** - Most common for SMEs. 1-50 shareholders. No minimum capital for most activities. 100% foreign ownership post-2020 (Federal Decree-Law 26/2020; Cabinet Decision 55/2021 lists strategic activities still requiring 51% Emirati). Requires notarized MOA. Must register UBO.
 
-**Sole Establishment** — Single owner, unlimited personal liability. Suitable for professional activities (consultants, freelancers wanting mainland license). Simpler, lower governance.
+**Sole Establishment** - Single owner, unlimited personal liability. Suitable for professional activities (consultants, freelancers wanting mainland license). Simpler, lower governance.
 
-**Civil Company** — Professional/technical activities (law firms, audit, engineering, medical). Partners bear joint liability.
+**Civil Company** - Professional/technical activities (law firms, audit, engineering, medical). Partners bear joint liability.
 
-**Branch Office** — Extension of foreign parent, not separate legal entity. Parent bears full liability. Requires UAE national service agent. Common for multinationals.
+**Branch Office** - Extension of foreign parent, not separate legal entity. Parent bears full liability. Requires UAE national service agent. Common for multinationals.
 
-**Representative Office** — Promotional activities only. Cannot trade or generate revenue.
+**Representative Office** - Promotional activities only. Cannot trade or generate revenue.
 
 ## Free Zone Comparison Matrix
 
@@ -118,16 +118,16 @@ No statutory minimum for most LLCs. Some regulated activities may require specif
 ## Annual Compliance
 
 After formation, every company must maintain:
-- **License renewal** — annual; lapse triggers penalties and visa complications
-- **UBO register** — update within 15 days of any change
-- **Economic substance reporting** — if conducting relevant activities (see tax-vat reference)
-- **Financial audit** — required by some entity types and most free zones
-- **Emiratisation quotas** — if mainland, 50+ employees (see employment-mohre reference)
-- **VAT and corporate tax filings** — (see tax-vat reference)
+- **License renewal** - annual; lapse triggers penalties and visa complications
+- **UBO register** - update within 15 days of any change
+- **Economic substance reporting** - if conducting relevant activities (see tax-vat reference)
+- **Financial audit** - required by some entity types and most free zones
+- **Emiratisation quotas** - if mainland, 50+ employees (see employment-mohre reference)
+- **VAT and corporate tax filings** - (see tax-vat reference)
 
 ## DIFC and ADGM
 
-These operate entirely separate legal systems based on English common law. They have their own company registration (not under Federal Decree-Law 32/2021), employment law, court system, and data protection. Web search difc.ae or adgm.com for current fees, requirements, and procedures — these change more frequently than mainland regulations.
+These operate entirely separate legal systems based on English common law. They have their own company registration (not under Federal Decree-Law 32/2021), employment law, court system, and data protection. Web search difc.ae or adgm.com for current fees, requirements, and procedures - these change more frequently than mainland regulations.
 
 **When to flag DIFC/ADGM:** Financial services, funds, fintech, regulated activities, or when user specifically mentions them, or when needing a legal framework familiar to international investors/lenders.
 

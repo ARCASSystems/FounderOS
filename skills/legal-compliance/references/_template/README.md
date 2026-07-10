@@ -1,6 +1,6 @@
 # Adding Your Jurisdiction's Reference Set
 
-This is the scaffold for any jurisdiction the Founder OS legal-compliance skill doesn't ship with. The UAE reference set (`../uae/`) is the worked example — your folder should mirror its shape.
+This is the scaffold for any jurisdiction the Founder OS legal-compliance skill doesn't ship with. The UAE reference set (`../uae/`) is the worked example - your folder should mirror its shape.
 
 The skill is **principally right** but **specifically empty** until you load it. It knows the *shape* of business compliance (tax, employment, contracts, IP, data protection, dispute resolution, industry permits) and can ask the right follow-up questions. It just won't quote your jurisdiction's law until you give it sources.
 
@@ -32,9 +32,9 @@ You can also do it manually: copy this `_template/` folder to `references/<your-
 
 These three sources cover most legal questions. Add them first.
 
-1. **Tax authority** — your country's IRS / HMRC / FBR / IRAS / ATO equivalent. Add the URL of their main legal/regulations page.
-2. **Business law / Companies act** — your gazetted Companies Act or equivalent. PDF URL or government portal page.
-3. **Labour law / Employment code** — your gazetted Employment Act / Labour Code / Fair Work Act. PDF URL or government portal page.
+1. **Tax authority** - your country's IRS / HMRC / FBR / IRAS / ATO equivalent. Add the URL of their main legal/regulations page.
+2. **Business law / Companies act** - your gazetted Companies Act or equivalent. PDF URL or government portal page.
+3. **Labour law / Employment code** - your gazetted Employment Act / Labour Code / Fair Work Act. PDF URL or government portal page.
 
 Add each via:
 
@@ -50,10 +50,10 @@ The command asks: which domain does this cover? Which jurisdiction folder? It th
 
 The UAE folder ships with 9 domain files because that's a complete reference set. You don't need all 9 on day one. Most founders use 3-4 in regular practice:
 
-- `employment.md` — when hiring or letting people go
-- `tax-vat.md` — at filing deadlines and registration thresholds
-- `contracts-commercial.md` — for service agreements, NDAs, MOUs
-- `data-protection.md` — for privacy policy, DPAs, cross-border transfers
+- `employment.md` - when hiring or letting people go
+- `tax-vat.md` - at filing deadlines and registration thresholds
+- `contracts-commercial.md` - for service agreements, NDAs, MOUs
+- `data-protection.md` - for privacy policy, DPAs, cross-border transfers
 
 Add domain files as questions come up. The skill will tell you which file is missing the first time you ask a question it can't answer.
 
@@ -79,7 +79,7 @@ When a material legal change happens (new ministerial decision, gazette notifica
 ## What this folder should NOT contain
 
 - **Your filings.** Your VAT TRN, license numbers, fiscal year end go in `context/compliance.md`, not here. This folder is the law; that file is your obligations.
-- **Your clients' legal data.** Client license details, NDAs you've signed, employment contracts you've signed — those belong in private project folders, not here.
+- **Your clients' legal data.** Client license details, NDAs you've signed, employment contracts you've signed - those belong in private project folders, not here.
 - **Secondary commentary as authority.** Big 4 guides, law firm articles, blog posts can be added as `notes:` fields in `sources.yml` for context, but the `url:` should always point to a primary source.
 - **AI-generated summaries.** Don't add ChatGPT or similar outputs as a source. The skill's job is to ground answers in primary law, not aggregate other AI's interpretations.
 
@@ -89,7 +89,7 @@ When a material legal change happens (new ministerial decision, gazette notifica
 
 | File | What to do |
 |---|---|
-| `README.md` | This file — keep as-is in your jurisdiction folder, or delete |
+| `README.md` | This file - keep as-is in your jurisdiction folder, or delete |
 | `sources.yml.template` | Rename to `sources.yml` and start populating |
 
 Domain files are not pre-created in this scaffold. The `/founder-os:legal-add-source` command creates them as you add sources, or you can manually create `<domain>.md` files mirroring the UAE structure.

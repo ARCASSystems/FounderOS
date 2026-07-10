@@ -61,7 +61,7 @@ Most-asked questions, answered directly. The skill checks here first before load
 
 - For employment disputes ≤AED 50,000, MOHRE issues binding decisions
 - No court route required first
-- General permit/dues fines: AED 100,000–AED 1,000,000 for hiring without valid permits or failing to settle dues
+- General permit/dues fines: AED 100,000 - AED 1,000,000 for hiring without valid permits or failing to settle dues
 
 ## Visa Grace Periods
 

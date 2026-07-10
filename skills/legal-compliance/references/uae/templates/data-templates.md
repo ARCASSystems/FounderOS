@@ -12,7 +12,7 @@
 
 **[Company Name]** ("we", "us", "our") is a company registered in the [UAE Mainland / [Free Zone Name]], License No. [Number], with its registered address at [Address].
 
-This Privacy Policy explains how we collect, use, store, and protect your personal data in accordance with the UAE Federal Decree-Law No. 45/2021 on the Protection of Personal Data [and [DIFC Data Protection Law / ADGM Data Protection Regulations] — include if applicable].
+This Privacy Policy explains how we collect, use, store, and protect your personal data in accordance with the UAE Federal Decree-Law No. 45/2021 on the Protection of Personal Data [and [DIFC Data Protection Law / ADGM Data Protection Regulations] - include if applicable].
 
 ### 2. What Data We Collect
 
@@ -52,9 +52,9 @@ We collect personal data when you:
 ### 5. Who We Share Your Data With
 
 We may share your personal data with:
-- **Service providers** who help us deliver our services (IT providers, cloud hosting, payment processors) — under appropriate data processing agreements
-- **Professional advisors** (lawyers, accountants, auditors) — as necessary
-- **Government and regulatory authorities** — where required by law
+- **Service providers** who help us deliver our services (IT providers, cloud hosting, payment processors) - under appropriate data processing agreements
+- **Professional advisors** (lawyers, accountants, auditors) - as necessary
+- **Government and regulatory authorities** - where required by law
 - **[Other specific recipients as applicable]**
 
 We do not sell your personal data to third parties.
@@ -81,7 +81,7 @@ Under UAE data protection law, you have the right to:
 - **Restrict** processing of your personal data in certain circumstances
 - **Object** to processing based on legitimate interests
 - **Withdraw consent** at any time (where consent is the legal basis)
-- **Data portability** — receive your data in a structured, machine-readable format
+- **Data portability** - receive your data in a structured, machine-readable format
 
 To exercise these rights, contact us at [privacy email address]. We will respond within [14/30] days.
 
@@ -94,8 +94,8 @@ We implement appropriate technical and organizational measures to protect your p
 Our website uses cookies to improve your experience. For details on what cookies we use and how to manage them, see our Cookie Notice [link / or include details here].
 
 **Essential cookies** (required for website function): [list]
-**Analytics cookies** (help us understand usage): [list — e.g., Google Analytics]
-**Marketing cookies** (used for targeted advertising): [list — if any]
+**Analytics cookies** (help us understand usage): [list - e.g., Google Analytics]
+**Marketing cookies** (used for targeted advertising): [list - if any]
 
 You can manage cookie preferences through your browser settings or our cookie consent tool.
 
@@ -118,7 +118,7 @@ Address: [Address]
 
 [If DPO appointed:] Our Data Protection Officer can be contacted at: [DPO email]
 
-[If applicable:] If you are not satisfied with our response, you have the right to lodge a complaint with the [UAE Data Office / DIFC Commissioner of Data Protection / ADGM — as applicable].
+[If applicable:] If you are not satisfied with our response, you have the right to lodge a complaint with the [UAE Data Office / DIFC Commissioner of Data Protection / ADGM - as applicable].
 
 ---
 
@@ -162,12 +162,12 @@ Address: [Address]
 
 ### 2. SCOPE AND PURPOSE
 
-2.1. This DPA governs the Processor's processing of Personal Data on behalf of the Controller in connection with [describe the service — e.g., "the provision of cloud hosting services", "CRM platform services", "payroll processing services"] under the main service agreement between the parties dated [date] (the "Main Agreement").
+2.1. This DPA governs the Processor's processing of Personal Data on behalf of the Controller in connection with [describe the service - e.g., "the provision of cloud hosting services", "CRM platform services", "payroll processing services"] under the main service agreement between the parties dated [date] (the "Main Agreement").
 
 2.2. Details of processing:
 | Item | Description |
 |---|---|
-| **Subject matter** | [Describe what the processing relates to — e.g., "hosting and managing client contact data"] |
+| **Subject matter** | [Describe what the processing relates to - e.g., "hosting and managing client contact data"] |
 | **Duration** | Duration of the Main Agreement |
 | **Nature and purpose** | [e.g., "Storage, backup, and retrieval of Personal Data to enable the Controller's business operations"] |
 | **Types of Personal Data** | [e.g., "Names, email addresses, phone numbers, employment details"] |
@@ -223,9 +223,9 @@ The Controller shall:
 
 ### 6. SUB-PROCESSORS
 
-6.1. [Option A: Prior specific consent — Processor must seek Controller's written consent for each Sub-processor]
+6.1. [Option A: Prior specific consent - Processor must seek Controller's written consent for each Sub-processor]
 
-[Option B: General authorization — Processor may use Sub-processors listed in Annex [X], and must notify Controller at least [14/30] days before adding or replacing a Sub-processor, giving Controller the right to object]
+[Option B: General authorization - Processor may use Sub-processors listed in Annex [X], and must notify Controller at least [14/30] days before adding or replacing a Sub-processor, giving Controller the right to object]
 
 6.2. Current Sub-processors: [List or reference an annex]
 

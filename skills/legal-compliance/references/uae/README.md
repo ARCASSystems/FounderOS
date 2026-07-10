@@ -10,8 +10,8 @@ The skill loads this folder when `core/identity.md` has one of:
 - `jurisdiction: UAE-Dubai-Mainland`
 - `jurisdiction: UAE-Dubai-Freezone-<zone>` (e.g., `DMCC`, `IFZA`, `RAKEZ`, `in5`)
 - `jurisdiction: UAE-Abu-Dhabi-Mainland`
-- `jurisdiction: UAE-DIFC` (separate regime — see DIFC sections in each file)
-- `jurisdiction: UAE-ADGM` (separate regime — see ADGM sections in each file)
+- `jurisdiction: UAE-DIFC` (separate regime - see DIFC sections in each file)
+- `jurisdiction: UAE-ADGM` (separate regime - see ADGM sections in each file)
 
 If you operate across mainland and a free zone, or both DIFC/ADGM and federal, the skill will surface the relevant section automatically.
 
@@ -40,14 +40,14 @@ To refresh: `/founder-os:legal-update`. Walks you through which sources are stal
 
 ## Disclaimer
 
-This reference set is general guidance based on publicly available UAE law as of the dates noted. For decisions with significant financial or legal consequences, confirm with a qualified UAE lawyer or registered tax agent. The skill flags 🟢/🟡/🔴 escalation level on every response — 🟡 means "the rule is clear but specific circumstances could change the outcome" and 🔴 means "professional counsel required, do not act on this skill alone".
+This reference set is general guidance based on publicly available UAE law as of the dates noted. For decisions with significant financial or legal consequences, confirm with a qualified UAE lawyer or registered tax agent. The skill flags 🟢/🟡/🔴 escalation level on every response - 🟡 means "the rule is clear but specific circumstances could change the outcome" and 🔴 means "professional counsel required, do not act on this skill alone".
 
 ## Maintenance
 
 Re-verify the index of cabinet/ministerial decisions monthly. The biggest sources of drift in UAE law:
 
-- **MOHRE / Emiratisation thresholds** — reset annually at calendar year-end
-- **FTA / tax** — Cabinet/Ministerial Decisions roughly monthly
-- **ICP / visas** — quarterly shifts in visa categories and thresholds
-- **DIFC / ADGM** — separate amendments, check both portals
-- **VARA / virtual assets** — fastest-moving area, web search before every answer
+- **MOHRE / Emiratisation thresholds** - reset annually at calendar year-end
+- **FTA / tax** - Cabinet/Ministerial Decisions roughly monthly
+- **ICP / visas** - quarterly shifts in visa categories and thresholds
+- **DIFC / ADGM** - separate amendments, check both portals
+- **VARA / virtual assets** - fastest-moving area, web search before every answer

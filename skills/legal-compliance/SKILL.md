@@ -192,7 +192,7 @@ When web-searching, only cite the approved primary source types above. Report th
 
 ---
 
-## Templates Index (UAE only — non-UAE jurisdictions add their own)
+## Templates Index (UAE only - non-UAE jurisdictions add their own)
 
 If the user asks for a template (NDA, employment offer, termination letter, privacy policy, DPA), check `templates/` inside the jurisdiction folder. UAE ships with a curated set; other jurisdictions start empty until the user adds.
 

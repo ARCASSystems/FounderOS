@@ -1,6 +1,6 @@
 # UAE Contracts & Commercial Agreements
 
-**Last verified: 2026-04-25.** Federal Decree-Law No. 46/2021 (electronic transactions) confirmed in force; e-signatures remain valid for most commercial contracts. Notarisation still required for POA, property, and certain government contracts. No material 2025-2026 amendments to general contract law verified at this refresh — re-verify legislation.ae monthly when advising on specific clause enforceability.
+**Last verified: 2026-04-25.** Federal Decree-Law No. 46/2021 (electronic transactions) confirmed in force; e-signatures remain valid for most commercial contracts. Notarisation still required for POA, property, and certain government contracts. No material 2025-2026 amendments to general contract law verified at this refresh - re-verify legislation.ae monthly when advising on specific clause enforceability.
 
 ## Table of Contents
 1. [Legal Foundation](#legal-foundation)
@@ -22,11 +22,11 @@
 
 ## Legal Foundation
 
-**Federal Law No. 5/1985 — Civil Transactions Law (as amended).** Backbone of UAE contract law. Freedom of contract (parties free to agree, subject to public order/morals). Good faith (Article 246 — contracts performed in good faith). Binding nature (Article 267 — contract is the law between parties). Most contracts don't need specific form.
+**Federal Law No. 5/1985 - Civil Transactions Law (as amended).** Backbone of UAE contract law. Freedom of contract (parties free to agree, subject to public order/morals). Good faith (Article 246 - contracts performed in good faith). Binding nature (Article 267 - contract is the law between parties). Most contracts don't need specific form.
 
-**Federal Decree-Law No. 50/2022 — Commercial Transactions Law.** Commercial agency, pledges, banking. Most relevant: commercial agency provisions (heavily protective of the agent — see warning below).
+**Federal Decree-Law No. 50/2022 - Commercial Transactions Law.** Commercial agency, pledges, banking. Most relevant: commercial agency provisions (heavily protective of the agent - see warning below).
 
-**Federal Decree-Law No. 46/2021 — Electronic Transactions and Trust Services.** E-signatures legally recognized.
+**Federal Decree-Law No. 46/2021 - Electronic Transactions and Trust Services.** E-signatures legally recognized.
 
 **Language:** Arabic is the legal language of UAE courts. Arabic version prevails in disputes. Recommendation: bilingual (English + Arabic) for significant contracts.
 
@@ -34,18 +34,18 @@
 
 Every UAE commercial contract should address these 12 items:
 
-1. **Parties** — Full legal name, license number, registered address. Free zone entities: include zone name. Individuals: passport/Emirates ID.
-2. **Scope** — Be specific. Vague scope = #1 source of disputes. List deliverables.
-3. **Payment** — Amount, currency (AED or specify), schedule, invoice requirements. Late payment rate (no statutory rate — must specify, common: 9-12% p.a.). UAE courts may reduce excessive penalties (Article 390).
-4. **Term and renewal** — Fixed or rolling? Auto-renewal? Notice for non-renewal?
-5. **Termination** — For cause + for convenience. Notice period. Post-termination obligations.
-6. **Liability** — Cap (1-2x contract value recommended). Exclude consequential/indirect damages. Carve-outs for confidentiality breach, IP infringement, fraud.
-7. **Confidentiality** — Scope, duration, exceptions (legal requirement, public domain, independently developed).
-8. **IP ownership** — Who owns what. Assignment vs license. Pre-existing IP rights.
-9. **Force majeure** — Qualifying events, notice requirement, mitigation, termination right after threshold period.
-10. **Governing law** — UAE federal, DIFC, or ADGM.
-11. **Dispute resolution** — Courts or arbitration. Include mandatory negotiation period first.
-12. **Notices** — Delivery method (email? registered mail?).
+1. **Parties** - Full legal name, license number, registered address. Free zone entities: include zone name. Individuals: passport/Emirates ID.
+2. **Scope** - Be specific. Vague scope = #1 source of disputes. List deliverables.
+3. **Payment** - Amount, currency (AED or specify), schedule, invoice requirements. Late payment rate (no statutory rate - must specify, common: 9-12% p.a.). UAE courts may reduce excessive penalties (Article 390).
+4. **Term and renewal** - Fixed or rolling? Auto-renewal? Notice for non-renewal?
+5. **Termination** - For cause + for convenience. Notice period. Post-termination obligations.
+6. **Liability** - Cap (1-2x contract value recommended). Exclude consequential/indirect damages. Carve-outs for confidentiality breach, IP infringement, fraud.
+7. **Confidentiality** - Scope, duration, exceptions (legal requirement, public domain, independently developed).
+8. **IP ownership** - Who owns what. Assignment vs license. Pre-existing IP rights.
+9. **Force majeure** - Qualifying events, notice requirement, mitigation, termination right after threshold period.
+10. **Governing law** - UAE federal, DIFC, or ADGM.
+11. **Dispute resolution** - Courts or arbitration. Include mandatory negotiation period first.
+12. **Notices** - Delivery method (email? registered mail?).
 
 ## Governing Law and Jurisdiction
 
@@ -74,7 +74,7 @@ Governing law: UAE Federal. Dispute resolution: mandatory negotiation (30 days) 
 
 **Late payment:** No statutory commercial interest rate. Specify in contract (9-12% p.a.). Courts may apply Article 76 Commercial Transactions Law (9% or 12%) for commercial debts if not specified.
 
-**Penalty clauses (Article 390):** Courts can modify penalties up or down to match actual damages. This is mandatory — cannot contract out. Use genuine pre-estimates of loss, not punitive amounts.
+**Penalty clauses (Article 390):** Courts can modify penalties up or down to match actual damages. This is mandatory - cannot contract out. Use genuine pre-estimates of loss, not punitive amounts.
 
 **Retention:** 5-10% until completion/acceptance. Release conditions must be specific and time-bound.
 
@@ -103,8 +103,8 @@ Governing law: UAE Federal. Dispute resolution: mandatory negotiation (30 days) 
 | Scenario | Default Owner |
 |---|---|
 | Employee creates work as part of job | Employer (Copyright Law, Decree-Law 38/2021) |
-| Contractor creates work for client | **Contractor retains** — client has no automatic ownership |
-| Joint work by multiple creators | Co-owned — each needs consent of others to exploit |
+| Contractor creates work for client | **Contractor retains** - client has no automatic ownership |
+| Joint work by multiple creators | Co-owned - each needs consent of others to exploit |
 | Commissioned work (not employment) | Commissioner may have limited usage rights, creator retains copyright |
 
 **Always use contracts to clarify IP.** Defaults are often not what either party expects. Assignment clause: "All work product shall be exclusive property of [Client] upon creation and payment." Pre-existing IP: license grant for use in deliverables. Moral rights: cannot be waived under UAE law but can be agreed not to be exercised.
@@ -116,9 +116,9 @@ Enforceable but courts apply reasonableness tests. **Time:** Max 2 years (courts
 ## E-Signatures
 
 Federal Decree-Law 46/2021 recognizes three levels:
-1. **Simple** — typed name, click-to-sign, scanned. Valid for most commercial contracts.
-2. **Advanced** — linked to signatory, under sole control. Higher evidentiary weight.
-3. **Qualified** — issued by certified trust service provider. Equivalent to handwritten.
+1. **Simple** - typed name, click-to-sign, scanned. Valid for most commercial contracts.
+2. **Advanced** - linked to signatory, under sole control. Higher evidentiary weight.
+3. **Qualified** - issued by certified trust service provider. Equivalent to handwritten.
 
 **Exceptions (e-signature NOT valid):** Personal status, real estate titles, negotiable instruments, powers of attorney requiring notarization.
 
@@ -138,11 +138,11 @@ Federal Decree-Law 46/2021 recognizes three levels:
 
 ## Commercial Agency Warning
 
-**Federal Law No. 18/1981 (as amended)** — The single most dangerous trap in UAE commercial law.
+**Federal Law No. 18/1981 (as amended)** - The single most dangerous trap in UAE commercial law.
 
 If a relationship qualifies as "commercial agency" (distributing/selling/promoting goods on behalf of a principal): almost impossible to terminate. Only UAE nationals or 100% UAE-owned entities can be agents. Once registered, agent has near-permanent territorial rights. Termination requires agent's consent or court order showing agent fault. Even after contract expiry, agent can argue continuation. Principal cannot import through other channels.
 
-**If someone proposes a distribution/commission/exclusive territory arrangement — this law may apply. Always escalate to a lawyer. RED escalation — always.**
+**If someone proposes a distribution/commission/exclusive territory arrangement - this law may apply. Always escalate to a lawyer. RED escalation - always.**
 
 ## DIFC and ADGM
 

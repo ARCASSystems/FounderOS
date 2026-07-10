@@ -33,7 +33,7 @@ You are doing a brain pass.
 
 0. **Log history gate.** Run: `python scripts/check-log-has-history.py`
 
-   If exit code is 1, read the output line and surface it to the user verbatim. Do not preflight or scan. Stop. (Fresh install — there are no dated entries yet to reason across.)
+   If exit code is 1, read the output line and surface it to the user verbatim. Do not preflight or scan. Stop. (Fresh install - there are no dated entries yet to reason across.)
 
 1. **Preflight through query.** Before picking files manually, run:
 
