@@ -10,7 +10,7 @@ mcp_requirements: []
 
 # Founder Scope Challenge
 
-Runs on: reasoning - reads your files and reasons; any capable agent can run this. No API key, no paid tool.
+Runs on: local-exec - reasons over your files after refreshing the local snapshot (`brain-snapshot.py --write`) when it is missing; on a cloud or read-only surface I reason from what I can read, I do not run the script. No API key, no paid tool.
 
 This is the brutal half of the OS. The propose engine (`founder-next-move`) names the move; this skill attacks the plan the founder is about to commit weeks to. The discipline a funded builder runs on their own roadmap, for a founder who does not write code.
 

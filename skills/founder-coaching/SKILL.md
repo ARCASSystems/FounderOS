@@ -10,7 +10,7 @@ mcp_requirements: []
 
 # Founder Coaching and Diagnostic System
 
-Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+Runs on: local-exec - reasons over your files after refreshing the local snapshot (`brain-snapshot.py --write`) when it is missing; on a cloud or read-only surface I reason from the profile and snapshot I can read, I do not run the script.
 
 Operational diagnosis of a founder: where their time goes, what roles they carry, what zone they're operating in, and what has to change for the business to move.
 

@@ -10,7 +10,7 @@ mcp_requirements: []
 
 # Catch up - sweep the inbox into the brain
 
-Runs on: local write - files things into `brain/rants/`; on a read-only surface it drafts what it would file and says so.
+Runs on: local-writes - files things into `brain/rants/`; on a read-only surface it drafts what it would file and says so.
 
 The founder captured thoughts somewhere else - a voice-note app, an email to self, saved messages, a text file dictated into a synced folder. This skill gets them into the brain with provenance, without asking the founder to structure anything.
 

@@ -10,7 +10,7 @@ mcp_requirements: []
 
 # Founder Next Move
 
-Runs on: reasoning - reads your files and reasons; any capable agent can run this. No API key, no paid tool.
+Runs on: local-exec - reasons over your files after refreshing the local snapshot (`brain-snapshot.py --write`) when it is missing; on a cloud or read-only surface I reason from the snapshot or identity files I can read, I do not run the script. No API key, no paid tool.
 
 This is the propose engine. The OS surfaces the founder's state everywhere else; this is the one place it says "therefore, do this." It reads the brain, decides where the founder is, and names the single highest-leverage move toward their first paying customer. It always ends with a step small enough to start today, so the founder never leaves with a blank screen.
 

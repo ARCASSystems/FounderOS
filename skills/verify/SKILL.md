@@ -12,7 +12,7 @@ mcp_requirements: []
 
 # Verify
 
-Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+Runs on: local-exec - runs `python -m py_compile` on the shipped scripts as part of the check; on a cloud or read-only surface I report the checks I can read and mark the exec ones as not run.
 
 Read-only health check across 8 substrate checks. Returns one screen. Never auto-fixes.
 
