@@ -36,7 +36,7 @@ You are not installing a template. You are installing an operating layer. It lis
 - **Plan A defines Plan B.** This product is a derivative of an actual founder's daily use. Features graduate from personal use into the product only after surviving contact with live P&L.
 - **Talk to it, from anywhere.** Built around dictation. Claude Code's built-in dictation is the primary input, and any voice-to-text tool you already use works just as well. Claude Code runs locally as a CLI and through the cloud app (claude.ai/code), so you can start and drive a full session from your phone too. A cloud session runs in a remote sandbox on a branch rather than on your local disk, so the local-first path stays your machine while the cloud path is there when you are away from it.
 - **Decay-driven keep/kill.** Set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires. The OS does not auto-kill, you decide.
-- **Invisible version control.** Full history and undo, no git command ever typed. Say "save my work", "what changed", or "undo to before this morning" and the OS wraps git for you. Local by default; nothing pushes anywhere unless you ask. Undo is fail-safe: it saves your current work first and can never lose it. Git itself is optional at install: without it the OS still snapshots every file it touches, every session (`/changes` lists them, one command restores any of them), and when you want full history you say yes once and the OS installs and wires git itself - nothing for you to type.
+- **Invisible version control.** Full history and undo, no git command ever typed. Say "save my work", "what changed", or "undo to before this morning" and the OS wraps git for you. Local by default; nothing pushes anywhere unless you ask. Undo is fail-safe: it saves your current work first and can never lose it. Git itself is optional at install: before you turn it on, session snapshots cover you - every file the OS touches is restorable per file, a rolling net that keeps the last 12 sessions (`/changes` lists them, one command restores any of them). Full history begins the moment you say yes: the OS installs and wires git itself, your data included, and from that save onward every version is permanent - nothing for you to type.
 
 ---
 
@@ -83,7 +83,7 @@ You need three things:
 
 That is it. No git. No database. No server. No Notion account required.
 
-Git is deliberately not on the list. The OS runs without it, and every session's file changes are still snapshotted with a one-command restore. When you want full version history, say "own my history" and the OS installs git and wires it up itself - you say yes once and never type a git command.
+Git is deliberately not on the list. The OS runs without it: every session's file changes are snapshotted with a one-command restore - a rolling net that keeps the last 12 sessions, not a permanent timeline. Full version history begins when you say "own my history" - the OS installs git and wires it up itself, and from then on every save is a permanent point in time. You say yes once and never type a git command.
 
 ---
 
