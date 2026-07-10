@@ -42,8 +42,11 @@ Check-sets:
     remote-safety (--staged only) Refuses to commit while the founder's personal
                   data is tracked (core/identity.md is in the index) AND any git
                   remote's push destination still points at the public FounderOS
-                  repo (github.com/ARCASSystems). In that state one `git push`
-                  publishes their identity. Setup and own-your-history rename the
+                  repo (github.com/ARCASSystems). Every push destination is
+                  checked - all pushurl values if any are set, otherwise all url
+                  values, because git pushes to every one of them, so one safe
+                  URL in the list must not hide a public one. In that state one
+                  `git push` publishes their identity. Setup and own-your-history rename the
                   public remote to founderos-upstream and disable its push URL;
                   this check is the backstop for installs that missed that step.
                   Passes silently in the public dev repo (identity is not tracked
@@ -328,18 +331,20 @@ def check_remote_safety() -> list[str]:
     config = _git_text(["git", "config", "--get-regexp", r"^remote\."], timeout=10)
     if not config:
         return []
-    remotes: dict[str, dict[str, str]] = {}
+    remotes: dict[str, dict[str, list[str]]] = {}
     for line in config.splitlines():
         key, _, value = line.partition(" ")
         parts = key.split(".")
         if len(parts) < 3 or parts[-1] not in ("url", "pushurl"):
             continue
         name = ".".join(parts[1:-1])
-        remotes.setdefault(name, {})[parts[-1]] = value.strip()
+        remotes.setdefault(name, {}).setdefault(parts[-1], []).append(value.strip())
     offending: list[str] = []
     for name, urls in sorted(remotes.items()):
-        push_target = urls.get("pushurl") or urls.get("url", "")
-        if _PUBLIC_REPO_URL.search(push_target):
+        # git pushes to EVERY pushurl when any is set (else every url), so a
+        # remote is unsafe if ANY of its push destinations is the public repo.
+        push_targets = urls.get("pushurl") or urls.get("url") or []
+        if any(_PUBLIC_REPO_URL.search(t) for t in push_targets):
             offending.append(
                 f"  [remote-safety] remote '{name}' can push to the public FounderOS repo\n"
                 f"    while your personal data (core/identity.md) is tracked. One git push\n"
@@ -403,19 +408,26 @@ def run_baseline(allow_emdash: bool) -> int:
     Dash check-set only - private-name, secret, and attribution stay on their own
     modes, and remote-safety (staged only) is untouched. Binary and unreadable
     files are skipped. Exit 1 on any dash, 0 when the tree is clean."""
-    listing = _git_text(["git", "ls-files"])
+    # -z: NUL-delimited, unquoted paths, so filenames with newlines or
+    # non-ASCII characters enumerate correctly.
+    listing = _git_text(["git", "ls-files", "-z"])
     total = 0
-    for rel in listing.splitlines():
-        rel = rel.strip()
+    for rel in listing.split("\0"):
         if not rel:
             continue
         path = Path(rel)
         try:
             if not path.is_file():
                 continue
-            text = path.read_text(encoding="utf-8")
-        except (OSError, UnicodeDecodeError):
-            continue  # binary or unreadable file: nothing to scan
+            data = path.read_bytes()
+        except OSError:
+            continue  # unreadable file: nothing to scan
+        if b"\0" in data:
+            continue  # binary regardless of UTF-8 validity (git's own heuristic)
+        try:
+            text = data.decode("utf-8")
+        except UnicodeDecodeError:
+            continue  # not UTF-8 text: nothing to scan
         offending = scan_text(
             text,
             [],

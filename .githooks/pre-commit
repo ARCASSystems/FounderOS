@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 set -e
-if command -v python3 >/dev/null 2>&1; then
-  PY=python3
-elif command -v python >/dev/null 2>&1; then
-  PY=python
-else
-  exit 0
+# Probe by RUNNING each candidate (same order as setup's preflight: python,
+# python3, py -3). `command -v` alone is not enough on Windows, where the
+# Microsoft Store ships stub python/python3 executables that exist but cannot
+# run, and machines with only the py launcher have no python3 at all.
+GUARD="$(git rev-parse --show-toplevel)/scripts/check-private-names.py"
+if python --version >/dev/null 2>&1; then
+  exec python "$GUARD" --staged
+elif python3 --version >/dev/null 2>&1; then
+  exec python3 "$GUARD" --staged
+elif py -3 --version >/dev/null 2>&1; then
+  exec py -3 "$GUARD" --staged
 fi
-exec "$PY" "$(git rev-parse --show-toplevel)/scripts/check-private-names.py" --staged
+# No working Python: graceful no-op by design (never break `git commit`).
+# Setup's Phase 0 preflight hard-stops before this state can exist on a
+# completed install.
+exit 0
