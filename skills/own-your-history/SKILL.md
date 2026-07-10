@@ -17,7 +17,10 @@ Graduates a git-less install (usually the ZIP path) to full version history. The
 ## Pre-flight
 
 - If `core/identity.md` does not exist, stop with: `Founder OS not set up here. Run /founder-os:setup first.`
-- If a `.git/` directory exists AND `git --version` succeeds: version history is already on. Say so, remind them of the three verbs ("save my work", "what changed", "undo to before this morning"), and stop. Nothing to do.
+- If a `.git/` directory exists AND `git --version` succeeds, check whether the history actually covers the founder's data before declaring victory:
+  - Run `git ls-files core/identity.md`. Empty output means the shipped developer `.gitignore` is still in place and history records only the engine, none of their data. Do not stop - skip to step 4a and complete the ownership flip.
+  - Run `git remote -v`. If any remote's push destination (pushurl if set, otherwise url) points at `github.com/ARCASSystems`, the push path is unsafe. Do not stop - skip to step 4a.
+  - Otherwise version history is fully on and fully theirs. Say so, remind them of the three verbs ("save my work", "what changed", "undo to before this morning"), and stop. Nothing to do.
 
 ## Procedure
 
@@ -57,8 +60,23 @@ git config user.email "<email>"
 
 1. `git init` in the OS root.
 2. Set the local identity from step 3.
-3. Wire the privacy guard BEFORE the first commit: `git config core.hooksPath .githooks`. Confirm `scripts/private-name-patterns.txt` exists; if it has no active pattern, offer to add the founder's own name now (`\bTheirName\b`, written with a file-write tool, never a shell echo).
-4. Record the first version with the same engine every later save uses: `python scripts/caveman_git.py save --message "Version history begins"`. Explicit staging, guard-checked, local only.
+3. Own the data: run the remote-safety check from step 4a (a fresh `git init` has no remotes, so this is instant), then copy `templates/operator.gitignore` over `.gitignore`. If `templates/` is not in the OS folder (Plugin install), resolve the source from the plugin root at `~/.claude/plugins/founder-os/templates/operator.gitignore`. The shipped `.gitignore` is the developer one that ignores the founder's own files; the operator one tracks their data and ignores only secrets, the private-name patterns file, runtime state, and per-machine settings. Without this swap, "full version history" silently records only the engine. On a plugin-path install there may be no `.gitignore` at all yet - the copy still runs; with no gitignore, secrets and runtime state would enter history on the very first save.
+4. Wire the privacy guard BEFORE the first commit: `git config core.hooksPath .githooks`. Confirm `scripts/private-name-patterns.txt` exists; if it has no active pattern, offer to add the founder's own name now (`\bTheirName\b`, written with a file-write tool, never a shell echo).
+5. Record the first version with the same engine every later save uses: `python scripts/caveman_git.py save --message "Version history begins"`. Explicit staging, guard-checked, local only.
+
+### 4a. Complete ownership on an install that already has git
+
+The clone path arrives here: git and engine history exist, but the developer `.gitignore` keeps the founder's data out of it, and `origin` pushes at the public repo. One yes ("I will make your version history cover your own files too, and make it impossible to accidentally publish them"), then, in this order - push safety BEFORE the data becomes trackable:
+
+1. Remote safety. For each remote whose push destination points at `github.com/ARCASSystems` (normally `origin` on a clone):
+   - `git remote rename origin founderos-upstream`
+   - `git remote set-url --push founderos-upstream DISABLED`
+   Updates still flow in from `founderos-upstream`; nothing can flow out. Say it plainly: "Updates still arrive from the public repo; pushing anything back to it is now impossible."
+2. Copy `templates/operator.gitignore` over `.gitignore`.
+3. Confirm the privacy guard is wired (`git config core.hooksPath` returns `.githooks`; if not, run step 4.4).
+4. Record the flip: `python scripts/caveman_git.py save --message "Your data now has version history"`. This first save brings their data into history, guard-checked.
+
+Then continue to step 5.
 
 ### 5. Confirm in plain language
 
@@ -67,7 +85,7 @@ Tell them what they now own: a full local timeline. "Save my work" records a ver
 ## Rules
 
 - Consent first. The install command runs only after an explicit yes, and the founder sees the exact command before agreeing.
-- Local only. `git init`, local config, local commits. Never add a remote, never push, never sign anything up.
+- Local only. `git init`, local config, local commits. Never push, never sign anything up. The only remote change ever made is defensive: renaming the public update source to `founderos-upstream` and disabling its push URL so nothing can flow out. Never add a new remote here (the backup skill owns that, separately consent-gated).
 - Never bypass the privacy guard. It is wired before the first commit so no version predates it.
 - Honest failure. If any step cannot complete (no winget, no sudo, PATH not refreshed), say exactly where it stopped and what still works. Session snapshots are unaffected either way.
 - No em dashes or en dashes in anything you write. Hyphens only.
