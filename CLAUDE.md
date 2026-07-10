@@ -16,11 +16,7 @@ It is NOT a framework. It is NOT a multi-tenant AI platform. It is a product you
 
 ## Quick Start
 
-Run the setup wizard to personalize this for your situation:
-
-```
-/founder-os:setup
-```
+Say "set up Founder OS" to personalize this for your situation. If you prefer a slash command, it depends on how you installed: `/setup` on a ZIP or git-clone install, `/founder-os:setup` on a plugin install.
 
 The wizard asks you questions about who you are, what you run, what tools you use, and what is slowing you down. From your answers it generates all the operating files in this repo - personalized to you. Takes 15-20 minutes the first time.
 
