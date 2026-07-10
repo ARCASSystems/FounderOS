@@ -33,6 +33,15 @@ Check-sets:
                   NOT bypassed by ALLOW_EMDASH. The matched value is never echoed.
                   This is the out-of-the-box half of the guard: even with an empty
                   patterns file a stray secret in a tracked file is blocked.
+    remote-safety (--staged only) Refuses to commit while the founder's personal
+                  data is tracked (core/identity.md is in the index) AND any git
+                  remote's push destination still points at the public FounderOS
+                  repo (github.com/ARCASSystems). In that state one `git push`
+                  publishes their identity. Setup and own-your-history rename the
+                  public remote to founderos-upstream and disable its push URL;
+                  this check is the backstop for installs that missed that step.
+                  Passes silently in the public dev repo (identity is not tracked
+                  there), on CI (--range never runs it), and after the rename.
 
 Graceful no-op: the .githooks wrappers exit 0 when Python is absent, so this
 never breaks a user's `git commit`. With Python present but no patterns file,
@@ -292,14 +301,52 @@ def _report(header: str, offending: list[str]) -> None:
         print(line, file=sys.stderr)
     print("", file=sys.stderr)
     print(
-        "Escape hatch: ALLOW_EMDASH=1 bypasses em/en dash (not private-name, attribution, or secret).",
+        "Escape hatch: ALLOW_EMDASH=1 bypasses em/en dash (not private-name, attribution, secret, or remote-safety).",
         file=sys.stderr,
     )
 
 
+# Matches a push destination at the public FounderOS repo, https or ssh form.
+_PUBLIC_REPO_URL = re.compile(r"github\.com[:/]ARCASSystems/", re.IGNORECASE)
+
+
+def check_remote_safety() -> list[str]:
+    """Return violations when personal data is tracked and a remote can still
+    push to the public repo. See the remote-safety check-set in the module
+    docstring. Any git error (not a repo, no remotes, no config matches) is a
+    silent pass - this backstop must never break an ordinary commit."""
+    if not _git_text(["git", "ls-files", "--", "core/identity.md"], timeout=10).strip():
+        return []
+    config = _git_text(["git", "config", "--get-regexp", r"^remote\."], timeout=10)
+    if not config:
+        return []
+    remotes: dict[str, dict[str, str]] = {}
+    for line in config.splitlines():
+        key, _, value = line.partition(" ")
+        parts = key.split(".")
+        if len(parts) < 3 or parts[-1] not in ("url", "pushurl"):
+            continue
+        name = ".".join(parts[1:-1])
+        remotes.setdefault(name, {})[parts[-1]] = value.strip()
+    offending: list[str] = []
+    for name, urls in sorted(remotes.items()):
+        push_target = urls.get("pushurl") or urls.get("url", "")
+        if _PUBLIC_REPO_URL.search(push_target):
+            offending.append(
+                f"  [remote-safety] remote '{name}' can push to the public FounderOS repo\n"
+                f"    while your personal data (core/identity.md) is tracked. One git push\n"
+                f"    would publish it. Fix (keeps updates flowing in, blocks anything out):\n"
+                f"      git remote rename {name} founderos-upstream\n"
+                f"      git remote set-url --push founderos-upstream DISABLED\n"
+                f"    Or say 'own my history' and the OS does it for you."
+            )
+    return offending
+
+
 def run_staged(patterns: list[re.Pattern[str]], allow_emdash: bool) -> int:
+    offending = check_remote_safety()
     diff = get_staged_diff()
-    offending = scan_text(_added_lines(diff), patterns, allow_emdash=allow_emdash)
+    offending += scan_text(_added_lines(diff), patterns, allow_emdash=allow_emdash)
     if offending:
         _report("BLOCKED: guard violations in staged diff:", offending)
         return 1
