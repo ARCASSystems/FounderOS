@@ -22,9 +22,11 @@ Run all eight checks. Each produces one of: `[PASS]`, `[WARN]`, or `[FAIL]`.
 
 ### Check 1 - Plugin surface integrity
 
-First detect the install shape: if the working directory has no `skills/` directory, this is a data-folder install (Path A plugin - the engine lives under `~/.claude/plugins/`, the founder's folder holds only their data). That is a correct state, not a defect:
+First detect the install shape: if the working directory has no `skills/` directory, this is a data-folder install (Path A plugin - the engine lives under `~/.claude/plugins/`, the founder's folder holds only their data). That is a correct state, not a defect - but only if the engine is actually reachable. A data folder whose plugin engine is missing is a broken OS that cannot run, so prove reachability before passing:
 
-- Data-folder install -> `[PASS] Plugin surface (engine runs from the plugin; no local engine copy to count)` and skip the counting below.
+- Read the plugin manifest at `~/.claude/plugins/founder-os/.claude-plugin/plugin.json`.
+  - Manifest reachable (file exists, parses, `version` present) -> `[PASS] Plugin surface (engine v<version> runs from the plugin; no local engine copy to count)` and skip the counting below.
+  - Manifest unreachable (path missing or unparseable) -> `[FAIL] Plugin surface (data folder but engine not found at ~/.claude/plugins/founder-os - the OS has no engine to run)` and skip the counting below.
 
 Otherwise (git-clone, curl, or ZIP install - the engine is in this folder), verify that the skill and command counts are internally consistent:
 
@@ -40,37 +42,55 @@ Outcome:
 - All counts agree -> `[PASS] Plugin surface (<N> skills / <M> commands, counts agree)`
 - Any count disagrees -> `[WARN] Plugin surface (disk has <N> skills / <M> commands, README claims <X>/<Y>)`
 
-### Check 2 - Hooks installed
+### Check 2 - Hooks installed (dispatcher wiring)
 
-- Read `.claude/settings.json` (or the user-level `~/.claude/settings.json`) for
-  a `SessionStart` hook entry.
-- Check that the file path referenced by the hook actually exists.
+v1.42 wires every hook event through one cross-platform Python dispatcher
+(`scripts/hooks/dispatch.py`), one settings entry per event - not the old
+.sh/.ps1 pairs. Verify the dispatcher shape, not a single event:
 
-Outcome:
-- Hook registered and file present -> `[PASS] Hooks installed (SessionStart present)`
-- Hook registered but file missing -> `[FAIL] Hooks installed (SessionStart entry found but file missing)`
-- No SessionStart hook entry at all -> `[WARN] Hooks installed (no SessionStart hook registered)`
-
-Note: if MCPs are not configured or settings.json is not readable, report `[WARN]` not
-`[FAIL]`. Hooks are opt-in by design.
-
-### Check 3 - Scripts present
-
-Check that all seven core Python helper scripts exist and parse cleanly:
-
-- `scripts/query.py`
-- `scripts/brain-snapshot.py`
-- `scripts/wiki-build.py`
-- `scripts/memory-diff.py`
-- `scripts/brain-pass-log.py`
-- `scripts/menu.py`
-- `scripts/observation-rollup.py`
-
-For each, run: `python -m py_compile scripts/<name>.py` (or `python3 -m py_compile`).
+- Read `.claude/settings.json` (or the user-level `~/.claude/settings.json`).
+- Confirm `scripts/hooks/dispatch.py` exists in the engine root (cwd on a full
+  install; `~/.claude/plugins/founder-os/` on a data-folder install).
+- Check that all six hook events are wired, each with exactly one command that
+  calls `dispatch.py` with the matching event name:
+  `SessionStart`, `PreToolUse`, `UserPromptSubmit`, `PreCompact`, `Stop`, `PostToolUse`.
 
 Outcome:
-- All seven present and compile -> `[PASS] Scripts present (7/7 compile cleanly)`
-- Some missing or compile errors -> `[FAIL] Scripts present (<N>/7 - list the failing ones)`
+- All six events wired to the dispatcher and dispatch.py present ->
+  `[PASS] Hooks installed (6/6 events wired to dispatch.py)`
+- Events wired but `scripts/hooks/dispatch.py` missing ->
+  `[FAIL] Hooks installed (settings wires the dispatcher but scripts/hooks/dispatch.py is missing)`
+- Some events unwired or not calling the dispatcher ->
+  `[WARN] Hooks installed (<N>/6 events wired to dispatch.py - missing: <list>)`
+- No hooks block at all -> `[WARN] Hooks installed (no hooks registered)`
+
+Note: if settings.json is not readable, report `[WARN]` not `[FAIL]`. Hooks are
+opt-in by design.
+
+### Check 3 - Scripts present and compile
+
+Enumerate the shipped Python scripts dynamically - do not hardcode a list, the
+set grows - and confirm each parses cleanly.
+
+- Resolve the engine root: the current working directory on a full clone, curl,
+  or ZIP install (it holds `scripts/`); `~/.claude/plugins/founder-os/` on a
+  data-folder install.
+- Glob `<engine>/scripts/*.py` AND `<engine>/scripts/hooks/*.py`. The second glob
+  is not optional: `scripts/hooks/dispatch.py` is the hook dispatcher every
+  session event runs through, so a machine that cannot compile it has a broken
+  install. It must be in the compile set. If the glob returns no
+  `scripts/hooks/dispatch.py`, that is itself a FAIL.
+- Python is a hard prerequisite for the OS (README requires 3.11+). Probe
+  `python --version`, then `python3 --version`, then `py -3 --version`. If none
+  resolve -> `[FAIL] Scripts present (Python not found - it is a hard prerequisite; install python.org 3.11+)`
+  and do not attempt the compiles.
+- With Python resolved, run `python -m py_compile <path>` (or `python3`/`py -3`,
+  whichever resolved) on every globbed script.
+
+Outcome:
+- All present and compile -> `[PASS] Scripts present (<N>/<N> compile cleanly, incl. hooks/dispatch.py)`
+- Any missing or compile error -> `[FAIL] Scripts present (<N>/<M> compile - list the failing ones)`
+- `scripts/hooks/dispatch.py` absent -> `[FAIL] Scripts present (hook dispatcher scripts/hooks/dispatch.py missing - every session event is broken)`
 
 ### Check 4 - MCP availability
 
@@ -89,16 +109,26 @@ Do NOT fail if MCPs are unconfigured. MCP setup is optional.
 
 ### Check 5 - Free-tier floor preserved
 
-Grep the CORE script set only - the seven scripts in Check 3 - for environment variable references that imply an API key:
+Grep the full shipped script set from Check 3 - every `<engine>/scripts/*.py`
+and `<engine>/scripts/hooks/*.py`, `dispatch.py` included - for environment
+variable references that imply an API key:
 - `ANTHROPIC_API_KEY`
 - `OPENAI_API_KEY`
 - `GEMINI_API_KEY`
 
-Scope matters: do NOT grep the whole tree. Skills, docs, and connector helpers legitimately MENTION key names when documenting optional opt-in upgrades (add-voice's free Google AI Studio key, connect's gitignored `.env` writer, this file). A mention is not a requirement, and flagging it produces a false warning on a perfect install. The floor this check guards is precise: the seven core scripts must RUN without any key.
+Scope and judgment both matter. Grep the shipped scripts, NOT the whole tree:
+skills, docs, and reference files legitimately MENTION key names when documenting
+optional opt-in upgrades. And within the scripts, a mention is not a requirement.
+`scripts/connect.py` is the connector catalog - it names keys (ELEVENLABS_API_KEY,
+GEMINI_API_KEY) as metadata describing optional paid/free upgrades, but reads none
+of them and runs fine with zero keys. That is a documented mention, not a
+requirement, and does not fail the floor. The floor this check guards is precise:
+every shipped script must RUN without any key. Flag a script only when it reads a
+key as mandatory config to do its job.
 
 Outcome:
-- No core script references a key -> `[PASS] Free-tier floor preserved (no core script requires an API key)`
-- A core script requires a key to run -> `[FAIL] Free-tier floor (core script requires an API key - breaks free-tier users)`
+- No shipped script requires a key to run -> `[PASS] Free-tier floor preserved (no shipped script requires an API key)`
+- A shipped script requires a key to run -> `[FAIL] Free-tier floor (a shipped script requires an API key - breaks free-tier users)`
 
 ### Check 6 - Wiki integrity
 
@@ -155,10 +185,10 @@ FounderOS v<version> - health check
 <YYYY-MM-DD HH:MM>
 
 [PASS] Plugin surface (<N> skills / <M> commands, counts agree)
-[WARN] Hooks installed (SessionStart present, PostToolUse not enabled)
-[PASS] Scripts present (7/7 compile cleanly)
+[PASS] Hooks installed (6/6 events wired to dispatch.py)
+[PASS] Scripts present (23/23 compile cleanly, incl. hooks/dispatch.py)
 [PASS] MCP availability (3 configured: Notion, Gmail, Calendar)
-[PASS] Free-tier floor preserved (no core script requires an API key)
+[PASS] Free-tier floor preserved (no shipped script requires an API key)
 [PASS] Wiki integrity (0 issues)
 [FAIL] Cadence staleness (daily-anchors 4 days stale - refresh before planning)
 [PASS] Auto-memory presence (MEMORY.md, 12 entries)
@@ -172,7 +202,7 @@ Rules for the output:
 - Brackets + state word + parenthetical for every check line. Exactly this format.
 - Summary footer: count each state, name the single highest-priority next action (first
   FAIL, or first WARN if no FAILs, or "all green" if all PASS).
-- Read the version from the `VERSION` file in the repo root. On a data-folder install with no `VERSION` file, read the version from the plugin's `.claude-plugin/plugin.json` if reachable; if neither exists, print the header without a version rather than failing.
+- Read the version from the `VERSION` file in the repo root. On a data-folder install with no `VERSION` file, read the version from the plugin's `.claude-plugin/plugin.json` (the same manifest Check 1 reads); if neither exists, print the header without a version rather than failing.
 - Do not exceed 30 lines total.
 
 ## Skill reliability
@@ -205,8 +235,12 @@ Python-enforced gates exit non-zero and stop the skill in code. Instruction-only
 
 - **This skill never auto-fixes anything. It only reports.**
 - Read-only. Never write to any file, never run any command that modifies state.
-- If a check cannot run (missing file, missing Python), report `[WARN]` not `[FAIL]`
-  for that check, with a reason in the parenthetical.
+- Python is a hard prerequisite for the OS, not an optional extra. Missing Python
+  is a `[FAIL]` on Check 3 (Scripts present), not a `[WARN]` - without it the
+  scripts every skill relies on cannot run at all.
+- If a non-prerequisite check cannot run (an optional file is absent, MCPs are
+  unconfigured, settings.json is unreadable), report `[WARN]` not `[FAIL]` for that
+  check, with a reason in the parenthetical.
 - Distinguish `[WARN]` (degraded but functional) from `[FAIL]` (broken or missing).
   The distinction matters so founders can prioritize. A `[FAIL]` means something that
   would produce an error or wrong output in normal use. A `[WARN]` means something
