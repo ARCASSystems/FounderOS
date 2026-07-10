@@ -131,7 +131,7 @@ You never need to use the OS terms. Say what feels natural.
 
 ### 6.2.9 Prove it worked (automatic health check - do not skip)
 
-Setup just built a few dozen files, copied nineteen hook scripts, and wired the substrate. A non-technical founder cannot see whether any of that actually landed, and the hooks fail silently by design - so a half-copied script or a missing Python would stay invisible until a skill breaks days later mid-task. Do not let the founder leave on trust. Run the `verify` skill now, automatically, before the finish line. This is the product living its own rule: no "you are ready" without a check that says so.
+Setup just built a few dozen files, copied the Python hook dispatcher and its helper scripts, and wired all six hook events through it. A non-technical founder cannot see whether any of that actually landed, and the hooks fail silently by design - so a half-copied script or a missing Python would stay invisible until a skill breaks days later mid-task. Do not let the founder leave on trust. Run the `verify` skill now, automatically, before the finish line. This is the product living its own rule: no "you are ready" without a check that says so.
 
 Run `verify` and show the founder its one-screen report (the eight substrate checks, each `[PASS]` / `[WARN]` / `[FAIL]`). Then read the result out loud in one plain line:
 
