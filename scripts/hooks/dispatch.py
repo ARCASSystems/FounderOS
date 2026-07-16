@@ -244,7 +244,15 @@ PRECOMPACT_TEXT = (
 def h_pre_compact(stdin_bytes: bytes) -> None:
     if not (ROOT / "core" / "identity.md").is_file():
         return
-    print(PRECOMPACT_TEXT)
+    # PreCompact stdout is debug-only in Claude Code; a plain print never
+    # reaches the model. hookSpecificOutput.additionalContext is the supported
+    # channel for surfacing an instruction.
+    print(json.dumps({
+        "hookSpecificOutput": {
+            "hookEventName": "PreCompact",
+            "additionalContext": PRECOMPACT_TEXT,
+        }
+    }))
 
 
 # --------------------------------------------------------------------------- #
@@ -339,10 +347,16 @@ def _session_change_paths(stdin_bytes: bytes) -> set[str] | None:
     sid = data.get("session_id")
     log_file = None
     if sid:
+        # A known session id with no log means THIS session wrote nothing.
+        # Never fall back to another session's log here - with two parallel
+        # sessions that would evaluate the other session's change set.
         cand = log_dir / f"{short_sid(str(sid))}.jsonl"
-        if cand.is_file():
-            log_file = cand
+        if not cand.is_file():
+            return None
+        log_file = cand
     if log_file is None:
+        # No session id at all (older Claude Code / empty stdin): best effort,
+        # newest log is the only candidate there is.
         logs = sorted(log_dir.glob("*.jsonl"), key=lambda p: p.stat().st_mtime, reverse=True)
         log_file = logs[0] if logs else None
     if log_file is None:
@@ -379,8 +393,13 @@ def revenue_check(stdin_bytes: bytes) -> None:
         return  # the log was not touched this session; nothing to nag about
 
     try:
+        # Recent = first 120 + last 120 lines. The template prepends newest
+        # entries at the top, but capture skills say "append", so a grown
+        # install can carry this session's entries at either end. A full-file
+        # scan would instead nag on historic outreach lines forever.
         with log.open("r", encoding="utf-8", errors="replace") as fh:
-            recent = [next(fh, "") for _ in range(120)]
+            all_lines = fh.readlines()
+        recent = all_lines[:120] + all_lines[-120:] if len(all_lines) > 240 else all_lines
     except Exception:
         return
 
