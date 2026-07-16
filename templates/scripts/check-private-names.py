@@ -100,14 +100,31 @@ def load_patterns(patterns_file: Path) -> list[re.Pattern[str]]:
     if not patterns_file.exists():
         return []
     patterns = []
-    for line in patterns_file.read_text(encoding="utf-8").splitlines():
+    for lineno, line in enumerate(patterns_file.read_text(encoding="utf-8").splitlines(), 1):
         line = line.strip()
         if not line or line.startswith("#"):
             continue
+        if any(ord(ch) < 32 for ch in line):
+            # A shell echo -e turns a literal \b into a backspace byte and the
+            # pattern silently matches nothing. A dead guard that looks loaded
+            # is worse than no guard - name it and skip it.
+            print(
+                f"[private-name] WARNING: pattern on line {lineno} of "
+                f"{patterns_file.name} contains control characters (a shell "
+                f"echo mangled \\b?) - pattern ignored. Rewrite it with a "
+                f"file editor, not a shell echo.",
+                file=sys.stderr,
+            )
+            continue
         try:
             patterns.append(re.compile(line))
-        except re.error:
-            pass
+        except re.error as exc:
+            print(
+                f"[private-name] WARNING: pattern on line {lineno} of "
+                f"{patterns_file.name} is not a valid regex ({exc}) - "
+                f"pattern ignored.",
+                file=sys.stderr,
+            )
     return patterns
 
 
