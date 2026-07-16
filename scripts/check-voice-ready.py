@@ -30,10 +30,10 @@ def check(root: Path) -> tuple[int, str]:
 
     for line in text.splitlines():
         if "{{" in line:
-            return 1, "core/voice-profile.yml still has {{template}} markers. Run /founder-os:setup or fill it in by hand."
+            return 1, "core/voice-profile.yml still has {{template}} markers. Run /founder-os:voice-interview (say 'set up my voice profile') to fill it - setup leaves it templated by design."
         for marker in TEMPLATE_MARKERS:
             if marker in line:
-                return 1, f"core/voice-profile.yml still has template defaults ({marker}). Run /founder-os:setup or fill it in by hand."
+                return 1, f"core/voice-profile.yml still has template defaults ({marker}). Run /founder-os:voice-interview (say 'set up my voice profile') to fill it."
 
     return 0, "core/voice-profile.yml is ready."
 

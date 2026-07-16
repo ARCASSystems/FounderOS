@@ -55,7 +55,7 @@ Draft `core/profile.md` from `templates/profile.md`, filled from the `profile-ro
 - `detected on` - today's date
 - `confidence` - high / medium / low, by how clear the signals were
 - `signals` - the words, goal, and comfort that pointed here, in one line
-- `lead surfaces`, `frame`, `technical comfort` - copied from the variant's row in `profile-router`
+- `lead surfaces`, `frame`, `technical comfort` - copied from the variant's row in `profile-router`. Override `technical comfort` when the interview showed otherwise: a founder who says "my nephew put this on here" or reaches for a paper notebook is `low` no matter what the variant row says, and a founder who mentions their own scripts is `high`. The variant row is the default, not the evidence.
 
 If the variant is `team-internal`, set them up as the closest individual variant (founder if they own the company) and append the team-interest note to `core/setup-backlog.md` per the router. Do not block - the individual install is the working product today.
 
@@ -85,6 +85,7 @@ Steps:
    - **If no matching entry exists** (rare - means Claude Code has not registered the project yet), fall back to the computed slug rule:
      - macOS / Linux: take the absolute path, replace `/` with `-`, drop the leading `-` if any. e.g. `/Users/jane/founder-os` -> `Users-jane-founder-os`.
      - Windows: prefix with `c--` (the colon becomes `--`), replace `\` with `-`, lowercase the drive letter. e.g. `C:\Users\Jane\founder-os` -> `c--Users-Jane-founder-os`.
+     - On every platform, also replace `_` and `.` with `-` - Claude Code normalizes those in its slugs too (e.g. `my_biz.dev` -> `my-biz-dev`). A slug computed without this writes MEMORY.md to a path Claude Code never reads.
    - Target file: `<claude_projects_dir>/<slug>/memory/MEMORY.md` where `<claude_projects_dir>` is `~/.claude/projects/` on macOS / Linux and `%USERPROFILE%\.claude\projects\` on Windows.
    - **Confirm the path with the user** before writing. Show: "I will write your auto-memory template to: `<full path>`. Proceed? (yes / no / I'll set it up later)" - this catches a wrong slug before the file lands in the wrong place.
 

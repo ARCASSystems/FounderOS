@@ -101,8 +101,11 @@ Outcome:
 Read `CLAUDE.md` and `AGENTS.md` for referenced MCP server names (look for server
 names listed under "Tools Available" or similar sections).
 
-For each named MCP, check whether it appears in the user's `.claude/settings.json`
-under an `mcpServers` or similar key.
+For each named MCP, check whether it appears under an `mcpServers` key in any of
+the places Claude Code actually reads them: `.mcp.json` at the OS root, `.mcp.json`
+inside any company or project folder the wizard created, or the user's
+`.claude/settings.json`. Project MCPs live in `.mcp.json` files - checking only
+`settings.json` reports 0 on installs whose MCPs are wired per-project.
 
 Outcome:
 - Configured MCPs found -> `[PASS] MCP availability (<N> configured: <names>)`
@@ -145,6 +148,9 @@ Run the lint check logic inline (do not invoke the lint skill recursively):
 - Do not scan `skills/`, `docs/`, `templates/`, `raw/`, or other product surfaces.
 - For each `[[target]]` found, verify that a file matching the target exists somewhere
   in the tree.
+- Ignore `[[...]]` that appears inside backticks or a fenced code block - those are
+  syntax examples in shipped prose (`rules/entry-conventions.md`, `brain/knowledge/README.md`),
+  not links. Counting them makes a pristine install report WARN forever.
 
 Approximate issue count:
 - 0 unresolvable links -> `[PASS] Wiki integrity (0 issues)`

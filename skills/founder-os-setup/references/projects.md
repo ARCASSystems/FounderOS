@@ -9,7 +9,7 @@ Load this when the Founder OS root is built. It creates company folders, builds 
 For each business from Phase 0:
 
 ### 3.1 Create Company Folder
-Ask where they keep their project folders. Create the company folder if it doesn't exist.
+Ask where they keep their project folders. A founder with no project-folder habit (paper notebook, everything in email) gets the default: create the company folder inside the OS root. Name the trade-off out loud in one line - projects inside the OS root share the root CLAUDE.md context in every session; they can be moved out later without losing anything.
 
 ### 3.2 Company CLAUDE.md
 Read `templates/company-claude-md.md` for structure. Personalize with:
@@ -32,6 +32,8 @@ If the founder skips it, log a backlog item: `- [ ] Fill companies/<slug>-busine
 
 ### 3.3 Company .mcp.json
 Based on tool stack from 0.5, create a `.mcp.json` with only the MCPs this business needs.
+
+There is no stack-token-to-MCP-server mapping shipped, and most MCPs need their own auth setup the wizard must not start - so the faithful default is an empty config: `{"mcpServers": {}}`. Write that, tell the founder plainly ("your tools are noted; connecting them is a later, optional step - say 'connect gmail' when you want it"), and log a backlog item naming the tools captured in 0.5. Never invent server entries.
 
 Show proposed config. Get approval. Write it.
 
@@ -97,3 +99,5 @@ Open two different project folders (ideally different businesses). Confirm:
 - No context from Business A appears in Business B
 - MCPs are scoped correctly
 - Global identity is accessible when needed but not pre-loaded
+
+On an in-place install (projects inside the OS root - the ZIP default), the third point holds only partially: Claude Code's CLAUDE.md cascade loads the root bootloader in every nested project. That is a known trade-off of the in-place layout, not a broken install - check the first two points, note the third as expected-partial, and do not chase it.
