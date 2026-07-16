@@ -55,7 +55,7 @@ from pathlib import Path
 MUTATING_TOOLS = {"Write", "Edit", "MultiEdit", "NotebookEdit"}
 SNAPSHOT_MAX_BYTES = 2 * 1024 * 1024  # skip snapshotting files larger than 2MB
 KEEP_SESSIONS = 12  # prune snapshot/log dirs beyond this many recent sessions
-DUP_WINDOW_SECONDS = 3  # dual-shell hook variants firing twice collapse to one
+DUP_WINDOW_SECONDS = 3  # duplicate hook registrations (plugin + folder settings) collapse to one
 
 
 def repo_root() -> Path:
@@ -147,8 +147,11 @@ def rel_path(p: str) -> str | None:
 def _is_duplicate(log_file: Path, tool: str, path: str) -> bool:
     """True when the last record matches tool+path within DUP_WINDOW_SECONDS.
 
-    Dual-shell machines run both the bash and PowerShell hook variants for the
-    same tool call; the second arrival is a duplicate, not a second write.
+    A machine can register the hook twice for the same tool call (the plugin
+    engine plus a folder-level settings.json); the second arrival is a
+    duplicate, not a second write. Cost of the window: a legitimate second
+    edit of the same file within 3 seconds undercounts the writes column by
+    one - snapshots and restore are unaffected.
     """
     try:
         if not log_file.is_file():
@@ -375,7 +378,7 @@ def render_manifest(log_file: Path) -> str:
             # Edited but never snapshotted (over the 2 MB cap, or the snapshot
             # failed): listed for visibility, but there is no copy to restore.
             adds, dels = git_numstat(path)
-            recover = "over 2 MB - listed, not snapshot-restorable"
+            recover = "no pre-edit copy (over 2 MB or snapshot failed) - not restorable"
         a = "-" if adds is None else str(adds)
         d = "-" if dels is None else str(dels)
         lines.append(f"| `{path}` | {meta['action']} | {a} | {d} | {meta['writes']} | {recover} |")
@@ -419,8 +422,8 @@ def prune_old() -> None:
 # --------------------------------------------------------------------------- #
 def cmd_manifest(session_arg: str | None) -> int:
     try:
-        # Dual-shell machines run both hook variants; a manifest rendered
-        # seconds ago by the sibling variant does not need a second render.
+        # Duplicate hook registrations (plugin + folder settings) can render
+        # twice; a manifest written seconds ago does not need a second render.
         try:
             if MANIFEST.is_file() and (time.time() - MANIFEST.stat().st_mtime) <= 5:
                 return 0
@@ -428,18 +431,26 @@ def cmd_manifest(session_arg: str | None) -> int:
             pass
 
         log_file = None
+        sid_known = False
         if session_arg:
+            sid_known = True
             cand = LOG_DIR / f"{short_sid(session_arg)}.jsonl"
             if cand.is_file():
                 log_file = cand
-        if log_file is None:
+        if log_file is None and not sid_known:
             data = read_stdin_json()
             sid = data.get("session_id")
             if sid:
+                sid_known = True
                 cand = LOG_DIR / f"{short_sid(str(sid))}.jsonl"
                 if cand.is_file():
                     log_file = cand
         if log_file is None:
+            # A known session id with no log means this session wrote nothing;
+            # never render another session's log in its place. Fall back to the
+            # newest log only when no session id arrived at all.
+            if sid_known:
+                return 0
             log_file = latest_log()
 
         if log_file is None:
