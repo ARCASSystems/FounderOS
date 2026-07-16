@@ -2,6 +2,31 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.42.1 - 2026-07-16
+
+The clean-machine patch. A full end-to-end install test on a pristine machine (ZIP path, a rambling non-technical founder at the wizard, no API key, no git identity) surfaced one blocker and a set of gaps between claim and behavior. All fixed here. No new skills or commands.
+
+### Fix - setup finishes on a clean machine
+
+- **The privacy guard no longer blocks the founder's own name.** Setup used to offer the founder's own name as the first guard pattern and then track `core/identity.md` - so the guard it had just installed blocked setup's own first commit and every later save touching their name. Patterns are now for names that must never enter your files (a client under NDA); your own name is tracked by design, and the anti-publish protection is the remote-safety guard, which already refuses any commit that could push personal data to the public repo.
+- **A mangled guard pattern warns instead of dying silently.** A shell echo can turn `\b` into a backspace byte, shipping a pattern that matches nothing while the installer reports it loaded. The guard now names and skips any pattern with control characters or invalid regex, at every run.
+- **Git authorship is confirmed, not assumed.** On a machine that already carries someone else's git identity (family or work computer), setup and own-your-history now read the configured name back and ask if it is you, instead of silently recording the founder's history as someone else. Own-your-history's already-has-git path also checks identity exists before its first save, so it cannot fail with git's "tell me who you are" wall.
+
+### Fix - hooks fire everywhere, before setup
+
+- **Each hook command tries all three Python spellings** (`python`, `python3`, `py -3`) with the braced `${CLAUDE_PROJECT_DIR}` form, so the session brief and the undo floor fire on a fresh extract on macOS boxes with only `python3`, Windows boxes with only the `py` launcher, and bash-less Windows where hooks run under cmd. Setup still writes the one discovered interpreter after the interview.
+- **The PreCompact save-before-you-forget instruction actually reaches the model** through the supported `hookSpecificOutput.additionalContext` channel. The old plain print went to the debug log and nothing else.
+
+### Fix - honest tracking, honest gates
+
+- **Session tools never read a parallel session's change log.** The Stop-hook revenue check and the change manifest fall back to the newest session log only when no session id arrived at all; a known session that wrote nothing now stays silent instead of evaluating another session's changes.
+- **The unrestorable-file label says why** ("no pre-edit copy - over 2 MB or snapshot failed") instead of always claiming the file was over 2 MB.
+- **The in-place install no longer overwrites the private-tag exclusion rules:** the personalized operating-rules template now carries the `<private>` contract, so writing it over the shipped file loses nothing.
+- **The voice gate points at the interview that fills it** (voice-interview), not back at setup, which leaves the profile templated by design.
+- **Verify looks where MCPs actually live** (`.mcp.json` at root and per project, not just settings.json) and no longer counts shipped syntax examples as broken wikilinks, so a pristine install can report a clean pass.
+- **Facebook counts as a main channel and accounting software gets a real stack field.** A local-services founder's "Facebook, everybody's on the neighborhood groups" and "QuickBooks for the money stuff" now land in `stack.json` (`primary_channel: facebook`, `accounting: quickbooks`) instead of being extracted and then thrown away as backlog prose.
+- **The wizard reads the founder in front of it:** technical comfort can override the variant default when the interview shows a non-technical operator, a vague stage answer is inferred from facts the founder already stated and read back for confirmation, project folders default into the OS root with the trade-off named, company `.mcp.json` defaults to an honest empty config, and the computed auto-memory slug normalizes underscores and dots the way Claude Code does.
+
 ## v1.42.0 - 2026-07-10
 
 The install-and-honesty release. It clears the blockers a clean-machine ZIP install hit, replaces the dual-shell hooks with one cross-platform dispatcher, and reconciles every self-claim against what the code actually does. No new skills or commands.
