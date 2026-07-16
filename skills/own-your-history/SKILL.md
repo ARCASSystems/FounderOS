@@ -74,7 +74,8 @@ The clone path arrives here: git and engine history exist, but the developer `.g
    Updates still flow in from `founderos-upstream`; nothing can flow out. Say it plainly: "Updates still arrive from the public repo; pushing anything back to it is now impossible."
 2. Copy `templates/operator.gitignore` over `.gitignore`.
 3. Confirm the privacy guard is wired (`git config core.hooksPath` returns `.githooks`; if not, run step 4.4).
-4. Record the flip: `python scripts/caveman_git.py save --message "Your data now has version history"`. This first save brings their data into history, guard-checked.
+4. Confirm git knows who the history belongs to: `git config user.name` and `git config user.email` inside the OS folder. If either is empty, run step 3 above (Record who the history belongs to) first - on a machine with no global git identity, the save below otherwise fails with git's "tell me who you are" error.
+5. Record the flip: `python scripts/caveman_git.py save --message "Your data now has version history"`. This first save brings their data into history, guard-checked.
 
 Then continue to step 5.
 
