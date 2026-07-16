@@ -210,7 +210,7 @@ If anything breaks in the first 24 hours, email `solutions@arcassystems.com` wit
 
 ## Known platform notes
 
-**Windows users.** Every hook event runs through one cross-platform Python dispatcher (`scripts/hooks/dispatch.py`), wired by `.claude/settings.json`. There is no shell to be missing - no bash, no PowerShell, no git-bash required. Python 3.11+ (already a prerequisite of the OS) is the only thing the hooks need; if the bare `python` command is not on your PATH, setup writes the interpreter it discovered (`python3` or `py -3`) into the hook commands for you.
+**Windows users.** Every hook event runs through one cross-platform Python dispatcher (`scripts/hooks/dispatch.py`), wired by `.claude/settings.json`. There is no shell to be missing - no bash, no PowerShell, no git-bash required. Python 3.11+ (already a prerequisite of the OS) is the only thing the hooks need. Out of the box each hook command tries the three interpreter spellings in order (`python`, `python3`, `py -3`), so the hooks fire even before setup on a machine where bare `python` is not on PATH; setup then writes the one interpreter it discovered into the hook commands for you.
 
 **Git-less installs (Path 0).** Every hook degrades quietly when git is absent: the session brief still runs, the auto-save hook stays silent instead of erroring, and the per-session change snapshots do not need git at all. Nothing errors, nothing nags. Version history activates when you say "own my history".
 

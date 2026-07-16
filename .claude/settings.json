@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py\" PreToolUse"
+            "command": "python \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" PreToolUse || python3 \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" PreToolUse || py -3 \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" PreToolUse"
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py\" SessionStart"
+            "command": "python \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" SessionStart || python3 \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" SessionStart || py -3 \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" SessionStart"
           }
         ]
       }
@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py\" UserPromptSubmit"
+            "command": "python \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" UserPromptSubmit || python3 \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" UserPromptSubmit || py -3 \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" UserPromptSubmit"
           }
         ]
       }
@@ -39,7 +39,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py\" Stop"
+            "command": "python \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" Stop || python3 \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" Stop || py -3 \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" Stop"
           }
         ]
       }
@@ -50,7 +50,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py\" PreCompact"
+            "command": "python \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" PreCompact || python3 \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" PreCompact || py -3 \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" PreCompact"
           }
         ]
       }
@@ -61,7 +61,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/scripts/hooks/dispatch.py\" PostToolUse"
+            "command": "python \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" PostToolUse || python3 \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" PostToolUse || py -3 \"${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py\" PostToolUse"
           }
         ]
       }
