@@ -8,6 +8,7 @@
   "calendar": null,
   "automation_platform": null,
   "crm": null,
+  "accounting": null,
   "file_storage": null,
   "meeting_notes": null,
   "voice_input": null,
@@ -24,6 +25,7 @@
     "calendar": ["google_calendar", "outlook_calendar"],
     "automation_platform": ["n8n", "make", "zapier", "none"],
     "crm": ["notion_db", "hubspot", "airtable", "none"],
+    "accounting": ["quickbooks", "xero", "wave", "spreadsheet", "none"],
     "file_storage": ["google_drive", "dropbox", "local", "none"],
     "meeting_notes": ["granola", "otter", "notion", "none"],
     "voice_input": ["wispr_flow", "whisper_local", "none"],
@@ -31,7 +33,7 @@
     "prospecting_db": ["apollo", "sales_nav", "linkedin", "none"],
     "video_tool": ["loom", "zoom", "none"],
     "booking": ["cal_com", "calendly", "none"],
-    "primary_channel": ["linkedin", "instagram", "youtube", "email_newsletter"],
+    "primary_channel": ["linkedin", "instagram", "youtube", "facebook", "email_newsletter"],
     "business_model": ["service", "ecommerce", "saas_software", "marketplace", "content_creator", "regulated_deep_tech", "other"]
   },
 

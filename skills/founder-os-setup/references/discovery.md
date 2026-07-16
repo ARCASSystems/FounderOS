@@ -137,7 +137,7 @@ Map the answer to a `stage` token (this SEEDS the stage - the propose engine re-
 - "chasing the first paying customer" / "trying to sell" / "no revenue yet" / "launched, no customers" -> `first-customer`
 - "have paying customers" / "made some sales" / "early revenue" -> `revenue`
 - "growing steady revenue" / "recurring revenue" / "scaling" / "MRR" -> `mrr-scale`
-- unclear or skipped -> `[NOT SET]` (do not guess a stage)
+- unclear or skipped -> `[NOT SET]` (do not guess a stage). One exception: when the answer is vague ("I dunno, growth I guess?") but facts already established in this interview prove a stage (steady revenue named, recurring contracts, a team on payroll), infer the token from those facts and read it back in one line for confirmation instead of writing `[NOT SET]`. An inference from their own stated facts is not a guess; inventing a stage from nothing is.
 
 Keep the founder's own words too. The stage seed is written as `<token> - <their words>` so the propose engine has both the lens and the texture.
 
@@ -184,7 +184,7 @@ Ask four short multi-choice prompts in sequence. One question, one line of optio
 3. "What calendar do you use? Google Calendar / Outlook / Apple Calendar / other / none / skip."
 4. "Where do you track customers, subscribers, or your pipeline? Notion DB / HubSpot / Airtable / subscriber list (Mailchimp, Klaviyo, ConvertKit) / spreadsheet / nothing yet / skip."
 
-5. "What's your main channel for reaching customers or your audience? LinkedIn / Instagram / YouTube / email newsletter / other / skip."
+5. "What's your main channel for reaching customers or your audience? LinkedIn / Instagram / YouTube / Facebook / email newsletter / other / skip."
 
 Map each answer to the exact lowercase token from `stack.json`'s `_allowed_values`:
 
@@ -192,7 +192,8 @@ Map each answer to the exact lowercase token from `stack.json`'s `_allowed_value
 - Email -> `email_platform` (gmail / outlook / apple_mail). "none" or "other" -> `null`.
 - Calendar -> `calendar` (google_calendar / outlook_calendar). Apple Calendar / "other" / "none" -> `null` and log to backlog.
 - CRM or pipeline -> `crm` (notion_db / hubspot / airtable / none). "spreadsheet" -> `null` with a backlog note. "nothing yet" -> `none`. "subscriber list" or any email marketing platform (Mailchimp, Klaviyo, ConvertKit) -> `crm: null` and log to backlog: "Subscriber platform: <tool_name>. B2C audience tool - not a sales CRM."
-- Primary channel (Q5) -> `primary_channel` (linkedin / instagram / youtube / email_newsletter). "other" -> `null` and log the actual platform name in the backlog. "skip" -> `null`.
+- Accounting software named anywhere in the interview (QuickBooks, Xero, Wave, "the books are in a spreadsheet") -> `accounting` (quickbooks / xero / wave / spreadsheet / none). It is not asked as its own prompt, but when a founder volunteers it - and service founders whose top pain is invoices almost always do - it is the system of record for their money and belongs in a real field, not a backlog prose note.
+- Primary channel (Q5) -> `primary_channel` (linkedin / instagram / youtube / facebook / email_newsletter). "other" -> `null` and log the actual platform name in the backlog. "skip" -> `null`.
 
 "skip" on any prompt records `null` for that field and continues. No "are you sure?" follow-up. No re-ask later in the wizard.
 
