@@ -5,6 +5,23 @@
 
 ---
 
+## `<private>` exclusion tag
+
+Any text wrapped in `<private>...</private>` is excluded from all persistent writes. This applies to:
+
+- `brain/log.md` (the brain-log skill)
+- `brain/rants/*.md` (the rant command - wrapped content is dropped before the file is written)
+- `brain/patterns.md`, `brain/flags.md`, `brain/decisions-parked.md` (the dream command - distilled content from rant processing)
+- `brain/knowledge/*.md` (the knowledge-capture skill)
+- Auto-memory `MEMORY.md` (the auto-memory write path)
+- Any future skill that writes to a persistent file the user did not explicitly request a write to
+
+The tag does not apply to ephemeral context - text the model holds in-conversation but does not persist.
+
+The tag is case-insensitive: `<PRIVATE>`, `<Private>`, `<private>` all work. The closing tag must match the opening tag case-insensitively.
+
+---
+
 ## Session Start Protocol
 
 1. Load the six operating-state files: `core/identity.md`, `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`. Plus this rules file. (CLAUDE.md is read automatically by Claude Code.)
