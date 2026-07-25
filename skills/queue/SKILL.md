@@ -79,6 +79,21 @@ Move an ACTIVE entry to the DONE section with today's date prepended:
 
 Confirm with one line: `Done: <short description>.`
 
+**The close step - one line of judgment, yours not mine.**
+
+When the item was work the OS did for you (a draft it wrote, a scan it ran, a job that filed something), ask one short question at close and record the answer on the DONE line:
+
+```
+[YYYY-MM-DD] <original description> | closed | verdict: ok|needs-work|failed - <your one line>
+```
+
+Two rules make this worth doing:
+
+- **The verdict is never self-graded.** The OS does not get to decide whether its own output was good. If you did not see the output, the honest record is no verdict at all, not a guessed one.
+- **Skipping is free.** One word is a complete answer. An empty verdict is better than a polite one.
+
+Those lines are the only real record of what the OS is actually good at. `founder-review` reads them monthly, and where you run digital employees, `employee-review` reads them to propose changes to the job that produced the work. A repeated needs-work on the same kind of item is a bug in how that work gets generated, not a task for you to keep fixing by hand.
+
 ### park
 
 Move an ACTIVE entry back to BACKLOG. Update the entry's date to today.

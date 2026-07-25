@@ -59,6 +59,24 @@ Never lead a release subject with the version. `v1.42.0 - release` tells a visit
 - Em or en dashes in subject or body. Hyphens only, with spaces around them.
 - Banned words from `templates/rules/writing-style.md`
 
+## Push cadence - the rule that stops stale-truth work
+
+This one only applies once your OS lives in more than one place: a copy on your machine plus a synced remote that something else reads (a backup you run routines against, a second machine, a cloud session).
+
+**The rule: push at the end of every session that changed anything.**
+
+The failure it prevents is specific and it is not obvious the first time it bites. Anything reading the remote composes its work from what the remote holds. If you decided something at your desk on Monday and did not push, then Tuesday's remote run rebuilds its picture from Sunday, re-raises the question you already answered, and hands you back work you already did. The answers look confident and they are out of date. You lose trust in the thing before you find the cause.
+
+The same push is your off-site backup, which is the second reason to make it a cadence and not a decision.
+
+Three qualifiers:
+
+- **A public repo is different.** Publishing is an explicit choice every time, never a cadence. This rule is for your own OS, not for anything the world can read.
+- **If the push is rejected because the remote moved,** pull with rebase, resolve, push. Never force push.
+- **A session that ends without pushing says so, and says why.** Mid-rebase, or you asked it to hold. Silence is what creates the stale-truth case.
+
+If your OS only exists in one place, ignore all of this. It costs nothing to skip and it is the first rule to adopt the day you sync.
+
 ## Reference
 
 Cross-linked from `CLAUDE.md` and `AGENTS.md` so every agent operating in this repo reads it before composing commits.

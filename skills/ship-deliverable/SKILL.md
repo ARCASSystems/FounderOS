@@ -1,15 +1,15 @@
 ---
 name: ship-deliverable
-description: Run the final ship gate before any external deliverable goes out. Say "ship this", "is this ready to ship", "final gate", or "run the ship checks" (or run /founder-os:ship-deliverable). Composes template fit, anti-AI scan, blind-spot evidence check, and pre-send-check in one report. Read-only.
+description: Run the final ship gate before any external deliverable goes out. Say "ship this", "is this ready to ship", "final gate", or "run the ship checks" (or run /founder-os:ship-deliverable). Runs a deterministic scan first, then composes template fit, anti-AI scan, blind-spot evidence check, and pre-send-check in one report. Read-only.
 why: "Composes four checks that are easy to skip individually under deadline pressure into one pass so nothing ships with an AI phrase, missing asset, or unreviewed blind spot."
 enhance: "Run blind-spot-review before calling ship-deliverable - Link 3 (blind-spot evidence check) will fail if no review artifact exists, and you will have to run it separately anyway."
-allowed-tools: ["Read", "Grep"]
+allowed-tools: ["Read", "Grep", "Bash"]
 mcp_requirements: []
 ---
 
 # Ship Deliverable
 
-Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+Runs on: local-exec - Link 0 runs a read-only scan script over the deliverable. On a surface that cannot run scripts, say so in one line, skip Link 0, and run Links 1 to 4 by reading. Never report Link 0 as passed when it did not run.
 
 Composes the checks that are easy to skip under deadline pressure and reports every failure in one pass.
 
@@ -21,9 +21,25 @@ If the path is missing, reply: `Which deliverable? Re-run as /founder-os:ship-de
 
 If the file does not exist, fail with the path and stop.
 
-## The Four Links
+## The Links
 
-Run all four links every time. Do not stop at the first failure.
+Run every link every time. Do not stop at the first failure.
+
+### Link 0 - Deterministic scan (run this first)
+
+```
+python scripts/deliverable_gate.py all <path>
+```
+
+Five checks a grep can settle without spending any judgment on them: structural fit, leftover placeholders, a prep date within 48 hours, AI-attribution strings and document author metadata, and evidence that a blind-spot pass actually happened. Exit 0 means nothing failed, exit 2 means something did.
+
+Three things to hold onto when reading its output:
+
+- **SKIP is honest, not a pass.** It names what a text scan cannot judge - a binary layout, a compressed PDF - and hands it to the reading links below. Never report a SKIP as a PASS.
+- **Brand checks need `os-config.yaml`.** The font and the document author name come from your config. With no config those two checks SKIP rather than assume a default, which means the reading pass has to cover them.
+- **A Link 0 FAIL is still a FAIL** even if the reading links all pass. It caught something real.
+
+If the script is missing or your surface cannot run it, say so in one line and continue with Links 1 to 4. The reading links overlap it deliberately, so you lose speed and repeatability, not coverage.
 
 ### Link 1 - Template Fit
 
@@ -67,6 +83,7 @@ If `skills/pre-send-check/SKILL.md` does not exist, record `FAIL - pre-send-chec
 Ship deliverable: <path>
 Run at <YYYY-MM-DD HH:MM>
 
+Link 0 Deterministic:   PASS / FAIL / NOT RUN - <n checks, n fail, n left to reading>
 Link 1 Template:        PASS / WARN / FAIL - <detail>
 Link 2 Anti-AI:         PASS / FAIL - <detail>
 Link 3 Blind-spot run:  PASS / FAIL - <detail>
@@ -82,7 +99,7 @@ If not ready, list every fix grouped by link. Do not edit the deliverable.
 
 ## Rules
 
-- Read-only. Never modify the deliverable.
-- Run all four links every time.
+- Read-only. Never modify the deliverable. Link 0's script writes nothing either.
+- Run every link every time.
 - If any link fails, verdict is `FIX THEN RETRY`.
 - A human can override, but the override and failed links must be logged to `brain/log.md`.

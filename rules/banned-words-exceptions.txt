@@ -1,0 +1,25 @@
+# Banned-words EXCEPTIONS
+#
+# Your accepted uses of terms from the banned list in rules/writing-style.md,
+# scoped to one kind of artifact. When the pre-send gate scans a file whose path
+# matches the glob, a hit on that term is noted for the record instead of warned
+# on. This is how a word you have already decided about stops being raised
+# forever, without weakening the list for everything else.
+#
+# The problem it solves: a voice gate that re-flags the same accepted word every
+# week trains you to ignore the gate. An exception file keeps the gate sharp by
+# giving settled judgment somewhere to live.
+#
+# FORMAT: term | artifact-class-or-path-glob | date | why you accepted it
+#   - term: lowercase, and it must actually be on the banned list
+#   - field 2: a human label with the glob in trailing parentheses, or a bare
+#     glob. Globs are relative to the OS root, fnmatch style.
+#   - Add a row ONLY when you have actually decided, with the date you decided.
+#     Never pre-populate this file with words you might want later.
+#
+# READ BY: skills/pre-send-check (Check 3). An empty file is the correct
+# starting state - every term on the banned list applies everywhere until you
+# say otherwise.
+#
+# EXAMPLE (delete this line, it is illustrative and not active):
+# ecosystem | partner deck (decks/partners/*.html) | 2026-01-15 | the client's own word for their marketplace, changing it would confuse them

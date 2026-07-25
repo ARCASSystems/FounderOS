@@ -1,16 +1,16 @@
 ---
 name: lint
 description: >
-  Audit the wiki for integrity issues. Say "lint the wiki", "check wiki integrity", "find broken links", "what's stale", or "what's drifted" (or run /founder-os:lint). Five checks: broken cross-references, orphan pages, stale time-sensitive content, provenance gaps, and contradictions. Read-only - findings are advisory. Run before a weekly review.
+  Audit the wiki for integrity issues. Say "lint the wiki", "check wiki integrity", "find broken links", "what's stale", or "what's drifted" (or run /founder-os:lint). Six checks: broken cross-references, orphan pages, stale time-sensitive content, provenance gaps, contradictions, and doctrine files that never say why they exist. Read-only - findings are advisory. Run before a weekly review.
 why: "Surfaces broken cross-references and stale content that silently mislead skills - a wiki that points to missing files or a decisions list that contradicts the sprint is worse than no wiki."
 enhance: "Run wiki-build first to refresh brain/relations.yaml so lint has an up-to-date graph to check against - lint on a stale graph produces false orphan counts."
-allowed-tools: ["Read", "Glob", "Grep"]
+allowed-tools: ["Read", "Glob", "Grep", "Bash"]
 mcp_requirements: []
 ---
 
 # Lint
 
-Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+Runs on: local-exec - Check 6 runs a read-only script. Every other check is reading, so on a surface without script access run Checks 1 to 5 and mark Check 6 as not run.
 
 Read-only audit of the wiki layer. Returns a structured report. Never modifies files.
 
@@ -113,6 +113,28 @@ For each decision marked `resolved` in `context/decisions.md`, check whether `ca
 
 This is a low-confidence signal. Output as candidates, not as defects. Phrasing: `Possible contradiction (review): <decision> vs <commitment>`.
 
+## Check 6 - Doctrine that does not say why (advisory, one line)
+
+```
+python scripts/selfdoc_check.py why --json
+```
+
+Names the files in `rules/` and `system/` that never state the problem they exist to solve. A file that does not say why it exists gets ignored or misapplied by the next session that opens it, which is the quiet way doctrine stops working (`rules/os-as-harness.md`, property 1).
+
+Render this as **one advisory line**, not a list of every file:
+
+```
+SELF-DOCUMENTATION (<N> files)
+- <N> doctrine files carry no `why:` - run `python scripts/selfdoc_check.py why` for the list
+(or: "Clean.")
+```
+
+Three rules keep this useful rather than noisy:
+
+- **Advisory forever.** It never blocks anything and never appears in NEXT 3 MOVES unless every other check is clean.
+- **Forward-only.** Files written before the convention adopt it the next time you touch them. Nobody backfills, and a long-standing count here is not debt.
+- **If the script is missing or your surface cannot run it**, render `SELF-DOCUMENTATION (not run - no script access)`. Never render `Clean.` for a check that did not run.
+
 ---
 
 ## Output format
@@ -147,6 +169,10 @@ PROVENANCE (<N> issues)
 POSSIBLE CONTRADICTIONS (<N> candidates)
 - <decision> (resolved YYYY-MM-DD) vs <commitment in cadence/weekly-commitments.md>
 (or: "Clean.")
+
+SELF-DOCUMENTATION (<N> files)
+- <N> doctrine files carry no `why:` - run `python scripts/selfdoc_check.py why` for the list
+(or: "Clean." or: "not run - no script access")
 
 NEXT 3 MOVES (advisory)
 - <highest-priority finding to address>

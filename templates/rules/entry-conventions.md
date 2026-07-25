@@ -154,6 +154,25 @@ The hook also surfaces a separate `Decay anchor missing` block when an entry has
 
 ---
 
+## Why-first doctrine files
+
+Everything above governs per-entry rows. This last convention governs the other kind of markdown: the doctrine and capability files a session reads to know how to act - `rules/*.md`, `system/*.md`, and `skills/*/SKILL.md`.
+
+**The rule:** a doctrine file states, at the top, the problem it exists to solve, before it explains what it does. A fresh session (or a fresh person) has to be able to tell load-bearing doctrine from a scratch note without being told. A file that never says why it exists gets ignored or misapplied.
+
+**The form**, either one:
+
+- **Frontmatter `why:`** - one line naming the problem the file solves. This is the canonical form.
+- **A body why-marker** - for a file with no frontmatter, a `## Why this exists` heading or an opening line naming the problem, in roughly the first 45 lines.
+
+`description:` alone does not satisfy this. Description says what a skill does and when to fire it. Why says what breaks without it. Those are different questions, and only the second one survives the file being rewritten.
+
+**Scope and adoption.** Forward-only, like everything else here. `rules/` and `system/` are where a missing why actually costs you something, so they are the default scope. Skill files already carry a description, so a why there is an improvement rather than a gap. Nothing gets backfilled: files adopt the convention the next time you touch them.
+
+`python scripts/selfdoc_check.py why` lists what is missing it, and `/founder-os:lint` surfaces the count as one advisory line. See `rules/os-as-harness.md` for why this is one of four properties that keep an OS maintainable rather than merely documented.
+
+---
+
 ## What this is not
 
 - **Not a frontmatter schema for the file.** The file-level frontmatter (if any) stays as-is. These are per-entry sub-fields.

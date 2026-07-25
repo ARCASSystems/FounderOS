@@ -410,6 +410,28 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** Before starting any new initiative. When scope is creeping mid-task.
 - **Follow-up.** If GREEN: document in `context/priorities.md`. If PARK: revisit when the trigger condition fires. Slash command: `/founder-os:forcing-questions`.
 
+### os-evolve
+
+- **Say.** "evolve the OS", "what should the OS fix about itself", or "plan the next OS cycle".
+- **Outcome.** One dated plan file at `plans/os-evolve-<date>.md`: last cycle scored (shipped, partial, or dead), numbered gaps each citing its evidence, paste-ready execute prompts, an unchecked reconcile line per prompt, and a kill column naming what this cycle deliberately does not do.
+- **Reads.** The newest audit or plan in `plans/` (or the file you name), `brain/flags.md`, `system/quarantine.md`, the previous cycle's plan, plus any needs-work verdicts and queue kill notes.
+- **Writes.** Exactly one file, the dated plan. Never `CLAUDE.md`, never `rules/`, never a User Layer file.
+- **Voice rules.** No.
+- **Prereqs.** None, though it earns its place once you have a few flags or an audit behind you.
+- **When to run.** After an audit, after two or three flags pile up, or when the OS fails the same way twice. Roughly fortnightly, never on a schedule.
+- **Follow-up.** Run the first prompt in a separate session, and let that session fill in the reconcile line in the same plan file. A prompt with no reconcile line becomes gap one of the next cycle. Slash command: `/founder-os:os-evolve`.
+
+### founder-review
+
+- **Say.** "review my month", "score my month", "founder review", or "coach me through the month".
+- **Outcome.** A scorecard counted from your own files (must-dos landed, log days, days since last outreach, work shipped, queue closed versus opened, flags older than 14 days, decisions made versus parked, last month's commitments), then at most five coaching questions, ending in at most three commitments with dates.
+- **Reads.** `cadence/weekly-commitments.md`, `cadence/queue.md`, `brain/log.md`, `brain/flags.md`, `context/clients.md`, `context/decisions.md`, `context/priorities.md`.
+- **Writes.** At most three items into `cadence/queue.md` titled `Review commitment: <your words>`, and one entry in `brain/log.md`. Nothing into any file another person reads.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete, plus about a month of use so the counts mean something.
+- **When to run.** Monthly, first Sunday, riding the `weekly-review` rhythm. It refuses a second run in the same month unless you ask for one.
+- **Follow-up.** The commitments feed the daily coach line in `morning-loop`, and next month opens by scoring them. The same loop pointed at a digital employee instead of you is `employee-review`. Slash command: `/founder-os:founder-review`.
+
 ---
 
 ## Meeting and capture

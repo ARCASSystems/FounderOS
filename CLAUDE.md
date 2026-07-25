@@ -172,6 +172,19 @@ Three additions sit underneath the daily files. None require setup beyond runnin
 
 The SessionStart brief (`.claude/hooks/session_start_brief.py`, run by the cross-platform hook dispatcher `scripts/hooks/dispatch.py` on the `SessionStart` event registered in `.claude/settings.json`) reads all three at every session open and surfaces what needs attention in one screen.
 
+### How the OS maintains itself (v1.43)
+
+Four rules describe how the OS stays usable as it grows, rather than becoming a pile of files nobody trusts. All four are opt-in reading: nothing here changes session-start behavior, and none of them is needed on day one.
+
+- **`rules/os-as-harness.md`** - the four self-maintenance properties, as one doctrine: doctrine files say why they exist, scripts document their own contract, repeated failures get fixed at the engine instead of re-corrected, and the OS fits the person running it. `python scripts/selfdoc_check.py` is the checker behind the first two, surfaced by `/founder-os:lint` as one advisory line. The standing guardrail: this is a self-observing OS, not a self-modifying one. Everything proposes, you decide.
+- **`rules/context-discipline.md`** - where tokens go on a long build, what must never be handed to a model, and the running build log plus the 30% rule that make a compacted or restarted session lose nothing.
+- **`rules/hands-resilience.md`** - the four-rung fallback ladder for when a tool you depend on dies, the preflight habit before work that needs one, and a registry you fill in with the tools you actually run. Ships with placeholder rows and no claims.
+- **`rules/digital-employees.md`** - the org chart doctrine for once you run several recurring jobs: two faces per job, propose-only by default, honest status, and the rule that a job's charter IS its permission grant rather than prose beside it. `templates/roles/employees.yaml` ships deliberately empty, because an org chart full of jobs that never ran is worse than none.
+
+`rules/banned-words-exceptions.txt` is the small companion to the voice rules: somewhere for a word you have already decided to accept, scoped to one kind of artifact, so the gate stops re-raising settled judgment. Ships empty.
+
+`templates/culture.md` is the culture layer, and it also ships empty on purpose. Fill it in once you have decisions behind you, reading the principles back out of choices that cost you something. Each one carries its price and the test that would tell you it had been abandoned.
+
 ### Runtime brain context (v1.10)
 
 `scripts/brain-snapshot.py` writes a small deterministic markdown payload to `brain/.snapshot.md` (open flags, this week's must-do, recent decisions, voice and brand fields, staleness). Nine output-producing skills (meeting-prep, weekly-review, strategic-analysis, decision-framework, founder-coaching, knowledge-capture, unit-economics, priority-triage, brain-log) read it at task time so the output reflects current state instead of starting cold. Snapshot is opt-in via the file existing. Skills proceed with profile-only context if it is missing.
@@ -220,6 +233,8 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/founder-os:audit` - composite health report across readiness, lint, wiki, brain, and voice.
 - `/founder-os:housekeeping [fix]` - one maintenance sweep. Detect (default): every debt item with its fix command, read-only. `fix`: reversible fixes in dependency order plus a judgment punch-list. Say "run housekeeping".
 - `/founder-os:forcing-questions <initiative>` - six-question gate before new work starts.
+- `/founder-os:os-evolve [source]` - plan the next round of OS improvements into one dated plan file: last cycle scored, gaps with evidence, numbered execute prompts, reconcile lines. It plans; a separate session executes.
+- `/founder-os:founder-review [YYYY-MM]` - your own monthly review. A scorecard counted from your files, at most five coaching questions, at most three dated commitments. Private by default.
 - `/founder-os:devil <claim>` - devil's advocate; runs the output bias self-check (`rules/biases.md`) against a claim or decision. Read-only.
 - `/founder-os:ship-deliverable <path>` - final read-only gate before an external deliverable is sent.
 - `/founder-os:legal-setup` - set up legal-compliance for the founder's jurisdiction.
@@ -258,9 +273,9 @@ Unattended while-you-sleep runs are an opt-in upgrade: sync your OS to a remote 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Routines run on-open and on-demand out of the box; unattended is the opt-in remote upgrade.
 
-## Skills (87 total)
+## Skills (89 total)
 
-The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 87 skills and 38 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
+The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 89 skills and 40 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
 
 `founder-os-setup` is the entry point. Every other skill activates from natural language ("set up my voice", "what's on for today", "help me decide") or via `/founder-os:<command>`. Say "show me what you can do" (or run `/founder-os:menu`) for a shortlist tailored to your current state.
 

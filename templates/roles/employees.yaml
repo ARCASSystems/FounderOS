@@ -1,0 +1,60 @@
+# roles/employees.yaml - your digital-employee org chart.
+# Doctrine: rules/digital-employees.md. Read that first; this file is only the registry.
+#
+# THIS FILE SHIPS EMPTY ON PURPOSE. An empty org chart is honest. One full of
+# impressive job titles that have never run is worse than no org chart at all.
+# Add your first row when a job has recurred three times and you have corrected
+# it twice. That is the job worth writing down.
+#
+# One row per employee, carrying BOTH faces plus the charter:
+#   human face  : job_title, job_description (plain language, honest narrow scope,
+#                 including what it does NOT do), kpi, last_review
+#   machine face: skill_chain, inputs, output_surface, dispatch, run_record_source
+#   the charter : may_write, never, tools - the part that actually constrains
+#
+# HONESTY RULE. A row exists only for something that exists. Status values:
+#   active  = runs today and there is evidence (runs recorded, or items it filed)
+#   stale   = exists but is not currently earning its seat (say why in the description)
+#   gated   = defined and approved, but nothing triggers it yet
+#   retired = kept for provenance, never deleted (see the retirement protocol)
+#
+# THE CHARTER IS THE GRANT. `may_write` and `never` are for you to read.
+# `tools` is the exact permission handed to the run, and it is the only field
+# that constrains anything. Whatever dispatches an employee reads `tools` from
+# HERE, so there is no second list to drift from. A row with no `tools` does not
+# run at all. Never hand a propose-only job a blanket "run anything" grant - the
+# whole point is that "never sends" is enforced, not merely written down.
+#
+# FORMAT: flat scalars only, one "key: value" per line. Records start at "- id:".
+# Parsed with the standard library only (scripts/flat_yaml.py) so this needs no
+# pip install, matching the free-tier floor the rest of the OS holds.
+# skill_chain, inputs, tools, may_write and never are comma-separated lists
+# inside one string.
+#
+# NEVER put pay, commercial terms, or anyone's personal data in any field here.
+
+employees: []
+
+# ---------------------------------------------------------------------------
+# EXAMPLE ROW - copy the shape, delete the example. This one is illustrative
+# and is NOT active (it sits outside the `employees:` list above on purpose).
+#
+#  - id: follow-up-watcher
+#    job_title: Follow-up Watcher
+#    seat: BD
+#    job_description: Warns when the last outreach entry in the log is 14 or more
+#      days old, or when a warm contact has gone quiet. Does not draft the
+#      follow-up, does not judge whether the contact is worth keeping, and never
+#      contacts anyone.
+#    skill_chain: reads brain/log.md and context/clients.md, then adds one queue item
+#    inputs: brain/.snapshot.md, brain/log.md, context/clients.md
+#    output_surface: cadence/queue.md (BACKLOG)
+#    dispatch: manual, weekly ("run the follow-up watch")
+#    run_record_source: the queue items it filed
+#    may_write: cadence/queue.md
+#    never: send or draft outreach, edit context/clients.md, quote a price
+#    tools: Read, Grep, Glob
+#    kpi: no 14-day outreach gap passes without a warning
+#    version: 1.0
+#    last_review: null
+#    status: gated

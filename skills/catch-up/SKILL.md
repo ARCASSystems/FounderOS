@@ -55,6 +55,26 @@ When the same conversation arrives twice (say, a meeting-notes tool and the foun
 
 A proper noun the two sources disagree on is surfaced as provisional, never silently picked.
 
+## When one source is all you have
+
+Most of the time it is. You recorded a call on one device and there is no second version of it. That is the normal case, and it has a failure mode worth naming because it does not look like a failure.
+
+A single recording with no second source leaves **nearly every proper noun unconfirmed**. Not wrong, unconfirmed. A person's surname, a company name, a product name you heard once and never saw written down. The capture reads fluently and confidently, so the marked names quietly become facts the next time anything reads that file.
+
+**The fix is never a better transcript.** Re-recording the same audio reproduces the same gaps, because the information was never in the audio. What resolves an unconfirmed name is a second source, a document, or you confirming it. Three things follow:
+
+- When a capture is single-source, say so in the sweep report. "One source, so the names below are unconfirmed" costs one line and changes how the next reader treats the file.
+- An unconfirmed name that reaches a client-facing document or another person's inbox is the expensive version of this. Confirm before it crosses that line, never after.
+- If the same class of capture problem shows up twice - always single-source, always the same tool dropping speakers - that is a problem with how you capture, not with that day's notes. Fix the capture path.
+
+## Media you consume, not just meetings you attend
+
+A podcast, an audiobook, a course, a long video you were half-listening to. Those land the same way as a meeting and they are worth capturing, because most of what changes how you work arrives that way rather than in a call.
+
+They route differently, though. A meeting updates a person or a client record. Media updates **your method**: it belongs as a proposed insertion into whatever holds how you do the work, through `knowledge-capture`. Media in, proposed edits to your own playbook out, and you approve them. Never a silent rewrite of your method because something in your headphones sounded good.
+
+The one thing to filter: capture the training, not the entertainment. A recording that ran all afternoon may hold one useful arc and three hours of unrelated life. File the arc, skip the rest, and say how many you skipped.
+
 ## Rules
 
 - Raw in, raw kept. No summarizing, no cleanup beyond the glossary name pass.
