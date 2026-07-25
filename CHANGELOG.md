@@ -2,6 +2,53 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.43.0 - 2026-07-25
+
+The harness release. The OS gains doctrine for how it keeps itself usable as it grows, a few small loops that make an improvement land instead of being rediscovered next month, and an update channel that stops a new release from costing you the edits you made. Five new skills, four new standard-library scripts, no new dependency, and nothing you have to keep running.
+
+### New - updating no longer costs you your own edits
+
+- **An update is a conversation, not a download.** `/founder-os:update` still pulls the System Layer, then walks the release packs in `updates/` with you. One pack per release per group of changes, each stating what changed, who can skip it, the files it touches, and a step-by-step protocol. Same command, richer behavior, no second command to learn.
+- **Three-way merge on anything you may have edited.** Three versions exist: the old shipped file, the new shipped file, and yours. The update works out what the release actually changed and proposes that on top of your version, leaving your edits alone. One file, one diff, one yes, never a batch. On a genuine conflict it shows both and writes nothing, because a refused update is a working install and a silently merged one might not be.
+- **`os-config.yaml` makes an update about your install, not about the product.** It records which of ten modules you actually run, so parts about things you never adopted get skipped and announced rather than walked through. It also holds the two values shipped code must never assume, your document font and the author name on generated documents, which is why the ship gate reports those checks as skipped rather than passing on a guess when they are unset. The setup wizard writes it.
+- **Every pack names the one file to copy if you run no tooling at all.** A pack that cannot state that does not ship: a change that cannot be described as a by-hand step is too complicated to be an update.
+
+### New - the OS explains itself, and reviews itself
+
+- **`rules/os-as-harness.md`** names the four properties that keep an OS maintainable rather than merely documented: doctrine files say why they exist, scripts document their own contract, a repeated failure gets fixed at the engine instead of corrected again, and the OS fits the person running it. The standing guardrail is stated plainly - this is a self-observing OS, not a self-modifying one. Everything proposes, you decide.
+- **`rules/context-discipline.md`** covers long sessions: where tokens go, what belongs in code rather than a prompt, and the running build log plus the 30% rule that let a session which fills up resume with nothing lost.
+- **`rules/hands-resilience.md`** is the four-rung fallback ladder for when a tool you depend on stops working, plus a registry you fill in with your own tools. It ships with placeholder rows and no claims about what works.
+- **`rules/digital-employees.md`** is the org chart doctrine for once several recurring jobs run for you, including the rule that a job's charter IS its permission grant rather than prose beside it.
+- **`os-evolve`** turns an audit or a pile of flags into one dated plan with evidence per gap, numbered execute prompts, and a reconcile line each. It never executes its own prompts: a session that plans and executes in one breath marks its own homework.
+- **`founder-review`** reviews you rather than your work. A scorecard counted from your own files, at most five coaching questions, at most three dated commitments. Private by default, and a measure with no instrument reports "no instrument" instead of a guessed number.
+
+### New - four questions each morning, and the answers land where they belong
+
+- **`morning-loop`** asks at most four questions drawn from what is genuinely waiting, each with narrow options and a recommendation first, then writes every answer into the file that owns it and closes the thing that raised it in the same pass. That second half is the one usually skipped, and skipping it is why the same question shows up on five mornings. A quiet morning reports itself as quiet rather than inventing a question.
+- **It ends with a coach line**: yesterday's step scored from the files where the files can tell, and today's single step named. Your own hands, doable today, never a build the OS should be running itself. The weekly and monthly reviews read that line.
+- **`/today` and `/next` changed what counts as progress.** Surfaces report what moved (a reply, a decision, a payment), not how many items were closed, and when nothing moved that is the line. Work needing your own hands surfaces as an action in your words, never as another entry on a list, because answering a full plate by adding to it is not help.
+
+### New - the OS is honest about what it does not know
+
+- **A name heard once stays unconfirmed until you say otherwise.** Something said in a call and never spelled out now waits in a ledger instead of sitting in your notes reading like a fact. Confirming it records the value and names the file it belongs in, and writing it there stays your step. The ledger refuses to hold an email, a phone number, or an amount. Single-source capture is the normal case, and it leaves nearly every proper noun unconfirmed while reading perfectly fluent - `catch-up` now says that out loud, including that the fix is a second source rather than a better transcript.
+- **A verdict loop for recurring jobs.** One line after a run you actually saw is the whole input to a review that proposes changes to the job rather than asking you to correct it again. Review is due on two triggers only, and with no verdicts nothing is ever due: a review with no evidence to read is an invitation to invent a performance story. The charter audit catches the common invisible failure, a job whose description says it only proposes while its actual grant covers every script on the machine.
+- **`employee-review`** turns those verdicts into a shown diff on the job's definition, and never applies its own diff. Proposing retirement is a valid outcome, and a retired row keeps its place with a dated why.
+- **`capture-sweep`** notices what was recorded and proposes where each item goes, sorted into a conversation, training media, internal talk, or personal. Personal is skipped and counted, never filed.
+
+### New - a skill that nothing can find never runs
+
+- **Verify checks skill reachability** (Check 9). A well-written skill that no command names, no registry row lists, no docs entry mentions, and no other skill points at is reachable from nothing while looking perfectly healthy from the outside. `skills/discoverable.yaml` promotes the handful worth reaching the moment you describe a situation rather than after the model reads a registry.
+
+### Sharper - three surfaces you already use
+
+- **The ship gate runs a deterministic scan first.** A leftover `[FILL]`, last month's date, or a tool credited as the author is caught by a grep instead of by your attention, which leaves the reading passes free for whether the content is actually true. SKIP is a first-class result naming what a text scan cannot judge, so nothing is silently guessed.
+- **Closing a queue item takes a one-line verdict** - ok, needs-work, or failed, never self-graded, and skipping is free. Those lines are the only honest record of what your OS is good at.
+- **Lint reports doctrine that never says why it exists**, as one advisory line, forward-only.
+
+### Ships empty on purpose
+
+The employees registry, the banned-words exceptions file, the culture template, the needs-attention file, and the workflow map. An empty org chart is honest, and one full of jobs that never ran is worse than none. Each says what fills it in and when.
+
 ## v1.42.1 - 2026-07-16
 
 The clean-machine patch. A full end-to-end install test on a pristine machine (ZIP path, a rambling non-technical founder at the wizard, no API key, no git identity) surfaced one blocker and a set of gaps between claim and behavior. All fixed here. No new skills or commands.
