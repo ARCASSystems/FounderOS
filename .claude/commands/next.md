@@ -96,6 +96,12 @@ If today's anchors are stale, surface that explicitly.
 
 If the recommendation came from Rule 1 (needs-input blocker), the SECOND-BEST line should suggest unblocking a different priority or deal that doesn't depend on the same ask. If no such option exists, write "Address the blocker first - all active work depends on it."
 
+### Step 4.5. Two rules on what you recommend
+
+**It has to be their hands.** The recommendation is something the founder does: a call, a message, a decision, a piece of work. Never "review the queue", "triage your flags", or anything whose output is a tidier OS. If the highest-ranked item is really work the OS should be doing itself, say that plainly and recommend the next thing that genuinely needs a person. A recommendation that maintains the system instead of moving the business is the failure mode this rule exists to stop.
+
+**Rank on what would move, not on what would close.** Rule 3 outranks Rule 6 for exactly this reason: a stalled deal is a thing that could move, and a tidy list is not. When two candidates score alike, prefer the one where something outside the OS changes - someone replies, a decision lands, money arrives. Prefer the one that only changes the OS last, and say so when that is all that is left.
+
 ### Step 5. Stop
 
 Do not invoke other skills. Do not write to any file. /next is read-only - the founder's job is to act, your job is to recommend. The founder can run `/today` for the broader picture, or run a specific skill for execution.

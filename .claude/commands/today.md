@@ -44,6 +44,14 @@ One-screen view of what matters today. No scrolling. No prose. Read-only.
 
 7. If a section has nothing, write the header and one line: `none open.` Do not skip the section.
 
+## What counts as progress here
+
+Two behavior rules on what this brief reports. They change what the founder sees on a busy day, so they are not stylistic.
+
+**Read back what moved, not what got closed.** The LAST 3 SESSIONS lines name outcomes: a reply that came in, a decision that got made, a thing that shipped, a payment that landed. Not "three items closed". Closing items is motion, and motion is easy to generate and easy to mistake for progress. If a day genuinely moved nothing, the honest line is that nothing moved. A brief that always looks productive is a brief nobody believes by the second week.
+
+**Work that needs the founder's own hands surfaces as an action, not as another thing on a list.** If the anchor requires them to make a call, send a message, or decide something, write it as the action in their words ("call the supplier back about the delivery date"), not as a queue reference. Never answer a full plate by adding to it. When the plate is genuinely full, say which one thing matters today and that the rest can wait.
+
 ## Rules
 
 - Read-only. Do not write to any file.

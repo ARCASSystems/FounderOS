@@ -421,6 +421,17 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** Mornings, or the end of a day with meetings in it.
 - **Follow-up.** `catch-up` files the raw words; this decides what each item is for. Personal items are skipped and counted, never filed. Slash command: `/founder-os:capture-sweep`.
 
+### morning-loop
+
+- **Say.** "morning loop", "run my morning", or "what needs me today".
+- **Outcome.** At most four questions drawn from what is genuinely waiting (a blocked queue item, an unanswered ask, a commitment gone quiet, a provisional fact, a flag past its decay date), each with two or three narrow options and a recommendation first. Then every answer written back into the file that owns it, and one coach line naming today's single step. A quiet morning reports "Nothing needs you this morning" rather than inventing a question.
+- **Reads.** `brain/needs-attention.md`, `cadence/queue.md`, `cadence/weekly-commitments.md`, `cadence/daily-anchors.md`, `brain/flags.md`, `brain/unconfirmed-facts.md`, `brain/employees.md`, and yesterday's coach line in `brain/log.md`.
+- **Writes.** Whichever files your answers belong to (the queue, the commitments, the flags, the ledgers), plus one `#morning-loop` entry in `brain/log.md` carrying the coach line. It closes the source that raised each question in the same pass.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete. It degrades gracefully: it reads only the files that exist.
+- **When to run.** First thing, once a day. It refuses a second run the same day.
+- **Follow-up.** The coach line is read by `weekly-review` and by `founder-review`, so a run of slipped days becomes coaching material at the monthly pass rather than a scolding here. Slash command: `/founder-os:morning-loop`.
+
 ### forcing-questions
 
 - **Say.** "should I start this", "is this worth doing", or "force me to think this through".

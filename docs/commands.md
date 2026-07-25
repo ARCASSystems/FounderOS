@@ -218,6 +218,16 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **When to run.** Whenever you cannot decide what to do next, or after a long break.
 - **Follow-up.** Run it. Or push back if the recommendation is wrong, and the model adjusts.
 
+### `/founder-os:morning-loop`
+
+- **Or say.** "morning loop" / "run my morning" / "what needs me today"
+- **Outcome.** At most four questions drawn from what is actually waiting, each with narrow options and a recommendation first, then a report of where every answer landed and one coach line naming today's single step. A quiet morning says so instead of inventing a question.
+- **Args.** None.
+- **Writes.** The files your answers belong to (queue, commitments, flags, the ledgers), plus one `#morning-loop` entry in `brain/log.md` with the coach line. It also closes whatever raised each question, in the same pass.
+- **Prereqs.** `/founder-os:setup` complete. It reads only the files that exist.
+- **When to run.** First thing, once a day. It refuses a second run the same day.
+- **Follow-up.** Do the one step. The coach line is scored by the weekly and monthly reviews.
+
 ### `/founder-os:founder-review [YYYY-MM]`
 
 - **Or say.** "review my month" / "score my month" / "coach me through the month"

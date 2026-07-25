@@ -185,6 +185,17 @@ Four rules describe how the OS stays usable as it grows, rather than becoming a 
 
 `templates/culture.md` is the culture layer, and it also ships empty on purpose. Fill it in once you have decisions behind you, reading the principles back out of choices that cost you something. Each one carries its price and the test that would tell you it had been abandoned.
 
+### The daily loop (v1.43)
+
+`/founder-os:morning-loop` is the human half of everything above. The OS notices things and writes them into files, and files do not ask you anything. The loop asks at most four questions drawn from what is genuinely waiting, writes each answer into the file that owns it, then closes the thing that raised it so it stops coming back. It ends with one coach line naming today's single step, which the weekly and monthly reviews read. Once a day, and a quiet morning reports itself as quiet rather than inventing a question.
+
+Two behavior rules ride with it, on `/today` and `/next`:
+
+- **Surfaces report what moved, not what got closed.** A reply that came in, a decision that landed, a payment that arrived. Closing items is motion, and motion is easy to mistake for progress. A brief that always looks productive is one nobody believes by the second week, so when nothing moved that is the honest line.
+- **Work needing your own hands surfaces as an action, not as another item on a list.** Never answer a full plate by adding to it. When the plate is full, the OS names the one thing that matters today and says the rest can wait.
+
+Two templates support the loop. `templates/brain/needs-attention.md` is where the OS parks a question only you can answer, and answered rows stay in place so a returning question is distinguishable from a new one. `templates/workflow-map.md` maps each role to the workflows that actually run underneath it, splitting their stages into the deterministic ones that belong in code and the judgment ones that need a model plus a named check. It ships empty, because a map of workflows you intend to build stops matching reality within a month.
+
 ### Runtime brain context (v1.10)
 
 `scripts/brain-snapshot.py` writes a small deterministic markdown payload to `brain/.snapshot.md` (open flags, this week's must-do, recent decisions, voice and brand fields, staleness). Nine output-producing skills (meeting-prep, weekly-review, strategic-analysis, decision-framework, founder-coaching, knowledge-capture, unit-economics, priority-triage, brain-log) read it at task time so the output reflects current state instead of starting cold. Snapshot is opt-in via the file existing. Skills proceed with profile-only context if it is missing.
@@ -273,9 +284,9 @@ Unattended while-you-sleep runs are an opt-in upgrade: sync your OS to a remote 
 
 All fabric pieces are optional. The slash commands ship active. Hooks register in `.claude/settings.json` and ship active. Routines run on-open and on-demand out of the box; unattended is the opt-in remote upgrade.
 
-## Skills (91 total)
+## Skills (92 total)
 
-The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 91 skills and 42 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
+The full skill registry lives in one place: [`skills/index.md`](skills/index.md) - all 92 skills and 43 commands in one table, each with its status and one-line purpose. The human-readable long-form (what each skill says, reads, writes, prereqs, and follow-ups) is [`docs/skills.md`](docs/skills.md), which mirrors that registry.
 
 `founder-os-setup` is the entry point. Every other skill activates from natural language ("set up my voice", "what's on for today", "help me decide") or via `/founder-os:<command>`. Say "show me what you can do" (or run `/founder-os:menu`) for a shortlist tailored to your current state.
 
