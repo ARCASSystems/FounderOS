@@ -1,0 +1,42 @@
+# skills/discoverable.yaml - which skills the model must be able to find on its own.
+#
+# THE PROBLEM THIS SOLVES. A skill only runs if something can find it. Claude Code
+# discovers skills natively in `.claude/skills/`. This OS keeps them in `skills/`,
+# which is not that place - they are reached through CLAUDE.md, the registry in
+# `skills/index.md`, and the slash commands. That works, and it is one indirection
+# away from the model. For the handful of skills you want reached the instant you
+# describe the situation, without a slash command and without the model reading a
+# registry first, name them here.
+#
+# `python scripts/skills_sync.py --apply` copies the named skills into
+# `.claude/skills/` so Claude Code sees them natively. `--check` reports drift
+# between the two. `--reachability` answers the wider question: is any skill in
+# this OS reachable from nothing at all?
+#
+# `skills/` is the single source. The copy under `.claude/skills/` is generated and
+# gitignored - never edit it, the next --apply overwrites it.
+#
+# FORMAT: flat records, read by scripts/flat_yaml.py (standard library only, no
+# pip install). Two blocks:
+#   discoverable - skills to copy into .claude/skills/, each with why it earns that
+#   never_touch  - directories in .claude/skills/ the sync must leave alone
+#                  (skills from a plugin, or ones you put there by hand)
+#
+# Keep this list SHORT. Copying all of them makes every skill compete for the
+# model's attention at once, which is a different way to be undiscoverable.
+
+discoverable:
+  - skill: today
+    why: asked for by name every morning, and the answer is worthless if it arrives late
+  - skill: catch-up
+    why: fires on "I captured some notes", which is a situation rather than a command
+  - skill: brain-log
+    why: fires on "log this" mid-conversation, when reaching for a command breaks the thought
+  - skill: queue
+    why: the plate. Asked in a dozen phrasings, none of which look like a command name
+  - skill: founder-next-move
+    why: the propose engine. The whole point is that it runs when you are stuck, not when you remember it exists
+
+never_touch:
+  - skill: supabase
+    why: example of a plugin-provided skill - not ours to copy or delete

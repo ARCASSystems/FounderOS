@@ -399,6 +399,28 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **When to run.** When stuck. When burning out. When confusing busy with productive.
 - **Follow-up.** `priority-triage` or `decision-framework` to act on what surfaced. No dedicated slash command.
 
+### employee-review
+
+- **Say.** "review the follow-up watcher", "how is that job doing", or "performance review for <id>".
+- **Outcome.** One job read back in role language (what it is for, what the verdicts say with the why-lines quoted exactly, whether its measure held), then at most three proposed changes to its definition, each as a shown diff.
+- **Reads.** Its row in `roles/employees.yaml`, its verdicts (`python scripts/employee_verdict.py list --employee <id>`), the queue items it filed including their close-line verdicts, its charter audit, and its engine script if it runs one.
+- **Writes.** Nothing without your yes. On an approved diff: the reviewed row only, plus a `last_review` stamp and a re-render of the view.
+- **Voice rules.** No.
+- **Prereqs.** A row in `roles/employees.yaml` and at least one recorded verdict or filed item. With no evidence it refuses rather than inventing a performance story.
+- **When to run.** Monthly, or the moment three needs-work verdicts land inside thirty days.
+- **Follow-up.** Proposing retirement is a valid outcome, and a retired row keeps its place with a dated why. The same loop pointed at you instead of a job is `founder-review`. Slash command: `/founder-os:employee-review`.
+
+### capture-sweep
+
+- **Say.** "sweep my meetings", "anything new to capture", or "check my recorder".
+- **Outcome.** Every new capture sorted into exactly one of four types (a conversation with a client or contact, training media, internal talk, personal), with the sorting decision printed per item, then proposed queue items and provisional-fact rows you approve in one batch.
+- **Reads.** `capture/inbox/`, the meeting recorder bound in `stack.json` if one is connected and reachable, and the marker at `brain/.capture-sweep.json`.
+- **Writes.** Queue items in `cadence/queue.md`, rows via `python scripts/unconfirmed_facts.py add`, and its own marker. Never a person's record, never a transcript, never personal data.
+- **Voice rules.** No.
+- **Prereqs.** None. With no recorder connected it sweeps the inbox and says plainly that no recorder is bound.
+- **When to run.** Mornings, or the end of a day with meetings in it.
+- **Follow-up.** `catch-up` files the raw words; this decides what each item is for. Personal items are skipped and counted, never filed. Slash command: `/founder-os:capture-sweep`.
+
 ### forcing-questions
 
 - **Say.** "should I start this", "is this worth doing", or "force me to think this through".

@@ -150,6 +150,26 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **When to run.** Returning after a gap and needing one orientation pass. Before a planning session. When a question spans priorities, pipeline, decisions, and flags at once.
 - **Follow-up.** Ask for priority triage if the read shows overload, or run `/today` for the day view.
 
+### `/founder-os:os-evolve [source]`
+
+- **Or say.** "evolve the OS" / "what should the OS fix about itself" / "plan the next OS cycle"
+- **Outcome.** One dated plan file: last cycle scored (shipped, partial, or dead), numbered gaps each citing its evidence, paste-ready execute prompts, an unchecked reconcile line per prompt, and a kill column naming what this cycle deliberately does not do.
+- **Args.** Optional path to the audit or plan to evolve from. Empty uses the newest file in `plans/`.
+- **Writes.** Exactly one file, `plans/os-evolve-<date>.md`. Never `CLAUDE.md`, never `rules/`, never a User Layer file.
+- **Prereqs.** None, though it earns its place once you have a few flags or an audit behind you.
+- **When to run.** After an audit, after two or three flags pile up, or when the OS fails the same way twice. Roughly fortnightly, never on a schedule.
+- **Follow-up.** Run the first prompt in a separate session and let that session fill in the reconcile line. This command never executes its own prompts.
+
+### `/founder-os:employee-review <id>`
+
+- **Or say.** "review the follow-up watcher" / "how is that job doing"
+- **Outcome.** One recurring job read back in role language (what it is for, what its verdicts say with the why-lines quoted exactly, whether its measure held), then at most three proposed changes to its definition as shown diffs.
+- **Args.** The employee id from `roles/employees.yaml`. Empty lists which jobs have a review due.
+- **Writes.** Nothing without your yes. On an approved diff: the reviewed row only, plus a `last_review` stamp.
+- **Prereqs.** A row in `roles/employees.yaml` and at least one verdict or filed item. With no evidence it refuses rather than inventing a performance story.
+- **When to run.** Monthly, or the moment three needs-work verdicts land inside thirty days.
+- **Follow-up.** Proposing retirement is a valid outcome, and a retired row keeps its place with a dated why.
+
 ---
 
 ## Retrieval and recall
@@ -198,6 +218,16 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **When to run.** Whenever you cannot decide what to do next, or after a long break.
 - **Follow-up.** Run it. Or push back if the recommendation is wrong, and the model adjusts.
 
+### `/founder-os:founder-review [YYYY-MM]`
+
+- **Or say.** "review my month" / "score my month" / "coach me through the month"
+- **Outcome.** A scorecard counted from your own files (must-dos landed, log days, days since last outreach, work shipped, queue closed versus opened, flags older than 14 days, decisions made versus parked, last month's commitments), then at most five coaching questions, ending in at most three commitments with dates.
+- **Args.** Optional month as `YYYY-MM`. Empty scores the month just ended.
+- **Writes.** At most three items in `cadence/queue.md` titled `Review commitment: <your words>`, and one entry in `brain/log.md`. Nothing into any file another person reads.
+- **Prereqs.** `/founder-os:setup` complete, plus about a month of use so the counts mean something.
+- **When to run.** Monthly, first Sunday, riding the weekly review rhythm. It refuses a second run in the same month unless you ask.
+- **Follow-up.** The commitments feed the daily coach line, and next month opens by scoring them.
+
 ### `/pre-meeting <subject>`
 
 - **Or say.** "prep me for my call with [name]"
@@ -221,6 +251,16 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 ---
 
 ## Capture and processing
+
+### `/founder-os:capture-sweep`
+
+- **Or say.** "sweep my meetings" / "anything new to capture" / "check my recorder"
+- **Outcome.** Every new capture sorted into exactly one of four types (a conversation with a client or contact, training media, internal talk, personal), with the sorting decision printed per item, then proposed queue items and provisional-fact rows you approve in one batch.
+- **Args.** None.
+- **Writes.** Queue items in `cadence/queue.md`, rows in the provisional-fact ledger, and its own marker. Never a person's record, never a transcript, never personal data.
+- **Prereqs.** None. With no recorder connected it sweeps `capture/inbox/` and says plainly that no recorder is bound.
+- **When to run.** Mornings, or at the end of a day with meetings in it.
+- **Follow-up.** `/founder-os:catch-up` files the raw words; this decides what each item is for. Personal items are skipped and counted, never filed.
 
 ### `/founder-os:catch-up`
 

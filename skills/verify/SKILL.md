@@ -2,7 +2,7 @@
 name: verify
 description: >
   Check that Founder OS is healthy. Say "verify the OS", "health check", "is the OS working",
-  "check my setup" (or run /founder-os:verify). Returns a structured report across 8 substrate
+  "check my setup" (or run /founder-os:verify). Returns a structured report across 9 substrate
   checks, each marked PASS / WARN / FAIL with a one-line reason. Read-only. Never auto-fixes.
 why: "Checks that the OS substrate is actually wired up correctly rather than just declaring setup done - hooks, scripts, and counts that disagree silently break skills."
 enhance: "Run after every setup or update to catch wiring issues early - a FAIL on scripts or hooks means several skills will behave incorrectly on every subsequent run."
@@ -14,11 +14,11 @@ mcp_requirements: []
 
 Runs on: local-exec - runs a stdlib syntax check (`ast.parse`, writes nothing to disk) on the shipped scripts as part of the check; on a cloud or read-only surface I report the checks I can read and mark the exec ones as not run.
 
-Read-only health check across 8 substrate checks. Returns one screen. Never auto-fixes.
+Read-only health check across 9 substrate checks. Returns one screen. Never auto-fixes.
 
-## The eight checks
+## The nine checks
 
-Run all eight checks. Each produces one of: `[PASS]`, `[WARN]`, or `[FAIL]`.
+Run all nine checks. Each produces one of: `[PASS]`, `[WARN]`, or `[FAIL]`.
 
 ### Check 1 - Plugin surface integrity
 
@@ -186,6 +186,23 @@ is the repo path with separators replaced by hyphens.
   `[PASS] Auto-memory presence (MEMORY.md, <N> entries)`
 - MEMORY.md missing -> `[WARN] Auto-memory presence (MEMORY.md not found - run setup wizard to create it)`
 
+### Check 9 - Every skill is reachable from something
+
+```
+python scripts/skills_sync.py --reachability --json
+```
+
+A skill only ever runs if something can find it. A well-written skill that no slash command names, no registry row lists, no docs entry mentions, and no other skill points at is reachable from nothing, and the OS behaves as though it were never written. Nothing about that failure looks broken from the outside, which is why it needs its own check.
+
+The script counts a skill as reachable if any one of these names it: a slash command, `skills/index.md`, `CLAUDE.md`, `docs/skills.md`, another skill's body, or `skills/discoverable.yaml`.
+
+Outcome:
+- Every skill reachable -> `[PASS] Skill reachability (<N>/<N> reachable, <M> natively discoverable)`
+- Any skill reachable from nothing -> `[FAIL] Skill reachability (<K> skills reachable from nothing: <names, capped at 5>)`
+- Script missing or no script access -> `[WARN] Skill reachability (not run - no script access)`
+
+A FAIL here is fixed by naming the skill somewhere: add its registry row, add a slash command, or promote it in `skills/discoverable.yaml`. Never by deleting the check.
+
 ## Output format
 
 Plain text. Maximum 30 lines including the header. Exactly this shape:
@@ -202,8 +219,9 @@ FounderOS v<version> - health check
 [PASS] Wiki integrity (0 issues)
 [FAIL] Cadence staleness (daily-anchors 4 days stale - refresh before planning)
 [PASS] Auto-memory presence (MEMORY.md, 12 entries)
+[PASS] Skill reachability (89/89 reachable, 5 natively discoverable)
 
-6 PASS - 1 WARN - 1 FAIL - next: refresh cadence/daily-anchors.md
+7 PASS - 1 WARN - 1 FAIL - next: refresh cadence/daily-anchors.md
 ```
 
 Rules for the output:

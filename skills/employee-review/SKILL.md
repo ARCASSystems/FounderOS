@@ -1,0 +1,51 @@
+---
+name: employee-review
+description: Review one digital employee and propose changes to it. Say "review the follow-up watcher", "how is that job doing", "performance review for <id>", or run /founder-os:employee-review <id>. Reads its registry row, its verdicts, and the items it filed, then proposes upgrades to its definition as a shown diff - prompt, chain, tool grant. Never applies its own diff. This reviews a recurring job the OS runs, not you (that is founder-review).
+why: "Verdicts pile up and nothing reads them, so a job that keeps producing bad output keeps its seat. This turns the record of what went wrong into a concrete change to the thing that produced it, which is the only way a correction stops repeating."
+enhance: "Run it monthly, or the moment three needs-work verdicts land inside thirty days. Record verdicts as you go or there will be nothing here to read."
+allowed-tools: ["Read", "Grep", "Glob", "Bash"]
+---
+
+# Employee review (propose only)
+
+Runs on: local-exec - reads the verdict ledger through a script. On a surface that cannot run scripts, read `brain/employees.md` instead and say that the counts come from the last render rather than from now.
+
+The upgrade half of the performance loop in `rules/digital-employees.md`. Monitoring speaks role language ("it flagged something I had already handled"). This review turns that into workflow language: a concrete diff on the job's definition, which you approve or reject.
+
+One employee per run.
+
+## Inputs
+
+1. **The registry row** in `roles/employees.yaml` - both faces plus the charter.
+2. **Its verdicts:** `python scripts/employee_verdict.py list --employee <id>`
+3. **What it actually filed** - the items in `cadence/queue.md` (including DONE) that came from this job, and the close-line verdicts on them.
+4. **Its charter, audited:** `python scripts/employee_verdict.py charters --json` - whether its grant is wider than its job description claims.
+5. **Its engine**, if it runs one: the script or skill named in `skill_chain`.
+
+Note on point 3: a close-line verdict on a queue item is evidence of the same grade as a recorded verdict, and it is often the more honest one because you wrote it at the moment you saw the output. Read both. Do not convert one into the other: the verdict ledger has a single writer, and the queue is a separate file with its own. This review reads both ledgers so the whole picture is in one place without adding a second writer to either.
+
+## Procedure
+
+1. **Refuse a review with no evidence.** Zero verdicts and nothing filed means there is nothing to review. Say so in one line and stop. Do not construct a performance narrative out of a job description - that is how a review becomes fiction.
+
+2. **The review, in role language** (this is the part you read):
+   - What the job is, quoted from its `job_description`.
+   - What the verdicts say: the counts, and the why-lines **quoted exactly**. Those lines are the evidence. Never paraphrase one into something stronger than what was written.
+   - Whether its measure held, checked against what it actually filed rather than assumed.
+
+3. **The upgrade proposal, in workflow language** - and only where the evidence points at the thing that generates the output, not at the day it went wrong. A correction you have made twice is a bug in the generator. Propose at most three changes, each as a shown diff on the real file:
+   - a prompt or skill-body change
+   - a chain change (add or drop a step in `skill_chain`)
+   - a grant change - **narrowing only.** Widening a grant is its own decision and never rides along inside a review.
+
+4. **Wait for a yes per diff.** Apply only what was approved. Then stamp `last_review: <today>` on the row and re-run `python scripts/employee_verdict.py render`.
+
+5. **Proposing retirement is a valid outcome.** If the pattern says this job should not exist - it loses to you on speed or accuracy, or the work stopped recurring - say that plainly and propose retirement. Per the doctrine, a retired row keeps its place with `status: retired` plus a dated one-line why at the front of its job description. It is never deleted. The row is the provenance, and the org chart stays honest about what used to work here.
+
+## Hard limits
+
+- **Propose only.** No diff lands without an explicit yes.
+- One employee per run. A sweep across all of them is a different job.
+- Never edit any row other than the one under review.
+- No pay, no commercial terms, and no personal data in the registry. Not in a job description, not in an example.
+- Never widen a tool grant here. Ever.

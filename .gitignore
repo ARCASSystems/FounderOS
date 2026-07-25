@@ -17,6 +17,11 @@ brain/.snapshot.md
 brain/rants/
 brain/knowledge/
 brain/needs-input.md
+brain/employee-verdicts.jsonl
+brain/employees.md
+brain/unconfirmed-facts.jsonl
+brain/unconfirmed-facts.md
+brain/.capture-sweep.json
 clients/
 user/
 drafts/
@@ -75,6 +80,11 @@ tests/
 !.github/tests/
 !.github/tests/*.py
 .pytest_cache/
+
+# Generated copies of skills promoted for native discovery in
+# skills/discoverable.yaml. skills/ is the source; these are rebuilt by
+# `python scripts/skills_sync.py --apply` and must never be edited or tracked.
+.claude/skills/
 
 # Python bytecode
 __pycache__/
