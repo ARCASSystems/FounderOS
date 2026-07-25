@@ -86,6 +86,25 @@ Steps:
 6. Validate the file is parseable JSON before writing. If parse fails, stop and surface the error.
 7. Confirm to the user: "Wrote your tool stack to `stack.json`. Skills that adapt to your tools now read from here."
 
+### 5.0b Write os-config.yaml
+
+`stack.json` records which tools the founder uses. `os-config.yaml` records which parts of the OS this install actually runs, plus the two brand values shipped code must never assume. Write it right after `stack.json`, from answers you already have. Do not run a new interview for it.
+
+Steps:
+
+1. Read the existing `os-config.yaml` at the root. Preserve every comment - they are what explain the file to the founder six months from now.
+2. **`brand.document_author`** - their own name, as it should appear as the author on a generated document. You already have this from identity, so write it. One line of why: without it, generated Office files credit the library that produced them, which is a bad look on a client deliverable.
+3. **`brand.font`** - the font their documents and pages should use. Write it only if they named one. If they did not, leave it unset and say: "Left the document font unset. The pre-ship gate will skip the font check until you fill it in, rather than assuming a default." Never write a font the founder did not name.
+4. **`modules`** - `yes` or `no` per module, set from what this setup actually built:
+   - `daily_loop`, `brain`, `clients`: `yes` on any normal setup.
+   - `voice`: `yes` only if the voice interview was completed, `no` if it went to the backlog.
+   - `wiki`, `employees`, `unconfirmed_facts`, `speech`, `legal`: `no` unless the founder explicitly asked for them. These are later-adoption modules and `no` is the right answer for almost every first install.
+   - Do not walk the founder through all ten. Set them from what happened and mention the file exists.
+5. **`install.method`** - `zip`, `git`, or `plugin`, from the mode already detected.
+6. Confirm in one line: "Wrote `os-config.yaml`. Updates will skip the parts of the OS you have not adopted, so you never get walked through a change that does not apply to you."
+
+If they ask, the honest framing is: `no` is not a lesser install. Most founders run four or five modules and never need the rest.
+
 ### 5.1 Skeleton Projects
 For each remaining workstream from 0.3 that wasn't built in Phase 4:
 - Create the folder with a stub CLAUDE.md and .mcp.json

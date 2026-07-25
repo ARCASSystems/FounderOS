@@ -1,0 +1,64 @@
+# os-config.yaml - what this install has adopted, and what your brand actually is.
+#
+# WHY THIS FILE EXISTS. Two jobs, both about not being told things that do not
+# apply to you.
+#
+#   1. Updates. An update pack declares which modules it touches. If you never
+#      adopted the digital-employee layer, the part of an update about digital
+#      employees is skipped rather than walked through and dismissed.
+#   2. Brand specifics. Things like your document font and the author name on
+#      generated documents are YOURS. Shipped code never assumes a default for
+#      them: the pre-ship gate reads them from here, and where a value is unset
+#      it says the check was skipped rather than inventing a value and passing.
+#
+# The setup wizard writes this file. Edit it any time - it is plain text, and
+# nothing here is secret. `stack.json` is the sibling file holding which tools
+# you use; this one holds which parts of the OS you actually run.
+#
+# FORMAT: flat `key: value` lines under a section, two-space indent. Read with
+# the standard library only, no pip install.
+
+# ---------------------------------------------------------------------------
+# Your brand. Unset means the pre-ship gate reports those checks as skipped
+# rather than guessing. Fill them in and the gate starts enforcing them.
+brand:
+  # The font your generated documents and pages should use.
+  font:
+  # The name that must appear as the author on generated documents. Office files
+  # otherwise credit the library that made them, which is a bad look on a
+  # client deliverable.
+  document_author:
+
+# ---------------------------------------------------------------------------
+# Which modules this install has adopted. `no` is not a lesser install: most
+# founders need four or five of these and nothing else. An update pack skips
+# any section whose module is `no`.
+modules:
+  # The daily loop: queue, today, next, morning-loop.
+  daily_loop: yes
+  # The brain layer: log, flags, rants, knowledge, dream.
+  brain: yes
+  # Voice and brand profiles, and the writing skills that read them.
+  voice: yes
+  # Client and pipeline tracking.
+  clients: yes
+  # The wiki layer: wikilinks, lint, wiki-build, ingest with provenance.
+  wiki: no
+  # The digital-employee org chart, verdict loop, and reviews.
+  employees: no
+  # The provisional-fact ledger for names heard once.
+  unconfirmed_facts: no
+  # Voice input and output (add-voice, add-mouth).
+  speech: no
+  # Legal reference layer for your jurisdiction.
+  legal: no
+
+# ---------------------------------------------------------------------------
+# How you install and update. Set by the wizard; correct it if you change how
+# you run the OS.
+install:
+  # zip | git | plugin
+  method:
+  # Set to `no` if you prefer to read update packs and apply changes by hand.
+  # Every pack ships with a by-hand fallback for exactly this case.
+  auto_apply_packs: yes

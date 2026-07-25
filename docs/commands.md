@@ -455,12 +455,12 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 ### `/founder-os:update`
 
 - **Or say.** "update Founder OS" / "pull the latest"
-- **Outcome.** A diff of System Layer files (skills, templates, commands, hooks) between your installed version and the latest release. Asks for confirmation before applying. Subcommand `check` previews without writing. Subcommand `rollback` restores the previous System Layer.
+- **Outcome.** Two halves. First the System Layer files (skills, templates, commands, hooks) are staged, verified, and applied. Then the release packs in `updates/` are walked with you: what changed, filtered to the modules your `os-config.yaml` says you actually run, and every change to a file you may have edited proposed as a diff you accept per file. Subcommand `check` previews the version only. Subcommand `rollback` restores changed files and removes ones the update introduced.
 - **Args.** Optional `check` or `rollback`.
-- **Writes.** `skills/`, `templates/`, `.claude/commands/`, `.claude/hooks/`. Personal data (`core/`, `context/`, `cadence/`, `brain/`) is never touched.
-- **Prereqs.** Plugin installed via Path A (marketplace) or Path B (git clone).
-- **When to run.** When a new release ships and you want it. Always run `check` first.
-- **Follow-up.** Open the changelog (`CHANGELOG.md`) to read what changed.
+- **Writes.** `skills/`, `templates/`, `.claude/commands/`, `scripts/`, `updates/`, `docs/`, `VERSION`. Your `CLAUDE.md`, `rules/`, and `.claude/settings.json` get a proposed diff, never an overwrite. Personal data (`core/`, `context/`, `cadence/`, `brain/`, `stack.json`, `os-config.yaml`) is never touched.
+- **Prereqs.** A `VERSION` file at the root. Works on a git install (fetch) and on a ZIP install with no git (re-download and overlay).
+- **When to run.** When a new release ships and you want it. Run `check` first if you only want to know whether one exists.
+- **Follow-up.** Anything you deferred during the pack walk is named with how to come back to it. `os-config.yaml` is worth filling in once so future updates skip what does not apply to you.
 
 ### `/founder-os:uninstall`
 

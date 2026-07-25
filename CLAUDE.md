@@ -24,12 +24,22 @@ The wizard asks you questions about who you are, what you run, what tools you us
 
 Founder OS ships with `/founder-os:update` to pull the latest System Layer files (skills, templates, commands, hooks) without touching your personal data. Run it whenever you want. The command tells you what is changing before applying.
 
-Your User Layer (identity, context, cadence, brain, network, clients) is never auto-updated. That is your data and stays exactly where you put it.
+Your User Layer (identity, context, cadence, brain, network, clients, `stack.json`, `os-config.yaml`) is never auto-updated. That is your data and stays exactly where you put it.
 
 Commands:
-- `/founder-os:update` - check for updates, show changelog, apply on confirmation
+- `/founder-os:update` - check for updates, show changelog, walk the release packs, apply on confirmation
 - `/founder-os:update check` - dry-run, report local vs remote version only
 - `/founder-os:update rollback` - revert the last update
+
+### An update is a conversation, not a download (v1.43)
+
+Pulling new files is the easy half. Pulling them into an OS you have personalized for months is where it goes wrong, and the failure is quiet: an overwrite takes your edits away and you find out weeks later when something you fixed is broken again.
+
+So updates arrive as **packs** in `updates/`, one per release per group of changes. Each pack states what changed, who can skip it, the files it touches with the module each belongs to, a step-by-step integration protocol, and a by-hand path naming the one file to copy if you run no tooling at all. **A pack that cannot state that by-hand path does not ship** - if a change cannot be described as a by-hand step, it is too complicated to be an update.
+
+`os-config.yaml` at the root is what makes a pack about your install rather than about the product. It records which of the ten modules you actually run, so the parts about modules you never adopted get skipped and announced rather than walked through. It also holds the two brand values shipped code must never assume - your document font and the author name on generated documents - which is why the pre-ship gate reports those checks as skipped rather than passing on a guess when they are unset. The setup wizard writes it; edit it any time.
+
+For any file you may have edited, the update runs a **three-way merge**: the old shipped version, the new shipped version, and yours. It works out what the release actually changed and proposes that on top of your version, leaving your edits in place. One file, one diff, one yes, never a batch. On a genuine conflict it shows both and writes nothing, because a refused update is a working install and a silently merged one might not be.
 
 ## How It Works
 
