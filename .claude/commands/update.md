@@ -281,15 +281,22 @@ If `install.auto_apply_packs` is `no`, do not walk the protocols. Print the pack
 
 ### Step 8.75. The three-way merge (for any file the founder may have edited)
 
-Three versions exist for a changed file: the OLD shipped version, the NEW shipped version, and the founder's LIVE file. Never diff live against new on its own - that reports every personalization as though it were drift and buries the actual change.
+Three versions exist for a changed file: the OLD shipped version, the NEW shipped version, and THEIRS - the founder's own file as it stood before this update ran. Never diff theirs against new on its own; that reports every personalization as though it were drift and buries the actual change.
 
-1. **Get the old shipped version.** GIT mode: `git show <BACKUP_REF>:<path>`. ZIP mode: the copy in `state/.update-backup-<ts>/`. If neither is available, say so and fall back to a two-way diff with that limitation stated out loud.
-2. **Work out what the release changed:** old versus new. That, and only that, is what is on offer.
-3. **Work out what the founder changed:** old versus live. That is what must survive.
-4. **Propose the release's change on top of the live file.** Show the diff hunks. Say in plain language what it does, and name any founder edit it sits near.
+1. **Find all three, and know which is where.** This is the step that makes the rest possible, and it is easy to get wrong: Step 8 has ALREADY copied System Layer files over their live paths. For those, the live path now holds the NEW version, and THEIRS survives only in the Step 7 backup. Read it from there. Reading "the founder's version" off the live path after Step 8 finds the release's own file and reports, wrongly, that they never edited anything.
+   - **NEW** - the live path (or the staged copy).
+   - **THEIRS** - ZIP mode: `state/.update-backup-<ts>/<path>`. GIT mode: `git show "$BACKUP_REF":<path>` (Step 7 commits any uncommitted System Layer edits before branching, so the branch really does hold their version).
+   - **OLD** - the previous release's copy of that path: `git show v<LOCAL_VERSION>:<path>` in GIT mode, if that tag exists locally. On a ZIP install, or a git install that is the founder's own repo rather than a clone of ours, OLD may not be recoverable at all.
+   - **If THEIRS and OLD are identical**, they never touched that file. Nothing is at risk, the Step 8 copy was correct, and there is nothing to walk them through. Say nothing and move on. This is the common case and it should stay silent.
+   - **If OLD cannot be found**, compare THEIRS against NEW, say out loud that this is a two-way diff and a personalization may therefore read as drift, and be more conservative for the whole file: propose, never assume.
+2. **Work out what the release changed:** OLD versus NEW. That, and only that, is what is on offer.
+3. **Work out what the founder changed:** OLD versus THEIRS. That is what must survive.
+4. **Propose the release's change on top of THEIRS.** Show the diff hunks. Say in plain language what it does, and name any founder edit it sits near.
 5. **Ask once, per file:** "Apply this to your `<path>`? Your own edits stay where they are. (yes / no / show me the whole file)"
-6. **On a genuine conflict** - the release changed the same lines the founder changed - do not guess and do not merge. Show both, say plainly that they touch the same lines, and offer three options: keep yours, take theirs, or you write the combined version by hand now.
-7. **Never write on a failed merge.** A refused update is a working install. A silently merged one might not be.
+   - **On yes:** write THEIRS with the release's change applied to the live path.
+   - **On no:** restore THEIRS to the live path from the backup. After Step 8, doing nothing is not neutral - it leaves the release's file in place and their edits gone. Declining a change must never be the thing that costs them their work.
+6. **On a genuine conflict** - the release changed the same lines the founder changed - do not guess and do not merge. Restore THEIRS to the live path first so nothing is lost while they think, then show both, say plainly that they touch the same lines, and offer three options: keep yours, take theirs, or you write the combined version by hand now.
+7. **Never write a merge you are not sure of.** A refused update is a working install. A silently merged one might not be. Where you cannot merge, THEIRS goes back and the release change is reported as not applied - never left half-applied.
 
 Rules for the whole step: one file at a time, one yes at a time, and pure personalization differences (a name substituted where the template had a token) are never reported as drift. That is the file working as designed.
 

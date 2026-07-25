@@ -85,9 +85,11 @@ def parse_flat_yaml(text: str, *, filename: str, record_key: str,
         if not stripped or stripped.startswith("#"):
             continue
 
-        # A top-level `key:` at column 0 switches blocks. Ours opens, any other closes.
-        if not line.startswith(" ") and stripped.endswith(":") and ": " not in stripped:
-            in_block = stripped[:-1] == record_key
+        # Any column-0 key switches blocks: ours opens it, anything else closes it.
+        # `key: value` counts too - a top-level scalar sitting after our block is
+        # another block's business, not an unparseable line.
+        if not line.startswith(" ") and ":" in stripped:
+            in_block = stripped == f"{record_key}:"
             cur = node = None
             mode = None
             continue

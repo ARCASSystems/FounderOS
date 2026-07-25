@@ -65,12 +65,23 @@ TERMINAL = {"confirmed", "cut"}
 # No personal data and no money in a fact, by rule. The guard catches an email, a
 # phone-length run of digits, and a number sitting next to a currency. It does NOT
 # reject a bare number: a year ("the 2026 cohort"), a count ("25 people"), or a date
-# is exactly the kind of claim this ledger exists to hold. The money test is
-# currency-adjacent rather than digit-count based, so those stay allowed. Currency is
-# matched generically (any three-letter code, or a symbol) so no market is special.
+# is exactly the kind of claim this ledger exists to hold. Two exclusions are what
+# make that true rather than merely intended:
+#   - Dates come out of the text before the phone test runs. "2026-07-25" is eight
+#     digits joined by hyphens, which is a phone number's exact shape.
+#   - A year is excluded from the money test. "the 2026 CEO" and "the 2024 KPI" are
+#     claims about a person and a target, not amounts. The cost of that exclusion is
+#     that a bare "2000 USD" reads as a year and gets through - write it "USD 2000".
+# Currency is matched generically (any three-letter code, or a symbol) so no market
+# is special.
 _EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+_DATE_RE = re.compile(r"\b\d{4}-\d{1,2}-\d{1,2}\b|\b\d{1,2}[/.]\d{1,2}[/.]\d{2,4}\b")
 _PHONE_RE = re.compile(r"(?:\d[ \-]?){7,}\d")
-_MONEY_RE = re.compile(r"(?:\b[A-Z]{3}\s?\d{2,}|\d[\d,.]*\s?(?:[A-Z]{3}\b|k\b|m\b)|[$£€¥]\s*\d)")
+_MONEY_RE = re.compile(
+    r"\b[A-Z]{3}\s?\d{2,}"                                # currency code, then the number
+    r"|(?<!\d)(?!(?:19|20)\d\d\b)\d[\d,.]*\s?[A-Z]{3}\b"  # the number, then the code
+    r"|(?<!\d)\d[\d,.]*\s?[km]\b"                         # shorthand: 500k, 2m
+    r"|[$£€¥]\s*\d")                                      # a currency symbol
 
 
 def _today(override: str | None = None) -> _dt.date:
@@ -139,7 +150,7 @@ def _pii_reason(text: str) -> str | None:
     t = text or ""
     if _EMAIL_RE.search(t):
         return "looks like an email address"
-    if _PHONE_RE.search(t):
+    if _PHONE_RE.search(_DATE_RE.sub(" ", t)):
         return "looks like a phone number (a long run of digits)"
     if _MONEY_RE.search(t):
         return "looks like a money amount (a number next to a currency)"
