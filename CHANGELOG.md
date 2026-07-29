@@ -2,6 +2,49 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.44.0 - 2026-07-29
+
+The usability release. A group stress-tested the product and named the risk in one line: the backend is not the problem, someone who did not build it being unable to drive it is. The comparison was a terminal, the most capable thing on the machine and useless if you do not know how to talk to it. So this release stops shipping workflows and ships people. A founder should finish setup feeling handed a team, not handed a folder of markdown.
+
+### New - your OS is five named roles
+
+- **`roles/employees.yaml` ships with five roles instead of empty.** The assistant who runs your morning. The one who names your next move. The note-taker who files what you captured away from your desk. The account manager who drafts the client update. The reviewer who reviews the other four. Each is backed by a skill that is on your disk, carries a written job description and an exact list of what it may touch, and arrives `gated` - defined, with nothing run yet.
+- **Setup introduces them by name.** The tour used to end by showing you six files. It now ends by telling you who you have and what each one will give you tomorrow morning. Six files is a folder. Five roles is a team.
+- **Only a run you watched moves a row to `active`.** The chart claims nothing that has not happened, which is the whole reason it is worth reading. Grading a role takes one line and is what every later review reads.
+- **The doctrine says what the file does.** An empty org chart was called the honest one. The sharper version, now written: a chart that lies is what is dishonest, and a gated row backed by a skill you can open is an introduction rather than a promise. Propose-only and draft-only are also separated, because a job that writes nothing and a job that writes a draft and stops before sending need different tool grants.
+
+### Fix - the org chart had never actually reached anyone
+
+`roles/employees.yaml`, `rules/digital-employees.md` and the two scripts behind them shipped in v1.43 and were never on the setup wizard's copy list, so no install ever received them and `employee-review` would have failed on its first command. Six other files were in the same state, including four rules files and the scripts behind the ship gate, the provisional-fact ledger, the lint self-check and the fetch-and-extract skill. The v1.43 update pack told founders to run a command that did not exist on their machine. All of it now ships, and the copy step reads the folder rather than a list that can silently fall behind it.
+
+### New - autonomy on a schedule you can read
+
+- **`cadence/first-30-days.md`** decides how much the OS does for you and when that changes. Days 1 to 7 it watches and asks one question a day. Days 8 to 21 it proposes, and nothing acts without a yes. Day 22 onward it acts inside the gates you already approved. The morning loop reads the file and holds itself to the stage.
+- **No scheduler, and no surprises.** The dates are written down and compared against today. A missing file means full speed, so an older install never goes quiet for a reason it cannot see. Say "skip the ramp" and it is over.
+- **The floor is not part of the ramp.** Nothing leaves your machine without you, on day 400 the same as day 1.
+
+### New - what this is, in writing
+
+The question nobody had answered on paper: how is this different from someone using Claude or ChatGPT well? Four things, now in `README.md` and `docs/first-day.md`. The context is a folder you own, so a better model next year reads the same files. Nothing becomes a fact because it was said once. Five named roles that are graded, rather than one assistant accountable for nothing. And a gate between a draft and a send that lives in a permission grant rather than in a polite sentence in a prompt.
+
+Also stated plainly rather than left implied: this is for founders and for people running teams, each person runs their own, and pay, private profiles and personal data never pass between two of them. Several people inside one live session is not something this does, and the docs say so instead of being vague about it.
+
+### New - two commit guards and a generated capability page
+
+- **A line-ending guard.** One stray carriage return turns off git's normalization and restyles a whole file, so the real diff vanishes into churn and the next machine to append writes a mixed one. Public users are cross-platform by definition, which makes this the kind of corruption you cannot reasonably debug. `raw/` is exempt. Override: `ALLOW_EOL=1`.
+- **An entry-form guard.** A decay field spelled `Decay After:` is never read by anything. The entry looks right, never surfaces for review, and nothing tells you. Added lines in the brain channels are now checked against the canonical form, which `rules/entry-conventions.md` now specifies exactly. Forward-only, so nothing old is dragged into a form that postdates it. Override: `ALLOW_ENTRY=1`.
+- **`docs/what-this-can-do.md`** answers "what can this actually do", generated from the skills on your disk and never maintained by hand. A hand-kept list is wrong the first week somebody forgets, and a wrong capability list is worse than none because it teaches you the OS cannot do something it can. The commit hook refuses a skill change that leaves the page stale and names the one command to rebuild it.
+
+### Fix - a red test suite that was mostly lying
+
+Fifty-eight tests were failing and three more were passing without testing anything. Every one of them drove the `.sh` and `.ps1` hooks that v1.42 deleted when the hooks moved to a single Python dispatcher. Worse than the red ones: a set that sat behind a platform skip saying the bash hook is muted on Windows, while the real reason was that the file no longer existed. A skip that names the wrong reason never gets looked at again.
+
+The behaviour survived the move, so the tests followed it rather than being deleted. Both platform variants collapse into one per file, and there are no platform skips left in any of them. Two more were red against correct code: one asserted a hardcoded script list that the verify skill had deliberately replaced with a glob, and one carried a fixture whose hardcoded dates drifted out of the tier it was asserting as the calendar moved. Both are fixed at the test, which is the rule this release also wrote down: a checker reporting a finding that is not real teaches you to skim past the ones that are.
+
+### New - four structural writing tells
+
+The banned-word list catches vocabulary. These four survive a find-and-replace, which is what makes them the ones left once the words are clean: an aphorism budget of one per document, no label-colon paragraph openers, no defining a thing by what it is not, and a docstring that is a contract rather than a case study.
+
 ## v1.43.0 - 2026-07-25
 
 The harness release. The OS gains doctrine for how it keeps itself usable as it grows, a few small loops that make an improvement land instead of being rediscovered next month, and an update channel that stops a new release from costing you the edits you made. Five new skills, four new standard-library scripts, no new dependency, and nothing you have to keep running.
