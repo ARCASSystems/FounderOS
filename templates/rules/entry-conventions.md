@@ -173,12 +173,50 @@ Everything above governs per-entry rows. This last convention governs the other 
 
 ---
 
+## The canonical form
+
+Everything above describes what to write. This section is the exact shape a writer has to produce, because the fields are read by more than one thing and a field spelled slightly differently is simply never read.
+
+**A field line is:** an optional list marker, then the field name exactly as written below, then one colon, then one space, then the value. Nothing else on the line.
+
+```
+- Decay after: 14d
+- Invalidated on: 2026-06-01
+- Superseded by: decisions.md#pricing-tier-revised-2026-06-01
+```
+
+**The field names, case-sensitive and complete:**
+
+`Decay after:` `Decay reason:` `Superseded by:` `Invalidated on:` `Replaces:` `First observed:` `Date parked:`
+
+**The values that have a fixed shape:**
+
+| Field | Accepts |
+|---|---|
+| `Decay after:` | `YYYY-MM-DD`, or a relative duration written as digits then `d` (`14d`, `90d`) |
+| `Invalidated on:` | `YYYY-MM-DD` |
+| `First observed:` | `YYYY-MM-DD` |
+| `Date parked:` | `YYYY-MM-DD` |
+| `Decay reason:`, `Superseded by:`, `Replaces:` | free text, one line |
+
+**An entry ID is:** `<channel>-<YYYY-MM-DD>-<NNN>`, lowercase, with the counter always three digits and zero-padded. `flag-2026-05-04-001`, never `flag-2026-05-04-1`. The channel must match the file it sits in, per the mapping above.
+
+### What enforces this
+
+`.githooks/pre-commit` checks the added lines of any staged brain-channel file against the form above, and refuses the commit when a field name is a near-miss (`Decay After:`), a dated value is unreadable (`Decay after: two weeks`), or an ID uses the wrong channel or a short counter. Escape hatch: `ALLOW_ENTRY=1`.
+
+Three things it deliberately does not do. It reads only added lines, so old entries are never dragged into a form they predate. It ignores unfilled template slots like `[YYYY-MM-DD]`. And it says nothing about whether an entry is any good, because that is a judgment and this is a form check.
+
+The reason it is worth a gate at all: a mistyped field fails silently. The entry looks right, the scanner never sees it, the item never surfaces for review, and nothing anywhere tells you. That is the one failure mode a form check is genuinely good at catching.
+
+---
+
 ## What this is not
 
 - **Not a frontmatter schema for the file.** The file-level frontmatter (if any) stays as-is. These are per-entry sub-fields.
-- **Not a rewrite mandate.** Existing entries do not need backfilling. Adopt on next touch.
+- **Not a rewrite mandate.** Existing entries do not need backfilling. Adopt on next touch, and the commit gate reads added lines only so it can never demand otherwise.
 - **Not a substitute for git.** Git keeps full history. These fields make "show me what's still live" a one-line query without `git log` archaeology.
-- **Not validated by tooling at write time.** The decay scanner reads what's there; it does not enforce schema. Keep names exact (case-sensitive, single colon, space after).
+- **Not a quality check.** The gate checks the shape of a field, never the worth of an entry. Whether a flag deserves 14 days or 90 is yours.
 
 ---
 

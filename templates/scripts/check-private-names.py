@@ -51,6 +51,22 @@ Check-sets:
                   this check is the backstop for installs that missed that step.
                   Passes silently in the public dev repo (identity is not tracked
                   there), on CI (--range never runs it), and after the rename.
+    line-ending   (--staged only) Refuses a staged text file carrying a lone CR
+                  inside its content, or whose ending style flips against HEAD.
+                  A lone CR turns off git's autocrlf normalization, so one stray
+                  byte restyles a whole file: the real diff vanishes into churn and
+                  the next machine appending to that file writes a mixed one.
+                  `raw/` is exempt (write-once provenance). Override: ALLOW_EOL=1.
+    entry-form    (--staged only) Validates ADDED lines in the files
+                  rules/entry-conventions.md governs (brain/log.md, patterns,
+                  flags, decisions-parked, needs-input, knowledge/, and their
+                  templates/ mirrors) against the canonical form: field names
+                  exact, dates and decay durations readable, entry ids on the
+                  right channel with a 3-digit counter. Forward-only by
+                  construction, since a diff has no old lines in it. Narrow on
+                  purpose: the failure worth blocking is a field spelled
+                  `Decay After:` that no scanner ever sees, so the entry never
+                  surfaces and nothing says so. Override: ALLOW_ENTRY=1.
 
 Graceful no-op: the .githooks wrappers exit 0 when Python is absent, so this
 never breaks a user's `git commit`. With Python present but no patterns file,
@@ -373,10 +389,203 @@ def check_remote_safety() -> list[str]:
     return offending
 
 
+# --- line-ending gate (--staged only) ---
+# A lone carriage return inside a file's content turns off git's autocrlf
+# normalization, so the whole file lands CRLF and every line reads as changed.
+# The real diff disappears into the churn, and the next machine to append to that
+# file writes the other ending into it. Public users are cross-platform by
+# definition, which makes this corruption a founder cannot reasonably debug.
+# Override for a deliberate normalization commit: ALLOW_EOL=1.
+EOL_TEXT_SUFFIXES = (".md", ".py", ".txt", ".yaml", ".yml", ".json", ".jsonl",
+                     ".html", ".css", ".js", ".toml", ".cfg")
+
+
+def staged_files() -> list[str]:
+    """Paths added, copied or modified in the index, forward slashes."""
+    out = _git_text(["git", "diff", "--cached", "--name-only", "--diff-filter=ACM"])
+    return [p.replace("\\", "/").strip() for p in out.splitlines() if p.strip()]
+
+
+def _git_bytes(cmd: list[str], timeout: int = 15) -> bytes:
+    """Raw stdout. _git_text passes text=True, which translates line endings and
+    so cannot be used to inspect them."""
+    try:
+        result = subprocess.run(cmd, capture_output=True, timeout=timeout)
+    except Exception:
+        return b""
+    return result.stdout if result.returncode == 0 else b""
+
+
+def _eol_style(blob: bytes) -> str:
+    crlf = blob.count(b"\r\n")
+    lf = blob.count(b"\n") - crlf
+    if crlf and lf:
+        return "mixed"
+    return "CRLF" if crlf else "LF" if lf else "none"
+
+
+def _eol_exempt(rel: str) -> bool:
+    """raw/ is a write-once provenance zone: a source document keeps whatever
+    control bytes it arrived with, and a file nobody rewrites cannot produce the
+    churn this gate exists to stop."""
+    return rel.startswith("raw/") or "/raw/" in rel
+
+
+def eol_defects(
+    files_provider=None, staged_blob=None, head_blob=None,
+) -> list[str]:
+    """One line per staged text file whose line endings would land wrong."""
+    files = (files_provider or staged_files)()
+    get_staged = staged_blob or (lambda p: _git_bytes(["git", "show", f":{p}"]))
+    get_head = head_blob or (lambda p: _git_bytes(["git", "show", f"HEAD:{p}"]))
+    out: list[str] = []
+    for rel in files:
+        if not rel.endswith(EOL_TEXT_SUFFIXES) or _eol_exempt(rel):
+            continue
+        blob = get_staged(rel)
+        if not blob or b"\x00" in blob:
+            continue
+        if blob.count(b"\r") > blob.count(b"\r\n"):
+            out.append(f"{rel}: a stray carriage return sits inside the content "
+                       f"rather than at a line end. git stores the whole file CRLF "
+                       f"because a lone CR turns off autocrlf normalization")
+            continue
+        before = get_head(rel)
+        if not before:
+            continue  # new file: no previous style to flip away from
+        was, now = _eol_style(before), _eol_style(blob)
+        if was != now and "none" not in (was, now):
+            out.append(f"{rel}: line endings flip {was} to {now}, so every line "
+                       f"reads as changed and the next machine to append to this "
+                       f"file produces a mixed one")
+    return out
+
+
+# --- staged entry-form gate (--staged only) ---
+# The convention lives in rules/entry-conventions.md and the failure it guards is
+# silence: a decay field spelled `Decay After:` is never seen by the scanner that
+# reads it, so the entry simply never surfaces for review and nothing tells you.
+# Deliberately narrow. It reads ADDED lines only, in the files the convention
+# actually governs, and it checks form rather than judgment - a checker that
+# manufactures findings teaches you to ignore the real ones.
+# Override: ALLOW_ENTRY=1.
+ENTRY_CHANNELS = {
+    "brain/log.md": "log",
+    "brain/patterns.md": "pattern",
+    "brain/flags.md": "flag",
+    "brain/decisions-parked.md": "parked",
+    "brain/needs-input.md": "need",
+}
+ENTRY_CHANNEL_NAMES = ("log", "pattern", "flag", "parked", "need", "know")
+
+_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+_DURATION_RE = re.compile(r"^\d+d$")
+_ID_RE = re.compile(r"\b([a-zA-Z]+)-(\d{4}-\d{2}-\d{2})-(\d+)\b")
+# A near-miss on a canonical field name: right words, wrong case or spacing.
+_NEAR_MISS_RE = re.compile(
+    r"^\s*[-*]?\s*(decay\s*after|decay\s*reason|superseded\s*by|invalidated\s*on|"
+    r"replaces|first\s*observed|date\s*parked)\s*:",
+    re.IGNORECASE)
+_CANONICAL_FIELDS = ("Decay after:", "Decay reason:", "Superseded by:",
+                     "Invalidated on:", "Replaces:", "First observed:",
+                     "Date parked:")
+# A dated field only counts as one when it OPENS the line, optionally as a list
+# item and optionally bolded. Matching the words anywhere on the line turns every
+# sentence that explains the convention into a finding, and a checker that
+# manufactures findings teaches you to ignore the real ones.
+_DATED_FIELD_RE = re.compile(
+    r"^\s*(?:[-*]\s+)?\*{0,2}(Decay after|Invalidated on|First observed|Date parked)"
+    r"\*{0,2}:\*{0,2}\s*(.*)$")
+
+
+def _is_placeholder(value: str) -> bool:
+    """An unfilled template slot is not a wrong value. `[YYYY-MM-DD]`,
+    `<Nd, e.g. 90d>` and `{{TODAY}}` are the shipped forms."""
+    return value.startswith(("[", "<", "{{")) or "{{" in value
+
+
+def _entry_channel(rel: str) -> str | None:
+    rel = rel.replace("templates/", "", 1) if rel.startswith("templates/") else rel
+    if rel in ENTRY_CHANNELS:
+        return ENTRY_CHANNELS[rel]
+    if rel.startswith("brain/knowledge/") and rel.endswith(".md"):
+        return "know"
+    return None
+
+
+def _added_lines_by_file(diff: str) -> dict[str, list[str]]:
+    """{path: [added lines]} from a unified diff, so a check can be path-scoped."""
+    out: dict[str, list[str]] = {}
+    cur: str | None = None
+    for line in diff.splitlines():
+        if line.startswith("+++ b/"):
+            cur = line[6:].replace("\\", "/").strip()
+            out.setdefault(cur, [])
+        elif line.startswith("+++ ") or line.startswith("--- "):
+            continue
+        elif line.startswith("diff --git"):
+            cur = None
+        elif cur and line.startswith("+"):
+            out[cur].append(line[1:])
+    return out
+
+
+def entry_defects(diff: str) -> list[str]:
+    out: list[str] = []
+    for rel, lines in _added_lines_by_file(diff).items():
+        channel = _entry_channel(rel)
+        if channel is None:
+            continue
+        for line in lines:
+            stripped = line.strip()
+            if not stripped:
+                continue
+
+            m = _NEAR_MISS_RE.match(line)
+            if m and not any(f in line for f in _CANONICAL_FIELDS):
+                seen = m.group(1)
+                out.append(f"{rel}: `{seen}:` is not a field name anything reads. "
+                           f"The convention is case-sensitive with one space after "
+                           f"the colon, so this entry silently never surfaces. "
+                           f"Canonical: {', '.join(_CANONICAL_FIELDS)}")
+                continue
+
+            fm = _DATED_FIELD_RE.match(line)
+            if fm:
+                field, value = fm.group(1), fm.group(2).strip()
+                if value and not _is_placeholder(value):
+                    ok = (_DATE_RE.match(value) or _DURATION_RE.match(value)
+                          if field == "Decay after"
+                          else _DATE_RE.match(value))
+                    if not ok:
+                        want = ("YYYY-MM-DD or a duration like 14d"
+                                if field == "Decay after" else "YYYY-MM-DD")
+                        out.append(f"{rel}: `{field}: {value}` is not readable. "
+                                   f"Expected {want}.")
+
+            for idm in _ID_RE.finditer(stripped):
+                chan, _, counter = idm.groups()
+                if chan.lower() not in ENTRY_CHANNEL_NAMES:
+                    continue  # not an entry id, just a dated slug
+                if chan != channel:
+                    out.append(f"{rel}: id `{idm.group(0)}` uses the `{chan}` "
+                               f"channel in a `{channel}` file.")
+                elif len(counter) != 3:
+                    out.append(f"{rel}: id `{idm.group(0)}` needs a 3-digit "
+                               f"zero-padded counter, so 001 rather than {counter}.")
+    return out
+
+
 def run_staged(patterns: list[re.Pattern[str]], allow_emdash: bool) -> int:
     offending = check_remote_safety()
     diff = get_staged_diff()
     offending += scan_text(_added_lines(diff), patterns, allow_emdash=allow_emdash)
+    if os.environ.get("ALLOW_EOL", "0") != "1":
+        offending += [f"{d}  (deliberate normalization commit: ALLOW_EOL=1)"
+                      for d in eol_defects()]
+    if os.environ.get("ALLOW_ENTRY", "0") != "1":
+        offending += [f"{d}  (override: ALLOW_ENTRY=1)"
+                      for d in entry_defects(diff)]
     if offending:
         _report("BLOCKED: guard violations in staged diff:", offending)
         return 1

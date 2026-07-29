@@ -1,18 +1,41 @@
 #!/usr/bin/env bash
 set -e
+ROOT="$(git rev-parse --show-toplevel)"
+
 # Probe by RUNNING each candidate (same order as setup's preflight: python,
 # python3, py -3). `command -v` alone is not enough on Windows, where the
 # Microsoft Store ships stub python/python3 executables that exist but cannot
 # run, and machines with only the py launcher have no python3 at all.
-GUARD="$(git rev-parse --show-toplevel)/scripts/check-private-names.py"
+PY=""
 if python --version >/dev/null 2>&1; then
-  exec python "$GUARD" --staged
+  PY="python"
 elif python3 --version >/dev/null 2>&1; then
-  exec python3 "$GUARD" --staged
+  PY="python3"
 elif py -3 --version >/dev/null 2>&1; then
-  exec py -3 "$GUARD" --staged
+  PY="py -3"
 fi
+
 # No working Python: graceful no-op by design (never break `git commit`).
 # Setup's Phase 0 preflight hard-stops before this state can exist on a
 # completed install.
+[ -n "$PY" ] || exit 0
+
+# Gate 1 - content. `--staged` runs every check that reads the index: private
+# names, secrets, em/en dashes, AI attribution, remote safety, line endings, and
+# the entry form in the brain channels. One script and one exit code, so the hook
+# cannot fall out of step with CI, which shares the scanner through --range.
+$PY "$ROOT/scripts/check-private-names.py" --staged || exit 1
+
+# Gate 2 - the capability page. It answers "what can this actually do" and is
+# generated from the skills on disk, so a commit that adds or removes a skill
+# without rebuilding it ships a page that understates or overstates the install.
+# Regeneration has to be triggered by something rather than remembered: a
+# generated registry goes stale the first week someone forgets, and a wrong
+# capability list is worse than none because it teaches you the OS cannot do
+# something it can. This refuses and names the one command; it never writes
+# during a commit, because a hook that edits your tree mid-commit is a surprise.
+if git diff --cached --name-only --diff-filter=ACMDR | grep -Eq '^skills/[^/]+/SKILL\.md$'; then
+  $PY "$ROOT/scripts/skills_sync.py" --capabilities --check || exit 1
+fi
+
 exit 0
