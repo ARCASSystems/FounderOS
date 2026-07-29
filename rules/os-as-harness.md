@@ -42,6 +42,10 @@ Four stages:
 
 **The input most people miss:** today the loop learns from failures - things killed, things marked needs-work, corrections. The richer signal is what you decline to decide. What you skip, repeatedly, is a preference you have not written down yet. A skip is not an answer, so nothing should ever act on one automatically. But a pattern of skips is worth surfacing to you as a question about the system, not the task.
 
+**A red checker is a bug in the checker until proven otherwise.** A checker that reports findings which are not real teaches you, within about two weeks, to skim its output and move on. From then on it costs you attention every run and catches nothing, and the day it reports something true you will scroll past that too. So when a checker goes red, the first question is whether the findings are real, not how fast the code can be changed to satisfy it. Fix the checker first, then close what is actually broken. A checker nobody reads is worse than no checker, because its green run is still counted as evidence.
+
+**A count shown in a daily surface names where it came from.** Any number the OS puts in front of you - open flags, warm leads, items waiting - is derived from a file, and a derived number drifts from its source silently, because a wrong count looks exactly like a right one. There is no visible symptom until someone reconciles by hand months later. Naming the source turns that reconciliation from an investigation into a read: the surface says "5 warm (context/clients.md)" and checking it is opening one file. This costs a few characters and removes an entire class of quiet drift.
+
 ## 4. Per-person adaptation - the OS fits the human, and each human runs their own
 
 **The property:** the OS adapts to who is operating it, and that adaptation is per person, never shared.

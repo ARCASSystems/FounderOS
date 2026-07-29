@@ -8,6 +8,24 @@ This page maps the cascade. You don't need to do all of it on day one - but know
 
 ---
 
+## Why a folder, and not just a good chat
+
+Worth answering before you spend 35 minutes, because if the answer is thin you should close this page.
+
+You already get good answers out of Claude. Four things here do not come from prompting better.
+
+**The context is yours and it is readable.** Everything the OS learns about your business is plain markdown on your disk. Point a better model at the same folder next year and nothing is lost. Open a file and you can see exactly what it thinks it knows about you.
+
+**A thing said once stays provisional.** A name from a call, a number in a transcript, a claim you half-remember. The OS marks those and asks you to confirm or cut them before it repeats them. The failure this avoids is the expensive one: an assistant confidently telling you your own business, slightly wrong, in front of somebody.
+
+**Five named roles, each one graded.** Not one assistant accountable for nothing. Every role carries a written job description, the exact list of what it may touch, and a record of how it has done. You fix a role's definition once instead of correcting its output weekly.
+
+**A gate sits between a draft and a send.** The OS writes the client update. It does not send it. That line is in each role's permission grant, not in a polite sentence in a prompt, so it holds on a bad day.
+
+The trade is simple. A good chat session is a good hour. This compounds across a year, because what it learns gets written down somewhere you keep.
+
+---
+
 ## The 35-minute first run
 
 Three steps. Each step activates the skills underneath it.
@@ -199,6 +217,40 @@ Fresh installs ship with `[FILL]` placeholders in `context/clients.md`, `cadence
 The SessionStart brief counts `[FILL]` rows so you can see at a glance how complete the picture is. As clients enter your pipeline, you replace `[FILL]` rows with real names and statuses. As priorities get committed, `[FILL]` slots in cadence get real entries.
 
 You do not need to fill them all at once. The system surfaces what is missing without nagging.
+
+---
+
+## The five roles you now have
+
+Setup writes `roles/employees.yaml`. It is the org chart, and it arrives with five roles already in it:
+
+| Role | What it gives you | Say |
+|---|---|---|
+| The assistant | Your morning: at most four questions from what is actually waiting, each answer written into the file that owns it | "run my morning" |
+| The one who names your next move | The single step that moves you closest to your next paying customer | "what should I do next" |
+| The note-taker | Whatever you captured away from your desk, filed into your brain with its date and source | "catch up" |
+| The account manager | The client update or progress report, in your voice, drafted and left for you to send | "write the update for [client]" |
+| The reviewer | A review of the other four, proposing changes to how they are defined | "review the assistant" |
+
+All five ship `gated`, which means defined and approved with nothing run yet. That is deliberate. A chart that told you on day one that your assistant had been tracking things would be lying, and it is the first thing you would catch it in.
+
+After you have watched one of them work, tell it how it did in one line. That verdict is what the reviewer reads later, and it is the only honest record of what your OS is actually good at. Add a sixth role when a job of your own has recurred three times and you have corrected it twice.
+
+The doctrine behind the chart is `rules/digital-employees.md`. The part worth reading first is the charter rule: a role's tool grant is its permission, so "never sends" is enforced rather than written down and hoped for.
+
+---
+
+## Your first 30 days
+
+Setup also writes `cadence/first-30-days.md` with real dates in it. It decides how much the OS does for you, and when that changes.
+
+- **Days 1 to 7.** It watches. It files what you tell it and asks one question a day. It proposes nothing, because anything it proposed this week would be built on the handful of answers you gave the wizard.
+- **Days 8 to 21.** It proposes. Queue items, drafts, a named next move. Nothing acts without a yes from you.
+- **Day 22 onward.** It acts inside the gates you already approved. The gate that matters does not move: nothing leaves your machine without you.
+
+The morning loop reads that file and holds itself to the stage. Nothing runs on a timer and nothing changes behind your back.
+
+If you want it at full speed today, say "skip the ramp" and it is over. The file exists for a founder who has not decided how much to trust this yet. If that is not you, overrule it.
 
 ---
 

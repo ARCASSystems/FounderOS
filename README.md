@@ -28,6 +28,32 @@ You are not installing a template. You are installing an operating layer. It lis
 
 ---
 
+## How is this different from just using Claude or ChatGPT well?
+
+The honest version of that question is sharper than it sounds. Someone who prompts well already gets good answers. So what does a folder of markdown add?
+
+Four things, and none of them arrive from writing a better prompt.
+
+**Your context is a folder you own.** Everything the OS knows about your business sits in plain markdown on your disk. Not in a chat history, not in a vendor's memory feature, not in an account you can be locked out of. When a better model ships next year you point it at the same folder and keep everything. When you want to know what it knows, you open a file.
+
+**Nothing becomes a fact because it was said once.** A name mentioned in passing, a number from a call, a claim in a transcript. The OS marks those provisional and asks you to confirm or cut them before it repeats them anywhere. An assistant that remembers everything you said will eventually say your own business back to you slightly wrong, at the worst possible moment, with total confidence. This is the part that stops that.
+
+**You get five named roles, and you grade them.** Not one assistant that is good at everything and accountable for nothing. Each role has a written job description, a list of exactly what it may touch, and a record of how it has actually done. When one keeps getting something wrong you change its definition once, instead of correcting it every week.
+
+**There is a gate between a draft and a send.** The OS writes the client update, the follow-up, the proposal. It delivers none of them. That boundary is written into each role's permission grant rather than asked for politely in a prompt, so it holds on the day you are tired and moving fast.
+
+A good chat session is a good hour. This is the part that compounds over a year, because what it learns gets written down in files you keep.
+
+## Founders, and the people running teams
+
+This was built for one person running a business alone, and that is still who it fits best. It works with a team too, with one thing to be clear about: each person runs their own OS. Yours holds your context, theirs holds theirs, and what passes between them is shared work items.
+
+What deliberately never passes between two of them, in either direction: pay and commercial terms, one person's private profile landing in someone else's system, and personal data about anybody. Convenience will make an argument for it about once a month. The answer stays no.
+
+Several people inside one live session is not something this does today. The whole category is circling that problem and nothing here pretends to have solved it.
+
+---
+
 ## What makes this different
 
 - **Stall detection built in.** The system watches for rolling items and forces keep/kill/escalate decisions. Every retro.
@@ -158,6 +184,8 @@ Open the FounderOS folder in Cowork and attach `CLAUDE.md` as folder instruction
 4. **Say "set up my brand profile"** (or run `/founder-os:brand-interview`) - so every deliverable looks like you (10 min)
 
 After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-screen view of today, and `/next` recommends one action. Full first-day path in [docs/first-day.md](docs/first-day.md). Full per-command reference in [docs/commands.md](docs/commands.md). Full per-skill reference (outcome, reads, writes, voice rules, prereqs, follow-ups) in [docs/skills.md](docs/skills.md).
+
+For the short answer to "what can this actually do", [docs/what-this-can-do.md](docs/what-this-can-do.md) lists every capability in plain language. It is generated from the skills on disk rather than maintained by hand, and the commit hook refuses a skill change that leaves it stale, so it is never a wish list. Rebuild it any time with `python scripts/skills_sync.py --capabilities`.
 
 > **Path B users (manual git clone):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/today`, etc. The plugin namespace only activates on Path A. See [docs/install.md](docs/install.md) for the exact commands per path.
 
@@ -297,7 +325,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.43.0. Public release. 92 skills, 43 commands. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.44.0. Public release. 92 skills, 43 commands, 715 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+
+v1.44.0 is the usability release. A group stress-tested the product and named the risk in one line: the backend is not the problem, someone who did not build it being unable to drive it is. So setup now ends by introducing five named roles and what each will give you tomorrow morning, rather than by showing you a folder. Every role is backed by a skill on your disk and every one starts gated, because a chart claiming a track record it does not have is the thing worth avoiding. Around that: an autonomy ramp with real dates you can read and overrule, a written answer to how this differs from using Claude well, a generated page listing what the install can actually do, two commit guards for the failures that stay invisible until they are expensive, and seven scripts that had been in the repo since earlier releases without ever reaching an install.
 
 v1.43.0 is the harness release. The headline: an update no longer costs you your own edits. The update command walks each release's packs with you, works out what the release actually changed versus what you edited, and proposes that difference on top of your version - one file, one diff, one yes, never a batch. On a genuine conflict it puts your file back and applies nothing until you choose, because a refused update is a working install and a silently merged one might not be. A new `os-config.yaml` records which parts of the OS you actually run, so updates skip what you never adopted, and holds your document font and author name so the ship gate reads them instead of guessing. Around that: four doctrine files on how the OS stays maintainable as it grows (the standing rule stated plainly - it proposes, you decide), a morning loop of at most four questions whose answers land in the files that own them and close the thing that raised them, a founder review that scores you rather than your work from your own files, and four new scripts - all standard library, nothing to pip install, no key.
 

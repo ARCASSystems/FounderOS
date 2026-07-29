@@ -53,6 +53,20 @@ Never use these:
 
 ---
 
+## Structural Tells
+
+Everything above is phrase-level, and a find-and-replace pass fixes phrase-level problems. These four survive that pass, which is why they are what remains in current AI writing once the vocabulary is clean. Check for them last, after the word list.
+
+**Aphorism budget: one per document.** The banned-phrase rules catch a formula like "X is the new Y". They do not catch the habit of ending every third paragraph on a quotable line. Three or four epigrams in one document is the tell, even when each one is individually good. Keep the best and say the rest plainly.
+
+**No label-colon openers.** "Why this exists." / "The bar:" / "The rule:" / "The problem:" opening a paragraph. It reads as a slide title, and the sentence after it would almost always have opened the paragraph fine on its own. Delete the label.
+
+**Do not define a thing by what it is not.** "This is not a framework." "It is not a general-purpose checker." Say what the thing is. A negation earns its place only where it stops a real misuse someone would otherwise make, or names a limit that genuinely surprises. Used as decoration it is filler wearing a serious face.
+
+**A docstring is a contract, not a case study.** Fifteen lines at most: what the module does, its invariants, how to call it. The story of the defect that motivated it belongs in the commit that fixed it, with a pointer from the docstring if it is worth finding. This half is also the self-documenting-code bar in `rules/os-as-harness.md`.
+
+---
+
 ## What Good Writing Sounds Like
 
 Good: "The process takes three steps. Most people skip the second one. That's where it breaks."
