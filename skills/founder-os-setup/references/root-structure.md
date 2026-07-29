@@ -69,13 +69,23 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── session_changes.py       # From templates/scripts/session_changes.py (session-changes tracker: snapshot-before-write, per-session manifest, /changes, one-command restore)
 │   ├── user-prompt-capture.py   # From templates/scripts/user-prompt-capture.py (writes prompts to brain/observations/ when FOUNDER_OS_OBSERVATIONS=1)
 │   ├── check-private-names.py   # From templates/scripts/check-private-names.py (pre-commit guard: private names, dashes, AI attribution, secrets)
-│   └── skill_health.py          # From templates/scripts/skill_health.py (skill-health detectors for housekeeping: desc bloat + dead pointers)
+│   ├── skill_health.py          # From templates/scripts/skill_health.py (skill-health detectors for housekeeping: desc bloat + dead pointers)
+│   ├── flat_yaml.py             # From templates/scripts/flat_yaml.py (the one stdlib reader for the OS's flat registry files; employee_verdict.py + skills_sync.py import it)
+│   ├── employee_verdict.py      # From templates/scripts/employee_verdict.py (verdict ledger, org-chart render, and charter audit for roles/employees.yaml; without it the org chart is a file nothing reads)
+│   ├── unconfirmed_facts.py     # From templates/scripts/unconfirmed_facts.py (the provisional-fact ledger the morning loop calls by name)
+│   ├── deliverable_gate.py      # From templates/scripts/deliverable_gate.py (the deterministic scan behind ship-deliverable Link 0)
+│   ├── selfdoc_check.py         # From templates/scripts/selfdoc_check.py (why-marker + script-contract checker behind lint Check 6)
+│   ├── skills_sync.py           # From templates/scripts/skills_sync.py (skill reachability, the generated capability page, and native-discovery sync)
+│   └── scrape.py                # From templates/scripts/scrape.py (the fetch-and-extract engine behind web-fetch-extract)
+├── docs/
+│   └── what-this-can-do.md      # GENERATED in Phase 6.2.8 by `python scripts/skills_sync.py --capabilities`. Never hand-written: it is built from the skills on disk, so it cannot claim a capability that is not installed.
 ├── cadence/
 │   ├── daily-anchors.md         # From templates/cadence/daily-anchors.md
 │   ├── weekly-commitments.md    # Personalized with their current priorities
 │   ├── quarterly-sprints.md     # Shipped with [NOT SET] placeholders - founder fills in during first quarterly review
 │   ├── annual-targets.md        # Shipped with [NOT SET] placeholders - founder fills in during first annual planning session
-│   └── queue.md                 # Copied from templates/cadence/queue.md (no personalization needed)
+│   ├── queue.md                 # Copied from templates/cadence/queue.md (no personalization needed)
+│   └── first-30-days.md         # From templates/cadence/first-30-days.md - the autonomy ramp. Substitute the five date tokens (see below); the morning loop reads this to know what it is allowed to do this week.
 ├── context/
 │   ├── priorities.md            # Personalized from 0.4
 │   ├── decisions.md             # From templates/context/decisions.md
@@ -92,14 +102,20 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── chief-of-staff.md
 │   ├── bd.md
 │   ├── cso.md                   # Reference-until-invoked (portfolio strategy lens)
-│   └── cto.md                   # Reference-until-invoked (tool-stack + automation lens)
+│   ├── cto.md                   # Reference-until-invoked (tool-stack + automation lens)
+│   └── employees.yaml           # From templates/roles/employees.yaml VERBATIM - the org chart, five gated starter roles. Copy it byte-for-byte, comments and all: the header is what explains the file six months from now, and Phase 6.2.1 introduces these five by name. No substitution, no trimming, no re-ordering.
 ├── rules/
 │   ├── operating-rules.md       # Personalized from 0.7
 │   ├── writing-style.md         # From templates/rules/writing-style.md
 │   ├── commit-naming.md         # From templates/rules/commit-naming.md (plain-language commit subjects, no version-only/AI-attribution; read by github-ops)
 │   ├── biases.md                # From templates/rules/biases.md (verbatim - the output bias self-check the OS runs on its own opinions)
 │   ├── entry-conventions.md     # From templates/rules/entry-conventions.md (bi-temporal + decay convention for flags/patterns/decisions)
-│   └── approval-gates.md        # From templates/rules/approval-gates.md (what auto-runs vs requires explicit yes)
+│   ├── approval-gates.md        # From templates/rules/approval-gates.md (what auto-runs vs requires explicit yes)
+│   ├── digital-employees.md     # From templates/rules/digital-employees.md (the org-chart doctrine roles/employees.yaml points at; the charter-is-the-grant rule lives here)
+│   ├── os-as-harness.md         # From templates/rules/os-as-harness.md (the four properties that keep an OS maintainable; self-observing, never self-modifying)
+│   ├── context-discipline.md    # From templates/rules/context-discipline.md (where tokens go in a long session, and the 30% rule)
+│   ├── hands-resilience.md      # From templates/rules/hands-resilience.md (the fallback ladder for when a tool you depend on stops working)
+│   └── banned-words-exceptions.txt # From templates/rules/banned-words-exceptions.txt (ships empty - your own settled judgment on banned words, so the gate stops re-raising it)
 ├── network/
 │   ├── inner-circle.md          # Personalized from 0.2 (key people mentioned)
 │   ├── mentors.md               # Stub
@@ -122,7 +138,7 @@ The dispatcher delegates the record, manifest, capture, and autosave work to Pyt
 
 **Interpreter token in settings.json (mandatory).** The shipped `settings.json` tries all three interpreter spellings per command as a pre-setup safety net. When writing the founder's `settings.json`, replace each fallback chain with ONE clean call using the interpreter Phase 0 preflight actually discovered - `python`, `python3`, or `py -3` - e.g. `python3 "${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py" <Event>`. One interpreter, deterministic, no dead fallback noise in the founder's debug log. Bare `python3` is unreliable on Windows; `py -3` is the Windows fallback. Do NOT modify anything else in the file. If a `.claude/settings.json` already exists (a prior install), merge by ensuring all six events (PreToolUse - the undo floor, SessionStart, UserPromptSubmit, PreCompact - the memory flush, Stop, PostToolUse) point at the dispatcher with the discovered interpreter; omitting PreToolUse or PreCompact silently disables the undo floor and save-before-forget. Do not overwrite the user's other hook customisations. The PostToolUse observation stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
-**Scripts copy step (mandatory).** Copy all twenty-one Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte:
+**Scripts copy step (mandatory).** Copy all twenty-eight Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte. Copy the whole folder rather than the list: `templates/scripts/*.py` is the source of truth, this list is the explanation. Every one of them resolves its own root from its own location, so they work from the founder's `scripts/` with nothing to configure. A helper that is in the folder but not on this list still gets copied, and a helper on this list that is missing from the folder is a packaging bug worth stopping for.
 
 - `templates/scripts/_common.py` → `scripts/_common.py` (shared helper module - `wiki-build.py` and `query.py` both `import` from it; if it is missing, `/founder-os:wiki-build` and `/founder-os:query` hard-error with `ModuleNotFoundError` on first run)
 - `templates/scripts/wiki-build.py` → `scripts/wiki-build.py` (used by `/founder-os:wiki-build`)
@@ -145,6 +161,13 @@ The dispatcher delegates the record, manifest, capture, and autosave work to Pyt
 - `templates/scripts/log-archive.py` → `scripts/log-archive.py` (the engine behind the `log-archive` skill: ages `brain/log.md` past its 300-line cap into `brain/archive/log-YYYY-MM.md` and leaves a pointer, so the running log every skill reads stays small as the install ages)
 - `templates/scripts/session_changes.py` → `scripts/session_changes.py` (the session-changes tracker behind the PreToolUse snapshot hook, the session-close manifest, and the `/changes` command; the pre-git undo floor on ZIP installs and a second net everywhere else)
 - `templates/scripts/skill_health.py` → `scripts/skill_health.py` (read-only skill-health detectors behind housekeeping: description bloat + dead skill pointers)
+- `templates/scripts/flat_yaml.py` → `scripts/flat_yaml.py` (the one standard-library reader for the OS's flat registry files; `employee_verdict.py` and `skills_sync.py` both import it by path and hard-error without it)
+- `templates/scripts/employee_verdict.py` → `scripts/employee_verdict.py` (the verdict ledger, org-chart render, and charter audit behind `roles/employees.yaml` and the `employee-review` skill; without it the five roles Phase 6.2.1 introduces cannot be graded and `employee-review` fails on its first command)
+- `templates/scripts/unconfirmed_facts.py` → `scripts/unconfirmed_facts.py` (the provisional-fact ledger: a name or claim heard once stays marked until confirmed. The morning loop runs this by name in its answer-writeback step, so without it the confirm-or-cut half of the loop errors out)
+- `templates/scripts/deliverable_gate.py` → `scripts/deliverable_gate.py` (the deterministic scan behind `ship-deliverable` Link 0: leftover `[FILL]`, a stale date, a tool credited as author. Without it the ship gate silently loses its only mechanical check and becomes reading passes alone)
+- `templates/scripts/selfdoc_check.py` → `scripts/selfdoc_check.py` (the why-marker and script-contract checker behind `/founder-os:lint` Check 6, and the command `templates/rules/entry-conventions.md` tells the founder to run)
+- `templates/scripts/skills_sync.py` → `scripts/skills_sync.py` (skill reachability, the generated capability page, and the `.claude/skills/` native-discovery sync; `/founder-os:verify` and `/founder-os:audit` both call it)
+- `templates/scripts/scrape.py` → `scripts/scrape.py` (the fetch-and-extract engine behind the `web-fetch-extract` skill; standard library for static pages, and it says so plainly when a page needs a renderer it does not have)
 
 Also copy `templates/scripts/private-name-patterns.txt.template` → `scripts/private-name-patterns.txt` (NOTE: drop the `.template` suffix on the destination filename). The pre-commit hook and `install-git-hooks.sh` both look for `scripts/private-name-patterns.txt` exactly. The `.template` suffix marks the source-of-truth example, not the runtime file.
 
@@ -189,6 +212,14 @@ Do NOT write `[NOT SET]` for these two, and do NOT hardcode the default into `cm
 **Universal placeholder pass (always run last).** After every template copy completes in Phase 2.2 (and any later phase that copies a template), grep the destination file for any remaining `{{...}}` placeholder. Replace every match with `[NOT SET]`. This is the same rule already applied to `cadence/weekly-commitments.md`. It must apply universally: `rules/operating-rules.md`, `rules/writing-style.md`, `roles/*.md`, `global-claude-md.md`, `context/priorities.md`, and any future template all go through this pass, with EXACTLY two exemptions: `core/voice-profile.yml` and `core/brand-profile.yml` keep their `{{...}}` placeholders intact - the voice and brand interviews fill those, and their readiness gates detect the literal markers. The named substitutions above MUST run before the universal pass so they don't get overwritten with `[NOT SET]`.
 
 **{{TODAY}} substitution.** The `templates/brain/relations.yaml` file contains the literal placeholder `{{TODAY}}`. When copying to `brain/relations.yaml`, replace every occurrence of `{{TODAY}}` with today's date in `YYYY-MM-DD` format (use `date -u +%Y-%m-%d` via Bash to get it).
+
+**The four ramp dates (cadence/first-30-days.md).** `templates/cadence/first-30-days.md` carries `{{TODAY}}`, `{{TODAY_PLUS_6}}`, `{{TODAY_PLUS_7}}`, `{{TODAY_PLUS_20}}` and `{{TODAY_PLUS_21}}`. Compute all five and substitute them before the universal pass. Do not do this arithmetic in your head - one wrong date silently puts a founder in the wrong stage for a fortnight. Get all five in one command:
+
+```
+python -c "import datetime as d;t=d.date.today();print('\n'.join(str(t+d.timedelta(days=n)) for n in (0,6,7,20,21)))"
+```
+
+The five lines map in order to `{{TODAY}}`, `{{TODAY_PLUS_6}}`, `{{TODAY_PLUS_7}}`, `{{TODAY_PLUS_20}}`, `{{TODAY_PLUS_21}}`. After substituting, read the destination file back and confirm no `{{` remains in it. A `[NOT SET]` reaching a date line here is worse than a wrong date, because the morning loop cannot compare against it at all and silently falls through to stage 3.
 
 **{{DATE}} substitution.** The `templates/cadence/daily-anchors.md` file contains the literal placeholder `{{DATE}}` on the `## Today: {{DATE}}` heading. When copying to `cadence/daily-anchors.md`, replace `{{DATE}}` with today's date in `YYYY-MM-DD` format (same source as `{{TODAY}}` above). The SessionStart brief and `/today` command both grep this heading - leaving the placeholder in place would make the very first session report STALE before the founder has done anything.
 
