@@ -14,6 +14,24 @@ You wake up, answer a few sharp questions, and the OS compounds. That is the who
 
 **Once a day at most.** If today's run already happened (a `#morning-loop` entry dated today in `brain/log.md`), say so and stop. A second run the same day means asking questions you already answered, which is the exact failure this loop exists to remove.
 
+## Step 0 - which stage is this install in
+
+Read `cadence/first-30-days.md` before anything else. It carries three dated stages and it decides how much this run is allowed to do. Compare today's date against the dates written in the file. Do not compute a stage from an install date, from the age of a folder, or from how full the files look. The dates are written down so this is a comparison, not a judgment.
+
+| Stage | Dates | This run may |
+|---|---|---|
+| 1 - Watching | days 1 to 7 | ask **one** question, and only about something already sitting in a file. Write the answer back. File no queue item, draft nothing, propose no priorities. |
+| 2 - Proposing | days 8 to 21 | ask up to four. Propose queue items and drafts. Nothing acts without a yes. |
+| 3 - Working | day 22 on | ask up to four, and act inside `rules/approval-gates.md`. |
+
+Three rules on top of the table:
+
+- **A missing file means stage 3.** An older install and a founder who deleted the ramp are the same case, and neither should find their OS has gone quiet for no reason they can see.
+- **A file whose dates have all passed means stage 3.** The ramp ends; it does not need closing.
+- **Say it once, on the day it changes.** When today is the first day of a new stage, open with one plain line naming what changed: "Day 8. From today I will start proposing queue items and drafts, and nothing acts without your yes." Never repeat it on the other days, and never explain the ramp unprompted.
+
+If the founder wrote an override at the top of the file (an ended line, a moved date, a deleted stage), that is the answer. The file outranks this table.
+
 ## Step 1 - gather, silently (no questions yet)
 
 Read only what is present, and skip what is not:
@@ -29,6 +47,8 @@ Read only what is present, and skip what is not:
 9. Context only, never a question: `system/quarantine.md` ACTIVE count, and any tool your hands registry records as down.
 
 ## Step 2 - pick at most four questions (the cap is hard)
+
+In stage 1 the cap is one, not four. Take the highest-priority item below and stop there. A first-week loop that asks four questions is interviewing the founder, not learning from them.
 
 Priority order. Never two questions about the same thing.
 
