@@ -34,7 +34,15 @@ $PY "$ROOT/scripts/check-private-names.py" --staged || exit 1
 # capability list is worse than none because it teaches you the OS cannot do
 # something it can. This refuses and names the one command; it never writes
 # during a commit, because a hook that edits your tree mid-commit is a surprise.
-if git diff --cached --name-only --diff-filter=ACMDR | grep -Eq '^skills/[^/]+/SKILL\.md$'; then
+#
+# Both conditions are required, and the second one is not paranoia: an install
+# can take the new hook without taking the new script (a partial update, or a
+# by-hand copy of one file). Without the -f test that founder gets every skill
+# commit blocked by a raw "can't open file" from Python, which breaks the rule
+# the whole hook is built on - never break `git commit` for something that is
+# not the founder's fault.
+if [ -f "$ROOT/scripts/skills_sync.py" ] \
+   && git diff --cached --name-only --diff-filter=ACMDR | grep -Eq '^skills/[^/]+/SKILL\.md$'; then
   $PY "$ROOT/scripts/skills_sync.py" --capabilities --check || exit 1
 fi
 

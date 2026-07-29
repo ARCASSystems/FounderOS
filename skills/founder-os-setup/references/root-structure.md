@@ -103,7 +103,7 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── bd.md
 │   ├── cso.md                   # Reference-until-invoked (portfolio strategy lens)
 │   ├── cto.md                   # Reference-until-invoked (tool-stack + automation lens)
-│   └── employees.yaml           # From templates/roles/employees.yaml VERBATIM - the org chart, five gated starter roles. Copy it byte-for-byte, comments and all: the header is what explains the file six months from now, and Phase 6.2.1 introduces these five by name. No substitution, no trimming, no re-ordering.
+│   └── employees.yaml           # From templates/roles/employees.yaml VERBATIM - the org chart, five gated starter roles. Copy it byte-for-byte, comments and all: the header is what explains the file six months from now, and step 2.6 of the post-setup tour (Phase 6.2.0) introduces these five by name. No substitution, no trimming, no re-ordering.
 ├── rules/
 │   ├── operating-rules.md       # Personalized from 0.7
 │   ├── writing-style.md         # From templates/rules/writing-style.md
@@ -162,12 +162,12 @@ The dispatcher delegates the record, manifest, capture, and autosave work to Pyt
 - `templates/scripts/session_changes.py` → `scripts/session_changes.py` (the session-changes tracker behind the PreToolUse snapshot hook, the session-close manifest, and the `/changes` command; the pre-git undo floor on ZIP installs and a second net everywhere else)
 - `templates/scripts/skill_health.py` → `scripts/skill_health.py` (read-only skill-health detectors behind housekeeping: description bloat + dead skill pointers)
 - `templates/scripts/flat_yaml.py` → `scripts/flat_yaml.py` (the one standard-library reader for the OS's flat registry files; `employee_verdict.py` and `skills_sync.py` both import it by path and hard-error without it)
-- `templates/scripts/employee_verdict.py` → `scripts/employee_verdict.py` (the verdict ledger, org-chart render, and charter audit behind `roles/employees.yaml` and the `employee-review` skill; without it the five roles Phase 6.2.1 introduces cannot be graded and `employee-review` fails on its first command)
+- `templates/scripts/employee_verdict.py` → `scripts/employee_verdict.py` (the verdict ledger, org-chart render, and charter audit behind `roles/employees.yaml` and the `employee-review` skill; without it the five roles the post-setup tour introduces cannot be graded and `employee-review` fails on its first command)
 - `templates/scripts/unconfirmed_facts.py` → `scripts/unconfirmed_facts.py` (the provisional-fact ledger: a name or claim heard once stays marked until confirmed. The morning loop runs this by name in its answer-writeback step, so without it the confirm-or-cut half of the loop errors out)
 - `templates/scripts/deliverable_gate.py` → `scripts/deliverable_gate.py` (the deterministic scan behind `ship-deliverable` Link 0: leftover `[FILL]`, a stale date, a tool credited as author. Without it the ship gate silently loses its only mechanical check and becomes reading passes alone)
 - `templates/scripts/selfdoc_check.py` → `scripts/selfdoc_check.py` (the why-marker and script-contract checker behind `/founder-os:lint` Check 6, and the command `templates/rules/entry-conventions.md` tells the founder to run)
 - `templates/scripts/skills_sync.py` → `scripts/skills_sync.py` (skill reachability, the generated capability page, and the `.claude/skills/` native-discovery sync; `/founder-os:verify` and `/founder-os:audit` both call it)
-- `templates/scripts/scrape.py` → `scripts/scrape.py` (the fetch-and-extract engine behind the `web-fetch-extract` skill; standard library for static pages, and it says so plainly when a page needs a renderer it does not have)
+- `templates/scripts/scrape.py` → `scripts/scrape.py` (the fetch-and-extract engine behind the `web-fetch-extract` skill. THE ONE EXCEPTION to the standard-library floor: it needs `pip install httpx selectolax tenacity`, and `--render` additionally needs playwright. It is copied anyway because it fails closed and says so - without the packages it exits 1 with the exact pip command and names the WebFetch fallback, so the skill degrades rather than breaking. Do NOT tell the founder to install anything during setup, and do not describe this one as standard library.)
 
 Also copy `templates/scripts/private-name-patterns.txt.template` → `scripts/private-name-patterns.txt` (NOTE: drop the `.template` suffix on the destination filename). The pre-commit hook and `install-git-hooks.sh` both look for `scripts/private-name-patterns.txt` exactly. The `.template` suffix marks the source-of-truth example, not the runtime file.
 
