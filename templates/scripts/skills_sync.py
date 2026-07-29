@@ -347,18 +347,17 @@ def capability_page(repo: Path = REPO) -> str:
             continue
         rows[md.parent.name] = _first_sentence(desc)
 
-    version = ""
-    vf = repo / "VERSION"
-    if vf.exists():
-        version = vf.read_text(encoding="utf-8").strip()
-
+    # Deliberately no version stamp. The page is about what is installed, not
+    # about which release you are on, and stamping it would make every version
+    # bump mark the page stale - so a founder editing one skill would be blocked
+    # by a number that has nothing to do with their edit. The page drifts only
+    # when the skill set drifts, which is the only drift worth a gate.
     out = [
         "# What this can do",
         "",
         CAPABILITY_MARK,
         "",
-        f"Generated from the {len(rows)} skills installed here"
-        + (f", on Founder OS v{version}" if version else "") + ".",
+        f"Generated from the {len(rows)} skills installed here.",
         "",
         "Nothing on this page is maintained by hand, so it cannot claim a capability "
         "that is not installed or miss one that is. If a skill is here, it is on your "

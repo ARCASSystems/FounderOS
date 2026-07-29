@@ -203,6 +203,19 @@ Outcome:
 
 A FAIL here is fixed by naming the skill somewhere: add its registry row, add a slash command, or promote it in `skills/discoverable.yaml`. Never by deleting the check.
 
+Check the generated capability page in the same pass, since it reads the same skill set:
+
+```
+python scripts/skills_sync.py --capabilities --check
+```
+
+`docs/what-this-can-do.md` is generated from the skills on disk and is the answer to "what can this actually do". A stale page is worse than no page, because it teaches the founder the OS cannot do something it can.
+
+- Page current -> nothing extra, the Check 9 line stands as it is.
+- Page stale or missing -> append to the same line: `[WARN] Skill reachability (<N>/<N> reachable; docs/what-this-can-do.md is stale - rebuild with python scripts/skills_sync.py --capabilities)`
+
+WARN rather than FAIL: a stale page is a wrong description of a working OS, not a broken one.
+
 ## Output format
 
 Plain text. Maximum 30 lines including the header. Exactly this shape:
