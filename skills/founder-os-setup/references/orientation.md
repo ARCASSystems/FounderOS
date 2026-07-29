@@ -51,11 +51,45 @@ If the snapshot is too thin for a real move (no customer set), the skill already
 
 If they say yes on the spot, run the `own-your-history` skill now and return to the tour when it finishes. If they say nothing or move on, drop it - the offer stays available as a plain sentence forever.
 
+**2.6 Meet the five roles (do not skip - this is the point of the tour).** The founder has just been shown a folder of markdown. On its own that is the thing they will not come back to. What they actually have is five jobs the OS knows how to do, and a person understands five jobs faster than they understand forty files. Read `roles/employees.yaml` (Phase 2.2 copied it) and introduce the roles it holds, by title, in plain language.
+
+Say what each one gives them, not what it reads. One line each. Do not paste the yaml, do not name the skill that backs a role, and do not use the word "employee" out loud - it is the file's word, not a word a founder wants for something that has done nothing yet:
+
+> "One more thing, and this is the part worth two minutes.
+>
+> Your OS is not one assistant. It is five jobs, each with a name, a written job description, and a list of exactly what it is allowed to touch. Here is who you have:
+>
+> - **The assistant** - runs your morning. It asks you at most four questions pulled from what is actually waiting, and every answer you give lands in the file that owns it, so you are never asked the same thing twice.
+> - **The one who names your next move** - reads where you actually are and tells you the single thing that moves you closest to your next paying customer. One big step, two small ones.
+> - **The note-taker** - whatever you captured away from your desk goes into `capture/inbox/`, and this files each one into your brain with the date and the source kept.
+> - **The account manager** - writes the update or the progress report for a client, in your voice, from what your files actually record. It writes the draft. Sending stays yours.
+> - **The reviewer** - reviews the other four. Reads what you said about their work and proposes changes to how they are defined. It never changes anything on its own.
+>
+> All five are switched on but idle. Nothing has run yet, and the chart says so honestly rather than pretending you have a team with a track record. Tomorrow morning, say 'run my morning' and the first one goes to work."
+
+Then two sentences on how it grows, because this is the part that answers "so what":
+
+> "As you use them you tell each one how it did, in one line. Those lines are what the reviewer reads later, and they are the only honest record of what your OS is actually good at. When a job of your own keeps recurring and you keep correcting it, that is the sixth role, and you add it the same way."
+
+**2.7 Say the first week will be quiet, before they notice it and think it is broken.** Phase 2.2 wrote `cadence/first-30-days.md` with real dates in it. Tell them it exists and what it does, in three sentences, and do not walk them through the stages:
+
+> "One last thing so nothing surprises you. For the first week your OS mostly watches: it files what you tell it and asks you one question a day, because anything it proposed this week would be guessing off the handful of answers you gave me an hour ago. From day 8 it starts proposing work, and from day 22 it acts on what you have approved. The dates are written in `cadence/first-30-days.md` - change them, or say 'skip the ramp' any time and it goes straight to full speed."
+
+If they say skip it now, write `Ended [today's date] - going straight to stage 3` at the top of the file and confirm in one line. Do not argue for the ramp and do not sell it. A founder who wants their OS at full speed on day one is allowed to have that, and the file was built to be overruled.
+
+**Rules for this point, all of them load-bearing:**
+
+- **Never say a role has done anything.** Every row ships `status: gated`, which means defined and approved with nothing run yet. Saying "your assistant has been tracking" on day one is the exact lie the org chart doctrine exists to prevent, and it is the first thing a founder will catch you in.
+- **Read the actual file.** If the founder edited or removed a row, introduce what is there. Never recite this list from memory.
+- **Five, not more.** Do not offer to design a sixth role during setup. The test for a new one is a job that has recurred three times and that they corrected twice, which cannot be true on day one.
+- **Take an opt-out in the moment.** Setup does not ask about the org chart anywhere earlier, on purpose: one more question in discovery buys nothing, and this reads better as an introduction than as a menu item. If the founder says here that they do not want it, say "fine, it stays on disk doing nothing" in one line, move on, and set `modules.employees: no` in Phase 5.0b. Do not delete the file and do not argue for it.
+- **If `roles/employees.yaml` is missing**, say so in one line rather than describing roles that are not on their disk: "The role chart did not copy. Say 'set up my team' any time and I will put it in." Log it to the backlog. Do not narrate five roles the founder does not have.
+
 **3. The three things to say next.** Give the founder exactly three next moves, in natural language, so they leave with something to do instead of a blank screen:
 
 > "Three things to try right now:
-> 1. Ask 'what should I focus on next?' (or run `/next`) - the OS gives you one recommended move toward your next paying customer.
-> 2. Ask 'what's on for today?' (or run `/today`) - a one-screen view of your day.
+> 1. Ask 'what should I focus on next?' (or run `/next`) - that is the one who names your next move, and you get a single recommended step toward your next paying customer.
+> 2. Ask 'what's on for today?' (or run `/today`) - that is your assistant, giving you a one-screen view of your day.
 > 3. Say 'set up my voice' - a 10-minute step so every post, email, and proposal the OS writes sounds like you, not like a robot. (The exact command is in the next message.)"
 
 Keep the three to three. More than three next steps is the overwhelm this OS exists to remove. The voice step is also covered in 6.2 Step 1 with the path-correct command, so here it stays natural-language only and does not need the prefix.
@@ -128,6 +162,18 @@ You never need to use the OS terms. Say what feels natural.
 - Open `[founder-os-root]/` for strategic work
 - Open `[company]/[project]/` for execution work
 - Claude loads the right context based on where you are."
+
+### 6.2.8 Generate the capability page
+
+Run it once, here, so the founder has a written answer to "what can this actually do" from day one:
+
+```
+python scripts/skills_sync.py --capabilities
+```
+
+It writes `docs/what-this-can-do.md` from the skills actually on disk. Do not hand-write this file and do not read it out. Name it in one line as part of the tour and move on: "There is a full list of what your OS can do in `docs/what-this-can-do.md`. It is generated from what is installed, so it is never a wish list."
+
+If the command fails (no `scripts/skills_sync.py`, or a plugin install with no reachable engine), say so in one line and put it in the backlog. Do not describe capabilities from memory instead.
 
 ### 6.2.9 Prove it worked (automatic health check - do not skip)
 

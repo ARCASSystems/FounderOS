@@ -60,7 +60,19 @@ A row exists only for something that exists. Three states:
 - `stale` - exists but is not currently earning its seat. Say why in the description.
 - `gated` - defined and approved, but not yet wired to anything that triggers it
 
-The failure this prevents: an org chart full of impressive-sounding jobs, none of which have ever run. An empty registry is honest. A full one that lies is worse than no registry.
+The failure this prevents: an org chart full of impressive-sounding jobs, none of which have ever run. A registry that lies is worse than no registry.
+
+This is why the five starter roles the OS installs all arrive `gated`, and why none of them may be marked `active` by anything except you, after you have seen a run. A gated row makes a claim you can check in ten seconds: open the skill it names and it is there. An active row makes a claim about the past, and only a run can back that. Seeding the first kind is an introduction. Seeding the second would be the lie this section exists to stop.
+
+## Propose-only and draft-only are different constraints
+
+Two shapes of restraint get called the same thing and the difference decides the tool grant.
+
+A **propose-only** job writes nothing. It hands you a ranked list, a diff, or a recommendation, and you act on it. It holds no write tool at all, and the charter audit treats a write tool on a job that calls itself propose-only as a finding rather than a preference.
+
+A **draft-only** job writes a file - a client update, a filed capture, an answer landing in the file that owns it - and stops before anything leaves your machine. It needs a write tool to do its job. What constrains it is `may_write` naming the exact files and `never` naming the delivery it must not do.
+
+Both are real constraints. Say in the job description which one a row is, then grant to match. A row that claims the stricter one and takes the looser grant is how "never sends" quietly becomes a wish, which is the failure the section above already warned about, arriving through the other door.
 
 ## Change protocols (so the registry stays true)
 
@@ -84,4 +96,8 @@ What never crosses, in either direction: pay and commercial terms, one person's 
 
 ## Start here
 
-You do not fill this in at setup. When a job has recurred three times and you have corrected it twice, that is the job worth writing a row for. Start with one. Give it a review after a month. Add a second only if the first one earned its place.
+Setup installs five roles and every one of them is `gated`. They are not a roster you built, they are the jobs this OS already knows how to do, written in role language so you can see what you have: someone who runs your morning, someone who names your next move, someone who files what you captured, someone who writes the client update, and someone who reviews the other four.
+
+Run one. Record a verdict on what you saw. Move it to `active` when there is a run behind it, mark it `stale` with a reason when there is not, or delete a starter row you know you will never use. Any of those three is honest; leaving five rows sitting `gated` for six months is also honest, just idle.
+
+Adding a sixth is the older rule and it has not changed. When a job has recurred three times and you have corrected it twice, that is the job worth writing your own row for.

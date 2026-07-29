@@ -97,8 +97,9 @@ Steps:
 3. **`brand.font`** - the font their documents and pages should use. Write it only if they named one. If they did not, leave it unset and say: "Left the document font unset. The pre-ship gate will skip the font check until you fill it in, rather than assuming a default." Never write a font the founder did not name.
 4. **`modules`** - `yes` or `no` per module, set from what this setup actually built:
    - `daily_loop`, `brain`, `clients`: `yes` on any normal setup.
+   - `employees`: `yes` on any normal setup. Phase 2.2 copies the org chart with its five starter roles and Phase 6.2.1 introduces them by name, so this part of the OS is something the founder has already been shown. Set it `no` only if they said they do not want it and you skipped 6.2.1.
    - `voice`: `yes` only if the voice interview was completed, `no` if it went to the backlog.
-   - `wiki`, `employees`, `unconfirmed_facts`, `speech`, `legal`: `no` unless the founder explicitly asked for them. These are later-adoption modules and `no` is the right answer for almost every first install.
+   - `wiki`, `unconfirmed_facts`, `speech`, `legal`: `no` unless the founder explicitly asked for them. These are later-adoption modules and `no` is the right answer for almost every first install.
    - Do not walk the founder through all ten. Set them from what happened and mention the file exists.
 5. **`install.method`** - `zip`, `git`, or `plugin`, from the mode already detected.
 6. Confirm in one line: "Wrote `os-config.yaml`. Updates will skip the parts of the OS you have not adopted, so you never get walked through a change that does not apply to you."

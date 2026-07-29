@@ -1,10 +1,26 @@
 # roles/employees.yaml - your digital-employee org chart.
 # Doctrine: rules/digital-employees.md. Read that first; this file is only the registry.
 #
-# THIS FILE SHIPS EMPTY ON PURPOSE. An empty org chart is honest. One full of
-# impressive job titles that have never run is worse than no org chart at all.
-# Add your first row when a job has recurred three times and you have corrected
-# it twice. That is the job worth writing down.
+# THIS FILE SHIPS WITH FIVE GATED STARTER ROLES. Each one is backed by a skill
+# that exists in this install, and every one of them starts `gated`: defined and
+# approved, nothing has run yet. None of them claims to have done anything.
+#
+# The honesty rule that governs this file has not moved. A row full of an
+# impressive job title with nothing behind it is worse than no row at all. What
+# changed is the reading of it: a title backed by a skill you can open and run
+# today is not an empty promise, it is an introduction. You would not hand
+# someone a folder of markdown and call it a team, and you would not hand them
+# five names that cannot do anything either. These five can.
+#
+# WHAT TO DO WITH THEM. Run one. If it earns its seat, record a verdict
+# (`python scripts/employee_verdict.py verdict --employee <id> --verdict ok
+# --why "..."`) and move its status to `active` - that is the moment the row
+# stops being a description and starts being a record. If it never earns its
+# seat, set it `stale` with the reason, or retire it. Deleting a starter row you
+# never used is also fine; nothing else reads it.
+#
+# ADDING YOUR OWN is the same test it always was: a job worth a row is one that
+# has recurred three times and that you have corrected twice.
 #
 # One row per employee, carrying BOTH faces plus the charter:
 #   human face  : job_title, job_description (plain language, honest narrow scope,
@@ -25,7 +41,17 @@
 # run at all. Never hand a propose-only job a blanket "run anything" grant - the
 # whole point is that "never sends" is enforced, not merely written down.
 #
+# A note on the two shapes of restraint, because the charter audit reads them
+# differently. A PROPOSE-ONLY job writes nothing at all: it hands you a diff or a
+# ranked list and you act. A DRAFT-ONLY job writes a file - a client update, a
+# filed capture - and stops before anything leaves your machine. Both are
+# constrained; only the first one may hold no write tool. Say which one a row is
+# and grant accordingly. `python scripts/employee_verdict.py charters` reads this
+# file and names any row whose grant is wider than its description claims.
+#
 # FORMAT: flat scalars only, one "key: value" per line. Records start at "- id:".
+# Every value is ONE line - the parser has no line continuation, so a value wrapped
+# across two lines fails the whole file loudly rather than dropping a field.
 # Parsed with the standard library only (scripts/flat_yaml.py) so this needs no
 # pip install, matching the free-tier floor the rest of the OS holds.
 # skill_chain, inputs, tools, may_write and never are comma-separated lists
@@ -33,19 +59,101 @@
 #
 # NEVER put pay, commercial terms, or anyone's personal data in any field here.
 
-employees: []
+employees:
+  - id: daily-assistant
+    job_title: The assistant
+    seat: COO
+    job_description: Runs your morning. Asks at most four questions drawn from what is actually waiting - a blocked queue item, a commitment gone quiet, a flag past its review date - then writes each answer into the file that owns it so the same question stops being raised on five mornings and answered on none. Also renders the one-screen view of your day. It writes down your answer in your words; it does not decide an answer you did not give, and it runs once a day.
+    skill_chain: morning-loop, today
+    inputs: brain/needs-attention.md, cadence/queue.md, cadence/weekly-commitments.md, cadence/daily-anchors.md, brain/flags.md, brain/log.md
+    output_surface: brain/log.md (the dated morning-loop entry)
+    dispatch: manual, daily ("run my morning", "what needs me today")
+    run_record_source: the morning-loop entries in brain/log.md
+    may_write: brain/log.md, cadence/queue.md, cadence/daily-anchors.md, brain/flags.md
+    never: reach anything outside this folder, answer on your behalf, run a second time the same day
+    tools: Read, Edit, Write, Grep, Glob
+    kpi: no question you have already answered gets asked again
+    version: 1.0
+    last_review: null
+    status: gated
+
+  - id: next-move-caller
+    job_title: The one who names your next move
+    seat: BD
+    job_description: Reads your snapshot, your log and your pipeline, works out what stage you are actually at, and names the single move with the most leverage toward your next paying customer - closing with one big step and two small enough to start today. Propose only. It names the move; it does not do it, book it, or contact anybody, and when your snapshot is too thin to read it asks for the missing field instead of guessing a stage.
+    skill_chain: founder-next-move
+    inputs: brain/.snapshot.md, core/identity.md, brain/log.md, context/clients.md, cadence/weekly-commitments.md
+    output_surface: the recommendation in your session, nothing written to your files
+    dispatch: manual, on demand ("what should I do next")
+    run_record_source: the moves you logged acting on, in brain/log.md
+    may_write: nothing - it refreshes brain/.snapshot.md and otherwise only reads
+    never: contact anyone, quote a price, commit you to a date, invent a stage your files do not show
+    tools: Read, Glob, Bash(python scripts/brain-snapshot.py:*)
+    kpi: you never end a session without one named next step
+    version: 1.0
+    last_review: null
+    status: gated
+
+  - id: capture-filer
+    job_title: The note-taker
+    seat: Chief of Staff
+    job_description: Sweeps what you captured away from the desk - a voice note, a dictated text file in a synced folder, a paste - out of capture/inbox/ and files each one into brain/rants/ with its date and where it came from kept intact. Draft only. It files raw captures and corrects names against your glossary; it does not interpret them, rewrite your words, or claim to have checked a notes tool that is not connected.
+    skill_chain: catch-up
+    inputs: capture/inbox/, context/names.md
+    output_surface: brain/rants/ (one dated file per capture)
+    dispatch: manual, after any stretch away from the desk ("catch up", "process my inbox")
+    run_record_source: the dated files in brain/rants/
+    may_write: brain/rants/, and clearing capture/inbox/ of what it has filed
+    never: edit the words of a capture, delete anything it did not just file, distil captures into conclusions on its own
+    tools: Read, Write, Glob
+    kpi: nothing you captured away from the desk is still sitting unfiled a week later
+    version: 1.0
+    last_review: null
+    status: gated
+
+  - id: client-status
+    job_title: The account manager
+    seat: COO
+    job_description: Writes the status update or milestone report for one client, in your voice, from what your client file and your log actually record. Draft only. It produces a draft in your folder and stops there; sending is yours. It refuses to write at all until your voice profile is filled rather than producing something in a generic assistant's voice and letting you find out after the client read it.
+    skill_chain: client-update
+    inputs: context/clients.md, core/voice-profile.yml, brain/log.md, cadence/weekly-commitments.md
+    output_surface: the draft file it is asked to produce
+    dispatch: manual, per client ("write the update for <client>")
+    run_record_source: the drafts it produced and the verdicts you closed them with
+    may_write: the draft file it was asked to produce
+    never: email, post or otherwise deliver anything, change a client's stage, write in a voice you have not set
+    tools: Read, Write, Bash(python scripts/check-voice-ready.py:*)
+    kpi: no active client goes a month with no update they actually received
+    version: 1.0
+    last_review: null
+    status: gated
+
+  - id: seat-reviewer
+    job_title: The reviewer
+    seat: Chief of Staff
+    job_description: Reviews one of the roles on this chart. Reads its row, the verdicts you recorded on it and what it actually filed, then proposes changes to its own definition - prompt, chain, tool grant - as a diff you accept or reject. Propose only, and it never applies its own diff. Given a role with no verdicts and nothing filed it refuses the review in one line rather than building a performance story out of a job description.
+    skill_chain: employee-review
+    inputs: roles/employees.yaml, brain/employee-verdicts.jsonl, cadence/queue.md
+    output_surface: the proposed diff in your session
+    dispatch: manual, monthly, or the moment three needs-work verdicts land inside thirty days
+    run_record_source: brain/employee-verdicts.jsonl
+    may_write: nothing - you apply the diff or you do not
+    never: apply its own diff, record a verdict on any role including itself, review a role with no evidence
+    tools: Read, Grep, Glob, Bash(python scripts/employee_verdict.py:*)
+    kpi: no role carries three needs-work verdicts without its definition changing
+    version: 1.0
+    last_review: null
+    status: gated
 
 # ---------------------------------------------------------------------------
-# EXAMPLE ROW - copy the shape, delete the example. This one is illustrative
-# and is NOT active (it sits outside the `employees:` list above on purpose).
+# EXAMPLE ROW - copy the shape for your own sixth role. This one is illustrative
+# and does NOT run (it sits outside the `employees:` list above on purpose).
+# Note that every value is one line: the parser has no continuation.
 #
 #  - id: follow-up-watcher
 #    job_title: Follow-up Watcher
 #    seat: BD
-#    job_description: Warns when the last outreach entry in the log is 14 or more
-#      days old, or when a warm contact has gone quiet. Does not draft the
-#      follow-up, does not judge whether the contact is worth keeping, and never
-#      contacts anyone.
+#    job_description: Warns when the last outreach entry in the log is 14 or more days old, or when a warm contact has gone quiet. Propose only. It does not draft the follow-up, judge whether the contact is worth keeping, or contact anyone.
 #    skill_chain: reads brain/log.md and context/clients.md, then adds one queue item
 #    inputs: brain/.snapshot.md, brain/log.md, context/clients.md
 #    output_surface: cadence/queue.md (BACKLOG)

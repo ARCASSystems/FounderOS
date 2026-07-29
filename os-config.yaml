@@ -44,8 +44,11 @@ modules:
   clients: yes
   # The wiki layer: wikilinks, lint, wiki-build, ingest with provenance.
   wiki: no
-  # The digital-employee org chart, verdict loop, and reviews.
-  employees: no
+  # The org chart: five named roles, the verdict loop, and the reviews. `yes` on
+  # a normal setup since v1.44 - the five roles are how the OS introduces itself
+  # on your first run, so switching this off means updates skip changes to a part
+  # of the OS you can already see.
+  employees: yes
   # The provisional-fact ledger for names heard once.
   unconfirmed_facts: no
   # Voice input and output (add-voice, add-mouth).
