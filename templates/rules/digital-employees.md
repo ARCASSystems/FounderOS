@@ -74,6 +74,8 @@ A **draft-only** job writes a file - a client update, a filed capture, an answer
 
 Both are real constraints. Say in the job description which one a row is, then grant to match. A row that claims the stricter one and takes the looser grant is how "never sends" quietly becomes a wish, which is the failure the section above already warned about, arriving through the other door.
 
+One seam worth naming. When you approve a propose-only job's diff, the edit that lands is yours: applied in your session, on your yes, with your tools. The role never held the pen. Approval moved the act to you, which is why a reviewer that "writes nothing" can still end with the registry updated - you updated it.
+
 ## Change protocols (so the registry stays true)
 
 **This doctrine** changes only through a diff you approved, the same gate as any other rule.

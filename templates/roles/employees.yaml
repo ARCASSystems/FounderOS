@@ -69,9 +69,9 @@ employees:
     output_surface: brain/log.md (the dated morning-loop entry)
     dispatch: manual, daily ("run my morning", "what needs me today")
     run_record_source: the morning-loop entries in brain/log.md
-    may_write: brain/log.md, cadence/queue.md, cadence/daily-anchors.md, brain/flags.md
+    may_write: brain/log.md, and the single file that owns each question you answered - the queue, a flag, a commitment, the verdicts ledger, a confirmed fact's home file
     never: reach anything outside this folder, answer on your behalf, run a second time the same day
-    tools: Read, Edit, Write, Grep, Glob
+    tools: Read, Edit, Write, Grep, Glob, Bash(python scripts/employee_verdict.py:*), Bash(python scripts/unconfirmed_facts.py:*)
     kpi: no question you have already answered gets asked again
     version: 1.0
     last_review: null
@@ -88,7 +88,7 @@ employees:
     run_record_source: the moves you logged acting on, in brain/log.md
     may_write: nothing - it refreshes brain/.snapshot.md and otherwise only reads
     never: contact anyone, quote a price, commit you to a date, invent a stage your files do not show
-    tools: Read, Glob, Bash(python scripts/brain-snapshot.py:*)
+    tools: Read, Bash(python scripts/brain-snapshot.py:*)
     kpi: you never end a session without one named next step
     version: 1.0
     last_review: null
@@ -122,7 +122,7 @@ employees:
     run_record_source: the drafts it produced and the verdicts you closed them with
     may_write: the draft file it was asked to produce
     never: email, post or otherwise deliver anything, change a client's stage, write in a voice you have not set
-    tools: Read, Write, Bash(python scripts/check-voice-ready.py:*)
+    tools: Read, Write, Bash(python scripts/check-voice-ready.py:*), Bash(python scripts/check-brand-voice-ready.py:*)
     kpi: no active client goes a month with no update they actually received
     version: 1.0
     last_review: null

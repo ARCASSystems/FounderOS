@@ -1,6 +1,6 @@
 ---
 name: employee-review
-description: Review one digital employee and propose changes to it. Say "review the follow-up watcher", "how is that job doing", "performance review for <id>", or run /founder-os:employee-review <id>. Reads its registry row, its verdicts, and the items it filed, then proposes upgrades to its definition as a shown diff - prompt, chain, tool grant. Never applies its own diff. This reviews a recurring job the OS runs, not you (that is founder-review).
+description: Review one digital employee and propose changes to it. Say "review the assistant", "review the note-taker", "how is that job doing", "performance review for <id>", or run /founder-os:employee-review <id>. Reads its registry row, its verdicts, and the items it filed, then proposes upgrades to its definition as a shown diff - prompt, chain, tool grant. Never applies its own diff. This reviews a recurring job the OS runs, not you (that is founder-review).
 why: "Verdicts pile up and nothing reads them, so a job that keeps producing bad output keeps its seat. This turns the record of what went wrong into a concrete change to the thing that produced it, which is the only way a correction stops repeating."
 enhance: "Run it monthly, or the moment three needs-work verdicts land inside thirty days. Record verdicts as you go or there will be nothing here to read."
 allowed-tools: ["Read", "Grep", "Glob", "Bash"]

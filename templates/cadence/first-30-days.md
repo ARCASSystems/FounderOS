@@ -24,8 +24,8 @@ Dates: {{TODAY}} to {{TODAY_PLUS_6}}
 That is all. The question comes from something real it noticed, not from a checklist.
 
 **What it does not do:** file queue items on its own, draft work you did not ask for,
-or tell you what your priorities should be. It has known you for a week. It has not
-earned an opinion about your business yet.
+or volunteer opinions about your priorities. It has known you for a week. It has not
+earned an unprompted opinion about your business yet.
 
 **Your part:** answer the one question, and use the OS for whatever you were going to
 do anyway. Ask it things. Log what happened. Every answer is context it did not have.
@@ -39,9 +39,9 @@ land instead of embarrass itself.
 
 Dates: {{TODAY_PLUS_7}} to {{TODAY_PLUS_20}}
 
-**What the OS does:** everything from stage 1, plus it starts proposing. Queue items
-for things it noticed going quiet. Drafts when you ask for one. A named next move when
-you ask what to do. The morning loop goes up to its full four questions.
+**What the OS does:** everything from stage 1, plus it starts raising things unasked.
+Queue items for what it noticed going quiet. A word when a commitment stalls. The
+morning loop goes up to its full four questions.
 
 **What it does not do:** anything without a yes. Every proposal is a thing you approve,
 edit, or kill. Nothing it produces reaches anyone outside this folder.
@@ -76,6 +76,11 @@ The morning loop reads this file and checks today's date against the dates above
 tells you which stage you are in when the stage changes, and it holds itself to that
 stage's limits in between. Nothing runs on a timer, and nothing changes behind your
 back: there is no scheduler here, only a date you can read.
+
+One boundary the stages never move: what you ask for, you get. The stages govern what
+the OS starts on its own. A direct question on day 2 - "what should I do next", "write
+the update" - gets the best answer your files can support, and if the files are still
+too thin to answer well, saying so is the answer.
 
 If this file is missing, the OS behaves as though it is in stage 3. That is deliberate.
 An install with no ramp file is either an older install or someone who deleted this on
