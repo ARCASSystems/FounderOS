@@ -2,7 +2,32 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
-## v1.44.0 - 2026-07-29
+## v1.45.0 - 2026-07-31
+
+The wider-door release. Two doors, one product: the OS now works end to end for a person who will never run git, and for an employee running one role inside a company. Neither reading costs the founder anything.
+
+### New - the OS for a person who will never run git
+
+The principle, now enforced in the text and not just the code: git may power the OS, it is never the interface. The machinery already degraded well (session snapshots as the undo floor, a first-class ZIP update path, the caveman verbs wrapping git); the words had not caught up.
+
+- **`rules/commit-naming.md` says up front it lives in the version-history layer** and never fires on an install without history. Its push-cadence section already scoped itself to multi-machine setups; the rejected-push line now explains recovery in plain words instead of rebase jargon.
+- **The global template stops writing git advice into your global config.** "Verify with git status" became "verify with a file read"; the history rules are named as dormant without history.
+- **Session end is honest about memory.** The old first step said commit to git. The new one says the truth: files persist the moment they are written, and the next session reads them with nothing else needed. The tour's "your repo is your memory" became "your files are your memory". This is the whole cross-session contract for a no-git install, and it is now stated everywhere it was implied.
+- **Updates never require a git command on any path.** One doc claimed Path B updates are manual via `git pull`; it now points at "update Founder OS" like every other path. `docs/install.md` gained one section naming the three layers: folders that are yours (never written by an update), folders that are the OS's (replaced freely), and the three files in between (proposed as diffs, never imposed).
+- **The version verbs describe saved versions, not git internals.** The skills catalogue's save / history / restore / backup entries dropped `git status`, `git log`, and reset flags from user-facing lines, keeping one honest sentence that git is the plumbing underneath.
+
+### New - works for an employee, not only a founder
+
+An employee running part of a job is the operator of that part. The wizard's role question (own the business / run a role inside one) existed since the role fork landed; the operator answer now leads somewhere instead of into a silently degraded install.
+
+- **The Role Snapshot** - the operator twin of the Founder Snapshot in `core/identity.md`: the part of the job you run, who you answer to, what is yours to own, what is not yours to decide, and the biggest blocker. Discovery captures it with the same manners as the founder flow: one question at a time, everything skip-able, never an invented answer. Each install carries exactly one of the two blocks.
+- **The propose engine gained an operator path.** The North Star changes from the next paying customer to the work you own in front of the person waiting on it. Same compression, same one-big-two-small close. `/next` routes on the identity role and whichever block exists, the SessionStart brief words its nudge for the path, and `brain-snapshot.py` carries either block.
+- **The account manager serves both readings.** For a founder it drafts the client update; for an employee it drafts the status update to whoever you answer to. Same skill, same formats, same draft-only gate - `context/clients.md` is the stakeholder register either way.
+- **The copy sweep.** Every line that read false to a non-founder was fixed in place: README, first-day, the ramp, the tour, the update packs, the shipped templates in rules/, roles/, cadence/, context/, brain/ and network/, and the seat skills. The word for the human is the operator; the founder reading loses nothing.
+
+### Fix - what the second stranger walk caught
+
+The same walk that closed v1.44 ran again over this release and its findings were fixed in the range, not filed: the SessionStart brief was the one surface still founder-only; `brain/needs-attention.md` shipped in templates but was never on the wizard's copy tree, leaving the assistant seat's first input missing on every fresh install; the reviewer seat held a script grant wide enough to write the ledger its charter forbids (narrowed to the two read-only subcommands its skill runs); the account manager's row promised an absolute refusal the skill softens with a labelled opt-out; five surfaces said the health check has eight checks when it has nine; and the tour claimed all five roles ready when the account manager waits on the voice step, which it now says.
 
 The usability release. A group stress-tested the product and named the risk in one line: the backend is not the problem, someone who did not build it being unable to drive it is. The comparison was a terminal, the most capable thing on the machine and useless if you do not know how to talk to it. So this release stops shipping workflows and ships people. A founder should finish setup feeling handed a team, not handed a folder of markdown.
 
