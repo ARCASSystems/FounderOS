@@ -46,7 +46,7 @@ python scripts/skills_sync.py --capabilities
 - **brand-interview** - Set up the visual brand profile
 - **linkedin-post** - Write a LinkedIn post in the founder's voice
 - **email-drafter** - Draft an email in the founder's voice
-- **client-update** - Write a client-facing status update or milestone report
+- **client-update** - Write a status update or milestone report for whoever is waiting on the work - a client, or the person you answer to inside a company
 - **content-repurposer** - Reformat one piece of content across many channels
 - **proposal-writer** - Write a consulting or service proposal
 - **sop-writer** - Write a delegation-ready SOP

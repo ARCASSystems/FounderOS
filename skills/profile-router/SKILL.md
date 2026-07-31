@@ -12,7 +12,7 @@ mcp_requirements: []
 
 Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
 
-The OS works for more than one kind of person. A founder, a job-seeker, a solo builder, and a student all get the same scaffold - facts about themselves, a record of decisions, a place for what is stalling, a worked example to copy. Only the task differs. This skill decides which task leads, so the first thing a new operator sees is the thing their situation needs, not a generic menu.
+The OS works for more than one kind of person. A founder, an employee running one role, a job-seeker, a solo builder, and a student all get the same scaffold - facts about themselves, a record of decisions, a place for what is stalling, a worked example to copy. Only the task differs. (The employee case is carried by the identity-layer role `operator`, not by a variant of its own - the founder variant's signal row already includes it.) This skill decides which task leads, so the first thing a new operator sees is the thing their situation needs, not a generic menu.
 
 This is the "meet the human" layer. On first contact the OS reads who is using it and adapts to them - least adaptation on their side, their ease, their language. A stranger should feel it work with them the way it works with the person who built it.
 

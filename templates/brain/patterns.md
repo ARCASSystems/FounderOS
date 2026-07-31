@@ -1,7 +1,7 @@
 # Patterns
 
 > Emerging patterns surfaced from log.md. These are not one-off events - they are repeated behaviours, recurring friction, or consistent wins worth naming.
-> Add a pattern when you see the same thing happen 3+ times. Surface it to the founder if it's blocking progress or creating risk.
+> Add a pattern when you see the same thing happen 3+ times. Surface it to the operator if it's blocking progress or creating risk.
 
 Default `Decay after: 90d` per `rules/entry-conventions.md`. After decay, the SessionStart brief surfaces the pattern for keep / kill / archive review.
 

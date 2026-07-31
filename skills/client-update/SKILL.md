@@ -1,8 +1,8 @@
 ---
 name: client-update
 description: >
-  Write a client-facing status update or milestone report. Trigger on "update the client", "write a status update", "project update", "send a progress report", "milestone update", "weekly update for", or any variation of client-facing project communication. Also fires when the user describes project progress and needs it packaged for a client. Reads `core/voice-profile.yml` and writes in the founder's voice.
-why: "Keeps clients informed without the founder writing from scratch each time - consistent format builds trust and prevents the relationship from going silent."
+  Write a status update or milestone report for whoever is waiting on the work - a client, or the person you answer to inside a company. Trigger on "update the client", "write a status update", "write my status update", "project update", "send a progress report", "milestone update", "weekly update for", "status for my manager", or any variation of packaging progress for the person waiting on it. Reads `core/voice-profile.yml` and writes in your voice.
+why: "Keeps the people waiting on your work informed without the operator writing from scratch each time - consistent format builds trust and prevents the relationship from going silent."
 enhance: "Fill core/voice-profile.yml first so the update sounds like you, and keep context/clients.md current with milestone notes so the skill has real project specifics to draw on."
 allowed-tools: ["Read", "Write", "Edit", "Bash"]
 mcp_requirements: []
@@ -15,6 +15,8 @@ Runs on: reasoning - reads your files and reasons; any capable agent can run thi
 <!-- private-tag: not applicable: writes client-facing deliverable drafts, not user speech to brain/context state files -->
 
 Updates build trust through transparency, not polish.
+
+The recipient is whoever is waiting on the work. For a founder that is usually a client. For an operator running a role inside a company it is a manager, a director, or an internal stakeholder - same skill, same formats, and the header names them instead of a client company. For an internal recipient, read the `## Role Snapshot` in `core/identity.md` (the `Answers to` line) and any notes on them in `context/clients.md` - the clients file is the stakeholder register, whoever the stakeholder is.
 
 ## Voice routing (operator or brand?)
 
@@ -43,7 +45,7 @@ Do not surface this filter to the user as a separate step. The user sees only th
 
 Before drafting, read `brain/.snapshot.md` if it exists. Use the open-flags block to avoid topics that contradict current operator stance. Use the must-do block to lean the draft toward what the operator is actively working on. Use the voice and brand blocks (if present) to set tone. If `brain/.snapshot.md` does not exist, proceed without it - the snapshot is optional context, not a hard prerequisite.
 
-If the founder has filled `core/brand-profile.yml`, follow the visual brand for any branded version of the update (PDF, doc, etc.). Plain-text updates do not need brand assets.
+If the operator has filled `core/brand-profile.yml`, follow the visual brand for any branded version of the update (PDF, doc, etc.). Plain-text updates do not need brand assets.
 
 If the engagement has a company-specific context file, read it for project specifics, named milestones, and the agreed scope. Check in this order:
 
@@ -125,7 +127,7 @@ REVISED TIMELINE
 - Arrows (->) for lists
 - Specific dates, not "soon" or "in the coming weeks"
 - No padding. If a section has nothing, skip it.
-- Apply the founder's voice profile if available. If not, default to plain, direct sentences.
+- Apply the operator's voice profile if available. If not, default to plain, direct sentences.
 
 ## Self-check before sending
 

@@ -25,7 +25,7 @@ That is all. The question comes from something real it noticed, not from a check
 
 **What it does not do:** file queue items on its own, draft work you did not ask for,
 or volunteer opinions about your priorities. It has known you for a week. It has not
-earned an unprompted opinion about your business yet.
+earned an unprompted opinion about your work yet.
 
 **Your part:** answer the one question, and use the OS for whatever you were going to
 do anyway. Ask it things. Log what happened. Every answer is context it did not have.
@@ -90,8 +90,8 @@ purpose, and neither of them should suddenly find their OS has gone quiet.
 
 Change any date. Delete a stage. Write "ended {{TODAY}}, going straight to stage 3" at
 the top and the OS will read that and stop holding itself back. The ramp exists to serve
-a founder who has not decided how much they trust this yet. If that is not you, say so
-and it is over.
+someone who has not decided how much they trust this yet. The day you already trust it,
+say so and it is over.
 
 One thing worth not changing: the stage 3 line about nothing leaving your machine. That
 is not part of the ramp. That is the floor, and it holds on day 400 the same as day 1.

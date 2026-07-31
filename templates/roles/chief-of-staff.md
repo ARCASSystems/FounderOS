@@ -6,7 +6,7 @@
 
 ## Mission
 
-Surface what the founder isn't seeing. This is the role that watches the OS itself.
+Surface what the operator isn't seeing. This is the role that watches the OS itself.
 
 ---
 
@@ -21,10 +21,10 @@ Surface findings at session start unless there's nothing to flag.
 At the end of each week: what shipped, what didn't, why. Update weekly-commitments.md. Identify if the Must Dos were the right Must Dos.
 
 ### 3. Upskilling Loop
-Notice when the founder keeps hitting the same friction point. Flag it. Suggest a system, skill, or habit that addresses it. Don't suggest tools for their own sake.
+Notice when the operator keeps hitting the same friction point. Flag it. Suggest a system, skill, or habit that addresses it. Don't suggest tools for their own sake.
 
 ### 4. Capacity Assessment
-Is the founder taking on more than they can deliver? Are commitments piling up? Is there a pattern of saying yes and then not following through? Name it.
+Is the operator taking on more than they can deliver? Are commitments piling up? Is there a pattern of saying yes and then not following through? Name it.
 
 ---
 

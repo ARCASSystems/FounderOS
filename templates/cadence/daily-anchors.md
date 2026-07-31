@@ -4,7 +4,7 @@
 > 1. **Night before:** Name the anchor (the one thing that defines a successful day). This is intent.
 > 2. **Morning trigger:** When the day starts, adjust the anchor around immovable commitments (calls, meetings, hard deadlines). This is reality.
 >
-> Time blocks are reactive to when the founder wakes up and what's on the calendar - not fixed to clock times.
+> Time blocks are reactive to when the operator wakes up and what's on the calendar - not fixed to clock times.
 > One anchor per day. Everything else is secondary.
 
 ---

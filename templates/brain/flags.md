@@ -32,7 +32,7 @@ Every new flag gets a stable ID per `rules/entry-conventions.md` (channel: `flag
 
 ### Type 1: Role performance flag
 
-Things the OS (Claude) should be doing differently. Captured when the founder corrects behaviour or gives feedback on how the system is working.
+Things the OS (Claude) should be doing differently. Captured when the operator corrects behaviour or gives feedback on how the system is working.
 
 ```
 [YYYY-MM-DD] [FLAG] [what the issue is] | [what should change]
@@ -44,7 +44,7 @@ Trigger to escalate: [specific condition]
 
 ### Type 2: Friction or stall flag
 
-Things in the founder's work that are stuck, stalling, or creating drag. Captured when a priority hasn't moved in 2+ weeks, a commitment was made and not kept, or a decision is being avoided.
+Things in the operator's work that are stuck, stalling, or creating drag. Captured when a priority hasn't moved in 2+ weeks, a commitment was made and not kept, or a decision is being avoided.
 
 ```
 [YYYY-MM-DD] [STALL] [what's stalled] | [last known status] | [suggested prompt]

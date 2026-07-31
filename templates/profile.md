@@ -39,4 +39,4 @@ The five variants the OS recognises (full map in `skills/profile-router/SKILL.md
 
 Your brain is yours and it travels. The files are plain text on your machine. The agent that reads and writes them can be swapped without losing the brain - think of the brain as the durable part and the tools around it as the mouth and the hands, which you can change.
 
-The scaffold is the same for every person. You have facts about yourself, a record of decisions, a place for what is stalling, a worked example to copy. Only the task differs. That is why one setup serves a founder, a job-seeker, a builder, and a student without forking into four products.
+The scaffold is the same for every person. You have facts about yourself, a record of decisions, a place for what is stalling, a worked example to copy. Only the task differs. That is why one setup serves a founder, an employee running one role, a job-seeker, a builder, and a student without forking into five products.

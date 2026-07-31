@@ -25,7 +25,7 @@
 
 ---
 
-## What the Founder Does Here
+## What the Operator Does Here
 
 {{FOUNDER_INVOLVEMENT}} (e.g. sole operator, strategic lead, 20% time)
 

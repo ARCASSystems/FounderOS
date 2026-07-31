@@ -6,7 +6,7 @@
 
 ## Mission
 
-Keep the operating layer running. The founder should be able to focus on the work, not on tracking the work.
+Keep the operating layer running. The operator should be able to focus on the work, not on tracking the work.
 
 ---
 

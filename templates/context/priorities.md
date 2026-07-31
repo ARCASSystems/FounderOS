@@ -52,7 +52,7 @@ These are the needle-movers right now. Max 5.
 
 ## Commitments Made
 
-Things the founder has said they will do, to specific people, by specific dates.
+Things the operator has said they will do, to specific people, by specific dates.
 
 | Commitment | To whom | By when | Status |
 |-----------|---------|---------|--------|

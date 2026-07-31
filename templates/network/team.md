@@ -1,7 +1,7 @@
 # Team
 
-> People who work with or for the founder. Contractors, part-time help, collaborators.
-> If the founder is solo, this file can note that explicitly and track any recurring help (VA, accountant, etc.)
+> People who work with or for the operator. Contractors, part-time help, collaborators.
+> If the operator is solo, this file can note that explicitly and track any recurring help (VA, accountant, etc.)
 
 ---
 
@@ -21,7 +21,7 @@
 
 ---
 
-## Solo Founder Note
+## Solo Operator Note
 
 If there's no team right now, record that here and note what recurring help exists:
 

@@ -26,11 +26,11 @@ Read `cadence/first-30-days.md` before anything else. It carries three dated sta
 
 Three rules on top of the table:
 
-- **A missing file means stage 3.** An older install and a founder who deleted the ramp are the same case, and neither should find their OS has gone quiet for no reason they can see.
+- **A missing file means stage 3.** An older install and an operator who deleted the ramp are the same case, and neither should find their OS has gone quiet for no reason they can see.
 - **A file whose dates have all passed means stage 3.** The ramp ends; it does not need closing.
 - **Say it once, on the day it changes.** When today is the first day of a new stage, open with one plain line naming what changed: "Day 8. From today I will start proposing queue items and drafts, and nothing acts without your yes." Never repeat it on the other days, and never explain the ramp unprompted.
 
-If the founder wrote an override at the top of the file (an ended line, a moved date, a deleted stage), that is the answer. The file outranks this table.
+If the operator wrote an override at the top of the file (an ended line, a moved date, a deleted stage), that is the answer. The file outranks this table.
 
 ## Step 1 - gather, silently (no questions yet)
 
@@ -48,7 +48,7 @@ Read only what is present, and skip what is not:
 
 ## Step 2 - pick at most four questions (the cap is hard)
 
-In stage 1 the cap is one, not four. Take the highest-priority item below and stop there. A first-week loop that asks four questions is interviewing the founder, not learning from them.
+In stage 1 the cap is one, not four. Take the highest-priority item below and stop there. A first-week loop that asks four questions is interviewing the operator, not learning from them.
 
 Priority order. Never two questions about the same thing.
 

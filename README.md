@@ -2,7 +2,7 @@
 
 ![Doc and Install Parity](https://github.com/ARCASSystems/FounderOS/actions/workflows/doc-parity.yml/badge.svg) ![guardian](https://github.com/ARCASSystems/FounderOS/actions/workflows/guardian.yml/badge.svg) ![LinkedIn Pack Acceptance](https://github.com/ARCASSystems/FounderOS/actions/workflows/linkedin-pack.yml/badge.svg)
 
-The operating layer for the person running the business. Six files run your company. Claude works from them every session.
+The operating layer for the person the work lands on. Six files run your company, or the part of one you run. Claude works from them every session.
 
 Owned by you. Runs locally in Claude Code. Talk to it.
 
@@ -20,7 +20,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 ## Who this is for
 
-You run the business or run a P&L inside one. Owner, operator, agency lead, consultancy head, head of department. If the buck stops with you, this is for you.
+You run the business, run a P&L inside one, or run a role inside one. Owner, operator, agency lead, consultancy head, head of department, the employee a whole workstream lands on. If work stops with you, this is for you.
 
 You are sharp but your day is chopped into thirty-minute pieces. You have tried productivity templates that promised the world and quietly stopped getting opened by week three.
 
@@ -34,9 +34,9 @@ The honest version of that question is sharper than it sounds. Someone who promp
 
 Four things, and none of them arrive from writing a better prompt.
 
-**Your context is a folder you own.** Everything the OS knows about your business sits in plain markdown on your disk. Not in a chat history, not in a vendor's memory feature, not in an account you can be locked out of. When a better model ships next year you point it at the same folder and keep everything. When you want to know what it knows, you open a file.
+**Your context is a folder you own.** Everything the OS knows about your work sits in plain markdown on your disk. Not in a chat history, not in a vendor's memory feature, not in an account you can be locked out of. When a better model ships next year you point it at the same folder and keep everything. When you want to know what it knows, you open a file.
 
-**Nothing becomes a fact because it was said once.** A name mentioned in passing, a number from a call, a claim in a transcript. The OS marks those provisional and asks you to confirm or cut them before it repeats them anywhere. An assistant that remembers everything you said will eventually say your own business back to you slightly wrong, at the worst possible moment, with total confidence. This is the part that stops that.
+**Nothing becomes a fact because it was said once.** A name mentioned in passing, a number from a call, a claim in a transcript. The OS marks those provisional and asks you to confirm or cut them before it repeats them anywhere. An assistant that remembers everything you said will eventually say your own work back to you slightly wrong, at the worst possible moment, with total confidence. This is the part that stops that.
 
 **You get five named roles, and you grade them.** Not one assistant that is good at everything and accountable for nothing. Each role has a written job description, a list of exactly what it may touch, and a record of how it has actually done. When one keeps getting something wrong you change its definition once, instead of correcting it every week.
 
@@ -44,9 +44,11 @@ Four things, and none of them arrive from writing a better prompt.
 
 A good chat session is a good hour. This is the part that compounds over a year, because what it learns gets written down in files you keep.
 
-## Founders, and the people running teams
+## Founders, teams, and the people inside them
 
-This was built for one person running a business alone, and that is still who it fits best. It works with a team too, with one thing to be clear about: each person runs their own OS. Yours holds your context, theirs holds theirs, and what passes between them is shared work items.
+This was built for one person running a business alone, and that is still who it fits best. It also works for an employee running part of a job: you are the operator of your part, the setup wizard asks who you answer to and what is yours to own, and every seat serves that scope. One product, one track, wider door.
+
+It works with a team too, with one thing to be clear about: each person runs their own OS. Yours holds your context, theirs holds theirs, and what passes between them is shared work items.
 
 What deliberately never passes between two of them, in either direction: pay and commercial terms, one person's private profile landing in someone else's system, and personal data about anybody. Convenience will make an argument for it about once a month. The answer stays no.
 

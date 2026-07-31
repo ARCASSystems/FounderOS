@@ -38,7 +38,7 @@ Nice to have. Don't start until Should Do is clear.
 
 ## Waiting On
 
-Blocked on someone else. Not on the founder.
+Blocked on someone else. Not on the operator.
 
 | Item | Waiting on | Since |
 |------|-----------|-------|

@@ -14,9 +14,9 @@ Worth answering before you spend 35 minutes, because if the answer is thin you s
 
 You already get good answers out of Claude. Four things here do not come from prompting better.
 
-**The context is yours and it is readable.** Everything the OS learns about your business is plain markdown on your disk. Point a better model at the same folder next year and nothing is lost. Open a file and you can see exactly what it thinks it knows about you.
+**The context is yours and it is readable.** Everything the OS learns about your work is plain markdown on your disk. Point a better model at the same folder next year and nothing is lost. Open a file and you can see exactly what it thinks it knows about you.
 
-**A thing said once stays provisional.** A name from a call, a number in a transcript, a claim you half-remember. The OS marks those and asks you to confirm or cut them before it repeats them. The failure this avoids is the expensive one: an assistant confidently telling you your own business, slightly wrong, in front of somebody.
+**A thing said once stays provisional.** A name from a call, a number in a transcript, a claim you half-remember. The OS marks those and asks you to confirm or cut them before it repeats them. The failure this avoids is the expensive one: an assistant confidently telling you your own work, slightly wrong, in front of somebody.
 
 **Five named roles, each one graded.** Not one assistant accountable for nothing. Every role carries a written job description, the exact list of what it may touch, and a record of how it has done. You fix a role's definition once instead of correcting its output weekly.
 
@@ -157,7 +157,7 @@ Use it for behavioural guards - things you correct Claude on that you do not wan
 - "Don't draft on my behalf without asking. Flag the issue, offer to draft."
 - "Numbers before recommendations on anything that touches money or time."
 
-This is different from the `brain/` layer in your repo. `brain/` holds operating memory (what's happening in your business). `MEMORY.md` holds behavioural memory (how you want Claude to work with you). Both load every session.
+This is different from the `brain/` layer in your repo. `brain/` holds operating memory (what's happening in your work). `MEMORY.md` holds behavioural memory (how you want Claude to work with you). Both load every session.
 
 Add a guard whenever you correct Claude on something that would otherwise come up again. Keep the file under 200 lines.
 
@@ -204,7 +204,7 @@ This is what an actual session feels like once setup is done. Not aspirational. 
 > - Pricing model question still parked, no trigger fired yet
 > **Action:** block Tuesday morning before next week, no calls
 
-That is the loop. The OS is the layer between you and your business that catches what would have fallen through.
+That is the loop. The OS is the layer between you and your work that catches what would have fallen through.
 
 **A note on cadence.** `/rant` works on Day 1. `/dream` is technically usable Day 1 too, but its real value compounds at week 2-3 when 10+ rants exist and pattern detection has signal. Do not expect a one-rant `/dream` to surface anything dramatic. The loop is a slow burn that pays off at the second weekly retro, not the first hour.
 
@@ -227,9 +227,9 @@ Setup writes `roles/employees.yaml`. It is the org chart, and it arrives with fi
 | Role | What it gives you | Say |
 |---|---|---|
 | The assistant | Your morning: at most four questions from what is actually waiting, each answer written into the file that owns it | "run my morning" |
-| The one who names your next move | The single step that moves you closest to your next paying customer | "what should I do next" |
+| The one who names your next move | The single step toward your next paying customer, or toward the work you own if you run a role inside a company | "what should I do next" |
 | The note-taker | Whatever you captured away from your desk, filed into your brain with its date and source | "catch up" |
-| The account manager | The client update or progress report, in your voice, drafted and left for you to send | "write the update for [client]" |
+| The account manager | The update or progress report for a client, or for whoever you answer to, in your voice, drafted and left for you to send | "write the update for [client]" |
 | The reviewer | A review of the other four, proposing changes to how they are defined | "review the assistant" |
 
 All five ship `gated`, which means defined and approved with nothing run yet. That is deliberate. A chart that told you on day one that your assistant had been tracking things would be lying, and it is the first thing you would catch it in.
@@ -250,7 +250,7 @@ Setup also writes `cadence/first-30-days.md` with real dates in it. It decides h
 
 The morning loop reads that file and holds itself to the stage. Nothing runs on a timer and nothing changes behind your back.
 
-If you want it at full speed today, say "skip the ramp" and it is over. The file exists for a founder who has not decided how much to trust this yet. If that is not you, overrule it.
+If you want it at full speed today, say "skip the ramp" and it is over. The file exists for someone who has not decided how much to trust this yet. The day you already trust it, overrule it.
 
 ---
 

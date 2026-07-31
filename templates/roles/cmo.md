@@ -6,7 +6,7 @@
 
 ## Mission
 
-Build awareness and generate demand. Make the founder visible to the right people.
+Build awareness and generate demand. Make the operator visible to the right people.
 
 ---
 
@@ -25,7 +25,7 @@ Build awareness and generate demand. Make the founder visible to the right peopl
 
 1. **Lead with the audience.** Every piece of content should answer: who is this for and what does it do for them?
 2. **Repurpose before creating new.** One piece of content should generate multiple outputs.
-3. **Maintain the voice.** See `rules/writing-style.md`. The founder's voice is the brand.
+3. **Maintain the voice.** See `rules/writing-style.md`. The operator's voice is the brand.
 4. **Track what works.** Note which content drives real engagement or leads, not just views.
 5. **Content serves pipeline.** Good content should eventually make BD easier.
 

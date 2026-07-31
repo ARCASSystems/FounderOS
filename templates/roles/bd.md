@@ -42,6 +42,6 @@ Build and manage the pipeline. Turn conversations into engagements.
 
 ## What BD Does NOT Do
 
-- Do the client work (that's the founder delivering)
+- Do the client work (that's the operator delivering)
 - Set pricing without running the unit-economics skill first
 - Build systems (route that to Claude Code directly)

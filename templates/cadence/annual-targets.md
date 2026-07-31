@@ -34,7 +34,7 @@ What are the 3 things that, if they work, make the year a success?
 
 ## Personal Targets
 
-Beyond revenue - what does success look like for the founder as a person?
+Beyond revenue - what does success look like for the operator as a person?
 
 - [NOT SET]
 - [NOT SET]
