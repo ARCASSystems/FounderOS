@@ -18,7 +18,7 @@ You already get good answers out of Claude. Four things here do not come from pr
 
 **A thing said once stays provisional.** A name from a call, a number in a transcript, a claim you half-remember. The OS marks those and asks you to confirm or cut them before it repeats them. The failure this avoids is the expensive one: an assistant confidently telling you your own work, slightly wrong, in front of somebody.
 
-**Five named roles, each one graded.** Not one assistant accountable for nothing. Every role carries a written job description, the exact list of what it may touch, and a record of how it has done. You fix a role's definition once instead of correcting its output weekly.
+**Five named roles, each one graded.** Not one assistant accountable for nothing. Every role carries a written job description, the exact list of what it may touch, and a record that starts empty and fills as you grade its runs. You fix a role's definition once instead of correcting its output weekly.
 
 **A gate sits between a draft and a send.** The OS writes the client update. It does not send it. That line is in each role's permission grant, not in a polite sentence in a prompt, so it holds on a bad day.
 

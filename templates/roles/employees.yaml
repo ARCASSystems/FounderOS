@@ -86,7 +86,7 @@ employees:
     output_surface: the recommendation in your session, nothing written to your files
     dispatch: manual, on demand ("what should I do next")
     run_record_source: the moves you logged acting on, in brain/log.md
-    may_write: nothing - it refreshes brain/.snapshot.md and otherwise only reads
+    may_write: brain/.snapshot.md only - a derived cache refresh, never an operating file
     never: contact anyone, quote a price, commit you to a date, invent a stage your files do not show
     tools: Read, Bash(python scripts/brain-snapshot.py:*)
     kpi: you never end a session without one named next step
@@ -114,7 +114,7 @@ employees:
   - id: client-status
     job_title: The account manager
     seat: COO
-    job_description: Writes the status update or milestone report for one client, or for whoever you answer to, in your voice, from what your client file and your log actually record. Draft only. It produces a draft in your folder and stops there; sending is yours. It refuses to write at all until your voice profile is filled rather than producing something in a generic assistant's voice and letting you find out after the reader saw it.
+    job_description: Writes the status update or milestone report for one client, or for whoever you answer to, in your voice, from what your client file and your log actually record. Draft only. It produces a draft in your folder and stops there; sending is yours. Until your voice profile is filled it stops and says so, and writes a plainly labelled generic draft only if you explicitly ask for one - never a generic voice you discover after the reader saw it.
     skill_chain: client-update
     inputs: context/clients.md, core/voice-profile.yml, brain/log.md, cadence/weekly-commitments.md
     output_surface: the draft file it is asked to produce
@@ -139,7 +139,7 @@ employees:
     run_record_source: brain/employee-verdicts.jsonl
     may_write: nothing - you apply the diff or you do not
     never: apply its own diff, record a verdict on any role including itself, review a role with no evidence
-    tools: Read, Grep, Glob, Bash(python scripts/employee_verdict.py:*)
+    tools: Read, Grep, Glob, Bash(python scripts/employee_verdict.py list:*), Bash(python scripts/employee_verdict.py charters:*)
     kpi: no role carries three needs-work verdicts without its definition changing
     version: 1.0
     last_review: null

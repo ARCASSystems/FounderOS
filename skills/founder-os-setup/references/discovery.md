@@ -121,10 +121,10 @@ These answers populate `core/identity.md` under `## Positioning`, which `linkedi
 This is the part the OS proposes from. A few fields make the brain "functional enough to propose", and the OS proposes off them even when they are thin, sharpening as the brain fills. Capturing them here is what lets the OS name a real first move instead of returning generic advice. Which block you capture depends on the role from 0.2.1:
 
 - **`founder` and `team_of_one` roles:** the Founder Snapshot below - venture, customer, stage, blocker.
-- **`operator` role:** the Role Snapshot (after the Founder Snapshot flow below) - scope, who they answer to, what is theirs to own, what is not theirs to decide, blocker. An employee running part of a job is the operator of that part, and the OS proposes for the part they run.
+- **`operator` role:** the Role Snapshot - skip the founder questions entirely and run the operator flow at the end of this step: scope, who they answer to, what is theirs to own, what is not theirs to decide, blocker. An employee running part of a job is the operator of that part, and the OS proposes for the part they run.
 - **Skip the whole step** when the provisional variant read in 0.2.2 is `student` or `career-mover` - these are working-journey fields and do not fit those situations. Role and variant are different axes: role (founder / operator / team_of_one) is the identity-layer field from 0.2.1, variant (founder / career-mover / builder / student / team-internal) is the profile-layer read from 0.2.2. Do not mix the two vocabularies. Log the skip and move on.
 
-Two of the four are usually already answered. Do NOT re-ask. Reuse and confirm:
+**The founder flow (`founder` / `team_of_one`).** Two of the four are usually already answered. Do NOT re-ask. Reuse and confirm:
 
 - **Venture (one line):** reuse the one-sentence business from 0.1. If it is already a clean one-liner, confirm it in one line: "So the venture in one line is: [their words]. That right?" Only ask fresh if 0.1 was vague or covered several businesses: "If you had to put the main venture in one line, what is it?"
 - **Customer:** reuse 0.2.5 question 1 ("who do you sell to"). If they answered it, confirm in the same breath as the venture. If they skipped it, ask gently in founder language: "Who is your first customer - who are you trying to win first? You can say skip."

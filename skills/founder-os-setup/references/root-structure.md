@@ -37,6 +37,7 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── flags.md                 # From templates/brain/flags.md
 │   ├── decisions-parked.md      # From templates/brain/decisions-parked.md
 │   ├── needs-input.md           # From templates/brain/needs-input.md
+│   ├── needs-attention.md       # From templates/brain/needs-attention.md (open asks the OS has raised for you - the morning loop's first read and the assistant seat's first input)
 │   ├── knowledge/
 │   │   └── README.md            # From templates/brain/knowledge/README.md
 │   ├── rants/

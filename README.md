@@ -38,7 +38,7 @@ Four things, and none of them arrive from writing a better prompt.
 
 **Nothing becomes a fact because it was said once.** A name mentioned in passing, a number from a call, a claim in a transcript. The OS marks those provisional and asks you to confirm or cut them before it repeats them anywhere. An assistant that remembers everything you said will eventually say your own work back to you slightly wrong, at the worst possible moment, with total confidence. This is the part that stops that.
 
-**You get five named roles, and you grade them.** Not one assistant that is good at everything and accountable for nothing. Each role has a written job description, a list of exactly what it may touch, and a record of how it has actually done. When one keeps getting something wrong you change its definition once, instead of correcting it every week.
+**You get five named roles, and you grade them.** Not one assistant that is good at everything and accountable for nothing. Each role has a written job description, a list of exactly what it may touch, and a record that starts empty and fills as you grade its runs. When one keeps getting something wrong you change its definition once, instead of correcting it every week.
 
 **There is a gate between a draft and a send.** The OS writes the client update, the follow-up, the proposal. It delivers none of them. That boundary is written into each role's permission grant rather than asked for politely in a prompt, so it holds on the day you are tired and moving fast.
 

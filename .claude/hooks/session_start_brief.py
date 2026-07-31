@@ -291,31 +291,38 @@ def section_tip(repo: Path, today: date) -> list[str]:
 FOUNDER_FIELD_RE = re.compile(
     r"^\*\*(Venture|Customer|Stage \(seed\)|Biggest blocker):\*\*\s*(.*?)\s*$"
 )
+ROLE_FIELD_RE = re.compile(
+    r"^\*\*(Scope|Answers to|Yours to own|Not yours to decide|Biggest blocker):\*\*\s*(.*?)\s*$"
+)
 H2_RE = re.compile(r"^##\s+(.+?)\s*$")
 
 
-def section_founder_move(repo: Path, today: date) -> list[str]:
-    """Read core/identity.md ## Founder Snapshot and report whether the brain
-    is functional enough to propose. Emits READY, THIN|<gap>, or nothing."""
-    text = read_text(repo / "core" / "identity.md")
-    if text is None:
-        return []
+def _snapshot_fields(text: str, section_name: str, field_re: re.Pattern) -> dict:
     in_section = False
     fields: dict[str, str] = {}
     for line in text.splitlines():
         h = H2_RE.match(line)
         if h:
-            in_section = h.group(1).strip().lower() == "founder snapshot"
+            in_section = h.group(1).strip().lower() == section_name
             continue
         if not in_section:
             continue
-        m = FOUNDER_FIELD_RE.match(line)
+        m = field_re.match(line)
         if m:
             fields[m.group(1)] = m.group(2).strip()
-    if not fields:
+    return fields
+
+
+def section_founder_move(repo: Path, today: date) -> list[str]:
+    """Read whichever snapshot block core/identity.md carries (Founder
+    Snapshot for founder / team_of_one, Role Snapshot for operator) and report
+    whether the brain is functional enough to propose.
+    Emits READY|<path>, THIN|<gap>, or nothing."""
+    text = read_text(repo / "core" / "identity.md")
+    if text is None:
         return []
 
-    def is_set(label: str) -> bool:
+    def is_set(fields: dict, label: str) -> bool:
         v = fields.get(label, "").strip()
         if not v or v.startswith("{{"):
             return False
@@ -323,17 +330,35 @@ def section_founder_move(repo: Path, today: date) -> list[str]:
             return False
         return True
 
-    customer = is_set("Customer")
-    stage = is_set("Stage (seed)")
-    blocker = is_set("Biggest blocker")
-    if customer and (stage or blocker):
-        return ["READY"]
-    missing: list[str] = []
-    if not customer:
-        missing.append("customer")
-    if not stage and not blocker:
-        missing.append("biggest blocker")
-    return [f"THIN|{' and '.join(missing)}"]
+    fields = _snapshot_fields(text, "founder snapshot", FOUNDER_FIELD_RE)
+    if fields:
+        customer = is_set(fields, "Customer")
+        stage = is_set(fields, "Stage (seed)")
+        blocker = is_set(fields, "Biggest blocker")
+        if customer and (stage or blocker):
+            return ["READY|founder"]
+        missing: list[str] = []
+        if not customer:
+            missing.append("your customer")
+        if not stage and not blocker:
+            missing.append("your biggest blocker")
+        return [f"THIN|{' and '.join(missing)}"]
+
+    fields = _snapshot_fields(text, "role snapshot", ROLE_FIELD_RE)
+    if fields:
+        answers_to = is_set(fields, "Answers to")
+        scope = is_set(fields, "Scope")
+        blocker = is_set(fields, "Biggest blocker")
+        if answers_to and (scope or blocker):
+            return ["READY|operator"]
+        missing = []
+        if not answers_to:
+            missing.append("who you answer to")
+        if not scope and not blocker:
+            missing.append("your biggest blocker")
+        return [f"THIN|{' and '.join(missing)}"]
+
+    return []
 
 
 def _safe_iso(s: str) -> bool:
@@ -609,10 +634,12 @@ def render_founder_move(section: list[str]) -> list[str]:
         return []
     parts = section[0].split("|")
     if parts[0] == "READY":
+        if len(parts) > 1 and parts[1] == "operator":
+            return ["", 'Your brain is ready - say "what should I focus on next?" for your move on the work you own.']
         return ["", 'Your brain is ready - say "what should I focus on next?" for your move toward a paying customer.']
     if parts[0] == "THIN":
-        missing = parts[1] if len(parts) > 1 else "biggest blocker"
-        return ["", f"Almost ready to propose - tell me your {missing} in one line and I can name your next move."]
+        missing = parts[1] if len(parts) > 1 else "your biggest blocker"
+        return ["", f"Almost ready to propose - tell me {missing} in one line and I can name your next move."]
     return []
 
 

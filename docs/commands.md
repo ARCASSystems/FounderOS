@@ -211,7 +211,7 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 ### `/next`
 
 - **Or say.** "what should I focus on next?"
-- **Outcome.** One recommended next action across priorities, deals, and cadence. Not a list. One action with a one-line reason.
+- **Outcome.** One recommended next action. When your identity carries a snapshot block (Founder Snapshot, or the operator's Role Snapshot), the command routes to the founder-next-move propose engine, which names the single highest-leverage move with a three-option close. Otherwise it runs the generic ranking across priorities, deals, and cadence. Not a list either way. One action with a one-line reason.
 - **Args.** None.
 - **Writes.** Read-only.
 - **Prereqs.** `/founder-os:setup` complete.
@@ -485,7 +485,7 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 ### `/founder-os:verify`
 
 - **Or say.** "verify the OS" / "health check" / "check the substrate"
-- **Outcome.** A structured health report across 8 substrate checks: plugin surface, hooks, scripts, MCPs, free-tier floor, wiki integrity, cadence freshness, auto-memory. Each check reports PASS / WARN / FAIL with a one-line reason. Max 30 lines of output. No emoji.
+- **Outcome.** A structured health report across 9 substrate checks: plugin surface, hooks, scripts, MCPs, free-tier floor, wiki integrity, cadence freshness, auto-memory, skill reachability. Each check reports PASS / WARN / FAIL with a one-line reason. Max 30 lines of output. No emoji.
 - **Args.** None.
 - **Writes.** Nothing. Read-only. Never auto-fixes.
 - **Prereqs.** `/founder-os:setup` complete.

@@ -39,7 +39,7 @@ If any field is `[NOT SET]`, say so honestly and offer the one-line fix: "Your b
 
 **1.5 Run the first real proposal, in the flow.** Do not hand them an artifact to open somewhere else - the value is in the flow they are already in. Run the `founder-next-move` skill now: it reads the snapshot you just wrote and names the single highest-leverage move - toward a paying customer on the founder path, toward the work they own on the operator path - closing with one big and two small steps. This is their first taste of the actual product - their own brain producing a decision, thirty seconds after it was born. Then say one line about how it compounds, because compounding IS the product:
 
-> "That move came from four lines your brain holds right now. Every session adds to it - what you did, what stalled, what you decided - and the moves get sharper because they are read from your real state, not guessed. Six months from now this same question reads a brain that knows your whole business."
+> "That move came from a handful of lines your brain holds right now. Every session adds to it - what you did, what stalled, what you decided - and the moves get sharper because they are read from your real state, not guessed. Six months from now this same question reads a brain that knows your whole working world."
 
 If the snapshot is too thin for a real move (no customer set on the founder path, nobody named to answer to on the operator path), the skill already handles that by asking for the missing field - that ask is the move. If Phase 0.2.6 was skipped entirely (`student` / `career-mover` variants), skip this point.
 
@@ -75,7 +75,7 @@ Say what each one gives them, not what it reads. One line each. Do not paste the
 > - **The account manager** - writes the update or the progress report for a client, or for whoever you answer to, in your voice, from what your files actually record. It writes the draft. Sending stays yours.
 > - **The reviewer** - reviews the other four. Reads what you said about their work and proposes changes to how they are defined. It never changes anything on its own.
 >
-> All five are switched on but idle. Nothing has run yet, and the chart says so honestly rather than pretending you have a team with a track record. Tomorrow morning, say 'run my morning' and the first one goes to work."
+> All five are defined and idle. Nothing has run yet, and the chart says so honestly rather than pretending you have a team with a track record. Tomorrow morning, say 'run my morning' and the first one goes to work. The account manager is the one with a prerequisite: it writes in your voice, so it waits for the ten-minute voice step right after this tour."
 
 Then two sentences on how it grows, because this is the part that answers "so what":
 
@@ -94,6 +94,7 @@ If they say skip it now, write `Ended [today's date] - going straight to stage 3
 - **Five, not more.** Do not offer to design a sixth role during setup. The test for a new one is a job that has recurred three times and that they corrected twice, which cannot be true on day one.
 - **Take an opt-out in the moment.** Setup does not ask about the org chart anywhere earlier, on purpose: one more question in discovery buys nothing, and this reads better as an introduction than as a menu item. If the founder says here that they do not want it, say "fine, it stays on disk doing nothing" in one line, move on, and set `modules.employees: no` in Phase 5.0b. Do not delete the file and do not argue for it.
 - **If `roles/employees.yaml` is missing**, say so in one line rather than describing roles that are not on their disk: "The role chart did not copy. Say 'set up my team' any time and I will put it in." Log it to the backlog. Do not narrate five roles the founder does not have.
+- **For `student` / `career-mover` variants (no snapshot block),** introduce the next-move seat with its honest limit in the same breath: without a snapshot, "what should I do next" runs the generic ranking rather than the propose engine, and that is still a real answer. Do not promise those users a proposal engine their identity file cannot feed.
 
 **3. The three things to say next.** Give the founder exactly three next moves, in natural language, so they leave with something to do instead of a blank screen:
 
@@ -189,7 +190,7 @@ If the command fails (no `scripts/skills_sync.py`, or a plugin install with no r
 
 Setup just built a few dozen files, copied the Python hook dispatcher and its helper scripts, and wired all six hook events through it. A non-technical founder cannot see whether any of that actually landed, and the hooks fail silently by design - so a half-copied script or a missing Python would stay invisible until a skill breaks days later mid-task. Do not let the founder leave on trust. Run the `verify` skill now, automatically, before the finish line. This is the product living its own rule: no "you are ready" without a check that says so.
 
-Run `verify` and show the founder its one-screen report (the eight substrate checks, each `[PASS]` / `[WARN]` / `[FAIL]`). Then read the result out loud in one plain line:
+Run `verify` and show the founder its one-screen report (the nine substrate checks, each `[PASS]` / `[WARN]` / `[FAIL]`). Then read the result out loud in one plain line:
 
 - **All PASS (or PASS with benign WARNs like no MCPs configured or the opt-in observation hook off):** "Checked it end to end - your OS is wired correctly and working." Then go to 6.3.
 - **Any FAIL:** name it plainly and fix it before declaring the finish line. A `[FAIL] Scripts present` usually means a script did not copy (re-run the Phase 2 hook/script copy) or Python is not installed (none of `python --version`, `python3 --version`, `py -3 --version` answers - point them at [python.org/downloads](https://www.python.org/downloads/), 3.11+, then re-run `verify`). A `[FAIL] Hooks installed` means the settings/hook copy did not complete. Do not paper over a FAIL with reassurance - a silent partial install is the one failure this whole OS exists to prevent.

@@ -739,12 +739,12 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 ### founder-next-move
 
 - **Say.** "what should I do next", "what's my next move", or "propose my next move".
-- **Outcome.** The single highest-leverage move toward your next paying customer, with a three-option close (one big, two small) so you always leave with a step you can start today.
-- **Reads.** `brain/.snapshot.md` (the four-field Founder Snapshot), `core/identity.md`, `core/profile.md`, `brain/log.md`, `context/clients.md`, `context/priorities.md`, `cadence/`, `brain/flags.md`.
+- **Outcome.** The single highest-leverage move - toward your next paying customer on the founder path, toward the work you own in front of whoever waits on it on the operator path - with a three-option close (one big, two small) so you always leave with a step you can start today.
+- **Reads.** `brain/.snapshot.md` (whichever snapshot block your identity carries - Founder Snapshot or Role Snapshot), `core/identity.md`, `core/profile.md`, `brain/log.md`, `context/clients.md`, `context/priorities.md`, `cadence/`, `brain/flags.md`.
 - **Writes.** Read-only.
 - **Voice rules.** No.
-- **Prereqs.** `founder-os-setup` complete with a Founder Snapshot. Founder and team_of_one variants. A thin snapshot still proposes a capture move.
-- **When to run.** Any morning, or any time you are unsure what to do next. Also surfaced as a nudge in the SessionStart brief once the brain is functional, and through `/next` for founders.
+- **Prereqs.** `founder-os-setup` complete with a snapshot block: the Founder Snapshot for the founder and team_of_one roles, the Role Snapshot for the operator role. A thin snapshot still proposes a capture move.
+- **When to run.** Any morning, or any time you are unsure what to do next. Also surfaced as a nudge in the SessionStart brief once the brain is functional, and through `/next` whenever a snapshot exists.
 - **Follow-up.** `founder-scope-challenge` to stress-test the plan, or `decision-framework` for a structured choice. No dedicated slash command (reached via `/next` or natural language).
 
 ### founder-scope-challenge
@@ -973,7 +973,7 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 ### verify
 
 - **Say.** "verify the OS", "run a health check", or "check the substrate".
-- **Outcome.** A structured health report across 8 substrate checks (plugin surface, hooks, scripts, MCPs, free-tier floor, wiki integrity, cadence freshness, auto-memory). Each check reports PASS / WARN / FAIL with a one-line reason.
+- **Outcome.** A structured health report across 9 substrate checks (plugin surface, hooks, scripts, MCPs, free-tier floor, wiki integrity, cadence freshness, auto-memory, skill reachability). Each check reports PASS / WARN / FAIL with a one-line reason.
 - **Reads.** `skills/index.md`, `plugin.json`, `.claude/settings.json`, `scripts/`, `brain/relations.yaml`, `cadence/`, `MEMORY.md`.
 - **Writes.** Nothing. Read-only. Never auto-fixes.
 - **Voice rules.** No.
