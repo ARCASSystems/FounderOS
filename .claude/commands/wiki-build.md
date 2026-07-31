@@ -22,7 +22,7 @@ Refresh the auto-extracted half of `brain/relations.yaml`. The hand-curated `rel
 
 5. If the script exits non-zero, report the error message verbatim and stop. Do NOT attempt to fix the underlying issue automatically.
 
-6. Do NOT commit. The user commits manually after review.
+6. Do NOT save a version of the change yourself. The user reviews the refreshed graph first; with version history on, it rides along in their next save.
 
 ## Wikilink syntax (Obsidian-compatible)
 

@@ -215,7 +215,7 @@ The reason it is worth a gate at all: a mistyped field fails silently. The entry
 
 - **Not a frontmatter schema for the file.** The file-level frontmatter (if any) stays as-is. These are per-entry sub-fields.
 - **Not a rewrite mandate.** Existing entries do not need backfilling. Adopt on next touch, and the commit gate reads added lines only so it can never demand otherwise.
-- **Not a substitute for git.** Git keeps full history. These fields make "show me what's still live" a one-line query without `git log` archaeology.
+- **Not a substitute for version history.** History keeps every past state. These fields make "show me what's still live" a one-line query without digging through the timeline.
 - **Not a quality check.** The gate checks the shape of a field, never the worth of an entry. Whether a flag deserves 14 days or 90 is yours.
 
 ---

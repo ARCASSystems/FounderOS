@@ -21,14 +21,16 @@ If a skill has a slash command that wraps it, that command is named at the end a
 
 ---
 
-## Version control (invisible git)
+## Version history
+
+Under the hood these four verbs run git for you. The rule they live by: git may exist as plumbing, it is never the interface. You never type a git command, and on an install with no git at all each verb says so plainly and points at the session snapshots that cover undo in the meantime.
 
 ### save
 
 - **Say.** "save my work", "save this", "save my progress", or "checkpoint this".
-- **Outcome.** Your current work is recorded as a new version. The OS stages every changed file by path and commits locally. You see what was saved in plain language.
-- **Reads.** `git status` for the changed files.
-- **Writes.** A local git commit. Never pushes.
+- **Outcome.** Your current work is recorded as a new version. The OS records every changed file by name into one saved version on your machine. You see what was saved in plain language.
+- **Reads.** Which files changed since your last saved version.
+- **Writes.** One saved version, locally. Nothing leaves your machine.
 - **Voice rules.** No.
 - **Prereqs.** Founder OS set up. `scripts/caveman_git.py` present.
 - **When to run.** Any time you want a restore point, and often. The auto-save hook also saves at session end once your name guard is active.
@@ -37,8 +39,8 @@ If a skill has a slash command that wraps it, that command is named at the end a
 ### history
 
 - **Say.** "what changed", "show my history", "version history", or "what did I save".
-- **Outcome.** Your saved versions as readable dated events, newest first, grouped by day. No SHAs.
-- **Reads.** The git log.
+- **Outcome.** Your saved versions as readable dated events, newest first, grouped by day. Never a code or a hash to decipher.
+- **Reads.** Your saved-version timeline.
 - **Writes.** Read-only.
 - **Voice rules.** No.
 - **Prereqs.** Founder OS set up. Handles a fresh repo with nothing saved yet.
@@ -49,8 +51,8 @@ If a skill has a slash command that wraps it, that command is named at the end a
 
 - **Say.** "undo to before this morning", "restore to yesterday", "roll back", or "go back to last week".
 - **Outcome.** Your OS is returned to an earlier version, non-destructively. It safety-saves your current work first, aborts if that save is blocked, and records the undo as a new version so it is itself reversible.
-- **Reads.** The git log and the target version.
-- **Writes.** A safety commit, then a new commit recording the undo. Never rewrites history, never `git reset --hard`, never loses work.
+- **Reads.** Your saved-version timeline and the version you name.
+- **Writes.** A safety save of where you are now, then a new saved version recording the undo. Never rewrites your timeline, never loses work.
 - **Voice rules.** No.
 - **Prereqs.** Founder OS set up. At least one saved version to return to.
 - **When to run.** When you want to undo a session, a day, or a stretch of changes.
@@ -60,8 +62,8 @@ If a skill has a slash command that wraps it, that command is named at the end a
 
 - **Say.** "back this up", "back up my OS", "set up a backup", or "mirror this offsite".
 - **Outcome.** An offsite copy of your OS, to a destination you choose: GitHub (recommended), OneDrive, Notion (reference mirror only), or stay local. On command only.
-- **Reads.** Your OS folder and git state.
-- **Writes.** Depends on the destination. The GitHub path reuses `github-ops` to create a private repo you own and push. Never force-pushes, never without your yes.
+- **Reads.** Your OS folder and its version history, when history is on.
+- **Writes.** Depends on the destination. The GitHub path reuses `github-ops` to create a private space you own and send your OS there. Never overwrites the remote's history, never without your yes.
 - **Voice rules.** No.
 - **Prereqs.** Founder OS set up. For GitHub, the `gh` CLI authenticated.
 - **When to run.** After a big session, once you have picked a backup destination. Optional: local version control works fully without it.
@@ -71,8 +73,8 @@ If a skill has a slash command that wraps it, that command is named at the end a
 
 - **Say.** "own my history", "turn on version history", "turn on full history", or "install git".
 - **Outcome.** A git-less install (usually the ZIP path) graduates to full version history: with your explicit yes, the OS installs git itself, turns the folder into a repository, wires the privacy guard before the first commit, and records version one. You never type a git command.
-- **Reads.** `core/identity.md` for the history identity; the install's git state.
-- **Writes.** The git install (consent-gated, exact command shown first), `git init`, local git config, the first commit.
+- **Reads.** `core/identity.md` for the history identity; whether the install already has history on.
+- **Writes.** The git install (consent-gated, exact command shown first), the folder turned into a repository, your author identity set locally, and version one recorded.
 - **Voice rules.** No.
 - **Prereqs.** Founder OS set up. Only does anything when version history is off.
 - **When to run.** Once the OS has proven useful - usually week one. Until then, session snapshots cover undo.
@@ -259,10 +261,10 @@ If a skill has a slash command that wraps it, that command is named at the end a
 
 - **Say.** "what changed since last session", "what did I miss", or "catch me up since I was last here".
 - **Outcome.** A 5-section delta report scoped to the gap since this skill last ran: hours elapsed, `brain/log.md` entries added, flags decayed, commitments now overdue, and files modified in `context/`. The marker advances at the end so the next run scopes to the next gap. First run seeds the marker and prints a one-line note with no delta.
-- **Reads.** `brain/.last-session` (the marker), `brain/log.md`, `brain/flags.md`, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `brain/.snapshot.md` if present. One `git log` call lists changed files in `context/`.
+- **Reads.** `brain/.last-session` (the marker), `brain/log.md`, `brain/flags.md`, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `brain/.snapshot.md` if present. With version history on, it also lists which `context/` files changed.
 - **Writes.** `brain/.last-session` only. No other file is touched.
 - **Voice rules.** No.
-- **Prereqs.** `founder-os-setup` complete. Works without git (Section 5 reports the gap if the install is not a repo).
+- **Prereqs.** `founder-os-setup` complete. Works without version history (Section 5 says that part of the report is off and why).
 - **When to run.** At the start of a working session after a gap, before any planning work.
 - **Follow-up.** `strategic-read` if you want a fuller orientation after the delta. Slash command: `/founder-os:since-last-session`.
 
@@ -345,7 +347,7 @@ If a skill has a slash command that wraps it, that command is named at the end a
 - **Say.** "run my weekly review", "weekly retro", or "roll the sprint".
 - **Outcome.** A Must / Should / Did bucket per priority for last week, plus a keep / kill / escalate verdict on every open flag.
 - **Reads.** `cadence/weekly-commitments.md`, `context/priorities.md`, `brain/log.md`, `brain/flags.md`, `cadence/daily-anchors.md`, `brain/.snapshot.md` if present.
-- **Writes.** Rolls `cadence/weekly-commitments.md` forward to the new week with previous-week retro folded in. Updates `context/priorities.md` if priorities shifted. Appends a retro entry to `brain/log.md`. Updates `brain/flags.md` on keep / kill / escalate. Optional git commit at the end.
+- **Writes.** Rolls `cadence/weekly-commitments.md` forward to the new week with previous-week retro folded in. Updates `context/priorities.md` if priorities shifted. Appends a retro entry to `brain/log.md`. Updates `brain/flags.md` on keep / kill / escalate. With version history on, saves the rolled week as one version at the end.
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete. At least one week of cadence data.
 - **When to run.** Friday EOD or Monday AM. Weekly.

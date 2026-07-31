@@ -166,11 +166,11 @@ git clone --depth 1 https://github.com/ARCASSystems/FounderOS.git ~/founder-os
 
 Open Claude Code in the cloned folder, then say "set up Founder OS" (or run `/setup`). Requires git and Python 3.11+. Commands use bare names on this path - no `/founder-os:` prefix.
 
-**When to choose:** The plugin install fails, or you want full control of the local copy and manual `git pull` updates.
+**When to choose:** The plugin install fails, or you want full control of the local copy. Updates work the same as every path ("update Founder OS"); `git pull` also works if you prefer raw git.
 
 ### Claude Cowork (partial - natural-language only)
 
-Open the FounderOS folder in Cowork and attach `CLAUDE.md` as folder instructions. Hooks and slash commands do not fire in Cowork. Use it for drafting and timed runs; return to Claude Code for hooks, cadence refresh, and commits.
+Open the FounderOS folder in Cowork and attach `CLAUDE.md` as folder instructions. Hooks and slash commands do not fire in Cowork. Use it for drafting and timed runs; return to Claude Code for hooks, cadence refresh, and saves.
 
 **When to choose:** You use Cowork for day-to-day drafting and want the OS context available there alongside your Claude Code install.
 
@@ -178,14 +178,14 @@ Open the FounderOS folder in Cowork and attach `CLAUDE.md` as folder instruction
 
 ## Setup ladder (40 min total, do in this order)
 
-1. **Install** - pick an [install path](#install) above (5 min). If your install uses git (curl or clone paths, or after "own my history"), run `./scripts/install-git-hooks.sh` to wire the privacy pre-commit hook (operator-only). Out of the box it already blocks committed secrets (API keys, tokens, bot tokens, PEM private keys), em/en dashes, and AI-attribution trailers - no config needed. To also block private names, open `scripts/private-name-patterns.txt` and add the names that must never enter your files (`\bClientName\b` - a client under NDA, a person you keep off the record); the name check stays off until that file has a pattern, while the secret and voice checks run regardless. Do not add your own name: once you own your history, your identity file is tracked by design, and your own name as a pattern would block every save that touches it. The file is gitignored, so any names in it never leave your machine. On a ZIP install this step waits until you turn on version history - there is nothing to wire before then.
+1. **Install** - pick an [install path](#install) above (5 min). If your install uses git (curl or clone paths, or after "own my history"), setup wires the privacy guard for you; `./scripts/install-git-hooks.sh` re-wires it by hand if you ever need to. Out of the box it already blocks committed secrets (API keys, tokens, bot tokens, PEM private keys), em/en dashes, and AI-attribution trailers - no config needed. To also block private names, open `scripts/private-name-patterns.txt` and add the names that must never enter your files (`\bClientName\b` - a client under NDA, a person you keep off the record); the name check stays off until that file has a pattern, while the secret and voice checks run regardless. Do not add your own name: once you own your history, your identity file is tracked by design, and your own name as a pattern would block every save that touches it. The file is gitignored, so any names in it never leave your machine. On a ZIP install this step waits until you turn on version history - there is nothing to wire before then.
 2. **Say "set up Founder OS"** (or run `/founder-os:setup`) - the wizard builds your operating layer from your answers (15 min). It reads which kind of operator you are (founder, career-mover, builder, student) so the OS leads with what your situation needs, and seeds your brain with a starter flag, pattern, parked decision, and log entry so your first session is not a blank screen.
 3. **Say "set up my voice profile"** (or run `/founder-os:voice-interview`) - so every writing skill sounds like you, not Claude (10 min)
 4. **Say "set up my brand profile"** (or run `/founder-os:brand-interview`) - so every deliverable looks like you (10 min)
 
 After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-screen view of today, and `/next` recommends one action. Full first-day path in [docs/first-day.md](docs/first-day.md). Full per-command reference in [docs/commands.md](docs/commands.md). Full per-skill reference (outcome, reads, writes, voice rules, prereqs, follow-ups) in [docs/skills.md](docs/skills.md).
 
-For the short answer to "what can this actually do", [docs/what-this-can-do.md](docs/what-this-can-do.md) lists every capability in plain language. It is generated from the skills on disk rather than maintained by hand, and the commit hook refuses a skill change that leaves it stale, so it is never a wish list. Rebuild it any time with `python scripts/skills_sync.py --capabilities`.
+For the short answer to "what can this actually do", [docs/what-this-can-do.md](docs/what-this-can-do.md) lists every capability in plain language. It is generated from the skills on disk rather than maintained by hand, and on installs with version history the privacy guard refuses a skill change that leaves it stale, so it is never a wish list. Rebuild it any time with `python scripts/skills_sync.py --capabilities`.
 
 > **Path B users (manual git clone):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/today`, etc. The plugin namespace only activates on Path A. See [docs/install.md](docs/install.md) for the exact commands per path.
 

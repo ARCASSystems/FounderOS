@@ -152,7 +152,7 @@ You never need to use the OS terms. Say what feels natural.
 
 **When the OS gives you an opinion:** It comes with a counter-case and a confidence level on purpose. The OS argues the other side of your own plan so you decide with the counter in front of you, the way a good advisor disagrees with you sometimes. That is the OS working, not the OS being difficult. To turn that lens on any claim or decision yourself, say "play devil's advocate" (or run `<prefix>devil`).
 
-**End of every session:** Claude commits changes. Your repo is your memory.
+**End of every session:** your files are your memory. Everything the session wrote is already on disk, and the next session opens on it. With version history on, the session is also recorded as one saved version.
 
 **To audit anytime:** Say "audit the OS" (or run `<prefix>audit`) for the composite health report across readiness, lint, wiki, brain staleness, and voice.
 

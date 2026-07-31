@@ -1,7 +1,7 @@
 ---
 name: restore
 description: >
-  Undo the founder's OS back to an earlier saved version, non-destructively, wrapping git so they never type a git command. Trigger on "undo", "undo to before this morning", "restore to yesterday", "roll back", "go back to last week", "revert my changes", or any plain request to return to an earlier state. Saves the current work as a safety version FIRST, aborts if that safety save is blocked, then records the undo as a NEW version so the undo itself is reversible. Never rewrites history, never `git reset --hard`, never loses uncommitted work.
+  Undo the founder's OS back to an earlier saved version, non-destructively, wrapping git so they never type a git command. Trigger on "undo", "undo to before this morning", "restore to yesterday", "roll back", "go back to last week", "revert my changes", or any plain request to return to an earlier state. Saves the current work as a safety version FIRST, aborts if that safety save is blocked, then records the undo as a NEW version so the undo itself is reversible. Never rewrites history, never runs a destructive reset, never loses unsaved work.
 why: "Undo is the feature that makes a non-technical founder trust the OS with their work. It only earns that trust if it can never lose anything, so the whole design is fail-safe: safety-save first, abort on any doubt, and keep every prior state recoverable."
 enhance: "Run save often so there are clean points to undo back to. If the founder is vague about when, show history first and offer two or three concrete days to pick from."
 allowed-tools: ["Bash", "Read"]

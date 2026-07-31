@@ -1,7 +1,7 @@
 ---
 name: save
 description: >
-  Save the founder's work as a new version, wrapping git so they never type a git command. Trigger on "save my work", "save this", "save my progress", "commit my work", "checkpoint this", "save a version", or any plain request to record the current state. Stages every changed file by path (never `git add -A`) and commits with a plain-language message. If the privacy guard blocks the commit (a private name, a dash, an AI-attribution line, or a secret), the reason is surfaced and nothing is saved.
+  Save the founder's work as a new version, wrapping git so they never type a git command. Trigger on "save my work", "save this", "save my progress", "commit my work", "checkpoint this", "save a version", or any plain request to record the current state. Records every changed file by name (never a blanket grab-everything) into one saved version with a plain-language message. If the privacy guard blocks the commit (a private name, a dash, an AI-attribution line, or a secret), the reason is surfaced and nothing is saved.
 why: "Version control is the biggest literacy wall in onboarding. Wrapping it in one verb gives a non-technical founder full history and undo without learning git, and keeps the you-own-your-files promise real."
 enhance: "Save often. Each save is a point you can undo back to later, so frequent saves make the restore verb far more useful."
 allowed-tools: ["Bash", "Read"]

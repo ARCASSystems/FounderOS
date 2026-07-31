@@ -138,11 +138,10 @@ Open Claude Code in that folder, then say "set up Founder OS" (or run `/setup`).
 **Pros**
 - Works regardless of plugin marketplace state.
 - You own the local copy. Nothing magical happens behind the scenes.
-- Standard git update path: `git pull` to refresh.
+- Updates work the same as every path: say "update Founder OS". `git pull` also works if you prefer raw git.
 
 **Cons**
 - Requires git installed.
-- Updates are manual via `git pull`.
 - Commands use bare names, not the `/founder-os:` namespace.
 
 **Verifying it worked:** From the Claude Code session opened in the cloned folder, say "set up Founder OS" (or run `/setup`). The setup wizard should start its questions. If the slash command does not appear, confirm Claude Code's working directory is the FounderOS root (the folder containing `CLAUDE.md` and `.claude-plugin/`).
@@ -166,7 +165,7 @@ Claude Cowork is Anthropic's desktop surface for non-coding work. It reads markd
 3. Attach `CLAUDE.md` as folder instructions (or use Cowork's "Folder instructions" if available on your version).
 4. If `brain/.snapshot.md` exists, attach it too. Skills produced this snapshot from your current state - it is the cheapest way to give Cowork live context.
 5. Talk to Cowork in natural language. "What is on my plate today?" "Draft a follow-up to the call with X." Cowork reads markdown and writes markdown.
-6. Return to Claude Code for any of: SessionStart brief, Stop revenue-check, slash commands, commits, cadence refresh, or the natural-language weekly review skill.
+6. Return to Claude Code for any of: SessionStart brief, Stop revenue-check, slash commands, saves, cadence refresh, or the natural-language weekly review skill.
 
 **Honest limits in Cowork:**
 
@@ -193,12 +192,22 @@ You can switch paths anytime. The OS is your files - they are the same regardles
 
 ---
 
+## Updating, and what stays yours
+
+Say "update Founder OS" whenever you like. No git needed: a ZIP install updates over a plain download, and every other path uses the same command. The update draws a hard line between the OS's machinery and your data:
+
+- **The OS's, replaced freely by an update:** `skills/`, `scripts/`, `templates/`, `docs/`, `updates/`, the commands, and the reference docs at the root.
+- **Yours, never written by an update:** `core/`, `context/`, `cadence/`, `brain/`, `capture/`, `network/`, `brands/`, `clients/`, `companies/`, plus `stack.json` and `os-config.yaml`. Your identity, your log, your pipeline, and your decisions survive every update by design.
+- **In between, proposed never imposed:** `CLAUDE.md`, `rules/`, and `.claude/settings.json`. An update shows you each change as a diff and you say yes or no per file. Declining leaves your version in place.
+
+---
+
 ## After install
 
 All paths converge on the same six files. Whichever path you picked, the next steps are the same. You can run the slash command or ask Claude in plain English - both work.
 
 1. **Start the wizard.** Say "set up Founder OS" (or run `/founder-os:setup` on Path A, `/setup` on Path 0 and Path B). Path D: skip until you have set up locally.
-   If your install uses git (Paths B and E, or Path 0 after "own my history"), run `./scripts/install-git-hooks.sh` to activate the privacy pre-commit hook (operator-only). On a fresh ZIP install there is no git yet, so this step waits until you turn version history on.
+   If your install uses git (Paths B and E, or Path 0 after "own my history"), the setup wizard wires the privacy guard for you as part of setup. If you ever need to re-wire it by hand later (say the folder moved machines), `./scripts/install-git-hooks.sh` does it. On a fresh ZIP install there is no git yet, so this waits until you turn version history on.
 2. **Add your voice.** Say "set up my voice profile" (or run `/founder-os:voice-interview` on Path A, `/voice-interview` on Path B). Captures how you write so every writing skill sounds like you.
 3. **Add your brand.** Say "set up my brand profile" (or run `/founder-os:brand-interview` on Path A, `/brand-interview` on Path B). Captures colors, fonts, logo so every branded deliverable looks like you.
 4. **See your day.** Ask "what's on for today?" (or run `/today`). Ask "what should I focus on next?" (or run `/next`).

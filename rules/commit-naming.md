@@ -1,5 +1,7 @@
 # Commit Naming Rule
 
+This rule lives in the version-history layer. If your install runs without version history (the normal state of a fresh ZIP install), nothing in this file fires: your files save directly to disk and there are no saved-version messages to name. It starts applying the day you turn history on.
+
 Public repo commits are read by visitors who do not have your context. The subject line states **what changed for the user**, not what was edited internally.
 
 ## The rule
@@ -72,7 +74,7 @@ The same push is your off-site backup, which is the second reason to make it a c
 Three qualifiers:
 
 - **A public repo is different.** Publishing is an explicit choice every time, never a cadence. This rule is for your own OS, not for anything the world can read.
-- **If the push is rejected because the remote moved,** pull with rebase, resolve, push. Never force push.
+- **If the push is rejected because the remote moved,** ask the OS to bring the remote changes down and re-apply yours on top, then push again. You never have to know the mechanics. Never force push.
 - **A session that ends without pushing says so, and says why.** Mid-rebase, or you asked it to hold. Silence is what creates the stale-truth case.
 
 If your OS only exists in one place, ignore all of this. It costs nothing to skip and it is the first rule to adopt the day you sync.

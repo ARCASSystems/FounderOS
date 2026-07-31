@@ -8,7 +8,7 @@
 {{FOUNDER_NAME}}. Based in {{LOCATION}}.
 {{FOUNDER_BACKGROUND_ONE_LINER}}
 
-I run multiple businesses: {{BUSINESS_LIST}}.
+What I run: {{BUSINESS_LIST}}.
 
 {{COMMUNICATION_PREFERENCES}}
 
@@ -31,9 +31,8 @@ I run multiple businesses: {{BUSINESS_LIST}}.
 
 - Each project loads its own CLAUDE.md and context. No cross-project bleed.
 - Read the project CLAUDE.md before doing anything.
-- Never assume state from a previous session. Verify with git status and a file read.
-- Main is the working branch unless told otherwise.
-- Never force push. Never skip hooks.
+- Never assume state from a previous session. Verify with a file read.
+- With version history on: main is the working branch, never force push, never skip the privacy guard. Without it, these lines are dormant.
 
 ## Model Routing
 

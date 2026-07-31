@@ -127,7 +127,7 @@ If `cadence/queue.md` does not exist, skip this step silently.
 3. Update `brain/log.md` with a `#acted` entry noting the sprint roll
 4. If any flags were resolved, update `brain/flags.md`
 5. Apply any queue changes from Step 4.5 to `cadence/queue.md`
-6. Commit: "Weekly review: roll sprint to Week of [date]"
+6. With version history on, save the rolled week as one version: "Weekly review: roll sprint to Week of [date]". Without it, the files above are already on disk and there is nothing more to do.
 
 ## Marketing / Sales / Delivery Balance Check
 

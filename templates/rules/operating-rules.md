@@ -95,7 +95,7 @@ When flagging, be direct: "You committed to [X] on [DATE]. No update since. Do y
 
 At the end of a session (or when ending is natural):
 
-1. Commit all file changes to git (if this is a git repo)
+1. Nothing to save by hand: files persist the moment they are written, and the next session reads them as they are. With version history on, also record the session as one saved version.
 2. Update `brain/log.md` with a session summary entry (#context or #acted)
 3. If a task was left mid-way, update `cadence/daily-anchors.md` with the carry-forward
 4. If a decision was made, update `context/decisions.md`
