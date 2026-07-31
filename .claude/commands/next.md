@@ -10,11 +10,11 @@ Recommend ONE next action across everything the founder is currently doing. This
 
 ### Step 0. Route by operator type
 
-Before ranking, check who this is for. Read `core/profile.md` (the `variant` field) and the `## Founder Snapshot` block in `core/identity.md`, if they exist.
+Before ranking, check who this is for. Read the `**Role:**` line under `## Basics` in `core/identity.md`, and whichever snapshot block the file carries (`## Founder Snapshot` or `## Role Snapshot`), if any. The role is the gate, not the profile variant - the variant field never holds `team_of_one`.
 
-If the variant is `founder` or `team_of_one` AND a `## Founder Snapshot` block exists in `core/identity.md`, do NOT run the generic ranking below. Run the `founder-next-move` propose engine instead. It reads the same files, infers the founder's current stage, and names the single highest-leverage move toward a paying customer with a three-option close. The engine handles a thin snapshot itself - it proposes a capture move when fields are missing - so route to it whenever the snapshot exists, even half-filled. Never send a founder who has a snapshot to the generic ranking.
+If the role is `founder` or `team_of_one` and a `## Founder Snapshot` block exists, OR the role is `operator` and a `## Role Snapshot` block exists, do NOT run the generic ranking below. Run the `founder-next-move` propose engine instead. It reads the same files, works out where they actually are, and names the single highest-leverage move - toward a paying customer on the founder path, toward the work they own on the operator path - with a three-option close. The engine handles a thin snapshot itself - it proposes a capture move when fields are missing - so route to it whenever the matching block exists, even half-filled. Never send someone who has a snapshot to the generic ranking.
 
-For every other case (no profile, a `student` / `career-mover` / `operator` variant, or no Founder Snapshot at all), continue with the ranking in Steps 1 to 5 below.
+For every other case (no identity file, a `student` / `career-mover` install with no snapshot block, or an older install carrying neither block), continue with the ranking in Steps 1 to 5 below.
 
 ### Step 1. Verify setup
 

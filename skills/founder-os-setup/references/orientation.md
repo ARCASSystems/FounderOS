@@ -15,7 +15,7 @@ If version history is off (no git on the machine - Phase 2.3 already said so), s
 
 Setup just created a few dozen files silently. A non-technical founder will not go looking for them and will not trust a system they cannot see. Before the longer orientation, run a short tour that makes the new OS visible and proves the brain captured something real. Keep it warm and concrete. Do not list all forty files - list the handful they will actually touch.
 
-**1. Reflect the Founder Snapshot back (founder / team_of_one only).** If Phase 0.2.6 ran, read the four fields you just wrote to `core/identity.md` `## Founder Snapshot` and say them back in plain language. This is the moment the founder sees their own brain on the page:
+**1. Reflect the snapshot back.** If Phase 0.2.6 ran, read the fields you just wrote to `core/identity.md` and say them back in plain language. This is the moment they see their own brain on the page. For the `founder` and `team_of_one` roles, the `## Founder Snapshot`:
 
 > "Here is what your OS now knows about you and your venture:
 > - Venture: [venture one-liner]
@@ -25,13 +25,23 @@ Setup just created a few dozen files silently. A non-technical founder will not 
 >
 > That is enough for the OS to start proposing real moves. It gets sharper every time you use it."
 
-If any of the four is `[NOT SET]`, say so honestly and offer the one-line fix: "Your biggest blocker is still blank - tell me in one line any time and I will add it." Do not paper over a blank with a guess. For non-founder variants (no Founder Snapshot), skip this point.
+For the `operator` role, the `## Role Snapshot`, same shape:
 
-**1.5 Run the first real proposal, in the flow (founder / team_of_one only).** Do not hand them an artifact to open somewhere else - the value is in the flow they are already in. Run the `founder-next-move` skill now: it reads the snapshot you just wrote and names the single highest-leverage move toward a paying customer, closing with one big and two small steps. This is the founder's first taste of the actual product - their own brain producing a decision, thirty seconds after it was born. Then say one line about how it compounds, because compounding IS the product:
+> "Here is what your OS now knows about you and the part of the job you run:
+> - Your scope: [scope one-liner]
+> - You answer to: [answers to]
+> - Yours to own: [owns] - and not yours to decide: [not yours]
+> - Biggest blocker: [biggest blocker]
+>
+> That is enough for the OS to start proposing real moves. It gets sharper every time you use it."
+
+If any field is `[NOT SET]`, say so honestly and offer the one-line fix: "Your biggest blocker is still blank - tell me in one line any time and I will add it." Do not paper over a blank with a guess. If Phase 0.2.6 was skipped entirely (`student` / `career-mover` variants - no snapshot block exists), skip this point.
+
+**1.5 Run the first real proposal, in the flow.** Do not hand them an artifact to open somewhere else - the value is in the flow they are already in. Run the `founder-next-move` skill now: it reads the snapshot you just wrote and names the single highest-leverage move - toward a paying customer on the founder path, toward the work they own on the operator path - closing with one big and two small steps. This is their first taste of the actual product - their own brain producing a decision, thirty seconds after it was born. Then say one line about how it compounds, because compounding IS the product:
 
 > "That move came from four lines your brain holds right now. Every session adds to it - what you did, what stalled, what you decided - and the moves get sharper because they are read from your real state, not guessed. Six months from now this same question reads a brain that knows your whole business."
 
-If the snapshot is too thin for a real move (no customer set), the skill already handles that by asking for the missing field - that ask is the move. For non-founder variants, skip this point entirely.
+If the snapshot is too thin for a real move (no customer set on the founder path, nobody named to answer to on the operator path), the skill already handles that by asking for the missing field - that ask is the move. If Phase 0.2.6 was skipped entirely (`student` / `career-mover` variants), skip this point.
 
 **2. Show the six files they now own.** Name them with a one-line, plain-English purpose each. These are the files a founder actually opens, not the engine files:
 
@@ -60,9 +70,9 @@ Say what each one gives them, not what it reads. One line each. Do not paste the
 > Your OS is not one assistant. It is five jobs, each with a name, a written job description, and a list of exactly what it is allowed to touch. Here is who you have:
 >
 > - **The assistant** - runs your morning. It asks you at most four questions pulled from what is actually waiting, and every answer you give lands in the file that owns it, so you are never asked the same thing twice.
-> - **The one who names your next move** - reads where you actually are and tells you the single thing that moves you closest to your next paying customer. One big step, two small ones.
+> - **The one who names your next move** - reads where you actually are and tells you the single thing that moves you closest to your next paying customer - or, if you run a role inside a company, the single thing that keeps the work you own moving. One big step, two small ones.
 > - **The note-taker** - whatever you captured away from your desk goes into `capture/inbox/`, and this files each one into your brain with the date and the source kept.
-> - **The account manager** - writes the update or the progress report for a client, in your voice, from what your files actually record. It writes the draft. Sending stays yours.
+> - **The account manager** - writes the update or the progress report for a client, or for whoever you answer to, in your voice, from what your files actually record. It writes the draft. Sending stays yours.
 > - **The reviewer** - reviews the other four. Reads what you said about their work and proposes changes to how they are defined. It never changes anything on its own.
 >
 > All five are switched on but idle. Nothing has run yet, and the chart says so honestly rather than pretending you have a team with a track record. Tomorrow morning, say 'run my morning' and the first one goes to work."
@@ -88,7 +98,7 @@ If they say skip it now, write `Ended [today's date] - going straight to stage 3
 **3. The three things to say next.** Give the founder exactly three next moves, in natural language, so they leave with something to do instead of a blank screen:
 
 > "Three things to try right now:
-> 1. Ask 'what should I focus on next?' (or run `/next`) - that is the one who names your next move, and you get a single recommended step toward your next paying customer.
+> 1. Ask 'what should I focus on next?' (or run `/next`) - that is the one who names your next move, and you get a single recommended step: toward your next paying customer, or toward the work you own if you run a role inside a company.
 > 2. Ask 'what's on for today?' (or run `/today`) - that is your assistant, giving you a one-screen view of your day.
 > 3. Say 'set up my voice' - a 10-minute step so every post, email, and proposal the OS writes sounds like you, not like a robot. (The exact command is in the next message.)"
 

@@ -25,6 +25,7 @@ STATUS_OPEN = re.compile(r"Status:\s*\**OPEN", re.IGNORECASE)
 H2_HEADER = re.compile(r"^##\s+(.+?)\s*$")
 H3_HEADER = re.compile(r"^###\s+(.+?)\s*$")
 FOUNDER_FIELD = re.compile(r"^\*\*(Venture|Customer|Stage \(seed\)|Biggest blocker):\*\*\s*(.*?)\s*$")
+ROLE_FIELD = re.compile(r"^\*\*(Scope|Answers to|Yours to own|Not yours to decide|Biggest blocker):\*\*\s*(.*?)\s*$")
 
 
 def safe_read(path: Path) -> str:
@@ -168,12 +169,12 @@ def brand_section(root: Path) -> list[str]:
     ]
 
 
-def founder_snapshot(root: Path) -> list[str]:
-    """Read core/identity.md ## Founder Snapshot - the four fields the propose
-    engine reads (venture, customer, stage seed, biggest blocker). Returns the
-    field lines, or [] when identity.md or the section is absent (e.g. a
-    non-founder install), so the snapshot stays silent rather than emitting an
-    empty header.
+def _identity_section(root: Path, section_name: str, field_re: re.Pattern, labels: tuple) -> list[str]:
+    """Read one snapshot block from core/identity.md. Returns the field lines,
+    or [] when identity.md or the section is absent, so the snapshot stays
+    silent rather than emitting an empty header. Each install carries exactly
+    one of the two snapshot blocks (Founder for founder / team_of_one, Role
+    for operator), so at most one of these readers returns fields.
     """
     path = root / "core" / "identity.md"
     if not path.exists():
@@ -187,11 +188,11 @@ def founder_snapshot(root: Path) -> list[str]:
     for line in text.splitlines():
         header = H2_HEADER.match(line)
         if header:
-            in_section = header.group(1).strip().lower() == "founder snapshot"
+            in_section = header.group(1).strip().lower() == section_name
             continue
         if not in_section:
             continue
-        match = FOUNDER_FIELD.match(line)
+        match = field_re.match(line)
         if match:
             fields[match.group(1)] = match.group(2).strip()
 
@@ -199,12 +200,28 @@ def founder_snapshot(root: Path) -> list[str]:
         return []
 
     out: list[str] = []
-    for label in ("Venture", "Customer", "Stage (seed)", "Biggest blocker"):
+    for label in labels:
         value = fields.get(label, "")
         if value.startswith("{{"):
             value = ""
         out.append(f"- {label}: {'[NOT SET]' if is_unset(value) else value}")
     return out
+
+
+def founder_snapshot(root: Path) -> list[str]:
+    """The four fields the founder-path propose engine reads."""
+    return _identity_section(
+        root, "founder snapshot", FOUNDER_FIELD,
+        ("Venture", "Customer", "Stage (seed)", "Biggest blocker"),
+    )
+
+
+def role_snapshot(root: Path) -> list[str]:
+    """The operator-role twin: the fields the operator-path propose engine reads."""
+    return _identity_section(
+        root, "role snapshot", ROLE_FIELD,
+        ("Scope", "Answers to", "Yours to own", "Not yours to decide", "Biggest blocker"),
+    )
 
 
 def open_flags(root: Path, limit: int = 3) -> list[str]:
@@ -371,6 +388,12 @@ def build_snapshot(root: Path, today: date) -> str:
     if fs:
         out.append("## Founder Snapshot")
         out.extend(fs)
+        out.append("")
+
+    rs = role_snapshot(root)
+    if rs:
+        out.append("## Role Snapshot")
+        out.extend(rs)
         out.append("")
 
     flags = open_flags(root)

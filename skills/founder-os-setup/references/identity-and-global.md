@@ -32,7 +32,9 @@ The `## Positioning` section is load-bearing. Populate:
 
 If any positioning answer was skipped, write `[NOT SET]` for that line. Do not invent a buyer, offer, or pain.
 
-The `## Founder Snapshot` section is the block the OS reads before it proposes a next move. It only exists for the `founder` and `team_of_one` variants - if Phase 0.2.6 was skipped (operator / student / career-mover), omit the whole section. When 0.2.6 ran, populate the four fields from it:
+The `## Basics` line `**Role:**` takes the role token from Phase 0.2.1 (`founder` / `operator` / `team_of_one`), plus any additional roles the user named, in plain words after the token. Downstream skills gate on the token, so it must be present exactly.
+
+The snapshot block is what the OS reads before it proposes a next move, and each install carries exactly ONE of the two: `## Founder Snapshot` for the `founder` and `team_of_one` roles, `## Role Snapshot` for the `operator` role. Omit the other section entirely - never ship both, and never ship either when Phase 0.2.6 was skipped for a `student` or `career-mover` variant. When the founder flow of 0.2.6 ran, populate the four Founder Snapshot fields from it:
 
 - `**Venture:**` from the 0.2.6 venture one-liner (the confirmed one-line version of 0.1).
 - `**Customer:**` from the 0.2.6 customer answer. This is the same source as `## Positioning` `**Sells to:**` for a founder; write it in both places so each block stands alone.
@@ -40,6 +42,15 @@ The `## Founder Snapshot` section is the block the OS reads before it proposes a
 - `**Biggest blocker:**` from the 0.2.6 `biggest_blocker`, verbatim.
 
 If any of the four was skipped, write `[NOT SET]` for that line. Do not invent a venture, customer, stage, or blocker - a thin-but-honest snapshot is what the propose engine is built to handle.
+
+When the operator flow of 0.2.6 ran instead, populate the five `## Role Snapshot` fields:
+
+- `**Scope:**` from the confirmed one-line scope (the 0.1 answer, confirmed in 0.2.6).
+- `**Answers to:**` from `answers_to`, verbatim.
+- `**Yours to own:**` from `owns` and `**Not yours to decide:**` from `not_yours`.
+- `**Biggest blocker:**` from `role_blocker`, verbatim.
+
+Same honesty rule: `[NOT SET]` for anything skipped. Do not invent a manager, a scope, or a blocker.
 
 The `## Basics` section also takes a discovery answer: populate `**Time zone:**` from the Phase 0.5.5 timezone answer. If it was skipped, write `[NOT SET]`. Leave `**Jurisdiction:**` as the shipped `[NOT SET - run /founder-os:legal-setup]` default - `legal-setup` fills it on first run.
 

@@ -80,7 +80,7 @@ employees:
   - id: next-move-caller
     job_title: The one who names your next move
     seat: BD
-    job_description: Reads your snapshot, your log and your pipeline, works out what stage you are actually at, and names the single move with the most leverage toward your next paying customer - closing with one big step and two small enough to start today. Propose only. It names the move; it does not do it, book it, or contact anybody, and when your snapshot is too thin to read it asks for the missing field instead of guessing a stage.
+    job_description: Reads your snapshot, your log and your pipeline, works out where you actually are, and names the single move with the most leverage - toward your next paying customer, or toward the work you own if you run a role inside a company - closing with one big step and two small enough to start today. Propose only. It names the move; it does not do it, book it, or contact anybody, and when your snapshot is too thin to read it asks for the missing field instead of guessing.
     skill_chain: founder-next-move
     inputs: brain/.snapshot.md, core/identity.md, brain/log.md, context/clients.md, cadence/weekly-commitments.md
     output_surface: the recommendation in your session, nothing written to your files
@@ -114,16 +114,16 @@ employees:
   - id: client-status
     job_title: The account manager
     seat: COO
-    job_description: Writes the status update or milestone report for one client, in your voice, from what your client file and your log actually record. Draft only. It produces a draft in your folder and stops there; sending is yours. It refuses to write at all until your voice profile is filled rather than producing something in a generic assistant's voice and letting you find out after the client read it.
+    job_description: Writes the status update or milestone report for one client, or for whoever you answer to, in your voice, from what your client file and your log actually record. Draft only. It produces a draft in your folder and stops there; sending is yours. It refuses to write at all until your voice profile is filled rather than producing something in a generic assistant's voice and letting you find out after the reader saw it.
     skill_chain: client-update
     inputs: context/clients.md, core/voice-profile.yml, brain/log.md, cadence/weekly-commitments.md
     output_surface: the draft file it is asked to produce
-    dispatch: manual, per client ("write the update for <client>")
+    dispatch: manual, per client or per stakeholder ("write the update for <client>", "write my status update")
     run_record_source: the drafts it produced and the verdicts you closed them with
     may_write: the draft file it was asked to produce
     never: email, post or otherwise deliver anything, change a client's stage, write in a voice you have not set
     tools: Read, Write, Bash(python scripts/check-voice-ready.py:*), Bash(python scripts/check-brand-voice-ready.py:*)
-    kpi: no active client goes a month with no update they actually received
+    kpi: nobody waiting on your work - a client, or whoever you answer to - goes a month with no update they actually received
     version: 1.0
     last_review: null
     status: gated

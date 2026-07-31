@@ -21,7 +21,7 @@ python scripts/skills_sync.py --capabilities
 - **weekly-review** - Run the weekly review and roll the sprint
 - **since-last-session** - Report what changed in the OS since the last time this skill ran
 - **menu** - Show what FounderOS can do right now
-- **founder-next-move** - Propose the single highest-leverage next move for a founder, aimed at their first paying customer
+- **founder-next-move** - Propose the single highest-leverage next move
 
 ## Your brain
 

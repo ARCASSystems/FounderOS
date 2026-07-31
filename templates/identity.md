@@ -1,6 +1,6 @@
 # core/identity.md
 
-> Who the founder is and how they work. This file is the source of truth for all role behavior.
+> Who the operator is and how they work. This file is the source of truth for all role behavior.
 > Update it when something meaningfully changes about how they operate.
 
 ---
@@ -8,9 +8,9 @@
 ## Basics
 
 **Name:** {{FOUNDER_NAME}}
-**Role:** Founder / {{ADDITIONAL_ROLES}}
+**Role:** {{ROLE}} (one of: founder, operator, team_of_one - written by the setup wizard from your own answer. Downstream skills read this token, so keep it if you edit the line.)
 **Location:** {{LOCATION}}
-**Team size:** {{TEAM_SIZE}} (e.g. solo, 2 people, 5 contractors)
+**Team size:** {{TEAM_SIZE}} (e.g. solo, 2 people, 5 contractors, or the team around you)
 **Time zone:** {{TIMEZONE}}
 - **Jurisdiction:** [NOT SET - run /founder-os:legal-setup]
 
@@ -33,12 +33,24 @@
 
 ## Founder Snapshot
 
-> The four fields the OS reads before it proposes a next move. Thin on day one, sharper as the brain fills. Keep these current - they are what the OS reasons over. Founder and team_of_one roles only; the setup wizard omits this whole section for other operators.
+> The four fields the OS reads before it proposes a next move. Thin on day one, sharper as the brain fills. Keep these current - they are what the OS reasons over. Founder and team_of_one roles only; the setup wizard writes the Role Snapshot below instead for the operator role, and each install carries exactly one of the two blocks.
 
 **Venture:** {{VENTURE_ONELINER}} (what you are building, in one line)
 **Customer:** {{FOUNDER_CUSTOMER}} (who it is for - who you are trying to win first)
 **Stage (seed):** {{STAGE_SEED}} (one of: pre-idea, idea-validation, building, first-customer, revenue, mrr-scale. Seeded at setup from your own words. The OS re-reads your log and re-infers your stage each time it proposes, so this is a starting read, not a fixed label.)
 **Biggest blocker:** {{BIGGEST_BLOCKER}} (the single thing between you and your next paying customer)
+
+---
+
+## Role Snapshot
+
+> The operator-role twin of the Founder Snapshot: the fields the OS reads before it proposes a next move when you run a role inside a company rather than the company itself. Written by the setup wizard for the operator role only; founder and team_of_one installs carry the Founder Snapshot above instead.
+
+**Scope:** {{ROLE_SCOPE}} (the part of the job you run, in one line)
+**Answers to:** {{ANSWERS_TO}} (who is waiting on your work - a manager, a director, a client you serve inside the company)
+**Yours to own:** {{OWNS}} (what you own end to end)
+**Not yours to decide:** {{NOT_YOURS}} (what you hand upward instead of deciding yourself)
+**Biggest blocker:** {{ROLE_BLOCKER}} (the single thing between you and the work you own being on track)
 
 ---
 
@@ -86,4 +98,4 @@
 ## What They're Building Toward
 
 {{NORTH_STAR_PARAGRAPH}}
-(e.g. a consulting firm that operates without them being in every call, a product that generates passive income, a platform for a specific community)
+(e.g. a consulting firm that operates without them being in every call, a product that generates passive income, a platform for a specific community, a role run so well it becomes the next one)

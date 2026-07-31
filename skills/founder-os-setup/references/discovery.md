@@ -88,6 +88,8 @@ Phrasing examples (match the user's tone):
 - student: "Sounds like you are here to learn and remember. I will lead with capture and recall. That right?"
 - team-internal: "Sounds like you want this for a team. Founder OS installs per person today, so I will set you up as an individual operator and note the team interest. That work?"
 
+One override on top of the variant phrasing: when the role captured in 0.2.1 is `operator`, never read the founder line back at them. Use this instead, whatever the variant: "Sounds like you run [their part of the job] inside [company]. I will lead with what you own, who is waiting on it, and your week. That right?"
+
 Record the provisional variant internally. Do NOT write any file yet. The priorities (0.4) and work-style (0.7) answers may refine it; you finalise and write `core/profile.md` in Phase 1.1.5. If the user corrects your read, take the correction as the variant.
 
 This is a soft touch, not a gate. If the user does not engage, keep the provisional read and move on. Never block discovery on it.
@@ -114,11 +116,13 @@ These answers populate `core/identity.md` under `## Positioning`, which `linkedi
 
 **Backward compatibility (parse-everything-at-once path).** If the founder answers with all three in one reply ("I sell to UAE SMEs, I sell brand and web projects, they feel embarrassed by a website that no longer matches the business"), parse all three, mark the section answered, and skip the remaining prompts in this phase. Confirm what was captured in one line. Do not re-ask.
 
-### 0.2.6 The Founder Snapshot
+### 0.2.6 The Snapshot - Founder Snapshot, or its operator twin the Role Snapshot
 
-This is the part the OS proposes from. Four fields make the brain "functional enough to propose": **the venture in one line, who the customer is, where the founder is right now, and the single biggest blocker.** The OS proposes off these four even when they are thin and sharpens as the brain fills. Capturing them here is what lets the OS name a real first move instead of returning generic advice.
+This is the part the OS proposes from. A few fields make the brain "functional enough to propose", and the OS proposes off them even when they are thin, sharpening as the brain fills. Capturing them here is what lets the OS name a real first move instead of returning generic advice. Which block you capture depends on the role from 0.2.1:
 
-**Run this for the `founder` and `team_of_one` roles** (captured in 0.2.1). Skip it for the `operator` role, and skip it when the provisional variant read in 0.2.2 is `student` or `career-mover` - the four fields are founder-journey fields and do not fit those situations. Role and variant are different axes: role (founder / operator / team_of_one) is the identity-layer field from 0.2.1, variant (founder / career-mover / builder / student / team-internal) is the profile-layer read from 0.2.2. Do not mix the two vocabularies. Log the skip and move on.
+- **`founder` and `team_of_one` roles:** the Founder Snapshot below - venture, customer, stage, blocker.
+- **`operator` role:** the Role Snapshot (after the Founder Snapshot flow below) - scope, who they answer to, what is theirs to own, what is not theirs to decide, blocker. An employee running part of a job is the operator of that part, and the OS proposes for the part they run.
+- **Skip the whole step** when the provisional variant read in 0.2.2 is `student` or `career-mover` - these are working-journey fields and do not fit those situations. Role and variant are different axes: role (founder / operator / team_of_one) is the identity-layer field from 0.2.1, variant (founder / career-mover / builder / student / team-internal) is the profile-layer read from 0.2.2. Do not mix the two vocabularies. Log the skip and move on.
 
 Two of the four are usually already answered. Do NOT re-ask. Reuse and confirm:
 
@@ -148,6 +152,15 @@ Record the answer verbatim as `biggest_blocker`. If they skip, record `[NOT SET]
 These four fields write to `core/identity.md` under `## Founder Snapshot` in Phase 1.1. The propose engine reads that block before it names a move, so a skipped field shows as `[NOT SET]` rather than a guess.
 
 **Backward compatibility (parse-everything-at-once path).** If the founder already gave you the venture, customer, stage, and blocker across earlier answers ("I'm building a pomegranate import business, supply is sorted from Afghanistan, I just need to crack the UAE market"), parse all of it - venture, customer, an inferred stage, and the blocker - mark the section answered, and skip the prompts. Confirm what was captured in one line. Do not re-ask.
+
+**The operator flow - the Role Snapshot.** For the `operator` role, capture these five fields instead of the four above. Same manners: one question, one line, every one skip-able, `[NOT SET]` on skip, never invent an answer.
+
+- **Scope:** reuse the one-sentence answer from 0.1. Confirm it in one line: "So the part of the job you run, in one line: [their words]. That right?" Only ask fresh if 0.1 was vague: "If you had to put the part of the job you run in one line, what is it?"
+- **Q1 - Who do you answer to?** "Who is waiting on your work - who do you answer to for this part of the job? A name or a role both work. You can say skip." Record as `answers_to`.
+- **Q2 - Yours versus not yours.** "What do you own end to end, and what is not yours to decide? One line each. You can say skip." Record as `owns` and `not_yours`. If they answer only one half, keep it and write `[NOT SET]` for the other. Do not press.
+- **Q3 - Biggest blocker.** "What is the single biggest thing between you and the work you own being on track? One line. You can say skip." Record verbatim as `role_blocker`.
+
+These five write to `core/identity.md` under `## Role Snapshot` in Phase 1.1. The propose engine reads that block before it names a move for an operator, so a skipped field shows as `[NOT SET]` rather than a guess. The same parse-everything-at-once rule applies: if earlier answers already carried the scope, the manager, or the blocker, parse them, confirm in one line, and do not re-ask.
 
 ### 0.2.7 Business model (the third axis)
 

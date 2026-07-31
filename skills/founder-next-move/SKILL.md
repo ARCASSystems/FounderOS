@@ -1,8 +1,8 @@
 ---
 name: founder-next-move
 description: >
-  Propose the single highest-leverage next move for a founder, aimed at their first paying customer. Trigger on "what should I do next", "what's my next move", "propose my next move", "what should I focus on toward a customer", "where do I push", "I don't know what to do next", "give me one thing to do", or any moment a founder wants the OS to decide the next step instead of listing options. Reads the founder's brain (the four-field Founder Snapshot, the log, the pipeline), infers their current stage, picks the one move with the most leverage toward a paying customer, and closes with three things they can do today (one big, two small). Free-tier; writes nothing to your operating files (it may refresh brain/.snapshot.md when stale).
-why: "A founder drowning in options does not need a list, they need one move. This reads where they actually are and names the single thing that gets them closer to a paying customer, with a step small enough to start today."
+  Propose the single highest-leverage next move. For a founder it aims at their next paying customer; for an operator running a role inside a company it aims at the outcome they own for whoever is waiting on it. Trigger on "what should I do next", "what's my next move", "propose my next move", "what should I focus on toward a customer", "where do I push", "I don't know what to do next", "give me one thing to do", or any moment the operator wants the OS to decide the next step instead of listing options. Reads the brain (the Founder Snapshot, or the Role Snapshot for the operator role, plus the log and the pipeline), works out where they actually are, picks the one move with the most leverage, and closes with three things they can do today (one big, two small). Free-tier; writes nothing to your operating files (it may refresh brain/.snapshot.md when stale).
+why: "A person drowning in options does not need a list, they need one move. This reads where they actually are and names the single thing with the most leverage - toward a paying customer for a founder, toward the outcome they own for an operator - with a step small enough to start today."
 enhance: "Keep brain/log.md current - the stage read and the move both sharpen when the log shows what the founder did this week."
 allowed-tools: ["Read", "Bash"]
 mcp_requirements: []
@@ -12,9 +12,12 @@ mcp_requirements: []
 
 Runs on: local-exec - reasons over your files after refreshing the local snapshot (`brain-snapshot.py --write`) when it is missing; on a cloud or read-only surface I reason from the snapshot or identity files I can read, I do not run the script. No API key, no paid tool.
 
-This is the propose engine. The OS surfaces the founder's state everywhere else; this is the one place it says "therefore, do this." It reads the brain, decides where the founder is, and names the single highest-leverage move toward their first paying customer. It always ends with a step small enough to start today, so the founder never leaves with a blank screen.
+This is the propose engine. The OS surfaces the operator's state everywhere else; this is the one place it says "therefore, do this." It reads the brain, decides where they are, and names the single highest-leverage move. It always ends with a step small enough to start today, so nobody leaves with a blank screen.
 
-The North Star every proposal optimises against: **move this founder to their first paying customer faster.** If they already have one, the next one. Nothing the OS proposes is for its own sake; it is for the customer.
+The North Star depends on who is operating, and the identity role decides it:
+
+- **founder / team_of_one:** **move this founder to their first paying customer faster.** If they already have one, the next one. Nothing the OS proposes is for its own sake; it is for the customer.
+- **operator (a person running a role inside a company):** **keep the work they own moving, in front of the person waiting on it.** The customer of an operator's work is whoever they answer to and whoever that work serves. Same compression, same three-step close; the aim point changes.
 
 ---
 
@@ -26,10 +29,10 @@ Before proposing, read `brain/.snapshot.md` if it exists. If it is missing, run:
 
 Then read it. If the snapshot script is also missing (older install), read `core/identity.md` directly. Do not block - a thin read still proposes.
 
-The snapshot carries the `## Founder Snapshot` block (venture, customer, stage seed, biggest blocker), open flags, this week's must-do, and recent decisions. Then read, in this order, skipping what is missing:
+The snapshot carries the identity snapshot block - `## Founder Snapshot` (venture, customer, stage seed, biggest blocker) or `## Role Snapshot` (scope, answers to, yours to own, not yours to decide, blocker) - plus open flags, this week's must-do, and recent decisions. Then read, in this order, skipping what is missing:
 
-1. `core/identity.md` - the `## Founder Snapshot` (source of truth if the snapshot is stale) and the `## Basics` location (drives the UAE ground-truth layer below).
-2. `core/profile.md` - what the OS leads with. Context only, never a gate. The gate for this engine lives in `core/identity.md`: a `## Founder Snapshot` block present, plus a `**Role:**` of `founder` or `team_of_one` under `## Basics` (the identity-layer role from setup, not the profile variant - `team_of_one` is a role and never appears in the variant field). When the gate does not pass, do not run this engine; point them at `/next` instead.
+1. `core/identity.md` - the snapshot block (source of truth if `brain/.snapshot.md` is stale) and the `## Basics` location (drives the UAE ground-truth layer below).
+2. `core/profile.md` - what the OS leads with. Context only, never a gate. The gate for this engine lives in `core/identity.md` and passes on either of two shapes: a `## Founder Snapshot` block plus a `**Role:**` of `founder` or `team_of_one` under `## Basics`, OR a `## Role Snapshot` block plus a `**Role:**` of `operator` (the identity-layer role from setup, not the profile variant - `team_of_one` is a role and never appears in the variant field). The block decides the path: Founder Snapshot runs the founder path below, Role Snapshot runs the operator path. When neither shape is present, do not run this engine; point them at `/next` instead.
 3. `brain/log.md` - the last 5 to 10 entries. This is how you re-infer the stage (below).
 4. `context/clients.md` - active deals, pipeline, last-touched dates.
 5. `context/priorities.md`, `cadence/weekly-commitments.md`, `brain/flags.md`, `brain/needs-input.md` - grounding for what is already in flight.
@@ -38,7 +41,9 @@ The snapshot carries the `## Founder Snapshot` block (venture, customer, stage s
 
 ## Step 1 - is the brain functional?
 
-The brain is "functional enough to propose" the moment the Founder Snapshot has a real **customer** and at least one of **stage** or **biggest blocker**. Check the four fields:
+**Operator path (Role Snapshot present):** the brain is functional the moment **Answers to** is real plus at least one of **Scope** or **Biggest blocker**. With those, propose. With scope but no blocker, propose thin and say so, then ask for the one blocker that would sharpen it. With **Answers to** missing, do not guess a move - the move IS capturing it: "I can point you at a real move the moment I know who is waiting on your work. Tell me in one line." Then stop.
+
+**Founder path:** the brain is "functional enough to propose" the moment the Founder Snapshot has a real **customer** and at least one of **stage** or **biggest blocker**. Check the four fields:
 
 - **If customer plus (stage or blocker) are set:** propose a real move (Step 2 onward).
 - **If the customer is set but neither stage nor blocker is:** still propose. Read the stage from the venture and the customer, give a thin first move toward that customer, and say plainly it is thin - then ask for the one blocker that would sharpen it. Do not stall on a missing stage when you already know who the customer is.
@@ -49,6 +54,8 @@ Propose from thin data when you have the minimum, and say it is thin. Sharpen as
 ---
 
 ## Step 2 - infer the current stage
+
+**Founder path only.** On the operator path there is no venture stage to infer: skip this step and read the state straight from the Role Snapshot, the log, and this week's commitments - what is owed, to whom, and what has gone quiet. Then go to Step 3.
 
 The stage seed in the Founder Snapshot is a starting read, not a fixed label. Re-infer the current stage every run from the log and the pipeline, then say which signal you used. A founder who closed their first sale last week is at `revenue` this morning even if the seed still says `first-customer`.
 
@@ -75,6 +82,8 @@ Bias the pick toward the territory, not the screen. A founder at `first-customer
 
 If a deal in `context/clients.md` has stalled with no touch in 7+ days and no blocker, that stalled deal is usually the move - a warm prospect going cold costs the most.
 
+On the operator path the same logic reads sideways instead of outward: the highest-leverage move is almost always the one that lands or unblocks the thing whoever you answer to is waiting on. A commitment gone quiet for 7+ days is the operator's stalled deal, and anything that sits inside "not yours to decide" is never the move - the move there is handing it upward with a recommendation attached.
+
 ---
 
 ## Step 4 - the human-support layer
@@ -83,7 +92,7 @@ Two conditions add to the output. Apply them only when they fit.
 
 **UAE ground truth (only when the founder's location or market is the UAE / Dubai).** Put one or two concrete, territory-level specifics into the move: how the trade actually moves, the gatekeepers, the physical markets (for example the Al Awir fruit and vegetable market, the Sharjah markets), who you have to get past to reach the buyer. Send them to the ground, not just to the inbox. Do not invent specifics you are unsure of - name the market and the move, and tell them to verify the access detail on the ground.
 
-**The jobs off-ramp (only when the founder signals they are rethinking the whole venture, or a stage has stalled for a long stretch with no movement).** Name it plainly and without judgement: not every venture is the right one to push, and changing track is a valid move, not a failure. Point them at the careers route. Do not surface this on a normal proposal - it is for the founder who is actually questioning the path.
+**The jobs off-ramp (only when they signal they are rethinking the whole venture - or, on the operator path, the role itself - or a stage has stalled for a long stretch with no movement).** Name it plainly and without judgement: not every venture is the right one to push, and changing track is a valid move, not a failure. Point them at the careers route. Do not surface this on a normal proposal - it is for the founder who is actually questioning the path.
 
 ---
 
@@ -101,6 +110,10 @@ WHY THIS, NOW
 WHERE YOU ARE
 Stage: <inferred stage> (<one line: seed, or re-inferred from the log because X>)
 Aiming at: your <first / next> paying customer
+
+[Operator path: replace the two lines above with]
+Scope: <the part of the job you run, from the Role Snapshot>
+Aiming at: the work you own, in front of <who they answer to>
 
 [UAE ground truth - include only when the market is the UAE]
 <one or two concrete territory specifics tied to the move>
@@ -131,8 +144,8 @@ If the founder asks "is this the right move" or pushes back on the plan, that is
 - One move. Not a menu. The whole point is compression.
 - Every proposal cites the brain. No move without a reason drawn from the founder's own files.
 - Always end with the three-option close. Never a blank screen, never zero next steps.
-- A thin brain gets a capture move, not an invented plan. Do not fabricate a customer, a stage, or a blocker.
-- The North Star is a paying customer. Internal polish is almost never the move.
+- A thin brain gets a capture move, not an invented plan. Do not fabricate a customer, a stage, a manager, or a blocker.
+- The North Star is a paying customer for a founder, and the work you own in front of whoever waits on it for an operator. Internal polish is almost never the move on either path.
 - Free-tier only. Reads files and reasons. No API key, no paid tool.
 - No em dashes, no en dashes, no banned words.
-- The gate is identity, not variant: a `## Founder Snapshot` block plus the `founder` or `team_of_one` role in `core/identity.md`. The profile variant never gates this engine. When the gate does not pass, point to `/next`.
+- The gate is identity, not variant: a `## Founder Snapshot` block with the `founder` or `team_of_one` role, or a `## Role Snapshot` block with the `operator` role, in `core/identity.md`. The profile variant never gates this engine. When neither shape is present, point to `/next`.
