@@ -4,7 +4,7 @@ description: >
   Sweep everything captured away from the laptop into the brain. Trigger on "catch up", "process my inbox", "I sent myself some notes", "here's what I captured today", or a paste of raw voice-note transcripts. Reads capture/inbox/ (and pasted text, and a connected meeting-notes tool when one is wired), files each item into brain/rants/ with provenance and processed: false, applies the names-glossary correction pass, then offers /dream to distil. One mental model: get the thought into the inbox any way you can; the OS files it.
 why: "The real work happens away from the desk. A thought that cannot land in the brain until the operator is back at a laptop usually never lands at all. The inbox makes capture a dump, not a task."
 enhance: "Pair with a capture channel that fits your day (docs/capture-anywhere.md ranks them by friction) and run /dream after a sweep so captures become patterns, flags, and decisions instead of sitting raw."
-allowed-tools: ["Read", "Write", "Bash", "Glob"]
+allowed-tools: ["Read", "Write", "Glob", "Bash(mv:*)", "Bash(mkdir:*)"]
 mcp_requirements: []
 ---
 

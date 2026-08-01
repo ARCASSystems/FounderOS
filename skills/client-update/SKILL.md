@@ -4,7 +4,7 @@ description: >
   Write a status update or milestone report for whoever is waiting on the work - a client, or the person you answer to inside a company. Trigger on "update the client", "write a status update", "write my status update", "project update", "send a progress report", "milestone update", "weekly update for", "status for my manager", or any variation of packaging progress for the person waiting on it. Reads `core/voice-profile.yml` and writes in your voice.
 why: "Keeps the people waiting on your work informed without the operator writing from scratch each time - consistent format builds trust and prevents the relationship from going silent."
 enhance: "Fill core/voice-profile.yml first so the update sounds like you, and keep context/clients.md current with milestone notes so the skill has real project specifics to draw on."
-allowed-tools: ["Read", "Write", "Edit", "Bash"]
+allowed-tools: ["Read", "Write", "Bash(python scripts/check-voice-ready.py:*)", "Bash(python scripts/check-brand-voice-ready.py:*)"]
 mcp_requirements: []
 ---
 

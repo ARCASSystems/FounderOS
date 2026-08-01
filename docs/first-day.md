@@ -236,7 +236,7 @@ All five ship `gated`, which means defined and approved with nothing run yet. Th
 
 After you have watched one of them work, tell it how it did in one line. That verdict is what the reviewer reads later, and it is the only honest record of what your OS is actually good at. Add a sixth role when a job of your own has recurred three times and you have corrected it twice.
 
-The doctrine behind the chart is `rules/digital-employees.md`. The part worth reading first is the charter rule: a role's tool grant is its permission, so "never sends" is enforced rather than written down and hoped for.
+The doctrine behind the chart is `rules/digital-employees.md`. The part worth reading first is the charter rule: a role's grant is written in two places that must match - the chart row you read, and the skill's own tool list that Claude Code enforces while it runs - and the charter audit names any drift between them, so "never sends" is enforced rather than written down and hoped for.
 
 ---
 

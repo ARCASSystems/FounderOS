@@ -34,13 +34,13 @@ The metaphor must not overpromise. A digital employee does exactly its chain and
 
 The most common way this doctrine fails: the boundary is written in the job description as prose, and the actual permission handed to the run is far wider. "Propose only, never send" as a sentence in a prompt is not a boundary. It is a wish.
 
-So every employee row carries three fields, and the middle one is the only one that constrains anything:
+So every employee row carries three fields:
 
 - `may_write` - every file or store it is allowed to change, in plain language
 - `never` - the prohibitions, so the shape of the job reads in one line
-- `tools` - the exact grant handed to the run
+- `tools` - the exact grant the run is meant to carry
 
-Whatever dispatches the employee reads `tools` from that row. There is no second list somewhere in the code to drift from. An employee with no `tools` field does not run at all. An employee asking for a blanket "run anything" grant on a propose-only job is refused, not warned.
+Be honest about where the enforcement actually sits, because it is not in this registry. The grant lives in two places by construction: the row's `tools` field, which you read, and the `allowed-tools` list in the seat skill's own frontmatter, which Claude Code enforces while the skill runs. A wider list in the skill makes the row decorative, so the two are kept identical and the charter audit (`python scripts/employee_verdict.py charters`) names any drift between them. An employee with no `tools` field does not run at all. An employee asking for a blanket "run anything" grant on a propose-only job is refused, not warned.
 
 `may_write` and `never` are for you to read. `tools` is what actually holds. Keep them consistent, and treat narrowing `tools` as the real control.
 

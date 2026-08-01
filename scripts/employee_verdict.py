@@ -391,7 +391,39 @@ PROPOSE_ONLY_SIGNALS = ("does not send", "never send", "never sends", "propose o
                         "propose-only", "does not approve", "never approves")
 
 
-def charter_findings(employees: list[dict]) -> list[dict]:
+def _skill_allowed_tools(root: Path, skill: str) -> list[str] | None:
+    """Read the allowed-tools list from skills/<skill>/SKILL.md frontmatter.
+
+    This is the second place the grant lives - the list Claude Code actually
+    enforces while the skill runs. Returns None when the skill file is absent
+    (a chain entry that is prose, or a plugin-path install where skills live
+    in the engine) or carries no allowed-tools line.
+    """
+    path = root / "skills" / skill / "SKILL.md"
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return None
+    if not lines or lines[0].strip() != "---":
+        return None
+    for line in lines[1:]:
+        stripped = line.strip()
+        if stripped == "---":
+            return None
+        if stripped.startswith("allowed-tools:"):
+            raw = stripped.split(":", 1)[1].strip()
+            if raw.startswith("[") and raw.endswith("]"):
+                raw = raw[1:-1]
+            tools = []
+            for chunk in raw.split(","):
+                t = chunk.strip().strip("'\"").strip()
+                if t:
+                    tools.append(t)
+            return tools
+    return None
+
+
+def charter_findings(employees: list[dict], root: Path | None = None) -> list[dict]:
     out: list[dict] = []
     for e in employees:
         eid = e.get("id", "?")
@@ -430,12 +462,38 @@ def charter_findings(employees: list[dict]) -> list[dict]:
             out.append({"kind": "no-never", "employee": eid,
                         "detail": "no never field - the prohibitions are what make the shape "
                                   "of the job readable in one line"})
+
+        # The seam check. The grant lives in two places: this row, and the
+        # allowed-tools list in the seat skill's frontmatter - the one Claude
+        # Code enforces at run time. A wider list there makes the charter
+        # decorative, so any drift between the two is a finding.
+        if root is not None:
+            charter_low = set(low)
+            chain = [s.strip() for s in (e.get("skill_chain") or "").split(",") if s.strip()]
+            for skill in chain:
+                ftools = _skill_allowed_tools(root, skill)
+                if ftools is None:
+                    continue
+                for t in ftools:
+                    t_low = t.lower()
+                    if t_low in BLANKET_GRANTS or t_low.startswith(BLANKET_PREFIXES):
+                        out.append({"kind": "skill-grant-blanket", "employee": eid,
+                                    "detail": f"skills/{skill}/SKILL.md allowed-tools grants '{t}' - "
+                                              f"the list Claude Code enforces hands over a whole "
+                                              f"shell, so this row's narrower grant is decorative"})
+                    elif t_low not in charter_low:
+                        out.append({"kind": "skill-grant-drift", "employee": eid,
+                                    "detail": f"skills/{skill}/SKILL.md allowed-tools grants '{t}', "
+                                              f"which this row's tools field does not - the enforced "
+                                              f"list is wider than the charter; align them in the "
+                                              f"same commit"})
     return out
 
 
 def cmd_charters(args) -> int:
-    employees = parse_registry(Path(args.registry))
-    findings = charter_findings(employees)
+    registry_path = Path(args.registry)
+    employees = parse_registry(registry_path)
+    findings = charter_findings(employees, root=registry_path.resolve().parent.parent)
     if args.json:
         print(json.dumps({"count": len(findings), "findings": findings}, ensure_ascii=True))
         return 0

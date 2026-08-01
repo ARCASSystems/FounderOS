@@ -76,6 +76,14 @@ Check for items that have rolled 2+ weeks without progress. These need a decisio
 
 Present rolled items and ask which treatment each gets.
 
+## Step 3.5: Grade the team (only if `roles/employees.yaml` exists)
+
+The weekly retro is where the digital-employee record gets read, or it never gets read at all. Run `python scripts/employee_verdict.py render` and read `brain/employees.md`:
+
+- Any row showing REVIEW DUE: tell the operator plainly and point at `/founder-os:employee-review <id>`. Do not run the review inside the retro.
+- Any seat that ran this week with no verdict recorded: ask for the one-line verdict now ("ok, needs work, or failed - and why"). One line per seat, never a form.
+- Nothing ran and nothing is due: say nothing. A quiet chart is not a finding.
+
 ## Step 4: Plan Next Week
 
 Ask: "What are the MUST DOs for next week? Max 3. What must be done by Friday no matter what?"

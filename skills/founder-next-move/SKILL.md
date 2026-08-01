@@ -4,13 +4,13 @@ description: >
   Propose the single highest-leverage next move. For a founder it aims at their next paying customer; for an operator running a role inside a company it aims at the outcome they own for whoever is waiting on it. Trigger on "what should I do next", "what's my next move", "propose my next move", "what should I focus on toward a customer", "where do I push", "I don't know what to do next", "give me one thing to do", or any moment the operator wants the OS to decide the next step instead of listing options. Reads the brain (the Founder Snapshot, or the Role Snapshot for the operator role, plus the log and the pipeline), works out where they actually are, picks the one move with the most leverage, and closes with three things they can do today (one big, two small). Free-tier; writes nothing to your operating files (it may refresh brain/.snapshot.md when stale).
 why: "A person drowning in options does not need a list, they need one move. This reads where they actually are and names the single thing with the most leverage - toward a paying customer for a founder, toward the outcome they own for an operator - with a step small enough to start today."
 enhance: "Keep brain/log.md current - the stage read and the move both sharpen when the log shows what the founder did this week."
-allowed-tools: ["Read", "Bash"]
+allowed-tools: ["Read", "Bash(python scripts/brain-snapshot.py:*)"]
 mcp_requirements: []
 ---
 
 # Founder Next Move
 
-Runs on: local-exec - reasons over your files after refreshing the local snapshot (`brain-snapshot.py --write`) when it is missing; on a cloud or read-only surface I reason from the snapshot or identity files I can read, I do not run the script. No API key, no paid tool.
+Runs on: local-exec - reasons over your files after refreshing the local snapshot (`brain-snapshot.py --write`) when it is missing or stale; on a cloud or read-only surface I reason from the snapshot or identity files I can read, I do not run the script. No API key, no paid tool.
 
 This is the propose engine. The OS surfaces the operator's state everywhere else; this is the one place it says "therefore, do this." It reads the brain, decides where they are, and names the single highest-leverage move. It always ends with a step small enough to start today, so nobody leaves with a blank screen.
 
@@ -23,11 +23,11 @@ The North Star depends on who is operating, and the identity role decides it:
 
 ## Brain context (read first)
 
-Before proposing, read `brain/.snapshot.md` if it exists. If it is missing, run:
+Before proposing, read `brain/.snapshot.md` if it exists. If it is missing, or its `date:` line is more than 3 days old, run:
 
     python scripts/brain-snapshot.py --write
 
-Then read it. If the snapshot script is also missing (older install), read `core/identity.md` directly. Do not block - a thin read still proposes.
+Then read it. A stale cache read as current is how a proposal ends up aimed at last month's state, so the date check is not optional. If the snapshot script is also missing (older install), read `core/identity.md` directly. Do not block - a thin read still proposes.
 
 The snapshot carries the identity snapshot block - `## Founder Snapshot` (venture, customer, stage seed, biggest blocker) or `## Role Snapshot` (scope, answers to, yours to own, not yours to decide, blocker) - plus open flags, this week's must-do, and recent decisions. Then read, in this order, skipping what is missing:
 

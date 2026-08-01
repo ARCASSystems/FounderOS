@@ -35,11 +35,15 @@
 #   retired = kept for provenance, never deleted (see the retirement protocol)
 #
 # THE CHARTER IS THE GRANT. `may_write` and `never` are for you to read.
-# `tools` is the exact permission handed to the run, and it is the only field
-# that constrains anything. Whatever dispatches an employee reads `tools` from
-# HERE, so there is no second list to drift from. A row with no `tools` does not
-# run at all. Never hand a propose-only job a blanket "run anything" grant - the
-# whole point is that "never sends" is enforced, not merely written down.
+# `tools` is the permission the run is meant to carry, and it lives in two
+# places by construction: this row, and the `allowed-tools` list in the seat
+# skill's own SKILL.md - the list Claude Code actually enforces while the skill
+# runs. The two are kept identical, and the charter audit
+# (`python scripts/employee_verdict.py charters`) names any drift between them,
+# so the enforced list cannot quietly grow wider than this one. A row with no
+# `tools` does not run at all. Never hand a propose-only job a blanket "run
+# anything" grant - the whole point is that "never sends" is enforced, not
+# merely written down.
 #
 # A note on the two shapes of restraint, because the charter audit reads them
 # differently. A PROPOSE-ONLY job writes nothing at all: it hands you a diff or a
@@ -65,11 +69,11 @@ employees:
     seat: COO
     job_description: Runs your morning. Asks at most four questions drawn from what is actually waiting - a blocked queue item, a commitment gone quiet, a flag past its review date - then writes each answer into the file that owns it so the same question stops being raised on five mornings and answered on none. Also renders the one-screen view of your day. It writes down your answer in your words; it does not decide an answer you did not give, and it runs once a day.
     skill_chain: morning-loop, today
-    inputs: brain/needs-attention.md, cadence/queue.md, cadence/weekly-commitments.md, cadence/daily-anchors.md, brain/flags.md, brain/log.md
+    inputs: brain/needs-attention.md, brain/needs-input.md, cadence/queue.md, cadence/weekly-commitments.md, cadence/daily-anchors.md, brain/flags.md, brain/log.md, brain/employees.md
     output_surface: brain/log.md (the dated morning-loop entry)
     dispatch: manual, daily ("run my morning", "what needs me today")
     run_record_source: the morning-loop entries in brain/log.md
-    may_write: brain/log.md, and the single file that owns each question you answered - the queue, a flag, a commitment, the verdicts ledger, a confirmed fact's home file
+    may_write: brain/log.md, brain/employees.md (a derived-view refresh via the verdict script, never by hand), and the single file that owns each question you answered - the queue, a flag, a commitment, the verdicts ledger, a confirmed fact's home file
     never: reach anything outside this folder, answer on your behalf, run a second time the same day
     tools: Read, Edit, Write, Grep, Glob, Bash(python scripts/employee_verdict.py:*), Bash(python scripts/unconfirmed_facts.py:*)
     kpi: no question you have already answered gets asked again
@@ -103,9 +107,9 @@ employees:
     output_surface: brain/rants/ (one dated file per capture)
     dispatch: manual, after any stretch away from the desk ("catch up", "process my inbox")
     run_record_source: the dated files in brain/rants/
-    may_write: brain/rants/, and clearing capture/inbox/ of what it has filed
+    may_write: brain/rants/, context/names.md (confirmed name corrections only), and moving what it has filed into capture/inbox/.processed/
     never: edit the words of a capture, delete anything it did not just file, distil captures into conclusions on its own
-    tools: Read, Write, Glob
+    tools: Read, Write, Glob, Bash(mv:*), Bash(mkdir:*)
     kpi: nothing you captured away from the desk is still sitting unfiled a week later
     version: 1.0
     last_review: null

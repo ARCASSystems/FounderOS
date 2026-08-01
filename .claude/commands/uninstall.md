@@ -41,7 +41,7 @@ System layer (will be removed):
 - skills/<list of skill folders>
 - scripts/ (Python helpers: wiki-build.py, query.py, brain-snapshot.py, brain-pass-log.py, memory-diff.py)
 - templates/<list of template folders>
-- rules/, docs/
+- docs/
 - .claude/commands/<list of command files>
 - .claude/hooks/<list of hook files>
 - .claude/settings.json (if present)
@@ -51,12 +51,18 @@ Personal data (will be PRESERVED):
 - context/
 - cadence/
 - brain/
+- capture/
+- brands/
 - network/
 - clients/
 - companies/
+- roles/ (your employee registry - statuses, review stamps, custom rows)
+- system/ (this install's quarantine record)
+- rules/ (personalized at setup and possibly hand-edited - update treats these as yours, so uninstall does too)
 - MEMORY.md
 - CLAUDE.md
 - stack.json (local tool bindings - if you reinstall, your tool choices come back)
+- os-config.yaml (which modules you run, plus your brand values)
 
 If you want to also remove personal data, re-run with: /founder-os:uninstall --purge
 
@@ -162,7 +168,7 @@ Plugin path: if you installed via the Claude Code plugin marketplace, also run `
 ## Rules
 
 - Never run a destructive command before the user has confirmed in step 3.
-- In default mode, NEVER touch the User Layer. Authoritative list lives in `/founder-os:update`. Currently: `core/`, `context/`, `cadence/`, `brain/`, `network/`, `clients/`, `companies/`, `MEMORY.md`, `CLAUDE.md`, `stack.json`. If `update.md` adds a new User Layer path, mirror it here in the same commit or default uninstall will silently delete it.
+- In default mode, NEVER touch the User Layer. Authoritative list lives in `/founder-os:update`. Currently: `core/`, `context/`, `cadence/`, `brain/`, `capture/`, `brands/`, `network/`, `clients/`, `companies/`, `roles/`, `system/`, `MEMORY.md`, `CLAUDE.md`, `stack.json`, `os-config.yaml` - plus `rules/`, protected by update as founder-personalized, so default uninstall preserves it too. If `update.md` adds a new User Layer path, mirror it here in the same commit or default uninstall will silently delete it.
 - In purge mode, require the literal word `PURGE` in uppercase. No softer confirmations.
 - If any `rm` step fails (permissions, locked file), report the failure on its own line and continue with the next step. Do not abort halfway.
 - This command does not push to any remote. The user is responsible for cleaning up any cloud copies (GitHub forks, Notion mirrors).

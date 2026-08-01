@@ -43,7 +43,7 @@ Route **AUTO** = reversible, on the approval-gate Auto list, fix mode may run it
 | 7 | Decay-due flags | entries past `Decay after:` in `brain/flags.md` | keep or kill each | JUDGMENT |
 | 8 | Memory gaps | `python scripts/memory-diff.py` (a `clients/<slug>/` folder with no auto-memory entry) | add the memory entry, or run `/founder-os:memory-pass` if entries exist but may be stale | JUDGMENT |
 | 9 | Quarantine ACTIVE | `Status: ACTIVE` entries in `system/quarantine.md` | resolve the failure or mark RESOLVED / WONTFIX | JUDGMENT |
-| 10 | Snapshot stale | `brain/.snapshot.md` missing or older than 3 days (boot reads it) | `python scripts/brain-snapshot.py` | AUTO |
+| 10 | Snapshot stale | `brain/.snapshot.md` missing or older than 3 days (the propose engine and other output skills read it warm) | `python scripts/brain-snapshot.py --write` | AUTO |
 | 11 | Skill description bloat | `python scripts/skill_health.py` (over 900 chars warn, over 1024 fail) | trim toward 600 chars | JUDGMENT |
 | 12 | Dead skill pointers | `python scripts/skill_health.py` | repoint to the real path, or remove the reference | AUTO (supervised - see fix mode) |
 
@@ -77,7 +77,7 @@ Operator-triggered, supervised. Run the AUTO fixes in this dependency order, nar
 3. **Log bloat** - `python scripts/log-archive.py`.
 4. **Dead skill pointers** - apply a repoint only when the correct target is unambiguous (the name exists at a clear alternate path, e.g. a command instead of a skill). Show each one-line edit. No obvious target: move it to the punch-list, never blind-remove.
 5. **Wiki graph** - `/wiki-build`, after any link edits so the graph reflects them.
-6. **Snapshot last** - `python scripts/brain-snapshot.py`, because it captures everything above.
+6. **Snapshot last** - `python scripts/brain-snapshot.py --write`, because it captures everything above. Without `--write` the script only prints; the cache on disk stays stale.
 
 Then print:
 

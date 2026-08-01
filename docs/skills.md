@@ -427,7 +427,7 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 
 - **Say.** "morning loop", "run my morning", or "what needs me today".
 - **Outcome.** At most four questions drawn from what is genuinely waiting (a blocked queue item, an unanswered ask, a commitment gone quiet, a provisional fact, a flag past its decay date), each with two or three narrow options and a recommendation first. Then every answer written back into the file that owns it, and one coach line naming today's single step. A quiet morning reports "Nothing needs you this morning" rather than inventing a question.
-- **Reads.** `brain/needs-attention.md`, `cadence/queue.md`, `cadence/weekly-commitments.md`, `cadence/daily-anchors.md`, `brain/flags.md`, `brain/unconfirmed-facts.md`, `brain/employees.md`, and yesterday's coach line in `brain/log.md`.
+- **Reads.** `brain/needs-attention.md` (and `brain/needs-input.md`, its `/dream`-written sibling), `cadence/queue.md`, `cadence/weekly-commitments.md`, `cadence/daily-anchors.md`, `brain/flags.md`, `brain/unconfirmed-facts.md`, `brain/employees.md` (refreshed first via the verdict script so a due review actually surfaces), and yesterday's coach line in `brain/log.md`.
 - **Writes.** Whichever files your answers belong to (the queue, the commitments, the flags, the ledgers), plus one `#morning-loop` entry in `brain/log.md` carrying the coach line. It closes the source that raised each question in the same pass.
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete. It degrades gracefully: it reads only the files that exist.

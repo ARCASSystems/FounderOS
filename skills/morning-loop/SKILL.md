@@ -3,7 +3,7 @@ name: morning-loop
 description: The morning answer loop. Say "morning loop", "run my morning", "what needs me today", or run /founder-os:morning-loop. Asks at most four sharp questions drawn from what is actually waiting - a blocked queue item, an unanswered ask, a provisional fact, a stale commitment - then writes every answer back into the file that owns it and silences the thing that asked. Ends with one coach line naming today's single step. Once a day.
 why: "Everything the OS notices piles up in files nobody re-reads, so the same question gets raised on five mornings and answered on none. This is the human half of the loop: a few answers a day, each one landing in the file that owns it so it stops being asked."
 enhance: "Run it first thing, before the day starts making the decisions for you. Answering four questions takes two minutes and is what keeps every other surface honest."
-allowed-tools: ["Read", "Edit", "Write", "Grep", "Glob", "Bash"]
+allowed-tools: ["Read", "Edit", "Write", "Grep", "Glob", "Bash(python scripts/employee_verdict.py:*)", "Bash(python scripts/unconfirmed_facts.py:*)"]
 ---
 
 # Morning loop - four questions, then get on with it
@@ -36,13 +36,13 @@ If the operator wrote an override at the top of the file (an ended line, a moved
 
 Read only what is present, and skip what is not:
 
-1. `brain/needs-attention.md` - open asks the OS has raised for you.
+1. `brain/needs-attention.md` - open asks the OS has raised for you. Read `brain/needs-input.md` with it if present: `/dream` parks its questions there, and the two files are one queue split by which surface wrote them.
 2. `cadence/queue.md` - ACTIVE items with no movement, and anything with a named blocker.
 3. `cadence/weekly-commitments.md` - this week's MUST DO items and whether any has gone quiet.
 4. `cadence/daily-anchors.md` - whether the anchor is even rolled to today.
 5. `brain/unconfirmed-facts.md` if it exists - names and claims waiting to be confirmed or cut.
 6. `brain/flags.md` - flags past their `Decay after:` date, which are due a keep-or-kill.
-7. `brain/employees.md` if you run recurring jobs - anything showing a review due.
+7. If `roles/employees.yaml` exists, run `python scripts/employee_verdict.py render` (a derived-view refresh, nothing else) and read `brain/employees.md` - anything showing REVIEW DUE. This is the only daily surface that carries the review trigger, so skipping it means verdicts pile up unread.
 8. Yesterday's coach line: the most recent `Coach:` line in `brain/log.md`. Step 4 scores it.
 9. Context only, never a question: `system/quarantine.md` ACTIVE count, and any tool your hands registry records as down.
 
