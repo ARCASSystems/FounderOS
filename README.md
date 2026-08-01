@@ -2,7 +2,9 @@
 
 ![Doc and Install Parity](https://github.com/ARCASSystems/FounderOS/actions/workflows/doc-parity.yml/badge.svg) ![guardian](https://github.com/ARCASSystems/FounderOS/actions/workflows/guardian.yml/badge.svg) ![LinkedIn Pack Acceptance](https://github.com/ARCASSystems/FounderOS/actions/workflows/linkedin-pack.yml/badge.svg)
 
-The operating layer for the person the work lands on. Six files run your company, or the part of one you run. Claude works from them every session.
+Get an operating system with your first team already on it: five named digital employees with written job descriptions, a brain that keeps everything you tell it and invents nothing, and your working life - clients, pipeline, decisions, the week - modelled in files you own. Six files run your company, or the part of one you run. Claude works from them every session.
+
+Built from markdown and Python because every AI reads both. The model is the part you will swap one day. The brain is the part you keep.
 
 Owned by you. Runs locally in Claude Code. Talk to it.
 
@@ -18,13 +20,41 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 ---
 
-## Who this is for
+## What you get on day one
 
-You run the business, run a P&L inside one, or run a role inside one. Owner, operator, agency lead, consultancy head, head of department, the employee a whole workstream lands on. If work stops with you, this is for you.
+Install, answer the wizard's questions, and by the end of the first sitting:
 
-You are sharp but your day is chopped into thirty-minute pieces. You have tried productivity templates that promised the world and quietly stopped getting opened by week three.
+- **An OS built around your actual work.** The wizard interviews you - what you run, who waits on you, what is stuck - and writes your files from the answers. No blank templates to fill.
+- **Your first team, named and chartered.** A daily assistant, a next-move caller, a capture filer, an account manager, and a reviewer that audits the other four. Each has a written job description, a list of exactly what it may touch, and a track record that starts empty and fills as you grade its runs. All five start gated: they propose, you decide.
+- **A brain that remembers and does not invent.** Everything you tell it lands in plain markdown: log, flags, patterns, parked decisions, knowledge. A name or number said once stays marked unconfirmed until you confirm it.
+- **Your digital infrastructure, modelled.** Clients and leads, today and the week, decisions made and parked, your network, your voice, your brand, your tool stack. One folder you can read, back up, move, or delete.
+- **A gate between a draft and a send.** The OS writes the client update, the follow-up, the proposal. It sends none of them. That line is written into each role's tool grant, the list Claude Code enforces while the role runs, not asked for politely in a prompt.
 
-You are not installing a template. You are installing an operating layer. It listens, routes, forgets nothing, and pushes back when you are about to ship something half-baked.
+If you stop using it, you lose nothing: it is a folder of files you can read without us. That is the whole risk of trying it.
+
+## The one habit that makes it compound
+
+Tell it what happened. Say what you did, what someone said, what is stuck - typed, dictated, or pasted in from your phone. Every session writes what it learns into your files, so the next session starts warmer than this one. Once a week, close the loop: the retro rolls the week, forces a keep-or-kill on every stall, and grades the team, so the roles that perform earn more room. Seconds a day, twenty minutes a week. Everything else in here compounds off that.
+
+## Who runs this
+
+You run the business, run a P&L inside one, or run a role inside one. Owner, agency lead, consultancy head, head of department, the employee a whole workstream lands on. If work stops with you, this fits, and the wizard reads which one you are and shapes the OS to it:
+
+- **The founder.** The North Star is the next paying customer. The pipeline, the cadence, and the next-move caller all point at it.
+- **The employee a workstream lands on.** You tell the wizard who you answer to and what is yours to own. The next-move caller aims at the work you own, and the account manager drafts the status update to whoever is waiting on it.
+- **The career-mover, the builder, the student.** Same brain, same capture, same cadence, led by what your situation needs. The next-move engine speaks founder and operator today; for the rest it says so honestly instead of pretending.
+
+You are sharp but your day is chopped into thirty-minute pieces. You have tried productivity templates that promised the world and quietly stopped getting opened by week three. This is not a template. It is an operating layer: it listens, routes, forgets nothing, and pushes back when you are about to ship something half-baked.
+
+## Prove it in ten minutes, offline
+
+Most of the claims above are checkable on your machine without trusting us:
+
+- **The brain answers with no model at all.** `python scripts/query.py index "<term>"` searches your whole brain - index, timeline, or full mode - pure Python, no API, no vector database. This is what "your files outlive any model" means in practice.
+- **The provisional-facts rule is a ledger, not a promise.** `python scripts/unconfirmed_facts.py list` shows every name and number still waiting on your confirm or cut.
+- **Undo works before git exists.** Say "what did you change" and every file the OS touched this session lists with a one-command restore.
+- **The team's boundaries are audited, not asserted.** `python scripts/employee_verdict.py charters` reads every role's charter against the tool list its skill actually enforces, and names any drift.
+- **The capability page is generated, not written.** `python scripts/skills_sync.py --capabilities` rebuilds [docs/what-this-can-do.md](docs/what-this-can-do.md) from the skills on disk - it cannot claim a skill that is not there.
 
 ---
 
@@ -34,13 +64,13 @@ The honest version of that question is sharper than it sounds. Someone who promp
 
 Four things, and none of them arrive from writing a better prompt.
 
-**Your context is a folder you own.** Everything the OS knows about your work sits in plain markdown on your disk. Not in a chat history, not in a vendor's memory feature, not in an account you can be locked out of. When a better model ships next year you point it at the same folder and keep everything. When you want to know what it knows, you open a file.
+**Your context is a folder you own.** Everything the OS knows about your work sits in plain markdown on your disk. Not in a chat history, not in a vendor's memory feature, not in an account you can be locked out of. When a better model ships next year you point it at the same folder and keep everything it knows - the operating files carry the knowledge; only tool conveniences (Claude Code's behavioural memory, the pre-git session undo net) stay with the tool. When you want to know what it knows, you open a file.
 
 **Nothing becomes a fact because it was said once.** A name mentioned in passing, a number from a call, a claim in a transcript. The OS marks those provisional and asks you to confirm or cut them before it repeats them anywhere. An assistant that remembers everything you said will eventually say your own work back to you slightly wrong, at the worst possible moment, with total confidence. This is the part that stops that.
 
 **You get five named roles, and you grade them.** Not one assistant that is good at everything and accountable for nothing. Each role has a written job description, a list of exactly what it may touch, and a record that starts empty and fills as you grade its runs. When one keeps getting something wrong you change its definition once, instead of correcting it every week.
 
-**There is a gate between a draft and a send.** The OS writes the client update, the follow-up, the proposal. It delivers none of them. That boundary is written into each role's permission grant rather than asked for politely in a prompt, so it holds on the day you are tired and moving fast.
+**There is a gate between a draft and a send.** The OS writes the client update, the follow-up, the proposal. It delivers none of them. That boundary is written into each role's tool grant - the list Claude Code enforces while the role runs - and the charter audit names any drift between the chart and the grant, so it holds on the day you are tired and moving fast.
 
 A good chat session is a good hour. This is the part that compounds over a year, because what it learns gets written down in files you keep.
 
@@ -329,7 +359,7 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 Version 1.45.0. Public release. 92 skills, 43 commands, 718 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
-v1.45.0 is the wider-door release, and it opens two doors. The first is for the person who will never run git: the OS already ran without it, but the words had not caught up - a rules file installed a push cadence onto machines with no git, the tour said "your repo is your memory", and one doc claimed updates need `git pull`. All of it now speaks plainly: your files are the memory and they persist the moment they are written, saves and versions replace commit language everywhere a user reads, updates work over plain download on every path, and the install doc names in one place which folders are yours, which are the OS's, and which an update proposes changes to instead of writing. The second door is for the employee a workstream lands on. The wizard already asked whether you own the business or run a role inside one, and the answer finally leads somewhere: operators get a Role Snapshot - the part of the job you run, who you answer to, what is yours to own, what is not yours to decide, and the blocker - the propose engine gained an operator path aimed at the work you own, the account manager drafts the status update to whoever you answer to, and every line of copy that read false to a non-founder was fixed in place. One product, one track, wider door.
+v1.45.0 is the wider-door release, and it opens two doors, then holds the boundary behind both. A third-pass architecture review before the push closed the enforcement seam: every role's enforced tool list now matches its written charter, the charter audit names any drift between the two, uninstall can no longer delete what update protects, and the review loop that turns gated roles into a track record now has real daily and weekly triggers. The first is for the person who will never run git: the OS already ran without it, but the words had not caught up - a rules file installed a push cadence onto machines with no git, the tour said "your repo is your memory", and one doc claimed updates need `git pull`. All of it now speaks plainly: your files are the memory and they persist the moment they are written, saves and versions replace commit language everywhere a user reads, updates work over plain download on every path, and the install doc names in one place which folders are yours, which are the OS's, and which an update proposes changes to instead of writing. The second door is for the employee a workstream lands on. The wizard already asked whether you own the business or run a role inside one, and the answer finally leads somewhere: operators get a Role Snapshot - the part of the job you run, who you answer to, what is yours to own, what is not yours to decide, and the blocker - the propose engine gained an operator path aimed at the work you own, the account manager drafts the status update to whoever you answer to, and every line of copy that read false to a non-founder was fixed in place. One product, one track, wider door.
 
 v1.44.0 is the usability release. A group stress-tested the product and named the risk in one line: the backend is not the problem, someone who did not build it being unable to drive it is. So setup now ends by introducing five named roles and what each will give you tomorrow morning, rather than by showing you a folder. Every role is backed by a skill on your disk and every one starts gated, because a chart claiming a track record it does not have is the thing worth avoiding. Around that: an autonomy ramp with real dates you can read and overrule, a written answer to how this differs from using Claude well, a generated page listing what the install can actually do, two commit guards for the failures that stay invisible until they are expensive, and seven scripts that had been in the repo since earlier releases without ever reaching an install.
 
