@@ -33,7 +33,7 @@ Read these files silently:
 
 Before producing output, read `brain/.snapshot.md` if it exists.
 
-If the snapshot is missing, run:
+If the snapshot is missing, or its `date:` line is more than 3 days old, run:
 
     python scripts/brain-snapshot.py --write
 

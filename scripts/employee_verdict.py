@@ -201,6 +201,10 @@ def review_status(emp: dict, verdicts: list[dict], asof: _dt.date) -> tuple[str,
         if ts is None:
             continue
         d = ts.date()
+        if d > asof:
+            # A future-dated verdict is a typo, not evidence. Counting it would
+            # trigger reviews off records that have not happened yet.
+            continue
         if newest is None or d > newest:
             newest = d
         if v.get("verdict") == "needs-work" and d >= cutoff:
@@ -382,10 +386,28 @@ def cmd_drift(args) -> int:
 
 # A grant that hands over a whole interpreter, a shell, or a file-editing tool is
 # not a boundary. Those are refused on a job whose description says it only
-# proposes, because "never sends" has to be enforced rather than merely written.
+# proposes, because "never sends" has to be a stated contract, not a loophole.
 BLANKET_GRANTS = ("bash", "bash(*)", "shell", "*", "all")
 BLANKET_PREFIXES = ("bash(python:", "bash(python3:", "bash(sh:", "bash(pwsh:",
                     "bash(powershell:", "bash(cmd:")
+# Interpreters that, followed by a bare wildcard (no script path), grant the
+# whole interpreter: Bash(python *), Bash(python3 *), Bash(py -3 *).
+BLANKET_INTERPRETERS = ("python", "python3", "py", "sh", "bash", "pwsh",
+                        "powershell", "cmd")
+
+
+def _is_blanket_grant(grant_low: str) -> bool:
+    if grant_low in BLANKET_GRANTS or grant_low.startswith(BLANKET_PREFIXES):
+        return True
+    if grant_low.startswith("bash(") and grant_low.endswith(")"):
+        inner = grant_low[5:-1].strip()
+        tokens = inner.split()
+        if tokens and tokens[0] in BLANKET_INTERPRETERS \
+                and "/" not in inner and "\\" not in inner:
+            # No script path anywhere in the rule: the scope is the interpreter
+            # itself, which is every script on the machine.
+            return True
+    return False
 EDIT_TOOLS = ("edit", "write", "multiedit", "notebookedit")
 PROPOSE_ONLY_SIGNALS = ("does not send", "never send", "never sends", "propose only",
                         "propose-only", "does not approve", "never approves")
@@ -394,10 +416,15 @@ PROPOSE_ONLY_SIGNALS = ("does not send", "never send", "never sends", "propose o
 def _skill_allowed_tools(root: Path, skill: str) -> list[str] | None:
     """Read the allowed-tools list from skills/<skill>/SKILL.md frontmatter.
 
-    This is the second place the grant lives - the list Claude Code actually
-    enforces while the skill runs. Returns None when the skill file is absent
-    (a chain entry that is prose, or a plugin-path install where skills live
-    in the engine) or carries no allowed-tools line.
+    This is the second place the grant lives - the skill's declared runtime
+    list. Returns None when the skill file is absent (a chain entry that is
+    prose, or a plugin-path install where skills live in the engine) or the
+    frontmatter has no allowed-tools key. Returns [] when the key exists but
+    declares nothing - the caller treats that as its own finding.
+
+    Handles the shapes Claude Code accepts: an inline list (["Read", "Bash"]),
+    a bare comma-separated line, a space-separated line with no commas or
+    parens, and a multiline YAML list of "- item" lines.
     """
     path = root / "skills" / skill / "SKILL.md"
     try:
@@ -406,21 +433,36 @@ def _skill_allowed_tools(root: Path, skill: str) -> list[str] | None:
         return None
     if not lines or lines[0].strip() != "---":
         return None
+
+    def _split(raw: str) -> list[str]:
+        raw = raw.strip()
+        if raw.startswith("[") and raw.endswith("]"):
+            raw = raw[1:-1]
+        if "," not in raw and "(" not in raw and " " in raw:
+            chunks = raw.split()
+        else:
+            chunks = raw.split(",")
+        return [c.strip().strip("'\"").strip() for c in chunks if c.strip().strip("'\"").strip()]
+
+    in_list = False
+    tools: list[str] = []
     for line in lines[1:]:
         stripped = line.strip()
         if stripped == "---":
-            return None
-        if stripped.startswith("allowed-tools:"):
-            raw = stripped.split(":", 1)[1].strip()
-            if raw.startswith("[") and raw.endswith("]"):
-                raw = raw[1:-1]
-            tools = []
-            for chunk in raw.split(","):
-                t = chunk.strip().strip("'\"").strip()
+            return tools if in_list else None
+        if in_list:
+            if stripped.startswith("- "):
+                t = stripped[2:].strip().strip("'\"").strip()
                 if t:
                     tools.append(t)
+                continue
             return tools
-    return None
+        if stripped.startswith("allowed-tools:"):
+            raw = stripped.split(":", 1)[1].strip()
+            if raw:
+                return _split(raw)
+            in_list = True
+    return tools if in_list else None
 
 
 def charter_findings(employees: list[dict], root: Path | None = None) -> list[dict]:
@@ -441,7 +483,7 @@ def charter_findings(employees: list[dict], root: Path | None = None) -> list[di
                                   + (f"; dispatch says '{dispatch}'" if dispatch else "")})
             continue
         for g, g_low in zip(grants, low):
-            if g_low in BLANKET_GRANTS or g_low.startswith(BLANKET_PREFIXES):
+            if _is_blanket_grant(g_low):
                 out.append({"kind": "blanket-grant", "employee": eid,
                             "detail": f"grant '{g}' hands over a whole interpreter or shell, "
                                       f"which permits every script on the machine including "
@@ -463,30 +505,51 @@ def charter_findings(employees: list[dict], root: Path | None = None) -> list[di
                         "detail": "no never field - the prohibitions are what make the shape "
                                   "of the job readable in one line"})
 
-        # The seam check. The grant lives in two places: this row, and the
-        # allowed-tools list in the seat skill's frontmatter - the one Claude
-        # Code enforces at run time. A wider list there makes the charter
-        # decorative, so any drift between the two is a finding.
+        # The seam check, both directions. The grant lives in two places: this
+        # row, and the allowed-tools list each chain skill declares. The two
+        # lists are kept identical (per chain, the charter covers the union),
+        # and drift in either direction is a finding: a wider skill list means
+        # the charter understates what the seat may do, and a charter tool no
+        # skill declares means the charter promises a grant nothing carries.
+        # Comparison is case-sensitive on purpose - a case-only difference in a
+        # script path is a real difference on Linux.
         if root is not None:
-            charter_low = set(low)
+            charter_exact = set(grants)
             chain = [s.strip() for s in (e.get("skill_chain") or "").split(",") if s.strip()]
+            chain_union: set[str] = set()
+            any_resolved = False
             for skill in chain:
                 ftools = _skill_allowed_tools(root, skill)
                 if ftools is None:
                     continue
+                any_resolved = True
+                if not ftools:
+                    out.append({"kind": "skill-grant-missing", "employee": eid,
+                                "detail": f"skills/{skill}/SKILL.md has an allowed-tools key that "
+                                          f"declares nothing - the seat's runtime list is "
+                                          f"undeclared, so the charter has nothing to hold against"})
+                    continue
+                chain_union.update(ftools)
                 for t in ftools:
-                    t_low = t.lower()
-                    if t_low in BLANKET_GRANTS or t_low.startswith(BLANKET_PREFIXES):
+                    if _is_blanket_grant(t.lower()):
                         out.append({"kind": "skill-grant-blanket", "employee": eid,
                                     "detail": f"skills/{skill}/SKILL.md allowed-tools grants '{t}' - "
-                                              f"the list Claude Code enforces hands over a whole "
-                                              f"shell, so this row's narrower grant is decorative"})
-                    elif t_low not in charter_low:
+                                              f"a whole shell or interpreter, so this row's "
+                                              f"narrower grant is decorative"})
+                    elif t not in charter_exact:
                         out.append({"kind": "skill-grant-drift", "employee": eid,
                                     "detail": f"skills/{skill}/SKILL.md allowed-tools grants '{t}', "
-                                              f"which this row's tools field does not - the enforced "
-                                              f"list is wider than the charter; align them in the "
-                                              f"same commit"})
+                                              f"which this row's tools field does not - the skill's "
+                                              f"declared list is wider than the charter; align them "
+                                              f"in the same commit"})
+            if any_resolved:
+                for g in grants:
+                    if g not in chain_union:
+                        out.append({"kind": "charter-grant-drift", "employee": eid,
+                                    "detail": f"this row grants '{g}' but no skill in its chain "
+                                              f"declares it in allowed-tools - the charter promises "
+                                              f"a grant nothing carries; align them in the same "
+                                              f"commit"})
     return out
 
 

@@ -37,13 +37,15 @@
 # THE CHARTER IS THE GRANT. `may_write` and `never` are for you to read.
 # `tools` is the permission the run is meant to carry, and it lives in two
 # places by construction: this row, and the `allowed-tools` list in the seat
-# skill's own SKILL.md - the list Claude Code actually enforces while the skill
-# runs. The two are kept identical, and the charter audit
-# (`python scripts/employee_verdict.py charters`) names any drift between them,
-# so the enforced list cannot quietly grow wider than this one. A row with no
-# `tools` does not run at all. Never hand a propose-only job a blanket "run
-# anything" grant - the whole point is that "never sends" is enforced, not
-# merely written down.
+# skill's own SKILL.md - the skill's declared runtime list. Claude Code today
+# reads that list as pre-approval (listed commands run without a prompt), not
+# as a wall that blocks the rest; anything outside it still hits your normal
+# permission prompts. The boundary is therefore a written contract plus a
+# tripwire: the two lists are kept identical, and the charter audit
+# (`python scripts/employee_verdict.py charters`) names drift between them in
+# either direction. A row with no `tools` does not run at all. Never hand a
+# propose-only job a blanket "run anything" grant - "never sends" has to be
+# a stated, audited contract, not a loophole.
 #
 # A note on the two shapes of restraint, because the charter audit reads them
 # differently. A PROPOSE-ONLY job writes nothing at all: it hands you a diff or a

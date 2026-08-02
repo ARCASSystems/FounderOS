@@ -38,7 +38,7 @@ Note on point 3: a close-line verdict on a queue item is evidence of the same gr
    - a chain change (add or drop a step in `skill_chain`)
    - a grant change - **narrowing only.** Widening a grant is its own decision and never rides along inside a review.
 
-4. **Wait for a yes per diff.** This seat writes nothing - the operator applies the approved diff, stamps `last_review: <today>` on the row, and refreshes the chart with `python scripts/employee_verdict.py render`, or explicitly hands those three steps to a session with write access. Name the three steps plainly when the yes lands. A yes to a diff is never a yes to widen this seat's own charter.
+4. **Wait for a yes per diff.** This seat writes nothing - the operator applies the approved diff, stamps `last_review: <today>` on the row, and refreshes the chart with `python scripts/employee_verdict.py render`, or explicitly hands those three steps to a session with write access. Name the three steps plainly when the yes lands. A yes to a diff is never a yes to widen this seat's own charter. **A completed review with zero accepted diffs still stamps `last_review`** - "reviewed, nothing to change" is a real outcome, and without the stamp the same row reads REVIEW DUE forever, which teaches you to ignore the flag.
 
 5. **Proposing retirement is a valid outcome.** If the pattern says this job should not exist - it loses to you on speed or accuracy, or the work stopped recurring - say that plainly and propose retirement. Per the doctrine, a retired row keeps its place with `status: retired` plus a dated one-line why at the front of its job description. It is never deleted. The row is the provenance, and the org chart stays honest about what used to work here.
 

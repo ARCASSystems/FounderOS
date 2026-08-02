@@ -55,7 +55,7 @@ Priority order. Never two questions about the same thing.
 0. **A dated deadline outranks everything.** Anything with a real date attached - a filing, a payment, a renewal, a promise you made for a specific day - beats every undated item no matter how interesting. Bookkeeping and tidying questions rank last, behind all business state. A clock that loses its slot to a tidier question is how a deadline gets missed.
 1. A decision a queue item is blocked on.
 2. A review due on a recurring job ("that follow-up job's last run - ok, needs work, or failed?").
-3. An ask in `brain/needs-attention.md` nobody has answered.
+3. An ask in `brain/needs-attention.md` or `brain/needs-input.md` nobody has answered.
 4. A commitment that has gone quiet: keep it, kill it, or move the date.
 5. A provisional fact whose confirm-or-cut unblocks something real. One at a time, never two in one batch.
 6. A flag past its decay date: keep, kill, or refresh.
@@ -72,7 +72,7 @@ An answer that does not land in a file is a conversation, not a loop. For each a
 - **A queue decision** - update the item in `cadence/queue.md`: move it, or close it with your one-line why on the DONE line.
 - **A verdict on a recurring job** - `python scripts/employee_verdict.py verdict --employee <id> --verdict <v> --why "<your line>"`
 - **A provisional fact** - `python scripts/unconfirmed_facts.py confirm --id <id> --value "<value>" --note "<who or what confirmed it>"` or `cut --id <id> --note "<why>"`. On a confirm, also write the value into the file the row names. That write is the point of the whole ledger.
-- **An answered ask** - mark it answered in place in `brain/needs-attention.md` with the date and your one line. Never delete it: the answered row is the record of what you decided.
+- **An answered ask** - mark it answered in place in the file that raised it (`brain/needs-attention.md` or `brain/needs-input.md`) with the date and your one line. Never delete it: the answered row is the record of what you decided. An ask closed in the wrong file is still open in the right one, and it comes back tomorrow.
 - **A commitment call** - update `cadence/weekly-commitments.md`. A kill gets its reason on the same line.
 - **A flag call** - update `brain/flags.md`: extend the decay date with a reason, or close it with one.
 

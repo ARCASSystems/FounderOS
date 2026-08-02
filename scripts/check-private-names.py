@@ -77,6 +77,7 @@ exit 0 when clean.
 
 from __future__ import annotations
 
+import datetime as _dt
 import os
 import re
 import subprocess
@@ -481,6 +482,17 @@ ENTRY_CHANNEL_NAMES = ("log", "pattern", "flag", "parked", "need", "know")
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 _DURATION_RE = re.compile(r"^\d+d$")
 _ID_RE = re.compile(r"\b([a-zA-Z]+)-(\d{4}-\d{2}-\d{2})-(\d+)\b")
+
+
+def _real_date(value: str) -> bool:
+    """Shape is not enough: 2026-99-99 matches the regex and can never fire.
+    A decay date or entry id carrying an impossible date silently never
+    surfaces, which is the exact failure this guard exists to catch."""
+    try:
+        _dt.date.fromisoformat(value)
+        return True
+    except ValueError:
+        return False
 # A near-miss on a canonical field name: right words, wrong case or spacing.
 _NEAR_MISS_RE = re.compile(
     r"^\s*[-*]?\s*(decay\s*after|decay\s*reason|superseded\s*by|invalidated\s*on|"
@@ -554,22 +566,27 @@ def entry_defects(diff: str) -> list[str]:
             if fm:
                 field, value = fm.group(1), fm.group(2).strip()
                 if value and not _is_placeholder(value):
-                    ok = (_DATE_RE.match(value) or _DURATION_RE.match(value)
-                          if field == "Decay after"
-                          else _DATE_RE.match(value))
+                    if _DATE_RE.match(value):
+                        ok = _real_date(value)
+                    else:
+                        ok = bool(_DURATION_RE.match(value)) if field == "Decay after" else False
                     if not ok:
-                        want = ("YYYY-MM-DD or a duration like 14d"
-                                if field == "Decay after" else "YYYY-MM-DD")
+                        want = ("a real YYYY-MM-DD date or a duration like 14d"
+                                if field == "Decay after" else "a real YYYY-MM-DD date")
                         out.append(f"{rel}: `{field}: {value}` is not readable. "
                                    f"Expected {want}.")
 
             for idm in _ID_RE.finditer(stripped):
-                chan, _, counter = idm.groups()
+                chan, id_date, counter = idm.groups()
                 if chan.lower() not in ENTRY_CHANNEL_NAMES:
                     continue  # not an entry id, just a dated slug
                 if chan != channel:
                     out.append(f"{rel}: id `{idm.group(0)}` uses the `{chan}` "
                                f"channel in a `{channel}` file.")
+                elif not _real_date(id_date):
+                    out.append(f"{rel}: id `{idm.group(0)}` carries an impossible "
+                               f"calendar date, so nothing date-driven will ever "
+                               f"surface it.")
                 elif len(counter) != 3:
                     out.append(f"{rel}: id `{idm.group(0)}` needs a 3-digit "
                                f"zero-padded counter, so 001 rather than {counter}.")

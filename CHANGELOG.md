@@ -2,6 +2,26 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.45.1 - 2026-08-02
+
+The fourth-pass patch. An independent end-to-end review (Codex) ran over the pushed v1.45.0 - the fourth independent pass on this range - and every confirmed finding shipped the same weekend. Pack: `updates/1.45.1-honest-boundaries.md`.
+
+### Fix - uninstall could destroy operator data
+
+The standalone `uninstall.sh` kept a preserve-list (seven directories, three files) that had fallen behind the layer model, then deleted everything else - taking `capture/`, `brands/`, `roles/`, `system/`, `rules/`, `memory/`, `os-config.yaml`, and any setup-created company folder with it. Both uninstallers now work the only safe way round: they delete a named list of system paths and touch nothing else, so a path the list has never heard of survives by construction. The command uninstaller also stops removing `rules/` (update classifies it as founder-personalized), and purge mode now actually removes everything it claims to, asking per folder about root directories it cannot name.
+
+### Fix - the boundary language now matches Claude Code's documented behavior
+
+Claude Code reads a skill's `allowed-tools` as pre-approval, not as a wall that blocks unlisted tools - restrictive enforcement is an open upstream request. Every sentence that said "the list Claude Code enforces" now says the true thing: the grant is a written contract living in two places kept identical, the charter audit names drift between them in both directions, and anything outside a grant routes through the operator's own permission prompts rather than running silently. The audit itself got the teeth the claim needs: it now checks the reverse direction (a charter tool no chain skill declares), parses every frontmatter shape Claude Code accepts (inline, multiline list, space-separated), flags an empty declaration, compares case-sensitively because script paths differ by case on Linux, and catches interpreter-wide wildcards like `Bash(python *)`.
+
+### Fix - a fresh extract now actually installs the discoverable skills
+
+`skills_sync.py --check` on a pristine ZIP reported five skills missing from `.claude/skills/` - the model could not see today, catch-up, or the next-move engine natively, because setup only ever generated the capability page. Setup now runs `--apply`, proves it clean with `--check`, then generates the page.
+
+### Fix - smaller honesty and correctness repairs from the same review
+
+Future-dated verdicts no longer trigger reviews; impossible calendar dates (2026-99-99) now fail the entry guard instead of passing shape-only checks; a completed review with zero accepted diffs still stamps `last_review` so REVIEW DUE clears; the weekly review and the generic snapshot recipe refresh a stale cache at 3 days like the propose engine; the morning loop prioritizes and closes asks in `brain/needs-input.md`, not only its twin; a ZIP install on a machine that happens to have git asks before `git init` instead of switching version history on unconsented; the wizard's date substitutions use Python instead of a Unix `date` a no-git Windows box may not have; `roles/`, `system/`, and setup-created company folders joined every layer list including update's opening gate and confirmation; and the README's offer was corrected line by line - the query proof's real syntax, the provisional ledger's deliberate refusal of money and contact data, the undo net's editor-tools-only honesty, "no blank templates" reworded to name the deliberate waits, and the capture-to-distil pipeline stated as it runs.
+
 ## v1.45.0 - 2026-07-31
 
 The wider-door release. Two doors, one product: the OS now works end to end for a person who will never run git, and for an employee running one role inside a company. Neither reading costs the founder anything.
@@ -31,7 +51,7 @@ The same walk that closed v1.44 ran again over this release and its findings wer
 
 ### New - the charter holds, and the README makes the offer
 
-A third-pass architecture review ran before the push and its confirmed findings landed in the range. The structural one: the registry claimed "there is no second list to drift from" while every seat skill's `allowed-tools` frontmatter - the list Claude Code actually enforces - was wider than its charter row. Every seat is now narrowed to the exact scoped grants its row states, the charter audit (`employee_verdict.py charters`) reads the seam and names any drift, and the doctrine, the first-day doc, and the README state the true mechanism. Around it: default uninstall now preserves everything update protects (`capture/`, `brands/`, `roles/`, `system/`, `rules/`, `os-config.yaml`), `roles/` and `system/` joined the User Layer lists, the morning loop and the weekly retro now genuinely surface REVIEW DUE (closing the verdict loop's missing trigger), the propose engine and housekeeping refresh a stale `brain/.snapshot.md` instead of only a missing one, and the morning loop reads `brain/needs-input.md` beside its near-twin so `/dream`'s parked questions stop falling between two files. The README itself was rebuilt as the offer it should have been: what you get on day one, the one habit that makes it compound, who runs it, and a "prove it in ten minutes, offline" section - because the strongest claims here are the checkable ones. Pack: `updates/1.45.0-the-charter-holds.md`.
+A third-pass architecture review ran before the push and its confirmed findings landed in the range. The structural one: the registry claimed "there is no second list to drift from" while every seat skill's `allowed-tools` frontmatter - the skill's declared runtime list - was wider than its charter row. Every seat is now narrowed to the exact scoped grants its row states, the charter audit (`employee_verdict.py charters`) reads the seam and names any drift, and the doctrine, the first-day doc, and the README state the true mechanism. Around it: default uninstall now preserves everything update protects (`capture/`, `brands/`, `roles/`, `system/`, `rules/`, `os-config.yaml`), `roles/` and `system/` joined the User Layer lists, the morning loop and the weekly retro now genuinely surface REVIEW DUE (closing the verdict loop's missing trigger), the propose engine and housekeeping refresh a stale `brain/.snapshot.md` instead of only a missing one, and the morning loop reads `brain/needs-input.md` beside its near-twin so `/dream`'s parked questions stop falling between two files. The README itself was rebuilt as the offer it should have been: what you get on day one, the one habit that makes it compound, who runs it, and a "prove it in ten minutes, offline" section - because the strongest claims here are the checkable ones. Pack: `updates/1.45.0-the-charter-holds.md`.
 
 ## v1.44.0 - 2026-07-29
 

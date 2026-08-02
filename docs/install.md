@@ -197,7 +197,7 @@ You can switch paths anytime. The OS is your files - they are the same regardles
 Say "update Founder OS" whenever you like. No git needed: a ZIP install updates over a plain download, and every other path uses the same command. The update draws a hard line between the OS's machinery and your data:
 
 - **The OS's, replaced freely by an update:** `skills/`, `scripts/`, `templates/`, `docs/`, `updates/`, the commands, and the reference docs at the root.
-- **Yours, never written by an update:** `core/`, `context/`, `cadence/`, `brain/`, `capture/`, `network/`, `brands/`, `clients/`, `companies/`, `roles/` (your employee registry and its review record), `system/` (this install's quarantine record), plus `stack.json`, `os-config.yaml`, and `MEMORY.md` with its `memory/` directory. Your identity, your log, your pipeline, and your decisions survive every update by design.
+- **Yours, never written by an update:** `core/`, `context/`, `cadence/`, `brain/`, `capture/`, `network/`, `brands/`, `clients/`, `companies/`, `roles/` (your employee registry and its review record), `system/` (this install's quarantine record), any company or project folders setup created at the root, plus `stack.json`, `os-config.yaml`, and `MEMORY.md` with its `memory/` directory. Your identity, your log, your pipeline, and your decisions survive every update by design.
 - **In between, proposed never imposed:** `CLAUDE.md`, `rules/`, and `.claude/settings.json`. An update shows you each change as a diff and you say yes or no per file. Declining leaves your version in place.
 
 ---

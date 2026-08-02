@@ -4,9 +4,19 @@
 # Usage:
 #   bash uninstall.sh [--target <path>] [--dry-run] [--help]
 #
-# Removes the FounderOS system layer. Your operating data (core/, cadence/,
-# context/, brain/, companies/, network/, clients/, MEMORY.md, CLAUDE.md)
-# is NEVER touched. Those files are yours and survive uninstall.
+# Removes the FounderOS system layer by NAMING what it removes, never by
+# wiping and restoring. Anything this script does not name survives by
+# construction: your operating data (core/, cadence/, context/, brain/,
+# capture/, brands/, companies/, network/, clients/, roles/, system/, rules/,
+# memory/, CLAUDE.md, MEMORY.md, stack.json, os-config.yaml) and any company
+# or project folder setup created at the root. The earlier version of this
+# script kept a preserve-list and deleted everything else, which destroyed
+# any user path the list had fallen behind on. A remove-list cannot make
+# that mistake: an unknown path is left alone, not deleted.
+#
+# The remove-list must mirror the System Layer list in
+# .claude/commands/update.md. A path added there joins this list in the
+# same commit.
 #
 # Targets bash 3.2+ so the macOS system bash works without brew install bash.
 # Avoid ${var,,} / declare -A / mapfile / readarray (bash 4+ only).
@@ -25,23 +35,33 @@ LEGACY_TARGET="$HOME/.claude/plugins/founder-os"
 # along with the install directory below. Do NOT re-introduce a global hook
 # removal step here: a sibling PersonalOS install shares ~/.claude/hooks/.
 
-# User data directories that must never be removed.
-PRESERVED_DIRS=(
-  "core"
-  "cadence"
-  "context"
-  "brain"
-  "companies"
-  "network"
-  "clients"
+# System Layer directories - the OS's machinery. This list is the ONLY thing
+# this script deletes. rules/ is deliberately absent: update.md classifies it
+# as founder-personalized, so uninstall leaves it too.
+SYSTEM_DIRS=(
+  "skills"
+  "scripts"
+  "templates"
+  "notion-package"
+  "docs"
+  "updates"
+  ".claude/commands"
+  ".claude/hooks"
+  ".claude-plugin"
 )
 
-# User Layer files. Must mirror the User Layer list in .claude/commands/update.md.
-# If you add a User Layer path there, add it here too or default uninstall will delete it.
-PRESERVED_FILES=(
-  "MEMORY.md"
-  "CLAUDE.md"
-  "stack.json"
+# System Layer files at the root.
+SYSTEM_FILES=(
+  ".claude/settings.json"
+  "VERSION"
+  "AGENTS.md"
+  "GEMINI.md"
+  "AVATAR.md"
+  "README.md"
+  "CHANGELOG.md"
+  "LICENSE"
+  "install.sh"
+  "uninstall.sh"
 )
 
 # ---- argument parsing --------------------------------------------------------
@@ -61,8 +81,12 @@ Options:
   --dry-run        List what would be removed without removing anything
   --help           Show this help
 
-Your operating data (core/, cadence/, context/, brain/, CLAUDE.md, MEMORY.md)
-is never removed. Those files are yours.
+Removes only the named system layer (skills, scripts, templates, docs,
+updates, commands, hooks, plugin manifests, root reference files). Everything
+else in the folder is yours and is not touched: core/, cadence/, context/,
+brain/, capture/, brands/, companies/, network/, clients/, roles/, system/,
+rules/, memory/, CLAUDE.md, MEMORY.md, stack.json, os-config.yaml, and any
+company or project folders setup created.
 EOF
   exit 0
 }
@@ -121,19 +145,19 @@ if [[ ! -d "$TARGET" ]]; then
   exit 0
 fi
 
-echo "The following will be removed:"
-echo ""
-echo "  Install directory:"
-echo "    $TARGET"
-echo "  (system layer only - skills, templates, scripts, hooks source)"
-echo ""
-echo "The following will NOT be removed (your data):"
-for dir in "${PRESERVED_DIRS[@]}"; do
-  echo "    $TARGET/$dir/"
+echo "The following system-layer paths will be removed:"
+for dir in "${SYSTEM_DIRS[@]}"; do
+  if [[ -d "$TARGET/$dir" ]]; then
+    echo "    $TARGET/$dir/"
+  fi
 done
-for file in "${PRESERVED_FILES[@]}"; do
-  echo "    $TARGET/$file"
+for file in "${SYSTEM_FILES[@]}"; do
+  if [[ -f "$TARGET/$file" ]]; then
+    echo "    $TARGET/$file"
+  fi
 done
+echo ""
+echo "Everything else in $TARGET is your data and will NOT be touched."
 echo ""
 
 # ---- confirm -----------------------------------------------------------------
@@ -153,52 +177,38 @@ fi
 
 echo ""
 
-# ---- remove install directory ------------------------------------------------
+# ---- remove named system paths ----------------------------------------------
 
-# We remove the whole directory EXCEPT the preserved paths.
-# Strategy: move preserved paths out, delete directory, move back.
-# This is safer than trying to enumerate and delete individual system files.
-
-TMPDIR_PRESERVE=$(mktemp -d)
-
-for dir in "${PRESERVED_DIRS[@]}"; do
-  src="$TARGET/$dir"
-  if [[ -d "$src" ]]; then
-    mv "$src" "$TMPDIR_PRESERVE/$dir"
+for dir in "${SYSTEM_DIRS[@]}"; do
+  path="$TARGET/$dir"
+  if [[ -d "$path" ]]; then
+    rm -rf "$path"
+    ok "$path"
   fi
 done
 
-for file in "${PRESERVED_FILES[@]}"; do
-  src="$TARGET/$file"
-  if [[ -f "$src" ]]; then
-    cp "$src" "$TMPDIR_PRESERVE/$file"
+for file in "${SYSTEM_FILES[@]}"; do
+  path="$TARGET/$file"
+  if [[ -f "$path" ]]; then
+    rm -f "$path"
+    ok "$path"
   fi
 done
 
-rm -rf "$TARGET"
-ok "$TARGET (system layer)"
-
-# Restore preserved paths if any were present
-mkdir -p "$TARGET"
-for dir in "${PRESERVED_DIRS[@]}"; do
-  if [[ -d "$TMPDIR_PRESERVE/$dir" ]]; then
-    mv "$TMPDIR_PRESERVE/$dir" "$TARGET/$dir"
-  fi
-done
-
-for file in "${PRESERVED_FILES[@]}"; do
-  if [[ -f "$TMPDIR_PRESERVE/$file" ]]; then
-    mv "$TMPDIR_PRESERVE/$file" "$TARGET/$file"
-  fi
-done
-
-rm -rf "$TMPDIR_PRESERVE"
+# .claude/ itself stays if anything of the user's is left in it; remove it
+# only when empty.
+if [[ -d "$TARGET/.claude" ]] && [[ -z "$(ls -A "$TARGET/.claude" 2>/dev/null)" ]]; then
+  rmdir "$TARGET/.claude"
+  ok "$TARGET/.claude (empty)"
+fi
 
 # ---- done --------------------------------------------------------------------
 
 echo ""
 echo "FounderOS system layer removed."
+echo "Your data is still in: $TARGET"
+echo "To remove your data too, delete that folder yourself - this script never does."
 echo ""
-echo "Your operating data is preserved at $TARGET."
-echo "Delete that folder manually if you want a clean removal."
-echo ""
+echo "Plugin path: if you installed via the Claude Code plugin marketplace, also run"
+echo "  /plugin uninstall founder-os"
+echo "to de-register the plugin."

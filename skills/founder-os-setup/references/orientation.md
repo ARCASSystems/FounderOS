@@ -174,15 +174,17 @@ You never need to use the OS terms. Say what feels natural.
 - Open `[company]/[project]/` for execution work
 - Claude loads the right context based on where you are."
 
-### 6.2.8 Generate the capability page
+### 6.2.8 Install the native skill copies and generate the capability page
 
-Run it once, here, so the founder has a written answer to "what can this actually do" from day one:
+Three commands, run here, in this order. The first is load-bearing: without it, the skills the manifest marks discoverable (today, catch-up, founder-next-move and the rest) never reach `.claude/skills/`, so the model cannot see them natively - the exact gap a fresh extract ships with.
 
 ```
+python scripts/skills_sync.py --apply
+python scripts/skills_sync.py --check
 python scripts/skills_sync.py --capabilities
 ```
 
-It writes `docs/what-this-can-do.md` from the skills actually on disk. Do not hand-write this file and do not read it out. Name it in one line as part of the tour and move on: "There is a full list of what your OS can do in `docs/what-this-can-do.md`. It is generated from what is installed, so it is never a wish list."
+`--apply` copies the manifest's discoverable skills into `.claude/skills/`. `--check` must come back clean; if it reports drift, say so plainly and re-run `--apply` rather than moving on. `--capabilities` writes `docs/what-this-can-do.md` from the skills actually on disk. Do not hand-write that file and do not read it out. Name it in one line as part of the tour and move on: "There is a full list of what your OS can do in `docs/what-this-can-do.md`. It is generated from what is installed, so it is never a wish list."
 
 If the command fails (no `scripts/skills_sync.py`, or a plugin install with no reachable engine), say so in one line and put it in the backlog. Do not describe capabilities from memory instead.
 

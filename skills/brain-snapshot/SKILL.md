@@ -83,8 +83,9 @@ A skill that opts in reads `brain/.snapshot.md` before producing output. The opt
 
 ```
 1. Read brain/.snapshot.md if it exists.
-2. If missing, run: python scripts/brain-snapshot.py --write
-   Then read it.
+2. If missing, OR its date: line is more than 3 days old, run:
+   python scripts/brain-snapshot.py --write
+   Then read it. A stale cache read as current aims output at last month's state.
 3. If the snapshot script is also missing (older install), proceed using only profile files.
    Do not block.
 4. Apply the snapshot as runtime context. Do not surface every field in every output.

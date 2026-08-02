@@ -40,9 +40,9 @@ So every employee row carries three fields:
 - `never` - the prohibitions, so the shape of the job reads in one line
 - `tools` - the exact grant the run is meant to carry
 
-Be honest about where the enforcement actually sits, because it is not in this registry. The grant lives in two places by construction: the row's `tools` field, which you read, and the `allowed-tools` list in the seat skill's own frontmatter, which Claude Code enforces while the skill runs. A wider list in the skill makes the row decorative, so the two are kept identical and the charter audit (`python scripts/employee_verdict.py charters`) names any drift between them. An employee with no `tools` field does not run at all. An employee asking for a blanket "run anything" grant on a propose-only job is refused, not warned.
+Be honest about what the grant is, because it is not a sandbox. The grant lives in two places by construction: the row's `tools` field, which you read, and the `allowed-tools` list in the seat skill's own frontmatter - the skill's declared runtime list. Claude Code today reads that list as pre-approval (the listed commands run without a prompt), not as a wall that blocks everything else; a restrictive mode is an open request upstream. So the boundary is a written contract plus a tripwire: the two lists are kept identical, the charter audit (`python scripts/employee_verdict.py charters`) names drift between them in either direction, and anything outside the grant still lands in your normal permission prompts rather than running silently. An employee with no `tools` field does not run at all. An employee asking for a blanket "run anything" grant on a propose-only job is refused, not warned.
 
-`may_write` and `never` are for you to read. `tools` is what actually holds. Keep them consistent, and treat narrowing `tools` as the real control.
+`may_write` and `never` are for you to read. `tools` is the declared surface the audit holds both files to. Keep them consistent, and treat narrowing `tools` as the real control. Tools that arrive through MCP (a calendar, a meeting-notes reader) ride the same permission prompts and belong in the row's `inputs`, not in `tools`.
 
 Your own verbs are a different thing and stay deliberately wide. When you run a task yourself, the grant is your hands, not a job acting on standing authority.
 
