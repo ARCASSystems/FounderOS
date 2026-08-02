@@ -432,6 +432,15 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 
 ## Plugin lifecycle
 
+### `/founder-os:self-diligence`
+
+- **Or say.** "what would an investor ask me about this business"
+- **Outcome.** A diligence read of your own venture: five scored dimensions, SWOT, critical challenges, disclosed gaps, and the questions you will be asked.
+- **Args.** Optional business or venture name, if you run more than one.
+- **Writes.** Nothing. Read-only unless you ask for it to be saved.
+- **Prereqs.** `founder-os-setup` complete. `check-identity-ready.py` must pass.
+- **When to run.** Before a funding, partnership, or acquisition conversation.
+
 ### `/founder-os:ingest <source>`
 
 - **Or say.** "ingest this" / "save this source"

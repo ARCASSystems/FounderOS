@@ -159,9 +159,27 @@ VERDICT
 [Viable / Viable with changes / Not viable, and the single biggest reason]
 ```
 
+## Every number carries a tier
+
+This skill produces market sizes, competitor prices, growth rates and counts. Those numbers get pasted into decks and shown to buyers and investors, so they are governed by `rules/research-integrity.md`.
+
+Tag every load-bearing claim inline with one of three tiers. Each is an obligation, not a label:
+
+- `[MEASURED: <artifact> + <command>]` - reproducible from a file you hold.
+- `[SOURCED: <url>, retrieved <date>]` - one live link and the day you fetched it.
+- `[ESTIMATE: <assumption>]` - your judgment, with the assumption stated so a reader can swap it.
+
+Two rules bite this skill hardest. A GAPS IN THE MARKET line saying "nobody is doing this" is a universal negative that nobody can verify: write what you actually did instead, "checked A, B and C on <date>, found none". And a competitor quote in quotation marks carries a URL and a date, or it comes out.
+
+Before the analysis goes anywhere, run the second pass. The reviewer must not be the writer:
+
+    python scripts/claims_check.py <the document>
+
+It warns, never blocks, never edits your file.
+
 ## Rules
 
 - Show reasoning, not just conclusions
 - Flag assumptions explicitly
 - Be skeptical by default
-- Numbers wherever possible
+- Numbers wherever possible, each one tagged per `rules/research-integrity.md`

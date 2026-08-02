@@ -76,6 +76,16 @@ Check for items that have rolled 2+ weeks without progress. These need a decisio
 
 Present rolled items and ask which treatment each gets.
 
+## Step 3.4: Identity review (only if `context/entities/` exists)
+
+Run `python scripts/entity_check.py`. It is read-only and it reports three things:
+
+- **Overdue identity reviews.** An entity whose `reviewed:` date is 60+ days old that has real dated touches since. You kept working with them while the written read of them was never confirmed. Each takes one of three outcomes: **confirmed** (re-stamp `reviewed:` with today), **corrected** (edit `profile.md`, append the correction to `log.md`, re-stamp), or **archived** (`status: archived`; it stops being surfaced and stays readable). An entity that simply went quiet is not surfaced, because dormancy is not debt.
+- **Promotion candidates.** A single file that outgrew itself. Propose the folder shape (`profile.md` / `log.md` / `sources/`) and let the operator approve. Never promote unasked.
+- **Shape drift.** A folder missing `profile.md` or `log.md`, or an entity with no `reviewed:` date.
+
+Convention and thresholds: `rules/entity-folders.md`. Nothing due means say nothing - a quiet report is not a finding.
+
 ## Step 3.5: Grade the team (only if `roles/employees.yaml` exists)
 
 The weekly retro is where the digital-employee record gets read, or it never gets read at all. Run `python scripts/employee_verdict.py render` and read `brain/employees.md`:

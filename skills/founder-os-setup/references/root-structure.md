@@ -77,6 +77,8 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── deliverable_gate.py      # From templates/scripts/deliverable_gate.py (the deterministic scan behind ship-deliverable Link 0)
 │   ├── selfdoc_check.py         # From templates/scripts/selfdoc_check.py (why-marker + script-contract checker behind lint Check 6)
 │   ├── skills_sync.py           # From templates/scripts/skills_sync.py (skill reachability, the generated capability page, and native-discovery sync)
+│   ├── claims_check.py          # From templates/scripts/claims_check.py (the research-integrity second pass: untagged numbers, unsourced quotes, unbounded negatives, arithmetic that does not reconcile)
+│   ├── entity_check.py          # From templates/scripts/entity_check.py (entity promotion candidates, overdue identity reviews, folder-shape drift)
 │   └── scrape.py                # From templates/scripts/scrape.py (the fetch-and-extract engine behind web-fetch-extract)
 ├── docs/
 │   └── what-this-can-do.md      # GENERATED in Phase 6.2.8 by `python scripts/skills_sync.py --capabilities`. Never hand-written: it is built from the skills on disk, so it cannot claim a capability that is not installed.
@@ -92,7 +94,9 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── decisions.md             # From templates/context/decisions.md
 │   ├── companies.md             # Personalized from 0.1/0.2
 │   ├── clients.md               # From templates/context/clients.md
-│   └── names.md                 # From templates/context/names.md (names glossary - replace {{FOUNDER_NAME}} and {{COMPANY_NAME}}; capture passes read it before writing any name)
+│   ├── names.md                 # From templates/context/names.md (names glossary - replace {{FOUNDER_NAME}} and {{COMPANY_NAME}}; capture passes read it before writing any name)
+│   └── entities/
+│       └── README.md            # From templates/context/entities/README.md (people, ventures and topics that are not clients or leads; the promote-to-folder convention entity_check.py reads)
 ├── capture/
 │   └── inbox/
 │       └── README.md            # From templates/capture/inbox/README.md (drop zone for away-from-laptop captures; swept by catch-up)
@@ -116,6 +120,8 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── os-as-harness.md         # From templates/rules/os-as-harness.md (the four properties that keep an OS maintainable; self-observing, never self-modifying)
 │   ├── context-discipline.md    # From templates/rules/context-discipline.md (where tokens go in a long session, and the 30% rule)
 │   ├── hands-resilience.md      # From templates/rules/hands-resilience.md (the fallback ladder for when a tool you depend on stops working)
+│   ├── research-integrity.md    # From templates/rules/research-integrity.md (the three claim tiers and the second pass on anything the OS researches; scripts/claims_check.py enforces it warn-first)
+│   ├── entity-folders.md        # From templates/rules/entity-folders.md (how one entity file becomes a folder, and the identity review that keeps a profile from fossilising; scripts/entity_check.py reads it)
 │   └── banned-words-exceptions.txt # From templates/rules/banned-words-exceptions.txt (ships empty - your own settled judgment on banned words, so the gate stops re-raising it)
 ├── network/
 │   ├── inner-circle.md          # Personalized from 0.2 (key people mentioned)
@@ -139,7 +145,7 @@ The dispatcher delegates the record, manifest, capture, and autosave work to Pyt
 
 **Interpreter token in settings.json (mandatory).** The shipped `settings.json` tries all three interpreter spellings per command as a pre-setup safety net. When writing the founder's `settings.json`, replace each fallback chain with ONE clean call using the interpreter Phase 0 preflight actually discovered - `python`, `python3`, or `py -3` - e.g. `python3 "${CLAUDE_PROJECT_DIR}/scripts/hooks/dispatch.py" <Event>`. One interpreter, deterministic, no dead fallback noise in the founder's debug log. Bare `python3` is unreliable on Windows; `py -3` is the Windows fallback. Do NOT modify anything else in the file. If a `.claude/settings.json` already exists (a prior install), merge by ensuring all six events (PreToolUse - the undo floor, SessionStart, UserPromptSubmit, PreCompact - the memory flush, Stop, PostToolUse) point at the dispatcher with the discovered interpreter; omitting PreToolUse or PreCompact silently disables the undo floor and save-before-forget. Do not overwrite the user's other hook customisations. The PostToolUse observation stays silent until `FOUNDER_OS_OBSERVATIONS=1` is set in the shell env.
 
-**Scripts copy step (mandatory).** Copy all twenty-eight Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte. Copy the whole folder rather than the list: `templates/scripts/*.py` is the source of truth, this list is the explanation. Every one of them resolves its own root from its own location, so they work from the founder's `scripts/` with nothing to configure. A helper that is in the folder but not on this list still gets copied, and a helper on this list that is missing from the folder is a packaging bug worth stopping for.
+**Scripts copy step (mandatory).** Copy all thirty Python helpers (plus the private-name patterns template) from `templates/scripts/` to the founder's `scripts/`, byte-for-byte. Copy the whole folder rather than the list: `templates/scripts/*.py` is the source of truth, this list is the explanation. Every one of them resolves its own root from its own location, so they work from the founder's `scripts/` with nothing to configure. A helper that is in the folder but not on this list still gets copied, and a helper on this list that is missing from the folder is a packaging bug worth stopping for.
 
 - `templates/scripts/_common.py` → `scripts/_common.py` (shared helper module - `wiki-build.py` and `query.py` both `import` from it; if it is missing, `/founder-os:wiki-build` and `/founder-os:query` hard-error with `ModuleNotFoundError` on first run)
 - `templates/scripts/wiki-build.py` → `scripts/wiki-build.py` (used by `/founder-os:wiki-build`)
@@ -168,6 +174,8 @@ The dispatcher delegates the record, manifest, capture, and autosave work to Pyt
 - `templates/scripts/deliverable_gate.py` → `scripts/deliverable_gate.py` (the deterministic scan behind `ship-deliverable` Link 0: leftover `[FILL]`, a stale date, a tool credited as author. Without it the ship gate silently loses its only mechanical check and becomes reading passes alone)
 - `templates/scripts/selfdoc_check.py` → `scripts/selfdoc_check.py` (the why-marker and script-contract checker behind `/founder-os:lint` Check 6, and the command `templates/rules/entry-conventions.md` tells the founder to run)
 - `templates/scripts/skills_sync.py` → `scripts/skills_sync.py` (skill reachability, the generated capability page, and the `.claude/skills/` native-discovery sync; `/founder-os:verify` and `/founder-os:audit` both call it)
+- `templates/scripts/claims_check.py` → `scripts/claims_check.py` (the second pass behind `rules/research-integrity.md`: scans a finished research document for untagged numbers, verbatim quotes with no source, unbounded universal negatives, and arithmetic that does not reconcile. Warn-first, never blocks, never edits the document. Named by `strategic-analysis`, `unit-economics`, `proposal-writer`, `self-diligence`, and `ship-deliverable`)
+- `templates/scripts/entity_check.py` → `scripts/entity_check.py` (the detector behind `rules/entity-folders.md`: proposes promoting a single-file entity to a folder, surfaces identity reviews 60+ days stale with real touches since, and reports folder-shape drift. Read-only; `weekly-review` calls it)
 - `templates/scripts/scrape.py` → `scripts/scrape.py` (the fetch-and-extract engine behind the `web-fetch-extract` skill. THE ONE EXCEPTION to the standard-library floor: it needs `pip install httpx selectolax tenacity`, and `--render` additionally needs playwright. It is copied anyway because it fails closed and says so - without the packages it exits 1 with the exact pip command and names the WebFetch fallback, so the skill degrades rather than breaking. Do NOT tell the founder to install anything during setup, and do not describe this one as standard library.)
 
 Also copy `templates/scripts/private-name-patterns.txt.template` → `scripts/private-name-patterns.txt` (NOTE: drop the `.template` suffix on the destination filename). The pre-commit hook and `install-git-hooks.sh` both look for `scripts/private-name-patterns.txt` exactly. The `.template` suffix marks the source-of-truth example, not the runtime file.

@@ -88,6 +88,8 @@ Several people inside one live session is not something this does today. The who
 
 ## What makes this different
 
+- **You own the operating logic, not a vendor.** Every other tool in this category asks you to make how you work legible to their platform, so their system can act on it. What you get back is behaviour inside their product; what they keep is the record of how your business actually runs. This is files on your machine. You can read them, edit them in any text editor, copy them to a USB stick, fork them, and keep every one of them the day the vendor disappears or triples the price. That difference is not a feature they forgot to build. Copying it would cost them their revenue model.
+- **It tells the truth about what it produces.** Capture side: a name or a number heard once is held as unconfirmed until you confirm or cut it, and the ledger refuses to hold contact details or amounts at all. Research side: every load-bearing number in an analysis, a proposal, or a market read carries a tier - measured, sourced, or estimated - and `claims_check.py` reads the finished document back for untagged numbers, quotes with no source, universal negatives nobody can verify, and arithmetic that does not reconcile. It warns, it never blocks, and it never edits your file.
 - **Stall detection built in.** The system watches for rolling items and forces keep/kill/escalate decisions. Every retro.
 - **Revenue loop enforcement.** Every outreach or content action must log same-session. Catches the gap between "I'll do X" and "I did X."
 - **Role as router.** COO, BD, CMO, Chief of Staff are behavioural modes, not personas. The right mode activates based on what you are actually doing.
@@ -108,6 +110,8 @@ Four layers, the same four the Founder OS Playbook draws on a napkin. Each does 
 - **The Heartbeat** - the rhythm that keeps it current: a daily anchor at the start of the day, a weekly retro at the end of the week, and a SessionStart brief that surfaces stalls and stale cadence.
 
 **Six role modes.** Four switch automatically based on what you are doing: COO (default), BD, CMO, Chief of Staff. Two more are there when you need them and you invoke explicitly: CSO for the portfolio view across everything you run, CTO for your tool stack and automations. To change lens yourself, just say "switch to CMO" (or any role).
+
+**It runs when you open it, plus hooks.** Some tools in this space monitor your work all day and act on their own. This one does not, and that is a real difference rather than a gap in the copy. It runs when you start a session, when a hook fires (session open, before a write, before compaction, on stop), and when you ask. What you trade for that is a system with no daemon, no server, no account, and nothing running against your files while you are asleep.
 
 A **SessionStart brief** runs on every Claude Code session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up. You do not need to think about it. The brief, the Stop hook, and slash commands are Claude Code-only - on Cowork or Cloud Claude they do not fire. Details under [Substrate details](#substrate-details) below if curious. Surface-by-surface compatibility table in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
@@ -148,6 +152,24 @@ Git is deliberately not on the list. The OS runs without it: every session's fil
 ## How to use it - talk to Claude
 
 The OS routes on natural language. Say what you need ("set up my voice profile", "what's on for today?", "prep me for my call with Sarah") and the right skill fires. Slash commands are speed shortcuts for power users, not the primary surface. If you forget what's available, say "show me what you can do" (or run `/founder-os:menu`) and the OS returns 5 to 7 capabilities scored against your current state.
+
+### Your first session, in nine sentences
+
+Setup ends by telling you who you have. This is what to type next. Say these out loud or paste them; none of them is a command you have to remember, and every one works on a fresh install.
+
+1. `What's on for today?`
+2. `Log this: <whatever just happened>`
+3. `What should I do next?`
+4. `What's on my plate?`
+5. `Draft a follow-up to <name> about <thing>`
+6. `I just got off a call with <name>, here's what happened: ...`
+7. `Help me decide between <A> and <B>`
+8. `What would an investor ask me about this business?`
+9. `Save my work`
+
+If only one of these lands this week, make it number 2. Everything the OS does later is built on having something written down, and the first time it answers a question using a thing you told it three weeks ago is the moment the whole system stops feeling like a folder.
+
+A fuller list, generated from the skills actually installed on your machine, is in [docs/what-this-can-do.md](docs/what-this-can-do.md). Scenario walkthroughs are in [docs/a-day-in-the-os.md](docs/a-day-in-the-os.md).
 
 ---
 
@@ -225,7 +247,7 @@ For the short answer to "what can this actually do", [docs/what-this-can-do.md](
 
 ## What ships in this repo
 
-### Skills (92)
+### Skills (93)
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
@@ -233,7 +255,7 @@ The skills are organised into **role packs**, each a function a solo founder cov
 
 One to call out is the **LinkedIn pack**: say "help me with my LinkedIn", pick an outcome (leads, a better job, a louder brand, or a healthier network), and the OS aims your own data export at it - a ranked outreach worklist, a deep network audit, dormant-contact revival, and an algorithm-aware content direction. All local, free-plan, within LinkedIn's terms - no scraper, no automated actions, message content never read.
 
-### Slash commands (43)
+### Slash commands (44)
 
 Every command has a natural-language equivalent - slash commands are speed shortcuts for power users, not the primary surface. Full reference with outcomes, args, and follow-ups in [`docs/commands.md`](docs/commands.md).
 
@@ -285,7 +307,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 ## Tools and MCPs
 
-Founder OS does not assume your stack. Most of the 92 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+Founder OS does not assume your stack. Most of the 93 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 ---
 
@@ -357,9 +379,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.45.1. Public release. 92 skills, 43 commands, 719 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.46.0. Public release. 93 skills, 44 commands, 764 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
-v1.45.1 is the fourth-pass patch: an independent end-to-end review ran over the pushed v1.45.0 and the confirmed findings shipped as this patch. The blockers first. The standalone uninstaller kept a preserve-list that had fallen behind the layer model and could delete an operator's registry, quarantine record, rules, and brand config - both uninstallers now delete only named system paths, so an unknown folder survives by construction, and purge finally removes everything it claims to. The natively discoverable skills never reached `.claude/skills/` on a fresh extract - setup now runs the apply step and proves it clean. And every sentence that called a role's tool list "enforced" now says what Claude Code documents: the list is pre-approval, the boundary is a written contract audited in both directions, and anything outside a grant routes through your own permission prompts. Around those: the charter audit reads every frontmatter shape and catches interpreter-wide wildcards, impossible calendar dates fail the entry guard, future-dated verdicts stop triggering reviews, a ZIP install on a machine that happens to have git now asks before turning history on, the wizard's timestamps no longer require a Unix shell, a completed review with nothing to change still clears its due flag, and this README's offer and offline proofs were corrected to what the commands and the wizard actually do.
+v1.46.0 is the fourth-pass patch: an independent end-to-end review ran over the pushed v1.45.0 and the confirmed findings shipped as this patch. The blockers first. The standalone uninstaller kept a preserve-list that had fallen behind the layer model and could delete an operator's registry, quarantine record, rules, and brand config - both uninstallers now delete only named system paths, so an unknown folder survives by construction, and purge finally removes everything it claims to. The natively discoverable skills never reached `.claude/skills/` on a fresh extract - setup now runs the apply step and proves it clean. And every sentence that called a role's tool list "enforced" now says what Claude Code documents: the list is pre-approval, the boundary is a written contract audited in both directions, and anything outside a grant routes through your own permission prompts. Around those: the charter audit reads every frontmatter shape and catches interpreter-wide wildcards, impossible calendar dates fail the entry guard, future-dated verdicts stop triggering reviews, a ZIP install on a machine that happens to have git now asks before turning history on, the wizard's timestamps no longer require a Unix shell, a completed review with nothing to change still clears its due flag, and this README's offer and offline proofs were corrected to what the commands and the wizard actually do.
 
 v1.45.0 is the wider-door release, and it opens two doors, then holds the boundary behind both. A third-pass architecture review before the push closed the charter seam: every role's declared tool list now matches its written charter, the charter audit names any drift between the two, uninstall can no longer delete what update protects, and the review loop that turns gated roles into a track record now has real daily and weekly triggers. The first is for the person who will never run git: the OS already ran without it, but the words had not caught up - a rules file installed a push cadence onto machines with no git, the tour said "your repo is your memory", and one doc claimed updates need `git pull`. All of it now speaks plainly: your files are the memory and they persist the moment they are written, saves and versions replace commit language everywhere a user reads, updates work over plain download on every path, and the install doc names in one place which folders are yours, which are the OS's, and which an update proposes changes to instead of writing. The second door is for the employee a workstream lands on. The wizard already asked whether you own the business or run a role inside one, and the answer finally leads somewhere: operators get a Role Snapshot - the part of the job you run, who you answer to, what is yours to own, what is not yours to decide, and the blocker - the propose engine gained an operator path aimed at the work you own, the account manager drafts the status update to whoever you answer to, and every line of copy that read false to a non-founder was fixed in place. One product, one track, wider door.
 

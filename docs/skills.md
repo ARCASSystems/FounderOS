@@ -703,6 +703,17 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 - **When to run.** After reading a book, listening to a podcast, finishing an article, or running an experiment that produced a takeaway.
 - **Follow-up.** `proposal-writer` and `strategic-analysis` will cite the new note automatically. No dedicated slash command.
 
+### self-diligence
+
+- **Say.** "what would an investor say", "diligence read", "am I ready to raise", or "what will they ask me".
+- **Outcome.** Five scored dimensions (market, differentiation, team, business model, readiness), a SWOT, the critical challenges, a disclosed-gaps section, and the questions a diligence analyst would ask. Anything your files do not ground becomes a question to you, never an invented answer.
+- **Reads.** `core/identity.md`, `core/founder-snapshot.md`, `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `context/leads.md`, `brain/log.md`, `brain/flags.md`, `cadence/weekly-commitments.md`, `companies/`.
+- **Writes.** Read-only unless you ask for the read to be saved.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete and `check-identity-ready.py` passing. The more of your real state is written down, the more of the read is scored rather than left open.
+- **When to run.** Before a funding, partnership, or acquisition conversation. Or any time you want the hard questions early enough to do something about them.
+- **Follow-up.** `strategic-analysis` for the market dimension. `unit-economics` for the money. `/founder-os:self-diligence`.
+
 ### strategic-analysis
 
 - **Say.** "analyze this market", "competitor map", "evaluate this opportunity", or "TAM SAM SOM".

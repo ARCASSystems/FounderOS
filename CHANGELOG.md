@@ -2,6 +2,26 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.46.0 - 2026-08-02
+
+The truth-about-our-own-numbers release. Capture-side honesty already shipped: a name or an amount heard once waits as unconfirmed until you confirm or cut it. This release covers the other direction - what the OS produces when it researches, sizes, prices, and analyses. Pack: `updates/1.46.0-tells-the-truth-about-its-own-numbers.md`.
+
+### New - three claim tiers and a script that reads the document back
+
+A verification pass over a real seven-document AI-assisted research pack found about 40 suspect claims in four repeating classes: precise statistics with no source, verbatim quotes attributed to people that appear nowhere findable, universal negatives nobody can verify, and arithmetic that does not reconcile - one cost row off by 11 percent in a table whose other nine rows were right. `rules/research-integrity.md` defines the answer: every load-bearing claim carries `[MEASURED]` (the artifact and the command that re-derives it), `[SOURCED]` (one live URL and the retrieval date), or `[ESTIMATE]` (the assumption stated inline so a reader can swap it). Two hard rules sit on top: a quote carries a retrievable link and date or it is deleted, and "no tool does X" gets rewritten as the bounded search actually run. `scripts/claims_check.py` is the second pass - standard library, no key, warn-first, never edits the document. `strategic-analysis`, `unit-economics` and `proposal-writer` name the rule; `ship-deliverable` gained Link 3.5 to run it on research-class deliverables. The reviewer is deliberately not the writer.
+
+### New - self-diligence, the investor read of your own venture
+
+Say "what would an investor ask me about this business" and the OS scores five dimensions - market potential, differentiation, team, business model and commercial path, readiness for the conversation - against evidence in your own files, then produces a SWOT, the critical challenges, a disclosed-gaps section, and the questions a diligence analyst would ask. The rule the whole skill rests on: anything the files cannot ground becomes a question to you, never an invented answer and never a hedge. No evidence is not a middling score, it is reported as unscored with the question that would fix it. The disclosed-gaps section is a feature rather than an apology: a real diligence analysis of a pre-seed company named audited-downward metrics, an honest coverage ledger, and a named known-risks section as the reason its confidence went up.
+
+### New - entity folders, so an identity thickens instead of sprawling
+
+A person, venture or topic starts as one file in `context/entities/`. When it outgrows one file - size, touch frequency, or you say so - `scripts/entity_check.py` proposes promotion to a folder with a fixed shape: `profile.md` holds the current read, `log.md` holds dated evidence append-only, `sources/` holds their documents as sent. You approve the promotion; it never happens on its own. Entities carry a `reviewed:` date and the weekly review surfaces any 60+ days stale that have real touches since, so a profile written in February is never read in August as if someone still stood behind it. An entity that simply went quiet is not surfaced, because dormancy is not debt. And when your stated way of working and the log disagree, the morning loop asks about the gap rather than picking a side - designed intent, enacted practice, and the question - because nobody writes down why the two diverge unless something asks. This takes the branch that v1.27's F34 declined: that removal was correct because the path had no directory, no schema, no reader and no install step. All five now ship, and `tests/test_no_phantom_entities.py` was rewritten to assert the backings directly rather than ban a keyword, which makes it a stricter guard than the one it replaces. Record: `plans/v1.46-entities-schema-supersedes-f34-2026-08-02.md`.
+
+### Changed - positioning that says the true thing in both directions
+
+The README now states the ownership line plainly: every other tool in this category asks you to make your operating logic legible to their platform, and what they keep is the record of how your business runs; this is files on your machine you can read, edit, fork, and keep the day the vendor disappears. It also states the gap in the same breath - the OS runs when you open it and when a hook fires, not all day on its own - because a positioning line that only says the flattering half is the thing this release exists to argue against. A first-session prompt card gives nine sentences to type after setup, and `docs/a-day-in-the-os.md` walks nine real situations end to end. That page carries no percentage and no multiplier anywhere, deliberately: a scenarios page is exactly where invented numbers go.
+
 ## v1.45.1 - 2026-08-02
 
 The fourth-pass patch. An independent end-to-end review (Codex) ran over the pushed v1.45.0 - the fourth independent pass on this range - and every confirmed finding shipped the same weekend. Pack: `updates/1.45.1-honest-boundaries.md`.

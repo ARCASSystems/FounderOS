@@ -20,6 +20,10 @@ Apply the routing rules in `skills/your-voice/SKILL.md`. Default to operator voi
 
 ## Before producing output
 
+**Every number in a proposal is a claim the buyer can check.** A wrong one costs more than a weak sentence, because it reads as carelessness about their money. `rules/research-integrity.md` governs them: any figure that did not come from the client's own mouth or a document you hold carries a tier tag in the working draft - `[MEASURED]`, `[SOURCED: url + date]`, or `[ESTIMATE: assumption]`. Benchmarks and "businesses like yours typically see X" are the dangerous class: either the claim carries a live source, or it gets rewritten using the client's own numbers. Never quote a person or a publication without a retrievable link and date.
+
+The finished proposal resolves those tags into plain prose ("our estimate, assuming X"), but only after the tagged draft has passed `python scripts/claims_check.py <draft>`.
+
 If using operator voice, run: `python scripts/check-voice-ready.py`
 If using brand voice, run: `python scripts/check-brand-voice-ready.py --brand <slug>`
 

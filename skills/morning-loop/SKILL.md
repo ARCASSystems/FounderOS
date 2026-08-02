@@ -59,7 +59,16 @@ Priority order. Never two questions about the same thing.
 4. A commitment that has gone quiet: keep it, kill it, or move the date.
 5. A provisional fact whose confirm-or-cut unblocks something real. One at a time, never two in one batch.
 6. A flag past its decay date: keep, kill, or refresh.
-7. One pattern observation, only if a slot is still free.
+7. **A gap between designed intent and enacted practice.** You described how something should work, and the log shows it running differently. Ask about the gap; do not pick a side and do not quietly update the file to whichever version is newer. Three lines, no more:
+
+   ```
+   Designed intent: <what you said should happen>
+   Enacted practice: <what the log shows happening>
+   The gap: <the question>
+   ```
+
+   The answer goes into the entity's `profile.md` (or the owning file). This is the one question that produces something no amount of accumulation gives you: the reason a stated process and a real one diverge. Nobody writes that down unless something asks. Only raise it when both sides are actually in the files - never manufacture a contradiction to have something to ask.
+8. One pattern observation, only if a slot is still free.
 
 Each question: two or three narrow options **plus your recommendation first**. Plain language, no ids and no system jargon. "Skip" is always free and costs nothing.
 

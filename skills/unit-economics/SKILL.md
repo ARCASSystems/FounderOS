@@ -108,6 +108,16 @@ BOTTOM LINE
 [What the numbers are telling you]
 ```
 
+## Where the input numbers came from
+
+The math is only as honest as what goes in. Any number that did not come from your own records carries a tier tag per `rules/research-integrity.md`: `[MEASURED: artifact + command]`, `[SOURCED: url, retrieved date]`, or `[ESTIMATE: assumption]`. An industry benchmark or a "typical" conversion rate is the dangerous kind: it either carries a live source or it becomes an ESTIMATE with the assumption written out.
+
+Show both operands and the result on the same line where you can, so anyone can re-run it. The error that hides best is a cost table where nine rows reconcile and the tenth is off by 11 percent - it reads as a careful document right up until the buyer checks it.
+
+Second pass before the model leaves your machine:
+
+    python scripts/claims_check.py <the document>
+
 ## Rules
 
 - Always show your work
@@ -115,4 +125,5 @@ BOTTOM LINE
 - Round to reasonable precision. "$48K" not "$47,832.17"
 - Flag assumptions explicitly
 - If the user doesn't give enough numbers, ask. Don't guess.
+- Outside numbers carry a tier tag per `rules/research-integrity.md`
 - Simple hyphens (-) not em or en dashes

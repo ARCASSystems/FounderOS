@@ -23,6 +23,7 @@ You are blocked: on a choice, on a list, on a shiny idea, or on a fog where you 
 | See what is actually on your plate | [queue](queue/SKILL.md) | Ready |
 | Read the state of the whole OS | [strategic-read](strategic-read/SKILL.md) | Ready |
 | Size a market or a competitor | [strategic-analysis](strategic-analysis/SKILL.md) | Ready |
+| Face the questions an investor will ask | [self-diligence](self-diligence/SKILL.md) | Ready |
 | Run the weekly retro and reset | [weekly-review](weekly-review/SKILL.md) | Ready |
 
 ## The shared discipline

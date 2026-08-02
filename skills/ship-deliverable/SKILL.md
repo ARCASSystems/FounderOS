@@ -69,6 +69,20 @@ Confirm `blind-spot-review` has run on this deliverable in this session or the i
 
 If no evidence exists, record `FAIL - run blind-spot-review first`.
 
+### Link 3.5 - Claims Check (research-class deliverables only)
+
+A deliverable is research-class when a decision would rest on its numbers: market sizing, a competitive read, pricing or unit economics, a proposal, a feasibility read, diligence prep. If the deliverable carries none of those, record `N-A - not research-class` and move on. Do not invent a reason to skip it.
+
+Otherwise run:
+
+    python scripts/claims_check.py <path>
+
+It reports untagged numbers, verbatim quotes with no source, unbounded universal negatives, and arithmetic that does not reconcile. Record the counts by class.
+
+This link WARNS, it does not fail the gate. `rules/research-integrity.md` is warn-first by design: the script cannot tell a load-bearing claim from an incidental one, and a gate that blocks on that judgment gets routed around within a week. Report what it found and let the operator decide. The one thing that is a real FAIL: an arithmetic mismatch, because the script re-ran the math and the document is simply wrong.
+
+If `scripts/claims_check.py` is missing, record `NOT RUN - claims_check.py missing` rather than passing silently.
+
 ### Link 4 - Pre-Send Check
 
 Read `skills/pre-send-check/SKILL.md` and apply its checklist to this deliverable inline. The check covers voice consistency, source truth, recipient, date, token replacement, asset paths, and filing hygiene.
@@ -87,6 +101,7 @@ Link 0 Deterministic:   PASS / FAIL / NOT RUN - <n checks, n fail, n left to rea
 Link 1 Template:        PASS / WARN / FAIL - <detail>
 Link 2 Anti-AI:         PASS / FAIL - <detail>
 Link 3 Blind-spot run:  PASS / FAIL - <detail>
+Link 3.5 Claims check:  PASS / WARN / N-A / NOT RUN - <n untagged, n unsourced quotes, n negatives, n arithmetic>
 Link 4 Pre-send check:  PASS / FAIL - <detail>
 
 Verdict: READY TO SEND | FIX THEN RETRY

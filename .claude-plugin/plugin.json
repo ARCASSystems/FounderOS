@@ -1,11 +1,11 @@
 {
   "name": "founder-os",
-  "description": "An operating system with your first team already on it. Five named digital employees with written job descriptions, gated until you grade their runs, plus a brain that keeps everything you tell it in plain markdown you own. 92 skills, 43 commands, six role modes. The setup wizard interviews you and builds the OS around your actual work in one sitting: clients, pipeline, decisions, the week, your voice, your brand. No server, no key, no git required - download the ZIP, extract, say \"set up Founder OS\". Version history without a git command: say \"save my work\", \"what changed\", \"undo to before this morning\". Everything lives in files any AI can read, so the model is the part you swap and the brain is the part you keep. Talk to it in plain English or run /founder-os:setup to get started.",
+  "description": "An operating system with your first team already on it. Five named digital employees with written job descriptions, gated until you grade their runs, plus a brain that keeps everything you tell it in plain markdown you own. 93 skills, 44 commands, six role modes. The setup wizard interviews you and builds the OS around your actual work in one sitting: clients, pipeline, decisions, the week, your voice, your brand. No server, no key, no git required - download the ZIP, extract, say \"set up Founder OS\". Version history without a git command: say \"save my work\", \"what changed\", \"undo to before this morning\". Everything lives in files any AI can read, so the model is the part you swap and the brain is the part you keep. Talk to it in plain English or run /founder-os:setup to get started.",
   "author": {
     "name": "ARCAS Systems",
     "email": "solutions@arcassystems.com"
   },
-  "version": "1.45.1",
+  "version": "1.46.0",
   "homepage": "https://github.com/ARCASSystems/FounderOS",
   "repository": "https://github.com/ARCASSystems/FounderOS",
   "commands": "./.claude/commands/"
