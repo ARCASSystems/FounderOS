@@ -4,7 +4,7 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 ## v1.48.0 - 2026-08-05
 
-The arrival release. v1.47 fixed how the OS reads its own past; this one fixes the front door - the distance between finding the repo and living inside it, crossed without a terminal. Pack: `updates/1.48.0-the-door-is-a-double-click.md`. Three user behaviours drove it, all raised in the same operator review: nobody should need to know what "open the folder in Claude Code" means, almost nobody starts with zero notes, and coming back after weeks away should not feel like a scolding.
+The arrival release. v1.47 fixed how the OS reads its own past; this one fixes the front door. The thought process, in one line: we watched how people actually arrive - real first-time users pitching ideas the way they would to any chatbot, an operator asking for a team of single-job assistants for her creative process, founders with years of notes already on disk - and the OS assumed someone they are not: a founder with a business, a terminal, and no history. Every change below is one of those real arrivals getting a door. Pack: `updates/1.48.0-the-door-is-a-double-click.md`.
 
 ### New - download, extract, double-click
 
@@ -13,6 +13,14 @@ The arrival release. v1.47 fixed how the OS reads its own past; this one fixes t
 ### New - setup can adopt the notes you already have
 
 The most common real arrival was the one setup did not model: an existing Obsidian vault or markdown folder with years in it. The wizard now has an adopt path ("set up Founder OS inside my vault", or one follow-up question when you name Obsidian or local files as your knowledge base). It moves the OS in next to your notes under four hard rules: create only what is missing, never write over an existing file (an existing CLAUDE.md is shown as a diff to accept or decline, like an update), ask once per collision, and name back what was left untouched. The wiring is stated honestly at setup and in the new `docs/adopt-existing-notes.md`: Claude reads any note on demand and your `[[wikilinks]]` keep working, but structured search (timeline, ID lookup, brain pass) covers the OS's own folders - the bridge is "capture this", adopt-as-you-go, not a silent promise of indexed history.
+
+### New - "I have an idea" is now a real front door
+
+Watch a first-time founder - often a student - open any AI chat: they pitch the idea itself ("people wait in lines for hours, my solution is an app where..."), and they get what a chatbot gives: a startup layout, a course, a feature list. The OS's propose engine always knew the right answer for that stage (name one real customer, talk to five of them this week, no building yet) but nothing fired on how these users actually speak. `founder-next-move` - one of the five natively-discoverable skills - now triggers on "I have an idea", "is this a good idea", "help me validate my idea", and the raw pitch itself. It parses the pitch the way the wizard parses a ramble (problem = customer clue, solution = venture, their words = stage evidence), offers to capture it, and answers in their vocabulary with a move that needs a phone and no money - never a business plan, never a refusal that sends a 19-year-old back to a generic chatbot.
+
+### New - "turn my process into assistants" builds a team the way a real operator specced it
+
+The ask arrives in work vocabulary, not tool vocabulary: an operator describes how she produces a deliverable - research, then a mood board, then the activation concepts - and wants named single-job assistants, one per step. `skill-creator` now fires on that ask and carries her design rules, taken from a real working session: capture the process in the operator's own words before building (sop-writer or a pasted voice-note transcript), one job per assistant so a bad output blames the employee and not the team, the human keeps the taste decisions (the assistant researches and presents options, the operator picks), effectiveness before efficiency (run it manually until it produces what you would have, only then scale), and a seat is earned then registered in `roles/employees.yaml` with an honest charter. `AGENTS.md` gained the other half: any connected agent doing recurring work - an SEO engine, an outreach drafter, a video pipeline - is a candidate employee under the same contract: charter is the grant, propose-only or draft-only stated, runs recorded, seats earned, and nothing ever sent on the operator's behalf. `GEMINI.md` points its agents at the same section.
 
 ### Fix - coming back after weeks reads as a welcome, not a wall
 

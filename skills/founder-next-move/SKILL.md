@@ -1,7 +1,7 @@
 ---
 name: founder-next-move
 description: >
-  Propose the single highest-leverage next move. For a founder it aims at their next paying customer; for an operator running a role inside a company it aims at the outcome they own for whoever is waiting on it. Trigger on "what should I do next", "what's my next move", "propose my next move", "what should I focus on toward a customer", "where do I push", "I don't know what to do next", "give me one thing to do", or any moment the operator wants the OS to decide the next step instead of listing options. Reads the brain (the Founder Snapshot, or the Role Snapshot for the operator role, plus the log and the pipeline), works out where they actually are, picks the one move with the most leverage, and closes with three things they can do today (one big, two small). Free-tier; writes nothing to your operating files (it may refresh brain/.snapshot.md when stale).
+  Propose the single highest-leverage next move. For a founder it aims at their next paying customer; for an operator running a role inside a company it aims at the outcome they own for whoever is waiting on it. Trigger on "what should I do next", "what's my next move", "where do I push", "I don't know what to do next", "give me one thing to do", or any moment the operator wants the OS to decide the next step instead of listing options. Also fires on the raw idea pitch: "I have an idea", "is this a good idea", "help me validate my idea", or a first-time founder describing an everyday problem and a solution they want to build. Reads the brain (the Founder or Role Snapshot, the log, the pipeline), works out where they actually are, picks the one move with the most leverage, and closes with three things they can do today (one big, two small). Free-tier; writes nothing to your operating files.
 why: "A person drowning in options does not need a list, they need one move. This reads where they actually are and names the single thing with the most leverage - toward a paying customer for a founder, toward the outcome they own for an operator - with a step small enough to start today."
 enhance: "Keep brain/log.md current - the stage read and the move both sharpen when the log shows what the founder did this week."
 allowed-tools: ["Read", "Bash(python scripts/brain-snapshot.py:*)"]
@@ -18,6 +18,17 @@ The North Star depends on who is operating, and the identity role decides it:
 
 - **founder / team_of_one:** **move this founder to their first paying customer faster.** If they already have one, the next one. Nothing the OS proposes is for its own sake; it is for the customer.
 - **operator (a person running a role inside a company):** **keep the work they own moving, in front of the person waiting on it.** The customer of an operator's work is whoever they answer to and whoever that work serves. Same compression, same three-step close; the aim point changes.
+
+---
+
+## When the input is a raw idea ("I have an idea for...")
+
+The message that triggers this skill is often the pitch itself: a first-time founder - sometimes a student - describing an everyday problem and a solution, the way they would to any chatbot. Treat that message as brain material, not as a request for a lecture:
+
+- **Parse the pitch the way the setup wizard parses a ramble.** The problem they describe is the customer clue, the solution is the venture, and their own words are the stage evidence - almost always `pre-idea` or `idea-validation`. Offer to capture it in one line ("logging this as your venture - say no to keep it out"), then run the engine as normal.
+- **Do not return a startup course, a business plan, a SWOT, or a feature list.** The stage table below already says what an idea needs next: real people with the problem, talked to this week, before anything gets built. That is the move.
+- **Say it in their vocabulary.** "Talk to five people who wear glasses in humid weather and ask what they do about the fog" beats "conduct customer discovery interviews". The move must be something they could start today with a phone and no money.
+- **A thin or missing snapshot is already handled** by Step 1: the capture move IS the move. Never a blank screen, never an invented plan, and never a refusal that sends a first-timer back to a generic chatbot.
 
 ---
 

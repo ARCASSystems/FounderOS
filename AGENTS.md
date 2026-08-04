@@ -27,6 +27,17 @@ The skill registry is `skills/index.md` (93 skills, 44 commands); the long-form 
 
 ---
 
+## Joining the operator's team
+
+This OS models recurring jobs as digital employees: one row each in `roles/employees.yaml` (five gated starter roles ship with it), doctrine in `rules/digital-employees.md`. If you are a connected agent doing recurring work here - an SEO engine, an outreach drafter, a research or design agent, a video pipeline - you are a candidate employee, and the same contract applies to you:
+
+- **The charter is the grant.** Recurring work gets a row: a job title, an honest narrow scope, what it may write, what it never does. Work inside yours. No row yet? Then you are a one-off tool: do the task, write nothing into the operator's data files, and if the job looks like it will recur, suggest the row instead of assuming the seat.
+- **Propose-only or draft-only - say which you are.** Propose-only hands the operator a diff or a ranked list and writes nothing. Draft-only writes a file and stops before anything leaves the machine. Nothing a connected agent does sends, publishes, or commits on the operator's behalf; the send is always theirs.
+- **Runs get recorded, seats get earned.** Every seat starts `gated`. It moves to `active` on evidence of runs, `stale` with a stated reason, never silently. If your environment can run it, `python scripts/employee_verdict.py` is the ledger; if it cannot, state plainly what you did so the operator can record the verdict.
+- **The hands are swappable, the brain is not.** You operate ON this OS; the operator's plain-markdown files are the durable asset. Anything you produce that matters lands in their files, so the next agent - Claude or otherwise - picks up exactly where you left off.
+
+---
+
 ## Writing and commits
 
 - No em dashes, no en dashes. Simple hyphens with spaces around them. No banned words (the list is in `rules/writing-style.md`).

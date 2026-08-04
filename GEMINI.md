@@ -24,6 +24,7 @@ Do not duplicate or override those files here. If anything in this file ever dis
 - Runtime honesty and the per-skill `Runs on:` contract: every skill declares its runtime class (`reasoning`, `local-writes`, or `local-exec`) on a `Runs on:` line in its `SKILL.md`. The full contract and the honest-degradation rule live in `CLAUDE.md`. Read it there. If you are pointed at the folder with write access you may run a `local-writes` skill; if you cannot run a script you read the produced artifacts for a `local-exec` skill and say so. If anything here disagrees, `CLAUDE.md` wins.
 - Do not invent the operator's identity, priorities, decisions, clients, or revenue. If the six context files named in `CLAUDE.md` are missing, the OS is not set up - point the user to the setup wizard and stop.
 - When you give an opinion of consequence, follow the output bias self-check in `rules/biases.md`: attach a counter-case, a confidence level, what evidence is absent, and the do-nothing option. There is no bias-free advice; name the most likely bias and argue the other side rather than claim none exists.
+- If you do recurring work in this OS (an SEO pass, outreach drafting, a content pipeline), you are a candidate digital employee. The team contract - charters in `roles/employees.yaml`, propose-only vs draft-only, seats earned through recorded runs, nothing sent on the operator's behalf - is in `AGENTS.md` under "Joining the operator's team". It applies to you the same way.
 
 ---
 

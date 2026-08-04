@@ -1,7 +1,7 @@
 ---
 name: skill-creator
 description: >
-  Create new skills, modify and improve existing skills, and measure skill performance. Use when the user wants to create a skill from scratch, edit or improve an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or tune a skill's description for better triggering accuracy. Triggers on "create a skill", "make a skill for", "turn this into a skill", "improve this skill", "why isn't my skill triggering", "test this skill", or "tune the description".
+  Create new skills, modify and improve existing skills, and measure skill performance. Use when the user wants to create a skill from scratch, edit or improve an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or tune a skill's description for better triggering accuracy. Triggers on "create a skill", "make a skill for", "turn this into a skill", "improve this skill", "why isn't my skill triggering", "test this skill", or "tune the description". Also fires when the ask arrives in work vocabulary instead of tool vocabulary: "turn my process into assistants", "build me a team of assistants", "break my workflow into single-job assistants", "I want one assistant per step", "make me an employee that does X".
 why: "A skill that never triggers, or triggers on the wrong prompts, is dead weight - this makes the description, the only thing the model sees before loading a skill, something you test rather than guess at."
 enhance: "Run the description length check at every edit, not just at creation - a tuning pass that scores well on triggering can quietly push the description past the install ceiling and the skill silently stops loading."
 summary: "Create, improve, and measure skills - and tune why they trigger."
@@ -28,6 +28,18 @@ At a high level, the process of creating a skill goes like this:
 Your job when using this skill is to figure out where the user is in this process and then jump in and help them progress. They might say "I want to make a skill for X" - then you help narrow down what they mean, write a draft, write the test cases, run them, and iterate. Or they might already have a draft - then you go straight to the eval and iterate part of the loop.
 
 Be flexible. If the user says "I do not need a bunch of evaluations, just vibe with me", do that instead.
+
+## From a described process to a team of single-job assistants
+
+The ask often arrives in work vocabulary, not tool vocabulary: an operator describes how they produce something - research, then a mood board, then the concept, then the deck - and wants "assistants" or "employees", one per step. This flow was specced by watching a real operator design exactly that, and her constraints are the design rules:
+
+1. **Capture the process in their words first.** Before building anything, get the scrappy workflow out of their head: the steps, the decisions at each step, what good output looks like to them. The `sop-writer` skill is the capture tool; a pasted voice-note transcript of them explaining it works just as well. Do not improve the process while capturing it - capture, then build.
+2. **One job per assistant.** Resist bundling steps because it would be "more efficient". A narrow assistant can be judged, corrected, and trusted; a do-everything assistant fails vaguely. When one step's output is bad, you fix that one assistant - blame the employee, not the team.
+3. **The human keeps the taste decisions.** Build each assistant to do the thinking and present options: research, alternatives, drafts. The operator picks. Never automate the picking unless they explicitly ask - and when scale-it-up comes up early, say the honest thing: automating a process you have not yet run manually multiplies mistakes, it does not fix them.
+4. **Effectiveness before efficiency.** Each assistant runs manually, gets reviewed, gets corrected, until it produces roughly what the operator would have produced - only then do speed, chaining, or scale earn attention.
+5. **A seat is earned, then registered.** When an assistant has run for real and kept its place, add it to `roles/employees.yaml` with an honest charter: what it may write, what it never does. Doctrine in `rules/digital-employees.md`; `gated` until it has actually run is the honest default.
+
+Each assistant is just a skill under this flow - the loop below (draft, test on real work, correct, repeat) is how every one of them gets good.
 
 After the skill is done, you can also run a description-tuning pass to improve how reliably the skill triggers.
 
