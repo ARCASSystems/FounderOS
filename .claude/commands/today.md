@@ -43,6 +43,7 @@ One-screen view of what matters today. No scrolling. No prose. Read-only.
    ```
 
 7. If a section has nothing, write the header and one line: `none open.` Do not skip the section.
+8. Day-one exception: if the anchor is `[NOT SET]` and the log holds one entry or fewer, do NOT render the fenced block. Reply instead, outside any block: `Nothing on today yet - that is normal on day one. Tell me the one thing you have to get done and I will make it today's anchor.` Placeholders rendered as a dashboard read as broken; a question reads as a start.
 
 ## What counts as progress here
 
@@ -57,7 +58,7 @@ Two behavior rules on what this brief reports. They change what the founder sees
 - Read-only. Do not write to any file.
 - Do not invoke other skills.
 - No commentary outside the fenced block.
-- If the daily anchor is stale (current date past `## Today:`), prepend a top line: `STALE: anchor date is <X>. Roll cadence/daily-anchors.md first.`
+- If the daily anchor is stale (current date past `## Today:`), prepend a top line: `Yesterday's plan (<X>) is still showing. Say "roll my day" and I will carry it forward and ask for today's one thing.`
 - Keep total under 20 lines.
 - No em dashes or en dashes. Hyphens only.
 - This command works only inside a Founder OS install. If the `cadence/` folder is missing, reply: `Founder OS not installed here. Run /founder-os:setup first.`

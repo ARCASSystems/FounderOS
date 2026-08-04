@@ -184,7 +184,7 @@ Do NOT write the founder's own name as a pattern. Their name lives in `core/iden
 
 If a pattern IS written: write `\b` as a literal two-character backslash-b, not an escape. A shell `printf`/`echo -e` path turns `\b` into a backspace byte (0x08) and ships a dead privacy guard that looks installed but matches nothing. Use `printf '%s\n' '\b<NAME>\b'` or a single-quoted heredoc. Do not try to prove the guard here - there is no git repository yet at this point in setup; Phase 2.3 Step 5 proves the block with a throwaway commit once git exists. On Windows or PowerShell, write the pattern with the file-write tool or `Set-Content` (PowerShell has no `echo -e`, so the backspace trap does not arise there) - never a shell echo. The guard itself validates patterns at load time and warns on control characters, so a mangled pattern is named instead of silently dead.
 
-These are not personalized templates. Copy contents exactly. Do not edit. Verify all twenty-eight `.py` copies plus `scripts/private-name-patterns.txt` exist on disk before continuing. If `templates/scripts/` ever holds a `.py` helper not named above, copy it too - the founder's `scripts/` set must equal the `templates/scripts/` set, since helpers import each other. If any are missing, the brain-snapshot, brain-pass, wiki-build, query, menu, observation-rollup, preflight-gate, observation-capture, or private-name guard helpers will fail silently or hard-error.
+These are not personalized templates. Copy contents exactly. Do not edit. Verify all thirty `.py` copies plus `scripts/private-name-patterns.txt` exist on disk before continuing. If `templates/scripts/` ever holds a `.py` helper not named above, copy it too - the founder's `scripts/` set must equal the `templates/scripts/` set, since helpers import each other. If any are missing, the brain-snapshot, brain-pass, wiki-build, query, menu, observation-rollup, preflight-gate, observation-capture, or private-name guard helpers will fail silently or hard-error.
 
 **{{role_noun}} substitution.** The `templates/bootloader-claude-md.md` file contains `{{role_noun}}` placeholders in two places. When writing the bootloader CLAUDE.md, substitute based on the role captured in Phase 0.2.1:
 
@@ -247,7 +247,7 @@ The five lines map in order to `{{TODAY}}`, `{{TODAY_PLUS_6}}`, `{{TODAY_PLUS_7}
 - `brain/decisions-parked.md` ships one example parked decision dated `2024-01-01`. Replace `Date parked:` with today's date and give it a real `parked-` ID.
 - `brain/log.md` ships its worked examples inside an HTML comment. Plant ONE live worked entry dated today so the brief's "last 3 log entries" is not empty. Use a neutral entry: `### [<today>] #context Installed Founder OS and ran setup. First real entry. (log-<today>-001)`. Leave the commented examples in place as a format reference.
 
-Keep all three generic. Do not invent business facts. They are labelled as examples for the operator to replace once their own first entries land.
+Keep all three generic. Do not invent business facts. And make each seed SAY it is a seed: every seeded title ends with `(example entry - keeping or killing it is how reviews work)`. The first brief will surface these as Review Due by design; a founder who was never told they are demos experiences that as the OS inventing work. The label is what turns the same moment into the demo it was meant to be.
 
 ### 2.3 Initialize Git
 

@@ -29,8 +29,12 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _common import ENTRY_DATE_HEADING  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Capability to command map. Single source of truth for what surfaces and how.
@@ -173,7 +177,13 @@ CLOSING_LINE = (
 
 # Patterns reused across rules.
 WEEKLY_HEADER = re.compile(r"^##\s+Week\s+of\s+(\d{4}-\d{2}-\d{2})\s*$", re.MULTILINE)
-DAILY_HEADER = re.compile(r"^##\s+(\d{4}-\d{2}-\d{2})\s*$", re.MULTILINE)
+# The shared entry-heading regex from _common. The old pattern here required
+# H2 and end-of-line after the date, which matched NONE of the three shipped
+# log formats (### [date] #tag / ### date #tag / ### date HH:MM - ...). The
+# result: log_recent() was always empty, the overwhelm and new-initiative
+# rules could never fire, rule_audit fired forever, and a six-month user was
+# still classified as day-one zero-state.
+DAILY_HEADER = ENTRY_DATE_HEADING
 STATUS_OPEN = re.compile(r"Status:\s*\**\s*OPEN", re.IGNORECASE)
 ROLLED_FORWARD = re.compile(r"Week\s+[2-9]\+|Week\s+\d{2,}\+", re.IGNORECASE)
 TEMPLATE_DEFAULT = re.compile(r"\{\{[^}]+\}\}|\[[A-Z][A-Z _-]+\]|\[CHOOSE:[^\]]*\]|\[#X+\]")

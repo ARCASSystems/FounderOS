@@ -244,7 +244,9 @@ def section_tip(repo: Path, today: date) -> list[str]:
     text = read_text(log)
     if text is None:
         return []
-    entry_re = re.compile(r"^###\s+(\d{4}-\d{2}-\d{2})")
+    # Literal copy of scripts/_common.py ENTRY_DATE_HEADING_PATTERN (hooks do
+    # not import from scripts/). test_entry_heading_parity keeps them identical.
+    entry_re = re.compile(r"^#{2,3}\s+\[?(\d{4}-\d{2}-\d{2})\]?(?:\s|$)")
     entry_dates: list[date] = []
     for ln in text.splitlines():
         m = entry_re.match(ln)
@@ -583,7 +585,7 @@ def render_quarantine(repo: Path) -> list[str]:
         if re.match(r"^## \d{4}-\d{2}-\d{2}", ln):
             latest = ln
             break
-    out = ["", f"Quarantine: {active} ACTIVE failure(s) - check system/quarantine.md"]
+    out = ["", f"Quarantine: {active} background job(s) failed silently - say \"what broke\" and I will read system/quarantine.md and explain"]
     if latest:
         out.append(f"  most recent: {latest}")
     return out
@@ -651,7 +653,9 @@ def render_tip(section: list[str]) -> list[str]:
 
 def render_observations(repo: Path, today: date, want: bool) -> list[str]:
     if not want:
-        return ["Observations: disabled (set FOUNDER_OS_OBSERVATIONS=1 to enable)"]
+        # Silence is the contract: an off-by-default developer feature does not
+        # earn a permanent line of shell jargon in every session brief.
+        return []
     out = ["Observations: enabled (writing to brain/observations/<date>.jsonl)"]
     rollup_dir = repo / "brain" / "observations" / "_rollups"
     rollup_count = len(list(rollup_dir.glob("*.md"))) if rollup_dir.is_dir() else 0

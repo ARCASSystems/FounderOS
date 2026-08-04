@@ -42,7 +42,7 @@ Do not surface this filter to the user as a separate step. The user sees only th
 
 ## Runtime context
 
-Before drafting, read `brain/.snapshot.md` if it exists. Use the open-flags block to avoid topics that contradict current operator stance. Use the must-do block to lean the draft toward what the operator is actively working on. Use the voice and brand blocks (if present) to set tone. If `brain/.snapshot.md` does not exist, proceed without it - the snapshot is optional context, not a hard prerequisite.
+Before drafting, read `brain/.snapshot.md`. If it is missing, or its `date:` line is more than 3 days old, run `python scripts/brain-snapshot.py --write` first and read the fresh one - a stale snapshot read as current presents last week's flags and must-dos as today's, which is worse than no memory at all. If Python is unavailable, proceed without it and say so. Use the open-flags block to avoid topics that contradict current operator stance. Use the must-do block to lean the draft toward what the operator is actively working on. Use the voice and brand blocks (if present) to set tone. The freshness check above is not optional: skipping the regeneration and reading a week-old snapshot is the one way this block makes output worse.
 
 ## Stack-aware sending
 

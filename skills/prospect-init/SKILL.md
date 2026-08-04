@@ -115,6 +115,6 @@ Plain language. The user is not a strategist. Mirror their words back. Do not tr
 
 ## Brain context (default)
 
-Before producing output, read `brain/.snapshot.md` if it exists. The open-flags block can surface whether this prospect collides with a parked decision or open commitment. If the snapshot script is missing (older install), proceed without it.
+Before producing output, read `brain/.snapshot.md`. If it is missing, or its `date:` line is more than 3 days old, run `python scripts/brain-snapshot.py --write` first and read the fresh one - a stale snapshot read as current presents last week's flags and must-dos as today's, which is worse than no memory at all. If Python is unavailable, proceed without it and say so. The open-flags block can surface whether this prospect collides with a parked decision or open commitment. If the snapshot script is missing (older install), proceed without it.
 
 <!-- private-tag: not applicable: prospect-init writes prospect facts captured from user speech into a structured file; the file lives in the public companies/prospects/ surface, not private brain state -->

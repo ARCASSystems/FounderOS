@@ -30,6 +30,10 @@ The principle: do more for you than you asked, in priority order, and never inve
 
 Not sure where the deal is? Say "just get them tracked" and the OS runs `prospect-init` first (the cheapest, most useful move), then names what each later step would add so you choose with the record in front of you.
 
+## Read the state before routing
+
+The route is only as good as what it knows. Before choosing, read `brain/.snapshot.md`. If it is missing, or its `date:` line is more than 3 days old, run `python scripts/brain-snapshot.py --write` first and read the fresh one. The open-flags block tells you what is stuck, the must-do block tells you what this week is actually about, and the patterns block tells you what keeps happening - a front door that routes without them is a cold start at the exact moment the user is deciding whether this OS knows them. If Python is unavailable, route from the files you can read and say so.
+
 ## The flow
 
 ### 1. Read the state first

@@ -496,10 +496,33 @@ def autosave() -> None:
         print("")
 
 
+def snapshot_refresh() -> None:
+    """Regenerate brain/.snapshot.md after the session's writes.
+
+    The snapshot is what 25 output skills read as "the operator's current
+    state". Nothing refreshed it on a schedule, so from day 2 those skills
+    presented week-old flags as today's - the audit's highest-leverage
+    finding. Stop is the correct trigger: it runs after every session's
+    writes, in guaranteed order, and the ~40ms stdlib cost is invisible at
+    session end. Best-effort like every handler: a missing script or absent
+    Python never blocks the stop.
+    """
+    script = ROOT / "scripts" / "brain-snapshot.py"
+    if not script.exists():
+        return
+    subprocess.run(
+        [sys.executable, str(script), "--write"],
+        cwd=str(ROOT), capture_output=True, timeout=30,
+    )
+
+
 def h_stop(stdin_bytes: bytes) -> None:
-    # Deterministic order: both readers run before the writer commits the tree.
+    # Deterministic order: both readers run before the writer commits the tree,
+    # and the snapshot refresh runs before autosave so a git-enabled install
+    # commits a tree whose derived state matches its sources.
     _wrap("Stop:revenue-check", revenue_check, stdin_bytes)
     _wrap("Stop:changes-manifest", changes_manifest, stdin_bytes)
+    _wrap("Stop:snapshot-refresh", lambda _b: snapshot_refresh(), stdin_bytes)
     _wrap("Stop:autosave", lambda _b: autosave(), stdin_bytes)
 
 

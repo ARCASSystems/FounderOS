@@ -203,7 +203,7 @@ Plain language. Mirror the operator's words back when summarising. No em dashes 
 
 ## Brain context (default)
 
-Before producing output, read `brain/.snapshot.md` if it exists. The open-flags block can surface whether a participant in this thread already has an open commitment or parked decision. The recent decisions block can show whether the thread settles or contradicts something already decided. If the snapshot is missing (older install), proceed without it. Do not block.
+Before producing output, read `brain/.snapshot.md` and check its `date:` line. If it is missing or more than 3 days old, do NOT treat it as current: read `brain/flags.md` and `cadence/weekly-commitments.md` directly for live state, and tell the user the snapshot is stale so they can ask for a refresh (any skill with shell access, or the next session close, rebuilds it). This skill's tool grant deliberately has no shell access, so it reports staleness rather than fixing it - a stale snapshot read as current presents last week's state as today's. The open-flags block can surface whether a participant in this thread already has an open commitment or parked decision. The recent decisions block can show whether the thread settles or contradicts something already decided. If the snapshot is missing (older install), proceed without it. Do not block.
 
 ## Cross-reference
 

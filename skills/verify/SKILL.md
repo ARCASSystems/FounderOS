@@ -214,6 +214,17 @@ python scripts/skills_sync.py --capabilities --check
 - Page current -> nothing extra, the Check 9 line stands as it is.
 - Page stale or missing -> append to the same line: `[WARN] Skill reachability (<N>/<N> reachable; docs/what-this-can-do.md is stale - rebuild with python scripts/skills_sync.py --capabilities)`
 
+And run the native-discovery drift check in the same pass, because it is the failure this check exists for in its sharpest form:
+
+```
+python scripts/skills_sync.py --check
+```
+
+The handful of skills in `skills/discoverable.yaml` are the ones that fire when you describe a SITUATION ("log this", "what's on my plate") rather than name a command. They only fire natively while their copy under `.claude/skills/` matches the source. Any edit to a source skill silently breaks that - the skill still exists, still passes reachability, and quietly stops firing on the situations it was built for. Before v1.47 this check ran only once, inside setup, so the drift was invisible to every later health check.
+
+- Exit 0 -> append `; native copies current` to the Check 9 line.
+- Any drift -> `[FAIL] Skill reachability (native-discovery drift: <K> skills - run python scripts/skills_sync.py --apply)`. The fix is the one command; never delete a skill from discoverable.yaml to silence the check.
+
 WARN rather than FAIL: a stale page is a wrong description of a working OS, not a broken one.
 
 ## Output format

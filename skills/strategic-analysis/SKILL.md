@@ -36,7 +36,7 @@ If a file is empty or missing, name the gap explicitly in the OUR POSITIONING bl
 
 ## Brain context (default)
 
-Before producing output, read `brain/.snapshot.md` if it exists.
+Before producing output, read `brain/.snapshot.md`. If it is missing, or its `date:` line is more than 3 days old, run `python scripts/brain-snapshot.py --write` first and read the fresh one - a stale snapshot read as current presents last week's flags and must-dos as today's, which is worse than no memory at all. If Python is unavailable, proceed without it and say so.
 
 If the snapshot is missing, run:
 
@@ -73,7 +73,7 @@ OUR POSITIONING
 [One paragraph]
 
 RELEVANT KNOWLEDGE
-[Matching notes from brain/knowledge/, or "No matching knowledge files found."]
+[Matching notes from brain/knowledge/, or "No knowledge notes matched the terms searched (<terms>) - if notes exist under another name, name the topic or run /founder-os:brain-pass."]
 
 GAPS IN THE MARKET
 [What nobody is doing well]
@@ -89,7 +89,7 @@ SAM: [The portion we can actually reach.]
 SOM: [What we can realistically capture in 12-24 months.]
 
 RELEVANT KNOWLEDGE
-[Matching notes from brain/knowledge/, or "No matching knowledge files found."]
+[Matching notes from brain/knowledge/, or "No knowledge notes matched the terms searched (<terms>) - if notes exist under another name, name the topic or run /founder-os:brain-pass."]
 
 ASSUMPTIONS
 [Every assumption listed]
@@ -107,7 +107,7 @@ THE CASE FOR: [Evidence, not hope]
 THE CASE AGAINST: [Be honest]
 
 RELEVANT KNOWLEDGE
-[Matching notes from brain/knowledge/, or "No matching knowledge files found."]
+[Matching notes from brain/knowledge/, or "No knowledge notes matched the terms searched (<terms>) - if notes exist under another name, name the topic or run /founder-os:brain-pass."]
 
 WHAT WOULD HAVE TO BE TRUE
 -> [Condition 1]
@@ -153,7 +153,7 @@ COMPETITIVE MOAT
 [Why this is hard to copy. Be honest if it is not.]
 
 RELEVANT KNOWLEDGE
-[Matching notes from brain/knowledge/, or "No matching knowledge files found."]
+[Matching notes from brain/knowledge/, or "No knowledge notes matched the terms searched (<terms>) - if notes exist under another name, name the topic or run /founder-os:brain-pass."]
 
 VERDICT
 [Viable / Viable with changes / Not viable, and the single biggest reason]

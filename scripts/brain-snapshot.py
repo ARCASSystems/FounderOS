@@ -224,6 +224,55 @@ def role_snapshot(root: Path) -> list[str]:
     )
 
 
+H3_PATTERN_HEADER = re.compile(r"^###\s+(.+?)\s*$")
+PATTERN_FIELD = re.compile(r"^(First observed|Last seen|Impact):\s*(.+?)\s*$")
+
+
+def active_patterns(root: Path, limit: int = 3) -> list[str]:
+    """Top patterns from brain/patterns.md, one line each.
+
+    patterns.md is the only file that encodes what the OS has LEARNED about
+    the operator (3+ repetitions, evidence, impact) - and before v1.47 no
+    output-producing skill ever saw it: the learning layer was write-only.
+    Putting the active patterns in the snapshot is what lets a draft or a
+    proposal say "this repeats" instead of treating every week as the first.
+    Placeholder rows ([Pattern Name]) and the template's worked example are
+    real entries to a parser, so bracket-only names are skipped.
+    """
+    path = root / "brain" / "patterns.md"
+    if not path.exists():
+        return []
+    text = safe_read(path)
+    if not text:
+        return []
+    out: list[str] = []
+    lines = text.splitlines()
+    for idx, line in enumerate(lines):
+        m = H3_PATTERN_HEADER.match(line)
+        if not m:
+            continue
+        name = m.group(1).strip()
+        if name.startswith("[") and name.endswith("]"):
+            continue  # template placeholder, not a learned pattern
+        fields = {}
+        for follow in lines[idx + 1: idx + 15]:
+            if H3_PATTERN_HEADER.match(follow):
+                break
+            fm = PATTERN_FIELD.match(follow.strip())
+            if fm:
+                fields[fm.group(1)] = fm.group(2)
+        detail = []
+        if fields.get("Last seen"):
+            detail.append(f"last seen {fields['Last seen']}")
+        if fields.get("Impact"):
+            detail.append(fields["Impact"][:80])
+        suffix = f" ({'; '.join(detail)})" if detail else ""
+        out.append(f"- {name}{suffix}")
+        if len(out) >= limit:
+            break
+    return out
+
+
 def open_flags(root: Path, limit: int = 3) -> list[str]:
     path = root / "brain" / "flags.md"
     if not path.exists():
@@ -400,6 +449,12 @@ def build_snapshot(root: Path, today: date) -> str:
     out.append("## Open flags (top 3)")
     out.extend(flags)
     out.append("")
+
+    patterns = active_patterns(root)
+    if patterns:
+        out.append("## Patterns (what keeps happening)")
+        out.extend(patterns)
+        out.append("")
 
     must = must_do(root)
     out.append("## This week (must do)")

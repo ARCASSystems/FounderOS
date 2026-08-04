@@ -57,7 +57,7 @@ After producing a draft and before returning it, run the anti-examples filter:
 
 Do not surface this filter to the user as a separate step. The user sees only the cleaned draft.
 
-Before drafting, read `brain/.snapshot.md` if it exists. Use the open-flags block to avoid topics that contradict current operator stance. Use the must-do block to lean the draft toward what the operator is actively working on. Use the voice and brand blocks (if present) to set tone. If `brain/.snapshot.md` does not exist, proceed without it - the snapshot is optional context, not a hard prerequisite.
+Before drafting, read `brain/.snapshot.md`. If it is missing, or its `date:` line is more than 3 days old, run `python scripts/brain-snapshot.py --write` first and read the fresh one - a stale snapshot read as current presents last week's flags and must-dos as today's, which is worse than no memory at all. If Python is unavailable, proceed without it and say so. Use the open-flags block to avoid topics that contradict current operator stance. Use the must-do block to lean the draft toward what the operator is actively working on. Use the voice and brand blocks (if present) to set tone. The freshness check above is not optional: skipping the regeneration and reading a week-old snapshot is the one way this block makes output worse.
 
 ## Core Philosophy
 
@@ -89,7 +89,7 @@ Date: [Date]
 [Translate 2-3 key symptoms into financial terms. Make the cost of inaction visible.]
 
 3. PAST WINS TO REFERENCE
-[Relevant prior notes from `brain/knowledge/`, if any. Name the topic, not private details. If none exist, write "No matching knowledge files found."]
+[Relevant prior notes from `brain/knowledge/`, if any. Name the topic, not private details. If none matched, write "No knowledge notes matched the terms searched (<terms>). If notes on this topic exist under another name, say the topic and I will read it directly, or run /founder-os:brain-pass."]
 
 4. WHAT WE'LL DO
 Phase 1: [Phase name and duration]

@@ -19,7 +19,7 @@ Three steps, nothing typed. The gentlest path there is.
 **Steps:**
 
 1. [Download the ZIP](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip).
-2. Right-click the file and choose **Extract All** (Windows) or double-click it (Mac). Move the extracted folder wherever you keep your work and rename it if you like (`founder-os` is a good name).
+2. Right-click the file and choose **Extract All** (Windows) or double-click it (Mac). Windows puts a folder inside a folder - open the inner one, the one that contains `CLAUDE.md`. Move it wherever you keep your work and rename it if you like (`founder-os` is a good name).
 3. Open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
 
 Commands use bare names on this path (`/setup`, `/today`), same as the git-clone path.

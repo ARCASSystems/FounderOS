@@ -66,7 +66,7 @@ The skill reads, in order:
 8. `brain/flags.md`
 9. `brain/log.md` (last 20 entries only, newest on top)
 
-If `brain/.snapshot.md` exists, also read it. Use it as supplementary runtime state. Proceed without it if missing.
+Also read `brain/.snapshot.md` and check its `date:` line. If it is missing or more than 3 days old, do NOT treat it as current: read `brain/flags.md` and `cadence/weekly-commitments.md` directly for live state, and tell the user the snapshot is stale so they can ask for a refresh (any skill with shell access, or the next session close, rebuilds it). This skill's tool grant deliberately has no shell access, so it reports staleness rather than fixing it - a stale snapshot read as current presents last week's state as today's. Use it as supplementary runtime state.
 
 ## Stale-context check (run before synthesis)
 
@@ -147,7 +147,7 @@ Summarise. Do not paste raw entry bodies that contain personal or client-sensiti
 
 ## Brain context (default)
 
-Before producing output, read `brain/.snapshot.md` if it exists. The open-flags and weekly-must-do blocks make the synthesis sharper. If the snapshot script is missing (older install), proceed without it.
+Before producing output, read `brain/.snapshot.md` and check its `date:` line. If it is missing or more than 3 days old, do NOT treat it as current: read `brain/flags.md` and `cadence/weekly-commitments.md` directly for live state, and tell the user the snapshot is stale so they can ask for a refresh (any skill with shell access, or the next session close, rebuilds it). This skill's tool grant deliberately has no shell access, so it reports staleness rather than fixing it - a stale snapshot read as current presents last week's state as today's. The open-flags and weekly-must-do blocks make the synthesis sharper. If the snapshot script is missing (older install), proceed without it.
 
 ## Rules
 

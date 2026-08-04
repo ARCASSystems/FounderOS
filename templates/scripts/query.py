@@ -13,6 +13,7 @@ from typing import Iterable
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _common import (  # noqa: E402
+    ENTRY_DATE_HEADING,
     WIKI_LAYER_EXCLUDED_PARTS,
     normalize_wikilink_target,
     wiki_layer_files,
@@ -55,6 +56,13 @@ RANT_TRIGGERS = ("rant", "dump", "avoidance", "vent", "raw")
 # fresh entry can beat an older equivalent.
 RECENCY_WINDOW_DAYS = 7
 RECENCY_BONUS = 0.5
+
+# Raw captures rank below distilled brain entries but are never invisible.
+# The old behavior excluded brain/rants/ from the index unless the question
+# contained a rant trigger - which meant the mobile-capture path (catch-up
+# files every inbox drop into rants/) wrote to the one folder search skipped.
+# A capture the user can only find by knowing a magic word is a silent loss.
+RANT_SCORE_PENALTY = 0.5
 
 # Mode caps and per-hit budgets.
 INDEX_HIT_CAP = 10
@@ -101,6 +109,82 @@ def is_rant_query(question: str) -> bool:
     return any(trigger in lowered for trigger in RANT_TRIGGERS)
 
 
+GLOSSARY_ROW = re.compile(r"^\|([^|]+)\|([^|]*)\|")
+
+
+def load_glossary(root: Path) -> list[set[str]]:
+    """Alias groups from context/names.md, one set per table row.
+
+    Each row of the People / Companies tables becomes one set holding the
+    canonical name plus every listed mishearing, lowercased. The glossary
+    already corrects names at capture time; reading it at ASK time closes the
+    other half of the loop - a founder who asks about "Janice" must still find
+    the facts filed under "Jansi". Header/separator rows and template
+    placeholders are skipped. Returns [] when the file is absent.
+    """
+    text = safe_read(root / "context" / "names.md")
+    groups: list[set[str]] = []
+    for line in text.splitlines():
+        m = GLOSSARY_ROW.match(line.strip())
+        if not m:
+            continue
+        canonical = m.group(1).strip()
+        heard = m.group(2).strip()
+        if not canonical or canonical.startswith("-") or canonical.lower() == "canonical name":
+            continue
+        if "{{" in canonical:
+            continue
+        names = {canonical.lower()}
+        for alias in re.split(r"[,;/]", heard):
+            alias = alias.strip().lower()
+            if alias:
+                names.add(alias)
+        if names:
+            groups.append(names)
+    return groups
+
+
+def expand_tokens_with_glossary(
+    question: str, q_tokens: set[str], groups: list[set[str]]
+) -> set[str]:
+    """Add every alias-group token when the question names any member.
+
+    Matching is on the raw lowercased question (substring on whole names) so
+    stemming cannot erase a name before it is compared. Expansion adds the
+    tokenized form of every name in the matched group, so a question asking
+    by the canonical spelling scores files that hold a mishearing and the
+    other way round.
+    """
+    lowered = question.lower()
+    expanded = set(q_tokens)
+    for names in groups:
+        if any(re.search(rf"\b{re.escape(n)}\b", lowered) for n in names if n):
+            for n in names:
+                expanded.update(tokenize(n))
+    return expanded
+
+
+def glossary_suggestions(question: str, groups: list[set[str]]) -> list[str]:
+    """Near-miss name suggestions for the no-match block, via difflib.
+
+    A misspelled name is the most common silent retrieval failure: the fact
+    exists, the spelling differs by one letter, and the user gets nothing.
+    stdlib get_close_matches keeps the free-tier floor.
+    """
+    import difflib
+
+    all_names = sorted({n for g in groups for n in g if n and " " not in n})
+    words = [w.lower() for w in re.findall(r"[a-zA-Z][a-zA-Z'-]{2,}", question)]
+    out: list[str] = []
+    for w in words:
+        if any(w in g for g in groups):
+            continue
+        for hit in difflib.get_close_matches(w, all_names, n=1, cutoff=0.8):
+            if hit not in out:
+                out.append(hit)
+    return out[:3]
+
+
 def safe_read(path: Path) -> str:
     try:
         return path.read_text(encoding="utf-8")
@@ -117,14 +201,24 @@ def rel(path: Path, root: Path) -> str:
         return path.as_posix()
 
 
-def all_markdown_files(root: Path, include_rants: bool = False) -> list[Path]:
+def all_markdown_files(
+    root: Path, include_rants: bool = False, include_archive: bool = False
+) -> list[Path]:
     """All in-scope markdown/yaml files under root, used by timeline and full modes.
 
     Broader than wiki_layer_files: includes top-level files (e.g. CLAUDE.md)
     and .yaml/.yml so timeline output can surface them. Excluded-parts set is
     sourced from _common so this stays in lockstep with the wiki-layer walk.
+    include_archive lifts the brain/archive/ exclusion - full and timeline
+    modes pass True, because an exact-ID lookup or a date question that cannot
+    see archived months reports an honest-looking "not found" that is a lie
+    about the user's own data.
     """
-    excluded = WIKI_LAYER_EXCLUDED_PARTS - {"rants"} if include_rants else WIKI_LAYER_EXCLUDED_PARTS
+    excluded = set(WIKI_LAYER_EXCLUDED_PARTS)
+    if include_rants:
+        excluded.discard("rants")
+    if include_archive:
+        excluded.discard("archive")
     out: list[Path] = []
     for p in root.rglob("*"):
         if not p.is_file():
@@ -141,23 +235,26 @@ def all_markdown_files(root: Path, include_rants: bool = False) -> list[Path]:
     return sorted(out)
 
 
-def candidate_files(root: Path, include_rants: bool = False) -> list[Path]:
+def candidate_files(
+    root: Path, include_rants: bool = False, include_archive: bool = False
+) -> list[Path]:
     """All in-scope wiki-layer files. Walks every wiki-layer prefix via
     _common.wiki_layer_files so a node the persisted graph references can
     also surface as a query candidate. DEFAULT_FILES are listed first so the
     canonical seeded files lead the index. Falls back to all in-scope
     markdown if neither survives.
 
-    When include_rants is True, brain/rants/ is added to the walked set so
-    rant entries can surface for rant-keyword queries. Default keeps rants
-    out of the index per the original scope.
+    Index mode passes include_rants=True and include_archive=True: raw
+    captures and archived months are in scope by default (rants at a score
+    penalty, applied by the caller). The parameters remain for callers that
+    want the narrow scope.
     """
     specific = [root / p for p in DEFAULT_FILES if (root / p).exists()]
-    extra = wiki_layer_files(root, include_rants=include_rants)
+    extra = wiki_layer_files(root, include_rants=include_rants, include_archive=include_archive)
     combined = sorted(set(specific + extra))
     if combined:
         return combined
-    return all_markdown_files(root, include_rants=include_rants)
+    return all_markdown_files(root, include_rants=include_rants, include_archive=include_archive)
 
 
 def heading_or_match(text: str, tokens: set[str]) -> str:
@@ -170,6 +267,39 @@ def heading_or_match(text: str, tokens: set[str]) -> str:
         if any(t in low for t in tokens):
             return line.strip()[:140]
     return "Relevant OS node"
+
+
+def best_match_context(text: str, tokens: set[str]) -> tuple[str | None, str | None]:
+    """(context_line, nearest_entry_id) for the line that actually matched.
+
+    The old behavior cited the file's FIRST id and FIRST heading regardless of
+    where the match sat - in a 300-line log that presents the newest entry's id
+    as the answer to a question matched 200 lines down, and in a doc it can
+    cite a worked example from the prose. Instead: score each line by token
+    hits, track the most recent entry ID seen at or above it (a structured
+    `id:` line or a trailing-paren heading id, not a prose mention), and
+    return both for the best-scoring line. Returns (None, None) when no line
+    hits, and the caller falls back to the old heading/top-id behavior.
+    """
+    best_score = 0
+    best_line: str | None = None
+    best_id: str | None = None
+    current_id: str | None = None
+    for line in text.splitlines():
+        id_line = ID_LINE_PATTERN.match(line)
+        if id_line:
+            current_id = id_line.group(1)
+        elif line.lstrip().startswith("#"):
+            trailing = re.search(r"\(\s*(" + ID_PATTERN.pattern + r")\s*\)\s*$", line)
+            if trailing:
+                current_id = trailing.group(1)
+        lowered = line.lower()
+        score = sum(1 for t in tokens if t in lowered)
+        if score > best_score:
+            best_score = score
+            best_line = line.strip()[:140]
+            best_id = current_id
+    return best_line, best_id
 
 
 def first_heading(text: str) -> str:
@@ -420,6 +550,8 @@ def score_files(
         node = rel(path, root)
         words = Counter(tokenize(node + "\n" + text[:12000]))
         score: float = float(sum(words[t] for t in question_tokens))
+        context: str | None = None
+        entry_id: str | None = None
         if score:
             score += sum(2 for t in question_tokens if t in node.lower())
             try:
@@ -428,8 +560,12 @@ def score_files(
                 mtime = None
             if mtime is not None and mtime >= cutoff:
                 score += RECENCY_BONUS
-        context = heading_or_match(text, question_tokens)
-        entry_id = top_entry_id(text)
+            # Cite the entry that matched, not the file's first entry.
+            context, entry_id = best_match_context(text[:12000], question_tokens)
+        if context is None:
+            context = heading_or_match(text, question_tokens)
+        if entry_id is None:
+            entry_id = top_entry_id(text)
         scores[node] = (score, context, entry_id)
     return scores
 
@@ -454,20 +590,25 @@ def traverse(starts: list[str], graph: dict[str, set[str]], limit: int = 3) -> d
 # ---------- Mode: index ----------
 
 
-def print_no_match(question: str) -> None:
+def print_no_match(question: str, glossary_groups: list[set[str]] | None = None) -> None:
     """Print the no-positive-match block.
 
     Honest fallback when the highest-scoring candidate has score 0.
     Returning the top-N graph-popular nodes in that case fakes a result
-    that no token actually justifies. The block tells the user three
-    things they can try next.
+    that no token actually justifies. The block tells the user what they
+    can try next - and when a word in the question is one letter away from
+    a name in the glossary, it says so, because a misspelled name is the
+    most common silent retrieval failure.
     """
     print(f"QUERY: {question}")
     print("---")
     print(f'No positive match for "{question}".')
+    if glossary_groups:
+        near = glossary_suggestions(question, glossary_groups)
+        if near:
+            print(f"Did you mean: {', '.join(near)}?")
     print("Suggestions:")
     print("- Rephrase with a more specific term.")
-    print('- If you are looking for a recent rant, add the word "rant" or "dump" to the query.')
     print(f'- Run /founder-os:brain-pass "{question}" for a synthesis across the whole brain layer.')
 
 
@@ -487,20 +628,32 @@ def run_index_mode(question: str, root: Path) -> int:
         )
         return 2
 
-    include_rants = is_rant_query(question)
-    files = candidate_files(root, include_rants=include_rants)
+    # Names glossary read at ASK time: a question asking by the canonical
+    # spelling must find facts filed under a mishearing, and the reverse.
+    glossary_groups = load_glossary(root)
+    q_tokens = expand_tokens_with_glossary(question, q_tokens, glossary_groups)
+
+    files = candidate_files(root, include_rants=True, include_archive=True)
     if not files:
         print(f"QUERY: {question}\n---\nTop results:\n\nNo markdown files found under {root}.")
         return 1
 
     file_scores = score_files(files, root, q_tokens)
 
+    # Raw captures stay findable but rank below distilled entries - unless
+    # the question is explicitly about rants, which restores full weight.
+    if not is_rant_query(question):
+        for node in list(file_scores):
+            if node.startswith("brain/rants/"):
+                score, context, entry_id = file_scores[node]
+                file_scores[node] = (score * RANT_SCORE_PENALTY, context, entry_id)
+
     # Zero-score fallback: if no file has a positive match, surface the
     # honest no-match block instead of returning graph-popular junk. The
     # graph fallback in the previous version returned the top-5 zero-score
     # nodes by edge count, which looks like a result but isn't one.
     if not any(score > 0 for score, _, _ in file_scores.values()):
-        print_no_match(question)
+        print_no_match(question, glossary_groups)
         return 0
 
     relations_path = root / "brain" / "relations.yaml"
@@ -587,7 +740,7 @@ def find_id_in_corpus(entry_id: str, root: Path) -> Path | None:
     """
     fm_pattern = re.compile(rf"^\s*id:\s*{re.escape(entry_id)}\s*$")
     heading_with_id = re.compile(rf"^#+\s+.*\(\s*{re.escape(entry_id)}\s*\)\s*$")
-    for p in all_markdown_files(root):
+    for p in all_markdown_files(root, include_archive=True):
         text = safe_read(p)
         if entry_id not in text:
             continue
@@ -612,27 +765,81 @@ def anchor_date(anchor: str, root: Path) -> tuple[date | None, Path | None]:
     return d, path
 
 
-def run_timeline_mode(anchor: str, root: Path) -> int:
-    if not anchor:
-        print("Usage: python scripts/query.py --mode timeline --anchor <slug-or-id>")
-        return 2
-    a_date, a_path = anchor_date(anchor, root)
-    if a_date is None:
-        print(f"timeline: anchor not found or undated: {anchor}")
-        return 1
+def dated_entries(text: str) -> list[tuple[date, str, str]]:
+    """Per-entry (date, heading, body) list from dated entry headings.
 
-    window_start = a_date - timedelta(days=TIMELINE_WINDOW_DAYS)
-    window_end = a_date + timedelta(days=TIMELINE_WINDOW_DAYS)
+    The file used to be the timeline's atom, dated by frontmatter or mtime -
+    which stamped every brain file "today" and made "what happened in March"
+    unanswerable. Every entry in every brain channel already carries its date
+    in the heading; this parses what is already written. Files with no dated
+    headings return [] and the caller falls back to whole-file dating.
+    """
+    out: list[tuple[date, str, str]] = []
+    lines = text.splitlines()
+    current: tuple[date, str, list[str]] | None = None
+    for line in lines:
+        m = ENTRY_DATE_HEADING.match(line)
+        if m:
+            if current:
+                out.append((current[0], current[1], "\n".join(current[2]).strip()))
+            d = parse_date_str(m.group(1))
+            if d:
+                current = (d, line.strip().lstrip("# ")[:140], [])
+            else:
+                current = None
+            continue
+        if current:
+            current[2].append(line)
+    if current:
+        out.append((current[0], current[1], "\n".join(current[2]).strip()))
+    return out
+
+
+def run_timeline_mode(anchor: str, root: Path, from_str: str = "", to_str: str = "") -> int:
+    # Window: an explicit --from/--to range wins; otherwise +/- 7 days
+    # around the anchor. Archive months are in scope - a date question that
+    # cannot see them answers from a censored corpus.
+    if from_str or to_str:
+        window_start = parse_date_str(from_str) if from_str else date(1970, 1, 1)
+        window_end = parse_date_str(to_str) if to_str else date.today()
+        if window_start is None or window_end is None:
+            print("timeline: bad --from/--to date, expected YYYY-MM-DD")
+            return 2
+        label = f"{window_start.isoformat()} .. {window_end.isoformat()}"
+    elif anchor:
+        a_date, a_path = anchor_date(anchor, root)
+        if a_date is None:
+            print(f"timeline: anchor not found or undated: {anchor}")
+            return 1
+        window_start = a_date - timedelta(days=TIMELINE_WINDOW_DAYS)
+        window_end = a_date + timedelta(days=TIMELINE_WINDOW_DAYS)
+        anchor_label = rel(a_path, root) if a_path else anchor
+        label = f"{anchor_label} ({a_date.isoformat()}) +/- {TIMELINE_WINDOW_DAYS} days"
+    else:
+        print("Usage: python scripts/query.py --mode timeline --anchor <slug-or-id> | --from <date> [--to <date>]")
+        return 2
 
     entries: list[tuple[date, str, str, str | None, str]] = []
-    for path in all_markdown_files(root):
+    for path in all_markdown_files(root, include_archive=True):
         text = safe_read(path)
-        d = file_date(path, text)
-        if d is None:
-            continue
-        if d < window_start or d > window_end:
-            continue
         node = rel(path, root)
+        per_entry = dated_entries(text)
+        if per_entry:
+            # The entry is the atom: each dated block carries its own date,
+            # heading, and nearest ID, so the answer is the entry, not
+            # "go read a 300-line file".
+            for d, heading, body in per_entry:
+                if d < window_start or d > window_end:
+                    continue
+                id_match = ID_PATTERN.search(heading) or ID_PATTERN.search(body)
+                entry_id = id_match.group(0) if id_match else None
+                if len(body) > TIMELINE_BODY_CHARS:
+                    body = body[:TIMELINE_BODY_CHARS].rstrip() + "..."
+                entries.append((d, node, heading, entry_id, body))
+            continue
+        d = file_date(path, text)
+        if d is None or d < window_start or d > window_end:
+            continue
         heading = first_heading(text) or node
         entry_id = top_entry_id(text)
         body = text.strip()
@@ -643,8 +850,7 @@ def run_timeline_mode(anchor: str, root: Path) -> int:
     entries.sort(key=lambda item: (item[0], item[1]))
     entries = entries[:TIMELINE_HIT_CAP]
 
-    anchor_label = rel(a_path, root) if a_path else anchor
-    print(f"TIMELINE: {anchor_label} ({a_date.isoformat()}) +/- {TIMELINE_WINDOW_DAYS} days")
+    print(f"TIMELINE: {label}")
     print("---")
     if not entries:
         print("No entries found in window.")
@@ -761,7 +967,10 @@ def run_full_mode(ids_arg: str, root: Path) -> int:
         print("Usage: python scripts/query.py --mode full --ids <id1,id2,...>")
         return 2
 
-    files = all_markdown_files(root)
+    # Archive is in scope: an exact-ID lookup that cannot see archived months
+    # returns "not found" for an entry sitting on the user's own disk. Cost is
+    # bounded - the substring prefilter skips any file not containing the id.
+    files = all_markdown_files(root, include_archive=True)
 
     print(f"FULL: {', '.join(ids)}")
     print("---")
@@ -799,12 +1008,16 @@ def main() -> int:
     )
     parser.add_argument("--anchor", default="", help="Anchor slug or ID for timeline mode")
     parser.add_argument("--ids", default="", help="Comma-separated IDs for full mode")
+    parser.add_argument("--from", dest="from_date", default="",
+                        help="Timeline window start YYYY-MM-DD (alternative to --anchor)")
+    parser.add_argument("--to", dest="to_date", default="",
+                        help="Timeline window end YYYY-MM-DD (defaults to today)")
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
 
     if args.mode == "timeline":
-        return run_timeline_mode(args.anchor, root)
+        return run_timeline_mode(args.anchor, root, args.from_date, args.to_date)
     if args.mode == "full":
         return run_full_mode(args.ids, root)
 

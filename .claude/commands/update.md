@@ -50,6 +50,7 @@ Argument: `$ARGUMENTS` - optional. One of: `check`, `rollback`, or empty.
 - `README.md`
 - `CHANGELOG.md` (release history - the Step 10 digest reads it)
 - `VERSION`
+- `state/` (the OS's own scratch: update backups and manifests, session-change snapshots - never founder content)
 
 **Protected live files (update PROPOSES, never overwrites):**
 - `CLAUDE.md` (root bootloader - personalized at setup with the founder's name and role, and often hand-edited since)
@@ -89,7 +90,8 @@ If `VERSION` does not exist, reply: `No VERSION file found. This install may pre
 
 Try in this order until one succeeds:
 
-1. `gh api repos/ARCASSystems/FounderOS/contents/VERSION --jq .content | base64 -d`
+1. `curl -fsSL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/VERSION` (plain fetch first: `base64 -d` is missing on a bare Windows box)
+2. `gh api repos/ARCASSystems/FounderOS/contents/VERSION --jq .content | base64 -d`
 2. `curl -sL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/VERSION`
 
 Strip whitespace. Call this `REMOTE_VERSION`.
@@ -340,4 +342,4 @@ After that block, add a short "what changed" digest: read the local `CHANGELOG.m
 - One file, one diff, one yes. Never a batch yes across files, and never a merge on a conflict.
 - Never claim a pack step was done when it was skipped or deferred. Say which, per item.
 - A skipped module is announced, never silently dropped. A founder who does not know something was skipped cannot decide to adopt it later.
-- This command works only inside a Founder OS install. If `.claude-plugin/plugin.json` is missing, reply: `Not a Founder OS install. Re-run from the Founder OS root directory.`
+- This command works only inside a Founder OS install. If BOTH `core/identity.md` and `CLAUDE.md` are missing from the working directory, reply: `Not a Founder OS install. Open your Founder OS folder and try again.` (Do not test for `.claude-plugin/` - it exists only on the plugin path, and setup builds the data folder without it.)

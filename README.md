@@ -155,17 +155,17 @@ The OS routes on natural language. Say what you need ("set up my voice profile",
 
 ### Your first session, in nine sentences
 
-Setup ends by telling you who you have. This is what to type next. Say these out loud or paste them; none of them is a command you have to remember, and every one works on a fresh install.
+Setup ends by telling you who you have. This is what to type next. Say these out loud or paste them; none of them is a command you have to remember, and every one works on a fresh install (number 9 will offer the ten-minute voice interview first, so drafts sound like you and not like a template).
 
 1. `What's on for today?`
 2. `Log this: <whatever just happened>`
 3. `What should I do next?`
 4. `What's on my plate?`
-5. `Draft a follow-up to <name> about <thing>`
-6. `I just got off a call with <name>, here's what happened: ...`
-7. `Help me decide between <A> and <B>`
-8. `What would an investor ask me about this business?`
-9. `Save my work`
+5. `I just got off a call with <name>, here's what happened: ...`
+6. `Help me decide between <A> and <B>`
+7. `What would an investor ask me about this business?`
+8. `Save my work`
+9. `Draft a follow-up to <name> about <thing>`
 
 If only one of these lands this week, make it number 2. Everything the OS does later is built on having something written down, and the first time it answers a question using a thing you told it three weeks ago is the moment the whole system stops feeling like a folder.
 
@@ -230,18 +230,18 @@ Open the FounderOS folder in Cowork and attach `CLAUDE.md` as folder instruction
 
 ---
 
-## Setup ladder (40 min total, do in this order)
+## Setup ladder (about 90 minutes end to end - stop after step 2 and come back any time)
 
 1. **Install** - pick an [install path](#install) above (5 min). If your install uses git (curl or clone paths, or after "own my history"), setup wires the privacy guard for you; `./scripts/install-git-hooks.sh` re-wires it by hand if you ever need to. Out of the box it already blocks committed secrets (API keys, tokens, bot tokens, PEM private keys), em/en dashes, and AI-attribution trailers - no config needed. To also block private names, open `scripts/private-name-patterns.txt` and add the names that must never enter your files (`\bClientName\b` - a client under NDA, a person you keep off the record); the name check stays off until that file has a pattern, while the secret and voice checks run regardless. Do not add your own name: once you own your history, your identity file is tracked by design, and your own name as a pattern would block every save that touches it. The file is gitignored, so any names in it never leave your machine. On a ZIP install this step waits until you turn on version history - there is nothing to wire before then.
 2. **Say "set up Founder OS"** (or run `/founder-os:setup`) - the wizard builds your operating layer from your answers (15 min). It reads which kind of operator you are (founder, career-mover, builder, student) so the OS leads with what your situation needs, and seeds your brain with a starter flag, pattern, parked decision, and log entry so your first session is not a blank screen.
 3. **Say "set up my voice profile"** (or run `/founder-os:voice-interview`) - so every writing skill sounds like you, not Claude (10 min)
-4. **Say "set up my brand profile"** (or run `/founder-os:brand-interview`) - so every deliverable looks like you (10 min)
+4. **Say "set up my brand profile"** (or run `/founder-os:brand-interview`) - so every deliverable looks like you (10 min). Three interviews exist and do different jobs: voice-interview = how YOU write, brand-interview = how your documents LOOK, brand-voice-interview = how a BRAND you run writes (only if you run one)
 
 After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-screen view of today, and `/next` recommends one action. Full first-day path in [docs/first-day.md](docs/first-day.md). Full per-command reference in [docs/commands.md](docs/commands.md). Full per-skill reference (outcome, reads, writes, voice rules, prereqs, follow-ups) in [docs/skills.md](docs/skills.md).
 
 For the short answer to "what can this actually do", [docs/what-this-can-do.md](docs/what-this-can-do.md) lists every capability in plain language. It is generated from the skills on disk rather than maintained by hand, and on installs with version history the privacy guard refuses a skill change that leaves it stale, so it is never a wish list. Rebuild it any time with `python scripts/skills_sync.py --capabilities`.
 
-> **Path B users (manual git clone):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/today`, etc. The plugin namespace only activates on Path A. See [docs/install.md](docs/install.md) for the exact commands per path.
+> **ZIP and git-clone users (Paths B and C):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/today`, etc. The plugin namespace only activates on Path A. See [docs/install.md](docs/install.md) for the exact commands per path.
 
 ---
 
@@ -379,9 +379,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.46.0. Public release. 93 skills, 44 commands, 764 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.47.0. Public release. 93 skills, 44 commands, 776 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
-v1.46.0 is the fourth-pass patch: an independent end-to-end review ran over the pushed v1.45.0 and the confirmed findings shipped as this patch. The blockers first. The standalone uninstaller kept a preserve-list that had fallen behind the layer model and could delete an operator's registry, quarantine record, rules, and brand config - both uninstallers now delete only named system paths, so an unknown folder survives by construction, and purge finally removes everything it claims to. The natively discoverable skills never reached `.claude/skills/` on a fresh extract - setup now runs the apply step and proves it clean. And every sentence that called a role's tool list "enforced" now says what Claude Code documents: the list is pre-approval, the boundary is a written contract audited in both directions, and anything outside a grant routes through your own permission prompts. Around those: the charter audit reads every frontmatter shape and catches interpreter-wide wildcards, impossible calendar dates fail the entry guard, future-dated verdicts stop triggering reviews, a ZIP install on a machine that happens to have git now asks before turning history on, the wizard's timestamps no longer require a Unix shell, a completed review with nothing to change still clears its due flag, and this README's offer and offline proofs were corrected to what the commands and the wizard actually do.
+v1.47.0 is the fourth-pass patch: an independent end-to-end review ran over the pushed v1.45.0 and the confirmed findings shipped as this patch. The blockers first. The standalone uninstaller kept a preserve-list that had fallen behind the layer model and could delete an operator's registry, quarantine record, rules, and brand config - both uninstallers now delete only named system paths, so an unknown folder survives by construction, and purge finally removes everything it claims to. The natively discoverable skills never reached `.claude/skills/` on a fresh extract - setup now runs the apply step and proves it clean. And every sentence that called a role's tool list "enforced" now says what Claude Code documents: the list is pre-approval, the boundary is a written contract audited in both directions, and anything outside a grant routes through your own permission prompts. Around those: the charter audit reads every frontmatter shape and catches interpreter-wide wildcards, impossible calendar dates fail the entry guard, future-dated verdicts stop triggering reviews, a ZIP install on a machine that happens to have git now asks before turning history on, the wizard's timestamps no longer require a Unix shell, a completed review with nothing to change still clears its due flag, and this README's offer and offline proofs were corrected to what the commands and the wizard actually do.
 
 v1.45.0 is the wider-door release, and it opens two doors, then holds the boundary behind both. A third-pass architecture review before the push closed the charter seam: every role's declared tool list now matches its written charter, the charter audit names any drift between the two, uninstall can no longer delete what update protects, and the review loop that turns gated roles into a track record now has real daily and weekly triggers. The first is for the person who will never run git: the OS already ran without it, but the words had not caught up - a rules file installed a push cadence onto machines with no git, the tour said "your repo is your memory", and one doc claimed updates need `git pull`. All of it now speaks plainly: your files are the memory and they persist the moment they are written, saves and versions replace commit language everywhere a user reads, updates work over plain download on every path, and the install doc names in one place which folders are yours, which are the OS's, and which an update proposes changes to instead of writing. The second door is for the employee a workstream lands on. The wizard already asked whether you own the business or run a role inside one, and the answer finally leads somewhere: operators get a Role Snapshot - the part of the job you run, who you answer to, what is yours to own, what is not yours to decide, and the blocker - the propose engine gained an operator path aimed at the work you own, the account manager drafts the status update to whoever you answer to, and every line of copy that read false to a non-founder was fixed in place. One product, one track, wider door.
 

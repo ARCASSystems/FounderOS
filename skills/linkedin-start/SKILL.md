@@ -30,6 +30,10 @@ Not sure which one? Pick "show me all lightly" and the OS runs the cheapest read
 
 There is a fifth path the data also supports: **reviving dormant-but-valuable contacts** (`linkedin-warm-revival`). It needs the power audit's `audit.json` first, so if a user asks for it directly, run `linkedin-power-audit` before routing there. Never route to warm-revival without that prerequisite.
 
+## Read the state before routing
+
+The route is only as good as what it knows. Before choosing, read `brain/.snapshot.md`. If it is missing, or its `date:` line is more than 3 days old, run `python scripts/brain-snapshot.py --write` first and read the fresh one. The open-flags block tells you what is stuck, the must-do block tells you what this week is actually about, and the patterns block tells you what keeps happening - a front door that routes without them is a cold start at the exact moment the user is deciding whether this OS knows them. If Python is unavailable, route from the files you can read and say so.
+
 ## The flow
 
 ### 1. Read the state first

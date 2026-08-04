@@ -68,7 +68,7 @@ The skill reads, in order:
 4. `cadence/daily-anchors.md` (to find commitments past their date)
 5. `cadence/weekly-commitments.md` (to find sprint items past their week)
 
-If `brain/.snapshot.md` exists, also read it. Use it as supplementary runtime state. Proceed without it if missing.
+Also read `brain/.snapshot.md`. If it is missing, or its `date:` line is more than 3 days old, run `python scripts/brain-snapshot.py --write` first and read the fresh one - a stale snapshot read as current presents last week's flags and must-dos as today's, which is worse than no memory at all. If Python is unavailable, proceed without it and say so. Use it as supplementary runtime state.
 
 For Section 5 the skill calls `git log --since=<marker-iso> --name-only --pretty=format: -- context/` (then dedupes paths and drops blank lines) to list files in `context/` modified since the marker. The call goes through the `Bash` tool. `git log --since` accepts an ISO-8601 timestamp directly, including the timezone offset written into the marker. If the install is not under git (no `.git/` directory at the repo root, or `git` returns a non-zero exit), skip Section 5 with the documented one-line note.
 
@@ -149,7 +149,7 @@ If `rules/approval-gates.md` is not present, default to the auto-run path for th
 
 ## Brain context (default)
 
-Before producing output, read `brain/.snapshot.md` if it exists. The open-flags and weekly-must-do blocks make Section 3 and Section 4 sharper. If the snapshot script is missing (older install), proceed without it. Do not block.
+Before producing output, read `brain/.snapshot.md`. If it is missing, or its `date:` line is more than 3 days old, run `python scripts/brain-snapshot.py --write` first and read the fresh one - a stale snapshot read as current presents last week's flags and must-dos as today's, which is worse than no memory at all. If Python is unavailable, proceed without it and say so. The open-flags and weekly-must-do blocks make Section 3 and Section 4 sharper. If the snapshot script is missing (older install), proceed without it. Do not block.
 
 ## Rules
 

@@ -132,10 +132,14 @@ check_git() {
 }
 
 check_python() {
+  # "py -3" is probed last: on a bare Windows box (git-bash) it is often the
+  # ONLY working spelling, and the wizard + hooks already probe it. A probe
+  # list that stops at python3/python tells that user Python is missing when
+  # it is not.
   local py_cmd py_version
-  for py_cmd in python3 python; do
-    if command -v "$py_cmd" &>/dev/null; then
-      py_version=$("$py_cmd" -c 'import sys; print(".".join(str(x) for x in sys.version_info[:3]))' 2>/dev/null || true)
+  for py_cmd in python3 python "py -3"; do
+    if command -v ${py_cmd%% *} &>/dev/null; then
+      py_version=$($py_cmd -c 'import sys; print(".".join(str(x) for x in sys.version_info[:3]))' 2>/dev/null || true)
       if [[ -n "$py_version" ]]; then
         local major minor
         major=$(echo "$py_version" | cut -d. -f1)
@@ -198,12 +202,13 @@ if [[ -d "$TARGET/.git" ]]; then
     printf '  Update to the latest version? [y/N] '
     read -r answer
   else
-    # Non-interactive (curl | bash). Default to update unless opted out.
-    if [[ -n "${FOUNDER_OS_NO_UPDATE:-}" ]]; then
-      answer="n"
-    else
+    # Non-interactive (curl | bash). An update the founder did not confirm is
+    # a consent failure, so the default is to leave the install untouched.
+    if [[ -n "${FOUNDER_OS_UPDATE:-}" ]]; then
       answer="y"
-      echo "Non-interactive shell detected. Updating. Set FOUNDER_OS_NO_UPDATE=1 to skip."
+    else
+      answer="n"
+      echo "Existing install found - left untouched. To update non-interactively, re-run with FOUNDER_OS_UPDATE=1."
     fi
   fi
   answer=$(printf '%s' "$answer" | tr '[:upper:]' '[:lower:]')

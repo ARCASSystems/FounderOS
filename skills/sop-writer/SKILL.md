@@ -22,7 +22,7 @@ Read three files first so the SOP is specific to the user's stack and voice, not
 2. **`core/identity.md`** for the founder's name and primary business. Use these for the Owner field. Do not invent.
 3. **`core/voice-profile.yml`** via the `your-voice` skill. Apply `voice.rhythm` and `voice.reading_level` to the prose inside steps. SOPs that read at level 12 for an ops-focused founder who speaks at level 8 do not get followed.
 
-Before drafting, read `brain/.snapshot.md` if it exists. Use the open-flags block to avoid topics that contradict current operator stance. Use the must-do block to lean the draft toward what the operator is actively working on. Use the voice and brand blocks (if present) to set tone. If `brain/.snapshot.md` does not exist, proceed without it - the snapshot is optional context, not a hard prerequisite.
+Before drafting, read `brain/.snapshot.md` and check its `date:` line. If it is missing or more than 3 days old, do NOT treat it as current: read `brain/flags.md` and `cadence/weekly-commitments.md` directly for live state, and tell the user the snapshot is stale so they can ask for a refresh (any skill with shell access, or the next session close, rebuilds it). This skill's tool grant deliberately has no shell access, so it reports staleness rather than fixing it - a stale snapshot read as current presents last week's state as today's. Use the open-flags block to avoid topics that contradict current operator stance. Use the must-do block to lean the draft toward what the operator is actively working on. Use the voice and brand blocks (if present) to set tone. The freshness check above is not optional: skipping the regeneration and reading a week-old snapshot is the one way this block makes output worse.
 
 ## SOP Structure
 

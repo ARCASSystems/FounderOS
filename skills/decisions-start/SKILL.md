@@ -31,6 +31,10 @@ The principle: do the thinking with you, not for you. The OS reads your own stat
 
 Not sure which? Say "I'm just stuck" and the OS asks the one sorting question (is it one decision, one too-long list, or a general fog) and routes from your answer. When in doubt it runs `strategic-read` first, because seeing where you stand usually names the block for you.
 
+## Read the state before routing
+
+The route is only as good as what it knows. Before choosing, read `brain/.snapshot.md`. If it is missing, or its `date:` line is more than 3 days old, run `python scripts/brain-snapshot.py --write` first and read the fresh one. The open-flags block tells you what is stuck, the must-do block tells you what this week is actually about, and the patterns block tells you what keeps happening - a front door that routes without them is a cold start at the exact moment the user is deciding whether this OS knows them. If Python is unavailable, route from the files you can read and say so.
+
 ## The flow
 
 ### 1. Read the state first

@@ -112,7 +112,7 @@ Do not invoke other skills. Do not write to any file. /next is read-only - the f
 - One recommendation. Not three. Not a menu. /next exists because the founder has too many options - your job is to compress them.
 - Reasoning is required. Every recommendation must cite WHY (the rule that fired).
 - No em dashes or en dashes. Hyphens with spaces.
-- This command works only inside a FounderOS install. If `.claude-plugin/plugin.json` is missing, reply: `Not a FounderOS install. Re-run from the FounderOS root directory.`
+- This command works only inside a FounderOS install. If BOTH `core/identity.md` and `CLAUDE.md` are missing from the working directory, reply: `Not a FounderOS install. Open your FounderOS folder and try again.` (Do not test for `.claude-plugin/` - it exists only on the plugin path, and setup builds the data folder without it.)
 - If the brain layer doesn't exist (older version of FounderOS without brain/), fall back to recommending purely from priorities + clients + cadence. Do not require brain/.
 
 <!-- private-tag: not applicable: updates structured deal-stage fields; not user-provided speech content -->

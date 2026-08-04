@@ -50,7 +50,7 @@ Use `raw/` only when preserving the full source matters. Use `brain/knowledge/` 
 
 ## Brain context (default)
 
-Before producing output, read `brain/.snapshot.md` if it exists.
+Before producing output, read `brain/.snapshot.md`. If it is missing, or its `date:` line is more than 3 days old, run `python scripts/brain-snapshot.py --write` first and read the fresh one - a stale snapshot read as current presents last week's flags and must-dos as today's, which is worse than no memory at all. If Python is unavailable, proceed without it and say so.
 
 If the snapshot is missing, run:
 
