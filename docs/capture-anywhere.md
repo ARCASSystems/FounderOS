@@ -22,6 +22,20 @@ Send the thought to yourself with a marker subject like `os:` while it is fresh.
 **4. Saved messages (zero setup, works today).**
 Telegram Saved Messages, a WhatsApp chat with yourself, any notes app. Voice-note it or type it, then paste the accumulated pile at the next session and say "catch up". The paste IS the capture - the OS does the rest.
 
+## Setting up the synced folder, step by step
+
+Channel 2 has a prerequisite the one-line version skips: your phone can only drop files into the OS folder if that folder lives somewhere your phone can reach. A default install (`~/founder-os`) is not synced anywhere. Fixing that takes about five minutes, once:
+
+**1. Put the OS folder inside your cloud folder.** Close Claude Code, then move the whole OS folder into the place that already syncs - `OneDrive/Documents/` on most Windows machines, iCloud Drive or Dropbox on a Mac. Reopen it in Claude Code from the new location. Everything keeps working: the OS is plain files and every script finds its own folder, wherever it sits.
+
+- One machine at a time is the honest rule. Cloud sync has no merge - if two machines edit the same file in the same window, the sync tool keeps a "conflicted copy" rather than losing data, but cleaning those up is on you. If you have turned version history on, the same applies to the history folder; prefer finishing on one machine before opening the other.
+
+**2. iPhone: a two-action Shortcut.** Open Shortcuts, create a new shortcut: **Dictate Text**, then **Save File** into your cloud folder at `founder-os/capture/inbox/` (iCloud Drive and Dropbox both appear in Save File; OneDrive is patchier in Shortcuts - if that is your cloud, the OneDrive app's own upload works as the fallback). Name it "Brain dump", add it to your home screen. From then on: tap, talk, done.
+
+**3. Android: a folder-pairing app.** Use any voice or notes app that saves text files to a folder, and pair that folder to your cloud with a sync app (FolderSync is the common one; Dropsync for Dropbox). Android setups vary by phone more than iPhone does - if the pairing fights you, email-to-self (channel 3) costs nothing and works identically everywhere.
+
+**4. That is all.** Filenames do not matter, the OS reads any text file in the inbox. Back at the laptop, say "catch up" and the pile gets filed, names checked, provenance kept.
+
 ## What happens to a capture
 
 1. Filed to `brain/rants/<date>-<slug>.md`, raw, with `processed: false` and its source recorded. Your words are never rewritten or summarized at capture time.

@@ -124,7 +124,7 @@ Installed and working. They have not been sorted into a group above, which says 
 - **decisions-start** - The front door to the Decisions pack: get unstuck when you cannot decide, cannot prioritise, or have lost the thread
 - **delivery-start** - The front door to the Delivery pack: get ready to deliver client work and gate it before it ships
 - **finance-import** - Parse a finance CSV export into a normalized markdown summary the OS can read later
-- **founder-os-setup** - Set up Founder OS from scratch
+- **founder-os-setup** - Set up Founder OS from scratch, or adopt it into an existing notes folder
 - **github-ops** - Fast GitHub operations via the gh CLI
 - **handoff-protocol** - Build a handoff doc when work moves to someone else
 - **legal-compliance** - Jurisdiction-aware legal, regulatory, and compliance skill for founders

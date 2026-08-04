@@ -7,7 +7,7 @@
   },
   "metadata": {
     "description": "Founder OS plugin and operating-system tools for owners",
-    "version": "1.47.0"
+    "version": "1.48.0"
   },
   "plugins": [
     {
@@ -17,7 +17,7 @@
         "repo": "ARCASSystems/FounderOS"
       },
       "description": "An operating system with your first team already on it: five named digital employees with written job descriptions, gated until you grade their runs, and a brain that keeps everything you tell it and invents nothing. 93 skills, 44 commands, six role modes. The wizard interviews you and models your working life in plain markdown you own: clients, pipeline, decisions, cadence, voice, brand. No server, no key, no git required - ZIP install, one Claude plan. Files any AI can read: the model is the part you swap, the brain is the part you keep",
-      "version": "1.47.0",
+      "version": "1.48.0",
       "strict": true
     }
   ]

@@ -30,3 +30,8 @@
 *.svg        text
 *.pdf        binary
 *.zip        binary
+
+# The double-click start files: the .bat must stay CRLF (cmd label parsing
+# misbehaves on LF-only batch files), the .command must stay LF (bash).
+*.bat        text eol=crlf
+*.command    text eol=lf

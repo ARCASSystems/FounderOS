@@ -20,9 +20,18 @@ Three steps, nothing typed. The gentlest path there is.
 
 1. [Download the ZIP](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip).
 2. Right-click the file and choose **Extract All** (Windows) or double-click it (Mac). Windows puts a folder inside a folder - open the inner one, the one that contains `CLAUDE.md`. Move it wherever you keep your work and rename it if you like (`founder-os` is a good name).
-3. Open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
+3. Double-click **Start Founder OS** (Windows: the file ending `.bat`; Mac: the one ending `.command`). It opens Claude Code in the folder and starts the setup wizard for you. After setup, the same double-click just opens your OS - it is the standing front door, not a one-time installer.
+
+First-run notes, so nothing surprises you:
+
+- **Windows** may show a security note about a downloaded script. Choose to run it - the file is plain text; right-click it and choose Edit to read everything it does before running, if you like.
+- **Mac**: right-click the file and choose **Open** the first time. That is how macOS treats any downloaded script, not an error in the file.
+- **If Claude Code is not installed yet**, the start file says so in plain language and opens the download page - nothing breaks.
+- **Prefer no scripts?** The spoken way works identically: open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
 
 Commands use bare names on this path (`/setup`, `/today`), same as the git-clone path.
+
+**Already have notes?** If you keep an Obsidian vault or a folder of markdown, setup can move the OS in next to your notes instead of starting a fresh folder - your existing files are never touched, and the wizard asks before anything that would collide. Say "set up Founder OS inside my vault". Full picture, including what your old notes can and cannot do afterwards, in [adopt-existing-notes.md](adopt-existing-notes.md).
 
 **Updates:** say "update Founder OS" (or run `/update`). The OS re-downloads the ZIP itself, refreshes only its own engine files (skills, commands, scripts, docs), and never touches your data. You approve before anything is applied.
 

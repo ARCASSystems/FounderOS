@@ -239,14 +239,17 @@ TIPS: list[tuple[str, str]] = [
 ]
 
 
+# Literal copy of scripts/_common.py ENTRY_DATE_HEADING_PATTERN (hooks do
+# not import from scripts/). test_entry_heading_parity keeps them identical.
+# Shared by the tip rotation and the returner-gap read below.
+entry_re = re.compile(r"^#{2,3}\s+\[?(\d{4}-\d{2}-\d{2})\]?(?:\s|$)")
+
+
 def section_tip(repo: Path, today: date) -> list[str]:
     log = repo / "brain" / "log.md"
     text = read_text(log)
     if text is None:
         return []
-    # Literal copy of scripts/_common.py ENTRY_DATE_HEADING_PATTERN (hooks do
-    # not import from scripts/). test_entry_heading_parity keeps them identical.
-    entry_re = re.compile(r"^#{2,3}\s+\[?(\d{4}-\d{2}-\d{2})\]?(?:\s|$)")
     entry_dates: list[date] = []
     for ln in text.splitlines():
         m = entry_re.match(ln)
@@ -704,6 +707,57 @@ def emit_sections(repo: Path, today: date, want_observations: bool) -> None:
         emit("observations", [str(section_observations(repo, today))])
 
 
+RETURNER_GAP_DAYS = 14
+
+
+def days_since_last_entry(repo: Path, today: date) -> int | None:
+    """Days since the newest dated entry in brain/log.md, or None when the log
+    is missing or has no dated entries (a day-one install is not a returner)."""
+    text = read_text(repo / "brain" / "log.md")
+    if text is None:
+        return None
+    newest: date | None = None
+    for ln in text.splitlines():
+        m = entry_re.match(ln)
+        if not m:
+            continue
+        try:
+            d = date.fromisoformat(m.group(1))
+        except ValueError:
+            continue
+        if newest is None or d > newest:
+            newest = d
+    if newest is None:
+        return None
+    return (today - newest).days
+
+
+def render_returner_brief(repo: Path, today: date, gap: int) -> None:
+    """The compact brief for a founder coming back after weeks away. The full
+    brief's wall of flags, decay, and stale warnings reads as a scolding after
+    an absence - this keeps the load-bearing lines (stale cadence gates
+    planning, overdue compliance deadlines do not pause) and turns everything
+    else into counts plus one offer. Nothing is hidden, it is just not shouted."""
+    out: list[str] = [f"=== Session brief ({today.isoformat()}) ==="]
+    out.append(f"First session in {gap} days - welcome back. The short version:")
+    out += render_queue(repo)
+    flags = render_flags(repo)
+    if flags:
+        out.append(flags[0] + " - waiting, not lost")
+    out += render_daily(section_daily(repo, today), today)
+    out += render_weekly(section_weekly(repo, today))
+    compliance = section_compliance(repo, today)
+    if any(s.startswith("OVERDUE|") for s in compliance):
+        cut = next((i for i, s in enumerate(compliance)
+                    if s.startswith("UPCOMING|")), len(compliance))
+        out += render_compliance(compliance[:cut])
+    out.append("")
+    out.append('Say "catch me up" for what changed while you were away, '
+               'or "what should I focus on next" to just start.')
+    out.append("=== end brief ===")
+    print("\n".join(out))
+
+
 def render_full_brief(repo: Path, today: date, want_observations: bool) -> None:
     banner = welcome_banner(repo)
     if banner is not None:
@@ -713,6 +767,11 @@ def render_full_brief(repo: Path, today: date, want_observations: bool) -> None:
     # A set-up install has core/identity.md; if it is missing and there was no
     # banner, this is not Founder OS - stay silent (matches the old hook).
     if not (repo / "core" / "identity.md").is_file():
+        return
+
+    gap = days_since_last_entry(repo, today)
+    if gap is not None and gap >= RETURNER_GAP_DAYS:
+        render_returner_brief(repo, today, gap)
         return
 
     out: list[str] = [f"=== Session brief ({today.isoformat()}) ==="]

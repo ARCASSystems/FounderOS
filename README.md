@@ -12,7 +12,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 **New here? [Read the Founder OS Playbook first](https://arcassystems.com/playbook)** - a visual walkthrough with screenshots: the problem, the three parts, how to start, and what not to do. Opens framed in any browser, about 15 minutes. It lives on the web so it never drifts out of date; there is no copy shipped in this repo.
 
-**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip)** - unzip it, open the folder in Claude Code, say "set up Founder OS". No git, no terminal, no curl. Or install via plugin marketplace, one-line curl, or git clone. See [Install](#install) below.
+**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip)** - unzip it, double-click **Start Founder OS**, and the setup wizard is talking. No git, no terminal, no curl. Or install via plugin marketplace, one-line curl, or git clone. See [Install](#install) below.
 
 ---
 
@@ -183,9 +183,13 @@ Five install paths. The one that needs no Git and no terminal comes first. Full 
 
 1. **[Download the ZIP](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip)**
 2. Right-click, **Extract All** (Windows) or double-click it (Mac). Put the folder wherever you keep your work.
-3. Open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
+3. Double-click **Start Founder OS** in the folder (Windows: the `.bat` file; Mac: the `.command` file). It opens Claude Code right there and starts the setup wizard talking. If Claude Code is not installed yet, it says so plainly and opens the download page instead of failing. First run only: Windows may show a note about a downloaded script - let it run (the file is plain text, right-click and Edit to read it); on a Mac, right-click the file and choose Open once.
+
+Prefer not to run a script? The spoken way works the same: open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
 
 That is the whole install. No git, no curl, no terminal command, no account beyond the Claude plan you already have. Updates work the same way: say "update Founder OS" and the OS re-downloads the ZIP itself, refreshes its own engine files, and never touches your data.
+
+**Already have notes?** If you keep an Obsidian vault or a folder of markdown, setup can move the OS in next to your notes instead of starting a separate folder - your existing files are never touched. Say "set up Founder OS inside my vault". Details in [docs/adopt-existing-notes.md](docs/adopt-existing-notes.md).
 
 **When to choose:** You want the fastest path from zero to owning the system, with nothing new installed on your machine. The folder is yours from the first second - plain markdown you can read, back up, or delete.
 
@@ -379,7 +383,9 @@ Already installed? Say "what's on for today?" (`/today`) or "verify the OS" (`/f
 
 ## Status
 
-Version 1.47.0. Public release. 93 skills, 44 commands, 776 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.48.0. Public release. 93 skills, 44 commands, 788 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+
+v1.48.0 is the arrival release: the distance between finding the repo and living inside it, crossed without a terminal. The ZIP path's hardest instruction was "open the folder in Claude Code" - now the folder carries a double-click start file for Windows and Mac that opens Claude Code in place and starts the wizard talking (or, on a set-up install, just opens your OS; it is the standing front door). Setup gained the adopt path for the person who was never starting from zero: it can move the OS in next to an existing Obsidian vault or markdown folder, creating only what is missing, never touching an existing file, and saying plainly what old notes can and cannot do afterwards. The capture doc now walks through actually wiring the synced folder a phone can reach, step by step. Coming back after weeks away stopped feeling like a scolding: past two weeks of quiet, the session brief compacts to a welcome, counts, and one offer - keeping only stale-cadence and overdue-compliance lines, because those do not pause for absence. And meeting-prep's people research now carries the same source discipline as every other researched claim: sources inline, a same-name check before anything is attributed, and "unverified - confirm on the call" instead of a confident guess about the human across the table.
 
 v1.47.0 is the fourth-pass patch: an independent end-to-end review ran over the pushed v1.45.0 and the confirmed findings shipped as this patch. The blockers first. The standalone uninstaller kept a preserve-list that had fallen behind the layer model and could delete an operator's registry, quarantine record, rules, and brand config - both uninstallers now delete only named system paths, so an unknown folder survives by construction, and purge finally removes everything it claims to. The natively discoverable skills never reached `.claude/skills/` on a fresh extract - setup now runs the apply step and proves it clean. And every sentence that called a role's tool list "enforced" now says what Claude Code documents: the list is pre-approval, the boundary is a written contract audited in both directions, and anything outside a grant routes through your own permission prompts. Around those: the charter audit reads every frontmatter shape and catches interpreter-wide wildcards, impossible calendar dates fail the entry guard, future-dated verdicts stop triggering reviews, a ZIP install on a machine that happens to have git now asks before turning history on, the wizard's timestamps no longer require a Unix shell, a completed review with nothing to change still clears its due flag, and this README's offer and offline proofs were corrected to what the commands and the wizard actually do.
 

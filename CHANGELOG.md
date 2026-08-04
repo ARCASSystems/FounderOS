@@ -2,6 +2,30 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.48.0 - 2026-08-05
+
+The arrival release. v1.47 fixed how the OS reads its own past; this one fixes the front door - the distance between finding the repo and living inside it, crossed without a terminal. Pack: `updates/1.48.0-the-door-is-a-double-click.md`. Three user behaviours drove it, all raised in the same operator review: nobody should need to know what "open the folder in Claude Code" means, almost nobody starts with zero notes, and coming back after weeks away should not feel like a scolding.
+
+### New - download, extract, double-click
+
+`Start Founder OS.bat` (Windows) and `Start Founder OS.command` (Mac) ship at the repo root. Double-clicking opens Claude Code in the folder and starts the setup wizard talking; on a set-up install the same double-click just opens your OS - it is the standing front door, not a one-shot installer. Missing Claude Code gets a plain-language pointer and the download page, never a bare error; missing Python gets a heads-up before the wizard would have found it twenty minutes in. The honest limits ship in the files and the docs: the start file cannot install Claude Code or the paid plan, Windows may warn once about a downloaded script, and macOS wants right-click-Open on first run. Both files are plain text and say so, both were verified live with a stubbed `claude` on both branches, and the `.command` carries its exec bit through GitHub's ZIP so a Mac extract is double-clickable. The wizard copies both into fresh plugin-path OS folders too, so every install shape ends double-clickable.
+
+### New - setup can adopt the notes you already have
+
+The most common real arrival was the one setup did not model: an existing Obsidian vault or markdown folder with years in it. The wizard now has an adopt path ("set up Founder OS inside my vault", or one follow-up question when you name Obsidian or local files as your knowledge base). It moves the OS in next to your notes under four hard rules: create only what is missing, never write over an existing file (an existing CLAUDE.md is shown as a diff to accept or decline, like an update), ask once per collision, and name back what was left untouched. The wiring is stated honestly at setup and in the new `docs/adopt-existing-notes.md`: Claude reads any note on demand and your `[[wikilinks]]` keep working, but structured search (timeline, ID lookup, brain pass) covers the OS's own folders - the bridge is "capture this", adopt-as-you-go, not a silent promise of indexed history.
+
+### Fix - coming back after weeks reads as a welcome, not a wall
+
+Use it three days, disappear five weeks, return: the old brief opened with every flag, decay item, and stale warning at once - at exactly the moment the product should be gentlest. Past 14 days of log silence the SessionStart brief now compacts to a welcome naming the gap, the queue, a flags count ("waiting, not lost" - counts, never the item-by-item list), and one offer: "catch me up", or just start. Two lines are deliberately kept at full strength because they do not pause for absence: stale cadence (it gates planning) and overdue compliance deadlines.
+
+### Fix - people research carries sources, or says it is unverified
+
+`meeting-prep` researched the person across the table (new-prospect research, thin-context web search) with none of the claims discipline v1.46 installed everywhere else - and a wrong fact about a human is the research error the founder repeats to their face. Researched facts in a brief now carry `(source: url, date)` inline, a same-name check runs before anything is attributed to the person (name collisions are the classic failure), and anything unsourced is written as "unverified - confirm on the call", which turns a landmine into a discovery question.
+
+### Fix - the synced-folder capture channel now comes with the actual steps
+
+`docs/capture-anywhere.md` recommended pointing a phone at "your cloud-synced OS folder" - but a default install is not synced anywhere, and the doc never said so. It now walks the five-minute setup honestly: move the OS folder into the cloud folder (with the one-machine-at-a-time rule stated plainly), the two-action iPhone Shortcut, the Android folder-pairing route, and email-to-self named as the zero-setup fallback when a platform fights back.
+
 ## v1.47.0 - 2026-08-04
 
 The it-remembers-correctly release. A three-way audit (user experience, architecture, data retrieval) ran over v1.46.0 with every key claim verified by executing the shipped scripts, and everything fixable inside the existing machinery shipped the same night. Pack: `updates/1.47.0-it-remembers-and-correctly.md`. The one-line thesis: the OS filed things well and read them back badly, and every fix below is one of the two directions of that.

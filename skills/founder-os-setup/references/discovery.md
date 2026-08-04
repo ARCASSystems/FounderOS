@@ -210,6 +210,8 @@ Map each answer to the exact lowercase token from `stack.json`'s `_allowed_value
 
 "skip" on any prompt records `null` for that field and continues. No "are you sure?" follow-up. No re-ask later in the wizard.
 
+**Adopt follow-up (only when Q1 was Obsidian or local files).** Almost nobody arrives with zero notes, and the person with years of markdown has the most to gain. Ask ONE question: "Do you want Founder OS set up inside that existing notes folder, so your notes and the OS live side by side - or in its own fresh folder? Either way your existing files are never touched." Record the answer as `adopt_vault` (yes -> also capture the folder path; no / unsure -> fresh folder, the default). If the user already said it in their opening ask ("set up inside my vault"), do not re-ask - record it and confirm in one line. The adopt mechanics live in Phase 2.1 and 2.2 (`references/root-structure.md`); nothing else in discovery changes.
+
 The other eight `stack.json` fields (`automation_platform`, `file_storage`, `meeting_notes`, `voice_input`, `server`, `prospecting_db`, `video_tool`, `booking`) stay `null` by default. If the founder dumps additional tool names in any earlier or later phase ("I use n8n and Granola"), parse them into the matching fields. They are not asked individually because they are not load-bearing for first-run output skills.
 
 **Backward compatibility (parse-everything-at-once path).** If the founder replies to the first prompt with multiple tools in one shot ("Notion, Gmail, Google Calendar, no CRM"), parse all of it, populate every matching field, and skip the remaining prompts in this phase. Confirm what was captured in one line. Do not re-ask.

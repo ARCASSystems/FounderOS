@@ -145,6 +145,8 @@ What does not work:
 
 Setup: Obsidian → Open folder as vault → point at your founder-os install. The `.obsidian/` config folder it creates is gitignored.
 
+Going the other direction - installing FounderOS into a vault you already have - is the adopt path: setup moves the OS in next to your notes and never touches an existing file. See [adopt-existing-notes.md](adopt-existing-notes.md).
+
 #### Bare-slug ambiguity
 
 If the same bare slug matches multiple files (e.g. `[[index]]` matching `brain/index.md`, `network/index.md`, and `roles/index.md`), Obsidian prompts you to pick at link-creation time. The lint skill (`/founder-os:lint`) flags ambiguous slugs, names every candidate, and names the deterministic pick.

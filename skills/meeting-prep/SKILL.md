@@ -62,6 +62,15 @@ If the meeting is with a new prospect (someone the founder hasn't worked with be
 2. **If no context exists,** offer to research the company before building the brief: "Want me to look up [company] before building the meeting brief? It'll give us context, likely pain points, and questions to bring."
 3. **If the founder wants to skip research,** proceed with meeting-prep using whatever context is available, but note what's missing.
 
+## Researched claims about people (mandatory when any web research runs)
+
+A wrong fact about the human across the table is the most expensive research error this skill can make - the founder repeats it to their face. `rules/research-integrity.md` governs researched facts here, with two rules specific to people:
+
+- **Every externally researched fact in the brief carries its source inline** - `(source: <url>, <date>)` on the line it supports, in CONTEXT and THEIR LIKELY PRIORITIES alike. A fact you could not source is written as what it is: "unverified - confirm on the call", which turns a landmine into a discovery question. Never let an unsourced claim about a person read as settled fact.
+- **Run the same-name check before attributing anything.** Names collide constantly. Before attaching a role, an article, or a track record to the person, confirm the source is about THIS person (company, location, or a second corroborating detail must line up). If it does not clearly line up, leave it out - a blank line costs nothing, a mixed-up person costs the meeting.
+
+Facts from the founder's own files (clients.md, the brain pass) cite their entry IDs as usual and need no web source - the brain is the founder's own record.
+
 ## Pre-Meeting Brief
 
 When the founder says they have a meeting coming up, build a brief. Ask for what you don't know, but don't over-ask if context is already clear.
@@ -151,4 +160,4 @@ NOTES
 
 ## If Context Is Thin
 
-If the founder gives you minimal info (just a name and "I have a call"), do a quick web search if tools are available. Look for their LinkedIn, company info, and any mutual context. Build the brief from what you find. Flag anything you're not sure about.
+If the founder gives you minimal info (just a name and "I have a call"), do a quick web search if tools are available. Look for their LinkedIn, company info, and any mutual context. Build the brief from what you find, under the researched-claims rules above: sources inline, the same-name check before any attribution, and "unverified - confirm on the call" for anything that did not clear it.
