@@ -2,11 +2,21 @@
 """UserPromptSubmit capture hook for Founder OS.
 
 Reads the user's submitted prompt from stdin (Claude Code passes a JSON
-envelope with a `prompt` field). Classifies the prompt shape against four
-patterns: rant, named-entity mention, status update, preference utterance.
-For each detected shape, emits a `[capture-suggestion]` system note on
-stdout - Claude Code prepends this to the model's context so the model
-sees the suggestion before composing its reply.
+envelope with a `prompt` field). Classifies the prompt shape against five
+patterns: rant, named-entity mention, status update, preference utterance,
+and correction of the OS's own manner. For each detected shape, emits a
+`[capture-suggestion]` system note on stdout - Claude Code prepends this to
+the model's context so the model sees the suggestion before composing its
+reply.
+
+The correction shape (v1.49) is the one that compounds. "Too long", "you
+asked me that already", "just pick one" are not complaints, they are the
+user telling you how they want to be worked with - at the only moment they
+ever say it, which is when they are annoyed and not trying to configure
+anything. Routed like a name correction: applied now, then offered as a row
+in core/working-preferences.md, which is read before output rather than
+recalled after a complaint. The test is that the same correction never has
+to be given twice.
 
 For rants specifically, the script also performs an EAGER capture: it
 writes the rant text immediately to `brain/rants/<YYYY-MM-DD>.md` so the
@@ -186,6 +196,53 @@ PREFERENCE = re.compile(
     re.IGNORECASE,
 )
 
+# Correction of the OS's own manner (v1.49). Distinct from a preference: a
+# preference is stated deliberately ("from now on"), a correction is fired off
+# mid-work when the last output was wrong in shape rather than in fact. It is
+# the most honest source of a working preference there is, because the user was
+# not trying to configure anything.
+#
+# Split in two on purpose, because the phrases differ in how much they can mean
+# something else. CORRECTION_STRONG is unambiguous at any length: it names the
+# assistant ("you keep", "I already told you") or is an explicit instruction
+# about form. CORRECTION_SHORT covers phrases that ARE corrections when fired
+# off as a short reply and are ordinary prose inside a long message ("the
+# meeting was too long"), so they only count under the length gate below.
+# Conservative on purpose: a false positive here trains the user to ignore the
+# suggestion, which costs more than a missed capture.
+CORRECTION_STRONG = re.compile(
+    r"(?:"
+    r"you (?:already )?asked me (?:that|this)|"
+    r"I (?:already )?told you|"
+    r"we (?:already )?(?:went over|covered) (?:this|that)|"
+    r"you keep [a-z]+ing|"
+    r"asked you not to|"
+    r"get to the point|"
+    r"skip the (?:preamble|summary|intro|recap|caveats)|"
+    r"don'?t give me (?:a menu|options|a list)|"
+    r"stop (?:repeating|explaining|narrating|hedging)|"
+    r"you are (?:repeating|over-?explaining)|"
+    r"you're (?:repeating|over-?explaining)"
+    r")",
+    re.IGNORECASE,
+)
+
+CORRECTION_SHORT = re.compile(
+    r"(?:"
+    r"too (?:long|much|wordy|verbose|detailed)|"
+    r"shorter|"
+    r"just (?:pick|choose|decide|answer)|"
+    r"not what I asked|"
+    r"less detail|"
+    r"fewer (?:words|options)"
+    r")",
+    re.IGNORECASE,
+)
+
+# A reply this short that says "too long" is about the last output. The same
+# words inside a paragraph are usually about something else entirely.
+CORRECTION_SHORT_MAX_CHARS = 200
+
 # Question marker. If the prompt ends with `?` (or contains a `?` followed by
 # only whitespace), it's a question - never a rant, even if long.
 TRAILING_QUESTION = re.compile(r"\?\s*$")
@@ -302,16 +359,35 @@ def has_named_entity_near_meeting_verb(prompt: str) -> bool:
     return False
 
 
+def is_correction(prompt: str) -> bool:
+    """Return True if the user is correcting HOW the OS works rather than what
+    it knows. Strong phrases count at any length; the ambiguous ones only count
+    when the whole message is short enough to be a reply to the last output."""
+    if not prompt:
+        return False
+    if CORRECTION_STRONG.search(prompt):
+        return True
+    return (
+        len(prompt.strip()) <= CORRECTION_SHORT_MAX_CHARS
+        and bool(CORRECTION_SHORT.search(prompt))
+    )
+
+
 def detect_shape(prompt: str) -> str | None:
-    """Return one of: rant, named-entity, status-update, preference, or None.
+    """Return one of: correction, rant, named-entity, status-update,
+    preference, or None.
 
     Priority order matters - a prompt that matches multiple shapes is
-    classified by the strongest signal. Preferences are most specific,
-    then status updates, then named-entity, then rant (the catch-all for
-    long unstructured input).
+    classified by the strongest signal. A correction is the most specific
+    (it is about this reply, right now), then preferences, then status
+    updates, then named-entity, then rant (the catch-all for long
+    unstructured input).
     """
     if not prompt or not prompt.strip():
         return None
+
+    if is_correction(prompt):
+        return "correction"
 
     if PREFERENCE.search(prompt):
         return "preference"
@@ -461,11 +537,26 @@ def render_note(shape: str, capture_path: Path | None, repo: Path | None = None)
         return (
             "[capture-suggestion: preference]\n"
             "The user expressed a durable preference ('from now on' / 'I prefer' / 'never ask me' / "
-            "'always X' / 'stop doing Y'). Before continuing the response, propose adding it as a "
-            "behavioral guard. Format: 'Want me to save that as a preference? It'll persist across "
-            "every session. Yes/no/skip.' Wait for confirmation, then add a one-line guard entry "
-            "to ~/.claude/projects/<slug>/memory/MEMORY.md under Behavioral Guards. If the auto-memory "
-            "path is unclear, ask the user to confirm the path once. Do not write without the yes."
+            "'always X' / 'stop doing Y'). Before continuing the response, propose saving it. "
+            "Format: 'Want me to save that as a working preference? I read it before every answer. "
+            "Yes/no/skip.' Wait for confirmation, then append ONE row to the Active table in "
+            "core/working-preferences.md: the preference in their words, where it applies, today's "
+            "date, and their exact sentence as the evidence. No row without evidence. Do not write "
+            "without the yes, and do not widen the scope beyond what they said."
+        )
+
+    if shape == "correction":
+        return (
+            "[capture-suggestion: correction]\n"
+            "The user corrected HOW you work, not what you know ('too long' / 'you asked me that "
+            "already' / 'just pick one'). Two things, in this order. FIRST: apply the correction in "
+            "THIS reply, immediately - a correction that gets filed instead of obeyed is worse than "
+            "one that gets ignored. SECOND, in one line at the end: 'Want that saved so I stop doing "
+            "it? Yes/no/skip.' On yes, append ONE row to the Active table in "
+            "core/working-preferences.md with their words as the evidence and today's date; if the "
+            "file does not exist, copy it from templates/working-preferences.md first. Do not write "
+            "without the yes. Do not apologise at length, do not explain why it happened, and never "
+            "argue with the correction."
         )
 
     return ""

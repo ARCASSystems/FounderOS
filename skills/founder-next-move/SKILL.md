@@ -4,7 +4,7 @@ description: >
   Propose the single highest-leverage next move. For a founder it aims at their next paying customer; for an operator running a role inside a company it aims at the outcome they own for whoever is waiting on it. Trigger on "what should I do next", "what's my next move", "where do I push", "I don't know what to do next", "give me one thing to do", or any moment the operator wants the OS to decide the next step instead of listing options. Also fires on the raw idea pitch: "I have an idea", "is this a good idea", "help me validate my idea", or a first-time founder describing an everyday problem and a solution they want to build. Reads the brain (the Founder or Role Snapshot, the log, the pipeline), works out where they actually are, picks the one move with the most leverage, and closes with three things they can do today (one big, two small). Free-tier; writes nothing to your operating files.
 why: "A person drowning in options does not need a list, they need one move. This reads where they actually are and names the single thing with the most leverage - toward a paying customer for a founder, toward the outcome they own for an operator - with a step small enough to start today."
 enhance: "Keep brain/log.md current - the stage read and the move both sharpen when the log shows what the founder did this week."
-allowed-tools: ["Read", "Bash(python scripts/brain-snapshot.py:*)"]
+allowed-tools: ["Read", "Bash(python scripts/brain-snapshot.py:*)", "Bash(python scripts/agent_runs.py:*)"]
 mcp_requirements: []
 ---
 
@@ -40,7 +40,11 @@ Before proposing, read `brain/.snapshot.md` if it exists. If it is missing, or i
 
 Then read it. A stale cache read as current is how a proposal ends up aimed at last month's state, so the date check is not optional. If the snapshot script is also missing (older install), read `core/identity.md` directly. Do not block - a thin read still proposes.
 
-The snapshot carries the identity snapshot block - `## Founder Snapshot` (venture, customer, stage seed, biggest blocker) or `## Role Snapshot` (scope, answers to, yours to own, not yours to decide, blocker) - plus open flags, this week's must-do, and recent decisions. Then read, in this order, skipping what is missing:
+The snapshot carries the identity snapshot block - `## Founder Snapshot` (venture, customer, stage seed, biggest blocker) or `## Role Snapshot` (scope, answers to, yours to own, not yours to decide, blocker) - plus the operator's active working preferences, open flags, this week's must-do, and recent decisions.
+
+**The `## Working preferences` block in the snapshot is a gate on this output, not context.** This skill produces the thing operators correct most, because it tells them what to do. If a row says they want the call made rather than a menu, the three-option close still runs (it is the rule) but the recommendation is stated flat, with no hedging around it. If a row says short answers, cut WHY THIS, NOW to two sentences. Apply the rows silently and never mention the file. A preference this engine ignores is a correction the operator has to give twice, and this is the surface where that is most likely to happen. If `brain/.snapshot.md` is unavailable, read `core/working-preferences.md` directly; if that is missing too, carry on without it.
+
+Then read, in this order, skipping what is missing:
 
 1. `core/identity.md` - the snapshot block (source of truth if `brain/.snapshot.md` is stale) and the `## Basics` location (drives the UAE ground-truth layer below).
 2. `core/profile.md` - what the OS leads with. Context only, never a gate. The gate for this engine lives in `core/identity.md` and passes on either of two shapes: a `## Founder Snapshot` block plus a `**Role:**` of `founder` or `team_of_one` under `## Basics`, OR a `## Role Snapshot` block plus a `**Role:**` of `operator` (the identity-layer role from setup, not the profile variant - `team_of_one` is a role and never appears in the variant field). The block decides the path: Founder Snapshot runs the founder path below, Role Snapshot runs the operator path. If an install somehow carries both blocks (a by-hand copy of the full template), the `**Role:**` token decides. When neither shape is present, do not run this engine; point them at `/next` instead.
@@ -160,3 +164,13 @@ If the founder asks "is this the right move" or pushes back on the plan, that is
 - Free-tier only. Reads files and reasons. No API key, no paid tool.
 - No em dashes, no en dashes, no banned words.
 - The gate is identity, not variant: a `## Founder Snapshot` block with the `founder` or `team_of_one` role, or a `## Role Snapshot` block with the `operator` role, in `core/identity.md`. The profile variant never gates this engine. When neither shape is present, point to `/next`.
+
+---
+
+## Record the run (the closing act, when this runs as a seat)
+
+If `roles/employees.yaml` carries the `next-move-caller` row, close with one line so the run leaves a trace whether or not anyone was watching:
+
+    python scripts/agent_runs.py record --seat next-move-caller --trigger "asked for the next move"         --read "brain/.snapshot.md,core/identity.md,brain/log.md" --produced "" --outcome ok
+
+Use `--outcome refused` (with `--could-not "<why>"`) when the brain was too thin to propose and you asked for the missing field instead, and `failed` when it broke. A refusal is not a failure and the log distinguishes them. Skip this silently if the script or the registry is absent, and never mention it in your reply - it is bookkeeping, not output.

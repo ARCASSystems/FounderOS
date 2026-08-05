@@ -4,7 +4,7 @@ description: >
   Sweep everything captured away from the laptop into the brain. Trigger on "catch up", "process my inbox", "I sent myself some notes", "here's what I captured today", or a paste of raw voice-note transcripts. Reads capture/inbox/ (and pasted text, and a connected meeting-notes tool when one is wired), files each item into brain/rants/ with provenance and processed: false, applies the names-glossary correction pass, then offers /dream to distil. One mental model: get the thought into the inbox any way you can; the OS files it.
 why: "The real work happens away from the desk. A thought that cannot land in the brain until the operator is back at a laptop usually never lands at all. The inbox makes capture a dump, not a task."
 enhance: "Pair with a capture channel that fits your day (docs/capture-anywhere.md ranks them by friction) and run /dream after a sweep so captures become patterns, flags, and decisions instead of sitting raw."
-allowed-tools: ["Read", "Write", "Glob", "Bash(mv:*)", "Bash(mkdir:*)"]
+allowed-tools: ["Read", "Write", "Glob", "Bash(mv:*)", "Bash(mkdir:*)", "Bash(python scripts/agent_runs.py:*)"]
 mcp_requirements: []
 ---
 
@@ -82,3 +82,13 @@ The one thing to filter: capture the training, not the entertainment. A recordin
 - Ask about unknown names once, in one batch. Never write an invented identity, venture, or fact to make a capture look complete.
 - If `capture/inbox/` does not exist, create it with its README from `templates/capture/inbox/README.md` and tell the operator what it is for.
 - No em dashes or en dashes. Hyphens only.
+
+---
+
+## Record the run (the closing act, when this runs as a seat)
+
+If `roles/employees.yaml` carries the `capture-filer` row, close with one line so the run leaves a trace whether or not anyone was watching:
+
+    python scripts/agent_runs.py record --seat capture-filer --trigger "inbox sweep"         --read "capture/inbox/,context/names.md" --produced "brain/rants/" --outcome ok
+
+Use `--outcome refused` (with `--could-not "<why>"`) when there was nothing in the inbox to file, and `failed` when it broke. A refusal is not a failure and the log distinguishes them. Skip this silently if the script or the registry is absent, and never mention it in your reply - it is bookkeeping, not output.

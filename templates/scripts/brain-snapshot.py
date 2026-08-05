@@ -224,6 +224,63 @@ def role_snapshot(root: Path) -> list[str]:
     )
 
 
+TABLE_SEP = re.compile(r"^\|[\s:|-]+\|$")
+
+
+def _preference_rows(text: str, section: str) -> list[tuple[str, str]]:
+    """Table rows under one H2 of core/working-preferences.md, as
+    (preference, applies-to) pairs. Header and separator rows are dropped, and
+    so is any row whose first cell is empty - an empty table ships on purpose,
+    so the parser has to read one as zero preferences rather than as one blank."""
+    rows: list[tuple[str, str]] = []
+    in_section = False
+    for line in text.splitlines():
+        header = H2_HEADER.match(line)
+        if header:
+            in_section = header.group(1).strip().lower() == section
+            continue
+        if not in_section:
+            continue
+        stripped = line.strip()
+        if not stripped.startswith("|") or TABLE_SEP.match(stripped):
+            continue
+        cells = [c.strip() for c in stripped.strip("|").split("|")]
+        if not cells or not cells[0]:
+            continue
+        if cells[0].lower() == "preference":
+            continue  # the header row
+        rows.append((cells[0], cells[1] if len(cells) > 1 else ""))
+    return rows
+
+
+def working_preferences(root: Path) -> list[str]:
+    """How the operator has said they want to be worked with.
+
+    This is the behaviour twin of the voice profile: voice gates HOW output is
+    written, this gates HOW the OS works with them - decide or offer options,
+    show the working or just answer, what never to ask twice. It is in the
+    snapshot because a preference nothing reads before it acts is a diary, and
+    the operator finds that out by having to give the same correction twice.
+
+    Only Active rows are returned. Proposed rows are counted, never applied:
+    they are waiting on a yes, and applying one early is the exact thing that
+    makes a behaviour layer feel like it was written behind somebody's back.
+    """
+    path = root / "core" / "working-preferences.md"
+    if not path.exists():
+        return []
+    text = safe_read(path)
+    if not text:
+        return []
+    active = _preference_rows(text, "active")
+    proposed = _preference_rows(text, "proposed")
+    out = [f"- {pref}" + (f" (applies to: {scope})" if scope else "")
+           for pref, scope in active]
+    if proposed:
+        out.append(f"- [{len(proposed)} proposed, waiting on your yes - not applied]")
+    return out
+
+
 H3_PATTERN_HEADER = re.compile(r"^###\s+(.+?)\s*$")
 PATTERN_FIELD = re.compile(r"^(First observed|Last seen|Impact):\s*(.+?)\s*$")
 
@@ -426,6 +483,12 @@ def build_snapshot(root: Path, today: date) -> str:
     out.append(f"date: {today.isoformat()}")
     out.extend(staleness_section(root, today))
     out.append("")
+
+    prefs = working_preferences(root)
+    if prefs:
+        out.append("## Working preferences (read these BEFORE you answer)")
+        out.extend(prefs)
+        out.append("")
 
     out.extend(voice_section(root))
     out.append("")

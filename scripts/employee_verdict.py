@@ -11,14 +11,21 @@ needs-work, or failed, plus why. That ledger is the entire input to the review
 that proposes changes to the job, and it is the only honest answer to "what is
 this OS actually good at".
 
+It is half the record, not all of it. A verdict only exists for a run you were
+watching, so this ledger alone is a sample biased toward the runs you saw. The
+other half is scripts/agent_runs.py, which each job writes for itself: what it
+read, what it produced, how it ended. `render` and `drift` read both, so the
+org chart can say a seat ran fourteen times and you graded three.
+
 Doctrine: rules/digital-employees.md. Registry: roles/employees.yaml.
 
 Subcommands, standard library only, ASCII-safe output:
 
   verdict   Append one verdict on a run. Append-only, never rewrites a line.
   list      Print verdicts (all, or --employee <id>), newest last.
-  render    Write the org-chart view: per employee its job, last verdict,
-            needs-work count, and whether a review is due. Zero LLM.
+  render    Write the org-chart view: per employee its job, what it actually
+            ran (from brain/agent-runs.jsonl), last verdict, needs-work count,
+            and whether a review is due. Zero LLM.
   archive   Roll entries older than 90 days into brain/archive/ - but only once
             the live ledger passes 500 lines, so no machinery runs ahead of need.
   drift     Cross-check every registry row against reality, and reality against
@@ -58,6 +65,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REGISTRY = REPO_ROOT / "roles" / "employees.yaml"
 VERDICTS = REPO_ROOT / "brain" / "employee-verdicts.jsonl"
+RUNS = REPO_ROOT / "brain" / "agent-runs.jsonl"
 VIEW = REPO_ROOT / "brain" / "employees.md"
 ARCHIVE_DIR = REPO_ROOT / "brain" / "archive"
 
@@ -167,6 +175,25 @@ def cmd_verdict(args) -> int:
     return 0
 
 
+def read_runs(path: Path = RUNS) -> list[dict]:
+    """The run log scripts/agent_runs.py writes. Read here so the org chart and
+    the review read what actually ran, not only the runs the operator watched
+    closely enough to grade. Absent file is the normal state on an install that
+    has never recorded a run, and returns []."""
+    if not path.exists():
+        return []
+    out = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            out.append(json.loads(line))
+        except json.JSONDecodeError:
+            continue
+    return out
+
+
 def cmd_list(args) -> int:
     verdicts = read_verdicts(Path(args.file))
     if args.employee:
@@ -236,7 +263,25 @@ def last_verdict_line(emp: dict, verdicts: list[dict]) -> str:
     return f"{v.get('verdict', '?')} ({v.get('ts', '?')[:10]}): {v.get('why', '')}"
 
 
-def render_view(employees: list[dict], verdicts: list[dict], asof: _dt.date) -> str:
+def runs_line(emp: dict, runs: list[dict]) -> str:
+    """One line naming what the seat has actually done, from the run log. The
+    verdict line beside it says what the operator saw. When the two numbers
+    differ, the gap IS the finding: a review reading verdicts alone is reading a
+    sample of the runs that happened to be watched."""
+    mine = [r for r in runs if r.get("seat") == emp.get("id")]
+    if not mine:
+        return "none recorded"
+    last = max((r.get("ts", "") for r in mine), default="")
+    outcomes: dict[str, int] = {}
+    for r in mine:
+        key = r.get("outcome", "?")
+        outcomes[key] = outcomes.get(key, 0) + 1
+    split = ", ".join(f"{k} {v}" for k, v in sorted(outcomes.items()))
+    return f"{len(mine)} (last {last[:10] or '?'}) - {split}"
+
+
+def render_view(employees: list[dict], verdicts: list[dict], asof: _dt.date,
+                runs: list[dict] | None = None) -> str:
     lines = [
         "# Digital employees - org chart view",
         "",
@@ -270,6 +315,7 @@ def render_view(employees: list[dict], verdicts: list[dict], asof: _dt.date) -> 
             lines.append(f"### {e.get('id')} - {e.get('job_title', '?')} [{e.get('status', '?')}]")
             lines.append(f"- Job: {e.get('job_description', '?')}")
             lines.append(f"- Measure: {e.get('kpi', '?')}")
+            lines.append(f"- Runs: {runs_line(e, runs or [])}")
             lines.append(f"- Last verdict: {last_verdict_line(e, verdicts)}")
             if nw30:
                 lines.append(f"- Needs-work last {NEEDS_WORK_WINDOW_DAYS}d: {nw30}")
@@ -281,11 +327,13 @@ def render_view(employees: list[dict], verdicts: list[dict], asof: _dt.date) -> 
 def cmd_render(args) -> int:
     employees = parse_registry(Path(args.registry))
     verdicts = read_verdicts(Path(args.file))
+    runs = read_runs(Path(args.runs))
     asof = _dt.date.fromisoformat(args.asof) if args.asof else _dt.date.today()
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(render_view(employees, verdicts, asof), encoding="utf-8", newline="\n")
-    print(f"wrote {out} ({len(employees)} employees, {len(verdicts)} verdicts)")
+    out.write_text(render_view(employees, verdicts, asof, runs), encoding="utf-8", newline="\n")
+    print(f"wrote {out} ({len(employees)} employees, {len(runs)} runs, "
+          f"{len(verdicts)} verdicts)")
     return 0
 
 
@@ -340,6 +388,12 @@ def registry_drift(root: Path) -> list[dict]:
     findings: list[dict] = []
     employees = parse_registry(root / "roles" / "employees.yaml")
     ids = {e.get("id") for e in employees}
+    runs_path = root / "brain" / "agent-runs.jsonl"
+    runs = read_runs(runs_path)
+    # Only check runs once the log exists. On an install that has never recorded
+    # one, every active row would be reported and the report would say nothing
+    # except "this feature is new" - which is noise, not drift.
+    seats_with_runs = {r.get("seat") for r in runs} if runs_path.exists() else None
 
     for e in employees:
         eid = e.get("id", "?")
@@ -354,6 +408,12 @@ def registry_drift(root: Path) -> list[dict]:
             findings.append({"kind": "active-without-evidence", "employee": eid,
                              "detail": "status is active but no run_record_source names where "
                                        "its runs are recorded - active means there is evidence"})
+        if (e.get("status") or "") == "active" and seats_with_runs is not None \
+                and eid not in seats_with_runs:
+            findings.append({"kind": "active-without-runs", "employee": eid,
+                             "detail": "status is active and the run log exists, but it holds no "
+                                       "line for this seat - either it has not run since the log "
+                                       "started, or it is not recording its own runs"})
         if not (e.get("job_description") or "").strip():
             findings.append({"kind": "no-job-description", "employee": eid,
                              "detail": "no job_description - the human face is not optional"})
@@ -602,6 +662,7 @@ def main(argv: list[str] | None = None) -> int:
     pr = sub.add_parser("render", help="Write the org chart view.")
     pr.add_argument("--registry", **common_registry)
     pr.add_argument("--file", **common_file)
+    pr.add_argument("--runs", default=str(RUNS), help="path to the run log")
     pr.add_argument("--out", default=str(VIEW))
     pr.add_argument("--asof", default=None, help="YYYY-MM-DD (default today)")
     pr.set_defaults(func=cmd_render)

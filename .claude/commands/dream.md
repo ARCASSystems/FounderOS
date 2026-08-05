@@ -1,5 +1,5 @@
 ---
-description: Process my rants. Say "process my rants" or "dream on the rants" (or run /founder-os:dream). Distils unprocessed rants into a 5-line digest and updates patterns, flags, parked decisions, needs-input, and client signals as warranted.
+description: Process my rants. Say "process my rants" or "dream on the rants" (or run /founder-os:dream). Distils unprocessed rants into a 5-line digest and updates patterns, flags, parked decisions, needs-input, client signals, and proposed working preferences as warranted.
 ---
 
 # Dream
@@ -15,6 +15,7 @@ Process all unprocessed rants in `brain/rants/`. Distil what surfaced. Write a t
    - **Flag** - stall, frustration, role feedback, friction. Append to `brain/flags.md` with `Status: **OPEN.**` and Severity Week 1 unless escalation is obvious. Stamp `flag-YYYY-MM-DD-NNN`.
    - **Parked decision** - idea waiting for a trigger. Append to `brain/decisions-parked.md` with a Trigger to revisit line. Stamp `parked-YYYY-MM-DD-NNN`.
    - **Need / blocker** - something the user must do or decide. Add or update a row in `brain/needs-input.md` (Specific + Impact columns). Stamp `need-YYYY-MM-DD-NNN` on new entries.
+   - **Preference** - the user said something about **how they want to be worked with**, not about the business. "Stop giving me three options." "I hate being asked twice." "Just tell me what you think." Append a row to the **Proposed** table in `core/working-preferences.md` - never the Active table - with the preference in their words, where it applies, today's date, and the quote as evidence. Stamp `pref-YYYY-MM-DD-NNN`. If the file does not exist, copy it from `templates/working-preferences.md` first.
    - **Client signal** - mention of a named person or company that warrants tracking. Update `context/clients.md`.
    - **Log only** - context, no action needed. Skip; the rant file itself is the record.
 
@@ -65,6 +66,7 @@ Before persisting anything to a file, scan the source text for `<private>...</pr
 - One Action only. Not a list of three.
 - If zero rants are unprocessed, output exactly: `Nothing to dream. <N> rants total, all processed.`
 - Do not ask the user questions inside `/dream`. If something is genuinely ambiguous, route it to `brain/needs-input.md` instead.
+- **A preference is proposed, never applied.** Every other channel writes an observation the user reads later. This one would change how the OS behaves toward them, so it lands in the Proposed table and waits. A behaviour rule that appears in the file without the user ever agreeing to it is the thing they will not forgive, and `/dream` runs unattended - it is exactly where that mistake would happen. If a run proposed any preference row, the digest's Action line says so and names the count.
 - Mark processed flag flips as a single edit per file, not per entry.
 - Voice rules apply to all writeback (no em dashes, no banned words). The raw rant text in the rants file is exempt - it stays verbatim.
 - Every ID cited in the digest must be an ID this run wrote. Never invent or fabricate IDs.

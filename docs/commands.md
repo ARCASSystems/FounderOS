@@ -295,9 +295,9 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 ### `/founder-os:dream`
 
 - **Or say.** "process my rants" / "dream on the rants"
-- **Outcome.** A 5-line digest in `brain/log.md` with stable-ID citations, plus new entries in `brain/patterns.md`, `brain/flags.md`, `brain/decisions-parked.md`, `brain/needs-input.md` as warranted. Each rant marked processed. If the opt-in observation log is enabled, today's tool calls are rolled into an OBSERVED section.
+- **Outcome.** A 5-line digest in `brain/log.md` with stable-ID citations, plus new entries in `brain/patterns.md`, `brain/flags.md`, `brain/decisions-parked.md`, `brain/needs-input.md` as warranted. A rant that says how you want to be worked with also proposes a row in the Proposed table of `core/working-preferences.md` - proposed, never applied, because this command runs unattended. Each rant marked processed. If the opt-in observation log is enabled, today's tool calls are rolled into an OBSERVED section.
 - **Args.** None.
-- **Writes.** `brain/log.md`, `brain/patterns.md`, `brain/flags.md`, `brain/decisions-parked.md`, `brain/needs-input.md`, `context/clients.md` if a client signal surfaces. Marks rants processed in place.
+- **Writes.** `brain/log.md`, `brain/patterns.md`, `brain/flags.md`, `brain/decisions-parked.md`, `brain/needs-input.md`, `core/working-preferences.md` (Proposed table only), `context/clients.md` if a client signal surfaces. Marks rants processed in place.
 - **Prereqs.** `/founder-os:setup` complete. At least one unprocessed rant in `brain/rants/`.
 - **When to run.** End of day, or when `brain/rants/` has 2+ unprocessed files.
 - **Follow-up.** `/today` or `/next` to act on any new flags.

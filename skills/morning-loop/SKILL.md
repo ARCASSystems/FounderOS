@@ -3,7 +3,7 @@ name: morning-loop
 description: The morning answer loop. Say "morning loop", "run my morning", "what needs me today", or run /founder-os:morning-loop. Asks at most four sharp questions drawn from what is actually waiting - a blocked queue item, an unanswered ask, a provisional fact, a stale commitment - then writes every answer back into the file that owns it and silences the thing that asked. Ends with one coach line naming today's single step. Once a day.
 why: "Everything the OS notices piles up in files nobody re-reads, so the same question gets raised on five mornings and answered on none. This is the human half of the loop: a few answers a day, each one landing in the file that owns it so it stops being asked."
 enhance: "Run it first thing, before the day starts making the decisions for you. Answering four questions takes two minutes and is what keeps every other surface honest."
-allowed-tools: ["Read", "Edit", "Write", "Grep", "Glob", "Bash(python scripts/employee_verdict.py:*)", "Bash(python scripts/unconfirmed_facts.py:*)"]
+allowed-tools: ["Read", "Edit", "Write", "Grep", "Glob", "Bash(python scripts/employee_verdict.py:*)", "Bash(python scripts/unconfirmed_facts.py:*)", "Bash(python scripts/agent_runs.py:*)"]
 ---
 
 # Morning loop - four questions, then get on with it
@@ -36,6 +36,7 @@ If the operator wrote an override at the top of the file (an ended line, a moved
 
 Read only what is present, and skip what is not:
 
+0. `core/working-preferences.md` - read it first and read it as a gate on this run. Its **Active** rows already tell you what not to ask and what shape the operator wants back: a row saying "never ask me about X" removes X from the candidate list entirely, and a row about answer length applies to Step 5. This is a loop whose whole purpose is to stop asking questions that already have answers, so a preference it ignores is the loop failing at its own job. Its **Proposed** rows are candidates from `/dream` and unanswered corrections, and one of them is a legitimate question for Step 2 (below).
 1. `brain/needs-attention.md` - open asks the OS has raised for you. Read `brain/needs-input.md` with it if present: `/dream` parks its questions there, and the two files are one queue split by which surface wrote them.
 2. `cadence/queue.md` - ACTIVE items with no movement, and anything with a named blocker.
 3. `cadence/weekly-commitments.md` - this week's MUST DO items and whether any has gone quiet.
@@ -59,6 +60,7 @@ Priority order. Never two questions about the same thing.
 4. A commitment that has gone quiet: keep it, kill it, or move the date.
 5. A provisional fact whose confirm-or-cut unblocks something real. One at a time, never two in one batch.
 6. A flag past its decay date: keep, kill, or refresh.
+6b. **A proposed working preference: promote it, or drop it.** One at a time, and only when a slot is free. Show the row in their own words with the evidence line, and ask plainly: "You said this. Want me to work that way from now on?" On a yes it moves to the Active table and starts gating output today. On a no it is deleted, not parked - a rejected preference kept "for later" comes back every morning. This is the one question that changes how the OS treats them, so it is never batched with another and never asked twice about the same row.
 7. **A gap between designed intent and enacted practice.** You described how something should work, and the log shows it running differently. Ask about the gap; do not pick a side and do not quietly update the file to whichever version is newer. Three lines, no more:
 
    ```
@@ -84,6 +86,7 @@ An answer that does not land in a file is a conversation, not a loop. For each a
 - **An answered ask** - mark it answered in place in the file that raised it (`brain/needs-attention.md` or `brain/needs-input.md`) with the date and your one line. Never delete it: the answered row is the record of what you decided. An ask closed in the wrong file is still open in the right one, and it comes back tomorrow.
 - **A commitment call** - update `cadence/weekly-commitments.md`. A kill gets its reason on the same line.
 - **A flag call** - update `brain/flags.md`: extend the decay date with a reason, or close it with one.
+- **A preference call** - edit `core/working-preferences.md`: move the row from Proposed to Active with today's date, or delete the row. Never leave it sitting in Proposed with a note; the row's presence IS the open question.
 
 **Then close the thing that asked.** This is the half that gets skipped and it is the half that matters. An answer that closes a flag has to close it in `brain/flags.md`, not only in the conversation. If a cached or rendered view still shows the item, refresh it or say plainly that it is stale. An answered question that leaves its source open comes back tomorrow wearing the same clothes, and by the third morning you have learned to ignore the loop.
 
@@ -125,3 +128,13 @@ Worth stating because it changes which questions are worth asking: the loop trac
 - No new writers. This loop asks and files. It never sends anything, never runs a recurring job, never starts a build.
 - It must survive a freeform answer. If you reply "1 yes, 2 skip, 3 the second one", read the intent. Never ask a person to answer in a tidier format.
 - Writing rules apply. No em dashes.
+
+---
+
+## Record the run (the closing act, when this runs as a seat)
+
+If `roles/employees.yaml` carries the `daily-assistant` row, close with one line so the run leaves a trace whether or not anyone was watching:
+
+    python scripts/agent_runs.py record --seat daily-assistant --trigger "morning loop"         --read "brain/needs-attention.md,cadence/queue.md,brain/flags.md" --produced "brain/log.md" --outcome ok
+
+Use `--outcome refused` (with `--could-not "<why>"`) when the run stopped because today's loop had already happened, and `failed` when it broke. A refusal is not a failure and the log distinguishes them. Skip this silently if the script or the registry is absent, and never mention it in your reply - it is bookkeeping, not output.

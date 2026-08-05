@@ -536,6 +536,39 @@ def render_rants(repo: Path) -> list[str]:
     return [f'Unprocessed rants: {unproc} (say "process my rants" or run /founder-os:dream to distil them)']
 
 
+def render_proposed_preferences(repo: Path) -> list[str]:
+    """Count rows waiting in the Proposed table of core/working-preferences.md.
+
+    Only proposed rows surface. Active rows are already gating output, so
+    printing them every morning would be noise; a row nobody has said yes to is
+    a real open question and the morning loop is where it gets answered. Silent
+    when the file is missing, has no Proposed section, or has an empty one -
+    which is what a fresh install looks like.
+    """
+    text = read_text(repo / "core" / "working-preferences.md")
+    if text is None:
+        return []
+    count = 0
+    in_proposed = False
+    for line in text.splitlines():
+        h2 = re.match(r"^##\s+(.+?)\s*$", line)
+        if h2:
+            in_proposed = h2.group(1).strip().lower() == "proposed"
+            continue
+        if not in_proposed:
+            continue
+        stripped = line.strip()
+        if not stripped.startswith("|") or re.match(r"^\|[\s:|-]+\|$", stripped):
+            continue
+        cells = [c.strip() for c in stripped.strip("|").split("|")]
+        if cells and cells[0] and cells[0].lower() != "preference":
+            count += 1
+    if count <= 0:
+        return []
+    word = "preference" if count == 1 else "preferences"
+    return [f'Proposed working {word}: {count} - say "run my morning" to keep or drop them']
+
+
 def render_compliance(section: list[str]) -> list[str]:
     if not section:
         return []
@@ -783,6 +816,7 @@ def render_full_brief(repo: Path, today: date, want_observations: bool) -> None:
     out += render_fill(repo)
     out += render_connectors(repo)
     out += render_rants(repo)
+    out += render_proposed_preferences(repo)
     out += render_compliance(section_compliance(repo, today))
     out += render_quarantine(repo)
     out += render_decay(section_decay(repo, today))

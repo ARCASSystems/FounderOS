@@ -4,7 +4,7 @@ description: >
   Write a status update or milestone report for whoever is waiting on the work - a client, or the person you answer to inside a company. Trigger on "update the client", "write a status update", "write my status update", "project update", "send a progress report", "milestone update", "weekly update for", "status for my manager", or any variation of packaging progress for the person waiting on it. Reads `core/voice-profile.yml` and writes in your voice.
 why: "Keeps the people waiting on your work informed without the operator writing from scratch each time - consistent format builds trust and prevents the relationship from going silent."
 enhance: "Fill core/voice-profile.yml first so the update sounds like you, and keep context/clients.md current with milestone notes so the skill has real project specifics to draw on."
-allowed-tools: ["Read", "Write", "Bash(python scripts/check-voice-ready.py:*)", "Bash(python scripts/check-brand-voice-ready.py:*)"]
+allowed-tools: ["Read", "Write", "Bash(python scripts/check-voice-ready.py:*)", "Bash(python scripts/check-brand-voice-ready.py:*)", "Bash(python scripts/agent_runs.py:*)"]
 mcp_requirements: []
 ---
 
@@ -136,3 +136,13 @@ REVISED TIMELINE
 3. Are all dates specific, or is anything hidden behind "soon"?
 4. Did you run the result against the universal anti-AI baseline (banned words, em dashes, rule of three, negation-contrast)?
 5. If the engagement has a brand profile and this is going out as a PDF or doc, did you use `your-deliverable-template` to apply it?
+
+---
+
+## Record the run (the closing act, when this runs as a seat)
+
+If `roles/employees.yaml` carries the `client-status` row, close with one line so the run leaves a trace whether or not anyone was watching:
+
+    python scripts/agent_runs.py record --seat client-status --trigger "update for one client"         --read "context/clients.md,brain/log.md" --produced "the draft file" --outcome ok
+
+Use `--outcome refused` (with `--could-not "<why>"`) when the voice profile was not set up and no generic draft was asked for, and `failed` when it broke. A refusal is not a failure and the log distinguishes them. Skip this silently if the script or the registry is absent, and never mention it in your reply - it is bookkeeping, not output.

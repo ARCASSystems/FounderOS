@@ -48,9 +48,20 @@ Your own verbs are a different thing and stay deliberately wide. When you run a 
 
 ## The performance loop (small, and it compounds)
 
-- **Verdicts.** After a run you actually saw, record one line: ok, needs work, or failed, plus why. That is the cheapest possible act of management and the whole input to everything below.
+- **Run records.** The job writes one line about itself when it finishes: what it read, what it produced, how it ended, and what it could not do. `python scripts/agent_runs.py record --seat <id> --trigger "<what set it off>" --outcome ok|refused|failed`. This is the job's own closing act, not something you remember to do.
+- **Verdicts.** After a run you actually saw, record one line: ok, needs work, or failed, plus why. That is the cheapest possible act of management.
 - **Review.** Read one employee's row, its verdicts, and its runs, then propose changes to its definition as a shown diff. Trigger it monthly, or as soon as three needs-work verdicts land in thirty days. The review never applies its own diff.
 - **Registry.** `roles/employees.yaml` is the org chart. One row per employee, both faces. Seeded honestly with only what exists.
+
+### Why the runner records the run, and not you
+
+Before the run log existed, `run_record_source` on every row held a sentence naming a place, and nothing wrote there. So the only trace a job left was a verdict you typed, and a verdict only exists for a run you were watching. That makes the whole ledger a sample biased toward the runs you happened to see, and the review reads that sample as if it were the record. A job that misbehaves quietly, in the runs you were not watching, is invisible to the exact machinery built to catch it.
+
+One line per run fixes it, and it is the smallest thing that could: `brain/agent-runs.jsonl`, append-only, standard library, no key. `python scripts/employee_verdict.py render` shows runs beside verdicts, so the gap between them is readable - fourteen runs, three graded. `drift` reports an `active` row that the log has never seen, which is the check `active` always claimed to mean.
+
+Two honest limits, worth stating so nobody over-trusts it. A run line says a run happened, never that the output was any good - that is still your verdict. And a job that does not record cannot be told apart from a job that did not run, which is why the drift check names the two possibilities rather than picking one.
+
+`refused` is a first-class outcome, not a failure. A propose-only job that declined because the charter said no is the charter working, and a log that could not say so would push every honest refusal into the failed bucket and teach you to distrust your own restraint rules.
 
 ## Honest status, always
 

@@ -2,6 +2,28 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.49.0 - 2026-08-05
+
+The OS starts learning how you want to be worked with, and the team starts keeping its own record. Both answer the same question: what can a folder of files do that the memory in a chat app cannot? Not more memory. Memory that lands where it gets read **before** the OS acts, in a file you can open and argue with. Pack: `updates/1.49.0-it-learns-how-you-want-to-be-worked-with.md`.
+
+### New - a behaviour layer that fills from your own corrections
+
+`core/working-preferences.md` records how you want to be worked with: decide for me or give me options, show the working or just answer, what never to ask twice, what a normal answer looks like, what "done" means, and anything the OS proposed once and got told off for. It is read before output, the same way `core/voice-profile.yml` is read before anything is written. That is the whole difference between this and a memory a model might recall after you complain.
+
+It ships empty on purpose and fills one line at a time, and every line carries the date and the sentence it came from. No row without evidence, and no row without your yes: sessions may propose, only you promote. The capture hook classifies a fifth prompt shape - a correction of how the OS is working ("too long", "you asked me that already", "just pick one") - and routes it the way a name correction already routes: applied in that same reply first, then offered as a saved row in one line. `/founder-os:dream` gains a fifth target class for preferences found in rants; because it runs unattended, its candidates land in a **Proposed** table and wait for the morning loop to ask. Nothing in Proposed ever gates output.
+
+Read points, because a layer nothing reads is a diary: the bootloader every session, `brain/.snapshot.md` (which nine output-producing skills already read), `founder-next-move`, and `morning-loop` - which reads it as a gate on its own questions, since a loop built to stop asking answered questions failing at exactly that would be the worst version of this. The session brief counts proposed rows and stays silent when there are none. Every read point carries on without the file, which is the normal state of a fresh install.
+
+The bar it is built to clear is the one `context/names.md` already clears: **the same correction should never have to be given twice.**
+
+### New - the runner records the run, so you stop being the recording device
+
+`run_record_source` on every org-chart row used to be a sentence naming a place, and nothing wrote there. So the only trace a job left was a verdict you typed, and a verdict only exists for a run you were watching. That made the verdict ledger a sample biased toward the runs you happened to see, read by `employee-review` as if it were the record. A job that misbehaved quietly, in the runs nobody watched, was invisible to the machinery built to catch it.
+
+`scripts/agent_runs.py` writes one line per run to `brain/agent-runs.jsonl` as the job's closing act: what triggered it, what it read, what it produced, how it ended, and what it could not do. Append-only, standard library, no key, and it refuses money amounts and contact details outright the way the provisional-fact ledger does. `refused` is a first-class outcome rather than a failure, because a propose-only job declining under its charter is the charter working. `employee_verdict.py render` now shows runs beside verdicts so the gap is readable - fourteen runs, three graded - and `drift` reports an `active` row the run log has never seen, which is the check `active` always claimed to mean. All five starter roles carry the grant on both sides of the seam, charter and skill, and the charter audit holds them together.
+
+Two limits stated in the doctrine rather than implied away: a run line says a run happened, never that its output was good, and a job that does not record cannot be told apart from a job that did not run - which is why the drift finding names both possibilities instead of picking one.
+
 ## v1.48.1 - 2026-08-05
 
 The voice patch. An end-to-end review checked the optional voice layer's claims against the code and against the live vendor APIs instead of against its own documentation, and four things failed. Pack: `updates/1.48.1-voice-that-works-on-day-one.md`.

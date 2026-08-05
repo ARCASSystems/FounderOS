@@ -3,7 +3,7 @@ name: employee-review
 description: Review one digital employee and propose changes to it. Say "review the assistant", "review the note-taker", "how is that job doing", "performance review for <id>", or run /founder-os:employee-review <id>. Reads its registry row, its verdicts, and the items it filed, then proposes upgrades to its definition as a shown diff - prompt, chain, tool grant. Never applies its own diff. This reviews a recurring job the OS runs, not you (that is founder-review).
 why: "Verdicts pile up and nothing reads them, so a job that keeps producing bad output keeps its seat. This turns the record of what went wrong into a concrete change to the thing that produced it, which is the only way a correction stops repeating."
 enhance: "Run it monthly, or the moment three needs-work verdicts land inside thirty days. Record verdicts as you go or there will be nothing here to read."
-allowed-tools: ["Read", "Grep", "Glob", "Bash(python scripts/employee_verdict.py list:*)", "Bash(python scripts/employee_verdict.py charters:*)"]
+allowed-tools: ["Read", "Grep", "Glob", "Bash(python scripts/employee_verdict.py list:*)", "Bash(python scripts/employee_verdict.py charters:*)", "Bash(python scripts/agent_runs.py:*)"]
 ---
 
 # Employee review (propose only)
@@ -49,3 +49,13 @@ Note on point 3: a close-line verdict on a queue item is evidence of the same gr
 - Never edit any row other than the one under review.
 - No pay, no commercial terms, and no personal data in the registry. Not in a job description, not in an example.
 - Never widen a tool grant here. Ever.
+
+---
+
+## Record the run (the closing act, when this runs as a seat)
+
+If `roles/employees.yaml` carries the `seat-reviewer` row, close with one line so the run leaves a trace whether or not anyone was watching:
+
+    python scripts/agent_runs.py record --seat seat-reviewer --trigger "review one seat"         --read "roles/employees.yaml,brain/employee-verdicts.jsonl,brain/agent-runs.jsonl" --produced "" --outcome ok
+
+Use `--outcome refused` (with `--could-not "<why>"`) when the seat had no verdicts and nothing filed, so the review was declined, and `failed` when it broke. A refusal is not a failure and the log distinguishes them. Skip this silently if the script or the registry is absent, and never mention it in your reply - it is bookkeeping, not output.

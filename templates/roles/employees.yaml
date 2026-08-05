@@ -74,10 +74,10 @@ employees:
     inputs: brain/needs-attention.md, brain/needs-input.md, cadence/queue.md, cadence/weekly-commitments.md, cadence/daily-anchors.md, brain/flags.md, brain/log.md, brain/employees.md
     output_surface: brain/log.md (the dated morning-loop entry)
     dispatch: manual, daily ("run my morning", "what needs me today")
-    run_record_source: the morning-loop entries in brain/log.md
-    may_write: brain/log.md, brain/employees.md (a derived-view refresh via the verdict script, never by hand), and the single file that owns each question you answered - the queue, a flag, a commitment, the verdicts ledger, a confirmed fact's home file
+    run_record_source: brain/agent-runs.jsonl, the lines whose seat is daily-assistant (written by the run itself via scripts/agent_runs.py)
+    may_write: brain/log.md, brain/agent-runs.jsonl (its own run record, never an operating file), brain/employees.md (a derived-view refresh via the verdict script, never by hand), and the single file that owns each question you answered - the queue, a flag, a commitment, the verdicts ledger, a confirmed fact's home file
     never: reach anything outside this folder, answer on your behalf, run a second time the same day
-    tools: Read, Edit, Write, Grep, Glob, Bash(python scripts/employee_verdict.py:*), Bash(python scripts/unconfirmed_facts.py:*)
+    tools: Read, Edit, Write, Grep, Glob, Bash(python scripts/employee_verdict.py:*), Bash(python scripts/unconfirmed_facts.py:*), Bash(python scripts/agent_runs.py:*)
     kpi: no question you have already answered gets asked again
     version: 1.0
     last_review: null
@@ -91,10 +91,10 @@ employees:
     inputs: brain/.snapshot.md, core/identity.md, brain/log.md, context/clients.md, cadence/weekly-commitments.md
     output_surface: the recommendation in your session, nothing written to your files
     dispatch: manual, on demand ("what should I do next")
-    run_record_source: the moves you logged acting on, in brain/log.md
-    may_write: brain/.snapshot.md only - a derived cache refresh, never an operating file
+    run_record_source: brain/agent-runs.jsonl, the lines whose seat is next-move-caller (written by the run itself via scripts/agent_runs.py)
+    may_write: brain/.snapshot.md (a derived cache refresh) and brain/agent-runs.jsonl (its own run record) - never an operating file
     never: contact anyone, quote a price, commit you to a date, invent a stage your files do not show
-    tools: Read, Bash(python scripts/brain-snapshot.py:*)
+    tools: Read, Bash(python scripts/brain-snapshot.py:*), Bash(python scripts/agent_runs.py:*)
     kpi: you never end a session without one named next step
     version: 1.0
     last_review: null
@@ -108,10 +108,10 @@ employees:
     inputs: capture/inbox/, context/names.md
     output_surface: brain/rants/ (one dated file per capture)
     dispatch: manual, after any stretch away from the desk ("catch up", "process my inbox")
-    run_record_source: the dated files in brain/rants/
-    may_write: brain/rants/, context/names.md (confirmed name corrections only), and moving what it has filed into capture/inbox/.processed/
+    run_record_source: brain/agent-runs.jsonl, the lines whose seat is capture-filer (written by the run itself via scripts/agent_runs.py)
+    may_write: brain/rants/, brain/agent-runs.jsonl (its own run record), context/names.md (confirmed name corrections only), and moving what it has filed into capture/inbox/.processed/
     never: edit the words of a capture, delete anything it did not just file, distil captures into conclusions on its own
-    tools: Read, Write, Glob, Bash(mv:*), Bash(mkdir:*)
+    tools: Read, Write, Glob, Bash(mv:*), Bash(mkdir:*), Bash(python scripts/agent_runs.py:*)
     kpi: nothing you captured away from the desk is still sitting unfiled a week later
     version: 1.0
     last_review: null
@@ -125,10 +125,10 @@ employees:
     inputs: context/clients.md, core/voice-profile.yml, brain/log.md, cadence/weekly-commitments.md
     output_surface: the draft file it is asked to produce
     dispatch: manual, per client or per stakeholder ("write the update for <client>", "write my status update")
-    run_record_source: the drafts it produced and the verdicts you closed them with
-    may_write: the draft file it was asked to produce
+    run_record_source: brain/agent-runs.jsonl, the lines whose seat is client-status (written by the run itself via scripts/agent_runs.py)
+    may_write: the draft file it was asked to produce, and brain/agent-runs.jsonl (its own run record)
     never: email, post or otherwise deliver anything, change a client's stage, write in a voice you have not set
-    tools: Read, Write, Bash(python scripts/check-voice-ready.py:*), Bash(python scripts/check-brand-voice-ready.py:*)
+    tools: Read, Write, Bash(python scripts/check-voice-ready.py:*), Bash(python scripts/check-brand-voice-ready.py:*), Bash(python scripts/agent_runs.py:*)
     kpi: nobody waiting on your work - a client, or whoever you answer to - goes a month with no update they actually received
     version: 1.0
     last_review: null
@@ -139,13 +139,13 @@ employees:
     seat: Chief of Staff
     job_description: Reviews one of the roles on this chart. Reads its row, the verdicts you recorded on it and what it actually filed, then proposes changes to its own definition - prompt, chain, tool grant - as a diff you accept or reject. Propose only, and it never applies its own diff. Given a role with no verdicts and nothing filed it refuses the review in one line rather than building a performance story out of a job description.
     skill_chain: employee-review
-    inputs: roles/employees.yaml, brain/employee-verdicts.jsonl, cadence/queue.md
+    inputs: roles/employees.yaml, brain/employee-verdicts.jsonl, brain/agent-runs.jsonl, cadence/queue.md
     output_surface: the proposed diff in your session
     dispatch: manual, monthly, or the moment three needs-work verdicts land inside thirty days
-    run_record_source: brain/employee-verdicts.jsonl
-    may_write: nothing - you apply the diff or you do not
+    run_record_source: brain/agent-runs.jsonl, the lines whose seat is seat-reviewer (written by the run itself via scripts/agent_runs.py)
+    may_write: brain/agent-runs.jsonl only - its own run record. Not your files, not the registry, not its own diff
     never: apply its own diff, record a verdict on any role including itself, review a role with no evidence
-    tools: Read, Grep, Glob, Bash(python scripts/employee_verdict.py list:*), Bash(python scripts/employee_verdict.py charters:*)
+    tools: Read, Grep, Glob, Bash(python scripts/employee_verdict.py list:*), Bash(python scripts/employee_verdict.py charters:*), Bash(python scripts/agent_runs.py:*)
     kpi: no role carries three needs-work verdicts without its definition changing
     version: 1.0
     last_review: null

@@ -427,8 +427,8 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 
 - **Say.** "morning loop", "run my morning", or "what needs me today".
 - **Outcome.** At most four questions drawn from what is genuinely waiting (a blocked queue item, an unanswered ask, a commitment gone quiet, a provisional fact, a flag past its decay date), each with two or three narrow options and a recommendation first. Then every answer written back into the file that owns it, and one coach line naming today's single step. A quiet morning reports "Nothing needs you this morning" rather than inventing a question.
-- **Reads.** `brain/needs-attention.md` (and `brain/needs-input.md`, its `/dream`-written sibling), `cadence/queue.md`, `cadence/weekly-commitments.md`, `cadence/daily-anchors.md`, `brain/flags.md`, `brain/unconfirmed-facts.md`, `brain/employees.md` (refreshed first via the verdict script so a due review actually surfaces), and yesterday's coach line in `brain/log.md`.
-- **Writes.** Whichever files your answers belong to (the queue, the commitments, the flags, the ledgers), plus one `#morning-loop` entry in `brain/log.md` carrying the coach line. It closes the source that raised each question in the same pass.
+- **Reads.** `core/working-preferences.md` first, as a gate on its own questions (an Active row saying never to ask about something removes it from the candidate list), then `brain/needs-attention.md` (and `brain/needs-input.md`, its `/dream`-written sibling), `cadence/queue.md`, `cadence/weekly-commitments.md`, `cadence/daily-anchors.md`, `brain/flags.md`, `brain/unconfirmed-facts.md`, `brain/employees.md` (refreshed first via the verdict script so a due review actually surfaces), and yesterday's coach line in `brain/log.md`.
+- **Writes.** Whichever files your answers belong to (the queue, the commitments, the flags, the ledgers, and `core/working-preferences.md` when you promote or drop a proposed row), plus one `#morning-loop` entry in `brain/log.md` carrying the coach line and one run line in `brain/agent-runs.jsonl`. It closes the source that raised each question in the same pass.
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete. It degrades gracefully: it reads only the files that exist.
 - **When to run.** First thing, once a day. It refuses a second run the same day.
@@ -751,8 +751,8 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 
 - **Say.** "what should I do next", "what's my next move", or "propose my next move".
 - **Outcome.** The single highest-leverage move - toward your next paying customer on the founder path, toward the work you own in front of whoever waits on it on the operator path - with a three-option close (one big, two small) so you always leave with a step you can start today.
-- **Reads.** `brain/.snapshot.md` (whichever snapshot block your identity carries - Founder Snapshot or Role Snapshot), `core/identity.md`, `core/profile.md`, `brain/log.md`, `context/clients.md`, `context/priorities.md`, `cadence/`, `brain/flags.md`.
-- **Writes.** Read-only.
+- **Reads.** `brain/.snapshot.md` (whichever snapshot block your identity carries - Founder Snapshot or Role Snapshot, plus the active working preferences, which gate the shape of the proposal), `core/identity.md`, `core/profile.md`, `brain/log.md`, `context/clients.md`, `context/priorities.md`, `cadence/`, `brain/flags.md`.
+- **Writes.** Read-only on your operating files. It refreshes `brain/.snapshot.md` when stale and appends one run line to `brain/agent-runs.jsonl`.
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete with a snapshot block: the Founder Snapshot for the founder and team_of_one roles, the Role Snapshot for the operator role. A thin snapshot still proposes a capture move.
 - **When to run.** Any morning, or any time you are unsure what to do next. Also surfaced as a nudge in the SessionStart brief once the brain is functional, and through `/next` whenever a snapshot exists.

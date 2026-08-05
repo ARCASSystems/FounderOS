@@ -18,12 +18,21 @@ Every session, the always-small files load at boot so behaviour is grounded in c
 
 1. `core/identity.md` - who the person running this OS is and how they work
 2. `core/profile.md` - what the OS leads with for this operator (variant, lead surfaces, frame)
-3. `rules/operating-rules.md` - behavioural rules
-4. `cadence/daily-anchors.md` - today's anchor task
-5. `cadence/weekly-commitments.md` - current sprint
-6. `context/priorities.md` - what matters this week and quarter
+3. `core/working-preferences.md` - how they have said they want to be worked with
+4. `rules/operating-rules.md` - behavioural rules
+5. `cadence/daily-anchors.md` - today's anchor task
+6. `cadence/weekly-commitments.md` - current sprint
+7. `context/priorities.md` - what matters this week and quarter
 
 CLAUDE.md (this file) is read automatically by Claude Code at session start.
+
+### Working preferences are read before you answer, not after they complain
+
+`core/working-preferences.md` is small and it is a gate, not background. Every row in its **Active** table is something the operator has already told you once, so producing output that breaks one is making them say it twice - which is the single failure this file exists to remove. Apply the rows that match the work in front of you, silently. Do not announce that you are applying a preference, do not quote the file back at them, and do not ask them to confirm a row that is already Active.
+
+Rows in the **Proposed** table are candidates nobody has said yes to yet. **Never apply one.** They exist to be asked about, which the morning loop does.
+
+If the file is missing, that is the normal state of a fresh install: carry on without it and let the first correction create it.
 
 For the files that grow with use, boot from the snapshot instead of the full read: if `brain/.snapshot.md` exists and its date is within 3 days, read IT for orientation - it carries the open flags, this week's must-do, the recent decisions, and staleness in a few hundred tokens. Then read `context/decisions.md`, `context/clients.md`, `brain/flags.md`, or `brain/log.md` in full ONLY when the task actually touches that domain (a decision call, a client question, stall detection, history). This is what keeps boot cheap on a months-old install where those files have grown.
 
@@ -122,6 +131,7 @@ founder-os/
 ├── core/
 │   ├── identity.md             # Who the operator is and how they work
 │   ├── profile.md              # What the OS leads with for this operator (variant, lead surfaces, frame)
+│   ├── working-preferences.md  # How they want to be worked with; read BEFORE output, like voice-profile
 │   ├── avatar.md               # Behavioural profile, loaded on demand by skills
 │   ├── voice-profile.yml       # Filled by the voice-interview setup step
 │   └── brand-profile.yml       # Filled by the brand-interview setup step
@@ -220,7 +230,7 @@ Both hooks fail gracefully and never block the session.
 
 The Founder OS exists to capture what the operator says so nothing slips. The "don't update files unless asked" rule above has explicit exemptions for capture-class writes - because if the operator has to remember to ask for capture, the capture loop is broken.
 
-A UserPromptSubmit hook - the cross-platform dispatcher `scripts/hooks/dispatch.py` running `scripts/user-prompt-capture.py` - classifies every incoming prompt against four shapes and emits a `[capture-suggestion]` system note before you respond. When you see one of these notes in your context, follow the routing below.
+A UserPromptSubmit hook - the cross-platform dispatcher `scripts/hooks/dispatch.py` running `scripts/user-prompt-capture.py` - classifies every incoming prompt against five shapes and emits a `[capture-suggestion]` system note before you respond. When you see one of these notes in your context, follow the routing below.
 
 **Shape 1 - Rant.** Long unstructured dump (~200+ words), first-person, no clear question. The hook EAGERLY writes the rant to `brain/rants/<YYYY-MM-DD>.md` with `processed: false` so the text is safe on disk. Your job: acknowledge in one short line that the rant was captured, then offer routing: `Want to act on it now? Say decision, draft, plan, or log - or ignore and /dream will pick it up later.` Do not summarise the rant content. Do not interview.
 
@@ -228,9 +238,11 @@ A UserPromptSubmit hook - the cross-platform dispatcher `scripts/hooks/dispatch.
 
 **Shape 3 - Status update.** "I finished the proposal", "I sent the email", "I shipped the feature", "I signed the contract". Propose logging to `brain/log.md` BEFORE continuing. One line: `Want me to log that to brain/log.md? Yes/no/skip.` Wait. On yes, invoke `brain-log`. Never write without yes.
 
-**Shape 4 - Durable preference.** "From now on", "I prefer", "never ask me", "always X", "stop doing Y". Propose adding it as a behavioral guard. One line: `Want me to save that as a preference? It'll persist across every session. Yes/no/skip.` Wait. On yes, append a one-line guard entry to `~/.claude/projects/<slug>/memory/MEMORY.md` under Behavioral Guards. If the auto-memory path is unclear, ask the operator to confirm the path once. Never write without yes.
+**Shape 4 - Durable preference.** "From now on", "I prefer", "never ask me", "always X", "stop doing Y". Propose saving it. One line: `Want me to save that as a working preference? I read it before every answer. Yes/no/skip.` Wait. On yes, append ONE row to the **Active** table in `core/working-preferences.md`: the preference in their words, where it applies, today's date, and their exact sentence as the evidence. Never write without yes, and never widen the scope past what they said.
 
-**Why confirm-then-write (not eager-write everywhere).** Rants are eager-captured because the cost of losing a rant the operator just typed is high and the cost of capturing a non-rant to `brain/rants/` is near zero. Named-entity and status-update writes touch real pipeline state and warrant a one-line confirmation. Preferences persist forever - the user must explicitly bless them.
+**Shape 5 - Correction of how you work.** "Too long", "you asked me that already", "just pick one", "get to the point". This is not a complaint, it is the operator telling you how they want to be worked with, at the only moment they ever say it. Two things, in order. **First, apply it in this reply** - a correction that gets filed instead of obeyed is worse than one that gets ignored. **Then**, one line at the end: `Want that saved so I stop doing it? Yes/no/skip.` On yes, append a row to the Active table exactly as in Shape 4. Do not apologise at length, do not explain why it happened, and never argue with the correction.
+
+**Why confirm-then-write (not eager-write everywhere).** Rants are eager-captured because the cost of losing a rant the operator just typed is high and the cost of capturing a non-rant to `brain/rants/` is near zero. Named-entity and status-update writes touch real pipeline state and warrant a one-line confirmation. Preferences and corrections change how the OS behaves toward the operator from then on, so they need an explicit yes - a behaviour rule that appeared without anyone agreeing to it is the one thing they would not forgive.
 
 **Why the UserPromptSubmit hook exists.** Without it, capture only fires when the operator runs a slash command. Real operators don't memorise commands - they talk. The hook reads what they say, classifies it, and prepends a routing instruction to your context so you handle it correctly. If the hook misses something obvious, the operator can always invoke the slash command explicitly.
 
