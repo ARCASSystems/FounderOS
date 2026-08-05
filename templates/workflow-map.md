@@ -6,7 +6,7 @@ The bridge between the two ways you will talk about your own OS. You think in ro
 
 ## How to fill it in
 
-One row per workflow that genuinely recurs. Two columns for the stages, and that split is the whole point of the table:
+One row per workflow that genuinely recurs. Rows arrive two ways: you write one by hand, or the `hire` skill writes one at the moment a team is hired - either way, only when the workflow is real. Two columns for the stages, and that split is the whole point of the table:
 
 - **Deterministic stages** are the ones with exactly one right answer: counting, filing, rendering, moving something from one state to another. These belong in code and should never be handed to a model. They cost nothing to run, they run the same way every time, and their failures are loud.
 - **Judgment stages** are the ones needing a call: what to say, whether this is worth doing, who someone actually is, whether the output is any good. These need the model, and each one needs a named check on its output before anything acts on it.

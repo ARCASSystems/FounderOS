@@ -412,6 +412,17 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 - **When to run.** Monthly, or the moment three needs-work verdicts land inside thirty days.
 - **Follow-up.** Proposing retirement is a valid outcome, and a retired row keeps its place with a dated why. The same loop pointed at you instead of a job is `founder-review`. Slash command: `/founder-os:employee-review`.
 
+### hire
+
+- **Say.** "hire", "I need help with X", "who should own this", "build me a team for Y", "this keeps eating my week".
+- **Outcome.** The Chief of Staff's hiring door. A recurring pain walks a six-rung shape ladder - an answer, a preference line, a skill, a script, a chartered seat, a team - and comes back as the SMALLEST thing that removes the job, with one sentence on what the next rung up would have bought. A rung-5 or rung-6 pick becomes a full job spec (both faces, charter, and an informed-choice passport: what it may touch, what it never does, what it costs, what leaves the machine, how to fire it) proposed before anything is created. A team is specced as a workflow whose handoffs the run log can trace.
+- **Reads.** `core/working-preferences.md`, `roles/employees.yaml`, the workflow map, `brain/patterns.md`, `brain/flags.md`, and `python scripts/agent_runs.py summary` for what the current team actually does.
+- **Writes.** Nothing without your yes. On a yes: the new row (`status: gated`) in `roles/employees.yaml`, the agent file via `python scripts/agents_sync.py apply`, and a workflow-map row when a team became real. Skill builds route to `skill-creator`.
+- **Voice rules.** No.
+- **Prereqs.** `founder-os-setup` complete. The doctrine bar is a job that recurred three times and was corrected twice; hiring ahead of that bar is your explicit call and is recorded as such.
+- **When to run.** When a job keeps coming back, when a review says a seat's definition is the problem, or when you catch yourself about to solve a recurring pain with a one-off chat.
+- **Follow-up.** Run the job manually once or twice before the seat takes it over. `employee-review` after the first month of runs. Never installs outside capabilities silently - each one is proposed with provenance and its own passport.
+
 ### capture-sweep
 
 - **Say.** "sweep my meetings", "anything new to capture", or "check my recorder".

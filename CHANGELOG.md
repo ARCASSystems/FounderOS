@@ -2,6 +2,26 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.50.0 - 2026-08-06
+
+The team gets one door to grow through, and every seat becomes someone you can talk to. v1.49 gave the team a memory of its own runs; this closes the loop the operator actually feels: how a new team member comes to exist, right-sized, and how you manage one without learning a second system. Pack: `updates/1.50.0-the-team-grows-through-one-door.md`.
+
+### New - `hire`, the Chief of Staff's door
+
+Say "I need help with X" or "this keeps eating my week" and the OS answers as an org designer, not a chatbot. The `hire` skill walks a six-rung shape ladder - an answer, a preference line, a skill, a script, a chartered seat, a team - and picks the SMALLEST shape that removes the job, with one sentence on what the next rung up would have bought. That sentence is the anti-naivety half of the feature: most recurring pains die at rung one to four, and a user who is told that, with the reason, can trust the one hire that is proposed. The doctrine bar stays honest (a job that recurred three times and was corrected twice), hiring ahead of it is the operator's explicit call and is recorded as such, and a rung-6 "team" is refused when one seat would do.
+
+Every proposed hire ends with an informed-choice passport before the yes: what it may touch, what it never does, what it costs to run, what leaves the machine (nothing, unless a connector is named), and how to fire it. A yes given without those five things is not consent, it is hope - and the users this OS is for are often new to all of it. The same rule covers outside capabilities: a plugin pack, an MCP connector, or a tool is proposed with its exact source and its own passport, one yes each, never installed silently.
+
+A team, when one is actually earned, is a workflow whose handoffs you can read: one seat per judgment stage, deterministic stages kept in code, and each stage's read-list naming the previous stage's output - so `python scripts/agent_runs.py list` reads back as a relay, who did what, in what order, where the baton was dropped. Builds route to `skill-creator` (which has carried the process-to-team design rules since v1.48); `hire` decides what should exist, it does not duplicate the builder.
+
+### New - every seat is an addressable agent, generated from its row
+
+`scripts/agents_sync.py` generates one `.claude/agents/<seat>.md` per non-retired row in `roles/employees.yaml`: the job, the measure, the read-list, the charter's tools verbatim, the prohibitions, the honest status, and the run-record closing act. The registry stays the single source - you manage a team member by editing their row, not by maintaining a second file that quietly disagrees with the first. `check` reports drift and fails loud, `apply` converges, a retired row's agent file is removed with it, and a hand-written agent file is named and never touched. Firing a seat is one line: set the row to retired, run apply.
+
+### Fix - the doctrine no longer disagrees with itself
+
+v1.49's run-log section landed in `templates/rules/digital-employees.md` but not in the repo-root `rules/` copy an in-place install actually reads. Both copies now carry it, plus the new shape-ladder section, and they are identical again.
+
 ## v1.49.0 - 2026-08-05
 
 The OS starts learning how you want to be worked with, and the team starts keeping its own record. Both answer the same question: what can a folder of files do that the memory in a chat app cannot? Not more memory. Memory that lands where it gets read **before** the OS acts, in a file you can open and argue with. Pack: `updates/1.49.0-it-learns-how-you-want-to-be-worked-with.md`.

@@ -125,6 +125,8 @@ It ships empty and fills from your own corrections. Say "too long" or "you asked
 
 **The team keeps its own record.** The five starter roles in `roles/employees.yaml` each write one line about themselves when they run: what they read, what they produced, how it ended, what they could not do. So a review can say this job ran fourteen times and you watched three, instead of reading only the runs you happened to catch. A run line never claims the output was good - that is still your one-word verdict.
 
+**The team grows through one door, sized honestly.** Say "this keeps eating my week" and the Chief of Staff walks a six-rung ladder - an answer, a written rule, a skill, a script, a chartered seat, a team - and proposes the smallest shape that removes the job, with one line on what the bigger option would have bought. Every hire arrives with a passport before your yes: what it may touch, what it never does, what it costs, what leaves the machine, how to fire it. Seats become real, addressable agents generated from the same registry row the audit reads, so you manage a team member by editing their contract, not by learning a second system - and nothing from outside the OS is ever installed without its source shown and your yes given.
+
 ---
 
 ## What it costs
@@ -257,7 +259,7 @@ For the short answer to "what can this actually do", [docs/what-this-can-do.md](
 
 ## What ships in this repo
 
-### Skills (93)
+### Skills (94)
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
@@ -317,7 +319,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 ## Tools and MCPs
 
-Founder OS does not assume your stack. Most of the 93 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+Founder OS does not assume your stack. Most of the 94 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 ---
 
@@ -391,7 +393,7 @@ Have an idea but no business yet? That counts. Say **"I have an idea"** and desc
 
 ## Status
 
-Version 1.49.0. Public release. 93 skills, 44 commands, 813 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.50.0. Public release. 94 skills, 44 commands, 820 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
 v1.48.0 is the arrival release, and the thought process behind it is one sentence: we watched how people actually arrive, and the OS assumed someone they are not. It assumed a founder with a business, a terminal, and no history. Real arrivals are a student with an idea and a phone, an operator who wants a team of assistants for her own creative process, a founder with years of notes in Obsidian, someone coming back after five weeks away. Each got a door. Download-extract-double-click: `Start Founder OS` files for Windows and Mac open Claude Code in the folder and start the wizard talking - the standing front door, honest in-file about what they cannot do. "I have an idea" now reaches the propose engine, which answers with the five real people to talk to this week, never a business plan or a course. "Turn my process into assistants" builds a team the way a real operator specced it: one job per assistant, the human keeps the taste decisions, effectiveness before efficiency, seats earned then registered. Setup adopts an existing vault without touching a single file, and says honestly what old notes can and cannot do. `AGENTS.md` now tells any connected agent - an SEO engine, an outreach drafter - how to join the team under a charter instead of freelancing in your files. The brief welcomes a returner back with counts and one offer instead of a wall of flags. And people research in meeting prep carries sources inline or says "unverified - confirm on the call", with a same-name check before anything is attributed to the human across the table.
 

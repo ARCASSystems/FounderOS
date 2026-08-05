@@ -87,6 +87,16 @@ Both are real constraints. Say in the job description which one a row is, then g
 
 One seam worth naming. When you approve a propose-only job's diff, the edit that lands is yours: applied in your session, on your yes, with your tools. The role never held the pen. Approval moved the act to you, which is why a reviewer that "writes nothing" can still end with the registry updated - you updated it.
 
+## How a job gets created (the shape ladder)
+
+The Chief of Staff's door is the `hire` skill, and the discipline behind it fits in one line: **pick the smallest shape that removes the job, and say what the next size up would have bought.** Six shapes, cheapest first: an answer, a preference line, a skill, a script, a chartered seat, a team. Most recurring pains die at rung 1 to 4 and never needed a team - and a founder who is told that, with the reason, trusts the one hire that IS proposed.
+
+Two rules ride the ladder. Split the job into stages before picking, because most real workflows are a deterministic spine (code, rung 4) with one or two judgment stages (rung 5) - paying model tokens to re-decide a solved filing step is how a team gets expensive without getting better. And manual-first at rung 5 and 6: a job nobody has run by hand gets run by hand once or twice before a seat takes it over. Effectiveness before efficiency.
+
+**A team is a workflow whose handoffs you can read.** One seat per judgment stage, one job per seat, and the relationship between specialists is the handoff artifact: stage B's read-list names stage A's output, so the run log reads back as a relay - who did what, in what order, where the baton was dropped. The operator manages the team the same way they manage one seat: talk to a seat by name (its agent file), change its standing instructions by editing its row, judge it by its runs and verdicts, fire it by retiring the row. There is no second management surface to learn.
+
+Every proposed hire carries an informed-choice passport before the yes: what it may touch, what it never does, what it costs to run, what leaves the machine (nothing, unless a connector is named), and how to fire it. The passport exists because the person hiring is often new to all of this, and a yes given without knowing those five things is not consent, it is hope.
+
 ## Change protocols (so the registry stays true)
 
 **This doctrine** changes only through a diff you approved, the same gate as any other rule.

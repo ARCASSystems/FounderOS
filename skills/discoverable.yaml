@@ -36,6 +36,8 @@ discoverable:
     why: the plate. Asked in a dozen phrasings, none of which look like a command name
   - skill: founder-next-move
     why: the propose engine. The whole point is that it runs when you are stuck, not when you remember it exists
+  - skill: hire
+    why: fires on "I need help with X" and "this keeps eating my week" - situations, not command names, and the moment matters because the default answer to both is a one-off chat that fixes nothing
 
 never_touch:
   - skill: supabase

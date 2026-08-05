@@ -85,6 +85,7 @@ tests/
 # skills/discoverable.yaml. skills/ is the source; these are rebuilt by
 # `python scripts/skills_sync.py --apply` and must never be edited or tracked.
 .claude/skills/
+.claude/agents/
 
 # Python bytecode
 __pycache__/
