@@ -2,15 +2,15 @@
 name: add-voice
 description: >
   Give your Founder OS a voice - talk to it out loud and hear it answer. Trigger on "add
-  voice", "let me talk to my OS", "voice mode", "talk to it out loud", or "set up voice".
-  Installs the Tier-0 loop by default: your browser's built-in speech (ears and mouth) plus
-  the reasoning CLI you already run the OS in (brain), with NO extra API key and NO paid
-  service - the accessibility floor. A small local Python setup wires a gitignored voice/
-  runtime bound to your machine. Realtime voice (Gemini Live, free Google AI Studio key) and
-  a premium mouth (ElevenLabs) are opt-in upgrades, never the default. Honest disclaimer up
-  front: in Chrome/Edge the browser sends your audio to its vendor to transcribe (no key, no
-  cost, but not fully local); a faster-whisper upgrade makes it fully local. Your brain -
-  your files and answers - stays on your machine.
+  voice", "let me talk to my OS", "voice mode", "talk to it out loud", or "set up voice
+  mode". This is SPEAKING and LISTENING; if they mean how their WRITING sounds, that is
+  voice-interview, not this. Installs the Tier-0 loop by default: your browser's built-in
+  speech (ears and mouth) plus the reasoning CLI you already run the OS in (brain), with NO
+  extra API key and NO paid service - the accessibility floor. Realtime voice (Gemini Live,
+  free Google AI Studio key) and a premium mouth (ElevenLabs) are opt-in upgrades, never the
+  default. Honest disclaimer up front: in Chrome/Edge the browser sends your audio to its
+  vendor to transcribe (no key, no cost, not fully local); faster-whisper makes it fully
+  local. Your brain - your files and answers - stays on your machine.
 why: "Voice is the most-asked extension and the easiest place to either silently bill the user or mishear them. Shipping it as a tiered skill - default that needs no key, upgrades that are opt-in and disclosed - holds the accessibility floor and keeps the honesty note load-bearing instead of buried."
 enhance: "Use Chrome or Edge for built-in speech input. Want speech that never leaves your machine? Add the faster-whisper upgrade in references/tiers.md. Want sub-second realtime conversation? That is Tier 1 - a free Google AI Studio key, with the cost-and-accuracy trade stated plainly before you commit."
 summary: "Talk to your OS and hear it back - default needs no key."
@@ -23,6 +23,15 @@ mcp_requirements: []
 Runs on: local-exec - the happy path runs a local Python setup that writes a gitignored `voice/` runtime and serves a local page. On a read-only or cloud surface, explain the steps and the tiers but do NOT claim the install ran or the loop works - it has not until the user runs it locally.
 
 This turns the documented "voice is a DIY mouth and ears" direction ([docs/voice-extension.md](../../docs/voice-extension.md)) into a wired capability the user installs by asking. The OS ships as a complete text brain; this adds a sensory layer on top of the same brain. Nothing here is required.
+
+## Check you are in the right skill (say this first if the ask was ambiguous)
+
+"Voice" means two different things in this OS, and "set up my voice" can mean either:
+
+- **This skill (add-voice)** - SPEAKING and LISTENING. You talk to the OS out loud and hear it answer.
+- **`voice-interview`** - your WRITING voice. It captures how you write so every email, post, and draft sounds like you. Nothing is spoken or heard.
+
+If the user asked with a phrase that could be either ("set up my voice", "voice setup"), say one line before installing anything: **"Quick check - do you mean talking to your OS out loud (this), or how your writing sounds (that is `voice-interview`)?"** Do not install a runtime the user did not ask for.
 
 ## The accessibility floor (the rule that governs the default)
 
@@ -76,7 +85,7 @@ Trigger: **"add voice --realtime"**, "add realtime voice", "I want a real conver
 
 It is NOT zero-cost or zero-install, and you say so BEFORE installing:
 
-1. **Disclaimer first (load-bearing).** A FREE Google AI Studio key has a free daily quota on Flash models; heavy realtime use can move you onto paid per-token rates. Audio streams to Google to run the model; your files and the answers read from them stay local. State this before they commit, not after. `setup_realtime.py` prints it at the top; you say it in conversation too. Full trade in [references/voice-model-disclaimer.md](references/voice-model-disclaimer.md).
+1. **Disclaimer first (load-bearing).** A FREE Google AI Studio key has a free daily quota on Flash models; heavy realtime use can move you onto paid per-token rates. Audio streams to Google to run the model. Your files never leave your machine, but anything the front SPEAKS was sent to Google first - including the answer the back-brain read out of your files. The file stays home; the sentence does not. State this before they commit, not after. `setup_realtime.py` prints it at the top; you say it in conversation too. Full trade in [references/voice-model-disclaimer.md](references/voice-model-disclaimer.md).
 2. **Get and store your own free key (the OS ships none).** The user creates their own free key at https://aistudio.google.com/apikey, in their own Google account. Setup wires everything else so they only drop the key in. Store it via the connect flow so it lands only in the gitignored `.env`: say "connect gemini" or run `python scripts/connect.py set-secret GEMINI_API_KEY` (pasted on stdin, never an argument). A second key (`GEMINI_API_KEY2`) is optional headroom the front rotates to on quota. Never ship, hardcode, or provide a key.
 3. **Run the installer.** `python skills/add-voice/setup_realtime.py` installs two packages (google-genai, websockets - a real install), copies the realtime page and bridge into the gitignored `voice/`, writes `voice/realtime-config.json`, and inherits the Tier-0 brain command. Pick a voice with `--voice <name>` (Aoede default; Puck, Charon, Kore, Fenrir, Leda also work). `python voice/live_server.py --models` lists the Live models your key exposes if the default is unavailable.
 4. **Start it and prove it.** `python voice/live_server.py` serves `http://127.0.0.1:8756/live`. Tap the orb, allow the mic, talk. Say "thinking" out loud to take the floor and it waits. Every turn records to `voice/live-log.md` (local-only). A clean proof is a spoken turn answered in the model's own voice, plus a business-fact question that visibly calls the brain. Do not claim realtime works until that has happened on the user's machine with their own key.

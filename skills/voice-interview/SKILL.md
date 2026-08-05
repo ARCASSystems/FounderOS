@@ -1,7 +1,7 @@
 ---
 name: voice-interview
 description: >
-  Set up the writing-voice profile. Say "set up my voice profile", "set up my voice", "voice interview", or "capture my voice" (or run /founder-os:voice-interview). Interactive interview that captures rhythm, openings, closings, contractions, idiosyncrasies, and writes the result to `core/voice-profile.yml`. Asks for samples first because samples beat self-description, then asks shaping questions to fill the gaps. Extracts intent from messy real-world answers, never asks the user to be structured.
+  Set up the writing-voice profile. Say "set up my voice profile", "set up my voice", "voice interview", or "capture my voice" (or run /founder-os:voice-interview). This is how your WRITING sounds; if they mean talking to the OS out loud (speaking and listening), that is add-voice, not this. Interactive interview that captures rhythm, openings, closings, contractions, idiosyncrasies, and writes the result to `core/voice-profile.yml`. Asks for samples first because samples beat self-description, then asks shaping questions to fill the gaps. Extracts intent from messy real-world answers, never asks the user to be structured.
 why: "Builds the voice profile that gates every writing skill - without it linkedin-post, email-drafter, proposal-writer, and client-update all produce generic output that does not sound like you."
 enhance: "Paste at least three real samples you have already written before answering shaping questions - samples are the ground truth and override the rules when they conflict, so more specific samples mean a sharper profile."
 allowed-tools: ["Read", "Write", "Edit"]
@@ -48,6 +48,8 @@ Say exactly:
 > 2. **A brand voice** - how a brand you run writes. Customer comms, brand social, ads. Captured separately with `/founder-os:brand-voice-interview`.
 >
 > If you are running a founder-led brand the two overlap, but the brand voice should still be captured separately so it survives after employees other than you start writing for the brand.
+>
+> One thing this is NOT: talking to your OS out loud. If you wanted to speak to it and hear it answer, say "add voice" instead and I will set that up.
 >
 > Is this for you personally, or for a brand you run? (personal / brand)
 

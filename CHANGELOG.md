@@ -2,6 +2,22 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.48.1 - 2026-08-05
+
+The voice patch. An end-to-end review checked the optional voice layer's claims against the code and against the live vendor APIs instead of against its own documentation, and four things failed. Pack: `updates/1.48.1-voice-that-works-on-day-one.md`.
+
+### Fix - the paid mouth was broken on arrival
+
+`add-mouth`'s ElevenLabs engine asked for `eleven_monolingual_v1`, which the vendor has retired: the live API answers `400 unsupported_model, deprecated and no longer available`. Anyone who paid for ElevenLabs and wired the premium mouth got a failed request and no reason. The model is now `eleven_multilingual_v2`, verified against a live key, overridable as `"model"` in `voice/mouth-config.json`, and the failure message separates the two real causes: a retired model id (400) or a voice that needs a paid plan (402). The realtime installer's usage example had the same class of defect - it showed `--model gemini-live-2.5-flash-native-audio`, a name no key returns - and now names the real one. Both tier docs stopped presenting model ids as facts: they carry the date they were checked and point at `python voice/live_server.py --models`, which is the only source of truth that belongs to your key.
+
+### Fix - "set up my voice" now lands in the right skill
+
+Voice means two different things in this OS. `voice-interview` captures how you WRITE, the profile every writing skill reads. `add-voice` installs SPEAKING and LISTENING. Their trigger phrases overlapped almost exactly ("set up my voice" against "set up voice"), and neither named the other, so the same sentence could open either one and a first-timer could end up installing a runtime they never asked for. Both descriptions now claim their own half and name the sibling, `add-voice` asks a one-line check before installing anything when the phrasing was ambiguous, and the voice-interview opening says plainly that it is not the talking-out-loud one.
+
+### Fix - the realtime privacy line now matches what the code does
+
+The docs said your files and the answers read from them stay local, and only the conversation leaves. Half of that was true. When the realtime front asks your local brain a question, the answer is sent back into the cloud session so the front can speak it, so the slice of your brain you hear read aloud has been to the model. The skill, the disclaimer, and the architecture note now say it the accurate way: the file stays home, the sentence does not, and a fact too sensitive for a cloud model should be asked in text or on Tier 0-local. The same section carries the lesson from the private build that has run this loop longest: a system prompt asking a model to be discreet is a request, not a guarantee, and this layer ships no outbound filter.
+
 ## v1.48.0 - 2026-08-05
 
 The arrival release. v1.47 fixed how the OS reads its own past; this one fixes the front door. The thought process, in one line: we watched how people actually arrive - real first-time users pitching ideas the way they would to any chatbot, an operator asking for a team of single-job assistants for her creative process, founders with years of notes already on disk - and the OS assumed someone they are not: a founder with a business, a terminal, and no history. Every change below is one of those real arrivals getting a door. Pack: `updates/1.48.0-the-door-is-a-double-click.md`.

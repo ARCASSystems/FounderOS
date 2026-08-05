@@ -66,8 +66,12 @@ reads your files. Wired by `setup_realtime.py`. Architecture: [realtime-architec
    `--voice <name>` at setup; list the Live models your key exposes with `python voice/live_server.py --models`.
 
 Default model: a Flash native-audio Live model (`gemini-2.5-flash-native-audio-latest`) - free-tier
-eligible within the daily quota. Model names change over time; `python voice/live_server.py --models`
-lists what your key actually exposes if the default is unavailable. The model you pick changes both
+eligible within the daily quota, and confirmed present on a live free key on 2026-08-05. Model names
+change often, and a name that has been retired fails at the first turn, so treat any model id you
+read in a doc as a claim to check, not a fact. `python voice/live_server.py --models` lists what your
+key actually exposes right now; that list, not this page, is the source of truth. Newer Live models
+appear there over time (there are already newer preview ones); the `-latest` default is the
+conservative pick because it tracks the current free-tier-eligible Flash audio model for you. The model you pick changes both
 accuracy and per-turn cost: a free key has a real free DAILY tier on Flash; heavy use can move you
 onto paid rates. Pick deliberately.
 

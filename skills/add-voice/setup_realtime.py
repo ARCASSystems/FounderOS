@@ -27,7 +27,7 @@ Writes: <repo-root>/voice/ (live_server.py, live.html, realtime-config.json) - g
 Usage:
     python skills/add-voice/setup_realtime.py                 # disclaim, install, wire
     python skills/add-voice/setup_realtime.py --no-install     # wire only (deps already present)
-    python skills/add-voice/setup_realtime.py --voice Puck --model gemini-live-2.5-flash-native-audio
+    python skills/add-voice/setup_realtime.py --voice Puck --model gemini-2.5-flash-native-audio-latest
     python skills/add-voice/setup_realtime.py --start          # wire, then start the server now
 """
 

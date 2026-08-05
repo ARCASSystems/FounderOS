@@ -23,6 +23,25 @@ This split is why a long answer never freezes the voice, and why business facts 
 files instead of guessed. It is the public, persona-free form of the same architecture the private
 build proved.
 
+## What actually leaves your machine (say this plainly, it is easy to get wrong)
+
+The split above is a real privacy gain, and it is smaller than it sounds. Be precise:
+
+- **Your files never leave.** No upload, no sync, no index in the cloud. The back-brain reads local
+  markdown on your own machine.
+- **Anything the front speaks has left.** `query_brain` returns its answer to the realtime front so
+  the front can voice it. That is a `send_tool_response` back into the cloud session. So the slice of
+  your brain you hear read aloud was sent to the model to be spoken.
+
+The honest line is: the FILE stayed home, the SENTENCE did not. If a fact is too sensitive to send to
+a cloud model, do not ask for it out loud on a realtime session. Ask it in text, or run Tier 0-local.
+
+The lesson the private build learned the hard way is worth repeating: a system prompt that says "be
+discreet" is a request, not a guarantee, and it slips. If you need a hard boundary on what can be
+spoken - a client call in the room, a camera running - the only thing that holds is a filter on the
+outbound text that runs before it is voiced, plus a mode that is unsafe-by-default rather than
+on-by-default. This layer does not ship one. Know that before you talk about a client by name.
+
 ## State the front does not have (inject it, never let it guess)
 
 The front holds only the live session. It has zero memory across wakes, and it has no clock. But a

@@ -40,6 +40,11 @@ publish, not for everyday read-backs. It is a deliberate spend.
 2. Optionally set a voice id in `voice/mouth-config.json` as `"voice": "<elevenlabs-voice-id>"`.
 3. Re-run: `python skills/add-mouth/setup.py --engine elevenlabs`.
 
+The mouth asks for `eleven_multilingual_v2` (checked against the live model list on 2026-08-05).
+ElevenLabs retires model ids over time and a retired id fails the request outright, so if you see an
+ElevenLabs error naming the model, pin a current one as `"model"` in `voice/mouth-config.json`. Your
+key's real list is at `https://api.elevenlabs.io/v1/models`.
+
 Cost: paid, per the ElevenLabs plan you choose. Locality: NOT local - your text is sent to
 ElevenLabs to synthesize. `say.py` prints that it used the ElevenLabs mouth every time, so the
 trade is never hidden. The OS-native and Piper voices stay free and local for everything else.

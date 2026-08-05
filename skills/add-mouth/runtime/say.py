@@ -132,8 +132,11 @@ def speak_elevenlabs(text, voice, out):
         print("say: ElevenLabs engine selected but no ELEVENLABS_API_KEY in .env.", file=sys.stderr)
         return False
     voice_id = voice or "21m00Tcm4TlvDq8ikWAM"  # a default public ElevenLabs voice id
+    # Model ids come and go. Set "model" in voice/mouth-config.json to pin a different one;
+    # list what your key actually exposes with a GET on https://api.elevenlabs.io/v1/models.
+    model_id = load_config().get("model") or "eleven_multilingual_v2"
     url = "https://api.elevenlabs.io/v1/text-to-speech/" + voice_id
-    body = json.dumps({"text": text, "model_id": "eleven_monolingual_v1"}).encode("utf-8")
+    body = json.dumps({"text": text, "model_id": model_id}).encode("utf-8")
     req = urllib.request.Request(url, data=body, method="POST")
     req.add_header("xi-api-key", key)
     req.add_header("Content-Type", "application/json")
@@ -143,7 +146,12 @@ def speak_elevenlabs(text, voice, out):
         with urllib.request.urlopen(req, timeout=30) as resp:
             Path(target).write_bytes(resp.read())
     except (urllib.error.URLError, urllib.error.HTTPError) as exc:
-        print("say: ElevenLabs request failed (" + str(exc) + ").", file=sys.stderr)
+        print("say: ElevenLabs request failed (" + str(exc) + ") using model '" + model_id +
+              "'. A 400 usually means that model id was retired - set a current one as \"model\" in "
+              "voice/mouth-config.json (your key's list: https://api.elevenlabs.io/v1/models). A 402 "
+              "means the voice needs a paid plan; ElevenLabs is the paid tier, so that is expected on "
+              "a free account. Your machine's own voice still works: set \"engine\": \"os\".",
+              file=sys.stderr)
         return False
     if not out:
         _play(target)

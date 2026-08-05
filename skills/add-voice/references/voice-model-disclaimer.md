@@ -39,8 +39,13 @@ So the trade is yours to make with open eyes. Here is each option stated plainly
   paid rates. The model you pick changes the cost - keep it on a Flash native-audio model unless you
   mean to spend, and watch usage with `python voice/live_server.py --summary`. This is NOT "free
   forever"; it is "free to start, with a real daily ceiling".
-- **Privacy:** audio and the live conversation stream to Google to run the model. Your brain (your
-  files and the answers read from them) stays local; only the conversation leaves.
+- **Privacy (read this exactly as written):** audio and the live conversation stream to Google to run
+  the model. Your FILES stay on your machine - they are never uploaded, and the back-brain that reads
+  them runs locally. But anything the realtime front SPEAKS has been sent to Google first, including
+  the answer the back-brain handed it. So when you ask a business question aloud and hear the answer,
+  that slice of your brain went to the model to be voiced. The file stayed home; the sentence did not.
+  Say client names, numbers, and anything under NDA out loud on a realtime session only if you are
+  comfortable with that. Tier 0-local (faster-whisper plus Piper) is the tier where nothing leaves.
 - **Whose key:** yours. You create it in your own Google AI Studio account and it lives only in your
   gitignored `.env`. The OS ships no key and never provides one - the setup wires everything else so
   you only drop in your own. That keeps the cost yours to see and control, on your own account.
