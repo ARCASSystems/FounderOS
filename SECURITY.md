@@ -1,5 +1,7 @@
 # Security Policy
 
+Looking for the everyday security picture - what leaves your machine, where secrets live, the guard chain, the five questions to ask before any yes? That is [rules/security-baseline.md](rules/security-baseline.md), one page. This file is for reporting a vulnerability in the repo itself.
+
 ## Reporting a Vulnerability
 
 Email `solutions@arcassystems.com` with:

@@ -2,6 +2,18 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.51.0 - 2026-08-07
+
+The security story now fits on one page you can read before any yes - and the page survived the same outside review as v1.50.1, which rewrote its first draft in six places until every claim matched the code. Pack: `updates/1.51.0-what-leaves-your-machine-on-one-page.md`.
+
+### New - `rules/security-baseline.md`, the security picture on one page
+
+What leaves the machine, surface by surface, each row with its named recipient, trigger, and default state: the model session (the one constant of a hosted model), cloud sessions, each voice tier with its local port and key location, the scrape helper request by request, in-skill web fetch and search, GitHub operations through `gh`, connectors, and git push. Then connector and MCP trust in plain words, where secrets live (`.env` and `.mcp.local.json`, gitignored, enforced by the connect helper), and the guard chain - framed honestly as a rejection layer, not proof: hooks can be bypassed and CI runs after push, and the page says so instead of rounding up to "can never happen".
+
+It closes with the five questions to ask before any yes - the same five the `hire` passport prints, written down as your own checklist for anything that wants in from outside. The page also says plainly which protections are rules the assistant follows (one yes per capability) and which are mechanical (the id validation, the digest ownership check, the secret scanner), because knowing the difference is the informed half of informed choice.
+
+Referenced where the decision actually happens: the `hire` passport's WHAT LEAVES HOME line, SECURITY.md (everyday picture vs vulnerability reporting), the README's local-first section, and llms.txt. Ships verbatim in `templates/rules/` like every other doctrine file - it describes the machine, not the founder.
+
 ## v1.50.1 - 2026-08-07
 
 The first outside review of v1.49.0 and v1.50.0 (an independent CTO pass over the full range, run before any new public building) returned 18 findings; every reproduced one is fixed here. Pack: `updates/1.50.1-what-the-first-outside-review-caught.md`.

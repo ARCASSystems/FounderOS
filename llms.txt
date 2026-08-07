@@ -33,5 +33,6 @@ The system has four layers, the same four the Founder OS Playbook draws on a nap
 
 - [Forking](https://github.com/ARCASSystems/FounderOS/blob/main/docs/forking.md): how to make the OS your own.
 - [Contributing](https://github.com/ARCASSystems/FounderOS/blob/main/CONTRIBUTING.md): how to propose changes.
-- [Security](https://github.com/ARCASSystems/FounderOS/blob/main/SECURITY.md): the local-first, no-server security posture.
+- [Security baseline](https://github.com/ARCASSystems/FounderOS/blob/main/rules/security-baseline.md): one page - what leaves the machine per surface, where secrets live, the guard chain, and the five questions to ask before any yes.
+- [Security policy](https://github.com/ARCASSystems/FounderOS/blob/main/SECURITY.md): how to report a vulnerability.
 - [License](https://github.com/ARCASSystems/FounderOS/blob/main/LICENSE): MIT.

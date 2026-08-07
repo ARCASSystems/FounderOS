@@ -127,6 +127,7 @@ Create the full folder structure. Read each template before generating the perso
 │   ├── hands-resilience.md      # From templates/rules/hands-resilience.md (the fallback ladder for when a tool you depend on stops working)
 │   ├── research-integrity.md    # From templates/rules/research-integrity.md (the three claim tiers and the second pass on anything the OS researches; scripts/claims_check.py enforces it warn-first)
 │   ├── entity-folders.md        # From templates/rules/entity-folders.md (how one entity file becomes a folder, and the identity review that keeps a profile from fossilising; scripts/entity_check.py reads it)
+│   ├── security-baseline.md     # From templates/rules/security-baseline.md (verbatim - what leaves the machine per surface, where secrets live, the guard chain, the five questions before any yes)
 │   └── banned-words-exceptions.txt # From templates/rules/banned-words-exceptions.txt (ships empty - your own settled judgment on banned words, so the gate stops re-raising it)
 ├── network/
 │   ├── inner-circle.md          # Personalized from 0.2 (key people mentioned)

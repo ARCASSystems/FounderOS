@@ -62,6 +62,8 @@ WHAT LEAVES HOME    <nothing, unless a connector is named here explicitly>
 HOW TO FIRE IT      <set the row to retired and run: python scripts/agents_sync.py apply>
 ```
 
+The WHAT LEAVES HOME line is backed by `rules/security-baseline.md` - the one-page map of every surface that can send anything off the machine, and the same five questions asked of anything from outside the OS. When a passport names a connector, point the operator at that page before the yes.
+
 For a **team** (rung 6), the spec is the workflow: each stage on one line - stage name, shape (seat or script), what it reads, what it hands to the next stage. The handoff artifact is the relationship: stage B's read-list names stage A's output, so `python scripts/agent_runs.py list` reads back as a relay you can audit - who did what, in what order, where the baton was dropped. One seat per judgment stage, one job per seat (a narrow assistant can be blamed and fixed; a do-everything assistant fails vaguely), and the operator keeps the taste decisions - seats research and present options, the human picks.
 
 ## Step 4 - on yes, and only on yes
