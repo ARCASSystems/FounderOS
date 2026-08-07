@@ -244,7 +244,13 @@ def scan_text(
     for line_num, raw in enumerate(text.splitlines(), 1):
         if is_base64_blob(raw):
             continue
-        line = raw.rstrip()
+        # The secret check runs FIRST, and when it fires the raw line is never
+        # shown by ANY finding on that line - a private-name or dash finding
+        # that echoed the line would print the very secret the secret finding
+        # hides. One line, one display decision.
+        secret_kind = find_secret(raw) if check_secrets else None
+        line = ("possible secret detected (line hidden)" if secret_kind
+                else raw.rstrip())
         for pat in patterns:
             if pat.search(raw):
                 offending.append(f"  [private-name] line {line_num}: {line}")
@@ -256,12 +262,10 @@ def scan_text(
                 if ap.search(raw):
                     offending.append(f"  [attribution] line {line_num}: {line}")
                     break
-        if check_secrets:
-            kind = find_secret(raw)
-            if kind:
-                offending.append(
-                    f"  [secret:{kind}] line {line_num}: possible secret detected (value hidden)"
-                )
+        if secret_kind:
+            offending.append(
+                f"  [secret:{secret_kind}] line {line_num}: possible secret detected (value hidden)"
+            )
     return offending
 
 
@@ -352,7 +356,8 @@ def _report(header: str, offending: list[str]) -> None:
 
 
 # Matches a push destination at the public FounderOS repo, https or ssh form.
-_PUBLIC_REPO_URL = re.compile(r"github\.com[:/]ARCASSystems/", re.IGNORECASE)
+_PUBLIC_REPO_URL = re.compile(
+    r"github\.com[:/]ARCASSystems/FounderOS(?:\.git)?/?$", re.IGNORECASE)
 
 
 def check_remote_safety() -> list[str]:

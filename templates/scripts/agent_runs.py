@@ -30,13 +30,20 @@ Subcommands, standard library only, ASCII-safe output:
 
 Row shape:
   {
-    "ts": "2026-08-05T19:40:11", "seat": "daily-assistant",
+    "ts": "2026-08-05T19:40:11", "run_id": "a1b2c3d4e5f6",
+    "seat": "daily-assistant",
     "trigger": "morning loop, asked by hand",
     "read": ["brain/needs-attention.md", "cadence/queue.md"],
     "produced": ["brain/log.md#morning-loop-2026-08-05"],
     "outcome": "ok",              # ok | refused | failed
     "could_not": "the queue file was missing so nothing was scored"
   }
+
+The run_id is what ties a verdict to a specific run: grade one with
+`python scripts/employee_verdict.py record ... --ref run:<run_id>`, and the
+summary's unwatched count then reflects which runs a verdict actually names
+instead of subtracting per-seat totals (runs recorded before run_id existed
+count as unwatched until a verdict names them).
 
 `refused` is a first-class outcome, not a failure. A propose-only job that
 declined to act because the charter said no is the charter working, and a log
@@ -62,6 +69,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as _dt
+import hashlib
 import importlib.util
 import json
 import re
@@ -163,8 +171,20 @@ def _split_list(raw: str | None) -> list[str]:
 def append_run(seat: str, trigger: str, read: list[str], produced: list[str],
                outcome: str, could_not: str | None,
                path: Path = RUNS, now: _dt.datetime | None = None) -> dict:
+    ts = (now or _dt.datetime.now()).isoformat(timespec="seconds")
+    # A stable id per run, so a verdict can point at THIS run (--ref run:<id>)
+    # and the unwatched count can match runs to verdicts instead of guessing
+    # from per-seat totals. Derived, not random, and salted with the log's
+    # current length so two identical triggers in the same second still get
+    # two ids - a collision would let one verdict vouch for both runs.
+    n = 0
+    if path.exists():
+        n = sum(1 for l in path.read_text(encoding="utf-8").splitlines() if l.strip())
+    run_id = hashlib.sha256(
+        f"{seat}|{ts}|{trigger}|{n}".encode("utf-8")).hexdigest()[:12]
     rec: dict = {
-        "ts": (now or _dt.datetime.now()).isoformat(timespec="seconds"),
+        "ts": ts,
+        "run_id": run_id,
         "seat": seat,
         "trigger": trigger,
         "read": read,
@@ -216,8 +236,9 @@ def cmd_list(args) -> int:
     for r in runs[-args.last:]:
         produced = ", ".join(r.get("produced") or []) or "-"
         tail = f"  could not: {r['could_not']}" if r.get("could_not") else ""
-        print(f"{r.get('ts', '?')}  {r.get('seat', '?'):18} {r.get('outcome', '?'):8} "
-              f"{r.get('trigger', '')} -> {produced}{tail}")
+        rid = r.get("run_id", "-")
+        print(f"{r.get('ts', '?')}  {rid:12}  {r.get('seat', '?'):18} "
+              f"{r.get('outcome', '?'):8} {r.get('trigger', '')} -> {produced}{tail}")
     if not runs:
         print("no runs recorded")
     return 0
@@ -232,10 +253,13 @@ def _parse_ts(ts: str) -> _dt.datetime | None:
         return None
 
 
-def read_verdict_count(path: Path) -> dict[str, int]:
-    """How many verdicts exist per seat. Only used to say how many runs went
-    unwatched, which is the number that makes the sampling bias visible."""
-    out: dict[str, int] = {}
+def read_verdicts(path: Path) -> dict[str, dict]:
+    """Per seat: how many verdicts exist, and which run ids they reference
+    (a verdict recorded with --ref run:<run_id>). Used to say how many runs
+    went unwatched - by MATCHING verdicts to runs, not by subtracting totals,
+    because old, duplicate, or queue-level verdicts would otherwise mark
+    unreviewed runs as watched."""
+    out: dict[str, dict] = {}
     if not path.exists():
         return out
     for line in path.read_text(encoding="utf-8").splitlines():
@@ -247,12 +271,17 @@ def read_verdict_count(path: Path) -> dict[str, int]:
         except json.JSONDecodeError:
             continue
         seat = rec.get("employee")
-        if seat:
-            out[seat] = out.get(seat, 0) + 1
+        if not seat:
+            continue
+        entry = out.setdefault(seat, {"count": 0, "run_refs": []})
+        entry["count"] += 1
+        ref = (rec.get("ref") or "").strip()
+        if ref.startswith("run:"):
+            entry["run_refs"].append(ref[4:])
     return out
 
 
-def summarise(runs: list[dict], verdicts: dict[str, int]) -> list[dict]:
+def summarise(runs: list[dict], verdicts: dict[str, dict]) -> list[dict]:
     by_seat: dict[str, list[dict]] = {}
     for r in runs:
         by_seat.setdefault(r.get("seat", "?"), []).append(r)
@@ -264,21 +293,30 @@ def summarise(runs: list[dict], verdicts: dict[str, int]) -> list[dict]:
             key = r.get("outcome", "?")
             outcomes[key] = outcomes.get(key, 0) + 1
         last = max((r.get("ts", "") for r in rows), default="")
-        graded = verdicts.get(seat, 0)
+        v = verdicts.get(seat, {"count": 0, "run_refs": []})
+        run_ids = {r["run_id"] for r in rows if r.get("run_id")}
+        watched_ids = run_ids & set(v["run_refs"])
+        matched_verdicts = sum(1 for ref in v["run_refs"] if ref in run_ids)
         out.append({
             "seat": seat,
             "runs": len(rows),
             "last_run": last,
             "outcomes": outcomes,
-            "verdicts": graded,
-            "unwatched": max(0, len(rows) - graded),
+            "verdicts": v["count"],
+            # A run counts as watched only when a verdict names it by run id
+            # (--ref run:<id>). Verdicts with no run ref (queue-level, legacy)
+            # still count as verdicts, but they cannot vouch for any particular
+            # run - which is exactly the sampling bias this number exists to
+            # make visible.
+            "unwatched": len(rows) - len(watched_ids),
+            "unmatched_verdicts": v["count"] - matched_verdicts,
         })
     return out
 
 
 def cmd_summary(args) -> int:
     runs = read_runs(Path(args.file))
-    verdicts = read_verdict_count(Path(args.verdicts))
+    verdicts = read_verdicts(Path(args.verdicts))
     rows = summarise(runs, verdicts)
     if args.json:
         print(json.dumps({"count": len(rows), "seats": rows}, ensure_ascii=True))
@@ -292,8 +330,10 @@ def cmd_summary(args) -> int:
         print(f"{r['seat']:18} runs {r['runs']:4}  last {r['last_run'][:10] or '?':10}  "
               f"{split}")
         if r["unwatched"]:
-            print(f"{'':18} no verdict on {r['unwatched']} of them - "
-                  f"you graded {r['verdicts']}")
+            aside = (f" ({r['unmatched_verdicts']} verdict(s) name no run)"
+                     if r["unmatched_verdicts"] else "")
+            print(f"{'':18} no verdict names {r['unwatched']} of them - "
+                  f"grade one with employee_verdict.py record --ref run:<id>{aside}")
     return 0
 
 

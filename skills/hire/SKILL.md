@@ -1,7 +1,7 @@
 ---
 name: hire
 description: >
-  The Chief of Staff's hiring door: turn a recurring pain or a "I need help with X" into the RIGHT-SIZED solution - an answer, a preference line, a skill, a script, a chartered seat, or a team of specialists - never defaulting to the biggest build. Trigger on "hire", "I need help with", "who should own this", "build me a team for", "create an assistant for", "automate this job", "this keeps eating my week", or when a review or the morning loop surfaces a gap worth a role. Walks the shape ladder, shows the cost of the next rung up, and proposes a job spec with an informed-choice passport before anything is created. Routes the build to skill-creator; registers seats in roles/employees.yaml and generates their agent files. Nothing is hired without your yes.
+  The Chief of Staff's hiring door: turn a recurring pain or a "I need help with X" into the RIGHT-SIZED solution - an answer, a preference line, a skill, a script, a chartered seat, or a team of specialists - never defaulting to the biggest build. Trigger on "hire", "I need help with", "who should own this", "build me a team for", "create an assistant for", "automate this job", "this keeps eating my week", or when a review or the morning loop surfaces a gap worth a role. Walks the shape ladder, shows the cost of the next rung up, and proposes a job spec with an informed-choice passport before anything is created. Routes the build to skill-creator; registers seats in roles/employees.yaml and generates their agent files. Waits for your explicit yes before any row or file is written, and runs the charter audit after every hire.
 why: "A founder drowning in a recurring job gets sold either a chatbot or a 200-step platform. This picks the smallest thing that actually removes the job, shows what the bigger option would cost, and makes every new team member arrive with a written contract instead of vibes."
 enhance: "Keep verdicts and run records current - the review loop is what turns a hired seat from a guess into a track record, and three needs-work verdicts inside thirty days is the signal to re-run hire on that job."
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash(python scripts/employee_verdict.py:*)", "Bash(python scripts/agents_sync.py:*)", "Bash(python scripts/agent_runs.py:*)"]
@@ -68,11 +68,12 @@ For a **team** (rung 6), the spec is the workflow: each stage on one line - stag
 
 1. Append the row to `roles/employees.yaml`, `status: gated`. Gated is not a formality: it is the honest state of a seat that has never run, and only a run the operator saw moves it.
 2. Run `python scripts/agents_sync.py apply` - the seat becomes an addressable agent file the operator can dispatch by name and instruct by editing the row.
-3. Rung 3 legs of the chain: hand off to `skill-creator` to build the skill, with the spec as its brief.
-4. Rung 6: add the workflow row to the workflow map (role, workflow, runs when, deterministic stages, judgment stages each with its named check, writes to). The map's rule holds - a row is written only when the workflow is now real, never for an intention.
-5. Say back, in one line each: what now exists, what is still manual, and what the first review will look at.
+3. Run `python scripts/employee_verdict.py charters` and show its findings in full. A grant wider than the job description claims gets narrowed before anything else happens - the audit is the mechanical half of the hire, and it is never swallowed.
+4. Rung 3 legs of the chain: hand off to `skill-creator` to build the skill, with the spec as its brief.
+5. Rung 6: add the workflow row to the workflow map (role, workflow, runs when, deterministic stages, judgment stages each with its named check, writes to). The map's rule holds - a row is written only when the workflow is now real, never for an intention.
+6. Say back, in one line each: what now exists, what is still manual, and what the first review will look at.
 
-No yes, no write. A "maybe" or a rephrase is a no. And never register a seat as a side effect of building something else - hiring is always its own visible step.
+No yes, no write. A "maybe" or a rephrase is a no. And never register a seat as a side effect of building something else - hiring is always its own visible step. Honest scope note: this waiting-for-yes is a procedure this skill follows, not a mechanism that can stop a write - the mechanical checks are the id validation and file-ownership rules in `agents_sync.py` and the charter audit in step 3. That is why the audit runs after EVERY hire instead of being trusted to have been unnecessary.
 
 ## Capabilities from outside the OS
 

@@ -173,4 +173,4 @@ If `roles/employees.yaml` carries the `next-move-caller` row, close with one lin
 
     python scripts/agent_runs.py record --seat next-move-caller --trigger "asked for the next move"         --read "brain/.snapshot.md,core/identity.md,brain/log.md" --produced "" --outcome ok
 
-Use `--outcome refused` (with `--could-not "<why>"`) when the brain was too thin to propose and you asked for the missing field instead, and `failed` when it broke. A refusal is not a failure and the log distinguishes them. Skip this silently if the script or the registry is absent, and never mention it in your reply - it is bookkeeping, not output.
+Use `--outcome refused` (with `--could-not "<why>"`) when the brain was too thin to propose and you asked for the missing field instead, and `--outcome failed --could-not "<why>"` when it broke - the script requires the reason for both, so a failure with no reason is never a silent no-record. A refusal is not a failure and the log distinguishes them. Skip this silently if the script or the registry is absent, and never mention it in your reply - it is bookkeeping, not output.

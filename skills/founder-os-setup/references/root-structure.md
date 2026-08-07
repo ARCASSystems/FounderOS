@@ -202,6 +202,8 @@ If a pattern IS written: write `\b` as a literal two-character backslash-b, not 
 
 These are not personalized templates. Copy contents exactly. Do not edit. Verify all thirty-two `.py` copies plus `scripts/private-name-patterns.txt` exist on disk before continuing. If `templates/scripts/` ever holds a `.py` helper not named above, copy it too - the founder's `scripts/` set must equal the `templates/scripts/` set, since helpers import each other. If any are missing, the brain-snapshot, brain-pass, wiki-build, query, menu, observation-rollup, preflight-gate, observation-capture, or private-name guard helpers will fail silently or hard-error.
 
+**Generate the agent files (mandatory, right after the registry and scripts are in place).** The five starter roles in `roles/employees.yaml` are only addressable once their agent files exist, and nothing generates them implicitly. Run `python scripts/agents_sync.py apply`, then `python scripts/agents_sync.py check`. If either exits nonzero, STOP setup and show the output - a fresh install whose advertised team cannot be dispatched by name is a broken install, not a cosmetic gap. (On the adopt path this still runs: apply only ever writes files carrying its own marker, so the founder's existing `.claude/agents/` files are named and left alone.)
+
 **{{role_noun}} substitution.** The `templates/bootloader-claude-md.md` file contains `{{role_noun}}` placeholders in two places. When writing the bootloader CLAUDE.md, substitute based on the role captured in Phase 0.2.1:
 
 - `founder` → replace `{{role_noun}}` with `founder`

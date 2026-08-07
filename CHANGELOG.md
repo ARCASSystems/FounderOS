@@ -2,6 +2,38 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.50.1 - 2026-08-07
+
+The first outside review of v1.49.0 and v1.50.0 (an independent CTO pass over the full range, run before any new public building) returned 18 findings; every reproduced one is fixed here. Pack: `updates/1.50.1-what-the-first-outside-review-caught.md`.
+
+### Fixed - a seat id is a filename, never a path
+
+A registry row with an id like `../../README` used to write OUTSIDE `.claude/agents/` and could overwrite a repository file while reporting success. Ids are now validated at load (lowercase letters, digits, inner hyphens, max 64), duplicate ids are rejected, and a mechanical containment check refuses any write or delete that would land outside the agents folder.
+
+### Fixed - the secret scanner no longer prints what it says it hides
+
+A line carrying both a secret and a second violation (an em dash, a private name, an attribution trailer) was echoed raw by the second finding - the scanner printed the very value its secret finding hid. The secret check now runs first on every line, and when it fires the whole line is hidden for every finding on it.
+
+### Fixed - your edits to a generated agent file survive
+
+Ownership used to be the marker line alone, so any edit you made below it was silently clobbered on the next apply and deleted on retirement. The marker now records a digest of the generated body: an edited file is reported `[modified]`, fails the exit code, and is never overwritten or deleted. A hand-written file shadowing a rostered seat now fails `check` too, instead of hiding under a success line.
+
+### Fixed - a correction has to be aimed at the OS to be captured
+
+Quoted feedback ('The client wrote, "you already asked me that"'), reported speech ("I told Alex to get to the point"), and long narrative containing a correction-shaped phrase no longer register as corrections of the OS. Every correction shape now sits behind the short-reply gate, a quotation guard, and a reported-speech guard - conservative on purpose, because a false capture that survives an accidental yes becomes a standing behaviour change.
+
+### Fixed - a fresh install can talk to its starter team
+
+Setup copied the registry and the generator but never ran it, so the five advertised roles existed as rows nobody could dispatch by name. Setup now runs `python scripts/agents_sync.py apply` then `check` right after the registry and scripts land, and stops loudly if either fails.
+
+### Fixed - the unwatched-run count stops guessing
+
+`agent_runs.py summary` subtracted verdict totals from run totals, so an old, duplicate, or queue-level verdict could mark an unreviewed run as watched. Every run now carries a `run_id`, a verdict recorded with `--ref run:<id>` names the run it grades, unwatched counts the runs no verdict names, and verdicts tied to no run are reported separately. `employee-review` now reads the run log as first-class evidence and refuses a review only when verdicts, filed items, AND run rows are all empty.
+
+### Fixed - the documented failure path records the failure
+
+The generated closing act and all five starter skills' run-record blocks omitted `--read`/`--produced` and told a failing run to record without the `--could-not` reason the script requires - so following the instructions on a failure produced an error and no record at all. All seven surfaces now show the working form. Also in this pass: the remote-safety guard matches only the public FounderOS repository instead of every ARCASSystems repository, the generated agent files make the no-external-calls rule conditional on the row's own `never` field instead of contradicting connector-carrying charters, and `hire` now states plainly which of its gates are procedure and which are mechanical, running the charter audit as an explicit step of every hire.
+
 ## v1.50.0 - 2026-08-06
 
 The team gets one door to grow through, and every seat becomes someone you can talk to. v1.49 gave the team a memory of its own runs; this closes the loop the operator actually feels: how a new team member comes to exist, right-sized, and how you manage one without learning a second system. Pack: `updates/1.50.0-the-team-grows-through-one-door.md`.

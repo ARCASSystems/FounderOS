@@ -203,11 +203,12 @@ PREFERENCE = re.compile(
 # not trying to configure anything.
 #
 # Split in two on purpose, because the phrases differ in how much they can mean
-# something else. CORRECTION_STRONG is unambiguous at any length: it names the
-# assistant ("you keep", "I already told you") or is an explicit instruction
-# about form. CORRECTION_SHORT covers phrases that ARE corrections when fired
-# off as a short reply and are ordinary prose inside a long message ("the
-# meeting was too long"), so they only count under the length gate below.
+# something else. CORRECTION_STRONG names the assistant ("you keep", "I already
+# told you") or is an explicit instruction about form. CORRECTION_SHORT covers
+# phrases that ARE corrections when fired off as a short reply and are ordinary
+# prose inside a long message ("the meeting was too long"). BOTH count only
+# under the length gate below, and both are rejected inside quotations and
+# after reported-speech lead-ins - see is_correction.
 # Conservative on purpose: a false positive here trains the user to ignore the
 # suggestion, which costs more than a missed capture.
 CORRECTION_STRONG = re.compile(
@@ -240,8 +241,41 @@ CORRECTION_SHORT = re.compile(
 )
 
 # A reply this short that says "too long" is about the last output. The same
-# words inside a paragraph are usually about something else entirely.
-CORRECTION_SHORT_MAX_CHARS = 200
+# words inside a paragraph are usually about something else entirely. Since the
+# review of 2026-08-07 this gate covers EVERY correction shape, strong ones
+# included: a 400-character brief that happens to contain "I already told you"
+# is narrative, not a correction fired at the OS.
+CORRECTION_MAX_CHARS = 200
+
+# Two more guards against capturing speech ABOUT a correction as a correction
+# OF the OS. A match inside double or curly quotes is someone being quoted
+# ('The client wrote, "you already asked me that"'), and a match right after a
+# reported-speech lead-in is a story about a human ("I told Alex to get to the
+# point"). Single straight quotes are deliberately not treated as spans -
+# contractions ("don't") would make them fire on ordinary prose.
+_QUOTE_PAIRS = (('"', '"'), ("“", "”"))
+_REPORTED_LEADIN = re.compile(
+    r"(?:\b(?:wrote|writes|said|says|saying|replied|responded|commented|messaged"
+    r"|emailed)\b[\s:,]*[\"“']?\s*$)"
+    r"|(?:\b(?:told|asked|reminded|begged)\s+(?!you\b)\w+\s+(?:to\s+|that\s+)?$)",
+    re.IGNORECASE,
+)
+
+
+def _in_quotes(text: str, start: int, end: int) -> bool:
+    for opener, closer in _QUOTE_PAIRS:
+        pos = 0
+        while True:
+            a = text.find(opener, pos)
+            if a == -1:
+                break
+            b = text.find(closer, a + 1)
+            if b == -1:
+                break
+            if a < start and end <= b + 1:
+                return True
+            pos = b + 1
+    return False
 
 # Question marker. If the prompt ends with `?` (or contains a `?` followed by
 # only whitespace), it's a question - never a rant, even if long.
@@ -361,16 +395,25 @@ def has_named_entity_near_meeting_verb(prompt: str) -> bool:
 
 def is_correction(prompt: str) -> bool:
     """Return True if the user is correcting HOW the OS works rather than what
-    it knows. Strong phrases count at any length; the ambiguous ones only count
-    when the whole message is short enough to be a reply to the last output."""
+    it knows. Conservative on purpose, three gates: the whole message must be
+    short enough to be a reply to the last output, the matched phrase must not
+    sit inside a quotation, and it must not follow a reported-speech lead-in.
+    A missed capture costs one more correction; a false capture teaches the
+    user to distrust every suggestion."""
     if not prompt:
         return False
-    if CORRECTION_STRONG.search(prompt):
-        return True
-    return (
-        len(prompt.strip()) <= CORRECTION_SHORT_MAX_CHARS
-        and bool(CORRECTION_SHORT.search(prompt))
-    )
+    s = prompt.strip()
+    if len(s) > CORRECTION_MAX_CHARS:
+        return False
+    m = CORRECTION_STRONG.search(s) or CORRECTION_SHORT.search(s)
+    if not m:
+        return False
+    if _in_quotes(s, m.start(), m.end()):
+        return False
+    lead = s[max(0, m.start() - 60):m.start()]
+    if _REPORTED_LEADIN.search(lead):
+        return False
+    return True
 
 
 def detect_shape(prompt: str) -> str | None:

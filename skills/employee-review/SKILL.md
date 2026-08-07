@@ -21,12 +21,13 @@ One employee per run.
 3. **What it actually filed** - the items in `cadence/queue.md` (including DONE) that came from this job, and the close-line verdicts on them.
 4. **Its charter, audited:** `python scripts/employee_verdict.py charters --json` - whether its grant is wider than its job description claims.
 5. **Its engine**, if it runs one: the script or skill named in `skill_chain`.
+6. **Its run log:** `python scripts/agent_runs.py list --seat <id> --json` - the record the seat wrote itself: trigger, outcome, what it read, what it produced, and `could_not` on every refusal or failure. This is the unbiased half of the picture; the verdicts are the sample you happened to grade.
 
 Note on point 3: a close-line verdict on a queue item is evidence of the same grade as a recorded verdict, and it is often the more honest one because you wrote it at the moment you saw the output. Read both. Do not convert one into the other: the verdict ledger has a single writer, and the queue is a separate file with its own. This review reads both ledgers so the whole picture is in one place without adding a second writer to either.
 
 ## Procedure
 
-1. **Refuse a review with no evidence.** Zero verdicts and nothing filed means there is nothing to review. Say so in one line and stop. Do not construct a performance narrative out of a job description - that is how a review becomes fiction.
+1. **Refuse a review with no evidence.** No evidence means all three ledgers are empty: zero verdicts, nothing filed, AND zero recorded runs. A seat with runs but no verdicts is reviewable - the run rows (trigger, outcome, produced, could_not) are evidence the seat wrote itself; say plainly that no run has been graded yet. Only when verdicts, filed items, and run rows are all empty do you say so in one line and stop. Do not construct a performance narrative out of a job description - that is how a review becomes fiction.
 
 2. **The review, in role language** (this is the part you read):
    - What the job is, quoted from its `job_description`.
@@ -58,4 +59,4 @@ If `roles/employees.yaml` carries the `seat-reviewer` row, close with one line s
 
     python scripts/agent_runs.py record --seat seat-reviewer --trigger "review one seat"         --read "roles/employees.yaml,brain/employee-verdicts.jsonl,brain/agent-runs.jsonl" --produced "" --outcome ok
 
-Use `--outcome refused` (with `--could-not "<why>"`) when the seat had no verdicts and nothing filed, so the review was declined, and `failed` when it broke. A refusal is not a failure and the log distinguishes them. Skip this silently if the script or the registry is absent, and never mention it in your reply - it is bookkeeping, not output.
+Use `--outcome refused` (with `--could-not "<why>"`) when the seat had no verdicts and nothing filed, so the review was declined, and `--outcome failed --could-not "<why>"` when it broke - the script requires the reason for both, so a failure with no reason is never a silent no-record. A refusal is not a failure and the log distinguishes them. Skip this silently if the script or the registry is absent, and never mention it in your reply - it is bookkeeping, not output.
