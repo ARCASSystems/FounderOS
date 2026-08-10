@@ -2,6 +2,34 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.52.0 - 2026-08-10
+
+A seat's read-list can finally grow. Tag a knowledge note with the seats that should read it and each one gets a pointer to it - never its contents - folded into its own instruction sheet. Decline once and the decline is recorded, so the question never comes back. Pack: `updates/1.52.0-the-brain-feeds-the-team.md`.
+
+### New - the knowledge fold, one optional frontmatter field
+
+`brain/knowledge/*.md` may carry `seats:`, and `scripts/agents_sync.py` folds a `## Knowledge routed to you` section into the agent file of every seat it names: one line per note carrying id, topic and path. Never a sentence of the body - the seat opens the file when it runs, which keeps the knowledge layer's do-not-hard-parse rule intact and stops a long note becoming a long prompt. Capped at 20 per seat, most recently captured first, with an overflow line naming how many more are tagged, because a silent truncation reads as completeness.
+
+Three states, and the third is the one that earns the release. Absent means never reviewed. A list of ids means routed. `seats: none` means reviewed and deliberately routed to nobody - the tombstone that records a decline. Without it every declined note returns every morning, which is how a person learns to ignore every question the OS asks, including the ones that mattered.
+
+### New - two propose surfaces, neither of which tags anything on its own
+
+`knowledge-capture` compares a new note's subject against each registry row's `job_description` and proposes at most ONE seat in one line. No obvious match, no question. `morning-loop` gains a lowest-priority candidate class: one untagged note per run, ranked behind everything that moves real business state, only when a slot is free after the real asks, and never at stage 1 of a fresh install. Both write on the answer - a yes writes the ids and runs `apply`, a no writes `none` - so the field's state is itself the record that the question is closed.
+
+### Changed - no new file-ownership logic, and that is the point
+
+The fold happens inside `render_agent`, so v1.50.1's body digest already covers it: tagging a note flips the seat to `[stale]`, `apply` converges, and a seat file the operator edited stays `[modified]` and is never clobbered. A `seats` id matching no live row renders nothing and is reported by `check` as a non-fatal `[dangling-tag]` - the bad-wikilink treatment, never auto-cleaned, because a retired seat's notes should still be tagged if the seat comes back. `compute()` and both subcommands take `--knowledge-dir`; a missing directory is a valid install, not an error.
+
+An install with zero tagged notes renders **byte-identical** agent files to v1.51.0. That is asserted by a test, not hoped for.
+
+### Changed - the assistant's charter matches the grant its skill declares
+
+`morning-loop` now declares `Bash(python scripts/agents_sync.py:*)` in `allowed-tools`, so `templates/roles/employees.yaml` grants it on the `daily-assistant` row and names the knowledge note's seats field in `may_write`. The charter audit reads both directions and would have failed the build otherwise.
+
+### Docs
+
+`rules/digital-employees.md` and its template copy carry the read-list-grows doctrine with the three-state table. `templates/brain/knowledge/README.md` documents the field beside the note shape. README carries the feature line and the status line; `skills/index.md` carries the header clause. Suite 830 -> 840.
+
 ## v1.51.0 - 2026-08-07
 
 The security story now fits on one page you can read before any yes - and the page survived the same outside review as v1.50.1, which rewrote its first draft in six places until every claim matched the code. Pack: `updates/1.51.0-what-leaves-your-machine-on-one-page.md`.

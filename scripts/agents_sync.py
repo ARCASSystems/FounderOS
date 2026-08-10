@@ -21,6 +21,13 @@ may write, what it must never do, the honest status, and the closing act -
 recording its own run to brain/agent-runs.jsonl so the org chart shows what
 actually ran.
 
+The read-list also grows. A note in brain/knowledge/ may carry an optional
+`seats:` line, and every seat it names gets a POINTER to that note folded into
+its read-list - id, topic, path, never the body. That is the second loop that
+makes "it grows with you" true: the first is core/working-preferences.md, read
+before output. Nothing auto-tags; a tag is always the operator's yes, and a
+declined note is recorded as `seats: none` so it is never raised again.
+
 Subcommands, standard library only, ASCII-safe output:
 
   check   Report drift between the registry and .claude/agents/. Exit 1 on any
@@ -41,6 +48,7 @@ Usage:
   python scripts/agents_sync.py check
   python scripts/agents_sync.py apply
   python scripts/agents_sync.py check --json
+  python scripts/agents_sync.py check --knowledge-dir <dir>   (read-only, testing)
 """
 
 from __future__ import annotations
@@ -71,6 +79,118 @@ _HASH_RE = re.compile(r"body-sha256:([0-9a-f]{64})")
 # ../../README would otherwise resolve OUTSIDE the agents dir and overwrite a
 # repository file while reporting success.
 ID_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$")
+
+# The knowledge fold. A seat is as ignorant on run 50 as on run 1 unless what
+# the operator has learned reaches its read-list. Any brain/knowledge note may
+# carry an optional `seats:` line, and this folds a POINTER to that note into
+# the read-list of every seat it names - id, topic, path, never a sentence of
+# the body. brain/knowledge/README.md's standing rule is "do not hard-parse
+# note bodies", and the seat opens the file itself when it runs.
+#
+# Three states, and the third is the one that matters:
+#   absent        never reviewed - a candidate for the morning-loop sweep
+#   seats: <ids>  routed to those seats
+#   seats: none   reviewed and deliberately routed to nobody - the tombstone.
+#                 Without it a declined note comes back every morning, which is
+#                 the zombie ask this OS already has a risk-register row for.
+#
+# This adds NO ownership logic and is not allowed to. The fold happens inside
+# render_agent, so the body digest in the marker already covers it: a new tag
+# makes the seat [stale], apply converges, and a file the operator edited stays
+# [modified] and is never clobbered. An install with no tagged notes renders
+# byte-identical agent files to a pre-fold install.
+KNOWLEDGE_DIR = REPO_ROOT / "brain" / "knowledge"
+KNOWLEDGE_CAP = 20  # a heavily-tagged seat must not bloat its own instruction sheet
+# A pointer is a label, so the fields that become one are bounded. Notes are
+# often written from an outside source - a book, an article, a page someone
+# scraped - so a topic line is not always text the operator composed, and an
+# unbounded one turns the pointer back into the body this whole design refuses
+# to copy. Bounding is not sanitising and is not claimed to be: it keeps a
+# label a label, and the block below still tells the seat these are pointers.
+KNOWLEDGE_ID_CAP = 64
+KNOWLEDGE_TOPIC_CAP = 120
+_FRONTMATTER_RE = re.compile(r"^---\r?\n(.*?)\r?\n---", re.S)
+
+
+def _fm_field(fm: str, key: str, cap: int | None = None) -> str:
+    m = re.search(rf"^{key}:\s*(.+)$", fm, re.M)
+    if not m:
+        return ""
+    val = " ".join(m.group(1).split()).strip("\"'")
+    if cap is not None and len(val) > cap:
+        val = val[:cap].rstrip() + "..."
+    return val
+
+
+def _scan_knowledge(knowledge_dir: Path | None) -> list[dict]:
+    """Every knowledge note's frontmatter, parsed once. A missing directory is
+    not an error: an install with no knowledge layer yet is a valid install and
+    must render exactly the agent files it renders today."""
+    if knowledge_dir is None or not Path(knowledge_dir).is_dir():
+        return []
+    notes: list[dict] = []
+    for path in sorted(Path(knowledge_dir).glob("*.md")):
+        if path.name.lower() == "readme.md":
+            continue  # the index, not a note
+        try:
+            text = path.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        m = _FRONTMATTER_RE.match(text)
+        if not m:
+            continue
+        fm = m.group(1)
+        raw = _fm_field(fm, "seats")
+        if not raw:
+            continue  # no field at all - never reviewed, routed nowhere
+        seats = [s.strip() for s in raw.strip("[]").split(",") if s.strip()]
+        if [s.lower() for s in seats] == ["none"]:
+            seats = []  # the tombstone: reviewed, deliberately routed to nobody
+        notes.append({
+            "file": path.name,
+            "id": _fm_field(fm, "id", KNOWLEDGE_ID_CAP) or path.stem[:KNOWLEDGE_ID_CAP],
+            "topic": _fm_field(fm, "topic", KNOWLEDGE_TOPIC_CAP)
+                     or path.stem[:KNOWLEDGE_TOPIC_CAP],
+            "captured": _fm_field(fm, "captured"),
+            "seats": seats,
+        })
+    return notes
+
+
+def _seat_knowledge(eid: str, knowledge_dir: Path | None,
+                    notes: list[dict] | None = None) -> list[dict]:
+    """The notes routed to one seat, most recently captured first. Ties break on
+    id so two notes captured the same day never reorder between runs - an
+    unstable order would show as permanent false drift.
+
+    Pass `notes` to reuse one scan across every seat; compute() does, so a
+    mature install with hundreds of notes is read once per run rather than once
+    per seat."""
+    if notes is None:
+        notes = _scan_knowledge(knowledge_dir)
+    mine = [n for n in notes if eid in n["seats"]]
+    return sorted(mine, key=lambda n: (n["captured"], n["id"]), reverse=True)
+
+
+def _knowledge_block(notes: list[dict]) -> list[str]:
+    """The read-list's growing half. No notes, no block - that is what keeps an
+    untagged install byte-identical."""
+    if not notes:
+        return []
+    shown = notes[:KNOWLEDGE_CAP]
+    lines = ["## Knowledge routed to you", ""]
+    lines += [f"- {n['id']} - {n['topic']} (brain/knowledge/{n['file']})"
+              for n in shown]
+    extra = len(notes) - len(shown)
+    if extra:
+        lines.append(f"+ {extra} more in brain/knowledge/ tagged to you")
+    lines += ["",
+              "These are pointers, not content. The operator tagged them to this "
+              "seat on purpose; open the ones that bear on the run you are doing, "
+              "and do not assume the rest.",
+              ""]
+    return lines
+
 
 
 def _strip_sentinel(text: str) -> str:
@@ -138,10 +258,14 @@ def _first_sentence(text: str, cap: int = 180) -> str:
     return out.strip()
 
 
-def render_agent(row: dict) -> str:
+def render_agent(row: dict, knowledge: list[dict] | None = None) -> str:
     """One agent file from one registry row. Everything here is READ from the
     row - nothing is invented, because this file is the seat's standing
-    instruction sheet and an invented line would be a permission nobody granted."""
+    instruction sheet and an invented line would be a permission nobody granted.
+
+    `knowledge` is the already-filtered pointer list for this seat (see
+    _seat_knowledge). It is folded in HERE, inside the render, so the digest
+    below covers it and the file-ownership rules need no new cases."""
     eid = row.get("id", "")
     title = (row.get("job_title") or eid).strip()
     desc = _first_sentence(row.get("job_description", ""))
@@ -179,6 +303,7 @@ def render_agent(row: dict) -> str:
         "are how this operator wants to be worked with, and they gate your "
         "output the same way they gate every other surface.",
         "",
+    ] + _knowledge_block(knowledge or []) + [
         "## What you may write",
         "",
         f"{(row.get('may_write') or 'nothing - this is a propose-only seat').strip()}",
@@ -247,11 +372,23 @@ def _classify_owned(text: str, wanted_text: str | None) -> str:
     return "modified"
 
 
-def compute(registry: Path, agents_dir: Path) -> dict:
-    """The full drift picture, computed once and shared by check and apply."""
+def compute(registry: Path, agents_dir: Path,
+            knowledge_dir: Path | None = None) -> dict:
+    """The full drift picture, computed once and shared by check and apply.
+
+    knowledge_dir is read, never written. Passing it means the render reflects
+    today's tags, so tagging a note is itself drift and apply is what converges
+    it - the same loop editing a registry row already goes through."""
     rows = load_registry(registry)
-    wanted = {r["id"]: render_agent(r) for r in rows
-              if (r.get("status") or "") != "retired"}
+    live = {r["id"] for r in rows if (r.get("status") or "") != "retired"}
+    notes = _scan_knowledge(knowledge_dir)
+    wanted = {r["id"]: render_agent(r, _seat_knowledge(r["id"], knowledge_dir, notes))
+              for r in rows if (r.get("status") or "") != "retired"}
+    # A tag naming no live row renders nothing and is never auto-cleaned: a
+    # retired seat's notes stay tagged in case the seat comes back. Reported
+    # like a bad wikilink - named, not fatal.
+    dangling = sorted({seat for note in notes
+                       for seat in note["seats"] if seat not in live})
     existing = {p.stem: p for p in sorted(agents_dir.glob("*.md"))} \
         if agents_dir.is_dir() else {}
 
@@ -278,7 +415,7 @@ def compute(registry: Path, agents_dir: Path) -> dict:
         # not mine and not in wanted: someone else's agent - drift's job to name
     return {"wanted": wanted, "existing": existing, "missing": missing,
             "stale": stale, "foreign": foreign, "orphan": orphan,
-            "modified": modified}
+            "modified": modified, "dangling": dangling}
 
 
 def _safe_target(agents_dir: Path, stem: str) -> Path:
@@ -294,11 +431,14 @@ def _safe_target(agents_dir: Path, stem: str) -> Path:
 
 
 def cmd_check(args) -> int:
-    state = compute(Path(args.registry), Path(args.agents_dir))
+    state = compute(Path(args.registry), Path(args.agents_dir),
+                    Path(args.knowledge_dir))
     drift = {k: state[k] for k in ("missing", "stale", "orphan", "foreign", "modified")}
     clean = not any(drift.values())
     if args.json:
-        print(json.dumps({"clean": clean, **{k: sorted(v) for k, v in drift.items()}},
+        print(json.dumps({"clean": clean,
+                          **{k: sorted(v) for k, v in drift.items()},
+                          "dangling": sorted(state["dangling"])},
                          ensure_ascii=True))
         return 0 if clean else 1
     for i in state["missing"]:
@@ -315,6 +455,10 @@ def cmd_check(args) -> int:
         print(f"[modified] {i}: generated agent file was edited after generation - "
               f"left alone; fold the edit into the registry row, or delete the "
               f"file yourself and run apply")
+    for i in state["dangling"]:
+        print(f"[dangling-tag] {i}: knowledge notes are tagged to a seat with no "
+              f"live registry row - nothing routed, nothing cleaned; the tag waits "
+              f"in case the seat comes back")
     if clean:
         print(f"agents_sync: {len(state['wanted'])} seat(s), agent files match the "
               f"registry.")
@@ -324,7 +468,7 @@ def cmd_check(args) -> int:
 
 def cmd_apply(args) -> int:
     agents_dir = Path(args.agents_dir)
-    state = compute(Path(args.registry), agents_dir)
+    state = compute(Path(args.registry), agents_dir, Path(args.knowledge_dir))
     agents_dir.mkdir(parents=True, exist_ok=True)
     written, removed = [], []
     for i in state["missing"] + state["stale"]:
@@ -354,6 +498,8 @@ def main(argv: list[str] | None = None) -> int:
         sp = sub.add_parser(name, help=help_text)
         sp.add_argument("--registry", default=str(REGISTRY))
         sp.add_argument("--agents-dir", dest="agents_dir", default=str(AGENTS_DIR))
+        sp.add_argument("--knowledge-dir", dest="knowledge_dir",
+                        default=str(KNOWLEDGE_DIR))
         if name == "check":
             sp.add_argument("--json", action="store_true")
         sp.set_defaults(func=fn)

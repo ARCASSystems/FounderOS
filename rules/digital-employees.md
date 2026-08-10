@@ -63,6 +63,22 @@ Two honest limits, worth stating so nobody over-trusts it. A run line says a run
 
 `refused` is a first-class outcome, not a failure. A propose-only job that declined because the charter said no is the charter working, and a log that could not say so would push every honest refusal into the failed bucket and teach you to distrust your own restraint rules.
 
+### The read-list grows, or the seat stays as ignorant on run 50 as on run 1
+
+A seat's read-list is the `inputs:` string on its row, and left alone that string never changes. Meanwhile the brain accumulates beside it: notes from books, calls, and articles, filed by `knowledge-capture`, read by nobody on the chart. Two stores in one folder, learning nothing from each other.
+
+The fix is one optional field, and the smallness is the point. Any note in `brain/knowledge/` may carry `seats:`, and every seat it names gets a POINTER folded into its read-list - id, topic, path. Never the note's body: the seat opens the file itself when it runs, which is the same do-not-hard-parse-bodies rule the knowledge layer has always had. `python scripts/agents_sync.py apply` is what makes it real, and the field has three states rather than two:
+
+| Value | Meaning |
+|---|---|
+| absent | never reviewed - the morning loop may raise it once, when a slot is free |
+| `seats: <ids>` | routed to those seats |
+| `seats: none` | reviewed and deliberately routed to nobody - the tombstone |
+
+**The third state is the one that earns its place.** A "no" that leaves no record is a question you get asked again tomorrow, and the morning after that, until you stop reading the mornings at all. Writing `seats: none` closes the question permanently, so a decline costs you one answer rather than one answer per day forever.
+
+Two rules carried over unchanged, because they are what keep the chart honest. **Nothing auto-tags** - a session proposes at most one seat in one line, and only your yes writes the field, exactly as the registry itself works. And **a tag adds no ownership rule**: the fold happens inside the render, so the body digest already in each agent file's marker covers it. Tag a note and the seat reads `[stale]`; `apply` converges it; a seat file you edited by hand stays `[modified]` and is never overwritten. An install where nothing is tagged renders precisely the files it rendered before.
+
 ## Honest status, always
 
 A row exists only for something that exists. Three states:

@@ -75,9 +75,9 @@ employees:
     output_surface: brain/log.md (the dated morning-loop entry)
     dispatch: manual, daily ("run my morning", "what needs me today")
     run_record_source: brain/agent-runs.jsonl, the lines whose seat is daily-assistant (written by the run itself via scripts/agent_runs.py)
-    may_write: brain/log.md, brain/agent-runs.jsonl (its own run record, never an operating file), brain/employees.md (a derived-view refresh via the verdict script, never by hand), and the single file that owns each question you answered - the queue, a flag, a commitment, the verdicts ledger, a confirmed fact's home file
+    may_write: brain/log.md, brain/agent-runs.jsonl (its own run record, never an operating file), brain/employees.md (a derived-view refresh via the verdict script, never by hand), and the single file that owns each question you answered - the queue, a flag, a commitment, the verdicts ledger, a confirmed fact's home file, a knowledge note's seats field
     never: reach anything outside this folder, answer on your behalf, run a second time the same day
-    tools: Read, Edit, Write, Grep, Glob, Bash(python scripts/employee_verdict.py:*), Bash(python scripts/unconfirmed_facts.py:*), Bash(python scripts/agent_runs.py:*)
+    tools: Read, Edit, Write, Grep, Glob, Bash(python scripts/employee_verdict.py:*), Bash(python scripts/unconfirmed_facts.py:*), Bash(python scripts/agent_runs.py:*), Bash(python scripts/agents_sync.py:*)
     kpi: no question you have already answered gets asked again
     version: 1.0
     last_review: null

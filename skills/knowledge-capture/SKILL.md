@@ -23,6 +23,7 @@ topic: <slug>
 captured: <YYYY-MM-DD>
 sources: [source title or URL]
 tags: [book, podcast, article, conversation, experiment]
+seats: <seat id, or none>   # optional - see Route it to a seat below
 ---
 
 # <Topic>
@@ -47,6 +48,27 @@ Also update `brain/knowledge/README.md` index table with one row. The columns ar
 Insert the new row directly under the header. Do not invent additional columns. Ask for a topic slug if it is not obvious from the source title.
 
 Use `raw/` only when preserving the full source matters. Use `brain/knowledge/` for distilled notes that future skills should read.
+
+## Route it to a seat (after the note is written, one question, at most one seat)
+
+The note exists. Now the one question that makes it compound instead of settling: does anyone on your org chart need to know this?
+
+Read `roles/employees.yaml` if it exists, and compare the note's subject against each row's `job_description`. If exactly one row obviously covers it, ask ONE line and nothing more:
+
+> This reads like it belongs to the account manager (`client-status`). Route it there?
+
+Then:
+
+- **Yes** - add `seats: <id>` to the note's frontmatter, then run `python scripts/agents_sync.py apply`. That seat's read-list now carries a pointer to this note: id, topic and path, never the body. It reads the file itself when it runs.
+- **No** - write `seats: none`. That is a tombstone, not a shrug. It records that the note was reviewed and deliberately routed to nobody, so no later sweep raises it again. A declined note that leaves no record comes back every morning until you stop reading the mornings.
+- **No obvious match** - ask nothing and write nothing. An absent field is a valid state meaning never reviewed, and the morning loop may raise it once, later, when a slot is free.
+
+Four rules on top:
+
+- **At most one seat, and at most one question.** A note routed to four seats is a note routed to nobody, and a second question turns a capture into an interview.
+- **Never tag as a side effect of capturing.** No yes, no field. Sessions propose, only you promote - the same rule the registry itself runs on.
+- **No registry, no question.** An install with no `roles/employees.yaml` has no seats to route to, and asking about one is noise.
+- **A retired seat keeps its tags.** Never strip a `seats:` value because the row is gone; `agents_sync check` names it as a dangling tag and leaves it, in case the seat comes back.
 
 ## Brain context (default)
 

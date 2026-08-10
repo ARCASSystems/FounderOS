@@ -3,7 +3,7 @@ name: morning-loop
 description: The morning answer loop. Say "morning loop", "run my morning", "what needs me today", or run /founder-os:morning-loop. Asks at most four sharp questions drawn from what is actually waiting - a blocked queue item, an unanswered ask, a provisional fact, a stale commitment - then writes every answer back into the file that owns it and silences the thing that asked. Ends with one coach line naming today's single step. Once a day.
 why: "Everything the OS notices piles up in files nobody re-reads, so the same question gets raised on five mornings and answered on none. This is the human half of the loop: a few answers a day, each one landing in the file that owns it so it stops being asked."
 enhance: "Run it first thing, before the day starts making the decisions for you. Answering four questions takes two minutes and is what keeps every other surface honest."
-allowed-tools: ["Read", "Edit", "Write", "Grep", "Glob", "Bash(python scripts/employee_verdict.py:*)", "Bash(python scripts/unconfirmed_facts.py:*)", "Bash(python scripts/agent_runs.py:*)"]
+allowed-tools: ["Read", "Edit", "Write", "Grep", "Glob", "Bash(python scripts/employee_verdict.py:*)", "Bash(python scripts/unconfirmed_facts.py:*)", "Bash(python scripts/agent_runs.py:*)", "Bash(python scripts/agents_sync.py:*)"]
 ---
 
 # Morning loop - four questions, then get on with it
@@ -45,7 +45,8 @@ Read only what is present, and skip what is not:
 6. `brain/flags.md` - flags past their `Decay after:` date, which are due a keep-or-kill.
 7. If `roles/employees.yaml` exists, run `python scripts/employee_verdict.py render` (a derived-view refresh, nothing else) and read `brain/employees.md` - anything showing REVIEW DUE. This is the only daily surface that carries the review trigger, so skipping it means verdicts pile up unread.
 8. Yesterday's coach line: the most recent `Coach:` line in `brain/log.md`. Step 4 scores it.
-9. Context only, never a question: `system/quarantine.md` ACTIVE count, and any tool your hands registry records as down.
+9. `brain/knowledge/*.md` frontmatter if the folder exists - only the `seats:` line, and only to find notes that have none. Frontmatter, never bodies.
+10. Context only, never a question: `system/quarantine.md` ACTIVE count, and any tool your hands registry records as down.
 
 ## Step 2 - pick at most four questions (the cap is hard)
 
@@ -71,6 +72,7 @@ Priority order. Never two questions about the same thing.
 
    The answer goes into the entity's `profile.md` (or the owning file). This is the one question that produces something no amount of accumulation gives you: the reason a stated process and a real one diverge. Nobody writes that down unless something asks. Only raise it when both sides are actually in the files - never manufacture a contradiction to have something to ask.
 8. One pattern observation, only if a slot is still free.
+9. **A knowledge note nobody has routed: which seat should be reading it, if any?** The lowest-priority class here and the last to take a slot - it tidies the OS rather than moving business state, so everything above outranks it. Fires only on files in `brain/knowledge/` with **no** `seats:` field at all; a note already routed, or one carrying `seats: none`, is never raised again. **One per run, maximum**, and only when a slot is still free after the real asks - the same rule as 6b. Stage 1 never asks this one: proposing is stage 2 and up. Name the note in plain words and at most one seat: "That note on what buyers actually pay for - should the one who names your next move be reading it?" If no seat obviously fits, do not ask; leave the field absent and spend the slot elsewhere.
 
 Each question: two or three narrow options **plus your recommendation first**. Plain language, no ids and no system jargon. "Skip" is always free and costs nothing.
 
@@ -86,6 +88,7 @@ An answer that does not land in a file is a conversation, not a loop. For each a
 - **An answered ask** - mark it answered in place in the file that raised it (`brain/needs-attention.md` or `brain/needs-input.md`) with the date and your one line. Never delete it: the answered row is the record of what you decided. An ask closed in the wrong file is still open in the right one, and it comes back tomorrow.
 - **A commitment call** - update `cadence/weekly-commitments.md`. A kill gets its reason on the same line.
 - **A flag call** - update `brain/flags.md`: extend the decay date with a reason, or close it with one.
+- **A knowledge-routing call** - edit the note's frontmatter in `brain/knowledge/<file>.md`. A yes writes `seats: <id>` and then `python scripts/agents_sync.py apply`, so the seat's read-list actually changes today instead of at some later sync. A no writes `seats: none`. Never leave it pending: the field's state IS the record that the question is closed, and it is the only thing that stops the same note being raised tomorrow.
 - **A preference call** - edit `core/working-preferences.md`: move the row from Proposed to Active with today's date, or delete the row. Never leave it sitting in Proposed with a note; the row's presence IS the open question.
 
 **Then close the thing that asked.** This is the half that gets skipped and it is the half that matters. An answer that closes a flag has to close it in `brain/flags.md`, not only in the conversation. If a cached or rendered view still shows the item, refresh it or say plainly that it is stale. An answered question that leaves its source open comes back tomorrow wearing the same clothes, and by the third morning you have learned to ignore the loop.
