@@ -259,7 +259,7 @@ For the short answer to "what can this actually do", [docs/what-this-can-do.md](
 
 ## What ships in this repo
 
-### Skills (94)
+### Skills (95)
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
@@ -267,7 +267,7 @@ The skills are organised into **role packs**, each a function a solo founder cov
 
 One to call out is the **LinkedIn pack**: say "help me with my LinkedIn", pick an outcome (leads, a better job, a louder brand, or a healthier network), and the OS aims your own data export at it - a ranked outreach worklist, a deep network audit, dormant-contact revival, and an algorithm-aware content direction. All local, free-plan, within LinkedIn's terms - no scraper, no automated actions, message content never read.
 
-### Slash commands (44)
+### Slash commands (45)
 
 Every command has a natural-language equivalent - slash commands are speed shortcuts for power users, not the primary surface. Full reference with outcomes, args, and follow-ups in [`docs/commands.md`](docs/commands.md).
 
@@ -319,7 +319,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 ## Tools and MCPs
 
-Founder OS does not assume your stack. Most of the 94 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+Founder OS does not assume your stack. Most of the 95 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 ---
 
@@ -393,7 +393,7 @@ Have an idea but no business yet? That counts. Say **"I have an idea"** and desc
 
 ## Status
 
-Version 1.52.0. Public release. 94 skills, 44 commands, 840 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.53.0. Public release. 95 skills, 45 commands, 847 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
 v1.48.0 is the arrival release, and the thought process behind it is one sentence: we watched how people actually arrive, and the OS assumed someone they are not. It assumed a founder with a business, a terminal, and no history. Real arrivals are a student with an idea and a phone, an operator who wants a team of assistants for her own creative process, a founder with years of notes in Obsidian, someone coming back after five weeks away. Each got a door. Download-extract-double-click: `Start Founder OS` files for Windows and Mac open Claude Code in the folder and start the wizard talking - the standing front door, honest in-file about what they cannot do. "I have an idea" now reaches the propose engine, which answers with the five real people to talk to this week, never a business plan or a course. "Turn my process into assistants" builds a team the way a real operator specced it: one job per assistant, the human keeps the taste decisions, effectiveness before efficiency, seats earned then registered. Setup adopts an existing vault without touching a single file, and says honestly what old notes can and cannot do. `AGENTS.md` now tells any connected agent - an SEO engine, an outreach drafter - how to join the team under a charter instead of freelancing in your files. The brief welcomes a returner back with counts and one offer instead of a wall of flags. And people research in meeting prep carries sources inline or says "unverified - confirm on the call", with a same-name check before anything is attributed to the human across the table.
 

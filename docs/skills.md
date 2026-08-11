@@ -704,6 +704,17 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 
 ## Knowledge and analysis
 
+### where
+
+- **Say.** "where is my work", "where did that go", "where did you save it", or "I cannot find the supplier list".
+- **Outcome.** Two or three sentences naming the project and the folder in your own words, plus a plain statement of which folders exist only on this computer. Not a list of paths.
+- **Reads.** Your own install, once, via `python scripts/where.py`. Nothing else.
+- **Writes.** Nothing. It is read-only and it never moves, renames, or tidies what it finds.
+- **Voice rules.** No, but the register bar is the highest in the OS: assume the person asking is frustrated and is not a developer.
+- **Prereqs.** None. Works on a ZIP install with no git, and says so rather than pretending everything is safe.
+- **When to run.** The moment something feels missing, instead of opening a second chat to look for it.
+- **Follow-up.** If it reports a folder with no backup, `own-your-history` is the one-yes fix. Slash command: `/founder-os:where`.
+
 ### knowledge-capture
 
 - **Say.** "capture this", "log this", "I just read", or "takeaways from <source>".

@@ -56,6 +56,15 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 
 ## Discovery
 
+### `/founder-os:where`
+
+- **Or say.** "where is my work", "where did that go", "where did you save it", "I cannot find the supplier list"
+- **Outcome.** Your recent work grouped by project, each with the folder named the way you would name it, and an explicit line per folder saying whether a second copy of it exists anywhere. Two or three sentences, not a table of paths.
+- **Args.** Optional: what you are looking for.
+- **Writes.** Nothing. Read-only, and it never moves, renames, or tidies what it finds.
+- **Prereqs.** None. Works on a ZIP install with no version history, and says so plainly rather than implying your work is safe.
+- **When to run.** The moment something feels missing - before opening a second chat to hunt for it.
+
 ### `/founder-os:menu`
 
 - **Or say.** "show me what you can do" / "what's available"

@@ -2,6 +2,26 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.53.0 - 2026-08-11
+
+A founder spent four chats looking for work that had never moved, then could not read the answer she was given. `/founder-os:where` answers "where is my work" with the project and the folder in her words, and names every folder that exists on one computer only. Pack: `updates/1.53.0-find-your-own-work.md`.
+
+### New - `where`, the answer to "I cannot find my work"
+
+`python scripts/where.py` walks the install once and groups recent work by project, newest first, naming the folder the way a person would name it. The OS's own machinery is excluded and the brain and operating files collapse to one line, because burying the answer under sixty skill files is how the previous answer became unreadable.
+
+The second half is the part nobody asks for. A project folder git has been told to ignore is invisible to every safety net the OS has, so the work at the highest risk of vanishing was the work nothing ever mentioned. Every folder now carries an explicit line: backed up, or exists only on this computer. A ZIP install with no version history says so rather than staying silent, since silence reads as reassurance.
+
+Read-only, standard library, no key. It opens nothing, moves nothing, renames nothing, and it never reorganizes what it found - a founder asking where something is has not asked for a tidy-up, and a tidy-up is what makes the next search harder.
+
+### New - the register is enforced in the skill, not left to judgment
+
+`skills/where/SKILL.md` carries the real failed answer and the working answer side by side, and bans the vocabulary that broke the first one: System Layer, User Layer, untracked, gitignored, the remote. Every one of those was accurate. None of them is English. The skill also fires unprompted when a founder says work has gone missing and the assistant is about to explain the folder structure instead - that explanation is the failure, not the fix.
+
+### Docs
+
+New `where` entries in `skills/index.md`, `docs/skills.md`, and `docs/commands.md`; the script joins the setup copy list so a fresh install receives it. Counts to 95 skills and 45 commands. Suite 840 -> 847.
+
 ## v1.52.0 - 2026-08-10
 
 A seat's read-list can finally grow. Tag a knowledge note with the seats that should read it and each one gets a pointer to it - never its contents - folded into its own instruction sheet. Decline once and the decline is recorded, so the question never comes back. Pack: `updates/1.52.0-the-brain-feeds-the-team.md`.
