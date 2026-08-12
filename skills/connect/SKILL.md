@@ -34,7 +34,7 @@ Run `python scripts/connect.py registry` to see the live registry. Connectors fa
 2. **env-key class (e.g. Telegram):**
    - Give the setup steps from the registry (for Telegram: open @BotFather, `/newbot`, copy the token, then message the new bot once so it has a chat to reply to).
    - Store the token WITHOUT putting it in your own message or a command argument. Have the user paste it on stdin:
-     `python scripts/connect.py set-secret TELEGRAM_BOT_TOKEN` then the pasted value on stdin. The writer refuses any target that is not on the gitignored allowlist (`.env`, `.mcp.local.json`) and not actually ignored by git, so the token cannot land in a tracked file.
+     `python scripts/connect.py set-secret TELEGRAM_BOT_TOKEN` then the pasted value on stdin. The writer refuses any target that is not on the allowlist (`.env`, `.mcp.local.json`) and not proven ignored, so the token cannot land in a tracked file. Where the install has version history, git supplies the proof; on a ZIP install with no git, the shipped `.gitignore` is read directly. Connectors work on both - a missing git is never a reason to refuse.
    - Run the reachability check: `python scripts/connect.py telegram-test`. It resolves the chat id via getUpdates if needed, sends a live test message, and reports the Bot API result.
    - **The API accepting the message does NOT prove the user saw it.** Ask the user directly: "did the test message arrive in Telegram?" Only mark connected after a yes.
    - Record status: `python scripts/connect.py status set telegram "connected (token in .env)"`.

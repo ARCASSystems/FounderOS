@@ -42,7 +42,7 @@ Options:
   --dry-run        Print what would happen without making any changes
   --help           Show this help
 
-After install, say "set up Founder OS" (or run /founder-os:setup) to personalise the OS.
+After install, say "set up Founder OS" (or run /setup) to personalise the OS.
 EOF
   exit 0
 }

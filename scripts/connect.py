@@ -6,9 +6,12 @@ its own:
 
   - Write a secret to a gitignored local file ONLY (mechanical enforcement, not
     writer-discipline): set-secret refuses any target that is not on the
-    gitignored allowlist AND not actually ignored by git. A token can therefore
-    never land in a tracked file through this path, and the always-on secret
-    pre-commit guard is the second line of defence if one ever does.
+    allowlist below and not proven ignored. Where a git repository exists, git
+    itself is asked. Where none does - the ZIP install, which is advertised as
+    needing no git - the shipped .gitignore is read directly and the name must
+    match a line of it exactly. A token therefore never lands in a tracked file
+    through this path, and the always-on secret pre-commit guard is the second
+    line of defence if one ever does.
   - Run a real reachability check that the assistant cannot fake: telegram-test
     sends a live message through the Bot API and reports the API result. The
     skill still asks the human "did it arrive?" because a Bot API ok=true does
@@ -101,9 +104,28 @@ REGISTRY: dict[str, dict[str, str]] = {
 
 # --- gitignore-enforced secret writer ------------------------------------------
 
+def _git_repo_present() -> bool:
+    """True only when git runs AND the OS folder is inside a repository.
+
+    Anything else is a plain False, not an error. A folder with no git is the
+    normal, advertised state of a ZIP install, so the answer routes the proof
+    below - it never refuses on its own."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--git-dir"],
+            cwd=str(REPO),
+            capture_output=True,
+            timeout=10,
+        )
+    except Exception:
+        return False
+    return result.returncode == 0
+
+
 def _is_git_ignored(target: Path) -> bool:
-    """True only when git itself reports the path as ignored. Fails closed: any
-    error (no git, not a repo) returns False so we refuse rather than guess."""
+    """True only when git itself reports the path as ignored. Call only after
+    _git_repo_present(): with no repository this can answer nothing but False,
+    which is the wrong answer rather than the safe one."""
     try:
         result = subprocess.run(
             ["git", "check-ignore", "-q", str(target)],
@@ -114,6 +136,46 @@ def _is_git_ignored(target: Path) -> bool:
     except Exception:
         return False
     return result.returncode == 0
+
+
+def _gitignore_lists(name: str) -> bool:
+    """True when the shipped .gitignore names this file on a line of its own.
+
+    The no-repository proof. There is no git to ask, and asking anyway was the
+    bug: check-ignore raised, the exception read as "not ignored", and every
+    connector was refused with a reason that was false. Reading the rule file
+    is the honest substitute.
+
+    Exact match only (`.env` or `/.env`), no glob interpretation. That is
+    deliberately narrow: it can confirm nothing beyond the two literal names on
+    SECRET_TARGET_ALLOWLIST, both of which ship as their own lines in the
+    developer .gitignore and in templates/operator.gitignore. A pattern this
+    cannot match is a pattern we are not certain enough about to trust with a
+    token."""
+    try:
+        lines = (REPO / ".gitignore").read_text(encoding="utf-8", errors="replace").splitlines()
+    except Exception:
+        return False
+    for raw in lines:
+        line = raw.strip()
+        if not line or line.startswith("#") or line.startswith("!"):
+            continue
+        if line in (name, f"/{name}"):
+            return True
+    return False
+
+
+def _create_user_only(path: Path) -> None:
+    """Create the secret file readable by this user only, where the platform
+    supports it. POSIX honours the mode; Windows ignores it and inherits the
+    folder's ACL, so this is best effort and never reported as more than that.
+    Existing files are left as they are - their permissions are the founder's."""
+    if path.exists():
+        return
+    try:
+        os.close(os.open(str(path), os.O_CREAT | os.O_WRONLY, 0o600))
+    except Exception:
+        pass
 
 
 def _parse_env(path: Path) -> dict[str, str]:
@@ -167,24 +229,67 @@ def cmd_set_secret(args: list[str]) -> int:
         print("No secret value provided (pass as the second arg or on stdin).", file=sys.stderr)
         return 1
 
-    if Path(target_name).name not in SECRET_TARGET_ALLOWLIST:
+    name = Path(target_name).name
+
+    # A target is a bare filename in the OS root, never a path. Reject anything
+    # carrying folder parts outright instead of quietly using its last segment:
+    # "../elsewhere/.env" would otherwise clear the allowlist on its basename,
+    # and silently writing to .env instead of what was asked for is the kind of
+    # false reassurance this whole path exists to avoid.
+    if name != target_name:
+        print(
+            f"REFUSED: {target_name} names a folder path. A secret target is a filename in your "
+            f"Founder OS folder. Allowed: {sorted(SECRET_TARGET_ALLOWLIST)}.",
+            file=sys.stderr,
+        )
+        return 2
+
+    if name not in SECRET_TARGET_ALLOWLIST:
         print(
             f"REFUSED: {target_name} is not a permitted secret target. "
             f"Allowed: {sorted(SECRET_TARGET_ALLOWLIST)}. Secrets go only to gitignored local files.",
             file=sys.stderr,
         )
         return 2
-    target = (REPO / target_name).resolve()
-    if not _is_git_ignored(target):
+
+    # Belt and braces: Path().name splits on the running platform's separators,
+    # so a Windows-shaped path handed to a POSIX interpreter survives the check
+    # above. Prove containment against the resolved root as well.
+    root = REPO.resolve()
+    target = (root / name).resolve()
+    if target.parent != root:
         print(
-            f"REFUSED: {target_name} is not gitignored. Writing a secret there would risk a commit. "
-            "Add it to .gitignore first, or use .env.",
+            f"REFUSED: {target_name} resolves outside your Founder OS folder. "
+            "A secret is only ever written inside it.",
             file=sys.stderr,
         )
         return 2
 
+    if _git_repo_present():
+        proven = _is_git_ignored(target)
+        refusal = (
+            f"REFUSED: git is not ignoring {name} in this folder, so a secret written there could end up "
+            f"in a commit. Add {name} to .gitignore, then run this again."
+        )
+        confirmation = f"Git is set to ignore {name}, so it will not be committed."
+    else:
+        proven = _gitignore_lists(name)
+        refusal = (
+            f"REFUSED: {name} is not on the ignore list this install ships with, so there is nothing "
+            "proving a secret stays private there. Re-install Founder OS to restore the list, then run this again."
+        )
+        confirmation = (
+            f"This install has no version history yet, and {name} is on the ignore list Founder OS ships with, "
+            "so it stays out of history when you turn it on."
+        )
+
+    if not proven:
+        print(refusal, file=sys.stderr)
+        return 2
+
+    _create_user_only(target)
     _write_env_key(target, key, value)
-    print(f"Stored {key} in {target_name} (value hidden). {target_name} is gitignored - it will not be committed.")
+    print(f"Stored {key} in {name} (value hidden). {confirmation}")
     return 0
 
 

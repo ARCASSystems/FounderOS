@@ -68,13 +68,15 @@ If `/founder-os:setup` is not recognised after install, run `/reload-plugins` (o
 **Pros**
 - Two commands and you are set up, with no terminal install step.
 - Plugin updates flow through `/plugin update`.
-- Slash commands and hooks register automatically, across every project.
+- Slash commands register automatically and are available in every project you open.
 
 **Cons**
 - Requires Claude Code with a paid Claude plan.
 - Plugin marketplace behaviour can vary by Claude Code version. If the install does not work, fall back to Path B or Path E.
 
 **Verifying it worked:** Open `/plugin` and check the Installed tab. You should see `founder-os` listed. Then `/founder-os:setup` should appear in the slash command palette. If the command is missing, run `/reload-plugins` first.
+
+**How hooks fire on Path A.** The plugin registers the slash commands. It does not register hooks - the setup wizard does, by writing a `.claude/settings.json` into the OS folder it builds for you. So the session brief, the revenue check, and the auto-save fire when you open Claude Code in your OS folder, and nowhere else. That is deliberate rather than a gap: every one of them reads your OS files, and firing them inside an unrelated project would be noise at best.
 
 **Where your files live.** The plugin is the engine - it installs under `~/.claude/plugins/` where Claude Code manages it, updates through `/plugin update`, and you never have to open it. When you run setup, it builds your actual OS in a folder you own (default `~/founder-os/`): priorities, decisions, brain log, the lot. That folder is plain markdown and yours to keep, back up, or fork. If you ever remove the plugin, your OS folder stays exactly where it is. Engine and data are separate on purpose: the engine is swappable, your files are not.
 
@@ -102,9 +104,9 @@ The installer:
 2. Clones FounderOS to `~/founder-os/` (override with `--target <path>`). This is one folder you own - your data, the hooks, and the commands all live together. It is a plain git repo: back it up, move it, fork it. Nothing phones home.
 3. Prints a one-screen confirmation with the next step (`cd` into `~/founder-os`, open Claude Code, say "set up Founder OS"). Hooks register through the `.claude/settings.json` inside that folder - see "How hooks fire on Path E" below.
 
-If FounderOS is already installed, re-running the same command asks whether to update instead of cloning again. (Installs from before v1.37 that still live at `~/.claude/plugins/founder-os` are detected and kept in place, so you are never left with two copies.)
+If FounderOS is already installed, the installer never overwrites it. Run from a terminal (`bash install.sh`), it asks whether to update. Piped straight from curl, as the command above does, nothing can read your answer, so it leaves the install untouched and prints how to update on purpose: re-run with `FOUNDER_OS_UPDATE=1`. (Installs from before v1.37 that still live at `~/.claude/plugins/founder-os` are detected and kept in place, so you are never left with two copies.)
 
-**How hooks fire on Path E.** Claude Code discovers hooks through a `.claude/settings.json` file in the working directory. The curl install lands one inside `~/founder-os/`, so the SessionStart brief and Stop revenue-check fire when you open Claude Code IN your OS folder. If you open Claude Code in a different project folder, those hooks do not fire there. To get hooks across every project, also add Path A (the Claude Code plugin) - the plugin engine activates the commands and hooks globally and stays out of your OS folder.
+**How hooks fire on Path E.** Claude Code discovers hooks through a `.claude/settings.json` file in the working directory. The curl install lands one inside `~/founder-os/`, so the SessionStart brief and Stop revenue-check fire when you open Claude Code IN your OS folder. If you open Claude Code in a different project folder, those hooks do not fire there. Adding the plugin (Path A) does not change that - the plugin carries the slash commands, not the hooks. Hooks are read from the folder you open, on every path, by design: they all read your OS files.
 
 **Pros**
 - One command, no decisions.
@@ -114,9 +116,9 @@ If FounderOS is already installed, re-running the same command asks whether to u
 **Cons**
 - Requires bash. On Windows, install git-bash first.
 - The install script requires internet access for the initial clone.
-- Hooks fire only when Claude Code is opened in the cloned folder. Use Path A for hooks that activate everywhere.
+- Hooks fire only when Claude Code is opened in the cloned folder. That is true on every install path.
 
-**Verify the install:** Say "verify the OS" (or run `/founder-os:verify`).
+**Verify the install:** Say "verify the OS" (or run `/verify`). This path clones the repo, so commands use bare names, not the `/founder-os:` namespace.
 
 ---
 
@@ -192,7 +194,7 @@ Full surface-by-surface compatibility detail in [docs/tools-and-mcps.md](tools-a
 | You have... | Pick |
 |---|---|
 | Nothing but Claude Code + a Pro/Max plan, and you want the fastest ownership path | Path 0 (ZIP) |
-| Claude Code + Pro/Max plan, and you want commands and hooks active across every project | Path A (plugin) |
+| Claude Code + Pro/Max plan, and you want the slash commands available in every project | Path A (plugin) |
 | bash + git + Python 3.11+ and you like the terminal | Path E (curl) |
 | Claude Code, plugin install failed | Path B (git clone) |
 | FounderOS installed, want Cowork too | Path D (Cowork) |

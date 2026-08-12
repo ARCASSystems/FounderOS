@@ -84,7 +84,15 @@ If the founder has added custom paths that do not match either list, STOP and as
 
 Read the local `VERSION` file at the repo root. Strip whitespace. Call this `LOCAL_VERSION`.
 
-If `VERSION` does not exist, reply: `No VERSION file found. This install may predate the update system. Create VERSION with the current plugin version and re-run.` Stop.
+If `VERSION` is missing or empty, set `LOCAL_VERSION` to `unknown` and CARRY ON. Do not stop, and never ask the founder to create the file or to work out which version they are on. A missing marker is the OS's own record-keeping, not a task to hand them, and refreshing the engine to the current release both fixes it and is what the rest of this command already does. Steps 3, 4, 6, 8.7, 9 and 10 each branch on `unknown`.
+
+Say it once, in their words, the first time you report anything:
+
+```
+I cannot tell which version this install is on, because the file that records it is missing. I can put that right by refreshing to the current release. Your own files are not part of that.
+```
+
+Scope note for whoever extends this: this path covers a missing marker, and it covers engine files that are present but out of date. It does NOT restore engine files that were deleted, because nothing here knows the full list of what should be on disk. That is `scripts/repair_install.py` driven by the install manifest, and it is the piece that completes this route.
 
 ### Step 2. Fetch remote version
 
@@ -121,6 +129,8 @@ Status: <up to date | update available>
 
 If update available, add one line: `Run /founder-os:update to install.` Stop.
 
+If `LOCAL_VERSION` is `unknown`, the `Status:` line reads `cannot tell - refresh available` and the line under it reads `Run /founder-os:update to refresh to the current release and restore the version marker.` Stop.
+
 **If `$ARGUMENTS` is `rollback`:**
 
 A real rollback does two things: restores every file the update CHANGED, and removes every file the update INTRODUCED. Restoring changed files while leaving new ones behind is not a rollback, it is a mix of two releases. The manifests written in Steps 7 and 8b make both halves exact.
@@ -140,6 +150,8 @@ The backup and manifests persist until manually deleted, so a rollback can be re
 **If `$ARGUMENTS` is empty:** proceed to Step 4.
 
 ### Step 4. Compare versions
+
+If `LOCAL_VERSION` is `unknown`, skip both comparisons and go to Step 5. There is nothing to compare against. Do not treat unknown as up to date and do not treat it as ahead - either reading stops the refresh, which is exactly the dead end this branch exists to remove.
 
 If `LOCAL_VERSION` equals `REMOTE_VERSION`, reply: `Up to date (v<LOCAL_VERSION>).` Stop.
 
@@ -181,6 +193,11 @@ Your User Layer files will NOT be touched:
 
 Proceed? (yes / no)
 ```
+
+If `LOCAL_VERSION` is `unknown`, show the same block with two changes and nothing else altered:
+
+- the `Current:` line reads `Current:  unknown (the file recording it is missing - this refresh restores it)`
+- the paragraph beginning "Then I walk you through what this release changed" is replaced with: `I cannot tell which releases you already have, so I will refresh the files above and skip the guided walkthrough of what changed. Nothing else about this is different, and your own files are still untouched.`
 
 Wait for reply. If not a clear `yes`, reply: `Update dismissed. Run /founder-os:update again later.` Stop.
 
@@ -274,6 +291,8 @@ Do NOT attempt to merge hook entries inside `settings.json` mechanically in this
 
 Files have landed. Now integrate the release with THIS install, which is the part a plain download cannot do.
 
+If `LOCAL_VERSION` is `unknown`, walk NO packs. With no starting version there is no range to walk, and guessing one either replays integration steps the founder already did or skips ones they never got. Say it in one line, name where the packs live so they can read any of them whenever they want, and go to Step 9. This is announced, never silent - the same rule as a skipped module.
+
 Read `os-config.yaml` at the root first, if it exists. It states which modules this install actually runs, and its `install.auto_apply_packs` setting. If the file is missing (an install that predates it), say so in one line, treat every module as adopted, and offer to write the file from the founder's answers at the end.
 
 Find the packs to walk: every `updates/<version>-<slug>.md` whose version is newer than `LOCAL_VERSION`, oldest first. No packs in range means nothing to do here - skip to Step 9 silently.
@@ -314,6 +333,8 @@ Rules for the whole step: one file at a time, one yes at a time, and pure person
 
 Write `REMOTE_VERSION` (plus a trailing newline) to the local `VERSION` file.
 
+When `LOCAL_VERSION` was `unknown`, this is the step that repairs the marker. Say so in one line rather than letting it pass silently: `Your install now records its version again, so future updates can tell what you have.`
+
 ### Step 10. Clean up and report
 
 Delete `state/.update-staging/<ts>/` - Step 8.5 was the last reader. The backup and both manifests stay (they are what `rollback` runs on).
@@ -330,7 +351,9 @@ Packs walked: <n> (<applied> applied, <skipped> skipped as not-your-modules, <de
 To rollback: /founder-os:update rollback
 ```
 
-After that block, add a short "what changed" digest: read the local `CHANGELOG.md` (just refreshed in Step 8) and summarize the entries between `LOCAL_VERSION` and `REMOTE_VERSION` in at most 6 plain-language lines. The founder should see what they just received without opening a file.
+If `LOCAL_VERSION` was `unknown`, the first line reads `Refreshed to v<REMOTE_VERSION>. Your install records its version again.` and the packs line is replaced with `Release walkthrough skipped - I could not tell which releases you already had.` Never render the literal word `unknown` as though it were a version number.
+
+After that block, add a short "what changed" digest: read the local `CHANGELOG.md` (just refreshed in Step 8) and summarize the entries between `LOCAL_VERSION` and `REMOTE_VERSION` in at most 6 plain-language lines. The founder should see what they just received without opening a file. When `LOCAL_VERSION` was `unknown` there is no range: summarize the newest release only, and say that is what you are showing them.
 
 ## Rules
 

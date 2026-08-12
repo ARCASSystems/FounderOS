@@ -2,6 +2,32 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.53.1 - 2026-08-12
+
+Three advertised install paths failed and blamed the founder for it: a correct plugin install was told to reinstall, a git-less ZIP install was refused connectors for a reason that was false, and a missing version marker became the founder's homework. An outside review of v1.53.0 caught the pattern; this patch closes it. Pack: `updates/1.53.1-your-install-was-right-all-along.md`.
+
+### Fixed - setup finds its own instructions on a plugin install
+
+The setup command resolved its wizard relative to the working directory, which on a plugin install is the founder's own folder - empty on purpose. It now resolves from the plugin engine first (`${CLAUDE_PLUGIN_ROOT}`, then a search of the plugin directory), falls back to the working directory for clone and ZIP installs, and when nothing resolves it suggests a restart instead of telling a correctly-installed founder to reinstall. The verify and own-your-history skills stop hardcoding one plugin path for the same reason: plugin managers move their folder layout between versions, and a wrong guess read a healthy install as broken. Own-your-history also now stops before the first save if it cannot find the operator ignore file, because a first save with no ignore rules writes secrets into history permanently.
+
+### Fixed - connectors work with no git installed
+
+`set-secret` proved "this file can never be committed" by asking git, and on a machine with no git the failed question read as "not protected" - so every connector was refused on the exact path the README advertises as needing no git, with a message blaming a file that was configured correctly. Where a repository exists git still answers; where none does, the shipped `.gitignore` is read directly and the target must match a line of it exactly. Same pass hardened the writer: a target carrying folder parts is refused outright instead of quietly landing at `.env`, and a newly created secrets file is user-only where the platform supports it.
+
+### Fixed - a missing version marker routes to repair, not to the founder
+
+"Update Founder OS" on an install with no VERSION file replied "Create VERSION with the current plugin version and re-run", which a non-technical founder cannot act on. Missing now means `unknown`: the update says it cannot tell what is installed, refreshes the engine to the current release, restores the marker, and skips only the guided walkthrough of what changed, since there is no known starting point to walk from. Full deleted-file repair waits on the install manifest (`scripts/repair_install.py`); the command names that boundary so the next builder knows what completes it.
+
+### Fixed - the privacy guard no longer suggests blocking your own name
+
+The own-your-history flow offered to add the founder's own name to the private-name patterns. Their name lives in the identity file by design, so the very first save failed right after they said yes to a privacy feature. The guard is now offered for what it is for - names that must never enter the files at all, a client under NDA - and the skill expects most people to skip it.
+
+### Docs - install claims match the code
+
+The plugin registers slash commands, not hooks; hooks are wired by setup into the OS folder and fire when Claude Code opens there. `docs/install.md` said hooks register automatically across every project - three places, all corrected, plus an honest "How hooks fire on Path A" paragraph. The curl installer printed `/founder-os:setup` on a path where commands are bare (`/setup`), and claimed a piped re-run asks a question it cannot read; both now match `install.sh`. The setup reference derives its helper count from disk instead of a hand-maintained number that had already gone stale.
+
+Counts unchanged: 95 skills, 45 commands, 847 tests.
+
 ## v1.53.0 - 2026-08-11
 
 A founder spent four chats looking for work that had never moved, then could not read the answer she was given. `/founder-os:where` answers "where is my work" with the project and the folder in her words, and names every folder that exists on one computer only. Pack: `updates/1.53.0-find-your-own-work.md`.

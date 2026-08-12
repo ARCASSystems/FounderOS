@@ -16,19 +16,32 @@ Runs on: local-exec - runs a stdlib syntax check (`ast.parse`, writes nothing to
 
 Read-only health check across 9 substrate checks. Returns one screen. Never auto-fixes.
 
+## Resolving the engine root
+
+Several checks read files that ship with the engine, and the engine is not always in the folder you are standing in. Work `ENGINE` out ONCE, before Check 1, and use it everywhere below that names it:
+
+1. If the working directory contains `skills/`, the engine is here. `ENGINE` is the working directory. This is the git-clone, curl, and ZIP case.
+2. Otherwise this is a data-folder install: the founder's folder holds only their data, and the engine is installed as a plugin. Take the first that resolves:
+   - `${CLAUDE_PLUGIN_ROOT}` - Claude Code sets it for a plugin's own components. Read it with `echo "$CLAUDE_PLUGIN_ROOT"` if it has not already been substituted into this file.
+   - The newest match for `~/.claude/plugins/**/.claude-plugin/plugin.json` whose `name` is `founder-os`. `ENGINE` is the folder holding that `.claude-plugin/`. Search rather than assume a fixed path: plugin managers move their layout between versions, and a hardcoded path reports a healthy install as broken.
+3. If neither resolves, `ENGINE` is unknown. Check 1 reports that as a FAIL. Do not guess a path and do not silently skip the checks that need one.
+
+A data folder is a correct install shape, not a defect. A data folder with no reachable engine is a broken OS, and Check 1 is what tells the two apart.
+
 ## The nine checks
 
 Run all nine checks. Each produces one of: `[PASS]`, `[WARN]`, or `[FAIL]`.
 
 ### Check 1 - Plugin surface integrity
 
-First detect the install shape: if the working directory has no `skills/` directory, this is a data-folder install (Path A plugin - the engine lives under `~/.claude/plugins/`, the founder's folder holds only their data). That is a correct state, not a defect - but only if the engine is actually reachable. A data folder whose plugin engine is missing is a broken OS that cannot run, so prove reachability before passing:
+Resolve `ENGINE` as above, then:
 
-- Read the plugin manifest at `~/.claude/plugins/founder-os/.claude-plugin/plugin.json`.
-  - Manifest reachable (file exists, parses, `version` present) -> `[PASS] Plugin surface (engine v<version> runs from the plugin; no local engine copy to count)` and skip the counting below.
-  - Manifest unreachable (path missing or unparseable) -> `[FAIL] Plugin surface (data folder but engine not found at ~/.claude/plugins/founder-os - the OS has no engine to run)` and skip the counting below.
+- `ENGINE` unknown -> `[FAIL] Plugin surface (this folder holds your data, but the engine that runs it could not be found - restart Claude Code first; if it persists, install the plugin again)` and skip the counting below.
+- `ENGINE` resolved to a plugin (case 2) -> read `<ENGINE>/.claude-plugin/plugin.json`.
+  - Parses with a `version` -> `[PASS] Plugin surface (engine v<version> runs from the plugin; no local engine copy to count)` and skip the counting below.
+  - Unparseable -> `[FAIL] Plugin surface (the engine is installed but its manifest could not be read - install the plugin again)` and skip the counting below.
 
-Otherwise (git-clone, curl, or ZIP install - the engine is in this folder), verify that the skill and command counts are internally consistent:
+Otherwise (`ENGINE` is the working directory - git-clone, curl, or ZIP), verify that the skill and command counts are internally consistent:
 
 - Count `skills/<name>/SKILL.md` files on disk.
 - Count `.claude/commands/*.md` files on disk.
@@ -49,8 +62,7 @@ v1.42 wires every hook event through one cross-platform Python dispatcher
 .sh/.ps1 pairs. Verify the dispatcher shape, not a single event:
 
 - Read `.claude/settings.json` (or the user-level `~/.claude/settings.json`).
-- Confirm `scripts/hooks/dispatch.py` exists in the engine root (cwd on a full
-  install; `~/.claude/plugins/founder-os/` on a data-folder install).
+- Confirm `<ENGINE>/scripts/hooks/dispatch.py` exists.
 - Check that all six hook events are wired, each with exactly one command that
   calls `dispatch.py` with the matching event name:
   `SessionStart`, `PreToolUse`, `UserPromptSubmit`, `PreCompact`, `Stop`, `PostToolUse`.
@@ -72,10 +84,8 @@ opt-in by design.
 Enumerate the shipped Python scripts dynamically - do not hardcode a list, the
 set grows - and confirm each parses cleanly.
 
-- Resolve the engine root: the current working directory on a full clone, curl,
-  or ZIP install (it holds `scripts/`); `~/.claude/plugins/founder-os/` on a
-  data-folder install.
-- Glob `<engine>/scripts/*.py` AND `<engine>/scripts/hooks/*.py`. The second glob
+- Use the `ENGINE` root resolved above.
+- Glob `<ENGINE>/scripts/*.py` AND `<ENGINE>/scripts/hooks/*.py`. The second glob
   is not optional: `scripts/hooks/dispatch.py` is the hook dispatcher every
   session event runs through, so a machine that cannot parse it has a broken
   install. It must be in the checked set. If the glob returns no
@@ -116,8 +126,8 @@ Do NOT fail if MCPs are unconfigured. MCP setup is optional.
 
 ### Check 5 - Free-tier floor preserved
 
-Grep the full shipped script set from Check 3 - every `<engine>/scripts/*.py`
-and `<engine>/scripts/hooks/*.py`, `dispatch.py` included - for environment
+Grep the full shipped script set from Check 3 - every `<ENGINE>/scripts/*.py`
+and `<ENGINE>/scripts/hooks/*.py`, `dispatch.py` included - for environment
 variable references that imply an API key:
 - `ANTHROPIC_API_KEY`
 - `OPENAI_API_KEY`
