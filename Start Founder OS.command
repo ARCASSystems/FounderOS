@@ -53,8 +53,17 @@ if [ -z "$py_ok" ]; then
   echo ""
 fi
 
-# Fresh install starts the wizard; a set-up OS just opens.
-if [ -f "core/identity.md" ]; then
+# A finished OS opens. An interrupted setup resumes where it stopped. A fresh
+# install starts the wizard. The completion marker is written by setup only
+# after its final health check, so an identity file alone is no longer read as
+# "setup finished" - it lands five phases early. An install set up before the
+# markers existed has identity and neither marker; it opens normally, exactly
+# as it always has.
+if [ -f "state/setup-complete.json" ]; then
+  exec claude
+elif [ -f "state/setup-progress.json" ]; then
+  exec claude "continue Founder OS setup where it left off"
+elif [ -f "core/identity.md" ]; then
   exec claude
 else
   exec claude "set up Founder OS"

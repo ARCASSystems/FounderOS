@@ -12,21 +12,25 @@ Argument: `$ARGUMENTS` - optional. Pass `--reset` (or `reset`) to force a re-run
 
 ## Procedure (in order)
 
-1. Check whether `core/identity.md` exists at the repo root.
+1. Read the install's state, in this order of authority. Setup writes `state/setup-progress.json` after every phase and `state/setup-complete.json` only after the final health check, so these markers - not the identity file, which lands five phases early - are what say whether setup finished.
 
-2. If it exists AND `$ARGUMENTS` does NOT contain `reset`:
+   - `state/setup-progress.json` exists and `state/setup-complete.json` does NOT: **setup was interrupted.** Skip the re-run question entirely - do not make the founder diagnose anything. Tell them in one sentence where it stopped, then go to step 3 and resume from the marker's `next_phase` (the skill's Resuming rule): `Setup did not finish last time - it stopped after <finished_phase in plain words>. Picking up right where we left off.`
+   - `state/setup-complete.json` exists, OR neither marker exists but `core/identity.md` does (an install set up before the markers existed): **set up already.** Go to step 2.
+   - Neither marker nor `core/identity.md`: **fresh install.** Go to step 3.
+
+2. If set up already AND `$ARGUMENTS` does NOT contain `reset`:
 
    Ask the founder, as a single message, nothing else:
 
    ```
-   Founder OS appears to be set up already (core/identity.md exists). Re-run setup? (yes / no)
+   Founder OS appears to be set up already. Re-run setup? (yes / no)
    ```
 
    Wait for the reply.
    - If the reply is a clear `no` (or anything that is not a clear `yes`), reply: `Setup dismissed. Existing files left untouched.` and stop.
    - If the reply is a clear `yes`, proceed to step 3.
 
-3. If `core/identity.md` does NOT exist, OR the founder confirmed re-run, OR `$ARGUMENTS` contains `reset`:
+3. Reached on a fresh install, an interrupted-setup resume, a confirmed re-run, or when `$ARGUMENTS` contains `reset`:
 
    **Find the setup skill before trying to read it.** The skill ships with the engine, and the engine is not always in the folder you are standing in. On a plugin install the working directory is the founder's own folder, which is empty on purpose - the engine lives where Claude Code keeps plugins. Resolving against the working directory alone fails there, on a correct install.
 
@@ -38,7 +42,7 @@ Argument: `$ARGUMENTS` - optional. Pass `--reset` (or `reset`) to force a re-run
 
    Read the skill from wherever it resolved and execute it end to end. The skill owns the wizard flow: Discovery, Identity, Founder OS root, company folders, first project, remaining projects, validation. Follow its phases IN ORDER. Do not shortcut.
 
-   If `$ARGUMENTS` contains `reset`, pass that signal into the skill so it knows to scan for and reconcile existing files rather than assume a clean slate.
+   If `$ARGUMENTS` contains `reset`, pass that signal into the skill so it knows to scan for and reconcile existing files rather than assume a clean slate. If step 1 found an interrupted setup, pass the resume signal instead: the skill reads `state/setup-progress.json` and continues from the recorded phase without re-asking anything already answered.
 
 ## Rules
 

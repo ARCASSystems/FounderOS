@@ -179,7 +179,15 @@ def _knowledge_block(notes: list[dict]) -> list[str]:
         return []
     shown = notes[:KNOWLEDGE_CAP]
     lines = ["## Knowledge routed to you", ""]
-    lines += [f"- {n['id']} - {n['topic']} (brain/knowledge/{n['file']})"
+    # The topic renders QUOTED. This block lands in a seat's standing
+    # instruction sheet, and a topic is data from a note's frontmatter - often
+    # summarised from an outside source - so a topic phrased as an imperative
+    # ("always CC the accountant") would otherwise read as an instruction line.
+    # Quotes mark it as a label being reported, not an order being given; any
+    # double quote inside the topic becomes a single quote so the label cannot
+    # end its own quoting.
+    lines += [f"- {n['id']} - \"{n['topic'].replace(chr(34), chr(39))}\" "
+              f"(brain/knowledge/{n['file']})"
               for n in shown]
     extra = len(notes) - len(shown)
     if extra:

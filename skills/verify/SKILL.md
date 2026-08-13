@@ -28,6 +28,16 @@ Several checks read files that ship with the engine, and the engine is not alway
 
 A data folder is a correct install shape, not a defect. A data folder with no reachable engine is a broken OS, and Check 1 is what tells the two apart.
 
+## Run the deterministic verifier first
+
+```
+python scripts/verify.py --json
+```
+
+Run it once, before Check 1, and keep the JSON. Checks 2 and 3 are translations of its output, not your own enumeration. The division of labour is deliberate and is the fix for a real blind spot: a model that derives its expectations from whatever is on disk cannot notice that something is missing from disk, so "enumerate dynamically" made deletion undetectable. The script carries the contract (derived from `templates/scripts/`, the set setup copies - never a hand-maintained list) and performs the comparison; your job is to render its findings in plain language, not to re-derive them.
+
+If `scripts/verify.py` itself is missing, that IS a finding: report Check 3 as `[FAIL] Scripts present (the install verifier scripts/verify.py is missing - run an update to restore the OS's own files)` and fall back to reading what you can for the other checks. Never silently substitute your own glob-and-count for the script's comparison.
+
 ## The nine checks
 
 Run all nine checks. Each produces one of: `[PASS]`, `[WARN]`, or `[FAIL]`.
@@ -57,54 +67,43 @@ Outcome:
 
 ### Check 2 - Hooks installed (dispatcher wiring)
 
-v1.42 wires every hook event through one cross-platform Python dispatcher
-(`scripts/hooks/dispatch.py`), one settings entry per event - not the old
-.sh/.ps1 pairs. Verify the dispatcher shape, not a single event:
+Translate the verifier's `hooks-wired` and `hook-dispatcher` checks. The script
+already read `.claude/settings.json`, confirmed `scripts/hooks/dispatch.py`
+exists, and checked that all six events (`SessionStart`, `PreToolUse`,
+`UserPromptSubmit`, `PreCompact`, `Stop`, `PostToolUse`) each call the
+dispatcher with the matching event name.
 
-- Read `.claude/settings.json` (or the user-level `~/.claude/settings.json`).
-- Confirm `<ENGINE>/scripts/hooks/dispatch.py` exists.
-- Check that all six hook events are wired, each with exactly one command that
-  calls `dispatch.py` with the matching event name:
-  `SessionStart`, `PreToolUse`, `UserPromptSubmit`, `PreCompact`, `Stop`, `PostToolUse`.
-
-Outcome:
-- All six events wired to the dispatcher and dispatch.py present ->
+Outcome, from the JSON:
+- `hooks-wired` pass and `hook-dispatcher` pass ->
   `[PASS] Hooks installed (6/6 events wired to dispatch.py)`
-- Events wired but `scripts/hooks/dispatch.py` missing ->
+- `hook-dispatcher` fail ->
   `[FAIL] Hooks installed (settings wires the dispatcher but scripts/hooks/dispatch.py is missing)`
-- Some events unwired or not calling the dispatcher ->
-  `[WARN] Hooks installed (<N>/6 events wired to dispatch.py - missing: <list>)`
-- No hooks block at all -> `[WARN] Hooks installed (no hooks registered)`
-
-Note: if settings.json is not readable, report `[WARN]` not `[FAIL]`. Hooks are
-opt-in by design.
+- `hooks-wired` warn with some events missing ->
+  `[WARN] Hooks installed (<N>/6 events wired to dispatch.py - missing: <missing_events>)`
+- `hooks-wired` warn because settings.json is absent or unreadable ->
+  `[WARN] Hooks installed (no hooks registered)` - hooks are opt-in by design,
+  so this is never a FAIL.
 
 ### Check 3 - Scripts present and compile
 
-Enumerate the shipped Python scripts dynamically - do not hardcode a list, the
-set grows - and confirm each parses cleanly.
+Translate the verifier's `scripts-complete` and `scripts-parse` checks. The
+script derived the required set from the engine's `templates/scripts/` (what
+setup copies into every install) and compared it against `scripts/` on disk,
+then parsed every present script including `scripts/hooks/dispatch.py`. That
+comparison is the whole point: a missing file cannot be noticed by globbing
+what exists, only by diffing against a contract that exists independently.
 
-- Use the `ENGINE` root resolved above.
-- Glob `<ENGINE>/scripts/*.py` AND `<ENGINE>/scripts/hooks/*.py`. The second glob
-  is not optional: `scripts/hooks/dispatch.py` is the hook dispatcher every
-  session event runs through, so a machine that cannot parse it has a broken
-  install. It must be in the checked set. If the glob returns no
-  `scripts/hooks/dispatch.py`, that is itself a FAIL.
-- Python is a hard prerequisite for the OS (README requires 3.11+). Probe
-  `python --version`, then `python3 --version`, then `py -3 --version`. If none
-  resolve -> `[FAIL] Scripts present (Python not found - it is a hard prerequisite; install python.org 3.11+)`
-  and do not attempt the parses.
-- With Python resolved, syntax-check every globbed script with a parse that
-  writes nothing to disk (`py_compile` would write `__pycache__` bytecode,
-  which would break this skill's read-only rule):
-  `python -c "import ast, sys; ast.parse(open(sys.argv[1], 'rb').read(), sys.argv[1])" <path>`
-  (swap `python` for `python3`/`py -3`, whichever resolved). A `SyntaxError`
-  is a failed parse.
+One thing stays yours: if `python` / `python3` / `py -3` all fail to run at
+all, report `[FAIL] Scripts present (Python not found - it is a hard
+prerequisite; install python.org 3.11+)` - the verifier cannot report its own
+interpreter being absent.
 
-Outcome:
-- All present and parse -> `[PASS] Scripts present (<N>/<N> parse cleanly, incl. hooks/dispatch.py)`
-- Any missing or parse error -> `[FAIL] Scripts present (<N>/<M> parse - list the failing ones)`
-- `scripts/hooks/dispatch.py` absent -> `[FAIL] Scripts present (hook dispatcher scripts/hooks/dispatch.py missing - every session event is broken)`
+Outcome, from the JSON:
+- Both pass -> `[PASS] Scripts present (<N>/<N> present and parse cleanly, incl. hooks/dispatch.py)`
+- `scripts-complete` fail -> `[FAIL] Scripts present (missing from scripts/: <missing list> - run an update to restore them)`
+- `scripts-parse` fail -> `[FAIL] Scripts present (<file>: <error> - the file is damaged; run an update to restore it)`
+- `scripts-complete` warn (no engine reachable to derive the contract) ->
+  `[WARN] Scripts present (present scripts parse, but the shipped list could not be found to prove completeness)`
 
 ### Check 4 - MCP availability
 

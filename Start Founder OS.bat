@@ -38,11 +38,24 @@ if not defined PY_OK (
   echo.
 )
 
-rem -- Fresh install starts the wizard; a set-up OS just opens.
-if exist "core\identity.md" (
+rem -- A finished OS opens. An interrupted setup resumes where it stopped.
+rem -- A fresh install starts the wizard. The completion marker is written by
+rem -- setup only after its final health check, so an identity file alone is
+rem -- no longer read as "setup finished" - it lands five phases early. An
+rem -- install set up before the markers existed has identity and neither
+rem -- marker; it opens normally, exactly as it always has.
+if exist "state\setup-complete.json" (
   claude
 ) else (
-  claude "set up Founder OS"
+  if exist "state\setup-progress.json" (
+    claude "continue Founder OS setup where it left off"
+  ) else (
+    if exist "core\identity.md" (
+      claude
+    ) else (
+      claude "set up Founder OS"
+    )
+  )
 )
 goto :eof
 

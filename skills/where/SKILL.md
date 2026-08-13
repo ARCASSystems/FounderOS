@@ -3,7 +3,7 @@ name: where
 description: Find work you cannot find. Say "where is my work", "where did that go", "where did you save it", "I cannot find the supplier list", "what have I been working on", or run /founder-os:where. Answers with the project and the folder in your own words, not a list of paths, and says plainly whether a second copy of it exists anywhere. Also names the folders that would be gone tomorrow if this laptop died.
 why: "A founder said: I have been on three different chats for this project but somehow it is nowhere to be found, it does things and saves somewhere else. Nothing was lost - the work sat in a folder git had been told to ignore, so it appeared in no status, no backup, and no answer she could use. When she asked where it went she got a wall of paths back and said she could not understand any of it. Losing track of your own work is the fastest way to stop trusting a system, and the answer has to be readable by the person asking."
 enhance: "Ask it the moment something feels missing rather than opening three chats to look. It is read-only, costs nothing, and it names unbacked-up folders even when you did not ask - that is usually the more urgent finding."
-allowed-tools: ["Read", "Glob", "Bash(python scripts/where.py:*)"]
+allowed-tools: ["Read", "Glob", "Bash(python scripts/where.py:*)", "Bash(python scripts/open_folder.py:*)"]
 ---
 
 # Where is my work
@@ -21,6 +21,8 @@ Also fire it, without being asked, when the founder says work has gone missing a
 ```
 python scripts/where.py --days 14
 ```
+
+If they named what they are looking for, pass it - the scan surfaces folders whose file names match, first: `python scripts/where.py --days 14 vendor list`. A name miss is reported honestly (file names are not content), so a miss never means the work is gone.
 
 Widen with `--days 60` or `--all` if the first pass finds nothing they recognise. Use `--json` if you need to reason over the result rather than read it.
 
@@ -62,7 +64,7 @@ Close with the smallest useful action:
 
 > Want me to open that folder?
 
-On a yes, open it with the platform command (`explorer` on Windows, `open` on macOS, `xdg-open` on Linux). If you cannot, give the full path on its own line so it can be pasted into Explorer or Finder, and say that is what it is for.
+On a yes, open it with `python scripts/open_folder.py "<folder from the scan>"` - never by interpolating the path into `explorer` / `open` / `xdg-open` yourself. The script passes the folder as one argument with no shell in between, and it refuses anything outside the OS folder, so a folder name a founder typed can never become shell syntax. If the script is missing or fails, give the full path on its own line so it can be pasted into Explorer or Finder, and say that is what it is for.
 
 ## What this skill never does
 

@@ -2,6 +2,34 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.54.0 - 2026-08-13
+
+Every v1.53.x defect shipped through green CI because CI checks the repo and nothing checks an install. This release closes that class: the OS can now prove its own install is complete, the backup answer tells the truth about what version history actually holds, and an interrupted setup resumes instead of playing dead. Pack: `updates/1.54.0-it-can-prove-its-own-install.md`.
+
+### New - `scripts/verify.py`, the deterministic install verifier
+
+The contract is derived, never hand-authored: the required-script list is read from `templates/scripts/`, the set setup copies into every install, so the list cannot go stale the way "thirty-two helpers" did. Against that contract the script proves five things about a folder: every shipped script present, every present script parses, the hook dispatcher exists, the six hook events are wired, and VERSION is readable. JSON out for the skill, plain text for a person, read-only throughout. One derivation, two consumers: `check_install_completeness.py` now runs the same checks against the repo before every ship, so a release that fails its own verifier cannot leave the building. Acceptance held literally in the suite: delete `scripts/where.py` from a copy of the tree and the check fails naming the file.
+
+The `verify` skill's Checks 2 and 3 now translate the script's JSON instead of enumerating. The old instruction - "enumerate dynamically, do not hardcode a list" - is retired on purpose and a test keeps it retired: a check that derives its expectations from whatever is on disk cannot notice what is absent from disk, which is why a deleted file was undetectable at any model quality.
+
+### Fixed - "backed up" no longer means "git has heard of it"
+
+`where.py` read `git ls-files` and called anything in it backed up, so a staged-never-committed file whose only copy is the laptop reported green, and a committed file with today's edits uncommitted did too. The answer now separates two facts: saved in local history (committed, clean against HEAD) and a second copy exists (the current commit is contained in a remote-tracking ref - local, offline knowledge of what a remote has actually been seen to hold). Five states render in plain words, and the words "Backed up" appear only for the last one. A dirty folder gets the honest line: an older version is saved, today's changes exist only here.
+
+Same file, three more review findings closed: git detection uses `rev-parse` instead of a `.git` directory test, so worktrees, submodules, and an OS folder living inside a bigger repo report their real history; engine-only folder names (docs, templates, tests, updates) are skipped only when the engine is actually in the folder, so a founder's project named docs no longer vanishes on a plugin install; files at the folder root are counted instead of silently dropped. The scan gained a time-and-entries budget that returns a partial answer instead of hanging, and the `/where` command's query argument finally reaches the script - folders whose file names match come back first, a miss is reported honestly.
+
+### New - setup resumes where it stopped
+
+Setup writes `state/setup-progress.json` after every phase and `state/setup-complete.json` only after the final health check passes. Both launchers and `/setup` branch on the markers: finished opens, interrupted resumes with one sentence about where it stopped, fresh starts the wizard. The identity file is no longer read as "setup finished" - it lands in Phase 1, five phases early, which is why an interrupted setup used to reopen as an ordinary session with no explanation. Installs from before the markers open exactly as they always did; the launcher branch logic is pinned by a four-case behavioural test on both platforms.
+
+### Fixed - two hardenings from the same review
+
+`skills/where` closed with "open it with explorer / open / xdg-open on the discovered path" - a shell interpolation of scanned data. New `scripts/open_folder.py` passes the folder as one argument with no shell involved and refuses any path outside the OS folder; the skill now names it and falls back to printing the path. And `agents_sync.py` renders a knowledge note's topic quoted on a seat's instruction sheet, so a topic phrased as an imperative reads as a label being reported, not an order - with embedded quotes flattened so the label cannot end its own quoting.
+
+### Docs
+
+Release pack with the by-hand path; the two new scripts join the wizard copy list and the file tree in `root-structure.md`. Counts: 95 skills, 45 commands unchanged; suite 847 -> 867.
+
 ## v1.53.1 - 2026-08-12
 
 Three advertised install paths failed and blamed the founder for it: a correct plugin install was told to reinstall, a git-less ZIP install was refused connectors for a reason that was false, and a missing version marker became the founder's homework. An outside review of v1.53.0 caught the pattern; this patch closes it. Pack: `updates/1.53.1-your-install-was-right-all-along.md`.

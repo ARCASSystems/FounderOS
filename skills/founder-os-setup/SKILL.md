@@ -71,3 +71,13 @@ Run the phases in order. When you reach a phase, read its reference file for the
 ## After every phase
 
 Show a quick status: what is done, what is next. Track anything skipped or deferred in the backlog (`core/setup-backlog.md`), not scattered across other files. The backlog is shown and saved in Phase 6.3.
+
+**Write the resume marker (mandatory, same moment as the status).** Setup takes 15 to 20 minutes and sessions get closed mid-way. Before these markers, an interrupted setup reopened as an ordinary session with no explanation, because the launchers branched on `core/identity.md` - written in Phase 1, five phases before setup is actually done. Two files fix that:
+
+- After EVERY phase completes, write `state/setup-progress.json` (create `state/` if needed):
+  `{"finished_phase": "<the phase that just completed, e.g. 2>", "next_phase": "<the next one>", "updated": "<YYYY-MM-DD>"}`
+- After Phase 6's verify health check passes - and not one moment earlier - write `state/setup-complete.json`:
+  `{"version": "<the VERSION file's content>", "completed": "<YYYY-MM-DD>"}`
+  then delete `state/setup-progress.json`. Completion means the tour ran and verify passed, not that files exist.
+
+**Resuming.** When you are started with a resume instruction, or `state/setup-progress.json` exists without `state/setup-complete.json`, read the marker, say in one plain sentence where setup stopped ("We got through building your folders last time - picking up at your company setup"), and continue from `next_phase`. Do not restart the interview and do not re-ask anything already answered - the files on disk are the record of what was answered. If the marker is unreadable, work out the furthest complete phase from what exists on disk (identity file, folder tree, company folders, first project) and resume after it, saying that is what you did.

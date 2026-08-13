@@ -18,6 +18,7 @@ Exit 0 when complete, 1 with a report otherwise.
 
 from __future__ import annotations
 
+import importlib.util
 import re
 import sys
 from pathlib import Path
@@ -104,6 +105,24 @@ def main() -> int:
             failures.append(f"templates/scripts/ has .py missing from scripts/: {only_tmpl}")
         if only_live:
             notes.append(f"scripts/ has .py not in templates/scripts/ (fallback-only by policy): {only_live}")
+
+    # 5. The install verifier's own verdict on this repo. scripts/verify.py derives
+    #    the install contract from templates/scripts/ (the same source this guard
+    #    reads above) and is what a founder's /verify runs against their folder.
+    #    The repo IS an install, so it must satisfy its own contract before ship -
+    #    a release that fails its own verifier would tell every founder their
+    #    install is broken. One derivation, two consumers: this gate and the skill.
+    verifier = LIVE_SCRIPTS / "verify.py"
+    if verifier.is_file():
+        spec = importlib.util.spec_from_file_location("fos_verify", verifier)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        report = mod.run_checks(REPO)
+        for c in report["checks"]:
+            if c["status"] == "fail":
+                failures.append(f"scripts/verify.py fails on this repo: {c['name']} - {c['detail']}")
+    else:
+        failures.append("scripts/verify.py is missing - the install verifier is part of the shipped contract")
 
     for n in notes:
         print(f"note: {n}")
