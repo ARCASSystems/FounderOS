@@ -11,7 +11,7 @@ Entry point for the voice interview. Triggers the `voice-interview` skill, which
 
 1. Check whether `core/identity.md` exists at the repo root.
 
-2. If `core/identity.md` does NOT exist, reply: `Founder OS not set up here yet. Run /founder-os:setup first.` and stop. The voice interview depends on identity being filled.
+2. If `core/identity.md` does NOT exist, reply: `Founder OS not set up here yet. Say "set up Founder OS" first.` and stop. The voice interview depends on identity being filled.
 
 3. Check whether `core/voice-profile.yml` exists.
 
@@ -30,6 +30,6 @@ Entry point for the voice interview. Triggers the `voice-interview` skill, which
 ## Rules
 
 - This command is a thin trigger. All logic lives in the skill. Do not duplicate interview steps here.
-- If the skill file is missing, reply: `Voice interview skill not found at skills/voice-interview/SKILL.md. This install is incomplete. Re-install the plugin.` and stop.
+- If the skill file is missing, reply: `Voice interview skill not found at skills/voice-interview/SKILL.md. Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
 - No em dashes or en dashes. Hyphens only with spaces.
 - Never overwrite an existing populated profile without the explicit re-run confirmation above.

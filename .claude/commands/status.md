@@ -13,11 +13,11 @@ Read-only readiness check. Reads the OS state and returns a single fenced score 
 
 2. The skill owns the scoring logic, file reads, and output rendering. This command is a thin trigger.
 
-3. If the skill file is missing, reply: `Readiness skill not found at skills/readiness-check/SKILL.md. This install is incomplete. Re-install the plugin.` and stop.
+3. If the skill file is missing, reply: `Readiness skill not found at skills/readiness-check/SKILL.md. Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
 
 ## Rules
 
 - Read-only. Do not write to any file.
 - Output is a single fenced block. No commentary before, after, or around it.
-- If the install is empty (no `core/identity.md`), reply: `Founder OS not set up here. Run /founder-os:setup first.` and stop.
+- If the install is empty (no `core/identity.md`), reply: `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
 - No em dashes or en dashes. Hyphens only.

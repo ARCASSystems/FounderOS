@@ -90,4 +90,4 @@ Argument: `$ARGUMENTS` (the person or meeting name).
 - Do not publish anything. Internal capture only.
 - If a transcript is at a path, read it with the Read tool before routing.
 - If it is a voice-to-text brain dump (rambling, tangential), accept the shape and extract intent. Do not ask the founder to be more structured.
-- This command works only inside a Founder OS install. If the `brain/` folder is missing, reply: `Founder OS not installed here. Run /founder-os:setup first.`
+- This command works only inside a Founder OS install. If the `brain/` folder is missing, reply: `Founder OS not installed here. Say "set up Founder OS" first.`

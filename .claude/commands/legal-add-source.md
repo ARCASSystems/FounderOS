@@ -17,7 +17,7 @@ This command does NOT auto-extract law text from the source. It registers the so
 
 ## Procedure
 
-1. **Verify install.** If `core/identity.md` does not exist, reply: `Founder OS not set up here. Run /founder-os:setup first.` and stop.
+1. **Verify install.** If `core/identity.md` does not exist, reply: `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
 
 2. **Parse the argument.** Expected forms:
    - `https://...` → URL source
@@ -26,7 +26,7 @@ This command does NOT auto-extract law text from the source. It registers the so
 
    If no argument was passed, ask: "What source do you want to add? Paste a URL, a PDF path, or both. Optionally add `-- <description>` for context."
 
-3. **Resolve jurisdiction.** Read `core/identity.md` `jurisdiction:` field. If missing, reply: `No jurisdiction set. Run /founder-os:legal-setup first.` and stop.
+3. **Resolve jurisdiction.** Read `core/identity.md` `jurisdiction:` field. If missing, reply: `No jurisdiction set. Say "set up legal" first.` and stop.
 
 4. **For URL sources: WebFetch the URL** to confirm it resolves. If it returns 4xx/5xx or redirects to an unrelated page, warn the user: "URL returns <status>. Add anyway? (yes / no)". If 200, capture the page title and a one-paragraph summary for the source's `notes:` field.
 

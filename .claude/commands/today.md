@@ -61,4 +61,4 @@ Two behavior rules on what this brief reports. They change what the founder sees
 - If the daily anchor is stale (current date past `## Today:`), prepend a top line: `Yesterday's plan (<X>) is still showing. Say "roll my day" and I will carry it forward and ask for today's one thing.`
 - Keep total under 20 lines.
 - No em dashes or en dashes. Hyphens only.
-- This command works only inside a Founder OS install. If the `cadence/` folder is missing, reply: `Founder OS not installed here. Run /founder-os:setup first.`
+- This command works only inside a Founder OS install. If the `cadence/` folder is missing, reply: `Founder OS not installed here. Say "set up Founder OS" first.`

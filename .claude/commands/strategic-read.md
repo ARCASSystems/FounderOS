@@ -9,8 +9,8 @@ Run the strategic-read skill at `skills/strategic-read/SKILL.md` end to end. Opt
 
 ## Procedure
 
-1. If `core/identity.md` does not exist, reply `Founder OS not set up here. Run /founder-os:setup first.` and stop.
-2. If `skills/strategic-read/SKILL.md` is missing, reply `strategic-read skill not found at skills/strategic-read/SKILL.md. Re-install the plugin.` and stop.
+1. If `core/identity.md` does not exist, reply `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
+2. If `skills/strategic-read/SKILL.md` is missing, reply `strategic-read skill not found at skills/strategic-read/SKILL.md. Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
 3. If a single argument was passed AND it does not match one of the valid section keys (`identity`, `commitments`, `decisions`, `flags`, `next-moves`), reply `Unknown section: <arg>. Valid keys: identity, commitments, decisions, flags, next-moves.` and stop. Do not fall back to the full report.
 4. Follow the strategic-read skill instructions exactly. Read each file in the documented order, run the stale-context check, then render the 5-section report (no arg) or the one selected section (valid arg) inside the fenced block.
 5. Output the structured block defined in the skill. Nothing before, nothing after.

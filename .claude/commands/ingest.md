@@ -14,10 +14,10 @@ Process a source into the OS with provenance preserved. Different from knowledge
 
 2. The skill owns source detection, raw file creation, wiki update proposal, and approval flow. This command is a thin trigger.
 
-3. If the skill file is missing, reply: `Ingest skill not found at skills/ingest/SKILL.md. This install is incomplete. Re-install the plugin or update via /founder-os:update.` and stop.
+3. If the skill file is missing, reply: `Ingest skill not found at skills/ingest/SKILL.md. Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
 
 ## Rules
 
 - Only one auto-write: the source itself to `raw/`. All wiki updates require explicit user approval.
-- If the install is empty (no `core/identity.md`), reply: `Founder OS not set up here. Run /founder-os:setup first.` and stop.
+- If the install is empty (no `core/identity.md`), reply: `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
 - No em dashes or en dashes. Hyphens only.

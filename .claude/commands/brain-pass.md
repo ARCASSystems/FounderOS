@@ -11,8 +11,8 @@ Run the brain-pass skill at `skills/brain-pass/SKILL.md` end to end.
 ## Procedure
 
 1. If `$ARGUMENTS` is empty, reply `What should the brain pass over? Re-run as /founder-os:brain-pass "<question>".` and stop.
-2. If `core/identity.md` does not exist, reply `Founder OS not set up here. Run /founder-os:setup first.` and stop.
-3. If `skills/brain-pass/SKILL.md` is missing, reply `brain-pass skill not found at skills/brain-pass/SKILL.md. Re-install the plugin.` and stop.
+2. If `core/identity.md` does not exist, reply `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
+3. If `skills/brain-pass/SKILL.md` is missing, reply `brain-pass skill not found at skills/brain-pass/SKILL.md. Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
 4. Follow the brain-pass skill instructions exactly. The question for the pass is `$ARGUMENTS`.
 5. Output the structured block defined in the skill (Answer / Evidence / Confidence / Gaps).
 

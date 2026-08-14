@@ -9,9 +9,9 @@ Run the since-last-session skill at `skills/since-last-session/SKILL.md` end to 
 
 ## Procedure
 
-1. If `core/identity.md` does not exist, reply `Founder OS not set up here. Run /founder-os:setup first.` and stop.
-2. If `skills/since-last-session/SKILL.md` is missing, reply `since-last-session skill not found at skills/since-last-session/SKILL.md. Re-install the plugin.` and stop.
-3. If `brain/` does not exist, reply `brain/ folder missing. Re-install or run /founder-os:setup first.` and stop.
+1. If `core/identity.md` does not exist, reply `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
+2. If `skills/since-last-session/SKILL.md` is missing, reply `since-last-session skill not found at skills/since-last-session/SKILL.md. Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
+3. If `brain/` does not exist, reply `brain/ folder missing. Say "set up Founder OS" to build it.` and stop.
 4. Follow the since-last-session skill instructions exactly.
    - If `brain/.last-session` is missing: print the seed message, write the marker, stop. No delta on the first run.
    - If `brain/.last-session` is present: read it, compute elapsed time, render the 5-section report, then overwrite the marker with the current ISO-8601 timestamp.

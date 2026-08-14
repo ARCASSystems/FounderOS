@@ -10,11 +10,11 @@ Quarterly refresh of the loaded jurisdiction's source set. Walks each source, pr
 
 ## Procedure
 
-1. **Verify install.** If `core/identity.md` does not exist, reply: `Founder OS not set up here. Run /founder-os:setup first.` and stop.
+1. **Verify install.** If `core/identity.md` does not exist, reply: `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
 
-2. **Read jurisdiction.** Open `core/identity.md` and find the `jurisdiction:` field. If missing, reply: `No jurisdiction set. Run /founder-os:legal-setup first.` and stop.
+2. **Read jurisdiction.** Open `core/identity.md` and find the `jurisdiction:` field. If missing, reply: `No jurisdiction set. Say "set up legal" first.` and stop.
 
-3. **Open sources.yml.** Read `skills/legal-compliance/references/<jurisdiction>/sources.yml`. If missing, reply: `No source set loaded for <jurisdiction>. Run /founder-os:legal-setup to create the scaffold, or /founder-os:legal-add-source to add sources directly.` and stop.
+3. **Open sources.yml.** Read `skills/legal-compliance/references/<jurisdiction>/sources.yml`. If missing, reply: `No source set loaded for <jurisdiction>. Say "set up legal" to create the scaffold, or "add a legal source" to add sources directly.` and stop.
 
 4. **Identify stale sources.** Today's date minus each source's `last_checked_on:`. Anything >180 days old is "stale". Anything >90 days old is "warming". Anything ≤90 days is "fresh".
 

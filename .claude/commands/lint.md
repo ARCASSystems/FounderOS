@@ -13,11 +13,11 @@ Read-only wiki audit. Surfaces issues, never fixes them.
 
 2. The skill owns the scan logic, file reads, and output rendering. This command is a thin trigger.
 
-3. If the skill file is missing, reply: `Lint skill not found at skills/lint/SKILL.md. This install is incomplete. Re-install the plugin or update via /founder-os:update.` and stop.
+3. If the skill file is missing, reply: `Lint skill not found at skills/lint/SKILL.md. Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
 
 ## Rules
 
 - Read-only. Never modify any file.
 - Output is a single fenced report block. No commentary before, after, or around it.
-- If the install is empty (no `core/identity.md`), reply: `Founder OS not set up here. Run /founder-os:setup first.` and stop.
+- If the install is empty (no `core/identity.md`), reply: `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
 - No em dashes or en dashes. Hyphens only.

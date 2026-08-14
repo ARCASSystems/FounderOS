@@ -9,7 +9,7 @@ Run the audit skill at `skills/audit/SKILL.md` end to end.
 
 ## Procedure
 
-1. If `core/identity.md` does not exist, reply `Founder OS not set up here. Run /founder-os:setup first.` and stop.
+1. If `core/identity.md` does not exist, reply `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
 2. Read `skills/audit/SKILL.md`.
 3. Run the five checks named in the skill.
 4. Use parallel sub-agents when the environment supports them. If not, run the checks in sequence and mark the report `parallel: unavailable`.

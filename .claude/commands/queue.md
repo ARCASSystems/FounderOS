@@ -20,7 +20,7 @@ Work queue management. Reads and updates `cadence/queue.md`.
    - "park the Q3 brief": execute `park`.
 
 3. If the skill file is missing, reply: `Queue skill not found at skills/queue/SKILL.md.
-   Re-install or update via /founder-os:update.` and stop.
+   Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
 
 ## Rules
 

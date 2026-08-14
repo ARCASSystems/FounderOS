@@ -9,9 +9,9 @@ Refresh the auto-extracted half of `brain/relations.yaml`. The hand-curated `rel
 
 ## Procedure
 
-1. If `core/identity.md` does not exist, reply `Founder OS not set up here. Run /founder-os:setup first.` and stop.
+1. If `core/identity.md` does not exist, reply `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
 
-2. If `scripts/wiki-build.py` does not exist, reply `Wiki-build script not found. Run /founder-os:setup or /founder-os:update to install it.` and stop.
+2. If `scripts/wiki-build.py` does not exist, reply `Wiki-build script not found. Say "update Founder OS" to restore the OS's own files.` and stop.
 
 3. Run the build script:
    ```bash

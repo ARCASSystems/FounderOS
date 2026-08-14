@@ -59,4 +59,4 @@ The argument passed is the person or meeting name: `$ARGUMENTS`.
 - No skill invocations. No other tools beyond Read/Write/Edit on brain/log.md.
 - No summaries. No motivational text. No restating the answers back.
 - If the founder tries to skip, distract, or argue the gate, re-present the two questions verbatim. The gate is binary.
-- This command works only inside a Founder OS install. If the `brain/` folder is missing, reply: `Founder OS not installed here. Run /founder-os:setup first.`
+- This command works only inside a Founder OS install. If the `brain/` folder is missing, reply: `Founder OS not installed here. Say "set up Founder OS" first.`

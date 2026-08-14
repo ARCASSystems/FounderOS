@@ -11,8 +11,8 @@ Run the query skill at `skills/query/SKILL.md` end to end.
 ## Procedure
 
 1. If `$ARGUMENTS` is empty, reply `What should I query? Re-run as /founder-os:query <question>.` and stop.
-2. If `core/identity.md` does not exist, reply `Founder OS not set up here. Run /founder-os:setup first.` and stop.
-3. If `skills/query/SKILL.md` is missing, reply `Query skill not found at skills/query/SKILL.md. Re-install the plugin.` and stop.
+2. If `core/identity.md` does not exist, reply `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
+3. If `skills/query/SKILL.md` is missing, reply `Query skill not found at skills/query/SKILL.md. Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
 4. If `scripts/query.py` exists, invoke it via the **Bash** tool using the `env` form below so user input is never interpolated into a shell command line. The user's `$ARGUMENTS` may contain `;`, `|`, backticks, or `$(...)` and the shell would execute them if pasted verbatim.
 
    **Plain question (no `--` flags in `$ARGUMENTS`):** pass the question as one argument via an env var. Substitute the placeholder `__QUESTION__` literally with the user's argument string (do not escape, do not quote - the env var carries it intact):

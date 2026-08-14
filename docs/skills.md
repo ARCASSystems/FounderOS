@@ -707,7 +707,8 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 ### where
 
 - **Say.** "where is my work", "where did that go", "where did you save it", or "I cannot find the supplier list".
-- **Outcome.** Two or three sentences naming the project and the folder in your own words, plus a plain statement of which folders exist only on this computer. Not a list of paths.
+- **Outcome.** Two or three sentences naming the project and the folder in your own words, plus a plain statement of what would survive this laptop dying. Not a list of paths.
+- **What "backed up" means here.** The words are strict on purpose. A folder is only called backed up when a remote is configured, its address is somewhere other than this computer, and the last sync recorded it holding this exact version. A copy in another folder on the same disk, or a file version history is told to ignore, does not earn the word - both are gone with the laptop. A folder that is partly copied says exactly that.
 - **Reads.** Your own install, once, via `python scripts/where.py`. Nothing else.
 - **Writes.** Nothing. It is read-only and it never moves, renames, or tidies what it finds.
 - **Voice rules.** No, but the register bar is the highest in the OS: assume the person asking is frustrated and is not a developer.
@@ -1009,7 +1010,8 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 
 - **Say.** "verify the OS", "run a health check", or "check the substrate".
 - **Outcome.** A structured health report across 9 substrate checks (plugin surface, hooks, scripts, MCPs, free-tier floor, wiki integrity, cadence freshness, auto-memory, skill reachability). Each check reports PASS / WARN / FAIL with a one-line reason.
-- **Reads.** `skills/index.md`, `plugin.json`, `.claude/settings.json`, `scripts/`, `brain/relations.yaml`, `cadence/`, `MEMORY.md`.
+- **Proof, not impression.** The file checks run first as a script (`python scripts/verify.py`), and the skill reports what it found rather than enumerating anything itself. The script holds the contract - the list of everything an install must carry, derived from what setup copies - and proves each file is present, is the version that shipped, and parses. That split exists because a check that derives its expectations from whatever is on disk cannot notice what is missing from disk, which is how a deleted file stayed invisible to this skill until v1.54.0.
+- **Reads.** `scripts/verify.py` output, `skills/index.md`, `plugin.json`, `.claude/settings.json`, `scripts/`, `brain/relations.yaml`, `cadence/`, `MEMORY.md`.
 - **Writes.** Nothing. Read-only. Never auto-fixes.
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete.

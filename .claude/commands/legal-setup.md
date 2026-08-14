@@ -12,9 +12,9 @@ This command is a thin trigger - the heavy lifting lives in `skills/legal-compli
 
 ## Procedure
 
-1. **Verify install.** If `core/identity.md` does not exist, reply: `Founder OS not set up here. Run /founder-os:setup first.` and stop.
+1. **Verify install.** If `core/identity.md` does not exist, reply: `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
 
-2. **Read the legal-compliance skill** at `skills/legal-compliance/SKILL.md`. If it is missing, reply: `legal-compliance skill not found. This install is incomplete. Re-install the plugin or update via /founder-os:update.` and stop.
+2. **Read the legal-compliance skill** at `skills/legal-compliance/SKILL.md`. If it is missing, reply: `legal-compliance skill not found. Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
 
 3. **Run the interview.** Ask ONE question at a time. Wait for the answer before moving on.
 
@@ -133,7 +133,7 @@ The SessionStart hook will surface any compliance.md deadline within 30 days.
 - Ask ONE question at a time. Wait for the answer.
 - If the user dumps multiple answers in one reply, parse all of them and skip ahead. Confirm what you captured in one line.
 - If the user says "skip" on any question, leave that field empty and continue. Do not push back.
-- Never invent jurisdiction-specific law during setup. If asked "what are my obligations?", reply: "I'll know once we load your jurisdiction's sources. Add them via `/founder-os:legal-add-source` and I can advise."
+- Never invent jurisdiction-specific law during setup. If asked "what are my obligations?", reply: "I'll know once we load your jurisdiction's sources. Add them by saying "add a legal source" and I can advise."
 - No em dashes or en dashes anywhere in output.
 
 <!-- private-tag: not applicable: writes structured compliance scaffolding from a template; not user-provided speech content -->

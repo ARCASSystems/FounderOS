@@ -33,5 +33,5 @@ Argument: `$ARGUMENTS` - the path to the export ZIP or unzipped export folder, w
 - The scoring engine is deterministic and free-plan only - no scrapers, no paid tools, no API calls. Only optional narrative or synthesis afterward uses the session's own Claude.
 - Never analyse an export the user did not personally download. Refuse on consent grounds.
 - Output files hold real names and URLs. Tell the user to keep the output folder local and never commit it.
-- If the skill file is missing, reply: `LinkedIn scan skill not found at skills/linkedin-network-scan/SKILL.md. This install is incomplete. Re-install the plugin.` and stop.
+- If the skill file is missing, reply: `LinkedIn scan skill not found at skills/linkedin-network-scan/SKILL.md. Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
 - No em dashes or en dashes. Hyphens only with spaces.

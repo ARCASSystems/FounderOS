@@ -2,6 +2,22 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.54.2 - 2026-08-14
+
+Two of the last three releases fixed a founder-facing message that told a correctly-installed founder to reinstall, or named a slash command that exists only on plugin installs. Both fixes landed in the single file where the defect was spotted. This release sweeps the class, which is what the harness doctrine says should have happened the first time. Pack: `updates/1.54.2-no-command-tells-you-to-reinstall.md`.
+
+### Fixed - 38 founder-facing messages across 25 command files
+
+Twenty-two commands answered a failed skill lookup with "re-install the plugin". That is wrong on every path: a ZIP or clone install has no plugin, and on the path it fails hardest - a correct plugin install - the engine is already on the machine and the real problem is a lookup, not a missing file. All now carry the reviewed v1.53.1 wording: restart Claude Code, and if it recurs, say "update Founder OS". Separately, replies naming `/founder-os:setup`, `/founder-os:update`, `/founder-os:legal-setup` and `/founder-os:legal-add-source` were dead ends for ZIP and clone installs, which register the bare form; they now name the natural-language phrase, which works on every path. Usage echoes of the shape "re-run as /founder-os:query" are left alone deliberately - a founder reading one has just typed that form, so it is self-correcting.
+
+`.claude/commands/verify.md` also carried the same working-directory skill lookup that setup.md had in v1.53.1: it resolved `skills/verify/SKILL.md` against the folder the founder is standing in, which on a plugin install is their own empty folder. It now resolves from `${CLAUDE_PLUGIN_ROOT}` first with the documented fallbacks.
+
+### Docs - four surfaces caught up with the code
+
+`skills/index.md` still described v1.53.0 as the newest release; its header now carries what v1.54.0 and v1.54.1 actually did. The `verify` entry in `docs/skills.md` now states that its file checks are a script's proof rather than the assistant's enumeration, and why that split exists. The `where` entry states what "backed up" has to earn since v1.54.1. `rules/security-baseline.md` and its templates copy carry the one-file-one-name rule for secret targets, including the hard-link refusal. The README's offline-proof list gains `python scripts/verify.py`, which is now the strongest checkable claim in it.
+
+No script changed in this release.
+
 ## v1.54.1 - 2026-08-14
 
 An outside review of v1.54.0 found three routes to a false "Backed up" line and one route for a secret to land in a file the founder never named. v1.54.0 shipped the backup answer as the honest one; it was not honest enough. Pack: `updates/1.54.1-the-backup-line-had-to-earn-it.md`.

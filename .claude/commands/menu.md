@@ -13,7 +13,7 @@ Discovery entry point. Surfaces 5 to 7 capabilities the founder is most likely t
 
 2. The skill owns the algorithm: read `brain/.snapshot.md` if present, current week's commitments from `cadence/weekly-commitments.md`, last 7 days of `brain/log.md`, and presence of `core/voice-profile.yml` and `core/brand-profile.yml`. Score capabilities against state. Return the top 5 to 7 by relevance with natural-language phrasing first, slash command shortcut second, one-sentence why-now.
 
-3. If the skill file is missing, reply: `Menu skill not found at skills/menu/SKILL.md. This install is incomplete. Re-install the plugin or update via /founder-os:update.` and stop.
+3. If the skill file is missing, reply: `Menu skill not found at skills/menu/SKILL.md. Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
 
 ## Rules
 
