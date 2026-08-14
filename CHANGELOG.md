@@ -2,13 +2,29 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.54.3 - 2026-08-14
+
+Three releases in a row were corrected by outside review, for the same three structural reasons each time. This release changes the structure instead of patching another instance, and ships the standard as a page a founder can read. Pack: `updates/1.54.3-the-release-process-stops-trusting-its-builder.md`.
+
+### New - `rules/release-verification.md`, the four gates every release now passes
+
+Refute before push: a context that did not build the change gets the diff and the release's user-facing claims, instructed to refute with repro-or-flag - the builder cannot review the builder, and this repo owns the proof (a shipped test that encoded its own bug as the expected result). A user-facing claim is a specification: each one in a release pack carries a falsification test or an honest unverified label. A finding names an instance, the fix names the class: no review finding closes without the repo-wide grep, which is the difference between v1.53.1 and v1.54.2 existing as separate releases. And the coverage floor is mechanical: scripts that handle secrets, send, delete, or report safety must be named by a test, enforced by a ratchet test in the maintainer's suite, which runs upstream of every release and is not shipped in this repo - the check found five gaps the day it was laid (among them the session-undo net, the capability-page builder, and the provisional-facts ledger - the machinery whose honesty the OS leans on), now tracked as a frozen shrink-only debt set: growth requires editing the frozen constant in a diff a reviewer sees. The refute pass over this very release hardened the check twice - a comment mention counted as coverage, and the debt list could quietly grow - both closed before this shipped.
+
+The page also defines success honestly: not zero findings, but no install-breaking defect reaching a founder, no class found twice, severity falling release over release, and every real finding becoming a permanent test.
+
+### Changed - release commits open with the gate
+
+`rules/commit-naming.md`'s release section points at the verification page before the naming rules: naming a release well matters less than the release deserving its name.
+
+Counts: 95 skills, 45 commands; suite 883 -> 886 with the floor's three ratchet tests.
+
 ## v1.54.2 - 2026-08-14
 
 Two of the last three releases fixed a founder-facing message that told a correctly-installed founder to reinstall, or named a slash command that exists only on plugin installs. Both fixes landed in the single file where the defect was spotted. This release sweeps the class, which is what the harness doctrine says should have happened the first time. Pack: `updates/1.54.2-no-command-tells-you-to-reinstall.md`.
 
 ### Fixed - 38 founder-facing messages across 25 command files
 
-Twenty-two commands answered a failed skill lookup with "re-install the plugin". That is wrong on every path: a ZIP or clone install has no plugin, and on the path it fails hardest - a correct plugin install - the engine is already on the machine and the real problem is a lookup, not a missing file. All now carry the reviewed v1.53.1 wording: restart Claude Code, and if it recurs, say "update Founder OS". Separately, replies naming `/founder-os:setup`, `/founder-os:update`, `/founder-os:legal-setup` and `/founder-os:legal-add-source` were dead ends for ZIP and clone installs, which register the bare form; they now name the natural-language phrase, which works on every path. Usage echoes of the shape "re-run as /founder-os:query" are left alone deliberately - a founder reading one has just typed that form, so it is self-correcting.
+Fifteen command files, seventeen messages, answered a failed skill lookup with "re-install the plugin" (the sweep touched twenty-two files in all, counting the second class below; the original entry here said twenty-two for the reinstall class alone, which the v1.54.3 refute pass caught against the diff - corrected 2026-08-14). That advice is wrong on every path: a ZIP or clone install has no plugin, and on the path it fails hardest - a correct plugin install - the engine is already on the machine and the real problem is a lookup, not a missing file. All now carry the reviewed v1.53.1 wording: restart Claude Code, and if it recurs, say "update Founder OS". Separately, replies naming `/founder-os:setup`, `/founder-os:update`, `/founder-os:legal-setup` and `/founder-os:legal-add-source` were dead ends for ZIP and clone installs, which register the bare form; they now name the natural-language phrase, which works on every path. Usage echoes of the shape "re-run as /founder-os:query" are left alone deliberately - a founder reading one has just typed that form, so it is self-correcting.
 
 `.claude/commands/verify.md` also carried the same working-directory skill lookup that setup.md had in v1.53.1: it resolved `skills/verify/SKILL.md` against the folder the founder is standing in, which on a plugin install is their own empty folder. It now resolves from `${CLAUDE_PLUGIN_ROOT}` first with the documented fallbacks.
 

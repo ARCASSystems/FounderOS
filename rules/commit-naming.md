@@ -35,6 +35,8 @@ If the bundle has no single most-visible change, split the commit.
 
 ## Release commits
 
+Before any release commit exists at all, it passes `rules/release-verification.md`: a refute pass by a context that did not build it, a falsification test or an honest unverified label on every user-facing claim, and the repo-wide class sweep on any review-finding fix. Naming a release well matters less than the release deserving its name.
+
 A version bump is still a commit, so it follows the same rule. The subject is the user-visible headline of the release in present tense, with no version number. The version lives in the git tag and, when useful, the body.
 
 **Release commit shape:**
