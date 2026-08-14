@@ -127,9 +127,9 @@ Remote: <REMOTE_VERSION>
 Status: <up to date | update available>
 ```
 
-If update available, add one line: `Run /founder-os:update to install.` Stop.
+If update available, add one line: `Say "update Founder OS" to install it.` Stop.
 
-If `LOCAL_VERSION` is `unknown`, the `Status:` line reads `cannot tell - refresh available` and the line under it reads `Run /founder-os:update to refresh to the current release and restore the version marker.` Stop.
+If `LOCAL_VERSION` is `unknown`, the `Status:` line reads `cannot tell - refresh available` and the line under it reads `Say "update Founder OS" to refresh to the current release and put the version marker back.` Stop.
 
 **If `$ARGUMENTS` is `rollback`:**
 
@@ -199,7 +199,7 @@ If `LOCAL_VERSION` is `unknown`, show the same block with two changes and nothin
 - the `Current:` line reads `Current:  unknown (the file recording it is missing - this refresh restores it)`
 - the paragraph beginning "Then I walk you through what this release changed" is replaced with: `I cannot tell which releases you already have, so I will refresh the files above and skip the guided walkthrough of what changed. Nothing else about this is different, and your own files are still untouched.`
 
-Wait for reply. If not a clear `yes`, reply: `Update dismissed. Run /founder-os:update again later.` Stop.
+Wait for reply. If not a clear `yes`, reply: `Update dismissed. Say "update Founder OS" whenever you want it.` Stop.
 
 ### Step 7. Back up current state and record the pre-update manifest
 
@@ -348,7 +348,7 @@ System Layer files refreshed.
 User Layer files untouched.
 Packs walked: <n> (<applied> applied, <skipped> skipped as not-your-modules, <deferred> deferred).
 
-To rollback: /founder-os:update rollback
+To undo this update: say "roll back the update"
 ```
 
 If `LOCAL_VERSION` was `unknown`, the first line reads `Refreshed to v<REMOTE_VERSION>. Your install records its version again.` and the packs line is replaced with `Release walkthrough skipped - I could not tell which releases you already had.` Never render the literal word `unknown` as though it were a version number.

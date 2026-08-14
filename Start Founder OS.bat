@@ -44,11 +44,24 @@ rem -- setup only after its final health check, so an identity file alone is
 rem -- no longer read as "setup finished" - it lands five phases early. An
 rem -- install set up before the markers existed has identity and neither
 rem -- marker; it opens normally, exactly as it always has.
-if exist "state\setup-complete.json" (
-  claude
+rem -- A marker counts only if it actually holds a record. A zero-byte file is
+rem -- a write that failed, and reading one as proof let a truncated completion
+rem -- marker suppress setup on an install that had never finished it.
+set "OS_DONE="
+set "OS_MID="
+if exist "state\setup-complete.json" for %%A in ("state\setup-complete.json") do if %%~zA GTR 2 set "OS_DONE=1"
+if exist "state\setup-progress.json" for %%A in ("state\setup-progress.json") do if %%~zA GTR 2 set "OS_MID=1"
+
+rem -- Progress is read FIRST and beats a completion marker sitting beside it.
+rem -- Finishing setup deletes the progress marker, so the two never coexist in
+rem -- a healthy install; when they do, the last thing that happened was a setup
+rem -- that started and did not finish. Resuming is recoverable; opening
+rem -- silently is the failure these markers exist to end.
+if defined OS_MID (
+  claude "continue Founder OS setup where it left off"
 ) else (
-  if exist "state\setup-progress.json" (
-    claude "continue Founder OS setup where it left off"
+  if defined OS_DONE (
+    claude
   ) else (
     if exist "core\identity.md" (
       claude

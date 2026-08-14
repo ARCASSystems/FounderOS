@@ -74,6 +74,7 @@ Show a quick status: what is done, what is next. Track anything skipped or defer
 
 **Write the resume marker (mandatory, same moment as the status).** Setup takes 15 to 20 minutes and sessions get closed mid-way. Before these markers, an interrupted setup reopened as an ordinary session with no explanation, because the launchers branched on `core/identity.md` - written in Phase 1, five phases before setup is actually done. Two files fix that:
 
+- **The moment setup starts, before Phase 1 writes anything**, delete `state/setup-complete.json` if it is there. A re-run is an unfinished setup from that instant on, and leaving the old completion marker in place means both markers exist together, completion wins the tie, and an interrupted re-run reopens as an ordinary session with no explanation - the precise failure the markers exist to end.
 - After EVERY phase completes, write `state/setup-progress.json` (create `state/` if needed):
   `{"finished_phase": "<the phase that just completed, e.g. 2>", "next_phase": "<the next one>", "updated": "<YYYY-MM-DD>"}`
 - After Phase 6's verify health check passes - and not one moment earlier - write `state/setup-complete.json`:

@@ -23,12 +23,18 @@ The backup line tells two separate truths, never one blurred one (a v1.53.0
 review finding: "backed up" used to mean "git has heard of this file", which is
 true of a staged-never-committed file whose only copy is this laptop):
 
-  - SAVED IN HISTORY: the folder's content is committed and clean against HEAD.
-    A dirty folder gets the honest line "an older version is saved - today's
-    changes exist only here."
-  - A SECOND COPY EXISTS: the current commit is contained in a remote-tracking
-    ref, meaning a remote this machine has synced with actually holds it. No
-    remote knowledge, no second-copy claim.
+  - SAVED IN HISTORY: the folder's content is committed and nothing in it is
+    pending. Pending means any of three things, because for the backup question
+    they are the same fact: a tracked file modified, a new file never added, or
+    a file version history is told to ignore. An ignored file has no second copy
+    anywhere, and it is the likeliest thing in a folder to be lost precisely
+    because nothing ever mentions it.
+  - A SECOND COPY EXISTS: a remote is configured, its address is somewhere other
+    than this computer, and the last sync recorded it holding this exact version.
+    A ref under refs/remotes proves none of that on its own - it can be hand
+    written, or point at a folder on the same disk, and both used to render as
+    "Backed up". This never opens the network: it reports what the last sync
+    recorded, and says so.
 
 Git detection uses `git rev-parse`, not a `.git` folder test: a linked worktree
 and a submodule have a `.git` FILE, and an OS folder nested inside a bigger
@@ -125,32 +131,97 @@ def _git_state(root: Path) -> dict | None:
             if line:
                 in_history.add(line.split("/", 1)[0])
 
+    # -z is not a preference, it is the only correct reading. Without it git
+    # quotes any path holding a non-ASCII byte and escapes it octally, so an OS
+    # folder named with an accent produced paths that matched nothing, the
+    # folder never landed in dirty, and today's unsaved work rendered as
+    # "Backed up". --ignored widens pending to cover the ignored file, which
+    # has no second copy anywhere and is the likeliest thing here to be lost.
+    # Ignored DIRECTORIES stay collapsed (no -uall): one entry for a whole
+    # node_modules, which is both the fast answer and the one we need, since
+    # only the top-level name is ever used.
     dirty: set[str] = set()
-    porcelain = _git(root, "status", "--porcelain")
+    porcelain = _git(root, "status", "--porcelain", "-z", "--ignored")
     if porcelain:
-        for line in porcelain.stdout.splitlines():
-            if len(line) < 4:
+        fields = porcelain.stdout.split("\0")
+        i = 0
+        while i < len(fields):
+            record = fields[i]
+            i += 1
+            if len(record) < 4:
                 continue
-            path = line[3:].strip().strip('"')
-            if " -> " in path:
-                path = path.split(" -> ", 1)[1].strip().strip('"')
+            code, path = record[:2], record[3:]
+            if "R" in code or "C" in code:
+                # a rename/copy record carries its source as the NEXT field;
+                # both ends count as pending - one gained content, one lost it
+                if i < len(fields) and fields[i]:
+                    src = local(fields[i])
+                    if src:
+                        dirty.add(src.rstrip("/").split("/", 1)[0])
+                i += 1
             rel = local(path)
             if rel:
                 dirty.add(rel.rstrip("/").split("/", 1)[0])
 
-    remote_has_head = False
-    refs = _git(root, "for-each-ref", "--format=%(refname)", "refs/remotes")
-    if refs:
+    return {"in_history": in_history, "dirty": dirty,
+            "remote_has_head": _remote_holds_head(root)}
+
+
+def _is_offsite_url(url: str) -> bool:
+    """True only when this address is somewhere other than this computer.
+
+    Deliberately strict: anything not recognisably a network address is treated
+    as local. A remote pointing at another folder on the same disk is a real git
+    remote and a real second copy of the data, but it is NOT a copy away from
+    this computer, and the line this decides says exactly that. Underclaiming
+    here costs a founder nothing; overclaiming is how someone stops making the
+    copy that would have saved them."""
+    u = url.strip()
+    if not u:
+        return False
+    lower = u.lower()
+    if lower.startswith("file://"):
+        return False
+    for scheme in ("ssh://", "git://", "http://", "https://", "ftp://", "ftps://"):
+        if lower.startswith(scheme):
+            return True
+    # scp-style: user@host:path. Excludes a Windows drive letter (C:/...),
+    # which has no @ and a single-character "host".
+    if "@" in u and ":" in u.split("@", 1)[1]:
+        return True
+    return False
+
+
+def _remote_holds_head(root: Path) -> bool:
+    """Whether the last sync recorded an off-machine copy holding this commit.
+
+    Three things must hold, and the old check tested none of them: a remote is
+    actually configured (a ref under refs/remotes can be written by hand and
+    belong to no remote at all), its address is off this computer, and ITS OWN
+    tracking refs contain HEAD. Never opens the network - this is what the last
+    sync recorded, which is the honest limit of an offline read."""
+    conf = _git(root, "config", "--get-regexp", r"^remote\..*\.url$")
+    if not conf:
+        return False
+    offsite: list[str] = []
+    for line in conf.stdout.splitlines():
+        key, _, url = line.strip().partition(" ")
+        name = key[len("remote."):-len(".url")] if key.startswith("remote.") else ""
+        if name and _is_offsite_url(url):
+            offsite.append(name)
+    if not offsite:
+        return False
+    for name in offsite:
+        refs = _git(root, "for-each-ref", "--format=%(refname)", f"refs/remotes/{name}")
+        if not refs:
+            continue
         for ref in refs.stdout.splitlines():
             ref = ref.strip()
             if not ref or ref.endswith("/HEAD"):
                 continue
             if _git(root, "merge-base", "--is-ancestor", "HEAD", ref) is not None:
-                remote_has_head = True
-                break
-
-    return {"in_history": in_history, "dirty": dirty,
-            "remote_has_head": remote_has_head}
+                return True
+    return False
 
 
 def _backup_state(name: str, git: dict | None) -> str:
@@ -160,10 +231,13 @@ def _backup_state(name: str, git: dict | None) -> str:
     if name not in git["in_history"]:
         return "not-saved"     # never committed - the working folder is the only copy
     if name in git["dirty"]:
-        return "stale-save"    # an older version is saved; today's changes exist only here
+        # something here is not in the last save: a modified file, a new one, or
+        # one that is ignored. All three mean the same thing to a founder asking
+        # what would survive the laptop dying.
+        return "stale-save"
     if git["remote_has_head"]:
-        return "second-copy"   # committed, clean, and a synced remote holds the commit
-    return "local-only"        # committed and clean, but no copy exists off this machine
+        return "second-copy"   # the last sync recorded an off-machine copy holding this version
+    return "local-only"        # saved here, but nothing off this computer holds it
 
 
 def _walk(root: Path, engine_here: bool, query_terms: list[str]) -> tuple[dict, bool]:
@@ -266,11 +340,12 @@ BACKUP_LINES = {
     "not-saved": ["    NOT BACKED UP. This exists only on this computer. If the",
                   "    laptop dies or the folder is deleted, it is gone."],
     "no-history": ["    Backup unknown - this install has no version history yet."],
-    "stale-save": ["    An older version is saved. Today's changes exist only here",
-                   "    until the next save runs."],
+    "stale-save": ["    An older version is saved. Some of what is in this folder",
+                   "    right now exists only on this computer."],
     "local-only": ["    Saved in version history on this computer. No copy exists",
                    "    anywhere else yet."],
-    "second-copy": ["    Backed up. A second copy exists away from this computer."],
+    "second-copy": ["    Backed up. The last sync sent this version somewhere off",
+                    "    this computer."],
 }
 
 

@@ -45,6 +45,7 @@ import ast
 import json
 import os
 import re
+import shlex
 import sys
 from pathlib import Path
 
@@ -64,7 +65,7 @@ def resolve_engine(root: Path) -> Path | None:
     env = os.environ.get("CLAUDE_PLUGIN_ROOT", "").strip()
     if env:
         cand = Path(env)
-        if (cand / "templates" / "scripts").is_dir():
+        if (cand / "templates" / "scripts").is_dir() and _is_founder_os(cand):
             return cand
     plugins = Path.home() / ".claude" / "plugins"
     if plugins.is_dir():
@@ -76,19 +77,27 @@ def resolve_engine(root: Path) -> Path | None:
             )
         except OSError:
             hits = []
-        named = []
+        # Identity is required, never preferred. Any plugin can ship a
+        # templates/scripts folder, and measuring this install against someone
+        # else's contract produces a confident answer about the wrong product -
+        # worse than the honest "cannot verify" that no engine returns.
         for h in hits:
             manifest = h / ".claude-plugin" / "plugin.json"
             try:
                 if json.loads(manifest.read_text(encoding="utf-8")).get("name") == "founder-os":
-                    named.append(h)
+                    return h
             except (OSError, ValueError):
                 continue
-        if named:
-            return named[0]
-        if hits:
-            return hits[0]
     return None
+
+
+def _is_founder_os(candidate: Path) -> bool:
+    """Whether this folder is the Founder OS engine, by its own manifest."""
+    manifest = candidate / ".claude-plugin" / "plugin.json"
+    try:
+        return json.loads(manifest.read_text(encoding="utf-8")).get("name") == "founder-os"
+    except (OSError, ValueError):
+        return False
 
 
 def required_scripts(engine: Path) -> list[str]:
@@ -123,6 +132,47 @@ def _scripts_complete(root: Path, engine: Path | None) -> dict:
                   f"{len(manifest)}/{len(manifest)} shipped scripts present", missing=[])
 
 
+def _scripts_current(root: Path, engine: Path | None) -> dict:
+    """Whether every shipped helper in this install is the one that shipped.
+
+    Presence is not currency. A helper left behind by an update, or edited by
+    hand, is syntactically perfect and silently wrong - which is the exact shape
+    of every defect the v1.53.x releases fixed: the repo had the fix and an
+    install did not. Names alone cannot see that; bytes can.
+
+    Skipped when the engine IS this folder, where the comparison is a file
+    against itself."""
+    if engine is None:
+        return _check("scripts-current", "warn",
+                      "cannot verify - the shipped files were not found on this "
+                      "machine, so there is nothing to compare this install against",
+                      stale=[])
+    if engine.resolve() == root.resolve():
+        return _check("scripts-current", "pass",
+                      "this folder holds the shipped files themselves", stale=[])
+    src = engine / "templates" / "scripts"
+    dst = root / "scripts"
+    stale = []
+    for name in required_scripts(engine):
+        a, b = src / name, dst / name
+        if not b.is_file():
+            continue    # absence is scripts-complete's finding, not this one
+        try:
+            if a.read_bytes() != b.read_bytes():
+                stale.append(name)
+        except OSError:
+            stale.append(name)
+    if stale:
+        return _check(
+            "scripts-current", "fail",
+            f"{len(stale)} of the OS's own files do not match the version that "
+            "shipped, so they are out of date or damaged: " + ", ".join(stale),
+            stale=stale)
+    return _check("scripts-current", "pass",
+                  "every one of the OS's own files matches the version that shipped",
+                  stale=[])
+
+
 def _scripts_parse(root: Path) -> dict:
     scripts_dir = root / "scripts"
     if not scripts_dir.is_dir():
@@ -155,6 +205,43 @@ def _hook_dispatcher(root: Path) -> dict:
                   "(the brief, the undo snapshot, the auto-save) is broken")
 
 
+def _runs_dispatcher(hook: dict, event: str) -> bool:
+    """Whether this entry actually runs the dispatcher for this event.
+
+    Substring matching passed a command that merely mentioned the dispatcher and
+    the event while running something else entirely - the check confirmed the
+    words, not the wiring. This reads the command as arguments: the dispatcher
+    must be the script being run, and the event must be an argument to it, not
+    a word inside some other flag's value."""
+    if hook.get("type") != "command":
+        return False
+    command = hook.get("command") or ""
+    if not isinstance(command, str) or not command.strip():
+        return False
+    try:
+        parts = shlex.split(command, posix=False)
+    except ValueError:
+        return False
+    parts = [p.strip('"').strip("'") for p in parts]
+    for i, part in enumerate(parts):
+        norm = part.replace("\\", "/")
+        # The dispatcher must be the script being RUN. Its full shipped path is
+        # the only accepted shape: a bare "dispatch.py" sitting anywhere in the
+        # line is satisfied by --label dispatch.py, which names the dispatcher
+        # while running something else.
+        if not norm.endswith("scripts/hooks/dispatch.py"):
+            continue
+        # a token immediately after a flag is that flag's value, not the program
+        if i > 0 and parts[i - 1].startswith("-"):
+            continue
+        # the event must be the argument handed to it, not a word further down
+        # the line inside some other flag's value
+        rest = parts[i + 1:]
+        if rest and rest[0] == event:
+            return True
+    return False
+
+
 def _hooks_wired(root: Path) -> dict:
     settings = root / ".claude" / "settings.json"
     if not settings.is_file():
@@ -173,7 +260,7 @@ def _hooks_wired(root: Path) -> dict:
     for event in HOOK_EVENTS:
         entries = hooks.get(event) or []
         wired = any(
-            "dispatch.py" in (h.get("command") or "") and event in (h.get("command") or "")
+            _runs_dispatcher(h, event)
             for entry in entries if isinstance(entry, dict)
             for h in (entry.get("hooks") or []) if isinstance(h, dict)
         )
@@ -208,6 +295,7 @@ def run_checks(root: Path) -> dict:
     engine = resolve_engine(root)
     checks = [
         _scripts_complete(root, engine),
+        _scripts_current(root, engine),
         _scripts_parse(root),
         _hook_dispatcher(root),
         _hooks_wired(root),
@@ -226,10 +314,24 @@ def run_checks(root: Path) -> dict:
     }
 
 
+# The JSON keys are for the skill. A person reading the plain output gets the
+# thing being checked in their own words - no internal names, no paths.
+CHECK_LABELS = {
+    "scripts-complete": "All of the OS's own files are here",
+    "scripts-current": "Those files are the version that shipped",
+    "scripts-parse": "None of them are damaged",
+    "hook-dispatcher": "The part that runs things automatically is in place",
+    "hooks-wired": "It is switched on for this folder",
+    "version-marker": "This install knows which version it is",
+}
+
+
 def render(report: dict) -> str:
-    out = ["INSTALL CHECK - what a script can prove about this folder", ""]
+    out = ["INSTALL CHECK - what this folder can prove about itself", ""]
     for c in report["checks"]:
-        out.append(f"[{c['status'].upper()}] {c['name']}: {c['detail']}")
+        label = CHECK_LABELS.get(c["name"], c["name"])
+        out.append(f"[{c['status'].upper()}] {label}")
+        out.append(f"        {c['detail']}")
     out.append("")
     if report["result"] == "fail":
         out.append("Something above is broken. The fastest fix for a missing or "

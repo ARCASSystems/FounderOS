@@ -59,10 +59,19 @@ fi
 # "setup finished" - it lands five phases early. An install set up before the
 # markers existed has identity and neither marker; it opens normally, exactly
 # as it always has.
-if [ -f "state/setup-complete.json" ]; then
-  exec claude
-elif [ -f "state/setup-progress.json" ]; then
+# -s, not -f: a marker counts only if it actually holds a record. A zero-byte
+# file is a write that failed, and reading one as proof let a truncated
+# completion marker suppress setup on an install that had never finished it.
+# Progress is read FIRST, and beats a completion marker sitting beside it.
+# Finishing setup deletes the progress marker, so the two never coexist in a
+# healthy install; when they do, the last thing that happened was a setup that
+# started and did not finish. Resuming that is recoverable. Opening silently,
+# which is what completion-wins did, is the exact failure these markers exist
+# to end.
+if [ -s "state/setup-progress.json" ]; then
   exec claude "continue Founder OS setup where it left off"
+elif [ -s "state/setup-complete.json" ]; then
+  exec claude
 elif [ -f "core/identity.md" ]; then
   exec claude
 else

@@ -2,6 +2,38 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.54.1 - 2026-08-14
+
+An outside review of v1.54.0 found three routes to a false "Backed up" line and one route for a secret to land in a file the founder never named. v1.54.0 shipped the backup answer as the honest one; it was not honest enough. Pack: `updates/1.54.1-the-backup-line-had-to-earn-it.md`.
+
+### Fixed - three ways a folder could claim a second copy it did not have
+
+Ordinary `git status --porcelain` sees neither ignored files nor untracked ones, so a folder whose only local-only content was ignored read as clean and rendered "Backed up" - and the ignored file is the likeliest thing in any folder to be lost, exactly because nothing mentions it. Status output is now read with `-z --ignored`: NUL-delimited, which also removes git's octal-escaped quoting of non-ASCII paths, the second route. An OS folder nested in a bigger repo with an accent in its name produced paths matching nothing, so the folder never counted as pending and today's unsaved work rendered as backed up. Rename records carry their source as the next field and both ends now count as pending.
+
+Third, `refs/remotes` proved nothing on its own. Any ref there qualified, including one written by hand belonging to no remote at all, and including a remote pointing at a bare repo on the same disk. The claim now requires all three of: a configured remote, an address that is recognisably not this computer (anything unrecognised is treated as local - underclaiming costs nothing, overclaiming is how someone stops making the copy that would have saved them), and that remote's own tracking ref containing HEAD. Never opens the network; the line says the last sync recorded it.
+
+The pending line now covers modified, untracked, and ignored content in one sentence, because for "what survives the laptop dying" they are the same fact.
+
+### Fixed - a hard-linked secret target is refused
+
+`resolve()` catches a symlink or a junction because both are paths that point elsewhere. A hard link is not a path - it is a second name for the same file object, so it resolves inside the OS folder and satisfies every containment check ever written, while the write lands in whatever else carries that name. `set-secret` now refuses a target reporting more than one link, and says the one thing the founder can do about it. `scripts/connect.py` also gains the test file it never had: the helper that writes credentials had zero automated coverage, and its v1.53.1 fix was proved once by hand and then by nothing.
+
+### Fixed - three ways the install check could pass while proving nothing
+
+Presence is not currency: a helper left behind by an interrupted update parses perfectly and is silently wrong, which is the shape of nearly every defect the last three releases fixed. New `scripts-current` check compares bytes against what shipped and names any mismatch. The engine search preferred a manifest named founder-os but fell back to any plugin carrying a `templates/scripts` folder, so an install could be measured against a foreign product's contract - identity is now required, on the searched path and the environment-provided one alike. And hook wiring was a substring test, satisfied by a command that merely mentioned the dispatcher and the event while running something else; it now parses the command and requires the dispatcher to be the program run and the event to be its first argument.
+
+### Fixed - founder-facing output that named internal things
+
+The plain verifier printed its own JSON keys (`scripts-complete`, `hooks-wired`) at a founder; each check now names what it checks in plain words, with the keys kept to the JSON the skill reads. Four `update` messages told founders to run `/founder-os:update`, which exists only on plugin installs - ZIP and clone installs register `/update`. All four now say what to say instead.
+
+### Fixed - setup could be told it had finished when it had not
+
+A confirmed re-run never cleared the old completion marker, so the first new progress marker produced both at once and completion won the tie, reopening an interrupted re-run as an ordinary session. The skill now clears completion the moment a re-run starts, the command clears it on the confirmed yes, and precedence is inverted everywhere: progress wins, because finishing setup deletes the progress marker and the two coexisting can only mean a setup that started and did not finish. Marker contents are validated - both launchers moved from an existence test to a non-empty test, closing a zero-byte completion marker suppressing setup entirely.
+
+### Tests
+
+Every case above is pinned, each carrying the reproduction that found it. `tests/test_connect_secrets.py` is new (8 cases, the writer's whole refusal contract). One existing test was rewritten rather than adjusted: `test_a_synced_remote_earns_the_backed_up_line` pushed to a bare repo in the same temp folder and asserted the result was a second copy, which encoded the defect as correct - the test agreed with the bug and could never have caught it. It now uses a genuinely offsite remote, with same-disk, hand-written-ref, ignored-file and non-ASCII cases as its inverse. Suite 867 -> 883.
+
 ## v1.54.0 - 2026-08-13
 
 Every v1.53.x defect shipped through green CI because CI checks the repo and nothing checks an install. This release closes that class: the OS can now prove its own install is complete, the backup answer tells the truth about what version history actually holds, and an interrupted setup resumes instead of playing dead. Pack: `updates/1.54.0-it-can-prove-its-own-install.md`.

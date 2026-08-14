@@ -165,6 +165,29 @@ def _gitignore_lists(name: str) -> bool:
     return False
 
 
+def _refuse_if_shared(path: Path) -> str | None:
+    """Refuse a target that is the same file as something else on disk.
+
+    resolve() catches a symlink or a junction because both are paths that point
+    elsewhere. A hard link is not a path - it is a second name for the same file
+    object, so it resolves inside the folder and passes every containment check
+    while a write through it lands in a file the founder never named. Returns
+    the refusal text, or None when the target is safe to write.
+
+    A file with one name is the only shape a secret target should ever have."""
+    try:
+        links = os.stat(path).st_nlink
+    except OSError:
+        return None    # not there yet, or unreadable - the write path handles it
+    if links > 1:
+        return (
+            f"REFUSED: {path.name} is the same file as something else on this computer, "
+            "so a secret written here would also be written there. Delete it and run this "
+            "again to make a fresh one."
+        )
+    return None
+
+
 def _create_user_only(path: Path) -> None:
     """Create the secret file readable by this user only, where the platform
     supports it. POSIX honours the mode; Windows ignores it and inherits the
@@ -285,6 +308,11 @@ def cmd_set_secret(args: list[str]) -> int:
 
     if not proven:
         print(refusal, file=sys.stderr)
+        return 2
+
+    shared = _refuse_if_shared(target)
+    if shared:
+        print(shared, file=sys.stderr)
         return 2
 
     _create_user_only(target)
