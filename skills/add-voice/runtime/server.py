@@ -213,6 +213,7 @@ def append_to_log(text):
 # to choose. Model loading is slow and once-only, so it is cached here.
 _STT_MODEL = None
 _STT_ERROR = ""
+_STT_FAILURE: list = []
 
 # Anything that looks like a filesystem location, ANYWHERE in the string.
 #
@@ -224,28 +225,34 @@ _STT_ERROR = ""
 # through. No anchors now: a slash-or-backslash separated path fragment of any
 # depth counts, wherever it sits.
 _PATHISH = re.compile(
+    r"(?:"
     r"[A-Za-z]:[\\/]"                                  # C:\ or D:/
     r"|\\\\[^\\/]+[\\]"                               # \\server\share
     r"|/(?:home|users|root|tmp|var|mnt|media|opt|srv|private|volumes|app|data"
     r"|cache|export|usr|etc)/"
     r"|~[A-Za-z0-9._-]*/"                               # ~/ and ~someone/
     r"|\$HOME|%USERPROFILE%|%APPDATA%|%LOCALAPPDATA%"
-    r"|[\\/][^\\/\s'\"]+[\\/][^\\/\s'\"]+[\\/]",      # any three-deep path
+    r"|[\\/][^\\/\s'\"]+[\\/][^\\/\s'\"]+[\\/]"        # any three-deep path
+    r")"
+    r"[^\s'\"<>]*",                                    # ...and the rest of the token
     re.IGNORECASE,
 )
-
 
 def _safe_error(raw: str) -> str:
     """An error a founder can act on, with no path in it.
 
-    This string is printed on the page. A privacy tier that puts the account
-    name on screen has missed its own point, so anything path-shaped is
-    replaced wholesale rather than trimmed.
+    This string is printed on the page, so no path reaches it. But only the
+    path goes: replacing the WHOLE message threw away the reason along with it,
+    and the two commonest real failures both became a message about a model
+    name that was never wrong - a missing espeak-ng data directory, and a
+    first download that could not resolve a host. The founder was sent to edit
+    a correct config file while the actual fix went unnamed.
     """
-    if _PATHISH.search(raw):
+    cleaned = _PATHISH.sub("<path>", raw).strip()
+    if not cleaned or cleaned == "<path>":
         return ("the local model could not be loaded - check the model name in "
                 "voice/config.json and that the first download completed")
-    return raw[:200]
+    return cleaned[:200]
 
 
 def local_stt_status():
@@ -264,12 +271,14 @@ def local_stt_status():
     # imports perfectly and then fails every turn, and the page was painting
     # "your speech stays on this machine" over ears that could not hear. Once a
     # load has failed, say so here rather than on the next recording.
-    if _STT_ERROR:
+    failed = _remembered(_STT_FAILURE)
+    if failed:
         return {
             "available": False,
             "model": model_name,
-            "reason": _STT_ERROR,
-            "how": "check local_stt_model in voice/config.json",
+            "reason": failed,
+            "how": "fix it, then edit voice/config.json or restart voice/server.py "
+                   "so this is checked again",
         }
     return {"available": True, "model": model_name, "reason": "", "how": ""}
 
@@ -277,8 +286,11 @@ def local_stt_status():
 def _load_stt():
     """Load the model once. The first call also downloads it, which is slow."""
     global _STT_MODEL, _STT_ERROR
-    if _STT_MODEL is not None or _STT_ERROR:
+    if _STT_MODEL is not None:
         return _STT_MODEL
+    if _STT_ERROR and _remembered(_STT_FAILURE):
+        return None
+    _STT_ERROR = ""            # the config changed; it is worth another try
     try:
         from faster_whisper import WhisperModel
     except ImportError:
@@ -292,6 +304,7 @@ def _load_stt():
         )
     except Exception as exc:                      # a failed model download, a bad name
         _STT_ERROR = _safe_error(str(exc))
+        _remember(_STT_FAILURE, _STT_ERROR)
         return None
     return _STT_MODEL
 
@@ -343,18 +356,49 @@ def transcribe_audio(raw, suffix=".webm"):
 # A turn that failed is the only hard evidence about whether Piper works. A
 # binary on PATH and a file on disk are not, which is how the page came to paint
 # "a local voice speaks" over a mouth that could not.
+#
+# Remembered, but not forever. The founder fixes the thing, and a status that
+# never re-checks then tells them the mouth is broken when it is not, while
+# pointing at a config file that was correct all along. Editing the config
+# clears it, and so does restarting.
 _TTS_ERROR: list = []
+
+
+def _config_stamp():
+    """The config file's mtime, so a remembered failure can expire."""
+    try:
+        return (HERE / "config.json").stat().st_mtime
+    except OSError:
+        return 0.0
+
+
+def _remember(store, note):
+    store.clear()
+    store.append((note, _config_stamp()))
+
+
+def _remembered(store):
+    """The last failure, unless the config has been edited since."""
+    if not store:
+        return ""
+    note, stamp = store[-1]
+    if _config_stamp() != stamp:
+        store.clear()
+        return ""
+    return note
 
 
 def local_tts_status():
     """Whether Piper can speak on this machine right now."""
     import shutil
 
-    if _TTS_ERROR:
+    failed = _remembered(_TTS_ERROR)
+    if failed:
         return {
             "available": False,
-            "reason": _TTS_ERROR[-1],
-            "how": "check piper_cmd and piper_voice in voice/config.json",
+            "reason": failed,
+            "how": "fix it, then edit voice/config.json or restart voice/server.py "
+                   "so this is checked again",
         }
     cmd = CONFIG.get("piper_cmd") or "piper"
     if shutil.which(cmd) is None:
@@ -402,7 +446,7 @@ def synthesize(text):
         # and leaving the mouth is the instance-not-class mistake that
         # rules/release-verification.md gate 3 exists to stop.
         note = _safe_error(err[-1] if err else "piper returned nothing")
-        _TTS_ERROR.append(note)
+        _remember(_TTS_ERROR, note)
         return (b"", False, note)
     return (proc.stdout, True, "")
 

@@ -394,7 +394,7 @@ Have an idea but no business yet? That counts. Say **"I have an idea"** and desc
 
 ## Status
 
-Version 1.55.0. Public release. 97 skills, 47 commands, 1049 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.55.0. Public release. 97 skills, 47 commands, 1057 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
 **The dependency floor, as of this release.** One Claude plan, no API key, nothing to pip install - with two named exceptions, both optional and both failing closed with the exact command when their package is absent: `scripts/scrape.py` (the fetch helper behind web research) asks for `httpx selectolax tenacity` and falls back to the built-in fetcher, and `scripts/pitch_deck.py` asks for `python-pptx` to render a deck to `.pptx`, where the markdown spec it renders from is the deliverable either way. The optional local voice tier asks for `faster-whisper` and Piper, and is off until you turn it on. Every other shipped script is standard library only. Paragraphs below this line are release history: each states what was true at that version, not what is true now.
 

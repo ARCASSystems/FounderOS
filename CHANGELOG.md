@@ -384,7 +384,38 @@ Also closed: a broken `git status` made the dirty-tree gate fail open,
 `--allow-dirty` crashed on a staged-but-uncommitted file, and re-running voice
 setup printed one brain command and wrote another.
 
-Every one of these is now a test. The suite went 1014 to 1048.
+### Fixed - the third pass, and where it stopped
+
+The gate ran a third time, scoped to one question: would any of this break an
+install or make the OS say something false. Nothing was install-breaking. Four
+things were false, and this is where the release stops.
+
+- **The path scrubber threw the reason away with the path.** It replaced the
+  whole message, so the two commonest real failures of the local tier - a
+  missing espeak-ng data directory and a first download that cannot resolve a
+  host - both became a message about a model name that was never wrong. The
+  founder was sent to edit a correct config file while the actual fix went
+  unnamed. Only the path is removed now, and matching the whole path token
+  rather than its first segment, because the middle of a path is the part that
+  carries the account name.
+- **A fixed problem stayed reported.** A failed local turn was remembered
+  forever, so after the founder installed the missing piece the OS still said
+  the tier was unavailable, and still pointed at the config. A remembered
+  failure now expires when the config is edited, and the instruction says to
+  restart.
+- **The gate had started failing the pages that teach the rule.** Four shipped
+  skills failed for quoting the banned-word list verbatim. A line naming four
+  or more of them is the list, not prose using it. And `highest-leverage` is
+  the noun, where the page bans the verb.
+- **A citation written the ordinary way round lost its coverage.** A source
+  with the URL, the title or the year outside the bracket was read as a claim.
+
+Three passes, thirty-six findings, all fixed and each one now a test. Severity
+fell each time: five serious, then five narrower, then none install-breaking.
+That is what `rules/release-verification.md` says convergence looks like, and it
+is the first release to have measured itself against it.
+
+Every one of these is now a test. The suite went 1014 to 1057.
 
 ## v1.54.3 - 2026-08-14
 

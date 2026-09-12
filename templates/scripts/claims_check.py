@@ -131,17 +131,20 @@ def _is_pure_tag_line(line: str) -> bool:
         return False
     rest = TIER_TAG_FULL.sub(" ", line)
     rest = DATEISH_CONTEXT.sub(" ", rest)
-    if URL.search(rest):
-        return False
-    for pat in (PERCENT, CURRENCY, MAGNITUDE, NUMBER):
+    # A citation carries exactly these outside the bracket: a URL, a quoted
+    # title, a publisher, a year, a page. Treating any of them as a claim cost
+    # coverage to sources written the ordinary way round.
+    rest = URL.sub(" ", rest)
+    rest = QUOTE.sub(" ", rest)
+    for pat in (PERCENT, CURRENCY, MAGNITUDE):
         if pat.search(rest):
             return False
-    if QUOTE.search(rest):
-        return False
-    # Decoration is fine: list markers, emphasis, brackets, a few words of
-    # label. A whole sentence next to the tag is not.
+    for m in NUMBER.finditer(rest):
+        if _is_claim_number(m.group(0)):
+            return False
+    # Decoration and a short source line are fine. A sentence is not.
     words = re.findall(r"[A-Za-z][A-Za-z'-]*", rest)
-    return len(words) <= 4
+    return len(words) <= 12
 
 
 def _is_claim_number(token: str) -> bool:

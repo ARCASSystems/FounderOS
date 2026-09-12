@@ -576,7 +576,10 @@ def census_paras(paras: list[Para], banned: list[str] | None = None,
     prose = [p for p in paras if p.kind in ("prose", "bullet")]
     c.paragraphs = len(prose)
     banned = banned if banned is not None else banned_words_or_warn()
-    banned_rx = [(w, re.compile(r"\b" + re.escape(w) + r"\b", re.IGNORECASE))
+    # Not hyphen-attached: rules/writing-style.md bans "leverage (as a verb)",
+    # and "highest-leverage move" is the noun doing honest work.
+    banned_rx = [(w, re.compile(r"(?<![-\w])" + re.escape(w) + r"(?![-\w])",
+                                re.IGNORECASE))
                  for w in dict.fromkeys(banned) if w]
 
     all_sents: list[list[str]] = []
@@ -608,8 +611,12 @@ def census_paras(paras: list[Para], banned: list[str] | None = None,
                             continue
                         taken.append((m.start(), m.end()))
                         c.hits.append(Hit(cls, group, p.line, _snip(p.text, m)))
-        for _w, rx in banned_rx:
-            for m in rx.finditer(p.text):
+        # A line naming four or more of the banned words is the list itself, not
+        # prose that uses them. The pages that TEACH this rule quote it in full,
+        # and failing them for doing so is the gate eating its own homework.
+        line_hits = [(w, m) for w, rx in banned_rx for m in rx.finditer(p.text)]
+        if len({w for w, _ in line_hits}) < 4:
+            for _w, m in line_hits:
                 c.hits.append(Hit("banned_word", "vocab", p.line, _snip(p.text, m)))
         if p.kind in ("prose", "bullet"):
             for m in re.finditer(r";", p.text):
