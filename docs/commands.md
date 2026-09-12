@@ -68,6 +68,18 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 
 ---
 
+### `/founder-os:pitch-deck`
+
+- **Or say.** "build my pitch deck", "investor deck", "deck for the raise"
+- **Outcome.** A ten-slide spec in markdown with speaker notes, every number tagged with where it came from, and a `.pptx` rendered from it. Ends with what the deck cannot yet defend.
+- **Args.** None. Name a company or a raise and it starts there.
+- **Writes.** `decks/<slug>-deck.md`, `decks/<slug>-deck.pptx`.
+- **Prereqs.** `/founder-os:setup` complete. The render needs `pip install python-pptx`; without it you still get the spec, which pastes into Canva, Gamma, Pitch or Google Slides.
+- **When to run.** Before a raise or a big sales meeting. It challenges the story first, which is the part that gets skipped when the deck feels urgent.
+- **Follow-up.** Close what the claims check flagged. Take the spec into a design tool for the visual pass.
+
+---
+
 ### `/founder-os:where`
 
 - **Or say.** "where is my work", "where did that go", "where did you save it", "I cannot find the supplier list"

@@ -191,6 +191,40 @@ floor was laid. It was a defensible gap while nothing reached it. Wiring
 `web-fetch-extract` into market research put it on the research path, so it has
 tests now: the parse half and the fail-closed path, both offline.
 
+### New - `pitch-deck`, and the second exception to the no-install floor
+
+An investor deck usually gets written in a chat window and retyped into slides.
+The retyping is where the structure goes and where the numbers drift away from
+the ones that were checked. Worse, building slides feels like progress, so the
+hard question nobody asked stays unasked until an investor asks it.
+
+`/founder-os:pitch-deck` runs in one order and will not shortcut it. It
+challenges the story first (say the business back in one sentence, name the one
+thing an investor pushes on hardest, ask one question, wait), interviews ten
+questions one at a time, writes a slide-by-slide spec to `decks/<slug>-deck.md`
+with speaker notes, tags every number with its tier from
+`rules/research-integrity.md`, runs `claims_check.py` and the register census
+over it, then renders. It closes with what the deck cannot yet defend and the
+smallest real step that would close each gap. It never invents traction: an
+empty proof slide saying what is being tested is more honest than a decorated
+one, and it is the slide an investor checks first.
+
+**The spec is the deliverable. The `.pptx` is a render of it.** That ordering is
+the point, because the render needs `pip install python-pptx`, which makes this
+the second shipped script that is not standard library after the scrape helper.
+It fails closed the way that one does: no package means exit 1, the exact
+command, and a line saying the markdown is still your deck and pastes into
+Canva, Gamma, Pitch or Google Slides. `--check` parses with no package at all.
+
+One detail worth naming: this repo's own ship gate fails any document whose
+author metadata credits the library that made it. The renderer reads the author
+from `os-config.yaml` and leaves the field blank when none is set, rather than
+inventing one, and it stamps a real creation date instead of the blank
+template's 2013. A generator whose output the ship gate rejects would not be
+shippable, and there is a test that runs the gate over what it produces.
+
+Counts: 96 skills to 97, 46 commands to 47. Suite 965 to 988.
+
 ## v1.54.3 - 2026-08-14
 
 Three releases in a row were corrected by outside review, for the same three structural reasons each time. This release changes the structure instead of patching another instance, and ships the standard as a page a founder can read. Pack: `updates/1.54.3-the-release-process-stops-trusting-its-builder.md`.
