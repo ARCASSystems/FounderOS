@@ -129,6 +129,68 @@ already made is a gate you learn to skip.
 Counts: 95 skills to 96, 45 commands to 46. Suite 902 to 934, with a failing and
 a passing fixture for every one of the eighteen classes.
 
+### New - market research can see the market, and says so when it cannot
+
+`strategic-analysis` produced market sizes, competitor prices and growth rates
+from `allowed-tools: ["Read", "Bash"]`. It could read your own files and nothing
+else. That makes the half about your position genuinely good and the half about
+the market a confident guess in the same formatting, which is the worse of the
+two failures because it does not look like one. Three of ninety-five skills
+could reach the web at all.
+
+It now searches and fetches, and every file read it had is kept: grounding the
+analysis in your actual position is what made it better than a generic table.
+Fetched pages go through the existing `web-fetch-extract` path rather than a
+second fetcher, and every fetched number becomes a
+`[SOURCED: <url>, retrieved <date>]` under `rules/research-integrity.md`.
+
+The part that matters more than the search: web search is not available on every
+plan or in every surface, and an org can switch it off. When it is unreachable
+the skill says one line out loud, tags every number `[ESTIMATE: ...]`, and puts
+the searches it would have run into the closing table so you can run them by
+hand or paste a page in. A named URL works with no search at all.
+
+### New - every analysis closes with what to research next
+
+Three columns: the gap, what decision it blocks, and a prompt you can paste as
+written. An analysis that ends at its conclusion leaves you holding a verdict
+and no next move.
+
+### New - the critique gate on the market and proposal skills
+
+Both now stress-test the inputs before producing anything: say the premise back
+in one sentence, name the one thing a sceptical buyer would push on first, ask
+exactly one question, wait. One question, because a gate that asks four is an
+interrogation and gets skipped. Wired into the two skills that produce, not
+added as a separate skill nobody remembers to run.
+
+### Fixed - `claims_check.py` could not see a market number
+
+Pointing the claims check at real market prose is how this surfaced. A two-part
+decimal was filtered as a version string, so `4.2 billion` - the shape of a
+market size, a growth rate and a multiple - was dropped in silence. A percentage
+written as a word was never matched. A bare number with a magnitude after it
+(`300k per year`) matched nothing, because there was no currency symbol. On a
+document with three untagged figures the script reported zero uncovered claims.
+
+The opposite defect was there too. `rules/research-integrity.md` tells you the
+tag goes "inline, on its own line", and the reader accepted a tag only on the
+same line, so following the published rule got you flagged for it. A tag on the
+next line now covers the claim above it, and a tag under a heading still does
+not cover the heading.
+
+### Fixed - `scrape.py` returned a page's JavaScript as page text
+
+`<script>` and `<style>` bodies came back inside the extracted text. Left in, a
+page's source arrives as prose and can be read as content: a quote from a page
+can turn out to be a variable name, and a tracker blob can crowd out the text
+you wanted. Now stripped, along with `noscript`, `template` and inline `svg`.
+
+`scrape.py` also leaves the frozen coverage-gap list it has sat on since that
+floor was laid. It was a defensible gap while nothing reached it. Wiring
+`web-fetch-extract` into market research put it on the research path, so it has
+tests now: the parse half and the fail-closed path, both offline.
+
 ## v1.54.3 - 2026-08-14
 
 Three releases in a row were corrected by outside review, for the same three structural reasons each time. This release changes the structure instead of patching another instance, and ships the standard as a page a founder can read. Pack: `updates/1.54.3-the-release-process-stops-trusting-its-builder.md`.

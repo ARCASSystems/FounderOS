@@ -40,7 +40,8 @@ URL = re.compile(r"https?://\S+")
 
 # --- claim candidates ---------------------------------------------------------
 
-PERCENT = re.compile(r"\b\d+(?:\.\d+)?\s?%")
+PERCENT = re.compile(
+    r"\b\d+(?:\.\d+)?\s?(?:%|per ?cent\b|percentage points?\b)")
 CURRENCY = re.compile(
     r"(?:[$€£₹]\s?\d[\d,]*(?:\.\d+)?"
     r"|\b(?:AED|USD|EUR|GBP|INR|SAR)\s?\d[\d,]*(?:\.\d+)?)"
@@ -49,12 +50,24 @@ CURRENCY = re.compile(
 # Comma-grouped, decimal, 4+ digit, or multiplier numbers. Bare years and other
 # non-claims are filtered by NOT_A_CLAIM below.
 NUMBER = re.compile(r"\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b|\b\d+\.\d+\b|\b\d{4,}\b|\b\d+(?:\.\d+)?x\b")
+# A bare number carrying a magnitude word is the commonest shape a market
+# figure takes ("4.2 billion", "300k users"), and neither NUMBER nor CURRENCY
+# saw it: no currency symbol, and the decimal was filtered below as a version
+# string. Market sizing is the main thing this script gets pointed at.
+MAGNITUDE = re.compile(
+    r"\b\d+(?:[,.]\d+)?\s?(?:k|m|bn|thousand|million|billion|trillion|lakh|crore)\b",
+    re.IGNORECASE,
+)
 
 NOT_A_CLAIM = [
     re.compile(r"^\d{4}-\d{2}-\d{2}$"),          # ISO date
     re.compile(r"^(?:19|20)\d{2}$"),             # bare year
     re.compile(r"^\d{1,2}:\d{2}$"),              # time
-    re.compile(r"^v?\d+\.\d+(?:\.\d+)?$"),       # version string
+    re.compile(r"^v\d+\.\d+(?:\.\d+)?$"),        # version string, v-prefixed
+    re.compile(r"^\d+\.\d+\.\d+$"),              # version string, three parts
+    # A two-part decimal with no "v" is deliberately NOT filtered. "4.2" was
+    # read as a version number and dropped, and that is the exact shape of a
+    # market size, a growth rate and a multiple.
 ]
 DATEISH_CONTEXT = re.compile(r"\d{4}-\d{2}-\d{2}|\d{1,2}:\d{2}|v\d+\.\d+")
 
@@ -121,8 +134,20 @@ def scan_file(path: Path, min_quote_words: int) -> list[dict]:
     findings: list[dict] = []
     text = path.read_text(encoding="utf-8", errors="replace")
 
-    for lineno, line in _iter_content_lines(text):
-        covered = bool(TIER_TAG.search(line) or URL.search(line))
+    # rules/research-integrity.md tells the founder the tag goes "inline, on its
+    # own line", and a same-line-only reader rejected exactly that shape. So a
+    # tag on the next line covers the claim above it, which is also the form that
+    # keeps a paragraph readable.
+    content = list(_iter_content_lines(text))
+    tagged_lines = {n for n, ln in content if TIER_TAG.search(ln)}
+
+    for idx, (lineno, line) in enumerate(content):
+        next_is_a_tag = (
+            idx + 1 < len(content)
+            and content[idx + 1][0] in tagged_lines
+            and not line.strip().startswith(("#", "|"))
+        )
+        covered = bool(TIER_TAG.search(line) or URL.search(line) or next_is_a_tag)
         snippet = line.strip()[:120]
 
         # Arithmetic reconciliation runs regardless of coverage.
@@ -177,6 +202,7 @@ def scan_file(path: Path, min_quote_words: int) -> list[dict]:
         tokens += [m.group(0) for m in CURRENCY.finditer(line)]
         if not DATEISH_CONTEXT.search(line):
             tokens += [t for t in (m.group(0) for m in NUMBER.finditer(line)) if _is_claim_number(t)]
+            tokens += [m.group(0) for m in MAGNITUDE.finditer(line)]
         seen = set()
         tokens = [t for t in tokens if not (t in seen or seen.add(t))]
         if tokens:

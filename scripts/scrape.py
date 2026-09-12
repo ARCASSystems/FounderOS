@@ -174,8 +174,18 @@ def fetch_html(
     return resp.text
 
 
+# Tags whose contents are code or styling, never page text. Left in, a page's
+# JavaScript source arrives as prose and a model reads it as content: a "quote"
+# from the page can turn out to be a variable name, and a tracker blob can eat
+# most of the extracted text.
+NON_TEXT_TAGS = ("script", "style", "noscript", "template", "svg")
+
+
 def extract_text(html: str, selector: Optional[str] = None) -> str:
     tree = HTMLParser(html)
+    for tag in NON_TEXT_TAGS:
+        for node in tree.css(tag):
+            node.decompose()
     if selector:
         node = tree.css_first(selector)
         if node is None:

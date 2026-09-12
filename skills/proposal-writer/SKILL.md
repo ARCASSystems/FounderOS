@@ -186,6 +186,26 @@ Adjust based on the founder's actual operating cadence.
 - Numbers and specifics wherever possible
 - Follow `your-voice` and the universal anti-AI baseline for all written content
 
+## Challenge the scope before you write it
+
+The expensive failure in a proposal is not a weak sentence. It is a scope that
+was never questioned, priced, agreed, and then found to be the wrong work in
+week three. Before drafting, stress-test what you were handed.
+
+1. Say the engagement back in one sentence: who, what changes for them, by when.
+   If you cannot, you do not have enough to write a proposal yet.
+2. Name the one thing this client will push back on hardest. The price, the
+   timeline, the assumption that their team has capacity, the dependency on data
+   they have not shown you. Name the real one, not the safe one.
+3. Name what is missing that would change the shape of the work if it turned out
+   differently.
+4. Ask exactly one question. The one whose answer changes the proposal most.
+5. Wait. Then write.
+
+This is not a delay. A proposal written on a premise the client rejects in the
+first meeting costs a week; a question costs a minute. Skip it only when the
+founder has already answered that question in the brief.
+
 ## What to Ask the User
 
 If context is thin, ask:
