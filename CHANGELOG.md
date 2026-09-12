@@ -331,7 +331,13 @@ Also: re-running voice setup used to overwrite the settings it never wrote, the
 Mac icon script claimed success whatever happened, and `rules/writing-style.md`
 said "these four" over seven items.
 
-Every one of these is now a test. The suite went 1014 to 1029.
+One more came out of checking what the pass could not: the generated deck's
+`Application` property said Microsoft PowerPoint made it, inherited from the
+library's blank template. A false line about the file's own origin, one click
+away in the document properties, in the release about claims being true. It
+now says Founder OS.
+
+Every one of these is now a test. The suite went 1014 to 1033.
 
 ## v1.54.3 - 2026-08-14
 

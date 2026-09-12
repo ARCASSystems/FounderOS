@@ -16,10 +16,11 @@ This is the SECOND script in the repo that is not standard library. It needs
 package it exits 1, prints the exact command, and names the fallback, so the
 skill above it degrades instead of breaking.
 
-One thing it must not do: credit itself. `deliverable_gate.py attribution`
-fails any document whose author metadata names the library that generated it,
-so the author is read from `os-config.yaml` and a deck with no configured
-author is left unstamped rather than stamped "python-pptx".
+One thing it must not do: credit itself, or credit anything else. The author
+is read from `os-config.yaml` and left blank when unset rather than stamped
+"python-pptx", which `deliverable_gate.py attribution` would fail. The
+`Application` field is rewritten too: the blank template claims PowerPoint made
+the file, and it did not.
 
 Invariants: reads the spec and os-config.yaml, writes exactly one .pptx at the
 path you name, never edits the spec, no network, no key, no model call.
@@ -215,7 +216,56 @@ def render(spec: Spec, out: Path, brand: dict) -> Path:
 
     out.parent.mkdir(parents=True, exist_ok=True)
     prs.save(str(out))
+    _correct_application_name(out)
     return out
+
+
+def _correct_application_name(path: Path) -> None:
+    """Say what made the file.
+
+    The blank template carries `<Application>Microsoft Macintosh PowerPoint`,
+    and the library has no API for it, so a deck that PowerPoint never touched
+    tells a recipient it did. Small, and false, and one click away in the
+    document properties. Rewritten in place; a failure here is never worth
+    losing the deck over, so it is swallowed.
+    """
+    import re
+    import shutil
+    import tempfile
+    import zipfile
+
+    target = "docProps/app.xml"
+    try:
+        with zipfile.ZipFile(path) as z:
+            if target not in z.namelist():
+                return
+            items = [(i, z.read(i.filename)) for i in z.infolist()]
+    except (OSError, zipfile.BadZipFile):
+        return
+
+    patched = []
+    for info, data in items:
+        if info.filename == target:
+            text = data.decode("utf-8", "replace")
+            text = re.sub(r"<Application>.*?</Application>",
+                          "<Application>Founder OS</Application>", text)
+            text = re.sub(r"<Company>.*?</Company>", "<Company></Company>", text)
+            data = text.encode("utf-8")
+        patched.append((info, data))
+
+    fd, tmp = tempfile.mkstemp(suffix=".pptx", dir=str(path.parent))
+    import os
+    os.close(fd)
+    try:
+        with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as z:
+            for info, data in patched:
+                z.writestr(info, data)
+        shutil.move(tmp, path)
+    except OSError:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
 
 
 def main(argv: list[str] | None = None) -> int:
