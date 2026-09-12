@@ -368,10 +368,9 @@ def check_register(path: Path, profile: str = "deliverable") -> list[Check]:
     if c is None:
         return [Check("register", "census", "SKIP",
                       f"no text extractor for {path.suffix or 'this format'}")]
-    if c.words < 40:
+    if c.words < 5:
         return [Check("register", "census", "SKIP",
-                      f"{c.words} words is too short to measure - the reading pass "
-                      "owns voice on this one, nothing was checked")]
+                      f"{c.words} words of prose - nothing to measure")]
 
     status, reasons = rc.gate(c, profile)
     top = rc.top_classes(c, profile)
@@ -381,7 +380,11 @@ def check_register(path: Path, profile: str = "deliverable") -> list[Check]:
         detail += " - " + "; ".join(reasons)
     if top:
         detail += " | fix first: " + ", ".join(f"{cls} ({n})" for cls, n in top)
-    return [Check("register", "census", "FAIL" if status == "fail" else "PASS", detail)]
+    # A warn is not a pass. Rendering it as one hid the fact that a short
+    # deliverable had not been scored at all, which read to the operator as a
+    # clean bill of health.
+    state = "FAIL" if status == "fail" else "SKIP" if status == "warn" else "PASS"
+    return [Check("register", "census", state, detail)]
 
 
 # --------------------------------------------------------------------- CLI --

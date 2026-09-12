@@ -70,19 +70,26 @@ NOT_A_CLAIM = [
     # market size, a growth rate and a multiple.
 ]
 DATEISH_CONTEXT = re.compile(
-    r"\d{4}-\d{2}-\d{2}|\d{1,2}:\d{2}|v\d+\.\d+(?:\.\d+)?|\b\d+\.\d+\.\d+\b")
+    r"\d{4}-\d{2}-\d{2}(?:-\d+)?"      # a date, and a date-prefixed order id
+    r"|\d{1,2}:\d{2}(?::\d{2})?"
+    r"|v\d+(?:\.\d+)+"                  # v1.2, v1.2.3, v1.2.3.4567
+    r"|\b\d+\.\d+\.\d+(?:\.\d+)*\b")  # a bare dotted version of any depth
 
-# A tag "inline, on its own line" - the shape the rule page teaches. Anything
-# else in front of it means the line carries a claim of its own and cannot also
-# vouch for the line above.
-TAG_ON_ITS_OWN_LINE = re.compile(r"^\s*(?:[-*+>]\s*)?\[(?:MEASURED|SOURCED|ESTIMATE)\b",
-                                 re.IGNORECASE)
+# A whole tag, so it can be stripped out and the remainder inspected.
+TIER_TAG_FULL = re.compile(r"\[(?:MEASURED|SOURCED|ESTIMATE)\b[^\]]*\]", re.IGNORECASE)
 
 # Words that make the number after them a version or a pointer, never a claim.
+#
+# Kept deliberately short. The first list held "go", "line", "release", "step",
+# "item" and "page", which are ordinary English, so "revenue to go 3.5x", "our
+# bottom line 3.5x" and "the release 2.5x'd headcount" were all silently
+# dropped - five real growth claims traded for one false positive on a
+# requirements line. A word earns a place here only when a number following it
+# is almost never a claim.
 VERSION_CONTEXT = re.compile(
-    r"\b(?:python|node|java|ruby|php|go|rust|npm|pip|version|ver|rev|release|"
-    r"section|chapter|figure|fig|table|appendix|clause|step|item|line|page|"
-    r"schema|api|spec|rfc|iso|django|flask|react|vue|angular)\s*[:v]?\s*$",
+    r"\b(?:python|node|java|ruby|php|rust|npm|pip|version|ver|django|flask|"
+    r"react|vue|angular|rfc|iso|section|chapter|figure|fig|table|appendix|"
+    r"clause)\s*[:v]?\s*$",
     re.IGNORECASE)
 
 UNIVERSAL_NEGATIVE = re.compile(
@@ -118,22 +125,44 @@ def _num(s: str) -> float:
     return float(s.replace(",", ""))
 
 
+def _is_pure_tag_line(line: str) -> bool:
+    """True when a line carries tags and no claim of its own."""
+    if not TIER_TAG.search(line):
+        return False
+    rest = TIER_TAG_FULL.sub(" ", line)
+    rest = DATEISH_CONTEXT.sub(" ", rest)
+    if URL.search(rest):
+        return False
+    for pat in (PERCENT, CURRENCY, MAGNITUDE, NUMBER):
+        if pat.search(rest):
+            return False
+    if QUOTE.search(rest):
+        return False
+    # Decoration is fine: list markers, emphasis, brackets, a few words of
+    # label. A whole sentence next to the tag is not.
+    words = re.findall(r"[A-Za-z][A-Za-z'-]*", rest)
+    return len(words) <= 4
+
+
 def _is_claim_number(token: str) -> bool:
     return not any(p.match(token) for p in NOT_A_CLAIM)
 
 
-def _version_in_context(line: str, token: str) -> bool:
-    """True when a bare decimal is a version or a cross-reference, not a claim.
+def _version_in_context(line: str, start: int, token: str) -> bool:
+    """True when a decimal at THIS position is a version or a cross-reference.
 
-    Widening the scan to catch "4.2 billion" also caught "Python 3.11" and
-    "section 4.2". A gate that cries wolf on a requirements line is one people
-    learn to ignore, which costs more than the numbers it would have caught.
+    Takes the match position rather than searching for the token: with
+    `line.find`, "See section 3.5 for the 3.5 multiple we underwrote" checked
+    the cross-reference's context for both occurrences and suppressed the real
+    claim along with it.
+
+    A multiplier is never a version, so "3.5x" is always a claim.
     """
-    idx = line.find(token)
-    if idx <= 0:
+    if token.lower().endswith("x"):
         return False
-    before = line[:idx].rstrip().lower()
-    return bool(VERSION_CONTEXT.search(before))
+    if start <= 0:
+        return False
+    return bool(VERSION_CONTEXT.search(line[:start].rstrip().lower()))
 
 
 def _iter_content_lines(text: str):
@@ -167,12 +196,14 @@ def scan_file(path: Path, min_quote_words: int) -> list[dict]:
     # tag on the next line covers the claim above it, which is also the form that
     # keeps a paragraph readable.
     content = list(_iter_content_lines(text))
-    # A tag grants coverage to the line above it only when it is ON ITS OWN LINE,
-    # which is the form rules/research-integrity.md actually teaches. The first
-    # version of this credited any following line that merely CONTAINED a tag,
-    # so a tagged claim silently covered the untagged claim above it: the better
-    # a document was sourced, the more hiding surface it grew.
-    own_line_tags = {n for n, ln in content if TAG_ON_ITS_OWN_LINE.match(ln)}
+    # A tag grants coverage to the line above only when that line is NOTHING BUT
+    # a tag. Testing the prefix was wrong twice over: it still let a tag written
+    # at the front of a sentence vouch for the line above while covering its own
+    # claims, and it rejected five shapes a founder actually writes - a numbered
+    # source list, a bold tag, a tag in a blockquoted bullet, a parenthesised
+    # tag, an italic one. Stripping the tags and looking at what is left settles
+    # both: no claim left over means the line is a citation and nothing else.
+    own_line_tags = {n for n, ln in content if _is_pure_tag_line(ln)}
 
     for idx, (lineno, line) in enumerate(content):
         next_is_a_tag = (
@@ -238,8 +269,9 @@ def scan_file(path: Path, min_quote_words: int) -> list[dict]:
         # dating your source - the exact habit the SOURCED tier asks for -
         # switched the number check off for that line.
         scannable = DATEISH_CONTEXT.sub(" ", line)
-        tokens += [t for t in (m.group(0) for m in NUMBER.finditer(scannable))
-                   if _is_claim_number(t) and not _version_in_context(scannable, t)]
+        tokens += [m.group(0) for m in NUMBER.finditer(scannable)
+                   if _is_claim_number(m.group(0))
+                   and not _version_in_context(scannable, m.start(), m.group(0))]
         tokens += [m.group(0) for m in MAGNITUDE.finditer(scannable)]
         seen = set()
         tokens = [t for t in tokens if not (t in seen or seen.add(t))]

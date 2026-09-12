@@ -139,9 +139,14 @@ def main():
         "created": datetime.now(timezone.utc).isoformat(),
         "note": "Tier 0 - browser STT/TTS + reasoning CLI, no extra key. See skills/add-voice/references/tiers.md to go local-first or realtime.",
     }
+    # brain_cmd is deliberately NOT kept. Re-running setup is the documented
+    # repair for a brain command that points at a CLI you no longer have, and
+    # keeping the old value made the repair a no-op that also contradicted its
+    # own output: it printed the freshly detected command and wrote the stale
+    # one three lines later.
     kept = []
     for key in ("local_stt", "local_stt_model", "local_tts", "piper_cmd",
-                "piper_voice", "brain_cmd", "created"):
+                "piper_voice", "created"):
         if key in existing and existing[key] not in (None, ""):
             if config.get(key) != existing[key]:
                 kept.append(key)
@@ -153,6 +158,9 @@ def main():
     print("OK   Wrote voice/config.json (port " + str(args.port) + ", bound to this machine).")
     if kept:
         print("     Kept your existing settings: " + ", ".join(sorted(kept)))
+    if existing.get("brain_cmd") and existing["brain_cmd"] != brain_argv:
+        print("     Brain command re-detected: " + " ".join(brain_argv)
+              + "  (was " + " ".join(existing["brain_cmd"]) + ")")
 
     # 3. REFERENCE pointer
     refs = SKILL_DIR / "references"

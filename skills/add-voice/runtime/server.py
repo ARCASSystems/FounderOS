@@ -214,16 +214,24 @@ def append_to_log(text):
 _STT_MODEL = None
 _STT_ERROR = ""
 
-# Anything that looks like a filesystem location. The first version tested for
-# three shapes and missed four more that carry an account name just as plainly:
-# a drive other than C, a UNC share, a bare posix cache path, a Windows path
-# written with forward slashes. Whitelisting what is safe to print beats
-# blacklisting what is not.
+# Anything that looks like a filesystem location, ANYWHERE in the string.
+#
+# Two earlier versions of this were too clever. The first listed three shapes
+# and missed four. The second anchored the posix branch on start-or-whitespace,
+# which a quote character defeats - and Python quotes the path in almost every
+# filesystem error it raises, so the single most common shape
+# ("[Errno 2] No such file or directory: '/home/someone/...'") walked straight
+# through. No anchors now: a slash-or-backslash separated path fragment of any
+# depth counts, wherever it sits.
 _PATHISH = re.compile(
-    r"[A-Za-z]:[\\/]"           # C:\ or D:/
-    r"|\\\\[^\\]+\\"           # \\server\share
-    r"|(?:^|\s)/(?:home|Users|root|tmp|var|mnt|media|opt|srv)/"
-    r"|(?:^|\s)~/"
+    r"[A-Za-z]:[\\/]"                                  # C:\ or D:/
+    r"|\\\\[^\\/]+[\\]"                               # \\server\share
+    r"|/(?:home|users|root|tmp|var|mnt|media|opt|srv|private|volumes|app|data"
+    r"|cache|export|usr|etc)/"
+    r"|~[A-Za-z0-9._-]*/"                               # ~/ and ~someone/
+    r"|\$HOME|%USERPROFILE%|%APPDATA%|%LOCALAPPDATA%"
+    r"|[\\/][^\\/\s'\"]+[\\/][^\\/\s'\"]+[\\/]",      # any three-deep path
+    re.IGNORECASE,
 )
 
 
@@ -332,10 +340,22 @@ def transcribe_audio(raw, suffix=".webm"):
 
 # -------------------------------------------------------------- local mouth --
 
+# A turn that failed is the only hard evidence about whether Piper works. A
+# binary on PATH and a file on disk are not, which is how the page came to paint
+# "a local voice speaks" over a mouth that could not.
+_TTS_ERROR: list = []
+
+
 def local_tts_status():
     """Whether Piper can speak on this machine right now."""
     import shutil
 
+    if _TTS_ERROR:
+        return {
+            "available": False,
+            "reason": _TTS_ERROR[-1],
+            "how": "check piper_cmd and piper_voice in voice/config.json",
+        }
     cmd = CONFIG.get("piper_cmd") or "piper"
     if shutil.which(cmd) is None:
         return {
@@ -376,7 +396,14 @@ def synthesize(text):
         return (b"", False, "piper took too long")
     if proc.returncode != 0 or not proc.stdout:
         err = (proc.stderr or b"").decode("utf-8", "replace").strip().splitlines()
-        return (b"", False, (err[-1] if err else "piper returned nothing")[:200])
+        # Through the same scrubber as the ears. Piper names the voice file it
+        # could not load, which is a full path to the founder's home directory,
+        # and this string reaches the page and the runtime log. Fixing the ears
+        # and leaving the mouth is the instance-not-class mistake that
+        # rules/release-verification.md gate 3 exists to stop.
+        note = _safe_error(err[-1] if err else "piper returned nothing")
+        _TTS_ERROR.append(note)
+        return (b"", False, note)
     return (proc.stdout, True, "")
 
 
@@ -486,7 +513,9 @@ class Handler(BaseHTTPRequestHandler):
             ms = (time.time() - t0) * 1000.0
             log_turn("speak", ms, ok, len(said), len(wav), note)
             if not ok:
-                self._send_json({"ok": False, "reason": note})
+                # recheck, exactly as /transcribe does: the mouth the page is
+                # advertising has just proved it does not work.
+                self._send_json({"ok": False, "reason": note, "recheck": True})
                 return
             self.send_response(200)
             self.send_header("Content-Type", "audio/wav")

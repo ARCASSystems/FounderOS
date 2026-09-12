@@ -178,16 +178,16 @@
       currentAudio = new Audio(URL.createObjectURL(blob));
       currentAudio.play();
     }).catch(function () {
-      // Turn the claim off before speaking through the browser. Saying "a local
-      // voice speaks" in the subtitle while the browser speaks is the same
-      // defect this release fixed in the ears, and fixing one instance without
-      // grepping the class is what rules/release-verification.md gate 3 exists
-      // to stop.
+      // Turn the claim off AND lock it off. Flipping the flag without disabling
+      // the box left the claim one click from coming back, because the cached
+      // health said the mouth was available and nothing ever re-read it. The
+      // ears disable their box on failure; the mouth has to as well.
       localTtsOn = false;
       try { ttsBox.checked = false; } catch (e) {}
       renderStatus();
       setState("local voice failed - using the browser");
       speakInBrowser(text);
+      refreshHealth();
     });
   }
   function stopSpeaking() {
@@ -399,7 +399,14 @@
       }
       if (!(h.local_tts && h.local_tts.available)) {
         localTtsOn = false;
-        try { ttsBox.checked = false; } catch (e) {}
+        try {
+          ttsBox.checked = false;
+          ttsBox.disabled = true;
+          ttsWrap.className = "off";
+        } catch (e) {}
+        if (h.local_tts && h.local_tts.reason) {
+          ttsWrap.title = "Local voice is off: " + h.local_tts.reason;
+        }
       }
       renderStatus();
     }).catch(function () {});

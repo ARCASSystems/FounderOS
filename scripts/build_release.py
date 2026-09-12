@@ -113,6 +113,21 @@ def blob_bytes(rel: str) -> bytes:
     return read_blobs([rel])[rel]
 
 
+def staged_but_uncommitted(rels: list[str]) -> list[str]:
+    """Tracked paths that do not exist at HEAD yet.
+
+    `git add` on a new file puts it in `ls-files` while HEAD has never seen it,
+    so the blob read dies with a bare "missing" from git. Named here so
+    --allow-dirty says what to do instead of crashing.
+    """
+    r = subprocess.run(["git", "ls-tree", "-r", "--name-only", "HEAD"],
+                       cwd=str(REPO), capture_output=True, text=True)
+    if r.returncode != 0:
+        return []
+    at_head = set(r.stdout.splitlines())
+    return [rel for rel in rels if rel not in at_head]
+
+
 def read_blobs(rels: list[str]) -> dict[str, bytes]:
     """Every blob through ONE git process.
 
@@ -152,7 +167,13 @@ def dirty_paths() -> list[str]:
     r = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"],
                        cwd=str(REPO), capture_output=True, text=True)
     if r.returncode != 0:
-        return []
+        # A gate that cannot check must not wave things through. Failing open
+        # here means a broken git call silently ships whatever is on disk.
+        raise SystemExit(
+            "git status failed, so the working tree cannot be checked:\n  "
+            + (r.stderr or "").strip()[:200]
+            + "\nRefusing to build rather than guessing the tree is clean."
+        )
     return [ln[3:].strip() for ln in r.stdout.splitlines() if ln.strip()]
 
 
@@ -187,6 +208,16 @@ def build_zip(version: str, out_dir: Path, allow_dirty: bool = False) -> Path:
             + ("\n  ..." if len(dirty) > 20 else "")
             + "\nCommit them, or pass --allow-dirty if you mean it. Either way the "
               "archive carries the COMMITTED bytes, never the working copy."
+        )
+
+    new_files = staged_but_uncommitted([rel for rel, _ in entries])
+    if new_files:
+        raise SystemExit(
+            "These files are staged but not committed, so HEAD has no bytes for "
+            "them:\n  " + "\n  ".join(new_files[:20])
+            + ("\n  ..." if len(new_files) > 20 else "")
+            + "\nCommit them or unstage them. --allow-dirty cannot help here: the "
+              "archive is built from HEAD and HEAD does not have these files."
         )
 
     zip_path = out_dir / f"{ASSET_STEM}-{version}.zip"

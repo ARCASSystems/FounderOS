@@ -302,8 +302,11 @@ kind of thing the builder cannot see in their own work.
 - **The writing census scored by length below a thousand words.** Identical
   writing at identical density scored 98 at fifteen words and 76 at a hundred
   and fifty, and most real deliverables live under that floor. The floor is now
-  two hundred words, and identical density now scores within three points from
-  fifty words to three thousand. The test that was supposed to guard this could
+  two hundred words: at or above it, identical density scores within three
+  points at any length, and below it a short note is scored gently rather
+  than having one tell extrapolated into a verdict. The first attempt at this
+  claim said "fifty words to three thousand", which was true of the fixture
+  that measured it and not of the scorer. The test that was supposed to guard this could
   never have failed: it repeated a clean sentence whose tell count does not grow
   with the text. It now repeats a paragraph, and a second test proves the
   fixture can detect the old behaviour.
@@ -337,7 +340,51 @@ library's blank template. A false line about the file's own origin, one click
 away in the document properties, in the release about claims being true. It
 now says Founder OS.
 
-Every one of these is now a test. The suite went 1014 to 1033.
+### Fixed - and then the second pass went after the fixes
+
+A fix is where a regression hides, so the refute gate ran again over the fix
+commit alone. It found that the first round had over-corrected in two places and
+under-corrected in two others.
+
+- **The version filter ate real claims.** Suppressing a decimal after certain
+  words stopped `Python 3.11` being read as a market size, but the word list
+  held "go", "line", "release", "step", "item" and "page", which are ordinary
+  English. "Revenue to go 3.5x", "our bottom line 3.5x" and "the release 2.5x'd
+  headcount" were all dropped. One false positive had been traded for five false
+  negatives. The list is short now, a multiplier is never a version, and a
+  cross-reference sharing a numeral with a real claim no longer suppresses it.
+- **The coverage bleed was half closed.** A tag moved to the front of a line
+  still vouched for the line above while covering its own claims. And testing
+  the line's prefix rejected five citation shapes a founder writes: a numbered
+  source list, a bold tag, a tag in a quoted bullet, a parenthesised tag, an
+  italic one. Both are settled by stripping the tags and looking at what is
+  left: nothing means it is a citation, a claim means it is not.
+- **The path scrubber leaked the commonest shape there is.** Python quotes the
+  path in almost every filesystem error it raises, and the anchor the scrubber
+  used was defeated by the quote character, so
+  `[Errno 2] No such file or directory: '/home/...'` printed verbatim. The
+  scrubber also had exactly one call site, so the mouth still returned Piper's
+  raw stderr, which names the voice file it could not load. Sixteen shapes are
+  scrubbed now and both halves use the same function.
+- **The local-voice claim was re-armable in one click.** The failure path turned
+  the flag off but left the checkbox enabled and never re-read health, so the
+  claim came straight back. The ears lock their toggle on failure; the mouth
+  does now too, and a failed turn outranks a binary being on PATH.
+- **The short-text gate passed a genuinely bad deliverable.** Waiving the score
+  below eighty words waived everything, so a 55-word note with eleven banned
+  words passed. Banned words now fail at any length, and the ship gate stopped
+  rendering a warn as a pass.
+- **The replacement density test was still a tautology.** Its fixture saturated
+  the structure cap, pinning every length to exactly 80 for reasons unrelated to
+  density; it passed with the floor at 50 and at 200. The fixture is diluted
+  now so the penalty stays linear, and the claim is stated as it really is:
+  invariant at or above the floor, deliberately lenient below it.
+
+Also closed: a broken `git status` made the dirty-tree gate fail open,
+`--allow-dirty` crashed on a staged-but-uncommitted file, and re-running voice
+setup printed one brain command and wrote another.
+
+Every one of these is now a test. The suite went 1014 to 1048.
 
 ## v1.54.3 - 2026-08-14
 

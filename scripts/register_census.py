@@ -452,13 +452,19 @@ CLASS_RULE = {
     "heading_one_liner": "a heading over one sentence is a label the sentence did not need",
 }
 
-# Below this, a document is scored as if it were this long. See the scoring
-# block in census_paras for why this number is 200 and not 1000.
+# Below this, a document is scored as if it were this long. That is leniency,
+# not invariance, and the difference matters: at or above the floor, identical
+# density scores identically at any length, and below it a short sample is
+# marked more gently rather than having one tell extrapolated into a verdict.
+# See the scoring block in census_paras for why this number is 200 and not 1000.
 DENSITY_FLOOR_WORDS = 200
 # And below THIS, the score itself is too small a sample to fail a gate on.
 # Zero-tolerance classes still fail, because one "to be honest" in a two-line
 # note is still one too many for something a client reads.
 MIN_WORDS_TO_SCORE_A_GATE = 80
+# Length never excuses these. Two is a deliberate allowance for a quotation
+# or a term of art; a handful is a vocabulary problem at any word count.
+BANNED_WORDS_THAT_ALWAYS_FAIL = 2
 
 GROUP_WEIGHT = {"clarity": 4, "register": 4, "structure": 2, "vocab": 1}
 GROUP_CAP = {"clarity": 30, "register": 30, "structure": 20, "vocab": 15}
@@ -764,6 +770,13 @@ def gate(c: Census, profile: str) -> tuple[str, list[str]]:
                 reasons.append(f"{cls} {counts[cls]} (budget {BUDGET[cls]})")
         if counts.get("dash"):
             reasons.append(f"dash {counts['dash']} (em and en dashes never ship)")
+    # A short text is too small a sample to score, but it is not too small to be
+    # full of banned words. A 55-word client note with eleven of them passed the
+    # gate because the score was waived and nothing else looked at it.
+    if not reasons and counts.get("banned_word", 0) > BANNED_WORDS_THAT_ALWAYS_FAIL:
+        reasons.append(f"banned_word {counts['banned_word']} "
+                       f"(more than {BANNED_WORDS_THAT_ALWAYS_FAIL} at any length)")
+
     scoreable = c.words >= MIN_WORDS_TO_SCORE_A_GATE
     if scoreable and c.score < GATE_FAIL_SCORE[profile]:
         reasons.append(f"score {c.score} below {GATE_FAIL_SCORE[profile]}")
