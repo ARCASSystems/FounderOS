@@ -21,6 +21,7 @@ Verbs (all read-only - the deliverable is never modified):
   date <path>          at least one date within 48h of --asof (your prep stamp)
   attribution <path>   AI-attribution strings, plus document author metadata
   evidence <path>      a blind-spot pass actually happened for this file
+  register <path>      the writing-register score from rules/writing-style.md
   all <path>           every verb above, one report, one exit code
 
 Brand specifics are yours, not ours: the font and the document author name are
@@ -347,6 +348,41 @@ def check_evidence(path: Path, root: Path, log_tail_lines: int = 100) -> list[Ch
     return out
 
 
+def check_register(path: Path, profile: str = "deliverable") -> list[Check]:
+    """The writing-register floor, from rules/writing-style.md.
+
+    Its own module because the counting is substantial; imported rather than
+    reimplemented so the page, the pre-send gate and this gate all read one
+    list and one set of patterns.
+    """
+    here = str(Path(__file__).resolve().parent)
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    try:
+        import register_census as rc
+    except Exception:
+        return [Check("register", "census", "SKIP",
+                      "register_census.py not importable - the reading pass owns voice")]
+
+    c = rc.census_file(path, profile)
+    if c is None:
+        return [Check("register", "census", "SKIP",
+                      f"no text extractor for {path.suffix or 'this format'}")]
+    if c.words < 40:
+        return [Check("register", "census", "SKIP",
+                      f"{c.words} words is too short to measure honestly")]
+
+    status, reasons = rc.gate(c, profile)
+    top = rc.top_classes(c, profile)
+    detail = (f"{c.score}/100 ({rc.grade(c.score)}) over {c.words} words, "
+              f"reading grade {c.fk_grade}")
+    if reasons:
+        detail += " - " + "; ".join(reasons)
+    if top:
+        detail += " | fix first: " + ", ".join(f"{cls} ({n})" for cls, n in top)
+    return [Check("register", "census", "FAIL" if status == "fail" else "PASS", detail)]
+
+
 # --------------------------------------------------------------------- CLI --
 
 def run_verb(verb: str, path: Path, root: Path, asof: _dt.date, cfg: dict) -> list[Check]:
@@ -360,6 +396,8 @@ def run_verb(verb: str, path: Path, root: Path, asof: _dt.date, cfg: dict) -> li
         return check_attribution(path, cfg)
     if verb == "evidence":
         return check_evidence(path, root)
+    if verb == "register":
+        return check_register(path, cfg.get("register_profile", "deliverable"))
     raise SystemExit(f"unknown verb {verb}")
 
 
@@ -367,7 +405,7 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Deterministic floor under the ship-deliverable gate. Read-only.")
     p.add_argument("verb", choices=["template", "placeholders", "date", "attribution",
-                                    "evidence", "all"])
+                                    "evidence", "register", "all"])
     p.add_argument("path", help="path to the deliverable")
     p.add_argument("--root", default=None, help="OS root override (for tests)")
     p.add_argument("--asof", default=None, help="YYYY-MM-DD (default today) for the 48h date check")
@@ -381,7 +419,7 @@ def main(argv: list[str] | None = None) -> int:
     asof = _dt.date.fromisoformat(args.asof) if args.asof else _dt.date.today()
     cfg = read_os_config(root)
 
-    verbs = (["template", "placeholders", "date", "attribution", "evidence"]
+    verbs = (["template", "placeholders", "date", "attribution", "evidence", "register"]
              if args.verb == "all" else [args.verb])
     checks: list[Check] = []
     for v in verbs:

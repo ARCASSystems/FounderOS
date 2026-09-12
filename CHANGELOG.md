@@ -58,6 +58,77 @@ which is exactly when fixes ship. Both paths are correct and they are not the
 same file, so `update.md` now says that in plain words instead of leaving a
 reader to notice the difference.
 
+### New - the writing rules have a mechanism behind them
+
+`rules/writing-style.md` was ninety-three lines of doctrine and nothing enforced
+it. The commit guard blocked em dashes, and after that every judgment about
+whether a draft sounded like a person was handed to a model and asked for an
+opinion. An opinion is not a measurement, so the same tells came back every week
+and there was no way to tell whether the writing was improving.
+
+`scripts/register_census.py` counts eighteen classes, each one a line of that
+page. It reads the banned-word list off the page itself, so there is one list
+and it is the one you can read: add a word there and it is enforced without
+touching the script. A class the script enforces has to be named on the page, or
+the suite fails. Zero-LLM, standard library, no key and no network, which is why
+it belongs at the accessibility floor rather than behind a plan.
+
+Scored by density per thousand words, not by total count. The first version
+scored absolute counts and gave this repo's own doctrine pages a D, which is a
+gate that teaches you to ignore it. Three profiles, because a client deliverable
+and a note to yourself fail for different things: `deliverable` fails under 80,
+`content` under 70, `internal` under 60. Three classes are zero-tolerance on a
+deliverable regardless of score, so a high score with a failed gate is normal.
+
+### Changed - two rules on the page were wrong, and the measurements said so
+
+Porting the rules into a script meant running them against real writing, and two
+did not survive it.
+
+"Max two hyphens per piece of writing" was unfollowable. The spaced hyphen is
+what the rule above it tells you to use instead of an em dash, so it carries real
+work: this repo's own pages run five to twenty-six per thousand words. Capping it
+at two made the dash rule unusable in anything longer than a paragraph. It is now
+a density, about ten per thousand words, which is roughly one per paragraph.
+
+"Contractions always" is a rule for writing that talks. A contract, a spec or a
+doctrine page reads worse forced into "don't" and "it's", and the pages here run
+six to twenty-two long forms per thousand words. It now applies to posts, emails
+and captions, and the census scores it only on the `content` profile while still
+counting it everywhere so you can see it.
+
+Seven rules the census enforces were added to the page in the same change, rather
+than enforced silently: no cross-references inside a document, one idea per
+paragraph, no negation-contrast, do not signal your own honesty, do not hedge a
+fact you know, do not point a finger at what nobody did, and a heading over a
+single sentence is a label the sentence did not need.
+
+### Changed - `pre-send-check` Check 3 and `ship-deliverable` Link 0
+
+Check 3 asked the model whether the deliverable sounded like you. It now runs the
+census first and reads the result, then does the half a count cannot do: tone
+against this specific recipient, a sentence that is technically clean and still
+sounds like nobody. Both halves, and they catch different things.
+
+`deliverable_gate.py` gains a `register` verb, so Link 0's deterministic scan went
+from five checks to six and the ship gate gets the count without a new link.
+
+### New - `writing-score`, the skill that answers whether it is improving
+
+A gate on one document tells you whether that document is clean. It cannot tell
+you whether your writing is getting better. `/founder-os:writing-score` runs the
+census across your recent files, groups by folder, names the three classes to fix
+first with a real sentence for each, and reports the change since the last run in
+`state/writing-scorecard.md`. It skips the OS's own engine folders, because
+scoring the product would bury your own writing in noise.
+
+Settled judgments stay settled: `rules/banned-words-exceptions.txt` already
+shipped empty, and the census reads it. A gate that re-raises a decision you
+already made is a gate you learn to skip.
+
+Counts: 95 skills to 96, 45 commands to 46. Suite 902 to 934, with a failing and
+a passing fixture for every one of the eighteen classes.
+
 ## v1.54.3 - 2026-08-14
 
 Three releases in a row were corrected by outside review, for the same three structural reasons each time. This release changes the structure instead of patching another instance, and ships the standard as a page a founder can read. Pack: `updates/1.54.3-the-release-process-stops-trusting-its-builder.md`.

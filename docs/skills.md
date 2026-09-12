@@ -798,6 +798,19 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 
 ## Ship gate
 
+### writing-score
+
+- **Say.** "score my writing", "is my writing getting better", or "writing scorecard".
+- **Outcome.** A mean score for your recent writing, the change since the last run, the three classes to fix first with a real sentence for each, and one thing to do. Never rewrites anything.
+- **Reads.** Your own files from the last 30 days. `rules/writing-style.md`, which is where the banned-word list is read from. `rules/banned-words-exceptions.txt` for judgments you already settled.
+- **Writes.** `state/writing-scorecard.md` and one line in `state/writing-scores.jsonl`.
+- **Voice rules.** This is the voice rules, counted. Eighteen classes, each one a line of `rules/writing-style.md`.
+- **Prereqs.** `founder-os-setup` complete. Python 3.11+. No key, no network, no model call.
+- **When to run.** Monthly, or after a stretch of writing. For one document before it goes out, run `python scripts/register_census.py <path> --lines` instead.
+- **Follow-up.** Fix the top class in the named file, then re-run to see the number move. Run via `/founder-os:writing-score`.
+
+---
+
 ### pre-send-check
 
 - **Say.** "check this before I send", "ready to send", or "final review".
