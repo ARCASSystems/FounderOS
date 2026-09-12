@@ -4,6 +4,8 @@ All notable releases. Format follows the user-value-first commit naming rule (`r
 
 ## v1.55.0 - 2026-09-12
 
+Three parts of this OS had the same shape of problem: a rule that existed as a page with nothing behind it. Writing quality was judged by a model and never measured. Market research was grounded in your own files and could not see the market. The privacy tier of voice was a paragraph carrying build instructions for an endpoint nobody had written. And the front door, after fifty-three versions, was still a link to a raw branch archive. This release puts a mechanism behind each one, and the mechanisms turned up five defects in the things they were wired into, which is what they were for. Pack: `updates/1.55.0-the-rules-got-mechanisms.md`.
+
 ### New - the download is a release now, and the folder has a face
 
 Fifty-three versions shipped behind one download link, and the link pointed at
