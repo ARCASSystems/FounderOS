@@ -2,6 +2,62 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.55.0 - 2026-09-12
+
+### New - the download is a release now, and the folder has a face
+
+Fifty-three versions shipped behind one download link, and the link pointed at
+`archive/refs/heads/main.zip`. That is GitHub's raw branch archive: it extracts
+to a folder called `FounderOS-main`, it is not tied to any version, and to a
+founder who does not write software it reads as exactly what it is, a developer
+artifact borrowed from somewhere. The front page now hands out
+`FounderOS-1.55.0.zip` from a tagged release, and inside it is one folder called
+**Founder OS**.
+
+That folder carries the ARCAS mark on Windows and, with one command, on a Mac.
+The mechanism is worth knowing because it is invisible when it fails: Windows
+only reads a folder's icon setting once the folder is flagged as customised, and
+extracting a ZIP does not set that flag. Measured against Explorer's own
+extractor, all three attribute bits written into the archive are dropped on the
+way out. So `Start Founder OS.bat` sets them itself on the first double-click,
+which is when the icon appears. On macOS the equivalent lives in a resource
+fork and cannot be carried by a ZIP at all; `bash scripts/set_folder_icon.sh`
+writes it, needs the Xcode Command Line Tools, and says so plainly rather than
+failing when they are absent. Both are cosmetic. Nothing about the OS depends
+on either.
+
+No `.exe`. An unsigned executable downloaded from the internet triggers the
+full-screen SmartScreen block, which a non-technical founder correctly reads as
+a virus warning, and that is a worse first impression than the ZIP it would have
+replaced. Signing costs real money on a yearly cycle and still has to build
+reputation before the warning goes quiet. The launcher logic already exists, so
+a signed build is a packaging job for whenever that invoice makes sense, not a
+rebuild. No `.lnk` shortcut in the archive either: a Windows shortcut can carry
+an icon, which makes it tempting, and shortcuts inside downloaded archives are a
+known malware route that antivirus and Windows both treat harshly.
+
+### New - `scripts/build_release.py` and `scripts/check_download_links.py`
+
+The release asset is built from `git ls-files`, so the ZIP and a `git clone`
+hand over the same tree and the five install paths cannot drift apart. Anything
+gitignored is excluded by construction rather than by a list somebody has to
+remember. `Start Founder OS.command` keeps mode 755 through the archive, taken
+from git's index rather than the working copy, because a Windows checkout does
+not carry the bit and a Mac download that lost it cannot be double-clicked.
+
+A pinned download link is the honest kind and the kind that rots, so the suite
+owns it: `check_download_links.py` fails when VERSION and the links in
+`README.md` and `docs/install.md` disagree, and `--fix` rewrites them.
+
+### Changed - `/update` says why it tracks main
+
+The front page hands out the latest tagged release. `/update` still downloads
+main, because it reads the remote version from main's `VERSION` file, and
+pulling a release asset there would abort every update made between releases,
+which is exactly when fixes ship. Both paths are correct and they are not the
+same file, so `update.md` now says that in plain words instead of leaving a
+reader to notice the difference.
+
 ## v1.54.3 - 2026-08-14
 
 Three releases in a row were corrected by outside review, for the same three structural reasons each time. This release changes the structure instead of patching another instance, and ships the standard as a page a founder can read. Pack: `updates/1.54.3-the-release-process-stops-trusting-its-builder.md`.

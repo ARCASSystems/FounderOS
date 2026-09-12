@@ -18,8 +18,8 @@ Three steps, nothing typed. The gentlest path there is.
 
 **Steps:**
 
-1. [Download the ZIP](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip).
-2. Right-click the file and choose **Extract All** (Windows) or double-click it (Mac). Windows puts a folder inside a folder - open the inner one, the one that contains `CLAUDE.md`. Move it wherever you keep your work and rename it if you like (`founder-os` is a good name).
+1. [Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.0/FounderOS-1.55.0.zip).
+2. Right-click the file and choose **Extract All** (Windows) or double-click it (Mac). Windows puts a folder inside a folder - open the inner one, called **Founder OS**, the one that contains `CLAUDE.md`. Move it wherever you keep your work. It is already named, so there is nothing to rename.
 3. Double-click **Start Founder OS** (Windows: the file ending `.bat`; Mac: the one ending `.command`). It opens Claude Code in the folder and starts the setup wizard for you. After setup, the same double-click just opens your OS - it is the standing front door, not a one-time installer.
 
 First-run notes, so nothing surprises you:
@@ -28,6 +28,7 @@ First-run notes, so nothing surprises you:
 - **Mac**: right-click the file and choose **Open** the first time. That is how macOS treats any downloaded script, not an error in the file.
 - **If Claude Code is not installed yet**, the start file says so in plain language and opens the download page - nothing breaks.
 - **Prefer no scripts?** The spoken way works identically: open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
+- **The folder icon** appears on Windows the first time you double-click **Start Founder OS**. Windows only reads a folder's icon setting once the folder is marked as customised, and extracting a ZIP does not mark it, so the launcher does it. On a Mac, run `bash scripts/set_folder_icon.sh` once if you want the same thing; it needs Xcode Command Line Tools and says so plainly if they are missing. Either way it is cosmetic. Nothing about the OS depends on it.
 
 Commands use bare names on this path (`/setup`, `/today`), same as the git-clone path.
 

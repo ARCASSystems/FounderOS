@@ -241,6 +241,8 @@ The staging set is: every System Layer path from the Layer definitions, PLUS the
 
 ZIP mode:
 
+This download tracks main on purpose, while the download button on the front page hands out the latest tagged release. They are not the same file and that is deliberate: `REMOTE_VERSION` above comes from main's `VERSION`, so pulling a release asset here would abort every update made between releases, which is exactly when fixes ship. The first download is the released build; updates carry whatever has landed since.
+
 1. Download `https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip` to a temp file. Use `curl -sL -o <tmp>/founderos-main.zip <url>` where curl exists, or PowerShell `Invoke-WebRequest -Uri <url> -OutFile <tmp>\founderos-main.zip` on Windows.
 2. Extract it in the temp location: `tar -xf founderos-main.zip` works on modern Windows, macOS, and Linux; PowerShell `Expand-Archive` is the fallback. The archive extracts to a `FounderOS-main/` folder.
 3. Copy each path in the staging set from `FounderOS-main/<path>` into `state/.update-staging/<ts>/<path>`, preserving relative paths. Do NOT stage any path outside the staging set - the archive also contains User Layer seeds (`stack.json`, `brain/`, sample content) and those must never reach the founder's live data.

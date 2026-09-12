@@ -13,6 +13,15 @@ setlocal
 cd /d "%~dp0"
 title Founder OS
 
+rem -- Brand the folder. Windows draws the icon named in desktop.ini only
+rem -- when the folder carries the read-only marker bit, and extracting a
+rem -- ZIP does not set it. Cosmetic only: both lines fail silently, and
+rem -- the OS opens either way.
+if exist "desktop.ini" if exist "assets\arcas.ico" (
+  attrib +h +s "desktop.ini" >nul 2>nul
+  attrib +r "%~dp0." >nul 2>nul
+)
+
 rem -- Is Claude Code installed?
 where claude >nul 2>nul
 if errorlevel 1 goto no_claude

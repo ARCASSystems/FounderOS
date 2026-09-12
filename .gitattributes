@@ -27,6 +27,7 @@
 *.jpeg       binary
 *.gif        binary
 *.ico        binary
+*.icns       binary
 *.svg        text
 *.pdf        binary
 *.zip        binary
@@ -35,3 +36,7 @@
 # misbehaves on LF-only batch files), the .command must stay LF (bash).
 *.bat        text eol=crlf
 *.command    text eol=lf
+
+# The Windows folder icon marker. Windows reads desktop.ini as an INI file and
+# wants CRLF; a LF-only copy is read inconsistently by older Explorer builds.
+desktop.ini  text eol=crlf
