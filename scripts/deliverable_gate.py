@@ -370,7 +370,8 @@ def check_register(path: Path, profile: str = "deliverable") -> list[Check]:
                       f"no text extractor for {path.suffix or 'this format'}")]
     if c.words < 40:
         return [Check("register", "census", "SKIP",
-                      f"{c.words} words is too short to measure honestly")]
+                      f"{c.words} words is too short to measure - the reading pass "
+                      "owns voice on this one, nothing was checked")]
 
     status, reasons = rc.gate(c, profile)
     top = rc.top_classes(c, profile)

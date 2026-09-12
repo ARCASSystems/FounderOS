@@ -59,7 +59,7 @@ Never use these:
 
 ## Structural Tells
 
-Everything above is phrase-level, and a find-and-replace pass fixes phrase-level problems. These four survive that pass, which is why they are what remains in current AI writing once the vocabulary is clean. Check for them last, after the word list.
+Everything above is phrase-level, and a find-and-replace pass fixes phrase-level problems. The ones below survive that pass, which is why they are what remains in current AI writing once the vocabulary is clean. Check for them last, after the word list.
 
 **Aphorism budget: one per document.** The banned-phrase rules catch a formula like "X is the new Y". They do not catch the habit of ending every third paragraph on a quotable line. Three or four epigrams in one document is the tell, even when each one is individually good. Keep the best and say the rest plainly.
 

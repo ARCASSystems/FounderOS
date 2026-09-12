@@ -278,6 +278,61 @@ this machine does not have, so Tier 1's spoken path is UNVERIFIED for v1.55.
 Piper's speaking path is UNVERIFIED too: only its absent path was testable here.
 The local ears were verified by hand against real recorded speech.
 
+### Fixed - what the refute pass found before this shipped
+
+`rules/release-verification.md` gate 1 says a context that did not build a
+change gets the diff and tries to break its claims before the push. It ran on
+this release and returned twenty-one findings. Five were serious and two of
+those were regressions this release had just introduced, which is exactly the
+kind of thing the builder cannot see in their own work.
+
+- **The claims check had a coverage bleed.** The next-line tag credit accepted
+  any following line containing a tag, including a tag sitting inline on a claim
+  of its own, so a well-sourced claim silently vouched for the unsourced one
+  above it. The better a document was tagged, the more hiding surface it grew.
+  A tag now grants coverage only when it is alone on its line, which is what the
+  rule page actually teaches.
+- **Dating a source switched the number check off for that line.** The scan
+  skipped any line containing a date, a time or a version, so
+  `retrieved 2026-09-12, the segment holds 12,000 brokers` reported nothing. The
+  habit the SOURCED tier asks for was disabling the check. Dates are now blanked
+  out of the line and what remains is scanned.
+- **The same widening read `Python 3.11` as a market claim.** A gate that cries
+  wolf on a requirements line gets ignored, which costs more than it catches.
+- **The writing census scored by length below a thousand words.** Identical
+  writing at identical density scored 98 at fifteen words and 76 at a hundred
+  and fifty, and most real deliverables live under that floor. The floor is now
+  two hundred words, and identical density now scores within three points from
+  fifty words to three thousand. The test that was supposed to guard this could
+  never have failed: it repeated a clean sentence whose tell count does not grow
+  with the text. It now repeats a paragraph, and a second test proves the
+  fixture can detect the old behaviour.
+- **A missing style page silently enforced zero banned words** and reported a
+  clean score, which is worse than not running. It now says so out loud.
+- **The release builder read the working tree, not git.** The file list came
+  from git and the content came from disk, so an uncommitted edit would have
+  shipped, and on Windows every text file shipped CRLF where the repository
+  holds LF. It reads committed blobs now, refuses a dirty tree, and two builds
+  of one commit are byte-identical.
+- **The voice page reported what was importable, not what worked.** A model name
+  that does not exist imports perfectly and fails every turn, while the page
+  said speech was staying on this machine. And the Piper fallback repeated the
+  contradiction this release had just fixed in the ears: it fell back to the
+  browser voice while the subtitle still claimed a local one. Both now drop the
+  claim before falling back, and the path filter covers seven shapes rather than
+  the three that were thought of.
+- **The update pack promised something that cannot happen.** `voice/` is the
+  founder's own gitignored folder, so an update refreshes the templates and
+  correctly leaves their copy alone. The pack said the new runtime would arrive.
+  Now the pack, the update command and the skill all say the same true thing and
+  name the one sentence that fixes it.
+
+Also: re-running voice setup used to overwrite the settings it never wrote, the
+Mac icon script claimed success whatever happened, and `rules/writing-style.md`
+said "these four" over seven items.
+
+Every one of these is now a test. The suite went 1014 to 1029.
+
 ## v1.54.3 - 2026-08-14
 
 Three releases in a row were corrected by outside review, for the same three structural reasons each time. This release changes the structure instead of patching another instance, and ships the standard as a page a founder can read. Pack: `updates/1.54.3-the-release-process-stops-trusting-its-builder.md`.

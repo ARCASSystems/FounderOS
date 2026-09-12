@@ -66,6 +66,16 @@ fi
 icon_file="$target/Icon$(printf '\r')"
 rm -f "$icon_file"
 Rez -append "$work/icon.rsrc" -o "$icon_file" 2>/dev/null
+
+# Check the marker file actually exists before claiming anything. Printing
+# "Icon set on:" whatever happened is how a cosmetic step turns into a bug
+# report: the founder believes it worked and wonders why Finder disagrees.
+if [ ! -s "$icon_file" ]; then
+  echo "Could not write the icon marker in: $target"
+  echo "Nothing was changed. Founder OS works exactly the same without it."
+  exit 0
+fi
+
 SetFile -a C "$target"      # the folder has a custom icon
 SetFile -a V "$icon_file"   # and the marker file stays out of sight
 

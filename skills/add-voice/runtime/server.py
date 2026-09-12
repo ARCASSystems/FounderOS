@@ -47,6 +47,7 @@ Usage:
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 import threading
@@ -213,6 +214,31 @@ def append_to_log(text):
 _STT_MODEL = None
 _STT_ERROR = ""
 
+# Anything that looks like a filesystem location. The first version tested for
+# three shapes and missed four more that carry an account name just as plainly:
+# a drive other than C, a UNC share, a bare posix cache path, a Windows path
+# written with forward slashes. Whitelisting what is safe to print beats
+# blacklisting what is not.
+_PATHISH = re.compile(
+    r"[A-Za-z]:[\\/]"           # C:\ or D:/
+    r"|\\\\[^\\]+\\"           # \\server\share
+    r"|(?:^|\s)/(?:home|Users|root|tmp|var|mnt|media|opt|srv)/"
+    r"|(?:^|\s)~/"
+)
+
+
+def _safe_error(raw: str) -> str:
+    """An error a founder can act on, with no path in it.
+
+    This string is printed on the page. A privacy tier that puts the account
+    name on screen has missed its own point, so anything path-shaped is
+    replaced wholesale rather than trimmed.
+    """
+    if _PATHISH.search(raw):
+        return ("the local model could not be loaded - check the model name in "
+                "voice/config.json and that the first download completed")
+    return raw[:200]
+
 
 def local_stt_status():
     """What the local ears can do right now. Never raises, never installs."""
@@ -225,6 +251,17 @@ def local_stt_status():
             "model": model_name,
             "reason": "faster-whisper is not installed",
             "how": "pip install faster-whisper",
+        }
+    # An import is not a working transcriber. A model name that does not exist
+    # imports perfectly and then fails every turn, and the page was painting
+    # "your speech stays on this machine" over ears that could not hear. Once a
+    # load has failed, say so here rather than on the next recording.
+    if _STT_ERROR:
+        return {
+            "available": False,
+            "model": model_name,
+            "reason": _STT_ERROR,
+            "how": "check local_stt_model in voice/config.json",
         }
     return {"available": True, "model": model_name, "reason": "", "how": ""}
 
@@ -246,13 +283,7 @@ def _load_stt():
             compute_type="int8",
         )
     except Exception as exc:                      # a failed model download, a bad name
-        # Model names and network errors are safe to show; a filesystem path is
-        # not, so anything path-shaped is reduced to the part that helps.
-        raw = str(exc)
-        _STT_ERROR = ("the local model could not be loaded - check the model name "
-                      "in voice/config.json and that the first download completed"
-                      if ":\\" in raw or "/home/" in raw or "/Users/" in raw
-                      else raw[:200])
+        _STT_ERROR = _safe_error(str(exc))
         return None
     return _STT_MODEL
 
@@ -437,8 +468,11 @@ class Handler(BaseHTTPRequestHandler):
             # It never records the audio, and the text it records is the same
             # text /brain would have logged anyway.
             log_turn("transcribe", ms, ok, len(raw), len(text), note)
+            # recheck tells the page to re-read /health: the ears it is
+            # advertising have just proved they do not work.
             self._send_json({"ok": ok, "text": text, "reason": note,
-                             "engine": "faster-whisper", "latency_ms": round(ms, 1)})
+                             "engine": "faster-whisper", "recheck": bool(_STT_ERROR),
+                             "latency_ms": round(ms, 1)})
             return
 
         if self.path == "/speak":

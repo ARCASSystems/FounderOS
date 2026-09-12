@@ -63,6 +63,21 @@ what your key exposes right now, and that list is the source of truth.
 
 Full detail, the upgrade commands, and the cost-and-accuracy trade for each are in [references/tiers.md](references/tiers.md) and [references/voice-model-disclaimer.md](references/voice-model-disclaimer.md). The disclaimer is load-bearing: the voice/STT model the user picks changes both how well their speech is received and the cost per turn. State it before they commit, never after.
 
+## Already have voice set up?
+
+`voice/` is your folder, gitignored, copied there once from this skill's
+`runtime/` templates. An update refreshes the templates and leaves your copy
+alone, because that folder holds your `config.json` and your brain command.
+
+So after an update that changed the runtime, copy the two files across:
+`skills/add-voice/runtime/server.py` and `runtime/index.html` over
+`voice/server.py` and `voice/index.html`. Leave `config.json` where it is.
+Saying "update my voice runtime" does exactly that. Re-running
+`python skills/add-voice/setup.py` also works, but it rewrites `config.json`,
+so prefer the copy.
+
+How to tell: if the page has no **Local ears** toggle, your copy predates v1.55.
+
 ## Pre-flight
 
 - If `core/identity.md` does not exist, voice still installs, but say plainly that with no identity the brain answers from a thin context. Offer `/founder-os:setup` first for richer answers. Do not block on it.

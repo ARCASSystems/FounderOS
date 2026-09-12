@@ -6,7 +6,7 @@ and nothing enforced them. The commit guard blocks em dashes, and after that
 every judgment about whether a draft sounds like a person was handed to a model
 and asked for an opinion. An opinion is not a measurement, so the same tells
 came back every week and nobody could tell whether writing was improving. This
-counts them instead. Seventeen classes, each one traceable to a line of
+counts them instead. Eighteen classes, each one traceable to a line of
 rules/writing-style.md, which is also where the banned-word list is read from
 so the page and this script cannot drift apart.
 
@@ -64,14 +64,24 @@ def load_banned_words(style_page: Path | None = None) -> list[str]:
         if st.startswith("## "):
             in_section = "banned word" in st.lower()
             continue
-        if not in_section or not st.startswith("- "):
+        if not in_section:
             continue
-        term = st[2:].strip()
-        term = re.sub(r"\s*\([^)]*\)\s*", "", term).strip()  # "leverage (as a verb)"
-        term = term.strip("`*_\"' ")
+        # Any list shape a person actually writes: "- x", "* x", "+ x", "1. x".
+        m = re.match(r"^(?:[-*+]|\d+[.)])\s+(.*)$", st)
+        if not m:
+            continue
+        term = re.sub(r"\s*\([^)]*\)\s*", "", m.group(1)).strip()  # "leverage (as a verb)"
+        # Trailing punctuation has to go or the word is unmatchable: a list
+        # written "- synergy." became the pattern \bsynergy\.\b, which matches
+        # nothing, so the term looked enforced and silently was not.
+        term = term.strip("`*_\"' ").rstrip(".,;:!?").strip()
         if term and "{{" not in term and len(term) < 40:
             words.append(term.lower())
     return words
+
+
+class StylePageEmpty(RuntimeError):
+    """The page yielded no banned words. Silence here is the dangerous answer."""
 
 
 def load_voice_banned(root: Path | None = None) -> list[str]:
@@ -442,6 +452,14 @@ CLASS_RULE = {
     "heading_one_liner": "a heading over one sentence is a label the sentence did not need",
 }
 
+# Below this, a document is scored as if it were this long. See the scoring
+# block in census_paras for why this number is 200 and not 1000.
+DENSITY_FLOOR_WORDS = 200
+# And below THIS, the score itself is too small a sample to fail a gate on.
+# Zero-tolerance classes still fail, because one "to be honest" in a two-line
+# note is still one too many for something a client reads.
+MIN_WORDS_TO_SCORE_A_GATE = 80
+
 GROUP_WEIGHT = {"clarity": 4, "register": 4, "structure": 2, "vocab": 1}
 GROUP_CAP = {"clarity": 30, "register": 30, "structure": 20, "vocab": 15}
 
@@ -551,7 +569,7 @@ def census_paras(paras: list[Para], banned: list[str] | None = None,
     c = Census()
     prose = [p for p in paras if p.kind in ("prose", "bullet")]
     c.paragraphs = len(prose)
-    banned = banned if banned is not None else (load_banned_words() + load_voice_banned())
+    banned = banned if banned is not None else banned_words_or_warn()
     banned_rx = [(w, re.compile(r"\b" + re.escape(w) + r"\b", re.IGNORECASE))
                  for w in dict.fromkeys(banned) if w]
 
@@ -641,11 +659,17 @@ def census_paras(paras: list[Para], banned: list[str] | None = None,
         c.hits = [h for h in c.hits if h.cls not in exclude]
 
     # Scored on density, not on total count. Absolute counts punish a long
-    # document for being long: the first draft of this scorer gave the repo's
-    # own doctrine pages a D, which would have taught founders to ignore it.
-    # Budgets are per thousand words, and anything shorter gets the whole
-    # thousand-word budget rather than a scaled-up one.
-    scale = 1000.0 / max(c.words, 1000)
+    # document for being long: the first draft gave this repo's own doctrine
+    # pages a D, which would have taught founders to ignore the whole thing.
+    #
+    # The floor was 1000 words at first, which quietly reintroduced the same
+    # bug under it: identical writing at identical density scored 98 at fifteen
+    # words and 76 at a hundred and fifty, because everything below the floor
+    # was still being scored on absolute counts, and most real deliverables
+    # live below it. Two hundred is low enough that a normal document is scored
+    # on its actual density and high enough that one tell in a two-line note is
+    # not extrapolated into a catastrophe.
+    scale = 1000.0 / max(c.words, DENSITY_FLOOR_WORDS)
     counts = {cls: len(hs) for cls, hs in c.by_class().items()}
     group_pen: dict[str, float] = {g: 0.0 for g in GROUP_WEIGHT}
     for cls, raw_n in counts.items():
@@ -672,12 +696,31 @@ def census_text(text: str, fmt: str = "md", profile: str = "deliverable") -> Cen
     return census_paras(paras, profile=profile)
 
 
+def banned_words_or_warn(warn=None) -> list[str]:
+    """The banned list, and a loud complaint when there is not one.
+
+    `rules/` is a file the founder is invited to edit, so the page can go
+    missing, get emptied, or have its heading restructured. Any of those made
+    the census quietly enforce zero banned words and report a clean score,
+    which is worse than not running: it tells you the writing passed a check
+    that did not happen.
+    """
+    page = load_banned_words()
+    if not page:
+        msg = (f"register-census: no banned words found in {STYLE_PAGE}. "
+               "The page is missing, empty, or its '## Banned Words and Phrases' "
+               "heading has been renamed. Every other class still ran; the "
+               "banned-word class did NOT.")
+        (warn or (lambda m: print(m, file=sys.stderr)))(msg)
+    return page + load_voice_banned()
+
+
 def census_file(path: Path, profile: str = "deliverable") -> Census | None:
     paras = load_paras(path)
     if paras is None:
         return None
     exempt = {term for term, glob in load_exceptions() if _matches(path, glob)}
-    banned = [w for w in (load_banned_words() + load_voice_banned()) if w not in exempt]
+    banned = [w for w in banned_words_or_warn() if w not in exempt]
     return census_paras(paras, banned=banned, profile=profile)
 
 
@@ -721,12 +764,16 @@ def gate(c: Census, profile: str) -> tuple[str, list[str]]:
                 reasons.append(f"{cls} {counts[cls]} (budget {BUDGET[cls]})")
         if counts.get("dash"):
             reasons.append(f"dash {counts['dash']} (em and en dashes never ship)")
-    if c.score < GATE_FAIL_SCORE[profile]:
+    scoreable = c.words >= MIN_WORDS_TO_SCORE_A_GATE
+    if scoreable and c.score < GATE_FAIL_SCORE[profile]:
         reasons.append(f"score {c.score} below {GATE_FAIL_SCORE[profile]}")
     if reasons:
         return "fail", reasons
     warns: list[str] = []
-    if c.score < GATE_WARN_SCORE[profile]:
+    if not scoreable:
+        warns.append(f"{c.words} words is too short to score a gate on - the "
+                     "zero-tolerance classes were still checked")
+    elif c.score < GATE_WARN_SCORE[profile]:
         warns.append(f"score {c.score} below {GATE_WARN_SCORE[profile]}")
     if c.burstiness and c.burstiness < 0.35 and c.sentences >= 8:
         warns.append(f"burstiness {c.burstiness} - sentence lengths read like a metronome")

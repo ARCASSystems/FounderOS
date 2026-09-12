@@ -178,6 +178,14 @@
       currentAudio = new Audio(URL.createObjectURL(blob));
       currentAudio.play();
     }).catch(function () {
+      // Turn the claim off before speaking through the browser. Saying "a local
+      // voice speaks" in the subtitle while the browser speaks is the same
+      // defect this release fixed in the ears, and fixing one instance without
+      // grepping the class is what rules/release-verification.md gate 3 exists
+      // to stop.
+      localTtsOn = false;
+      try { ttsBox.checked = false; } catch (e) {}
+      renderStatus();
       setState("local voice failed - using the browser");
       speakInBrowser(text);
     });
@@ -246,7 +254,7 @@
 
   function startLocalRecording() {
     if (!navigator.mediaDevices || !window.MediaRecorder) {
-      setState("this browser cannot record audio - using the browser's ears");
+      setState("this browser cannot record audio - local ears switched off, press again to use your browser's ears");
       localSttOn = false; sttBox.checked = false; renderStatus();
       return;
     }
@@ -271,7 +279,10 @@
               setState("");
               askBrain(data.text);
             } else {
-              setState("local ears: " + ((data && data.reason) || "no text") );
+              setState("local ears: " + ((data && data.reason) || "no text"));
+              // The server tells us when the ears it advertised cannot work.
+              // Re-read the truth rather than keep painting the claim.
+              if (data && data.recheck) { refreshHealth(); }
             }
           })
           .catch(function () { setState("transcribe failed - server offline?"); });
@@ -374,7 +385,26 @@
   }
 
   // Say what is running, not what could be. Everything the page claims about
-  // where your voice goes comes from here.
+  // where your voice goes comes from here, and it can be re-read at any time:
+  // a tier can stop working mid-session, and a stale claim about where your
+  // audio goes is the one thing this page must not hold on to.
+  function refreshHealth() {
+    return fetch("/health").then(function (r) { return r.json(); }).then(function (h) {
+      if (!h) return;
+      health = h;
+      if (!(h.local_stt && h.local_stt.available)) {
+        localSttOn = false;
+        try { sttBox.checked = false; sttBox.disabled = true; sttWrap.className = "off"; } catch (e) {}
+        if (h.local_stt && h.local_stt.reason) { sttWrap.title = "Local ears is off: " + h.local_stt.reason; }
+      }
+      if (!(h.local_tts && h.local_tts.available)) {
+        localTtsOn = false;
+        try { ttsBox.checked = false; } catch (e) {}
+      }
+      renderStatus();
+    }).catch(function () {});
+  }
+
   fetch("/health").then(function (r) { return r.json(); }).then(function (h) {
     if (!h) return;
     health = h;

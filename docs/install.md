@@ -28,7 +28,7 @@ First-run notes, so nothing surprises you:
 - **Mac**: right-click the file and choose **Open** the first time. That is how macOS treats any downloaded script, not an error in the file.
 - **If Claude Code is not installed yet**, the start file says so in plain language and opens the download page - nothing breaks.
 - **Prefer no scripts?** The spoken way works identically: open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
-- **The folder icon** appears on Windows the first time you double-click **Start Founder OS**. Windows only reads a folder's icon setting once the folder is marked as customised, and extracting a ZIP does not mark it, so the launcher does it. On a Mac, run `bash scripts/set_folder_icon.sh` once if you want the same thing; it needs Xcode Command Line Tools and says so plainly if they are missing. Either way it is cosmetic. Nothing about the OS depends on it.
+- **The folder icon** appears on Windows the first time you double-click **Start Founder OS**. Windows only reads a folder's icon setting once the folder is marked as customised, and extracting a ZIP does not mark it, so the launcher does it. On a Mac, run `bash scripts/set_folder_icon.sh` from the folder once if you want the same thing (it ships with the ZIP and the clone, which are the paths where there is a folder to brand); it needs Xcode Command Line Tools and says so plainly if they are missing. Either way it is cosmetic. Nothing about the OS depends on it.
 
 Commands use bare names on this path (`/setup`, `/today`), same as the git-clone path.
 

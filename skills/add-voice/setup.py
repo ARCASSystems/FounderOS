@@ -113,18 +113,46 @@ def main():
         shutil.copy2(src, voice_dir / fname)
     print("OK   Copied the voice page and server into " + str(voice_dir))
 
+    # Re-running setup is the documented way to get a newer runtime, so this
+    # must not throw away settings the founder chose. Anything already in the
+    # file wins over the defaults below, and the two local-tier keys are written
+    # explicitly so `tiers.md` can call them "two settings in voice/config.json"
+    # and be telling the truth about a file that actually has them.
+    existing = {}
+    config_path = voice_dir / "config.json"
+    if config_path.exists():
+        try:
+            existing = json.loads(config_path.read_text(encoding="utf-8"))
+        except (ValueError, OSError):
+            existing = {}
+
     config = {
         "tier": 0,
         "port": args.port,
         "root": str(root),
         "brain_cmd": brain_argv,
+        "local_stt": False,
+        "local_stt_model": "base",
+        "local_tts": False,
+        "piper_cmd": "piper",
+        "piper_voice": "",
         "created": datetime.now(timezone.utc).isoformat(),
         "note": "Tier 0 - browser STT/TTS + reasoning CLI, no extra key. See skills/add-voice/references/tiers.md to go local-first or realtime.",
     }
-    (voice_dir / "config.json").write_text(
+    kept = []
+    for key in ("local_stt", "local_stt_model", "local_tts", "piper_cmd",
+                "piper_voice", "brain_cmd", "created"):
+        if key in existing and existing[key] not in (None, ""):
+            if config.get(key) != existing[key]:
+                kept.append(key)
+            config[key] = existing[key]
+
+    config_path.write_text(
         json.dumps(config, indent=2, ensure_ascii=True) + "\n", encoding="utf-8"
     )
     print("OK   Wrote voice/config.json (port " + str(args.port) + ", bound to this machine).")
+    if kept:
+        print("     Kept your existing settings: " + ", ".join(sorted(kept)))
 
     # 3. REFERENCE pointer
     refs = SKILL_DIR / "references"

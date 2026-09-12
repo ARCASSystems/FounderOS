@@ -13,12 +13,19 @@ What it produces, into `dist/`:
   FounderOS-<version>.zip.sha256   the checksum line for the release notes
   FounderOS-<version>.dmg          macOS only, and only when hdiutil is there
 
-What goes in: every file git tracks, and nothing else. Using `git ls-files` as
-the source means anything gitignored is excluded by construction rather than by
-a list somebody has to remember to update - no `.git`, no `__pycache__`, no
-`.pytest_cache`, no `voice/runtime-log.jsonl`, no local state. It also means
-the ZIP and a `git clone` hand over the same tree, so the five install paths
-cannot drift apart.
+What goes in: every file git tracks, read from git's own object store rather
+than from the working copy. Anything gitignored is excluded by construction
+rather than by a list somebody has to remember - no `.git`, no `__pycache__`,
+no `voice/runtime-log.jsonl`, no local state.
+
+Reading blobs rather than files is the part worth keeping. Taking the file list
+from git and the CONTENT from disk shipped whatever happened to be in the
+working tree: an uncommitted edit, a debugging line, a pasted key. It also
+shipped Windows line endings, because `.gitattributes` normalises on checkin
+and a Windows checkout is CRLF on disk, so a ZIP built on Windows and a `git
+clone` on Linux were not the same tree. Both are closed by asking git for the
+bytes. A dirty tree is refused outright anyway, since the version you ship
+should be the version you can go back to.
 
 Two details that are easy to get wrong and expensive to miss:
 
@@ -40,6 +47,7 @@ Usage:
   python scripts/build_release.py                 # version from VERSION
   python scripts/build_release.py --version 1.55.0
   python scripts/build_release.py --skip-dmg
+  python scripts/build_release.py --allow-dirty  # build anyway, marked in the output
 """
 
 from __future__ import annotations
@@ -95,6 +103,59 @@ def tracked_files() -> list[tuple[str, int]]:
     return sorted(out)
 
 
+def blob_bytes(rel: str) -> bytes:
+    """The committed content of one tracked path, straight from git.
+
+    Git rather than `open(path)`: the working copy can carry an uncommitted
+    edit and, on Windows, carries CRLF where the repository holds LF. Neither
+    belongs in something a stranger downloads.
+    """
+    return read_blobs([rel])[rel]
+
+
+def read_blobs(rels: list[str]) -> dict[str, bytes]:
+    """Every blob through ONE git process.
+
+    `git show` per file spawned five hundred processes and took over a minute
+    on Windows. `cat-file --batch` reads the same objects down one pipe.
+    """
+    if not rels:
+        return {}
+    proc = subprocess.Popen(
+        ["git", "cat-file", "--batch"], cwd=str(REPO),
+        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    )
+    query = "".join(f"HEAD:{r}\n" for r in rels).encode("utf-8")
+    out, err = proc.communicate(query)
+    if proc.returncode != 0:
+        raise SystemExit(f"git cat-file failed: {err.decode(errors='replace')[:200]}")
+
+    result: dict[str, bytes] = {}
+    pos = 0
+    for rel in rels:
+        nl = out.find(b"\n", pos)
+        if nl == -1:
+            raise SystemExit(f"git cat-file returned nothing for {rel}")
+        header = out[pos:nl].decode("utf-8", "replace")
+        if header.endswith(("missing", "ambiguous")):
+            raise SystemExit(f"git could not read HEAD:{rel} - {header}")
+        size = int(header.rsplit(" ", 1)[1])
+        start = nl + 1
+        result[rel] = out[start:start + size]
+        pos = start + size + 1            # skip the trailing newline git adds
+    return result
+
+
+def dirty_paths() -> list[str]:
+    """Tracked files that differ from HEAD. An untracked file is not a problem:
+    it cannot reach the archive, because the archive is built from the index."""
+    r = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"],
+                       cwd=str(REPO), capture_output=True, text=True)
+    if r.returncode != 0:
+        return []
+    return [ln[3:].strip() for ln in r.stdout.splitlines() if ln.strip()]
+
+
 def refuse_excluded(paths: list[str]) -> None:
     bad = [p for p in paths if any(p == n or p.startswith(n) for n in NEVER_SHIP)]
     if bad:
@@ -114,32 +175,47 @@ def read_version(explicit: str | None) -> str:
     return version_file.read_text(encoding="utf-8").strip().lstrip("v")
 
 
-def build_zip(version: str, out_dir: Path) -> Path:
+def build_zip(version: str, out_dir: Path, allow_dirty: bool = False) -> Path:
     entries = tracked_files()
     refuse_excluded([p for p, _ in entries])
+
+    dirty = dirty_paths()
+    if dirty and not allow_dirty:
+        raise SystemExit(
+            "The working tree has uncommitted changes, so the release would not "
+            "match any commit:\n  " + "\n  ".join(dirty[:20])
+            + ("\n  ..." if len(dirty) > 20 else "")
+            + "\nCommit them, or pass --allow-dirty if you mean it. Either way the "
+              "archive carries the COMMITTED bytes, never the working copy."
+        )
 
     zip_path = out_dir / f"{ASSET_STEM}-{version}.zip"
     if zip_path.exists():
         zip_path.unlink()
 
+    # One timestamp for every entry, taken from the commit, so two builds of the
+    # same commit produce the same archive.
+    r = subprocess.run(["git", "show", "-s", "--format=%ct", "HEAD"],
+                       cwd=str(REPO), capture_output=True, text=True)
+    import datetime as _dt
+    when = (_dt.datetime.fromtimestamp(int(r.stdout.strip()))
+            if r.returncode == 0 and r.stdout.strip().isdigit() else _dt.datetime.now())
+    stamp = (when.year, when.month, when.day, when.hour, when.minute, when.second)
+
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         # The root folder entry, carrying the read-only marker that tells
         # Windows to read desktop.ini at all.
-        root = zipfile.ZipInfo(f"{FOLDER_NAME}/")
+        root = zipfile.ZipInfo(f"{FOLDER_NAME}/", date_time=stamp)
         root.create_system = 3  # unix, so the exec bit below survives
         root.external_attr = (
             (stat.S_IFDIR | 0o755) << 16
         ) | DOS_DIRECTORY | DOS_READONLY
         z.writestr(root, b"")
 
+        blobs = read_blobs([rel for rel, _ in entries])
         for rel, mode in entries:
-            source = REPO / rel
-            if not source.is_file():
-                # A tracked file missing from the working tree means a broken
-                # checkout. Say so rather than shipping a hole.
-                raise SystemExit(f"Tracked but missing from the working tree: {rel}")
-
-            info = zipfile.ZipInfo.from_file(source, f"{FOLDER_NAME}/{rel}")
+            data = blobs[rel]
+            info = zipfile.ZipInfo(f"{FOLDER_NAME}/{rel}", date_time=stamp)
             info.create_system = 3
             unix_mode = 0o755 if mode == 0o100755 else 0o644
             dos = 0
@@ -147,7 +223,7 @@ def build_zip(version: str, out_dir: Path) -> Path:
                 dos = DOS_HIDDEN | DOS_SYSTEM
             info.external_attr = ((stat.S_IFREG | unix_mode) << 16) | dos
             info.compress_type = zipfile.ZIP_DEFLATED
-            z.writestr(info, source.read_bytes())
+            z.writestr(info, data)
 
     return zip_path
 
@@ -173,10 +249,12 @@ def build_dmg(version: str, out_dir: Path) -> Path | None:
         shutil.rmtree(staging.parent)
     staging.mkdir(parents=True)
 
-    for rel, mode in tracked_files():
+    entries = tracked_files()
+    blobs = read_blobs([rel for rel, _ in entries])
+    for rel, mode in entries:
         target = staging / rel
         target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(REPO / rel, target)
+        target.write_bytes(blobs[rel])            # committed bytes, as above
         if mode == 0o100755:
             target.chmod(0o755)
 
@@ -209,6 +287,8 @@ def main() -> int:
     ap.add_argument("--version", help="Release version. Defaults to the VERSION file.")
     ap.add_argument("--out", default="dist", help="Output directory (default: dist).")
     ap.add_argument("--skip-dmg", action="store_true", help="Do not attempt the dmg.")
+    ap.add_argument("--allow-dirty", action="store_true",
+                    help="Build from HEAD even with uncommitted changes present.")
     args = ap.parse_args()
 
     version = read_version(args.version)
@@ -216,7 +296,7 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"Building Founder OS {version}")
-    zip_path = build_zip(version, out_dir)
+    zip_path = build_zip(version, out_dir, allow_dirty=args.allow_dirty)
     sidecar = write_checksum(zip_path)
 
     with zipfile.ZipFile(zip_path) as z:
@@ -225,6 +305,10 @@ def main() -> int:
     print(f"  zip: {zip_path.name}  {len(names)} entries, {size_mb:.1f} MB")
     print(f"  sha256: {sidecar.read_text(encoding='utf-8').split()[0]}")
     print(f"  extracts to: {FOLDER_NAME}/")
+    print("  contents: the committed bytes at HEAD, not the working copy")
+    if args.allow_dirty and dirty_paths():
+        print("  WARNING: --allow-dirty was passed and the tree is dirty. The "
+              "archive still holds HEAD, so it does NOT contain your uncommitted work.")
 
     if not args.skip_dmg:
         dmg = build_dmg(version, out_dir)
