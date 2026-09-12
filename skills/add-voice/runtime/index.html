@@ -47,23 +47,30 @@
   .state { font-size: 0.8rem; opacity: 0.7; height: 1.2em; }
   .fallback { display: none; gap: 0.5rem; margin-top: 0.6rem; }
   .fallback input { flex: 1; font: inherit; padding: 0.5rem; border-radius: 8px; border: 1px solid rgba(127,127,127,0.4); background: transparent; color: inherit; }
+  .toggles { margin-top: -6px; }
+  .toggles label { font-size: 13px; opacity: 0.9; margin-right: 14px; }
+  .toggles label.off { opacity: 0.45; }
+  #privacy { font-size: 13px; }
 </style>
 </head>
 <body>
   <h1>Founder OS - voice</h1>
-  <p class="sub">Tier 0 - the default. No extra key, no paid service. Your one subscription answers; your browser hears and speaks.</p>
+  <p class="sub" id="sub">Tier 0 - the default. No extra key, no paid service. Your one subscription answers.</p>
 
   <div class="banner" id="banner">
-    Heads up: your browser's speech recognition may send your audio to your browser vendor
-    (Google or Microsoft) to turn it into text. It needs no key and costs nothing, but it is
-    not fully local. For fully-local speech, add the faster-whisper upgrade (see the add-voice
-    skill's tiers note). Your brain - your files and answers - stays on this machine either way.
+    Checking what is running...
   </div>
 
   <div class="row">
     <button id="talk" class="primary">Hold to talk</button>
     <button id="save">Save last to brain</button>
     <span class="state" id="state"></span>
+  </div>
+
+  <div class="row toggles">
+    <label id="sttWrap" title=""><input type="checkbox" id="localStt" disabled> Local ears</label>
+    <label id="ttsWrap" title=""><input type="checkbox" id="localTts" disabled> Local voice</label>
+    <span class="state" id="privacy"></span>
   </div>
 
   <div class="panel">
@@ -92,10 +99,59 @@
   var sendBtn = document.getElementById("send");
 
   var lastSaid = "";
+  var noBrowserEars = false;
+
+  // What is ACTUALLY running, filled from /health. Never assume: the whole point
+  // of the local tier is that the page tells the truth about where your voice is
+  // going, and a page that says "local" while the audio goes to a browser vendor
+  // would be worse than no local tier at all.
+  var health = { ears_active: "browser", mouth_active: "browser",
+                 local_stt: { available: false }, local_tts: { available: false } };
+  var localSttOn = false;
+  var localTtsOn = false;
+
+  var bannerEl = document.getElementById("banner");
+  var privacyEl = document.getElementById("privacy");
+  var sttBox = document.getElementById("localStt");
+  var ttsBox = document.getElementById("localTts");
+  var sttWrap = document.getElementById("sttWrap");
+  var ttsWrap = document.getElementById("ttsWrap");
+
+  function earsAreLocal() { return localSttOn && health.local_stt && health.local_stt.available; }
+  function mouthIsLocal() { return localTtsOn && health.local_tts && health.local_tts.available; }
+
+  function renderStatus() {
+    var ears = earsAreLocal();
+    var mouth = mouthIsLocal();
+    // The subtitle names the tier that is actually running. Leaving it on the
+    // Tier 0 wording while local ears are on would contradict the banner two
+    // lines below it, and the contradiction is the kind a reader believes the
+    // reassuring half of.
+    document.getElementById("sub").textContent =
+      (ears || mouth)
+        ? "Tier 0-local. No extra key, no paid service. Your one subscription answers. "
+          + (ears ? "Speech stays on this machine" : "Your browser hears")
+          + " and " + (mouth ? "a local voice speaks" : "your browser speaks") + "."
+        : "Tier 0 - the default. No extra key, no paid service. Your one subscription "
+          + "answers; your browser hears and speaks.";
+    privacyEl.textContent = ears
+      ? "Ears: on this machine"
+      : "Ears: your browser vendor";
+    bannerEl.textContent = ears
+      ? "Local ears are on. Your speech is transcribed on this machine by faster-whisper "
+        + "and the audio never leaves it. Answers still come from the reasoning CLI you "
+        + "already run, on your own subscription."
+      : "Your browser's speech recognition sends your audio to your browser vendor "
+        + "(Google or Microsoft) to turn it into text. It needs no key and costs nothing, "
+        + "but it is not local. Turn on Local ears to keep speech on this machine. Your "
+        + "brain - your files and answers - stays here either way.";
+  }
 
   function setState(s) { stateEl.textContent = s || ""; }
 
-  function speak(text) {
+  var currentAudio = null;
+
+  function speakInBrowser(text) {
     try {
       window.speechSynthesis.cancel();
       var u = new SpeechSynthesisUtterance(text);
@@ -103,8 +159,32 @@
       window.speechSynthesis.speak(u);
     } catch (e) { /* no mouth available - the text on screen is the fallback */ }
   }
+
+  function speak(text) {
+    if (!mouthIsLocal()) { speakInBrowser(text); return; }
+    // Local voice. If Piper cannot answer, fall straight back to the browser
+    // rather than leaving the turn silent.
+    fetch("/speak", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text })
+    }).then(function (r) {
+      if (!r.ok) throw new Error("speak failed");
+      var ct = r.headers.get("Content-Type") || "";
+      if (ct.indexOf("audio") === -1) throw new Error("no audio");
+      return r.blob();
+    }).then(function (blob) {
+      stopSpeaking();
+      currentAudio = new Audio(URL.createObjectURL(blob));
+      currentAudio.play();
+    }).catch(function () {
+      setState("local voice failed - using the browser");
+      speakInBrowser(text);
+    });
+  }
   function stopSpeaking() {
     try { window.speechSynthesis.cancel(); } catch (e) {}
+    try { if (currentAudio) { currentAudio.pause(); currentAudio = null; } } catch (e) {}
   }
 
   // Ask the brain. Backchannel so a slow turn is never silent (concurrency principle:
@@ -158,6 +238,59 @@
   }
   saveBtn.addEventListener("click", saveLast);
 
+  // Local ears: record with MediaRecorder and POST the audio to /transcribe,
+  // where faster-whisper turns it into text on this machine. Opt-in, because it
+  // needs a package Tier 0 deliberately does not install.
+  var mediaRecorder = null;
+  var chunks = [];
+
+  function startLocalRecording() {
+    if (!navigator.mediaDevices || !window.MediaRecorder) {
+      setState("this browser cannot record audio - using the browser's ears");
+      localSttOn = false; sttBox.checked = false; renderStatus();
+      return;
+    }
+    stopSpeaking();
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+      chunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = function (e) { if (e.data.size) chunks.push(e.data); };
+      mediaRecorder.onstop = function () {
+        stream.getTracks().forEach(function (t) { t.stop(); });
+        var blob = new Blob(chunks, { type: mediaRecorder.mimeType || "audio/webm" });
+        if (!blob.size) { setState(""); return; }
+        setState("transcribing on this machine...");
+        fetch("/transcribe", {
+          method: "POST",
+          headers: { "Content-Type": blob.type },
+          body: blob
+        }).then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (data && data.ok && data.text) {
+              youEl.textContent = data.text;
+              setState("");
+              askBrain(data.text);
+            } else {
+              setState("local ears: " + ((data && data.reason) || "no text") );
+            }
+          })
+          .catch(function () { setState("transcribe failed - server offline?"); });
+      };
+      mediaRecorder.start();
+      setState("listening (local)...");
+      talkBtn.textContent = "Listening - release to ask";
+    }).catch(function (err) {
+      setState("mic blocked: " + (err && err.name ? err.name : "permission denied"));
+      talkBtn.textContent = "Hold to talk";
+    });
+  }
+
+  function stopLocalRecording() {
+    try { if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop(); } catch (e) {}
+    mediaRecorder = null;
+    talkBtn.textContent = "Hold to talk";
+  }
+
   // Ears: the browser's built-in speech recognition, if present.
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (SR) {
@@ -184,6 +317,7 @@
 
     var listening = false;
     function startListening() {
+      if (earsAreLocal()) { startLocalRecording(); return; }
       if (listening) return;
       listening = true; finalText = "";
       stopSpeaking();
@@ -192,6 +326,7 @@
       try { rec.start(); } catch (e) {}
     }
     function stopListening() {
+      if (earsAreLocal()) { stopLocalRecording(); return; }
       if (!listening) return;
       listening = false;
       try { rec.stop(); } catch (e) {}
@@ -203,14 +338,18 @@
     talkBtn.addEventListener("touchstart", function (e) { e.preventDefault(); startListening(); });
     talkBtn.addEventListener("touchend", function (e) { e.preventDefault(); stopListening(); });
   } else {
-    // No built-in speech recognition (Firefox, Safari). Never dead-end: type instead.
-    talkBtn.disabled = true;
-    talkBtn.textContent = "No mic STT in this browser";
+    // No built-in speech recognition (Firefox, Safari). The local ears still
+    // work here if faster-whisper is installed, because they need a microphone
+    // and not a vendor service - which makes this browser the case the local
+    // tier helps most, not least.
     fallback.style.display = "flex";
-    document.getElementById("banner").textContent =
-      "Your browser has no built-in speech recognition, so type your turn below. The mouth " +
-      "(read-aloud) and the brain still work. For spoken input, use Chrome or Edge, or add the " +
-      "faster-whisper upgrade (see the add-voice skill's tiers note).";
+    talkBtn.addEventListener("mousedown", function () { if (earsAreLocal()) startLocalRecording(); });
+    talkBtn.addEventListener("mouseup", function () { if (earsAreLocal()) stopLocalRecording(); });
+    talkBtn.addEventListener("touchstart", function (e) {
+      if (!earsAreLocal()) return; e.preventDefault(); startLocalRecording(); });
+    talkBtn.addEventListener("touchend", function (e) {
+      if (!earsAreLocal()) return; e.preventDefault(); stopLocalRecording(); });
+    noBrowserEars = true;
   }
 
   function sendTyped() {
@@ -220,14 +359,47 @@
   sendBtn.addEventListener("click", sendTyped);
   textin.addEventListener("keydown", function (e) { if (e.key === "Enter") sendTyped(); });
 
-  // Tell the user honestly if the brain CLI is not reachable.
+  function wireToggle(box, wrap, status, label, onChange) {
+    if (status && status.available) {
+      box.disabled = false;
+      wrap.title = label + " runs on this machine.";
+      box.addEventListener("change", onChange);
+    } else {
+      box.disabled = true;
+      wrap.className = "off";
+      var why = (status && status.reason) || "not available";
+      var how = (status && status.how) ? " - " + status.how : "";
+      wrap.title = label + " is off: " + why + how;
+    }
+  }
+
+  // Say what is running, not what could be. Everything the page claims about
+  // where your voice goes comes from here.
   fetch("/health").then(function (r) { return r.json(); }).then(function (h) {
-    if (h && h.brain_available === false) {
+    if (!h) return;
+    health = h;
+    if (h.brain_available === false) {
       brainEl.textContent =
         "Ready to hear you and save to your brain. Conversational answers need the reasoning " +
         "CLI on this machine's PATH - see the troubleshooting note. Saving works now.";
     }
-  }).catch(function () {});
+    wireToggle(sttBox, sttWrap, h.local_stt, "Local ears", function () {
+      localSttOn = sttBox.checked;
+      renderStatus();
+    });
+    wireToggle(ttsBox, ttsWrap, h.local_tts, "Local voice", function () {
+      localTtsOn = ttsBox.checked;
+      renderStatus();
+    });
+    // config.json can start them on; the checkbox then reflects reality.
+    if (h.ears_active === "local") { sttBox.checked = true; localSttOn = true; }
+    if (h.mouth_active === "local") { ttsBox.checked = true; localTtsOn = true; }
+    if (noBrowserEars && !(h.local_stt && h.local_stt.available)) {
+      talkBtn.disabled = true;
+      talkBtn.textContent = "No mic STT in this browser";
+    }
+    renderStatus();
+  }).catch(function () { renderStatus(); });
 })();
 </script>
 </body>

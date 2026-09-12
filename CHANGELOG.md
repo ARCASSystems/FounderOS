@@ -225,6 +225,57 @@ shippable, and there is a test that runs the gate over what it produces.
 
 Counts: 96 skills to 97, 46 commands to 47. Suite 965 to 988.
 
+### New - the voice privacy tier exists now, instead of being described
+
+Tier 0 sends your audio to Google or Microsoft to turn it into text. The skill
+said so honestly and pointed at a fix, and the fix did not exist. The tiers page
+carried build instructions ("capture mic audio with MediaRecorder, POST it to a
+small local transcribe endpoint") written as though the endpoint were already
+there. Nobody had written it. A reader could not tell a wired tier from a
+described one, and that was the worse half of the defect.
+
+**Local ears.** `POST /transcribe` transcribes on your machine with
+faster-whisper, behind a toggle on the page. `pip install faster-whisper`, tick
+the box, and speech stops leaving the machine. Measured on a laptop CPU with the
+`base` model: about 2.4 seconds for a ten-second turn including the one-off
+model load, about 1.1 seconds once cached.
+
+**Local mouth.** `POST /speak` shells out to Piper and returns audio. Install
+Piper, point `piper_voice` at your voice file, tick the box. If Piper fails
+mid-turn the page falls back to the browser voice rather than leaving the answer
+silent.
+
+Both opt-in, both default off, and neither is importable at module level, so an
+install without them starts exactly as it always has. Tier 0 stays zero-install.
+
+**The page says which ears are running, not which are possible.** The banner,
+the subtitle and the status line all read from the server on load and change
+together. With the toggle off it names your browser vendor; with it on it says
+the audio stays here. A toggle whose dependency is missing is disabled with a
+tooltip naming what is missing and how to install it, instead of failing when
+you press the button. A privacy feature that says "local" while the audio goes
+elsewhere would be worse than shipping none, so nothing on that page is a
+claim about what is installed rather than what is running.
+
+Building it turned up one of its own: a decoder failure echoed the temp file
+path, and therefore the account name, into the page. Filtered now, along with
+the model-load error, on every platform's path shape.
+
+### Changed - both tier tables mark what is wired and what is not
+
+The skill's table gains a State column and the tiers page marks every heading
+`[WIRED]` or `[DOCUMENTED]`. ElevenLabs is marked not built, because it is not.
+Tier 1 carries the date it was last run against a live key rather than a promise
+about today, because Gemini Live model names change and a retired one fails at
+the first turn.
+
+Honest limits on this release. Tier 1's installer was run end to end here: it
+installs, copies the runtime, writes its config, and with no key it says exactly
+how to add one. The conversation itself was not run, because that needs a key
+this machine does not have, so Tier 1's spoken path is UNVERIFIED for v1.55.
+Piper's speaking path is UNVERIFIED too: only its absent path was testable here.
+The local ears were verified by hand against real recorded speech.
+
 ## v1.54.3 - 2026-08-14
 
 Three releases in a row were corrected by outside review, for the same three structural reasons each time. This release changes the structure instead of patching another instance, and ships the standard as a page a founder can read. Pack: `updates/1.54.3-the-release-process-stops-trusting-its-builder.md`.
