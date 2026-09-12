@@ -39,14 +39,44 @@ The default install - Tier 0 - must work end-to-end on the **one subscription th
 
 ## The tiers
 
-| Tier | What it adds | Needs | Default? |
-| --- | --- | --- | --- |
-| **0** | Browser speech-in + speech-out + brain on your one subscription | nothing extra | YES |
-| **0-local** | Swap browser STT for faster-whisper so speech never leaves your machine | one pip install + a model download | no - opt-in |
-| **1** | Realtime, sub-second spoken conversation (Gemini Live front) | a FREE Google AI Studio key | no - opt-in |
-| **2** | A premium, higher-quality mouth (ElevenLabs) | a paid key | no - opt-in |
+| Tier | What it adds | Needs | State | Default? |
+| --- | --- | --- | --- | --- |
+| **0** | Browser speech-in + speech-out + brain on your one subscription | nothing extra | wired | YES |
+| **0-local ears** | faster-whisper transcribes on this machine, so speech never reaches a browser vendor | `pip install faster-whisper` + a model download | wired | no - opt-in |
+| **0-local mouth** | Piper speaks locally instead of the browser | the Piper binary + a voice file | wired | no - opt-in |
+| **1** | Realtime, sub-second spoken conversation (Gemini Live front) | a FREE Google AI Studio key | wired, last run 2026-08-05 | no - opt-in |
+| **2** | A premium, higher-quality mouth (ElevenLabs) | a paid key | documented, not built | no - opt-in |
+
+**Read the State column before you promise anything.** `wired` means code ships
+and runs it. `documented, not built` means the page describes it and nothing
+implements it. Until v1.55 both local rungs said the first while meaning the
+second: `references/tiers.md` gave build instructions ("capture mic audio with
+MediaRecorder, POST it to a small local transcribe endpoint") as though the
+endpoint existed, and no endpoint existed. A reader could not tell the two
+apart, and that was the actual defect, worse than the missing feature.
+
+Tier 1's own honesty note: the runtime ships and the installer runs, but Gemini
+Live model names change often and a retired name fails at the first turn. The
+date in the table is the last time it was run end to end against a live free
+key, not a promise about today. `python voice/live_server.py --models` lists
+what your key exposes right now, and that list is the source of truth.
 
 Full detail, the upgrade commands, and the cost-and-accuracy trade for each are in [references/tiers.md](references/tiers.md) and [references/voice-model-disclaimer.md](references/voice-model-disclaimer.md). The disclaimer is load-bearing: the voice/STT model the user picks changes both how well their speech is received and the cost per turn. State it before they commit, never after.
+
+## Already have voice set up?
+
+`voice/` is your folder, gitignored, copied there once from this skill's
+`runtime/` templates. An update refreshes the templates and leaves your copy
+alone, because that folder holds your `config.json` and your brain command.
+
+So after an update that changed the runtime, copy the two files across:
+`skills/add-voice/runtime/server.py` and `runtime/index.html` over
+`voice/server.py` and `voice/index.html`. Leave `config.json` where it is.
+Saying "update my voice runtime" does exactly that. Re-running
+`python skills/add-voice/setup.py` also works, but it rewrites `config.json`,
+so prefer the copy.
+
+How to tell: if the page has no **Local ears** toggle, your copy predates v1.55.
 
 ## Pre-flight
 

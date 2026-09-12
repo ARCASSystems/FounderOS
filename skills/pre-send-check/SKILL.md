@@ -4,7 +4,7 @@ description: >
   Run a pre-send gate before any deliverable goes out. Trigger on "check this before I send", "ready to send", "final review", "look this over before it goes out", "review before I ship", or any variation of pre-ship review on an email, proposal, deck, contract, post, invoice, or status update. Read-only - never modifies the deliverable. Reports PASS or FAIL on each of seven checks and returns a decision.
 why: "Forces a structured check before anything goes out so token-replacement misses, broken links, and voice inconsistencies are caught rather than sent to clients."
 enhance: "Always provide the source of truth the deliverable was built from - Check 2 (source-truth match) is the most failure-prone check and only works when the skill can compare the draft against real source material."
-allowed-tools: ["Read"]
+allowed-tools: ["Read", "Bash"]
 mcp_requirements: []
 ---
 
@@ -61,10 +61,20 @@ FAIL if: any claim is ungrounded, outdated, or contradicts the source. List the 
 
 ### Check 3: Voice Consistency
 
-Does the deliverable sound like the founder? Check for generic AI phrasing, banned words, dashes, and fillers. Check for tone mismatch (too formal for a warm contact, too casual for a first cold outreach).
+Two halves, and they catch different things. Run the script first.
 
-PASS if: voice matches the founder's written style for this recipient type.
-FAIL if: generic AI phrasing, banned words, em or en dashes, or tone mismatch. List the specific offenders.
+```bash
+python scripts/register_census.py <path> --gate content --lines
+```
+
+Use `--gate deliverable` for anything a client receives, `--gate content` for a post or an email. It counts the eighteen classes in `rules/writing-style.md`, reads the banned list off that page, and exits 2 on a fail. No model call and no key, so it runs the same way every time and costs nothing. If the deliverable is pasted text rather than a file, pass it with `--text` instead.
+
+If `scripts/register_census.py` is missing, record `NOT RUN - register_census.py missing` rather than passing this half silently.
+
+Then read it yourself for what a count cannot see: tone against this specific recipient (too formal for a warm contact, too casual for a first approach), a sentence that is technically clean and still sounds like nobody, a joke that will not land.
+
+PASS if: the gate passes or warns, and the tone fits this recipient.
+FAIL if: the gate fails, or the tone is wrong for the recipient. Quote the gate's own lines for the countable half, and name the specific sentences for the tone half. A settled judgment about a banned word belongs in `rules/banned-words-exceptions.txt`, not in an argument with the gate every week.
 
 ### Check 4: Asset Inlining
 

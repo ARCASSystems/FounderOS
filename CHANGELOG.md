@@ -2,6 +2,421 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.55.0 - 2026-09-12
+
+Three parts of this OS had the same shape of problem: a rule that existed as a page with nothing behind it. Writing quality was judged by a model and never measured. Market research was grounded in your own files and could not see the market. The privacy tier of voice was a paragraph carrying build instructions for an endpoint nobody had written. And the front door, after fifty-three versions, was still a link to a raw branch archive. This release puts a mechanism behind each one, and the mechanisms turned up five defects in the things they were wired into, which is what they were for. Pack: `updates/1.55.0-the-rules-got-mechanisms.md`.
+
+### New - the download is a release now, and the folder has a face
+
+Fifty-three versions shipped behind one download link, and the link pointed at
+`archive/refs/heads/main.zip`. That is GitHub's raw branch archive: it extracts
+to a folder called `FounderOS-main`, it is not tied to any version, and to a
+founder who does not write software it reads as exactly what it is, a developer
+artifact borrowed from somewhere. The front page now hands out
+`FounderOS-1.55.0.zip` from a tagged release, and inside it is one folder called
+**Founder OS**.
+
+That folder carries the ARCAS mark on Windows and, with one command, on a Mac.
+The mechanism is worth knowing because it is invisible when it fails: Windows
+only reads a folder's icon setting once the folder is flagged as customised, and
+extracting a ZIP does not set that flag. Measured against Explorer's own
+extractor, all three attribute bits written into the archive are dropped on the
+way out. So `Start Founder OS.bat` sets them itself on the first double-click,
+which is when the icon appears. On macOS the equivalent lives in a resource
+fork and cannot be carried by a ZIP at all; `bash scripts/set_folder_icon.sh`
+writes it, needs the Xcode Command Line Tools, and says so plainly rather than
+failing when they are absent. Both are cosmetic. Nothing about the OS depends
+on either.
+
+No `.exe`. An unsigned executable downloaded from the internet triggers the
+full-screen SmartScreen block, which a non-technical founder correctly reads as
+a virus warning, and that is a worse first impression than the ZIP it would have
+replaced. Signing costs real money on a yearly cycle and still has to build
+reputation before the warning goes quiet. The launcher logic already exists, so
+a signed build is a packaging job for whenever that invoice makes sense, not a
+rebuild. No `.lnk` shortcut in the archive either: a Windows shortcut can carry
+an icon, which makes it tempting, and shortcuts inside downloaded archives are a
+known malware route that antivirus and Windows both treat harshly.
+
+### New - `scripts/build_release.py` and `scripts/check_download_links.py`
+
+The release asset is built from `git ls-files`, so the ZIP and a `git clone`
+hand over the same tree and the five install paths cannot drift apart. Anything
+gitignored is excluded by construction rather than by a list somebody has to
+remember. `Start Founder OS.command` keeps mode 755 through the archive, taken
+from git's index rather than the working copy, because a Windows checkout does
+not carry the bit and a Mac download that lost it cannot be double-clicked.
+
+A pinned download link is the honest kind and the kind that rots, so the suite
+owns it: `check_download_links.py` fails when VERSION and the links in
+`README.md` and `docs/install.md` disagree, and `--fix` rewrites them.
+
+### Changed - `/update` says why it tracks main
+
+The front page hands out the latest tagged release. `/update` still downloads
+main, because it reads the remote version from main's `VERSION` file, and
+pulling a release asset there would abort every update made between releases,
+which is exactly when fixes ship. Both paths are correct and they are not the
+same file, so `update.md` now says that in plain words instead of leaving a
+reader to notice the difference.
+
+### New - the writing rules have a mechanism behind them
+
+`rules/writing-style.md` was ninety-three lines of doctrine and nothing enforced
+it. The commit guard blocked em dashes, and after that every judgment about
+whether a draft sounded like a person was handed to a model and asked for an
+opinion. An opinion is not a measurement, so the same tells came back every week
+and there was no way to tell whether the writing was improving.
+
+`scripts/register_census.py` counts eighteen classes, each one a line of that
+page. It reads the banned-word list off the page itself, so there is one list
+and it is the one you can read: add a word there and it is enforced without
+touching the script. A class the script enforces has to be named on the page, or
+the suite fails. Zero-LLM, standard library, no key and no network, which is why
+it belongs at the accessibility floor rather than behind a plan.
+
+Scored by density per thousand words, not by total count. The first version
+scored absolute counts and gave this repo's own doctrine pages a D, which is a
+gate that teaches you to ignore it. Three profiles, because a client deliverable
+and a note to yourself fail for different things: `deliverable` fails under 80,
+`content` under 70, `internal` under 60. Three classes are zero-tolerance on a
+deliverable regardless of score, so a high score with a failed gate is normal.
+
+### Changed - two rules on the page were wrong, and the measurements said so
+
+Porting the rules into a script meant running them against real writing, and two
+did not survive it.
+
+"Max two hyphens per piece of writing" was unfollowable. The spaced hyphen is
+what the rule above it tells you to use instead of an em dash, so it carries real
+work: this repo's own pages run five to twenty-six per thousand words. Capping it
+at two made the dash rule unusable in anything longer than a paragraph. It is now
+a density, about ten per thousand words, which is roughly one per paragraph.
+
+"Contractions always" is a rule for writing that talks. A contract, a spec or a
+doctrine page reads worse forced into "don't" and "it's", and the pages here run
+six to twenty-two long forms per thousand words. It now applies to posts, emails
+and captions, and the census scores it only on the `content` profile while still
+counting it everywhere so you can see it.
+
+Seven rules the census enforces were added to the page in the same change, rather
+than enforced silently: no cross-references inside a document, one idea per
+paragraph, no negation-contrast, do not signal your own honesty, do not hedge a
+fact you know, do not point a finger at what nobody did, and a heading over a
+single sentence is a label the sentence did not need.
+
+### Changed - `pre-send-check` Check 3 and `ship-deliverable` Link 0
+
+Check 3 asked the model whether the deliverable sounded like you. It now runs the
+census first and reads the result, then does the half a count cannot do: tone
+against this specific recipient, a sentence that is technically clean and still
+sounds like nobody. Both halves, and they catch different things.
+
+`deliverable_gate.py` gains a `register` verb, so Link 0's deterministic scan went
+from five checks to six and the ship gate gets the count without a new link.
+
+### New - `writing-score`, the skill that answers whether it is improving
+
+A gate on one document tells you whether that document is clean. It cannot tell
+you whether your writing is getting better. `/founder-os:writing-score` runs the
+census across your recent files, groups by folder, names the three classes to fix
+first with a real sentence for each, and reports the change since the last run in
+`state/writing-scorecard.md`. It skips the OS's own engine folders, because
+scoring the product would bury your own writing in noise.
+
+Settled judgments stay settled: `rules/banned-words-exceptions.txt` already
+shipped empty, and the census reads it. A gate that re-raises a decision you
+already made is a gate you learn to skip.
+
+Counts: 95 skills to 96, 45 commands to 46. Suite 902 to 934, with a failing and
+a passing fixture for every one of the eighteen classes.
+
+### New - market research can see the market, and says so when it cannot
+
+`strategic-analysis` produced market sizes, competitor prices and growth rates
+from `allowed-tools: ["Read", "Bash"]`. It could read your own files and nothing
+else. That makes the half about your position genuinely good and the half about
+the market a confident guess in the same formatting, which is the worse of the
+two failures because it does not look like one. Three of ninety-five skills
+could reach the web at all.
+
+It now searches and fetches, and every file read it had is kept: grounding the
+analysis in your actual position is what made it better than a generic table.
+Fetched pages go through the existing `web-fetch-extract` path rather than a
+second fetcher, and every fetched number becomes a
+`[SOURCED: <url>, retrieved <date>]` under `rules/research-integrity.md`.
+
+The part that matters more than the search: web search is not available on every
+plan or in every surface, and an org can switch it off. When it is unreachable
+the skill says one line out loud, tags every number `[ESTIMATE: ...]`, and puts
+the searches it would have run into the closing table so you can run them by
+hand or paste a page in. A named URL works with no search at all.
+
+### New - every analysis closes with what to research next
+
+Three columns: the gap, what decision it blocks, and a prompt you can paste as
+written. An analysis that ends at its conclusion leaves you holding a verdict
+and no next move.
+
+### New - the critique gate on the market and proposal skills
+
+Both now stress-test the inputs before producing anything: say the premise back
+in one sentence, name the one thing a sceptical buyer would push on first, ask
+exactly one question, wait. One question, because a gate that asks four is an
+interrogation and gets skipped. Wired into the two skills that produce, not
+added as a separate skill nobody remembers to run.
+
+### Fixed - `claims_check.py` could not see a market number
+
+Pointing the claims check at real market prose is how this surfaced. A two-part
+decimal was filtered as a version string, so `4.2 billion` - the shape of a
+market size, a growth rate and a multiple - was dropped in silence. A percentage
+written as a word was never matched. A bare number with a magnitude after it
+(`300k per year`) matched nothing, because there was no currency symbol. On a
+document with three untagged figures the script reported zero uncovered claims.
+
+The opposite defect was there too. `rules/research-integrity.md` tells you the
+tag goes "inline, on its own line", and the reader accepted a tag only on the
+same line, so following the published rule got you flagged for it. A tag on the
+next line now covers the claim above it, and a tag under a heading still does
+not cover the heading.
+
+### Fixed - `scrape.py` returned a page's JavaScript as page text
+
+`<script>` and `<style>` bodies came back inside the extracted text. Left in, a
+page's source arrives as prose and can be read as content: a quote from a page
+can turn out to be a variable name, and a tracker blob can crowd out the text
+you wanted. Now stripped, along with `noscript`, `template` and inline `svg`.
+
+`scrape.py` also leaves the frozen coverage-gap list it has sat on since that
+floor was laid. It was a defensible gap while nothing reached it. Wiring
+`web-fetch-extract` into market research put it on the research path, so it has
+tests now: the parse half and the fail-closed path, both offline.
+
+### New - `pitch-deck`, and the second exception to the no-install floor
+
+An investor deck usually gets written in a chat window and retyped into slides.
+The retyping is where the structure goes and where the numbers drift away from
+the ones that were checked. Worse, building slides feels like progress, so the
+hard question nobody asked stays unasked until an investor asks it.
+
+`/founder-os:pitch-deck` runs in one order and will not shortcut it. It
+challenges the story first (say the business back in one sentence, name the one
+thing an investor pushes on hardest, ask one question, wait), interviews ten
+questions one at a time, writes a slide-by-slide spec to `decks/<slug>-deck.md`
+with speaker notes, tags every number with its tier from
+`rules/research-integrity.md`, runs `claims_check.py` and the register census
+over it, then renders. It closes with what the deck cannot yet defend and the
+smallest real step that would close each gap. It never invents traction: an
+empty proof slide saying what is being tested is more honest than a decorated
+one, and it is the slide an investor checks first.
+
+**The spec is the deliverable. The `.pptx` is a render of it.** That ordering is
+the point, because the render needs `pip install python-pptx`, which makes this
+the second shipped script that is not standard library after the scrape helper.
+It fails closed the way that one does: no package means exit 1, the exact
+command, and a line saying the markdown is still your deck and pastes into
+Canva, Gamma, Pitch or Google Slides. `--check` parses with no package at all.
+
+One detail worth naming: this repo's own ship gate fails any document whose
+author metadata credits the library that made it. The renderer reads the author
+from `os-config.yaml` and leaves the field blank when none is set, rather than
+inventing one, and it stamps a real creation date instead of the blank
+template's 2013. A generator whose output the ship gate rejects would not be
+shippable, and there is a test that runs the gate over what it produces.
+
+Counts: 96 skills to 97, 46 commands to 47. Suite 965 to 988.
+
+### New - the voice privacy tier exists now, instead of being described
+
+Tier 0 sends your audio to Google or Microsoft to turn it into text. The skill
+said so honestly and pointed at a fix, and the fix did not exist. The tiers page
+carried build instructions ("capture mic audio with MediaRecorder, POST it to a
+small local transcribe endpoint") written as though the endpoint were already
+there. Nobody had written it. A reader could not tell a wired tier from a
+described one, and that was the worse half of the defect.
+
+**Local ears.** `POST /transcribe` transcribes on your machine with
+faster-whisper, behind a toggle on the page. `pip install faster-whisper`, tick
+the box, and speech stops leaving the machine. Measured on a laptop CPU with the
+`base` model: about 2.4 seconds for a ten-second turn including the one-off
+model load, about 1.1 seconds once cached.
+
+**Local mouth.** `POST /speak` shells out to Piper and returns audio. Install
+Piper, point `piper_voice` at your voice file, tick the box. If Piper fails
+mid-turn the page falls back to the browser voice rather than leaving the answer
+silent.
+
+Both opt-in, both default off, and neither is importable at module level, so an
+install without them starts exactly as it always has. Tier 0 stays zero-install.
+
+**The page says which ears are running, not which are possible.** The banner,
+the subtitle and the status line all read from the server on load and change
+together. With the toggle off it names your browser vendor; with it on it says
+the audio stays here. A toggle whose dependency is missing is disabled with a
+tooltip naming what is missing and how to install it, instead of failing when
+you press the button. A privacy feature that says "local" while the audio goes
+elsewhere would be worse than shipping none, so nothing on that page is a
+claim about what is installed rather than what is running.
+
+Building it turned up one of its own: a decoder failure echoed the temp file
+path, and therefore the account name, into the page. Filtered now, along with
+the model-load error, on every platform's path shape.
+
+### Changed - both tier tables mark what is wired and what is not
+
+The skill's table gains a State column and the tiers page marks every heading
+`[WIRED]` or `[DOCUMENTED]`. ElevenLabs is marked not built, because it is not.
+Tier 1 carries the date it was last run against a live key rather than a promise
+about today, because Gemini Live model names change and a retired one fails at
+the first turn.
+
+Honest limits on this release. Tier 1's installer was run end to end here: it
+installs, copies the runtime, writes its config, and with no key it says exactly
+how to add one. The conversation itself was not run, because that needs a key
+this machine does not have, so Tier 1's spoken path is UNVERIFIED for v1.55.
+Piper's speaking path is UNVERIFIED too: only its absent path was testable here.
+The local ears were verified by hand against real recorded speech.
+
+### Fixed - what the refute pass found before this shipped
+
+`rules/release-verification.md` gate 1 says a context that did not build a
+change gets the diff and tries to break its claims before the push. It ran on
+this release and returned twenty-one findings. Five were serious and two of
+those were regressions this release had just introduced, which is exactly the
+kind of thing the builder cannot see in their own work.
+
+- **The claims check had a coverage bleed.** The next-line tag credit accepted
+  any following line containing a tag, including a tag sitting inline on a claim
+  of its own, so a well-sourced claim silently vouched for the unsourced one
+  above it. The better a document was tagged, the more hiding surface it grew.
+  A tag now grants coverage only when it is alone on its line, which is what the
+  rule page actually teaches.
+- **Dating a source switched the number check off for that line.** The scan
+  skipped any line containing a date, a time or a version, so
+  `retrieved 2026-09-12, the segment holds 12,000 brokers` reported nothing. The
+  habit the SOURCED tier asks for was disabling the check. Dates are now blanked
+  out of the line and what remains is scanned.
+- **The same widening read `Python 3.11` as a market claim.** A gate that cries
+  wolf on a requirements line gets ignored, which costs more than it catches.
+- **The writing census scored by length below a thousand words.** Identical
+  writing at identical density scored 98 at fifteen words and 76 at a hundred
+  and fifty, and most real deliverables live under that floor. The floor is now
+  two hundred words: at or above it, identical density scores within three
+  points at any length, and below it a short note is scored gently rather
+  than having one tell extrapolated into a verdict. The first attempt at this
+  claim said "fifty words to three thousand", which was true of the fixture
+  that measured it and not of the scorer. The test that was supposed to guard this could
+  never have failed: it repeated a clean sentence whose tell count does not grow
+  with the text. It now repeats a paragraph, and a second test proves the
+  fixture can detect the old behaviour.
+- **A missing style page silently enforced zero banned words** and reported a
+  clean score, which is worse than not running. It now says so out loud.
+- **The release builder read the working tree, not git.** The file list came
+  from git and the content came from disk, so an uncommitted edit would have
+  shipped, and on Windows every text file shipped CRLF where the repository
+  holds LF. It reads committed blobs now, refuses a dirty tree, and two builds
+  of one commit are byte-identical.
+- **The voice page reported what was importable, not what worked.** A model name
+  that does not exist imports perfectly and fails every turn, while the page
+  said speech was staying on this machine. And the Piper fallback repeated the
+  contradiction this release had just fixed in the ears: it fell back to the
+  browser voice while the subtitle still claimed a local one. Both now drop the
+  claim before falling back, and the path filter covers seven shapes rather than
+  the three that were thought of.
+- **The update pack promised something that cannot happen.** `voice/` is the
+  founder's own gitignored folder, so an update refreshes the templates and
+  correctly leaves their copy alone. The pack said the new runtime would arrive.
+  Now the pack, the update command and the skill all say the same true thing and
+  name the one sentence that fixes it.
+
+Also: re-running voice setup used to overwrite the settings it never wrote, the
+Mac icon script claimed success whatever happened, and `rules/writing-style.md`
+said "these four" over seven items.
+
+One more came out of checking what the pass could not: the generated deck's
+`Application` property said Microsoft PowerPoint made it, inherited from the
+library's blank template. A false line about the file's own origin, one click
+away in the document properties, in the release about claims being true. It
+now says Founder OS.
+
+### Fixed - and then the second pass went after the fixes
+
+A fix is where a regression hides, so the refute gate ran again over the fix
+commit alone. It found that the first round had over-corrected in two places and
+under-corrected in two others.
+
+- **The version filter ate real claims.** Suppressing a decimal after certain
+  words stopped `Python 3.11` being read as a market size, but the word list
+  held "go", "line", "release", "step", "item" and "page", which are ordinary
+  English. "Revenue to go 3.5x", "our bottom line 3.5x" and "the release 2.5x'd
+  headcount" were all dropped. One false positive had been traded for five false
+  negatives. The list is short now, a multiplier is never a version, and a
+  cross-reference sharing a numeral with a real claim no longer suppresses it.
+- **The coverage bleed was half closed.** A tag moved to the front of a line
+  still vouched for the line above while covering its own claims. And testing
+  the line's prefix rejected five citation shapes a founder writes: a numbered
+  source list, a bold tag, a tag in a quoted bullet, a parenthesised tag, an
+  italic one. Both are settled by stripping the tags and looking at what is
+  left: nothing means it is a citation, a claim means it is not.
+- **The path scrubber leaked the commonest shape there is.** Python quotes the
+  path in almost every filesystem error it raises, and the anchor the scrubber
+  used was defeated by the quote character, so
+  `[Errno 2] No such file or directory: '/home/...'` printed verbatim. The
+  scrubber also had exactly one call site, so the mouth still returned Piper's
+  raw stderr, which names the voice file it could not load. Sixteen shapes are
+  scrubbed now and both halves use the same function.
+- **The local-voice claim was re-armable in one click.** The failure path turned
+  the flag off but left the checkbox enabled and never re-read health, so the
+  claim came straight back. The ears lock their toggle on failure; the mouth
+  does now too, and a failed turn outranks a binary being on PATH.
+- **The short-text gate passed a genuinely bad deliverable.** Waiving the score
+  below eighty words waived everything, so a 55-word note with eleven banned
+  words passed. Banned words now fail at any length, and the ship gate stopped
+  rendering a warn as a pass.
+- **The replacement density test was still a tautology.** Its fixture saturated
+  the structure cap, pinning every length to exactly 80 for reasons unrelated to
+  density; it passed with the floor at 50 and at 200. The fixture is diluted
+  now so the penalty stays linear, and the claim is stated as it really is:
+  invariant at or above the floor, deliberately lenient below it.
+
+Also closed: a broken `git status` made the dirty-tree gate fail open,
+`--allow-dirty` crashed on a staged-but-uncommitted file, and re-running voice
+setup printed one brain command and wrote another.
+
+### Fixed - the third pass, and where it stopped
+
+The gate ran a third time, scoped to one question: would any of this break an
+install or make the OS say something false. Nothing was install-breaking. Four
+things were false, and this is where the release stops.
+
+- **The path scrubber threw the reason away with the path.** It replaced the
+  whole message, so the two commonest real failures of the local tier - a
+  missing espeak-ng data directory and a first download that cannot resolve a
+  host - both became a message about a model name that was never wrong. The
+  founder was sent to edit a correct config file while the actual fix went
+  unnamed. Only the path is removed now, and matching the whole path token
+  rather than its first segment, because the middle of a path is the part that
+  carries the account name.
+- **A fixed problem stayed reported.** A failed local turn was remembered
+  forever, so after the founder installed the missing piece the OS still said
+  the tier was unavailable, and still pointed at the config. A remembered
+  failure now expires when the config is edited, and the instruction says to
+  restart.
+- **The gate had started failing the pages that teach the rule.** Four shipped
+  skills failed for quoting the banned-word list verbatim. A line naming four
+  or more of them is the list, not prose using it. And `highest-leverage` is
+  the noun, where the page bans the verb.
+- **A citation written the ordinary way round lost its coverage.** A source
+  with the URL, the title or the year outside the bracket was read as a claim.
+
+Three passes, thirty-six findings, all fixed and each one now a test. Severity
+fell each time: five serious, then five narrower, then none install-breaking.
+That is what `rules/release-verification.md` says convergence looks like, and it
+is the first release to have measured itself against it.
+
+Every one of these is now a test. The suite went 1014 to 1057.
+
 ## v1.54.3 - 2026-08-14
 
 Three releases in a row were corrected by outside review, for the same three structural reasons each time. This release changes the structure instead of patching another instance, and ships the standard as a page a founder can read. Pack: `updates/1.54.3-the-release-process-stops-trusting-its-builder.md`.

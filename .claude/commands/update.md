@@ -241,6 +241,8 @@ The staging set is: every System Layer path from the Layer definitions, PLUS the
 
 ZIP mode:
 
+This download tracks main on purpose, while the download button on the front page hands out the latest tagged release. They are not the same file and that is deliberate: `REMOTE_VERSION` above comes from main's `VERSION`, so pulling a release asset here would abort every update made between releases, which is exactly when fixes ship. The first download is the released build; updates carry whatever has landed since.
+
 1. Download `https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip` to a temp file. Use `curl -sL -o <tmp>/founderos-main.zip <url>` where curl exists, or PowerShell `Invoke-WebRequest -Uri <url> -OutFile <tmp>\founderos-main.zip` on Windows.
 2. Extract it in the temp location: `tar -xf founderos-main.zip` works on modern Windows, macOS, and Linux; PowerShell `Expand-Archive` is the fallback. The archive extracts to a `FounderOS-main/` folder.
 3. Copy each path in the staging set from `FounderOS-main/<path>` into `state/.update-staging/<ts>/<path>`, preserving relative paths. Do NOT stage any path outside the staging set - the archive also contains User Layer seeds (`stack.json`, `brain/`, sample content) and those must never reach the founder's live data.
@@ -251,6 +253,32 @@ GIT mode:
 1. Fetch the release: if a `founderos-upstream` remote exists (installed by setup or own-your-history - its push URL is disabled, fetch still works), run `git fetch founderos-upstream main`. Otherwise fall back to the direct URL: `git fetch https://github.com/ARCASSystems/FounderOS.git main`. Never push to either. If the fetch fails, stage via the ZIP-mode beats above instead (download the archive with curl; staging and verification are identical from there).
 2. List what the release actually contains: `git ls-tree -r --name-only FETCH_HEAD`, filtered to the staging set. A path on the staging set but absent from the release is a skip, not an error (the release may have removed it; log it, never delete it locally unless the founder opts in).
 3. Materialize those paths into the staging dir: `git archive FETCH_HEAD <paths...> | tar -x -C state/.update-staging/<ts>/`. Where tar is unavailable, fall back to writing each file with `git show FETCH_HEAD:<path>` to `state/.update-staging/<ts>/<path>`.
+
+**8a-voice. The voice runtime is not in the staging set, and that is on purpose.**
+
+`voice/` is the founder's own gitignored runtime folder, copied there once by
+`skills/add-voice/setup.py` from the tracked templates in
+`skills/add-voice/runtime/`. It is User Layer, so nothing above copies into it,
+and an update that overwrote it would throw away their `config.json`, their
+brain command and their tier settings.
+
+The templates DO update: `skills/add-voice/runtime/server.py` and `index.html`
+arrive with every release. The copy already sitting in `voice/` does not, so a
+founder who set voice up before this release keeps running the old page against
+the old server until they say so.
+
+If `voice/` exists on this install AND `skills/add-voice/runtime/server.py`
+changed in this release, say this in the Step 10 summary, in these words:
+
+    Your voice runtime is one version behind. Say "update my voice runtime" and
+    I will copy the new page and server into voice/ and leave your config.json
+    alone. Nothing else about your install is affected.
+
+On a yes: copy `skills/add-voice/runtime/server.py` and
+`skills/add-voice/runtime/index.html` over `voice/server.py` and
+`voice/index.html`. Never touch `voice/config.json`, `voice/runtime-log.jsonl`,
+or any `live-*` file. Re-running `python skills/add-voice/setup.py` also works
+and is the by-hand path, but it REWRITES `config.json`, so offer the copy first.
 
 **8b. Verify the staging.** All four checks pass or the update aborts with the install untouched:
 

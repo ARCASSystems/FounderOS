@@ -12,7 +12,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 **New here? [Read the Founder OS Playbook first](https://arcassystems.com/playbook)** - a visual walkthrough with screenshots: the problem, the three parts, how to start, and what not to do. Opens framed in any browser, about 15 minutes. It lives on the web so it never drifts out of date; there is no copy shipped in this repo.
 
-**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip)** - unzip it, double-click **Start Founder OS**, and the setup wizard is talking. No git, no terminal, no curl. Or install via plugin marketplace, one-line curl, or git clone. See [Install](#install) below.
+**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.0/FounderOS-1.55.0.zip)** - unzip it, double-click **Start Founder OS**, and the setup wizard is talking. No git, no terminal, no curl. Or install via plugin marketplace, one-line curl, or git clone. See [Install](#install) below.
 
 ---
 
@@ -190,8 +190,8 @@ Five install paths. The one that needs no Git and no terminal comes first. Full 
 
 ### Download ZIP (no Git or terminal, own it in 10 minutes)
 
-1. **[Download the ZIP](https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip)**
-2. Right-click, **Extract All** (Windows) or double-click it (Mac). Put the folder wherever you keep your work.
+1. **[Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.0/FounderOS-1.55.0.zip)**
+2. Right-click, **Extract All** (Windows) or double-click it (Mac). Inside is a folder called **Founder OS**. Put it wherever you keep your work.
 3. Double-click **Start Founder OS** in the folder (Windows: the `.bat` file; Mac: the `.command` file). It opens Claude Code right there and starts the setup wizard talking. If Claude Code is not installed yet, it says so plainly and opens the download page instead of failing. First run only: Windows may show a note about a downloaded script - let it run (the file is plain text, right-click and Edit to read it); on a Mac, right-click the file and choose Open once.
 
 Prefer not to run a script? The spoken way works the same: open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
@@ -260,7 +260,7 @@ For the short answer to "what can this actually do", [docs/what-this-can-do.md](
 
 ## What ships in this repo
 
-### Skills (95)
+### Skills (97)
 
 Grouped by when you reach for them, not by category. Each row in [`docs/skills.md`](docs/skills.md) names the outcome, reads, writes, voice rules, prereqs, and follow-ups.
 
@@ -268,7 +268,7 @@ The skills are organised into **role packs**, each a function a solo founder cov
 
 One to call out is the **LinkedIn pack**: say "help me with my LinkedIn", pick an outcome (leads, a better job, a louder brand, or a healthier network), and the OS aims your own data export at it - a ranked outreach worklist, a deep network audit, dormant-contact revival, and an algorithm-aware content direction. All local, free-plan, within LinkedIn's terms - no scraper, no automated actions, message content never read.
 
-### Slash commands (45)
+### Slash commands (47)
 
 Every command has a natural-language equivalent - slash commands are speed shortcuts for power users, not the primary surface. Full reference with outcomes, args, and follow-ups in [`docs/commands.md`](docs/commands.md).
 
@@ -320,7 +320,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 ## Tools and MCPs
 
-Founder OS does not assume your stack. Most of the 95 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+Founder OS does not assume your stack. Most of the 97 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 ---
 
@@ -394,7 +394,9 @@ Have an idea but no business yet? That counts. Say **"I have an idea"** and desc
 
 ## Status
 
-Version 1.54.3. Public release. 95 skills, 45 commands, 886 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.55.0. Public release. 97 skills, 47 commands, 1057 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+
+**The dependency floor, as of this release.** One Claude plan, no API key, nothing to pip install - with two named exceptions, both optional and both failing closed with the exact command when their package is absent: `scripts/scrape.py` (the fetch helper behind web research) asks for `httpx selectolax tenacity` and falls back to the built-in fetcher, and `scripts/pitch_deck.py` asks for `python-pptx` to render a deck to `.pptx`, where the markdown spec it renders from is the deliverable either way. The optional local voice tier asks for `faster-whisper` and Piper, and is off until you turn it on. Every other shipped script is standard library only. Paragraphs below this line are release history: each states what was true at that version, not what is true now.
 
 v1.48.0 is the arrival release, and the thought process behind it is one sentence: we watched how people actually arrive, and the OS assumed someone they are not. It assumed a founder with a business, a terminal, and no history. Real arrivals are a student with an idea and a phone, an operator who wants a team of assistants for her own creative process, a founder with years of notes in Obsidian, someone coming back after five weeks away. Each got a door. Download-extract-double-click: `Start Founder OS` files for Windows and Mac open Claude Code in the folder and start the wizard talking - the standing front door, honest in-file about what they cannot do. "I have an idea" now reaches the propose engine, which answers with the five real people to talk to this week, never a business plan or a course. "Turn my process into assistants" builds a team the way a real operator specced it: one job per assistant, the human keeps the taste decisions, effectiveness before efficiency, seats earned then registered. Setup adopts an existing vault without touching a single file, and says honestly what old notes can and cannot do. `AGENTS.md` now tells any connected agent - an SEO engine, an outreach drafter - how to join the team under a charter instead of freelancing in your files. The brief welcomes a returner back with counts and one offer instead of a wall of flags. And people research in meeting prep carries sources inline or says "unverified - confirm on the call", with a same-name check before anything is attributed to the human across the table.
 

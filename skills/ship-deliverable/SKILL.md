@@ -31,13 +31,14 @@ Run every link every time. Do not stop at the first failure.
 python scripts/deliverable_gate.py all <path>
 ```
 
-Five checks a grep can settle without spending any judgment on them: structural fit, leftover placeholders, a prep date within 48 hours, AI-attribution strings and document author metadata, and evidence that a blind-spot pass actually happened. Exit 0 means nothing failed, exit 2 means something did.
+Six checks a script can settle without spending any judgment on them: structural fit, leftover placeholders, a prep date within 48 hours, AI-attribution strings and document author metadata, evidence that a blind-spot pass actually happened, and the writing register counted against `rules/writing-style.md`. Exit 0 means nothing failed, exit 2 means something did.
 
 Three things to hold onto when reading its output:
 
 - **SKIP is honest, not a pass.** It names what a text scan cannot judge - a binary layout, a compressed PDF - and hands it to the reading links below. Never report a SKIP as a PASS.
 - **Brand checks need `os-config.yaml`.** The font and the document author name come from your config. With no config those two checks SKIP rather than assume a default, which means the reading pass has to cover them.
 - **A Link 0 FAIL is still a FAIL** even if the reading links all pass. It caught something real.
+- **The register check counts, it does not judge.** It reports a score out of 100 and names the three classes to fix first. A high score with a FAIL is normal: three classes are zero-tolerance on a deliverable. Run `python scripts/register_census.py <path> --lines` to see the actual sentences, which is the only form worth acting on. A settled judgment about a banned word belongs in `rules/banned-words-exceptions.txt`.
 
 If the script is missing or your surface cannot run it, say so in one line and continue with Links 1 to 4. The reading links overlap it deliberately, so you lose speed and repeatability, not coverage.
 

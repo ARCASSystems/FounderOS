@@ -40,7 +40,8 @@ URL = re.compile(r"https?://\S+")
 
 # --- claim candidates ---------------------------------------------------------
 
-PERCENT = re.compile(r"\b\d+(?:\.\d+)?\s?%")
+PERCENT = re.compile(
+    r"\b\d+(?:\.\d+)?\s?(?:%|per ?cent\b|percentage points?\b)")
 CURRENCY = re.compile(
     r"(?:[$€£₹]\s?\d[\d,]*(?:\.\d+)?"
     r"|\b(?:AED|USD|EUR|GBP|INR|SAR)\s?\d[\d,]*(?:\.\d+)?)"
@@ -49,14 +50,47 @@ CURRENCY = re.compile(
 # Comma-grouped, decimal, 4+ digit, or multiplier numbers. Bare years and other
 # non-claims are filtered by NOT_A_CLAIM below.
 NUMBER = re.compile(r"\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b|\b\d+\.\d+\b|\b\d{4,}\b|\b\d+(?:\.\d+)?x\b")
+# A bare number carrying a magnitude word is the commonest shape a market
+# figure takes ("4.2 billion", "300k users"), and neither NUMBER nor CURRENCY
+# saw it: no currency symbol, and the decimal was filtered below as a version
+# string. Market sizing is the main thing this script gets pointed at.
+MAGNITUDE = re.compile(
+    r"\b\d+(?:[,.]\d+)?\s?(?:k|m|bn|thousand|million|billion|trillion|lakh|crore)\b",
+    re.IGNORECASE,
+)
 
 NOT_A_CLAIM = [
     re.compile(r"^\d{4}-\d{2}-\d{2}$"),          # ISO date
     re.compile(r"^(?:19|20)\d{2}$"),             # bare year
     re.compile(r"^\d{1,2}:\d{2}$"),              # time
-    re.compile(r"^v?\d+\.\d+(?:\.\d+)?$"),       # version string
+    re.compile(r"^v\d+\.\d+(?:\.\d+)?$"),        # version string, v-prefixed
+    re.compile(r"^\d+\.\d+\.\d+$"),              # version string, three parts
+    # A two-part decimal with no "v" is deliberately NOT filtered. "4.2" was
+    # read as a version number and dropped, and that is the exact shape of a
+    # market size, a growth rate and a multiple.
 ]
-DATEISH_CONTEXT = re.compile(r"\d{4}-\d{2}-\d{2}|\d{1,2}:\d{2}|v\d+\.\d+")
+DATEISH_CONTEXT = re.compile(
+    r"\d{4}-\d{2}-\d{2}(?:-\d+)?"      # a date, and a date-prefixed order id
+    r"|\d{1,2}:\d{2}(?::\d{2})?"
+    r"|v\d+(?:\.\d+)+"                  # v1.2, v1.2.3, v1.2.3.4567
+    r"|\b\d+\.\d+\.\d+(?:\.\d+)*\b")  # a bare dotted version of any depth
+
+# A whole tag, so it can be stripped out and the remainder inspected.
+TIER_TAG_FULL = re.compile(r"\[(?:MEASURED|SOURCED|ESTIMATE)\b[^\]]*\]", re.IGNORECASE)
+
+# Words that make the number after them a version or a pointer, never a claim.
+#
+# Kept deliberately short. The first list held "go", "line", "release", "step",
+# "item" and "page", which are ordinary English, so "revenue to go 3.5x", "our
+# bottom line 3.5x" and "the release 2.5x'd headcount" were all silently
+# dropped - five real growth claims traded for one false positive on a
+# requirements line. A word earns a place here only when a number following it
+# is almost never a claim.
+VERSION_CONTEXT = re.compile(
+    r"\b(?:python|node|java|ruby|php|rust|npm|pip|version|ver|django|flask|"
+    r"react|vue|angular|rfc|iso|section|chapter|figure|fig|table|appendix|"
+    r"clause)\s*[:v]?\s*$",
+    re.IGNORECASE)
 
 UNIVERSAL_NEGATIVE = re.compile(
     r"\b(?:no (?:one|body|tool|platform|product|competitor|vendor|company|app)s?\b"
@@ -91,8 +125,47 @@ def _num(s: str) -> float:
     return float(s.replace(",", ""))
 
 
+def _is_pure_tag_line(line: str) -> bool:
+    """True when a line carries tags and no claim of its own."""
+    if not TIER_TAG.search(line):
+        return False
+    rest = TIER_TAG_FULL.sub(" ", line)
+    rest = DATEISH_CONTEXT.sub(" ", rest)
+    # A citation carries exactly these outside the bracket: a URL, a quoted
+    # title, a publisher, a year, a page. Treating any of them as a claim cost
+    # coverage to sources written the ordinary way round.
+    rest = URL.sub(" ", rest)
+    rest = QUOTE.sub(" ", rest)
+    for pat in (PERCENT, CURRENCY, MAGNITUDE):
+        if pat.search(rest):
+            return False
+    for m in NUMBER.finditer(rest):
+        if _is_claim_number(m.group(0)):
+            return False
+    # Decoration and a short source line are fine. A sentence is not.
+    words = re.findall(r"[A-Za-z][A-Za-z'-]*", rest)
+    return len(words) <= 12
+
+
 def _is_claim_number(token: str) -> bool:
     return not any(p.match(token) for p in NOT_A_CLAIM)
+
+
+def _version_in_context(line: str, start: int, token: str) -> bool:
+    """True when a decimal at THIS position is a version or a cross-reference.
+
+    Takes the match position rather than searching for the token: with
+    `line.find`, "See section 3.5 for the 3.5 multiple we underwrote" checked
+    the cross-reference's context for both occurrences and suppressed the real
+    claim along with it.
+
+    A multiplier is never a version, so "3.5x" is always a claim.
+    """
+    if token.lower().endswith("x"):
+        return False
+    if start <= 0:
+        return False
+    return bool(VERSION_CONTEXT.search(line[:start].rstrip().lower()))
 
 
 def _iter_content_lines(text: str):
@@ -121,8 +194,27 @@ def scan_file(path: Path, min_quote_words: int) -> list[dict]:
     findings: list[dict] = []
     text = path.read_text(encoding="utf-8", errors="replace")
 
-    for lineno, line in _iter_content_lines(text):
-        covered = bool(TIER_TAG.search(line) or URL.search(line))
+    # rules/research-integrity.md tells the founder the tag goes "inline, on its
+    # own line", and a same-line-only reader rejected exactly that shape. So a
+    # tag on the next line covers the claim above it, which is also the form that
+    # keeps a paragraph readable.
+    content = list(_iter_content_lines(text))
+    # A tag grants coverage to the line above only when that line is NOTHING BUT
+    # a tag. Testing the prefix was wrong twice over: it still let a tag written
+    # at the front of a sentence vouch for the line above while covering its own
+    # claims, and it rejected five shapes a founder actually writes - a numbered
+    # source list, a bold tag, a tag in a blockquoted bullet, a parenthesised
+    # tag, an italic one. Stripping the tags and looking at what is left settles
+    # both: no claim left over means the line is a citation and nothing else.
+    own_line_tags = {n for n, ln in content if _is_pure_tag_line(ln)}
+
+    for idx, (lineno, line) in enumerate(content):
+        next_is_a_tag = (
+            idx + 1 < len(content)
+            and content[idx + 1][0] in own_line_tags
+            and not line.strip().startswith(("#", "|"))
+        )
+        covered = bool(TIER_TAG.search(line) or URL.search(line) or next_is_a_tag)
         snippet = line.strip()[:120]
 
         # Arithmetic reconciliation runs regardless of coverage.
@@ -175,8 +267,15 @@ def scan_file(path: Path, min_quote_words: int) -> list[dict]:
         tokens = []
         tokens += [m.group(0) for m in PERCENT.finditer(line)]
         tokens += [m.group(0) for m in CURRENCY.finditer(line)]
-        if not DATEISH_CONTEXT.search(line):
-            tokens += [t for t in (m.group(0) for m in NUMBER.finditer(line)) if _is_claim_number(t)]
+        # Blank out the dates, times and versions, then scan what is left. The
+        # old form skipped the WHOLE LINE when it saw one, which meant that
+        # dating your source - the exact habit the SOURCED tier asks for -
+        # switched the number check off for that line.
+        scannable = DATEISH_CONTEXT.sub(" ", line)
+        tokens += [m.group(0) for m in NUMBER.finditer(scannable)
+                   if _is_claim_number(m.group(0))
+                   and not _version_in_context(scannable, m.start(), m.group(0))]
+        tokens += [m.group(0) for m in MAGNITUDE.finditer(scannable)]
         seen = set()
         tokens = [t for t in tokens if not (t in seen or seen.add(t))]
         if tokens:

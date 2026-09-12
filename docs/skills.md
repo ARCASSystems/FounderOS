@@ -798,6 +798,32 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 
 ## Ship gate
 
+### writing-score
+
+- **Say.** "score my writing", "is my writing getting better", or "writing scorecard".
+- **Outcome.** A mean score for your recent writing, the change since the last run, the three classes to fix first with a real sentence for each, and one thing to do. Never rewrites anything.
+- **Reads.** Your own files from the last 30 days. `rules/writing-style.md`, which is where the banned-word list is read from. `rules/banned-words-exceptions.txt` for judgments you already settled.
+- **Writes.** `state/writing-scorecard.md` and one line in `state/writing-scores.jsonl`.
+- **Voice rules.** This is the voice rules, counted. Eighteen classes, each one a line of `rules/writing-style.md`.
+- **Prereqs.** `founder-os-setup` complete. Python 3.11+. No key, no network, no model call.
+- **When to run.** Monthly, or after a stretch of writing. For one document before it goes out, run `python scripts/register_census.py <path> --lines` instead.
+- **Follow-up.** Fix the top class in the named file, then re-run to see the number move. Run via `/founder-os:writing-score`.
+
+---
+
+### pitch-deck
+
+- **Say.** "build my pitch deck", "investor deck", "help me pitch this", "deck for the raise".
+- **Outcome.** A slide-by-slide markdown spec you own, every number carrying its tier tag, and a `.pptx` rendered from it. Closes with the gaps the deck cannot yet defend and what would close each one.
+- **Reads.** Your identity and brain files for context. `os-config.yaml` for the font and the document author. `rules/research-integrity.md` for the claim tiers.
+- **Writes.** `decks/<slug>-deck.md` and `decks/<slug>-deck.pptx`.
+- **Voice rules.** Yes. The anti-AI baseline applies to every slide and every speaker note.
+- **Prereqs.** `founder-os-setup` complete. The render needs `pip install python-pptx`, one of only two shipped scripts that asks for a package. Without it the markdown spec is still the deliverable and pastes into any deck tool.
+- **When to run.** When you need a deck. Run `strategic-analysis` on the same market first if you want the market slide to carry sourced numbers rather than round ones.
+- **Follow-up.** Fix what the claims check flagged before the deck reaches a room. Take the spec into a design tool if you want it beautiful; it carries the structure and the speaker notes. Run via `/founder-os:pitch-deck`.
+
+---
+
 ### pre-send-check
 
 - **Say.** "check this before I send", "ready to send", or "final review".

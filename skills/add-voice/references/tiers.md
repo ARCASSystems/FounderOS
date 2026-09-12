@@ -4,7 +4,12 @@ The default (Tier 0) is wired by `setup.py` and needs nothing extra. The rest ar
 upgrades. Read [voice-model-disclaimer.md](voice-model-disclaimer.md) for the cost and
 accuracy trade of each before you pick.
 
-## Tier 0 - default (no extra key, no paid service)
+Every heading below is marked `[WIRED]` or `[DOCUMENTED]`. `[WIRED]` means code ships and
+runs it. `[DOCUMENTED]` means this page describes it and nothing implements it yet. The
+marks exist because both local rungs used to read as built while being build instructions,
+and a reader had no way to tell.
+
+## Tier 0 - default (no extra key, no paid service)  [WIRED]
 
 Already wired by `python skills/add-voice/setup.py`:
 
@@ -29,26 +34,54 @@ The accessibility floor holds whenever that CLI runs on your existing subscripti
 separate API key. If your only subscription cannot run a no-key headless command, the page
 still does ears, mouth, and save-to-brain; conversational answers then need a key (Tier 1).
 
-## Tier 0-local - faster-whisper (fully local speech, no key)
+## Tier 0-local ears - faster-whisper (fully local speech, no key)  [WIRED]
 
 Make speech never leave your machine. Free, local, one install.
 
+Until v1.55 this section was build instructions written as though the endpoint
+existed. It exists now: `POST /transcribe` in `voice/server.py`, with
+MediaRecorder capture behind the **Local ears** toggle on the page.
+
 1. `pip install faster-whisper`
-2. Download a model the first run pulls automatically (start with `small`).
-3. Capture mic audio in the browser (MediaRecorder), POST it to a small local transcribe
-   endpoint, and feed the text into the same `/brain` route. The browser page is the same;
-   only the ears change. This is the local-first keeper the disclaimer points to.
+2. Start the server and tick **Local ears**. The first use downloads the model,
+   which takes a minute; every use after that is local and instant-ish. Measured
+   on a laptop CPU with the `base` model: about 2.4 seconds for a ten-second
+   turn including the one-off model load, about 1.1 seconds after it is cached.
+3. That is all. The page routes the hold-to-talk button through the recorder
+   instead of the browser's recogniser, and the text lands in the same `/brain`
+   route as before.
 
-faster-whisper is the documented upgrade, not bundled, so Tier 0 stays a zero-install proof.
+Two settings in `voice/config.json`, both optional:
 
-## Tier 0-local mouth - Piper (fully local voice out, no key)
+- `local_stt: true` starts with the toggle already on.
+- `local_stt_model` picks the model. `base` is the default and the honest
+  starting point; `small` is more accurate and slower.
+
+**The page says which ears are running, every time.** Not which are possible.
+With the toggle off it names your browser vendor; with it on it says the audio
+stays here. If faster-whisper is not installed the toggle is disabled and its
+tooltip says why and how to fix it, rather than failing when you press the
+button. faster-whisper is never bundled, so Tier 0 stays a zero-install proof.
+
+## Tier 0-local mouth - Piper (fully local voice out, no key)  [WIRED]
 
 Upgrade the mouth from the browser default to a small local neural voice. Free, local.
 
-- Install Piper and a voice model (see https://github.com/rhasspy/piper), then have the
-  server shell out to Piper instead of returning text for the browser to speak.
+1. Install Piper and download a voice, both from https://github.com/rhasspy/piper
+2. Put the voice path in `voice/config.json` as `piper_voice` (the `.onnx` file).
+   `piper_cmd` defaults to `piper` and only needs setting if yours is elsewhere.
+3. Tick **Local voice** on the page.
 
-## Tier 1 - realtime voice (Gemini Live, FREE Google AI Studio key)
+`POST /speak` shells out to Piper and returns WAV. If Piper is missing, or the
+voice file named in the config is not there, the toggle is disabled and says
+which of the two is wrong. If Piper fails mid-turn the page falls back to the
+browser voice rather than leaving the answer silent, because a silent turn reads
+as a broken app.
+
+Not verified by the maintainer on a machine with Piper installed. The absent
+path is tested; the speaking path is not.
+
+## Tier 1 - realtime voice (Gemini Live, FREE Google AI Studio key)  [WIRED, last run against a live key 2026-08-05]
 
 Sub-second spoken conversation. The cheapest realtime option that needs only a free-tier key -
 no paid console, no ElevenLabs. The realtime model speaks in its OWN native voice (no extra
@@ -75,7 +108,7 @@ conservative pick because it tracks the current free-tier-eligible Flash audio m
 accuracy and per-turn cost: a free key has a real free DAILY tier on Flash; heavy use can move you
 onto paid rates. Pick deliberately.
 
-## Tier 2 - premium mouth (ElevenLabs, paid)
+## Tier 2 - premium mouth (ElevenLabs, paid)  [DOCUMENTED, not built]
 
 Broadcast-quality voice out. Paid key, paid plan. A deliberate spend, never a default.
 Store the key via the connect skill (`connect elevenlabs`) so it only ever lives in `.env`.
@@ -84,3 +117,9 @@ Store the key via the connect skill (`connect elevenlabs`) so it only ever lives
 
 Tier 0 is the whole product working on one subscription with no extra key. Every tier above
 it is a deliberate choice with a stated cost. Default down, upgrade on purpose.
+
+And the page never claims a tier it is not running. It reads its status from the server on
+load, names the ears and the mouth that are actually active, and disables a toggle whose
+dependency is missing with a tooltip saying which one and how to install it. A privacy
+feature that says "local" while the audio goes elsewhere would be worse than not shipping
+one at all.

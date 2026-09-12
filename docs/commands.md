@@ -56,6 +56,30 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 
 ## Discovery
 
+### `/founder-os:writing-score`
+
+- **Or say.** "score my writing", "is my writing getting better"
+- **Outcome.** The mean score of your recent writing, the change since last time, the three classes to fix first with a real sentence for each, and one thing to do.
+- **Args.** None. Name a file instead and it measures that one file with every hit shown.
+- **Writes.** `state/writing-scorecard.md`, `state/writing-scores.jsonl`.
+- **Prereqs.** `/founder-os:setup` complete. Python 3.11+.
+- **When to run.** Monthly, or after a run of writing. Before sending one document, the ship gate already runs the same count.
+- **Follow-up.** Fix the top class in the named file and re-run. A banned word you have decided about belongs in `rules/banned-words-exceptions.txt`, so the gate stops raising it.
+
+---
+
+### `/founder-os:pitch-deck`
+
+- **Or say.** "build my pitch deck", "investor deck", "deck for the raise"
+- **Outcome.** A ten-slide spec in markdown with speaker notes, every number tagged with where it came from, and a `.pptx` rendered from it. Ends with what the deck cannot yet defend.
+- **Args.** None. Name a company or a raise and it starts there.
+- **Writes.** `decks/<slug>-deck.md`, `decks/<slug>-deck.pptx`.
+- **Prereqs.** `/founder-os:setup` complete. The render needs `pip install python-pptx`; without it you still get the spec, which pastes into Canva, Gamma, Pitch or Google Slides.
+- **When to run.** Before a raise or a big sales meeting. It challenges the story first, which is the part that gets skipped when the deck feels urgent.
+- **Follow-up.** Close what the claims check flagged. Take the spec into a design tool for the visual pass.
+
+---
+
 ### `/founder-os:where`
 
 - **Or say.** "where is my work", "where did that go", "where did you save it", "I cannot find the supplier list"
