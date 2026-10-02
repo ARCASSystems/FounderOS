@@ -432,7 +432,7 @@ v1.36 adds the output bias self-check. The OS now runs a check on its own reason
 
 FounderOS ships in deliberate increments. Each release closes a specific gap that the previous one made visible. v1.21 added the visible queue and health check. v1.22 added the privacy tag and observation rollup. v1.23 added the natural-language capture path. v1.24 added Python preflight gates so writing and reasoning skills fail visibly when their data is not set up, rather than producing generic output silently. New releases land when there is a real gap worth closing, not on a calendar.
 
-Community forks are encouraged. If you build something on top of FounderOS, open a discussion thread linking your fork. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for what we accept and [`docs/forking.md`](docs/forking.md) for extension points.
+Community forks are encouraged. If you build something on top of FounderOS, [open an issue](https://github.com/ARCASSystems/FounderOS/issues) with a link to your fork. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for what we accept and [`docs/forking.md`](docs/forking.md) for extension points.
 
 **The technical lane is left open on purpose, not built.** Founder OS is plain markdown a coder can fork and extend: turn an idea into a buildable spec, wire deeper automation through the hands layer, or add vector retrieval over the brain. None of that ships by default, because most founders do not write code and the OS does not pre-build for a user who is not in the room. The files are open if you are that user. The brain stays plain markdown either way, so nothing you add locks you in.
 

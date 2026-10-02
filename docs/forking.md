@@ -62,6 +62,6 @@ This convention costs nothing to add and makes a future rebase straightforward.
 
 ## Where to get help
 
-- **GitHub Discussions** - open a discussion thread in the FounderOS repo. If your fork is public, link it there. We don't merge into this repo, but we'll point others to your work.
-- **Community fork list** - linked from the README once forks are registered via the discussion thread.
+- **GitHub Issues** - open an issue in the FounderOS repo. If your fork is public, link it there. We don't merge into this repo, but we'll point others to your work.
+- **Community fork list** - linked from the README once forks are registered through an issue.
 - **The baseline itself** - every skill body is prose describing the behavior. Read the ones closest to what you want to build before writing your own.

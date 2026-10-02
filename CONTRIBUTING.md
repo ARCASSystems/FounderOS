@@ -22,7 +22,7 @@ FounderOS ships in deliberate increments. Each release closes a gap the previous
 
 ### Community forks are encouraged
 
-If you build something on top of FounderOS, open a discussion thread linking your fork. We don't merge into this repo, but we'll point others to your work.
+If you build something on top of FounderOS, open an issue with a link to your fork. We don't merge into this repo, but we'll point others to your work.
 
 ## What we accept
 
