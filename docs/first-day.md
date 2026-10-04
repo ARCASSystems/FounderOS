@@ -20,7 +20,7 @@ You already get good answers out of Claude. Four things here do not come from pr
 
 **Five named roles, each one graded.** Not one assistant accountable for nothing. Every role carries a written job description, the exact list of what it may touch, and a record that starts empty and fills as you grade its runs. You fix a role's definition once instead of correcting its output weekly.
 
-**A gate sits between a draft and a send.** The OS writes the client update. It does not send it. That line is in each role's permission grant, not in a polite sentence in a prompt, so it holds on a bad day.
+**A gate sits between a draft and a send.** The OS writes the client update and is written not to send it. For the role that drafts it, that line is also in the role's permission grant and audited for drift, not left to a polite sentence in a prompt. Further down, this page shows what the grant does and does not stop.
 
 The trade is simple. A good chat session is a good hour. This compounds across a year, because what it learns gets written down somewhere you keep.
 
@@ -236,7 +236,7 @@ All five ship `gated`, which means defined and approved with nothing run yet. Th
 
 After you have watched one of them work, tell it how it did in one line. That verdict is what the reviewer reads later, and it is the only honest record of what your OS is actually good at. Add a sixth role when a job of your own has recurred three times and you have corrected it twice.
 
-The doctrine behind the chart is `rules/digital-employees.md`. The part worth reading first is the charter rule: a role's grant is written in two places that must match - the chart row you read, and the skill's own declared tool list - and the charter audit names any drift between them in either direction. Plainly: Claude Code treats that list as pre-approval today, not a hard wall, so anything outside the grant lands in your normal permission prompts instead of running silently. The boundary is a written, audited contract - which is exactly what makes drift visible instead of hoped away.
+The doctrine behind the chart is `rules/digital-employees.md`. The part worth reading first is the charter rule: a role's grant is written in two places that must match - the chart row you read, and the skill's own declared tool list - and the charter audit names any drift between them in either direction. Plainly: Claude Code treats that list as pre-approval today, not a hard wall. Outside the grant, your permission mode decides. Manual mode asks you first. Auto mode, the default in the terminal, lets a reviewer model decide and block only what looks risky, so an action can run without a prompt. A hard send gate that waits for your yes is coming in 2.0. The boundary is a written, audited contract - which is exactly what makes drift visible instead of hoped away.
 
 ---
 

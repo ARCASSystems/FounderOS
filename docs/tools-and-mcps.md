@@ -2,7 +2,7 @@
 
 Founder OS does not assume your stack. The OS is a set of files and skills. Each skill declares which Model Context Protocol (MCP) servers it can use, and degrades gracefully when those MCPs are not available.
 
-You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run most of the 73 skills end-to-end. The four skills that produce noticeably better output with the relevant MCP connected are `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`. They still function without one, but with reduced context.
+You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run most of the 97 skills end-to-end. The four skills that produce noticeably better output with the relevant MCP connected are `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`. They still function without one, but with reduced context.
 
 This doc covers three things: which MCPs activate which skills, which editors and surfaces (Obsidian, Claude Cowork, claude-mem) pair well with the OS, and what works under each surface.
 
@@ -10,9 +10,9 @@ This doc covers three things: which MCPs activate which skills, which editors an
 
 ## What is an MCP?
 
-An MCP (Model Context Protocol) server is an integration that lets Claude Code talk to an external tool - your email, calendar, Notion, Apollo, Supabase, and so on. MCPs are configured at the Claude Code level, not inside Founder OS. You install them once and any project can use them.
+An MCP (Model Context Protocol) server is an integration that lets Claude Code talk to an external tool - your email, calendar, Notion, Apollo, Supabase, and so on. MCPs are set up outside Founder OS, in one of two places. The easier one for most founders: connect Gmail, Google Calendar or Drive once as a connector on your claude.ai account. When you sign in to Claude Code with that same account, those connectors are available there too. Or add an MCP server to Claude Code itself, once, and any project can use it.
 
-Read the Claude Code docs for how to add MCP servers: [docs.claude.com/claude-code](https://docs.claude.com/en/docs/claude-code).
+Anthropic's guide to both: [Connect Claude Code to tools via MCP](https://code.claude.com/docs/en/mcp).
 
 ---
 
@@ -118,7 +118,7 @@ If you add a third-party skill or build your own, follow the same convention so 
 
 If a skill says it needs an MCP you don't have, it will tell you. Two options:
 
-1. **Install the MCP.** See [docs.claude.com/claude-code](https://docs.claude.com/en/docs/claude-code) for adding MCP servers.
+1. **Install the MCP.** Connect it once as a connector on your claude.ai account, or see [Connect Claude Code to tools via MCP](https://code.claude.com/docs/en/mcp) to add it to Claude Code directly.
 2. **Skip that skill.** Use the local-file alternative the skill suggests (e.g. paste calendar events manually, write Notion exports as markdown into `brain/log.md`).
 
 If you get stuck, email `solutions@arcassystems.com` with the skill name and the error.
@@ -157,22 +157,17 @@ The pick rule: scan directories in the order declared in `scripts/wiki-build.py:
 
 When you first open the founder-os folder as an Obsidian vault, the graph view will be empty. Every seeded file is an isolated node by design. The wikilink convention is forward-only: existing template files are not retrofitted with cross-references. The graph fills in as you write `[[wikilinks]]` between files (a flag references a decision, a meeting note references a client, a knowledge note references a pattern). Run `/founder-os:wiki-build` after a session that added cross-references to refresh `brain/relations.yaml`.
 
-### Claude Cowork (Anthropic's desktop knowledge-work surface)
+### Claude Cowork (Anthropic's agent for non-coding work)
 
-Cowork is Anthropic's desktop agent for non-coding work. It can open local folders, read markdown, run MCPs, and run timed jobs. Pair it with FounderOS for knowledge-work execution while keeping Claude Code as the OS layer.
+Cowork is Anthropic's agent for knowledge work. From 16 September 2026 it has been merging into the main Claude app alongside chat, Pro and Max plans first. It reads the connectors, skills and plugins on your claude.ai account, not your local `~/.claude` folder.
 
-What works in Cowork:
-- Reading the file tree, CLAUDE.md as context (manually attached or via Cowork's "Folder instructions").
-- MCP connectors at the account level.
-- Timed runs via `/schedule`.
-- Markdown reads and writes.
+What changes on 6 October 2026, on Pro and Max plans:
+- New Cowork tasks run in Anthropic's cloud. A cloud task reaches a folder on your computer only while the Claude desktop app is open and connected to it.
+- Anthropic's help pages disagree on scheduled tasks. One says they cannot be tied to a folder on your computer, another says a task that uses local files needs the desktop app open. Either way, a timed job that needs your OS folder is safer in Claude Code.
 
-What does not work in Cowork (yet):
-- SessionStart and Stop hooks. The session-start-brief and revenue-loop check do not fire.
-- Custom slash commands from `.claude/commands/`. The plugin marketplace tags plugins per-surface, and FounderOS is not yet tagged "Works with: Cowork."
-- The fabric trio (`/today`, `/pre-meeting`, `/capture-meeting`) and the `/founder-os:*` namespace.
+What Cowork loads from a plugin on your claude.ai account, per Anthropic's plugin docs: skills, commands (run as `/plugin-name:command`), agents and hooks. Founder OS keeps its hooks in the folder's own settings, not in the plugin, and adding Founder OS to a claude.ai account is not yet tested. Whether Cowork reads a connected folder's own hooks is not yet tested either.
 
-Recommended pattern: use Cowork for execution work (drafting, scheduled briefs, file ops) pointed at the FounderOS folder. Keep Claude Code in terminal for any commit, ship, hook-driven, or cadence-refresh work. Track the [plugins directory](https://claude.com/plugins) for when FounderOS gains a "Works with: Cowork" tag.
+Recommended pattern: use Cowork for drafting against the FounderOS folder while the desktop app is open. Keep Claude Code for anything hook-driven, on a timer, saved, or cadence-related.
 
 ### claude-mem (complementary tool-call telemetry)
 
@@ -191,21 +186,22 @@ Note: claude-mem is AGPL-3.0. We cannot vendor any of its code into FounderOS wi
 
 What changes by surface is per-skill capability, not whether the OS works. Every skill declares its runtime class on a `Runs on:` line (see the `Runs on:` contract in `CLAUDE.md`): `reasoning` (read and reason), `local-writes` (create or edit OS files), `local-exec` (run a local script). Surfaces fall into three buckets:
 
-- **Local-CLI** - runs scripts, writes files, fires slash commands and hooks. Claude Code is the reference; Codex and other local CLIs are covered by the bridge-file redirect (`AGENTS.md`, `GEMINI.md`).
-- **Desktop folder-attached** - reads and writes the files when opened in the folder; no slash commands or hooks; script execution depends on the surface. Cowork, Antigravity.
-- **Web-only** - reads and reasons; no local writes, no script execution. Cloud Claude, any browser LLM.
+- **Local Claude Code** - runs scripts, writes files, fires slash commands and hooks. That covers the terminal tool, the IDE extensions, and the Claude desktop app's Code tab with a local folder selected, which Anthropic documents as the same engine reading the same settings files. Codex and other local CLIs are covered by the bridge-file redirect (`AGENTS.md`, `GEMINI.md`).
+- **Desktop folder-attached** - reads and writes the files through a connected folder. Cowork does this only while the Claude desktop app is open. Antigravity does it when opened in the folder. Folder hooks and folder commands are not yet tested on either, so do not count on them.
+- **Cloud and web** - Claude Code on the web runs in Anthropic's cloud on a GitHub copy of a repo, never on a folder that lives only on your computer. claude.ai chat loads a plugin's skills (commands arrive as skills) and never runs hooks, and a browser LLM can only read and reason over what you give it.
 
-Only the Claude Code row below is validated by a real run. The other rows describe what each bucket's capability implies through the bridge-file redirect. They are covered by design, not separately tested per agent.
+Only the terminal row below is validated by a real run. The other rows describe what each bucket's capability implies through the bridge-file redirect. They are covered by design, not separately tested per agent.
 
 | Surface (bucket) | `reasoning` | `local-writes` | `local-exec` | Slash commands | Hooks |
 |---|---|---|---|---|---|
-| Claude Code (local-CLI) - validated | Yes | Yes | Yes | Yes | Yes |
-| Cowork, Antigravity (desktop folder-attached) - redirect-covered, not separately validated | Yes | Yes, with folder write access | Depends on the surface; with no script-exec it reads the produced artifacts | No - say so | No - say so |
-| Cloud Claude, browser LLM (web-only) - redirect-covered, not separately validated | Yes | No - drafts the change for you to apply | No - reads the produced artifacts and helps you act | No - say so | No - say so |
+| Claude Code terminal tool (local) - validated | Yes | Yes | Yes | Yes | Yes |
+| Claude desktop app, Code tab, local folder - per Anthropic's docs, not yet validated by us | Yes | Yes | Yes | Yes | Yes |
+| Cowork, Antigravity (desktop folder-attached) - not separately validated | Yes | Yes, through a connected folder (Cowork: only while the desktop app is open) | Depends on the surface; with no script-exec it reads the produced artifacts | Not tested - say what you want in words | Not tested - do not count on them |
+| claude.ai chat, Claude Code on the web, browser LLM - not separately validated | Yes | No local writes - drafts the change for you to apply | No local scripts - reads the produced artifacts and helps you act | Chat: plugin commands arrive as skills | Chat: never. Web: a repo's hooks run on the cloud copy, not on your disk |
 
 Apply the honest-degradation rule from `CLAUDE.md`: on a surface that cannot do what a skill's `Runs on:` class needs, say so in one sentence and offer the path you can do. Never claim a slash command, script run, hook, or local write happened where it did not.
 
-**Auto-memory:** Claude Code reads `~/.claude/projects/<slug>/memory/MEMORY.md` at session start. Cowork keeps its own memory, not shared with Claude Code. Web-only surfaces and Obsidian have none.
+**Auto-memory:** Claude Code reads `~/.claude/projects/<slug>/memory/MEMORY.md` at session start. claude.ai has its own account memory, on every plan including free since March 2026, and Cowork in the cloud shares it. Whether that account memory reaches Claude Code is not yet tested, so keep anything the OS must know in your files. Obsidian has no memory layer and only reads the files.
 
 **Obsidian and claude-mem** are not agent surfaces. Obsidian reads and edits the markdown but runs no skills, slash commands, or hooks (see the Obsidian section above). claude-mem is a separate tool-call telemetry plugin (see above).
 

@@ -45,7 +45,7 @@ Two details that are easy to get wrong and expensive to miss:
 Usage:
 
   python scripts/build_release.py                 # version from VERSION
-  python scripts/build_release.py --version 1.55.0
+  python scripts/build_release.py --version 1.55.1
   python scripts/build_release.py --skip-dmg
   python scripts/build_release.py --allow-dirty  # build anyway, marked in the output
 """

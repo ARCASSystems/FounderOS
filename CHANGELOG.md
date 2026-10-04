@@ -2,6 +2,19 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.55.1 - 2026-10-04
+
+A truth patch, with no new feature. An audit of the live product found front-page claims that had stopped being true, and this release corrects each one. The full pack is `updates/1.55.1-the-front-door-tells-the-truth.md`.
+
+- **The send-gate wording matches auto mode.** Claude Code in the terminal now starts in auto mode, so "anything outside a role's grant lands in your permission prompts" no longer held. And many skills, the email and proposal drafters among them, pre-approve shell commands, so no permission mode reliably stops a send today. The README now names that gap and says a hard send gate is coming in 2.0, and the first-day guide and the employee doctrine say what happens outside a role's grant in each permission mode.
+- **The download path stops at a real download.** Both start files and the README sent people to `claude.ai/code`, which installs nothing, and called Claude Code free. They now open `claude.com/download`, say a paid plan is needed, and name the desktop app's Code tab (Local, Select folder) as the no-terminal route, per Anthropic's docs and not yet tested by us. An update does not refresh the start files yet, so the pack says how to copy them.
+- **Plugin updates are described as they work.** Auto-update is off by default for third-party marketplaces. The docs say how to update by hand and how to turn it on.
+- **Cowork and the cloud as Anthropic documents them.** From 6 October new Cowork tasks on Pro and Max run in the cloud, and Anthropic's own pages disagree on scheduled tasks with local files. The timed-job recipe pointed at your OS folder is gone, and each surface is described with what is not yet tested marked as such.
+- **The global template loses the maintainer's own rules.** No model-routing section, no developer's "typecheck, build, test", and the clarifying-questions rule now says act on the low-risk path, state the approach before an ambiguous build, and ask one sharp question only when being wrong is expensive.
+- **`verify.py` names what it checked.** Every result ends with what was checked and what was not, instead of "All present". On a ZIP, clone or curl install it also stops printing a pass for a comparison it skipped: it now compares `scripts/` with the shipped copy in `templates/scripts/`, so a hand-edited helper shows up by name.
+- **The pack rule is a test.** A pack from 1.55.0 on that is missing one of its five sections fails the maintainer's suite before release.
+- **Two hygiene fixes.** Four shell scripts gain the exec bit, so `./scripts/install-git-hooks.sh` works on a Mac or Linux clone, and the UAE legal sources file parses as YAML.
+
 ## v1.55.0 - 2026-09-12
 
 Three parts of this OS had the same shape of problem: a rule that existed as a page with nothing behind it. Writing quality was judged by a model and never measured. Market research was grounded in your own files and could not see the market. The privacy tier of voice was a paragraph carrying build instructions for an endpoint nobody had written. And the front door, after fifty-three versions, was still a link to a raw branch archive. This release puts a mechanism behind each one, and the mechanisms turned up five defects in the things they were wired into, which is what they were for. Pack: `updates/1.55.0-the-rules-got-mechanisms.md`.

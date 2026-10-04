@@ -58,7 +58,7 @@ sources:
     url: https://tax.gov.ae/en/taxes/Vat/guides.references.aspx
     covers: [tax-vat]
     last_checked_on: 2026-05-14
-    notes: 196 documents as of 2026-05-14. Check monthly for new clarifications. Key recent: VATGRH1 (Apr 2026), VATGPM1 (Jan 2026), VAT Admin Exceptions (Dec 2025), VATP044 (May 2025).
+    notes: "196 documents as of 2026-05-14. Check monthly for new clarifications. Key recent: VATGRH1 (Apr 2026), VATGPM1 (Jan 2026), VAT Admin Exceptions (Dec 2025), VATP044 (May 2025)."
 
   emaratax:
     name: EmaraTax Portal

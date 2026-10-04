@@ -18,7 +18,7 @@ Runs on: local-writes - creates or edits files in your OS folder; needs an agent
 Setup writes real files. Before you frame anything, confirm the surface you are on can write to the operator's OS folder:
 
 - **Claude Code (local, write access):** full setup. Proceed normally.
-- **Claude Cowork, Cloud Claude, or any read-only surface:** do NOT pretend setup ran. Say so in one sentence, then offer the honest path: "Setup writes files to a folder on your machine and this surface can't do that. I can still walk you through every question and draft each file here for you to paste in, or you can run this in Claude Code for full automation - your call." Then either draft-and-hand-off, or stop. Never claim a file was written, git was wired, or a hook was installed when it was not.
+- **Any surface that cannot write to a folder on the founder's machine** (claude.ai chat, Claude Code on the web, Cowork without a connected folder and the desktop app open, or any read-only surface): do NOT pretend setup ran. Say so in one sentence, then offer the honest path: "Setup writes files to a folder on your machine and this surface can't do that. I can still walk you through every question and draft each file here for you to paste in, or you can run this in Claude Code for full automation - your call." Then either draft-and-hand-off, or stop. Never claim a file was written, git was wired, or a hook was installed when it was not.
 
 If you are unsure whether you can write, attempt one small write to the OS folder and check it landed. If it did not, you are on a degraded surface - take the path above.
 

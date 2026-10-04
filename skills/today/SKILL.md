@@ -23,6 +23,6 @@ Do not attempt to read `cadence/daily-anchors.md`, `context/decisions.md`, `brai
 
 ## Procedure
 
-The user is asking for the today brief. Run the `/today` command. In Cowork mode, where slash commands do not fire, print the equivalent output by reading `cadence/daily-anchors.md`, `context/decisions.md`, `brain/flags.md`, and `brain/log.md` using the same structure as `.claude/commands/today.md`.
+The user is asking for the today brief. Run the `/today` command. On a surface where the `/today` command does not fire (claude.ai chat, or Cowork until it is tested there), print the equivalent output by reading `cadence/daily-anchors.md`, `context/decisions.md`, `brain/flags.md`, and `brain/log.md` using the same structure as `.claude/commands/today.md`.
 
 Keep it read-only. No commentary outside the brief.

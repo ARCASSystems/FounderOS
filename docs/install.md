@@ -10,23 +10,25 @@ If you get stuck, email `solutions@arcassystems.com` with the path you tried and
 
 ## Path 0 - Download ZIP (no Git or terminal required)
 
-Three steps, nothing typed. The gentlest path there is.
+Three steps and one sentence typed. The gentlest path there is.
 
 **Best for:** Anyone who wants to own the system in ten minutes with nothing new installed. Anyone who does not have git and does not want to think about it.
 
-**Requirements:** Claude Code with a paid Claude plan, and Python 3.11+ (the setup wizard checks for it before asking anything and tells you plainly if it is missing).
+**Requirements:** Claude Code with a paid Claude plan (Pro, Max, Team or Enterprise - it does not run on the free plan), and Python 3.11+ (the setup wizard checks for it before asking anything and tells you plainly if it is missing).
 
 **Steps:**
 
-1. [Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.0/FounderOS-1.55.0.zip).
+1. [Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.1/FounderOS-1.55.1.zip).
 2. Right-click the file and choose **Extract All** (Windows) or double-click it (Mac). Windows puts a folder inside a folder - open the inner one, called **Founder OS**, the one that contains `CLAUDE.md`. Move it wherever you keep your work. It is already named, so there is nothing to rename.
-3. Double-click **Start Founder OS** (Windows: the file ending `.bat`; Mac: the one ending `.command`). It opens Claude Code in the folder and starts the setup wizard for you. After setup, the same double-click just opens your OS - it is the standing front door, not a one-time installer.
+3. Open the folder in Claude Code and say **"set up Founder OS"**. Two ways in:
+   - **No terminal - the Claude desktop app.** Download it from [claude.com/download](https://claude.com/download), sign in, open the **Code** tab, choose **Local**, click **Select folder**, and pick the Founder OS folder. The desktop app includes Claude Code, so nothing else is installed. This route follows Anthropic's docs, and we have not yet watched a fresh install run it.
+   - **With the Claude Code terminal tool.** Double-click **Start Founder OS** (the file ending `.bat` on Windows, the one ending `.command` on a Mac). It opens Claude Code in the folder and starts the setup wizard for you. After setup, the same double-click just opens your OS - it is the standing front door, not a one-time installer.
 
 First-run notes, so nothing surprises you:
 
 - **Windows** may show a security note about a downloaded script. Choose to run it - the file is plain text; right-click it and choose Edit to read everything it does before running, if you like.
 - **Mac**: right-click the file and choose **Open** the first time. That is how macOS treats any downloaded script, not an error in the file.
-- **If Claude Code is not installed yet**, the start file says so in plain language and opens the download page - nothing breaks.
+- **If the Claude Code terminal tool is not installed**, the start file says so, explains the desktop-app route, and opens the Claude download page - nothing breaks. The desktop app does not add the terminal tool, so if you only have the app, open the folder from its Code tab instead of double-clicking.
 - **Prefer no scripts?** The spoken way works identically: open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
 - **The folder icon** appears on Windows the first time you double-click **Start Founder OS**. Windows only reads a folder's icon setting once the folder is marked as customised, and extracting a ZIP does not mark it, so the launcher does it. On a Mac, run `bash scripts/set_folder_icon.sh` from the folder once if you want the same thing (it ships with the ZIP and the clone, which are the paths where there is a folder to brand); it needs Xcode Command Line Tools and says so plainly if they are missing. Either way it is cosmetic. Nothing about the OS depends on it.
 
@@ -53,7 +55,7 @@ Commands use bare names on this path (`/setup`, `/today`), same as the git-clone
 
 ## Path A - Claude Code plugin (no terminal, cleanest)
 
-Two commands, typed inside Claude Code. No terminal needed. Auto-updates available. Cleanest first-run experience.
+Two commands, typed inside Claude Code. No terminal needed. Cleanest first-run experience. Updates are manual unless you turn auto-update on (see Pros).
 
 **Best for:** Anyone not comfortable in a terminal, and anyone with a Claude Pro or Max plan who already uses Claude Code.
 
@@ -68,7 +70,7 @@ If `/founder-os:setup` is not recognised after install, run `/reload-plugins` (o
 
 **Pros**
 - Two commands and you are set up, with no terminal install step.
-- Plugin updates flow through `/plugin update`.
+- Updates are one click, but manual by default: Claude Code leaves auto-update off for third-party marketplaces like this one. Update from `/plugin` (Installed tab, Update now), or turn auto-update on once (`/plugin`, Marketplaces tab, Enable auto-update).
 - Slash commands register automatically and are available in every project you open.
 
 **Cons**
@@ -79,7 +81,7 @@ If `/founder-os:setup` is not recognised after install, run `/reload-plugins` (o
 
 **How hooks fire on Path A.** The plugin registers the slash commands. It does not register hooks - the setup wizard does, by writing a `.claude/settings.json` into the OS folder it builds for you. So the session brief, the revenue check, and the auto-save fire when you open Claude Code in your OS folder, and nowhere else. That is deliberate rather than a gap: every one of them reads your OS files, and firing them inside an unrelated project would be noise at best.
 
-**Where your files live.** The plugin is the engine - it installs under `~/.claude/plugins/` where Claude Code manages it, updates through `/plugin update`, and you never have to open it. When you run setup, it builds your actual OS in a folder you own (default `~/founder-os/`): priorities, decisions, brain log, the lot. That folder is plain markdown and yours to keep, back up, or fork. If you ever remove the plugin, your OS folder stays exactly where it is. Engine and data are separate on purpose: the engine is swappable, your files are not.
+**Where your files live.** The plugin is the engine - it installs under `~/.claude/plugins/` where Claude Code manages it, updates from `/plugin` (manual unless you turn auto-update on), and you never have to open it. When you run setup, it builds your actual OS in a folder you own (default `~/founder-os/`): priorities, decisions, brain log, the lot. That folder is plain markdown and yours to keep, back up, or fork. If you ever remove the plugin, your OS folder stays exactly where it is. Engine and data are separate on purpose: the engine is swappable, your files are not.
 
 **Verify the install:** Say "verify the OS" (or run `/founder-os:verify`).
 
@@ -164,7 +166,12 @@ Open Claude Code in that folder, then say "set up Founder OS" (or run `/setup`).
 
 ## Path D - Claude Cowork (partial, desktop knowledge work)
 
-Claude Cowork is Anthropic's desktop surface for non-coding work. It reads markdown, runs MCPs, and runs timed jobs - but hooks and the `/founder-os:*` slash command namespace do not fire there. Pair it with FounderOS for drafting and timed execution. Keep Claude Code as the OS layer.
+Claude Cowork is Anthropic's agent for non-coding work. From 16 September 2026 it has been merging into the main Claude app alongside chat, Pro and Max plans first. Two platform facts shape how it pairs with Founder OS:
+
+- **From 6 October 2026, new Cowork tasks on Pro and Max plans run in Anthropic's cloud.** A cloud task reaches a folder on your computer only while the Claude desktop app is open and connected to it.
+- **Anthropic's help pages disagree on scheduled tasks.** One says they cannot be tied to a folder on your computer. Another says a task that uses local files needs the desktop app open. Either way, a timed job that reads or writes your OS folder is safer in Claude Code.
+
+Founder OS hooks live in the folder's own settings, not in the plugin, and whether Cowork reads them is not yet tested. Pair Cowork with FounderOS for drafting while the desktop app is open. Keep Claude Code as the OS layer.
 
 **Best for:** Founders who already have FounderOS installed via Path 0, A, B, or E, and want Cowork available as a drafting surface with OS context.
 
@@ -173,18 +180,18 @@ Claude Cowork is Anthropic's desktop surface for non-coding work. It reads markd
 **Setup recipe:**
 
 1. Install via Path 0, A, B, or E first.
-2. In Cowork, open the FounderOS folder you set up.
-3. Attach `CLAUDE.md` as folder instructions (or use Cowork's "Folder instructions" if available on your version).
+2. Open the Claude desktop app and keep it open while you work, because Cowork reaches your folder only through it.
+3. Connect the FounderOS folder you set up, and attach `CLAUDE.md` as its instructions.
 4. If `brain/.snapshot.md` exists, attach it too. Skills produced this snapshot from your current state - it is the cheapest way to give Cowork live context.
-5. Talk to Cowork in natural language. "What is on my plate today?" "Draft a follow-up to the call with X." Cowork reads markdown and writes markdown.
-6. Return to Claude Code for any of: SessionStart brief, Stop revenue-check, slash commands, saves, cadence refresh, or the natural-language weekly review skill.
+5. Talk to Cowork in natural language. "What is on my plate today?" "Draft a follow-up to the call with X."
+6. Return to Claude Code for any of: SessionStart brief, Stop revenue-check, saves, cadence refresh, anything on a timer, or the weekly review.
 
 **Honest limits in Cowork:**
 
-- The SessionStart brief does not fire. You will not see flags, stale cadence, or decay items unless you ask.
-- The Stop revenue-check does not fire. Outreach actions captured in Cowork must be logged manually until you return to Claude Code.
-- The fabric trio (`/today`, `/pre-meeting`, `/capture-meeting`) and the `/founder-os:*` namespace do not run.
-- Cowork memory is separate from Claude Code's auto-memory. Behavioural guards in `~/.claude/projects/<slug>/memory/MEMORY.md` do not load in Cowork.
+- Do not count on the SessionStart brief. You will not see flags, stale cadence, or decay items unless you ask.
+- Do not count on the Stop revenue-check. Log outreach actions captured in Cowork by hand until you return to Claude Code.
+- The fabric trio (`/today`, `/pre-meeting`, `/capture-meeting`) is a set of folder commands. Cowork can run a plugin's commands when the plugin is on your claude.ai account, but installing Founder OS there is not yet tested, so say what you want in words instead.
+- Cowork does not read Claude Code's auto-memory. Behavioural guards in `~/.claude/projects/<slug>/memory/MEMORY.md` do not load in Cowork.
 
 Full surface-by-surface compatibility detail in [docs/tools-and-mcps.md](tools-and-mcps.md).
 
@@ -195,6 +202,7 @@ Full surface-by-surface compatibility detail in [docs/tools-and-mcps.md](tools-a
 | You have... | Pick |
 |---|---|
 | Nothing but Claude Code + a Pro/Max plan, and you want the fastest ownership path | Path 0 (ZIP) |
+| Only the Claude desktop app, no terminal | Path 0 (ZIP), opened from the Code tab |
 | Claude Code + Pro/Max plan, and you want the slash commands available in every project | Path A (plugin) |
 | bash + git + Python 3.11+ and you like the terminal | Path E (curl) |
 | Claude Code, plugin install failed | Path B (git clone) |
@@ -237,4 +245,4 @@ If anything breaks in the first 24 hours, email `solutions@arcassystems.com` wit
 
 **Mac, Linux.** Same Python dispatcher, no extra setup.
 
-**Cloud Claude (web, desktop).** Cloud Claude cannot run slash commands or write to local disk. It is a read-only surface. If you want the OS to remember your context across sessions, you need one of the local paths above.
+**Claude in the cloud.** Three different things share the name. Claude Code on the web (claude.ai/code) runs a full session in Anthropic's cloud on a GitHub copy of a repo, so it never sees a folder that lives only on your computer. claude.ai chat can load a plugin's skills but never runs hooks. Cowork reaches a folder on your computer only while the Claude desktop app is open. For the OS to work on your own files, with the session brief and saves, open the folder in Claude Code on your machine: the terminal tool, or per Anthropic's docs an IDE extension or the desktop app's Code tab (not yet tested by us).

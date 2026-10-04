@@ -263,6 +263,9 @@ Rules for the output:
 - Brackets + state word + parenthetical for every check line. Exactly this format.
 - Summary footer: count each state, name the single highest-priority next action (first
   FAIL, or first WARN if no FAILs, or "all green" if all PASS).
+- Directly under the footer, print one line starting `Not checked:` from the verifier's
+  `scope.not_checked` (skills, commands, rules, docs, your own files). The script can only
+  measure what `templates/scripts/` lists, so "all green" must never read as "everything is here".
 - Read the version from the `VERSION` file in the repo root. On a data-folder install with no `VERSION` file, read the version from the plugin's `.claude-plugin/plugin.json` (the same manifest Check 1 reads); if neither exists, print the header without a version rather than failing.
 - Do not exceed 30 lines total.
 

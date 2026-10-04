@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""verify.py - prove an install is complete instead of assuming it.
+"""verify.py - prove an install's engine is complete instead of assuming it.
 
 Why this exists: v1.53.1 shipped five defects that all passed CI, because CI
 checks the repo and nothing checks an INSTALL. The health-check skill could not
@@ -140,16 +140,16 @@ def _scripts_current(root: Path, engine: Path | None) -> dict:
     of every defect the v1.53.x releases fixed: the repo had the fix and an
     install did not. Names alone cannot see that; bytes can.
 
-    Skipped when the engine IS this folder, where the comparison is a file
-    against itself."""
+    This runs when the engine IS this folder too (a ZIP, clone or curl
+    install). It used to skip that case as "a file against itself", but the
+    reference is `templates/scripts/` and the install's copy is `scripts/`: two
+    paths, meant to match, and a hand-edited helper makes them differ. The skip
+    printed a PASS for a comparison that never ran, on the main install path."""
     if engine is None:
         return _check("scripts-current", "warn",
                       "cannot verify - the shipped files were not found on this "
                       "machine, so there is nothing to compare this install against",
                       stale=[])
-    if engine.resolve() == root.resolve():
-        return _check("scripts-current", "pass",
-                      "this folder holds the shipped files themselves", stale=[])
     src = engine / "templates" / "scripts"
     dst = root / "scripts"
     stale = []
@@ -165,11 +165,11 @@ def _scripts_current(root: Path, engine: Path | None) -> dict:
     if stale:
         return _check(
             "scripts-current", "fail",
-            f"{len(stale)} of the OS's own files do not match the version that "
+            f"{len(stale)} of the OS's shipped scripts do not match the version that "
             "shipped, so they are out of date or damaged: " + ", ".join(stale),
             stale=stale)
     return _check("scripts-current", "pass",
-                  "every one of the OS's own files matches the version that shipped",
+                  "every shipped script matches the version that shipped",
                   stale=[])
 
 
@@ -311,15 +311,51 @@ def run_checks(root: Path) -> dict:
         "engine": str(engine) if engine else None,
         "checks": checks,
         "result": worst,
+        "scope": scope_of(engine),
     }
+
+
+# What a pass can and cannot mean. The contract is derived from
+# `templates/scripts/`, so the script half of an install is all it can measure.
+# A deleted skill, command or rule leaves no trace against that list, and a
+# closing line of "All present" told a founder with exactly that damage that
+# their install was whole. Every result now ends by naming its scope, and the
+# JSON carries it so the skill can say the same.
+#
+# The scope is worked out from what this run could actually compare, not
+# written once: with no reachable engine there is no shipped list, so presence
+# and currency were not checked and the line must not say they were. Each item
+# is phrased as a question, so a line that follows a FAIL never reads as a
+# clean result.
+SCOPE_NOT_CHECKED = (
+    "the scripts that part calls (the session brief among them)",
+    "skills", "commands", "rules", "templates", "CLAUDE.md", "docs",
+    "the start files", "your own files",
+)
+
+
+def scope_of(engine: Path | None) -> dict:
+    checked: list[str] = []
+    not_checked: list[str] = []
+    if engine is None:
+        checked.append("whether the OS's own scripts are undamaged")
+        not_checked.append("whether every shipped script is here and current "
+                           "(the shipped list was not found)")
+    else:
+        checked.append("whether the OS's own scripts are all here, match the "
+                       "shipped copy and are undamaged")
+    checked.append("whether the part that runs things automatically is in place "
+                   "and on for this folder")
+    checked.append("which version this install records")
+    return {"checked": checked, "not_checked": not_checked + list(SCOPE_NOT_CHECKED)}
 
 
 # The JSON keys are for the skill. A person reading the plain output gets the
 # thing being checked in their own words - no internal names, no paths.
 CHECK_LABELS = {
-    "scripts-complete": "All of the OS's own files are here",
-    "scripts-current": "Those files are the version that shipped",
-    "scripts-parse": "None of them are damaged",
+    "scripts-complete": "The OS's own scripts are all here",
+    "scripts-current": "Those scripts are the version that shipped",
+    "scripts-parse": "None of the scripts are damaged",
     "hook-dispatcher": "The part that runs things automatically is in place",
     "hooks-wired": "It is switched on for this folder",
     "version-marker": "This install knows which version it is",
@@ -341,12 +377,26 @@ def render(report: dict) -> str:
         out.append("Nothing is broken. The lines above marked WARN are things this "
                    "folder does not have yet, with what turns each on.")
     else:
-        out.append("Everything this script can prove, it proved. All present.")
+        out.append("Every check above passed.")
+    scope = report["scope"]
+    out.append("")
+    out.append("Checked: " + _plain_list(scope["checked"], "and") + ".")
+    out.append("Not checked: " + _plain_list(scope["not_checked"], "or")
+               + ". A problem in any of those would not show up here yet.")
     return "\n".join(out)
 
 
+def _plain_list(items, last_word: str) -> str:
+    items = list(items)
+    if len(items) < 2:
+        return "".join(items)
+    joiner = f", {last_word} " if len(items) > 2 else f" {last_word} "
+    return ", ".join(items[:-1]) + joiner + items[-1]
+
+
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description="Prove this install is complete.")
+    p = argparse.ArgumentParser(description="Check this install's own scripts, hook wiring "
+                                            "and version file, and say what was not checked.")
     p.add_argument("--root", default=str(REPO_ROOT))
     p.add_argument("--json", action="store_true")
     a = p.parse_args(argv)

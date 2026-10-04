@@ -12,7 +12,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 **New here? [Read the Founder OS Playbook first](https://arcassystems.com/playbook)** - a visual walkthrough with screenshots: the problem, the three parts, how to start, and what not to do. Opens framed in any browser, about 15 minutes. It lives on the web so it never drifts out of date; there is no copy shipped in this repo.
 
-**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.0/FounderOS-1.55.0.zip)** - unzip it, double-click **Start Founder OS**, and the setup wizard is talking. No git, no terminal, no curl. Or install via plugin marketplace, one-line curl, or git clone. See [Install](#install) below.
+**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.1/FounderOS-1.55.1.zip)** - unzip it, open the folder in Claude Code, and say "set up Founder OS". With the Claude desktop app that is the Code tab, **Local**, then **Select folder**, with no terminal (per Anthropic's docs, not yet tested by us). With the Claude Code terminal tool installed, double-clicking **Start Founder OS** does it for you. Or install via plugin marketplace, one-line curl, or git clone. See [Install](#install) below.
 
 ---
 
@@ -28,7 +28,9 @@ Install, answer the wizard's questions, and by the end of the first sitting:
 - **Your first team, named and chartered.** A daily assistant, a next-move caller, a capture filer, an account manager, and a reviewer that audits the other four. Each has a written job description, a list of exactly what it may touch, and a track record that starts empty and fills as you grade its runs. All five start gated: they propose, you decide.
 - **A brain that remembers and does not invent.** What you tell it lands in plain markdown: log, flags, patterns, parked decisions, knowledge. Raw dumps are captured whole; meetings and passing facts file with your confirm. A name or number said once stays marked unconfirmed until you confirm it, and money figures and contact details never enter the provisional ledger at all, by design.
 - **Your digital infrastructure, modelled.** Clients and leads, today and the week, decisions made and parked, your network, your tool stack, and the two profile slots your voice and brand interviews fill. One folder you can read, back up, move, or delete.
-- **A gate between a draft and a send.** The OS writes the client update, the follow-up, the proposal. It sends none of them. That line is written into each role's charter and its skill's declared tool list, kept identical and audited for drift - a written contract, not a polite request in a prompt. Anything outside a role's grant lands in your normal permission prompts, never silently.
+- **A gate between a draft and a send.** The OS writes the client update, the follow-up, the proposal, and its skills are written to draft and stop. For the five starter roles that line is also in each role's charter and its skill's declared tool list, kept identical and audited for drift - a written contract, not a polite request in a prompt.
+
+  The limit today: nothing technical stops a send yet. Many skills, the email and proposal drafters among them, pre-approve shell commands while they run, so not even Manual mode asks before those. And Claude Code in the terminal now starts in auto mode, where a reviewer model blocks the risky actions instead of asking you. A hard send gate that waits for your yes is coming in 2.0. Until then, read a draft before you ask for it to go out.
 
 If you stop using it, you lose nothing: it is a folder of files you can read without us. That is the whole risk of trying it.
 
@@ -55,7 +57,7 @@ Most of the claims above are checkable on your machine without trusting us:
 - **Undo works before git exists.** Say "what did you change" and every file the OS edited through its editing tools this session lists with a one-command restore. A file a shell command wrote is outside that net until version history is on - the one honest gap.
 - **The team's boundaries are audited, not asserted.** After setup, `python scripts/employee_verdict.py charters` reads every role's charter against the tool list its skill declares, both directions, and names any drift.
 - **The capability page is generated, not written.** `python scripts/skills_sync.py --capabilities` rebuilds [docs/what-this-can-do.md](docs/what-this-can-do.md) from the skills on disk - it cannot claim a skill that is not there.
-- **The install can prove it is whole.** `python scripts/verify.py` compares your folder against the list of everything that shipped, and names anything missing, out of date, or damaged. The list is derived from the files setup copies rather than maintained by hand, so it cannot quietly go stale, and the same proof runs against this repo before every release - the product cannot ship a version that fails its own checkup.
+- **The install can prove its engine is whole.** `python scripts/verify.py` checks that the OS's own scripts are all in your folder, byte for byte the shipped copy, and undamaged, and checks the hook wiring and the version file. It ends by naming what it did not check, skills, commands, rules and docs among them, so a pass never reads as more than it proved. The script list is derived from the files setup copies rather than maintained by hand, so it cannot quietly go stale, and the same proof runs against this repo before every release - the product cannot ship a version that fails its own checkup.
 
 ---
 
@@ -71,7 +73,9 @@ Four things, and none of them arrive from writing a better prompt.
 
 **You get five named roles, and you grade them.** Not one assistant that is good at everything and accountable for nothing. Each role has a written job description, a list of exactly what it may touch, and a record that starts empty and fills as you grade its runs. When one keeps getting something wrong you change its definition once, instead of correcting it every week.
 
-**There is a gate between a draft and a send.** The OS writes the client update, the follow-up, the proposal. It delivers none of them. That boundary is written into each role's charter and its skill's declared tool list, kept identical and audited for drift, and anything outside a grant still routes through your own permission prompts. A written, audited contract holds on the day you are tired and moving fast; a sentence buried in a prompt does not.
+**There is a gate between a draft and a send.** The OS writes the client update, the follow-up, the proposal, and its skills are written to deliver none of them. For the five starter roles that boundary is also in each role's charter and its skill's declared tool list, kept identical and audited for drift. A written, audited contract holds on the day you are tired and moving fast; a sentence buried in a prompt does not.
+
+What it does not do yet is stop a send by itself. Many skills pre-approve shell commands, and in auto mode, the terminal's default, a reviewer model decides instead of asking you. The hard send gate is coming in 2.0.
 
 A good chat session is a good hour. This is the part that compounds over a year, because what it learns gets written down in files you keep.
 
@@ -114,7 +118,7 @@ Four layers, the same four the Founder OS Playbook draws on a napkin. Each does 
 
 **It runs when you open it, plus hooks.** Some tools in this space monitor your work all day and act on their own. This one does not, and that is a real difference rather than a gap in the copy. It runs when you start a session, when a hook fires (session open, before a write, before compaction, on stop), and when you ask. What you trade for that is a system with no daemon, no server, no account, and nothing running against your files while you are asleep.
 
-A **SessionStart brief** runs on every Claude Code session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up. You do not need to think about it. The brief, the Stop hook, and slash commands are Claude Code-only - on Cowork or Cloud Claude they do not fire. Details under [Substrate details](#substrate-details) below if curious. Surface-by-surface compatibility table in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+A **SessionStart brief** runs on every Claude Code session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up. You do not need to think about it. The brief and the Stop hook run when Claude Code is open in your OS folder. That is tested in the terminal tool, and per Anthropic's docs the IDE extensions and the desktop app's Code tab read the same settings, which we have not yet tested. Do not count on them in Cowork, claude.ai chat, or Claude Code on the web. Details under [Substrate details](#substrate-details) below if curious. Surface-by-surface compatibility table in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 **The legal layer (as-needed, not daily).** A safety layer for hires, fires, NDAs, VAT, license renewals, and walking into a lawyer's office prepared. UAE founders get a full reference set out of the box. Founders elsewhere scaffold their jurisdiction and load their own sources. The skill never invents law and surfaces overdue compliance deadlines from `context/compliance.md` on every session. Details under [Legal layer](#legal-layer) below.
 
@@ -135,10 +139,10 @@ It ships empty and fills from your own corrections. Say "too long" or "you asked
 One Claude subscription. Everything else is free.
 
 - **Founder OS** (this repo) - free, MIT licence
-- **Claude Code** (the interface) - free to install
+- **Claude Code** (the interface) - comes with a paid Claude plan, in the Claude desktop app or as a terminal tool, and does not run on the free plan.
 - **Claude subscription** - any paid Claude plan with enough context (100K+ tokens). Most plans are $20-100/month.
 
-Founder OS is built for Claude Code: the setup wizard, the slash commands, and the SessionStart and Stop hooks all run there. A paid Claude plan is the only real cost - free tiers usually don't have the context for this to work well. The files themselves are plain markdown and travel with you, so you can read them in any AI you paste them into, but the wizard, commands, and hooks run in Claude Code. You are not locked in.
+Founder OS is built for Claude Code: the setup wizard, the slash commands, and the SessionStart and Stop hooks all run there. A paid Claude plan is the only real cost - Claude Code does not run on the free plan. The files themselves are plain markdown and travel with you, so you can read them in any AI you paste them into, but the wizard, commands, and hooks run in Claude Code. You are not locked in.
 
 **Which model?** Any current Claude model runs the OS - Opus for judgment-heavy work, Sonnet for everyday speed, Haiku for quick mechanical tasks. It is not pinned to a model, so newer is always fine. To match the model to the task, see [docs/model-routing.md](docs/model-routing.md).
 
@@ -148,8 +152,8 @@ Founder OS is built for Claude Code: the setup wizard, the slash commands, and t
 
 You need three things:
 
-- **Claude Code** - free. Download at [claude.ai/code](https://claude.ai/code). Desktop app for Mac and Windows.
-- **A paid Claude plan** - Claude Pro or Claude Max. Free tiers lack sufficient context.
+- **Claude Code** - included with a paid Claude plan, not free. The no-terminal way is the Claude desktop app from [claude.com/download](https://claude.com/download): open its **Code** tab, choose **Local**, and click **Select folder**. That route follows Anthropic's docs, and we have not yet watched a fresh install run it. Prefer a terminal? Install the command-line tool from [Anthropic's quickstart](https://code.claude.com/docs/en/quickstart).
+- **A paid Claude plan** - Pro, Max, Team or Enterprise. Claude Code does not run on the free plan.
 - **Python 3.11+** - for the runtime scripts. Check with `python --version`, then `python3 --version`, then `py -3 --version` - the first one that answers is the one your machine uses. (Bare `python3` is unreliable on Windows.)
 
 That is it. No git. No database. No server. No Notion account required.
@@ -186,15 +190,13 @@ A fuller list, generated from the skills actually installed on your machine, is 
 
 Five install paths. The one that needs no Git and no terminal comes first. Full step-by-step for each in [docs/install.md](docs/install.md).
 
-**Not comfortable in a terminal?** Start with the ZIP download below - three steps, nothing typed - or the plugin install after it. Neither needs a terminal.
+**Not comfortable in a terminal?** Start with the ZIP download below - three steps and one sentence typed - or the plugin install after it. Neither needs a terminal.
 
 ### Download ZIP (no Git or terminal, own it in 10 minutes)
 
-1. **[Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.0/FounderOS-1.55.0.zip)**
+1. **[Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.1/FounderOS-1.55.1.zip)**
 2. Right-click, **Extract All** (Windows) or double-click it (Mac). Inside is a folder called **Founder OS**. Put it wherever you keep your work.
-3. Double-click **Start Founder OS** in the folder (Windows: the `.bat` file; Mac: the `.command` file). It opens Claude Code right there and starts the setup wizard talking. If Claude Code is not installed yet, it says so plainly and opens the download page instead of failing. First run only: Windows may show a note about a downloaded script - let it run (the file is plain text, right-click and Edit to read it); on a Mac, right-click the file and choose Open once.
-
-Prefer not to run a script? The spoken way works the same: open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
+3. Open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`). In the Claude desktop app: **Code** tab, **Local**, **Select folder**, pick the folder, with no terminal (per Anthropic's docs, not yet tested by us). If you have the Claude Code terminal tool, double-click **Start Founder OS** in the folder instead (the `.bat` file on Windows, the `.command` file on a Mac), and it opens Claude Code right there with the wizard talking. The desktop app does not add that terminal tool, so with the app alone the start file explains the desktop route and opens the download page rather than failing. First run only: Windows may show a note about a downloaded script - let it run (the file is plain text, right-click and Edit to read it). On a Mac, right-click the file and choose Open once.
 
 That is the whole install. No git, no curl, no terminal command, no account beyond the Claude plan you already have. Updates work the same way: say "update Founder OS" and the OS re-downloads the ZIP itself, refreshes its own engine files, and never touches your data.
 
@@ -213,7 +215,7 @@ That is the whole install. No git, no curl, no terminal command, no account beyo
 
 Then say "set up Founder OS" (or run `/founder-os:setup`). If setup is not recognised, run `/reload-plugins` first.
 
-**When to choose:** You want the gentlest path. Two commands typed inside Claude Code, no terminal install step, and auto-updates via `/plugin update`. Needs Claude Code with a paid Claude plan. The plugin is the engine and stays out of your way under `~/.claude/plugins/`; setup builds your OS in a folder you own (default `~/founder-os/`). Engine and data are separate - your files are yours even if you remove the plugin.
+**When to choose:** You want the gentlest path. Two commands typed inside Claude Code, no terminal install step. Updates are manual by default, because Claude Code leaves auto-update off for third-party marketplaces like this one: update from `/plugin` (Installed tab, Update now), or turn auto-update on once (`/plugin`, Marketplaces tab, Enable auto-update). Needs Claude Code with a paid Claude plan. The plugin is the engine and stays out of your way under `~/.claude/plugins/`; setup builds your OS in a folder you own (default `~/founder-os/`). Engine and data are separate - your files are yours even if you remove the plugin.
 
 ### One-line curl (fastest if you live in a terminal)
 
@@ -235,9 +237,9 @@ Open Claude Code in the cloned folder, then say "set up Founder OS" (or run `/se
 
 **When to choose:** The plugin install fails, or you want full control of the local copy. Updates work the same as every path ("update Founder OS"); `git pull` also works if you prefer raw git.
 
-### Claude Cowork (partial - natural-language only)
+### Claude Cowork (partial)
 
-Open the FounderOS folder in Cowork and attach `CLAUDE.md` as folder instructions. Hooks and slash commands do not fire in Cowork. Use it for drafting and timed runs; return to Claude Code for hooks, cadence refresh, and saves.
+Cowork is merging into the main Claude app (Pro and Max first), and from 6 October 2026 new Cowork tasks on Pro and Max plans run in Anthropic's cloud. A cloud task reaches a folder on your computer only while the Claude desktop app is open. Anthropic's help pages disagree on scheduled tasks: one says they cannot be tied to a folder on your computer, another says a task that uses local files needs the desktop app open. So use Cowork for drafting against your OS folder with the desktop app open, and come back to Claude Code for the session brief, saves, cadence refresh, and anything on a timer. Founder OS hooks and commands are not yet tested in Cowork, so say what you want in words there.
 
 **When to choose:** You use Cowork for day-to-day drafting and want the OS context available there alongside your Claude Code install.
 
@@ -367,11 +369,11 @@ Full convention spec in `rules/entry-conventions.md` (generated by setup).
 
 ---
 
-## Cloud Claude (web, desktop, mobile)
+## Claude in chat, Cowork and on the web
 
 The Notion Starter Kit was scoped but is not yet shipped; community forks welcome. The system prompt at [`notion-package/system-prompts/founder-os-project-prompt.md`](notion-package/system-prompts/founder-os-project-prompt.md) is available for preview and testing only. Use the Claude Code path for the full setup experience.
 
-Slash commands and hooks are Claude Code only. Local file writes run on any surface attached to the folder with write access - Claude Code, or a desktop folder-attached surface like Cowork or Antigravity. Web-only Cloud Claude reads this repo's files as context but cannot write locally or run `/founder-os:setup` from a checkout. Full surface-by-surface matrix in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+Founder OS hooks run in Claude Code opened in your OS folder. That is tested in the terminal tool. Anthropic's docs say the IDE extensions and the desktop app's Code tab read the same settings, which we have not yet tested. Claude Code on the web (claude.ai/code) runs in Anthropic's cloud on a GitHub copy of a repo, never on a folder that lives only on your computer. claude.ai chat loads a plugin's skills but never runs hooks. Cowork reaches a folder on your computer only while the Claude desktop app is open. Full surface-by-surface matrix in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 Safe fallback prompt for Cloud Claude:
 
@@ -394,7 +396,7 @@ Have an idea but no business yet? That counts. Say **"I have an idea"** and desc
 
 ## Status
 
-Version 1.55.0. Public release. 97 skills, 47 commands, 1057 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.55.1. Public release. 97 skills, 47 commands, 1063 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
 **The dependency floor, as of this release.** One Claude plan, no API key, nothing to pip install - with two named exceptions, both optional and both failing closed with the exact command when their package is absent: `scripts/scrape.py` (the fetch helper behind web research) asks for `httpx selectolax tenacity` and falls back to the built-in fetcher, and `scripts/pitch_deck.py` asks for `python-pptx` to render a deck to `.pptx`, where the markdown spec it renders from is the deliverable either way. The optional local voice tier asks for `faster-whisper` and Piper, and is off until you turn it on. Every other shipped script is standard library only. Paragraphs below this line are release history: each states what was true at that version, not what is true now.
 

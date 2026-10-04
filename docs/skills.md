@@ -151,7 +151,7 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 - **Writes.** Read-only.
 - **Voice rules.** No.
 - **Prereqs.** Founder OS setup complete.
-- **When to run.** At the start of a work session, especially in Cowork mode where slash commands do not fire.
+- **When to run.** At the start of a work session, especially on a surface where the `/today` command may not fire, such as claude.ai chat or Cowork.
 - **Follow-up.** Work the named anchor or ask "what should I focus on next?" Slash command: `/today`.
 
 ---

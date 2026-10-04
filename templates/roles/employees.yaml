@@ -39,8 +39,10 @@
 # places by construction: this row, and the `allowed-tools` list in the seat
 # skill's own SKILL.md - the skill's declared runtime list. Claude Code today
 # reads that list as pre-approval (listed commands run without a prompt), not
-# as a wall that blocks the rest; anything outside it still hits your normal
-# permission prompts. The boundary is therefore a written contract plus a
+# as a wall that blocks the rest. Outside it, your permission mode decides:
+# Manual mode asks you, while auto mode (the terminal's default) lets a
+# reviewer model decide and can run an action without a prompt. The
+# boundary is therefore a written contract plus a
 # tripwire: the two lists are kept identical, and the charter audit
 # (`python scripts/employee_verdict.py charters`) names drift between them in
 # either direction. A row with no `tools` does not run at all. Never hand a

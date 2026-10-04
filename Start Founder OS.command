@@ -24,14 +24,24 @@ done
 export PATH
 
 if ! command -v claude >/dev/null 2>&1; then
+  # The desktop-app route below follows Anthropic's docs: the app includes
+  # Claude Code but does not add the claude command to PATH, so this file
+  # cannot open it. Not yet watched on a fresh install.
   echo ""
-  echo "Claude Code is not installed yet - the free app Founder OS runs inside."
+  echo "The Claude Code terminal tool was not found on this Mac."
+  echo "Founder OS runs inside Claude Code, which needs a paid Claude plan"
+  echo "(Pro, Max, Team or Enterprise). It is not free."
   echo ""
-  echo "  1. Download it at https://claude.ai/code  (opening that page now)"
-  echo "  2. Install it and sign in with your Claude account (Pro or Max plan)"
-  echo "  3. Double-click this file again"
+  echo "No terminal needed - use the Claude desktop app (opening the download page now):"
+  echo "  1. Install it and sign in with your Claude account"
+  echo "  2. Open the Code tab, choose Local, click Select folder, pick this folder"
+  echo "  3. Type: set up Founder OS"
   echo ""
-  open "https://claude.ai/code" 2>/dev/null || true
+  echo "Prefer the terminal? Install Claude Code from"
+  echo "  https://code.claude.com/docs/en/quickstart"
+  echo "then double-click this file again."
+  echo ""
+  open "https://claude.com/download" 2>/dev/null || true
   read -r -p "Press Enter to close this window..."
   exit 1
 fi

@@ -53,7 +53,7 @@ Four different things get called "scheduling". They are not the same:
 
 - **Native `CronCreate`** - in-session only. Fires while the Claude Code REPL is idle, and a recurring job auto-expires after 7 days. Good for a short in-session cadence, not a reliable weekly or monthly cron.
 - **`RemoteTrigger` (claude.ai routines)** - runs on claude.ai infrastructure. It cannot read your laptop, so it only helps once your OS is synced to a remote it can reach. This is the unattended upgrade.
-- **Cowork `/schedule`** - Anthropic's desktop surface can run timed jobs, but hooks and the `/founder-os:*` namespace do not fire there. Use it for drafting and timed runs, keep Claude Code as the OS layer.
+- **Cowork scheduled tasks** - from 6 October 2026 new Cowork tasks on Pro and Max plans run in Anthropic's cloud. Anthropic's help pages disagree on whether a scheduled task can use local files: one says it cannot be tied to a folder on your computer, another says it can while the desktop app is open. Treat a Cowork schedule as unreliable for your OS folder. Use it for jobs that need your connectors alone (an inbox summary, say), and keep Claude Code as the OS layer.
 - The old external task-runner MCP is no longer a dependency. Founder OS uses the native on-open / on-demand floor and the optional remote upgrade instead, so there is nothing extra to install.
 
 ## Runtime honesty

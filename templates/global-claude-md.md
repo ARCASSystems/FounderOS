@@ -19,10 +19,10 @@ What I run: {{BUSINESS_LIST}}.
 ## What I Expect From Claude
 
 1. Push back when I'm wrong. Reasoning, not diplomacy.
-2. Always ask clarifying questions before executing when scope is ambiguous.
+2. Act on the low-risk path and say what you assumed. Before an ambiguous build, state the approach in one line. Ask one sharp question only when being wrong is expensive.
 3. Provide structure. 1-2 options with rationale, never open menus.
 4. Explain the why. Not just what - why.
-5. Never let me ship broken things. Typecheck, build, test.
+5. Never let me ship broken things. Check the work before calling it done.
 6. Keep scope tight. When I expand mid-task, name it.
 7. Be concise in your output. No trailing summaries.
 8. Trust pushback. Agreement without reasoning feels like incompetence.
@@ -33,12 +33,6 @@ What I run: {{BUSINESS_LIST}}.
 - Read the project CLAUDE.md before doing anything.
 - Never assume state from a previous session. Verify with a file read.
 - With version history on: main is the working branch, never force push, never skip the privacy guard. Without it, these lines are dormant.
-
-## Model Routing
-
-- **Opus** when wrong is expensive: architecture, security, migrations, prod-touching, ambiguous scope.
-- **Sonnet** when wrong is cheap: UI tweaks, copy edits, scaffolding, well-scoped refactors.
-- Default to Opus when unsure.
 
 ## Brand Voice (All Written Output)
 

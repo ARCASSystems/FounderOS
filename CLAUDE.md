@@ -116,7 +116,7 @@ The class is the highest capability the skill's happy path needs (exec over writ
 
 ### Invocation
 
-Natural language is the universal surface: say what you want and the matching skill runs on any surface that can read the files. Slash commands are an optional shortcut and are Claude-Code-only (the plugin runtime). On Cowork, Antigravity, or Cloud Claude a slash command does not fire - say what you want in words and the same skill runs, or for a `local-exec` skill the agent reads the produced results and helps you act.
+Natural language is the universal surface: say what you want and the matching skill runs on any surface that can read the files. Slash commands are an optional shortcut, built and tested for Claude Code. On Cowork, Antigravity, claude.ai chat, or Claude Code on the web, do not count on a Founder OS slash command firing - say what you want in words and the same skill runs, or for a `local-exec` skill the agent reads the produced results and helps you act.
 
 ### The honest-degradation rule
 
@@ -128,9 +128,9 @@ This is the single source for runtime honesty across the OS. `AGENTS.md` and `GE
 
 Founder OS runs on any capable agent that can read the files. What changes by surface is capability, not whether the OS works. Three buckets (full matrix in `docs/tools-and-mcps.md`):
 
-- **Local-CLI (Claude Code is the reference):** runs `reasoning`, `local-writes`, and `local-exec` skills, plus slash commands and hooks. Codex and other local CLIs are covered by the bridge-file redirect (`AGENTS.md`, `GEMINI.md`).
-- **Desktop folder-attached (Cowork, Antigravity):** reads and writes the files when opened in the folder, so it runs `reasoning` and `local-writes` skills. Slash commands and hooks do not fire; `local-exec` depends on whether the surface can run a script.
-- **Web-only (Cloud Claude, a browser LLM):** reads and reasons, runs `reasoning` skills. It cannot write locally or run scripts, so for `local-writes` it drafts the change for you to apply and for `local-exec` it reads the produced artifacts and helps you act.
+- **Local Claude Code (the reference):** validated in the terminal tool. Per Anthropic's docs the IDE extensions and the Claude desktop app's Code tab, with a local folder selected, read the same settings, which is not yet tested. Runs `reasoning`, `local-writes`, and `local-exec` skills, plus slash commands and hooks. Codex and other local CLIs are covered by the bridge-file redirect (`AGENTS.md`, `GEMINI.md`).
+- **Desktop folder-attached (Cowork, Antigravity):** reads and writes the files through a connected folder, so it runs `reasoning` and `local-writes` skills. Cowork reaches a local folder only while the Claude desktop app is open, and from 6 October 2026 new Cowork tasks on Pro and Max plans run in the cloud. Founder OS hooks and folder commands are not tested there, so do not count on them. Whether `local-exec` works depends on whether the surface can run a script.
+- **Cloud and web (claude.ai chat, Claude Code on the web, a browser LLM):** none of them works on a folder that lives only on your computer. claude.ai chat loads a plugin's skills but never runs hooks. Claude Code on the web runs on a GitHub copy in Anthropic's cloud. For `local-writes` they draft the change for you to apply, and for `local-exec` they read the produced artifacts and help you act.
 
 Apply the honest-degradation rule above: never claim a slash command, a script run, a hook, or a local write happened on a surface that cannot do it. The per-skill `Runs on:` line says what each skill needs.
 
