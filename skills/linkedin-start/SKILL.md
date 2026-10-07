@@ -122,7 +122,7 @@ If - and only if - the user accepts full setup, write the single fact learned (t
 
 ## Honest positioning (say this, do not oversell)
 
-Lead with the defensible truth: free, local, and within LinkedIn's terms (no scraper, no auto-actions, no account-ban risk), private (the data never leaves the machine, message content is never read), and goal-conditioned (it aims at clients, a job, or a brand, which off-the-shelf tools do not).
+Lead with the defensible truth: free, local, and within LinkedIn's terms (no scraper, no auto-actions, no account-ban risk), private (the raw export stays on the machine, only a compact digest reaches the Claude session, and message content is never read), and goal-conditioned (it aims at clients, a job, or a brand, which off-the-shelf tools do not).
 
 Be honest where paid tools genuinely win: enriching stale title-only data, finding net-new strangers (Sales Navigator), sending at scale, and live job-change or intent signals. The export is a strong read of the network you already have, not a prospecting database of people you do not.
 

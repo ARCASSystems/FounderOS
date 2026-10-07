@@ -110,17 +110,17 @@ Every skill declares one runtime class on a `Runs on:` line near the top of its 
 
 - `reasoning` - reads your files and reasons, then writes a reply. Every capable agent can run it.
 - `local-writes` - creates or edits files in your OS folder. Any agent pointed at the folder with write access can run it: Claude Code, or a folder-attached desktop surface like Cowork or Antigravity. A read-only surface drafts the change for you to apply.
-- `local-exec` - runs a local script against your files. A local-runtime agent runs it (Claude Code is the reference). A cloud surface reads the produced artifacts instead and says so.
+- `local-exec` - runs a local script against your files. A local-runtime agent runs it (Claude Code is the reference). claude.ai chat or a browser LLM reads the produced artifacts instead and says so.
 
 The class is the highest capability the skill's happy path needs (exec over writes over reasoning). A skill that reads a cache and may rewrite it is `local-writes` even though it often only reads.
 
 ### Invocation
 
-Natural language is the universal surface: say what you want and the matching skill runs on any surface that can read the files. Slash commands are an optional shortcut, built and tested for Claude Code. On Cowork, Antigravity, claude.ai chat, or Claude Code on the web, do not count on a Founder OS slash command firing - say what you want in words and the same skill runs, or for a `local-exec` skill the agent reads the produced results and helps you act.
+Natural language is the universal surface: say what you want and the matching skill runs on any surface that can read the files. Slash commands are an optional shortcut, built and tested for Claude Code. On Cowork, Antigravity or claude.ai chat, do not count on a Founder OS slash command firing - say what you want in words and the same skill runs, or for a `local-exec` skill the agent reads the produced results and helps you act.
 
 ### The honest-degradation rule
 
-Before you claim a result, check whether your surface can do what the skill needs. If it cannot (a slash command on a non-Claude-Code surface, a script run on a cloud surface, a file write where you have no write access), say so in one sentence and offer the path you CAN do: read the produced artifacts and help act, or replicate the lighter work from templates. Never claim a local write or a script run happened when it did not.
+Before you claim a result, check whether your surface can do what the skill needs. If it cannot (a slash command on a non-Claude-Code surface, a script run in claude.ai chat or a browser LLM, a file write where you have no write access), say so in one sentence and offer the path you CAN do: read the produced artifacts and help act, or replicate the lighter work from templates. Never claim a local write or a script run happened when it did not.
 
 This is the single source for runtime honesty across the OS. `AGENTS.md` and `GEMINI.md` point here rather than restating it.
 
@@ -130,7 +130,7 @@ Founder OS runs on any capable agent that can read the files. What changes by su
 
 - **Local Claude Code (the reference):** validated in the terminal tool. Per Anthropic's docs the IDE extensions and the Claude desktop app's Code tab, with a local folder selected, read the same settings, which is not yet tested. Runs `reasoning`, `local-writes`, and `local-exec` skills, plus slash commands and hooks. Codex and other local CLIs are covered by the bridge-file redirect (`AGENTS.md`, `GEMINI.md`).
 - **Desktop folder-attached (Cowork, Antigravity):** reads and writes the files through a connected folder, so it runs `reasoning` and `local-writes` skills. Cowork reaches a local folder only while the Claude desktop app is open, and from 6 October 2026 new Cowork tasks on Pro and Max plans run in the cloud. Founder OS hooks and folder commands are not tested there, so do not count on them. Whether `local-exec` works depends on whether the surface can run a script.
-- **Cloud and web (claude.ai chat, Claude Code on the web, a browser LLM):** none of them works on a folder that lives only on your computer. claude.ai chat loads a plugin's skills but never runs hooks. Claude Code on the web runs on a GitHub copy in Anthropic's cloud. For `local-writes` they draft the change for you to apply, and for `local-exec` they read the produced artifacts and help you act.
+- **Cloud and web (claude.ai chat, Claude Code on the web, a browser LLM):** none of them works on a folder that lives only on your computer. claude.ai chat loads a plugin's skills but never runs hooks, so for `local-writes` it drafts the change for you to apply and for `local-exec` it reads the produced artifacts and helps you act. Claude Code on the web runs scripts and, in a single-repo session, a repo's own hooks, but on a GitHub copy in Anthropic's cloud, so its writes land on a branch there, not in your folder.
 
 Apply the honest-degradation rule above: never claim a slash command, a script run, a hook, or a local write happened on a surface that cannot do it. The per-skill `Runs on:` line says what each skill needs.
 
@@ -228,27 +228,25 @@ The companion `brain-pass` skill (`/founder-os:brain-pass "<question>"`) synthes
 
 `scripts/memory-diff.py` (added v1.12) is read by the SessionStart brief on every session open. It walks `clients/<slug>/` and flags any folder that has no matching entry in your auto-memory (`MEMORY.md` or `project_<slug>.md`). Closes the gap where a cloud or parallel local Claude session creates a client folder that the next local session boots blind to. Hook-only feature. No new skill, no new command.
 
-## Agent Teams (recommended)
+## Agent Teams (optional, experimental)
 
-Claude Code has an experimental Agent Teams feature that turns sequential workflows into parallel specialist teams. For a solo founder running Founder OS, this is the difference between a meeting flow that runs prep, capture, log, and client-update one after another, and the same flow running as parallel specialists that finish in a fraction of the time.
+Claude Code has an experimental Agent Teams feature: several Claude Code sessions that work in parallel, message each other and share a task list. Anthropic says it uses significantly more tokens than a single session and suits work whose pieces can run on their own, such as research or review. For a sequential flow, like a meeting's prep, capture, log and client update, a single session or subagents are the better fit.
 
 You do not need Agent Teams to run Founder OS. Subagents are the stable default and cover most real work. Agent Teams is an opt-in upgrade once you are comfortable with the system.
 
 **What it adds:**
 
-- Parallel execution for the weekly insights brief (state files read in parallel, not sequence)
-- Multi-step proposal flow (scope, terms, voice pass, deliverable format) run as specialist agents
+- A review or research pass where each teammate takes one angle, then they compare findings
 - Any chained skill invocation where the steps do not depend on each other
 
 **How to enable:**
 
 1. Set the environment variable: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
-2. Use Opus 4.8 as your model
-3. Restart Claude Code
+2. Restart Claude Code
 
-No other config needed. Founder OS skills and commands work the same way. The flag only changes how multi-agent workflows execute under the hood.
+Know before you turn it on: Anthropic says that with the flag set, a subagent Claude names can launch as a teammate without asking, so teams can form when you did not ask for one, and each teammate adds token use. To go back, set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=0`.
 
-**Source:** https://github.com/victordelrosal/agent-teams-claude-code is the field manual for this feature. Read it before you flip the flag on a real deliverable.
+**Source:** Anthropic's guide at https://code.claude.com/docs/en/agent-teams. Read it before you flip the flag on a real deliverable.
 
 ## Fabric (hooks, commands, routines)
 
@@ -286,7 +284,7 @@ Founder OS ships with a thin fabric layer that makes the files behave like an op
 - `/today` - 20-line one-screen view of today.
 - `/next` - one recommended next action across priorities, deals, and cadence.
 - `/founder-os:queue` - manage the execution queue (read, add, start, done, park). Say "what's on my plate" or "add to queue: <thing>".
-- `/founder-os:verify` - read-only substrate health check across 8 checks. Say "verify the OS".
+- `/founder-os:verify` - read-only substrate health check across 9 checks. Say "verify the OS".
 - `/founder-os:strategic-read` - 5-section state-of-the-OS read across identity, commitments, decisions, flags, and recommended moves. Pass an optional section key (`identity`, `commitments`, `decisions`, `flags`, `next-moves`) to scope to one section. Say "read across the OS" or "what does the system look like right now".
 - `/founder-os:log-reply` - ingest a pasted conversational thread (WhatsApp export, email body, voice memo transcript) into `brain/log.md` in one pass, with proposed updates to `context/clients.md` and `context/leads.md` you confirm before any write lands. Say "log this reply".
 - `/founder-os:since-last-session` - report what shifted since the last run. Reads `brain/.last-session`, computes elapsed time, surfaces new log entries, decayed flags, overdue commitments, and modified `context/` files. Say "what changed since last session" or "catch me up since I was last here".
@@ -316,7 +314,7 @@ The full skill registry lives in one place: [`skills/index.md`](skills/index.md)
 
 ## Philosophy
 
-- **Local-first.** Your data stays on your machine. Nothing is sent to a company server without your explicit consent.
+- **Local-first.** Your files stay on your machine. What a session reads goes to Anthropic under your Claude plan, the way any Claude conversation does. Anything else that leaves is a surface you turned on, listed in `rules/security-baseline.md`, and ARCAS receives nothing.
 - **No lock-in.** All files are plain markdown. Obsidian can read them. So can any other markdown editor. The system does not depend on a proprietary platform.
 - **Boundary protection is a feature.** Saying no, parking scope, pushing back on unreasonable requests are designed in, not edge cases.
 - **People first. Systems second. AI where it earns the right.**

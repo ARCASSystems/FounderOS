@@ -5,8 +5,9 @@
 # starts the setup wizard for you; after that it just opens your OS.
 # It installs nothing and sends nothing anywhere.
 #
-# First run on a Mac: if macOS says it "cannot be opened because it is from
-# an unidentified developer", right-click the file and choose Open once.
+# First run on a Mac: if macOS blocks this file because it cannot verify the
+# developer, open System Settings > Privacy & Security, click Open Anyway, and
+# confirm with Open (Apple's current steps, not yet run by us on a real Mac).
 # That is macOS being careful with downloaded scripts, not an error here.
 # This file is plain text - open it in any editor to read everything it does.
 

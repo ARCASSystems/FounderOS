@@ -24,7 +24,7 @@ Every new entry gets a stable ID per `rules/entry-conventions.md` (channel: `nee
 id: need-YYYY-MM-DD-NNN
 Status: OPEN
 
-**Specific:** Exactly what is needed. Be precise. "Pricing range for the diagnostic tier in AED" beats "pricing info."
+**Specific:** Exactly what is needed. Be precise. "Pricing range for the starter offer, in your currency" beats "pricing info."
 
 **Impact:** What is blocked until you provide this. Name the priority, deal, or workflow.
 

@@ -24,7 +24,7 @@ Anthropic's guide to both: [Connect Claude Code to tools via MCP](https://code.c
 | Calendar | Google Calendar MCP | Outlook MCP, manual paste | meeting-prep, /today | No - degrades to "no calendar event" line |
 | Knowledge base | Notion MCP | Local markdown, Obsidian | knowledge-capture, session-handoff | No - skills work locally without it |
 | Sales / CRM | Apollo MCP | HubSpot MCP, manual entry | proposal-writer (pricing context only) | No |
-| Design and decks | Canva MCP, Gamma MCP | None - skill produces text spec | (no deck skills shipped yet) | No |
+| Design and decks | Canva MCP, Gamma MCP | None - skill produces text spec | pitch-deck (uses no MCP. Its markdown spec pastes into Canva or Gamma, or renders to `.pptx` with `python-pptx`) | No |
 | Code repos | GitHub MCP | None - if no GitHub, skip | (future build-related skills) | No |
 | Database | Supabase MCP | None | (advanced users only) | No |
 | Web research | Web search (built-in) | None | strategic-analysis, knowledge-capture | No - usually built into Claude Code |
@@ -71,7 +71,7 @@ If you install Founder OS and add no MCPs, all of these skills work end-to-end o
 - wiki-build
 - query
 
-The four remaining skills (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce noticeably better output with the relevant integration connected.
+Four skills in particular (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce noticeably better output with the relevant integration connected.
 
 ---
 
@@ -104,7 +104,7 @@ The four remaining skills (`email-drafter`, `meeting-prep`, `knowledge-capture`,
 
 ## Declaring MCP requirements per skill
 
-Every skill in `skills/` includes a `mcp_requirements:` field in its frontmatter:
+Most skills in `skills/` carry a `mcp_requirements:` field in their frontmatter:
 
 - `mcp_requirements: []` - works with no MCPs.
 - `mcp_requirements: [optional: gmail, optional: gcal]` - degrades gracefully if the MCP is missing.
@@ -151,7 +151,7 @@ Going the other direction - installing FounderOS into a vault you already have -
 
 If the same bare slug matches multiple files (e.g. `[[index]]` matching `brain/index.md`, `network/index.md`, and `roles/index.md`), Obsidian prompts you to pick at link-creation time. The lint skill (`/founder-os:lint`) flags ambiguous slugs, names every candidate, and names the deterministic pick.
 
-The pick rule: scan directories in the order declared in `scripts/wiki-build.py:INCLUDE_PREFIXES` (`core/`, `context/`, `cadence/`, `brain/`, `network/`, `companies/`, `roles/`, `rules/`), then alphabetical within the first matching directory. First match wins. So `[[index]]` resolves to `brain/index.md` because `brain/` comes before `network/` and `roles/` in `INCLUDE_PREFIXES`. Disambiguate explicitly by writing the path form: `[[brain/index.md]]`.
+The pick rule: scan directories in the order declared in `scripts/_common.py:WIKI_LAYER_PREFIXES` (`core/`, `context/`, `cadence/`, `brain/`, `network/`, `companies/`, `roles/`, `rules/`), then alphabetical within the first matching directory. First match wins. So `[[index]]` resolves to `brain/index.md` because `brain/` comes before `network/` and `roles/` in `WIKI_LAYER_PREFIXES`. Disambiguate explicitly by writing the path form: `[[brain/index.md]]`.
 
 #### Day-0 expectations
 
@@ -176,9 +176,9 @@ Recommended pattern: use Cowork for drafting against the FounderOS folder while 
 - claude-mem captures *tool-call telemetry* (what files did I touch, what commands ran).
 - FounderOS curates *founder thinking* (decisions, clients, voice rants, behavioural guards).
 
-You can install both on the same machine without conflict. claude-mem runs a Bun-managed worker on port 37777. FounderOS is plain markdown with no daemon. Audit claude-mem's `<private>` tag usage before installing in client repos - it ships private tool-call telemetry to its worker by default.
+You can install both on the same machine without conflict. claude-mem runs a Bun-managed local worker, on a port you can configure. FounderOS is plain markdown with no daemon. Audit claude-mem's `<private>` tag usage before installing in client repos - it ships private tool-call telemetry to its worker by default.
 
-Note: claude-mem is AGPL-3.0. We cannot vendor any of its code into FounderOS without licensing the public repo AGPL.
+Note: claude-mem is Apache-2.0 (its GitHub page, checked 6 Oct 2026). FounderOS does not vendor it. The two stay separate tools.
 
 ---
 
@@ -188,7 +188,7 @@ What changes by surface is per-skill capability, not whether the OS works. Every
 
 - **Local Claude Code** - runs scripts, writes files, fires slash commands and hooks. That covers the terminal tool, the IDE extensions, and the Claude desktop app's Code tab with a local folder selected, which Anthropic documents as the same engine reading the same settings files. Codex and other local CLIs are covered by the bridge-file redirect (`AGENTS.md`, `GEMINI.md`).
 - **Desktop folder-attached** - reads and writes the files through a connected folder. Cowork does this only while the Claude desktop app is open. Antigravity does it when opened in the folder. Folder hooks and folder commands are not yet tested on either, so do not count on them.
-- **Cloud and web** - Claude Code on the web runs in Anthropic's cloud on a GitHub copy of a repo, never on a folder that lives only on your computer. claude.ai chat loads a plugin's skills (commands arrive as skills) and never runs hooks, and a browser LLM can only read and reason over what you give it.
+- **Cloud and web** - Claude Code on the web runs scripts and a repo's own hooks in Anthropic's cloud, on a GitHub copy of a repo, never on a folder that lives only on your computer. claude.ai chat loads a plugin's skills (commands arrive as skills) and never runs hooks, and a browser LLM can only read and reason over what you give it.
 
 Only the terminal row below is validated by a real run. The other rows describe what each bucket's capability implies through the bridge-file redirect. They are covered by design, not separately tested per agent.
 
@@ -197,7 +197,8 @@ Only the terminal row below is validated by a real run. The other rows describe 
 | Claude Code terminal tool (local) - validated | Yes | Yes | Yes | Yes | Yes |
 | Claude desktop app, Code tab, local folder - per Anthropic's docs, not yet validated by us | Yes | Yes | Yes | Yes | Yes |
 | Cowork, Antigravity (desktop folder-attached) - not separately validated | Yes | Yes, through a connected folder (Cowork: only while the desktop app is open) | Depends on the surface; with no script-exec it reads the produced artifacts | Not tested - say what you want in words | Not tested - do not count on them |
-| claude.ai chat, Claude Code on the web, browser LLM - not separately validated | Yes | No local writes - drafts the change for you to apply | No local scripts - reads the produced artifacts and helps you act | Chat: plugin commands arrive as skills | Chat: never. Web: a repo's hooks run on the cloud copy, not on your disk |
+| Claude Code on the web (claude.ai/code) - not separately validated | Yes | Yes, on a GitHub copy in the cloud, saved to a branch there, never your local folder | Yes, on that cloud copy | A repo's own commands | A repo's own hooks, on the cloud copy |
+| claude.ai chat, browser LLM - not separately validated | Yes | No - drafts the change for you to apply | No - reads the produced artifacts and helps you act | Chat: plugin commands arrive as skills | No |
 
 Apply the honest-degradation rule from `CLAUDE.md`: on a surface that cannot do what a skill's `Runs on:` class needs, say so in one sentence and offer the path you can do. Never claim a slash command, script run, hook, or local write happened where it did not.
 

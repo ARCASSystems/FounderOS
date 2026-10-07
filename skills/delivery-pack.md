@@ -10,7 +10,7 @@ This is the operations function for a founder who is also the delivery team. It 
 
 ## What the pack is
 
-You owe a client a session, an update, a process, a document, or a finished piece. The pack readies each one and, critically, gives a solo founder the second pair of eyes they do not have: a real risk pass and a pre-send check before the work ships. Everything runs locally and free. The OS preps, writes, builds, and checks; it never sends to the client for you.
+You owe a client a session, an update, a process, a document, or a finished piece. The pack readies each one and, critically, gives a solo founder the second pair of eyes they do not have: a real risk pass and a pre-send check before the work ships. It needs no extra service or key. The OS preps, writes, builds, and checks; it never sends to the client for you.
 
 ## The outcomes and the skills behind them
 

@@ -1,8 +1,8 @@
 ---
 name: linkedin-network-scan
 description: >
-  Turn your own LinkedIn export into a ranked, ready-to-work outreach list, for free. Point it at the data-export ZIP LinkedIn gives you; a deterministic local script scores every connection against an ICP you set and writes a short worklist plus an interactive page you can filter. No scraper, no paid tool, no API call, and no automated actions that could get your account restricted. Message content is never read - only who you spoke to, the direction, and when. The assistant reads only the small ranked digest, never the 2,000-row export, and your names and links stay on your machine. Use when someone says "scan my linkedin network", "rank my linkedin connections", "who in my network fits my ICP", "build my outreach list from my connections", or shares a LinkedIn export ZIP.
-why: "A LinkedIn connections export is tens of thousands of tokens; reading it raw wastes context and money. A deterministic script collapses it to a ranked top-N first, so the model only ever sees a small worklist - and real names and URLs never leave the machine."
+  Turn your own LinkedIn export into a ranked, ready-to-work outreach list, for free. Point it at the data-export ZIP LinkedIn gives you; a deterministic local script scores every connection against an ICP you set and writes a short worklist plus an interactive page you can filter. No scraper, no paid tool, no API call, and no automated actions that could get your account restricted. Message content is never read - only who you spoke to, the direction, and when. The assistant reads only the small ranked digest, never the 2,000-row export, and the raw export, emails and profile links stay on your machine. Use when someone says "scan my linkedin network", "rank my linkedin connections", "who in my network fits my ICP", "build my outreach list from my connections", or shares a LinkedIn export ZIP.
+why: "A LinkedIn connections export is tens of thousands of tokens; reading it raw wastes context and money. A deterministic script collapses it to a ranked top-N first, so the model only ever sees a small worklist - and the raw rows, emails and profile URLs stay on the machine."
 enhance: "Write a real ICP file before running (roles, industries, company keywords, min seniority, optional region, optional demote keywords) instead of taking the permissive default - a narrowed ICP turns a long flat list into a short, ranked, actionable worklist."
 summary: "Rank your own LinkedIn network against an ICP you define."
 allowed-tools: ["Bash", "Read"]
@@ -15,7 +15,7 @@ Runs on: local-exec - runs a local script; on a cloud surface I read the results
 
 Turn your own LinkedIn export into a real worklist. You bring the file LinkedIn already lets you download; a local script reads it, scores every connection against the ideal-customer (or ideal-contact) profile you set, and hands back a short ranked list and an interactive page you can filter by fit, region, and warmth.
 
-No scraper. No paid tool. No automated actions that could get your account restricted. The whole thing runs on a free LinkedIn account and Python's standard library, on your own machine. The raw CSVs never enter the conversation - the script collapses them to a compact digest first, so the assistant reads a few hundred lines instead of two thousand rows, and your names and profile links never leave your disk.
+No scraper. No paid tool. No automated actions that could get your account restricted. The whole thing runs on a free LinkedIn account and Python's standard library, on your own machine. The raw CSVs never enter the conversation - the script collapses them to a compact digest first, so the assistant reads a few hundred lines instead of two thousand rows, and the raw export, emails and profile links stay on your disk. The names in the digest reach Anthropic with the rest of the session.
 
 ## When to use
 
@@ -108,12 +108,12 @@ Both HTML views carry a small footer credit and a soft link back to ARCAS System
 
 ## Model
 
-The scoring engine is deterministic and LLM-free - it runs end to end with no paid AI subscription, which is the free-tier floor for this skill. Only the narrative or synthesis afterward (summarising the digest, drafting talking points) uses the session's own Claude. Use the session's latest available Claude for that step; at time of writing the current latest is Opus 4.8 (`claude-opus-4-8`), but the skill is not pinned to any model - newer is fine.
+The scoring engine is deterministic and LLM-free - it runs end to end with no paid AI subscription, which is the free-tier floor for this skill. Only the narrative or synthesis afterward (summarising the digest, drafting talking points) uses the session's own Claude. Use the session's latest available Claude for that step. The skill is not pinned to any model, so newer is fine.
 
 ## Privacy
 
 - Message **content** is never read. The script uses only metadata: who messaged whom, the direction, the count, and the date - enough to tell a real two-way relationship from a one-way cold send.
-- Nothing leaves the machine. No API calls, no scrapers, no third-party services.
+- The script makes no API calls and uses no scrapers or third-party services. The raw export stays on your machine. The compact digest, which holds real names, is what your Claude session reads, so it goes to Anthropic under your plan like anything else the session reads.
 - The output holds real names and URLs. The script writes a "keep this local, do not commit" warning into every file; repeat it to the user. The anonymised `network-scan.html` is the one safe to share - the full file and the CSV are not.
 
 ## Honest limitations (state these, do not hide them)

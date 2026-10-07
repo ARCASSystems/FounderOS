@@ -28,8 +28,8 @@ Same file-based brain the agent frameworks promise. None of the three doors the 
 Local-first is a smaller attack surface, not a force field.
 
 - **Your laptop is the perimeter.** Disk encryption, OS updates, and screen locks matter more than anything in this repo.
-- **MCP connectors are your choice.** Each tool you connect (calendar, email, notes) extends what a session can reach. The OS treats every write path behind a connector as gated - but connect only what you use, and read `rules/approval-gates.md` for what auto-runs versus what always asks.
-- **A cloud session is a different posture.** Claude Code's cloud path runs in a remote sandbox on a branch. Useful when you are away from the machine; it is opt-in per use, and the local path stays the default.
+- **MCP connectors are your choice.** Each tool you connect (calendar, email, notes) extends what a session can reach. The OS's written rules treat every write path behind a connector as gated, but until a hard send gate ships nothing enforces that, so connect only what you use, and read `rules/approval-gates.md` for what the rules let run and what they say to ask about first.
+- **A cloud session is a different posture.** Claude Code on the web runs in a remote sandbox, on a branch of a GitHub copy of your OS, so everything the repo tracks is cloned there. It is opt-in per use, and the local path stays the default. To drive your own computer from your phone instead, Claude Code's Remote Control keeps the session and your files on your machine.
 
 ## For the power user: the repo is the sync contract
 

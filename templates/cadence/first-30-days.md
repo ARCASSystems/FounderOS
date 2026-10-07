@@ -56,8 +56,8 @@ From: {{TODAY_PLUS_21}}
 
 **What the OS does:** acts inside the gates you already have. Approving a queue item is
 the decision, so the work follows without a second confirmation. The gates in
-`rules/approval-gates.md` still hold, and the ones that matter do not move: nothing
-leaves your machine without you, nothing is sent, nothing is published.
+`rules/approval-gates.md` still hold, and the ones that matter do not move: the skills that
+write to people draft and stop, and the few that send act only when you ask.
 
 **What it does not do:** graduate any further on its own. There is no stage 4 that
 arrives by itself. Widening what the OS may do without asking is a decision you make

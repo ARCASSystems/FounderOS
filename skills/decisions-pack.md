@@ -10,7 +10,7 @@ This is the chief-of-staff function for a founder who runs alone. It covers the 
 
 ## What the pack is
 
-You are blocked: on a choice, on a list, on a shiny idea, or on a fog where you have lost the thread. The pack reads your own state and gives you the thinking partner a solo founder does not have. It structures the decision and gives you the counter-case; it never makes the call for you. Everything runs locally and free, as reasoning over files you already hold. Nothing is sent.
+You are blocked: on a choice, on a list, on a shiny idea, or on a fog where you have lost the thread. The pack reads your own state and gives you the thinking partner a solo founder does not have. It structures the decision and gives you the counter-case; it never makes the call for you. It reasons over files you already hold, with no extra service or key. Nothing goes to anyone but the Claude session you are already in.
 
 ## The outcomes and the skills behind them
 

@@ -10,7 +10,7 @@ This is the finance function for a founder who does their own numbers. It covers
 
 ## What the pack is
 
-You bring a pricing question, a deal to test, a hire to weigh, or a finance export to make sense of. The pack gives you the math: CAC, LTV, margins, break-even, pricing models, and an honest read of where you are the bottleneck. Everything runs locally and free, on plain arithmetic the OS shows its working for. No black-box number, no invented benchmark.
+You bring a pricing question, a deal to test, a hire to weigh, or a finance export to make sense of. The pack gives you the math: CAC, LTV, margins, break-even, pricing models, and an honest read of where you are the bottleneck. It needs no extra service or key, and runs on plain arithmetic the OS shows its working for. No black-box number, no invented benchmark.
 
 ## The outcomes and the skills behind them
 

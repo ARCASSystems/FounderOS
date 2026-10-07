@@ -28,7 +28,7 @@ id: log-YYYY-MM-DD-NNN
 
 ### [YYYY-MM-DD] #context Closed week with three meetings booked for next week. (log-YYYY-MM-DD-001)
 
-### [YYYY-MM-DD] #xref:decisions Reviewed pricing options for the diagnostic tier. Routed to context/decisions.md as an open decision pending margin model. (log-YYYY-MM-DD-002)
+### [YYYY-MM-DD] #xref:decisions Reviewed pricing options for the starter offer. Routed to context/decisions.md as an open decision pending margin model. (log-YYYY-MM-DD-002)
 
 ### [YYYY-MM-DD] #acted [S] Sent proposal to <Prospect>. Updated context/clients.md row with status "proposal sent" and follow-up date. (log-YYYY-MM-DD-003)
 

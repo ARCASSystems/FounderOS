@@ -15,7 +15,7 @@
 *.key
 
 # Private-name guard patterns. Your names power the pre-commit guard but never
-# enter history, so they can never leave this machine even if you ever push.
+# enter history, so they never reach a remote even if you ever push.
 scripts/private-name-patterns.txt
 
 # Runtime state. Session snapshots, change logs, update staging and backups.

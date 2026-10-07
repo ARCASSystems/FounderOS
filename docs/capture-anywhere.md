@@ -13,7 +13,7 @@ Pick ONE that fits how your day actually runs. The setup wizard asks; you can ch
 **1. A voice-notes app with an MCP connection (lowest friction once wired).**
 If you use a meeting-notes or voice-memo tool that offers an MCP server, bind it as `meeting_notes` in `stack.json` (say "connect my notes tool"). After a one-time sign-in, "catch up" can pull your transcripts itself - you record on the phone and do nothing else. This is the only channel where the OS fetches; all others are you delivering text.
 
-**2. Synced-folder dictation (low friction, fully local, no new account).**
+**2. Synced-folder dictation (low friction, no new account, your own synced storage).**
 Point a phone automation at your cloud-synced OS folder: an iOS Shortcut or Android automation that takes dictation and writes a text file into `capture/inbox/`. Record, done - the file is waiting at the next session. This is the most private channel: your words touch only your own storage.
 
 **3. Email to self (zero setup, works today).**

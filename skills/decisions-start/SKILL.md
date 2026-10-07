@@ -78,7 +78,7 @@ When the OS leans toward an option, it says so out loud, attaches the counter-ca
 
 ## Honest positioning (say this, do not oversell)
 
-Lead with the defensible truth: the OS reads your own state, structures the decision, and gives you the counter-case, free and local, nothing sent. It is the thinking partner a solo founder does not have, not an oracle.
+Lead with the defensible truth: the OS reads your own state, structures the decision, and gives you the counter-case, with no extra service or key, and nothing goes to anyone but the Claude session you are already in. It is the thinking partner a solo founder does not have, not an oracle.
 
 Be honest about the limits: it does not know your risk appetite or what you can live with, it cannot see what you have not written down, and it will not make an irreversible call for you. It clears the block so you can decide; the decision is yours.
 

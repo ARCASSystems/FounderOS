@@ -18,8 +18,9 @@ It does the three jobs the capability scaffold calls for, tailored to your machi
                  voice/realtime-config.json (model, voice, ports, key names, and the no-key
                  brain command inherited from Tier 0), and check whether a key is present.
 
-Your brain stays local. Only the live conversation streams. Nothing here phones home except
-the model call you opt into with your own key.
+Your files stay on this machine. The live conversation streams, and every sentence the voice
+speaks goes to Google first. Nothing here phones home except the model call you opt into
+with your own key.
 
 Reads:  realtime/ templates next to this file; voice/config.json (Tier-0, for the brain command).
 Writes: <repo-root>/voice/ (live_server.py, live.html, realtime-config.json) - gitignored, yours.
@@ -59,8 +60,8 @@ The model you talk to runs in the cloud. This is the one trade to understand:
            with accents, noise, and jargon, as any speech model does.
 
   PRIVACY  Your audio and the live conversation stream to Google to run the
-           model. Your BRAIN - your markdown files and the answers read from
-           them - stays on this machine. Only the conversation leaves.
+           model. Your files stay on this machine, but every sentence the
+           voice speaks, answers read from your files included, goes to Google first.
 
 If you would rather not stream audio or risk any cost, stop here and stay on
 Tier 0 (no key, no install). Full detail: references/voice-model-disclaimer.md

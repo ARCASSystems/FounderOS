@@ -7,8 +7,8 @@ description: >
   slow each was, and - on the realtime tier - what you tend to ask), and PROPOSES the next
   fast handler to pre-program so a request you make often is answered instantly instead of
   going through the slow reasoning path. It is propose-only: it never edits a handler or
-  changes a config. You decide what to add. Free-tier and fully local - it reads gitignored
-  files on your machine and synthesises in-session, with no external call and no key.
+  changes a config. You decide what to add. Free-tier. It reads gitignored files on your
+  machine and synthesises in-session, with no key and no call beyond your Claude session.
 why: "A voice OS gets faster the more it is shaped to one person's habits. The private design tuned handlers to how the operator actually spoke; this is the public, propose-only port. Reading the telemetry the voice skills already log and surfacing the one handler worth pre-programming next turns a generic voice loop into one fitted to this user, without ever editing behind their back."
 summary: "Reads your voice telemetry and proposes the next fast handler. Propose-only."
 allowed-tools: ["Bash", "Read"]

@@ -2,6 +2,18 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.55.2 - 2026-10-07
+
+The rest of the front-door truth pass, with no new feature. A full read of the shipped 1.55.1 tree found more claims of the same kind. The pack is `updates/1.55.2-the-rest-of-the-front-door.md`.
+
+- **No page promises that nothing leaves without you.** The first-day guide, the day-in-the-OS walkthrough and the first-30-days template now say the skills that write to people draft and stop, and the few that send act only when you ask. That is a written rule until a hard send gate ships. The local-first line now says what a session reads goes to Anthropic under your plan. The skill pages that made the same promise were corrected too.
+- **Template examples changed.** The entry-conventions template now shows a superseded decision about a review day, and the needs-input and log templates use a generic offer name.
+- **The security page names claude.ai connectors and plugins**, which load in Claude Code sessions signed in with that account, and says how to turn them off.
+- **The cloud pages agree.** Claude Code on the web runs scripts and a repo's hooks on a GitHub copy in the cloud, and the phone line names Remote Control, which keeps your files on your computer.
+- **The Mac first run follows Apple's current steps** (Privacy & Security, then Open Anyway), marked as not yet run on a real Mac.
+- **Install-path fixes.** ZIP users are no longer told to type `/founder-os:setup`, and the README no longer promises that re-running the curl installer updates an install.
+- **Smaller corrections.** Agent Teams marked optional and experimental with no model requirement, claude-mem's licence corrected to Apache-2.0, `pitch-deck` named in the tools table, and several counts, labels and references fixed.
+
 ## v1.55.1 - 2026-10-04
 
 A truth patch, with no new feature. An audit of the live product found front-page claims that had stopped being true, and this release corrects each one. The full pack is `updates/1.55.1-the-front-door-tells-the-truth.md`.

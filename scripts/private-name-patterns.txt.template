@@ -5,7 +5,7 @@
 # name, client, email, or phone number from leaking into a public push.
 #
 # This file (scripts/private-name-patterns.txt) is gitignored - your names never
-# leave your machine. Only this .template is tracked in the repo.
+# enter your history or any push. Only this .template is tracked in the repo.
 #
 # IMPORTANT: until you add at least one pattern below, the guard is INACTIVE and
 # every commit prints a one-line warning. Add your names to turn it on.

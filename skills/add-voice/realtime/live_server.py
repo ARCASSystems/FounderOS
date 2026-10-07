@@ -24,8 +24,8 @@ tools run the real OS reads right here):
 
 Accessibility floor: Tier 1 needs ONE free Google AI Studio key. A free key carries a free
 daily quota on Flash models; heavy realtime use can move you onto paid per-token rates. The
-disclaimer (references/voice-model-disclaimer.md) states this before you commit. Your brain
-stays local.
+disclaimer (references/voice-model-disclaimer.md) states this before you commit. Your files
+stay on your disk, but every sentence the voice speaks goes to Google first.
 
 Run:  python voice/live_server.py        then open http://127.0.0.1:8756/live
 Stop: Ctrl+C

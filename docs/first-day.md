@@ -4,7 +4,7 @@ The OS is files. Skills read those files. The more files you fill, the more skil
 
 This page maps the cascade. You don't need to do all of it on day one - but knowing the order means you stop wondering why a writing skill sounds generic.
 
-> **Path B users (manual git clone):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/status`, `/wiki-build`, `/lint`, `/today`. The plugin namespace only activates on Path A install. The commands below show the Path A form; remove the prefix on Path B. See [docs/install.md](install.md) for the exact mapping.
+> **ZIP, git-clone and curl installs (Paths 0, B and E):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/status`, `/wiki-build`, `/lint`, `/today`. The plugin namespace only activates on a plugin install (Path A). The commands below show the plugin form. Remove the prefix on any other path. See [docs/install.md](install.md) for the exact mapping.
 
 ---
 
@@ -246,7 +246,7 @@ Setup also writes `cadence/first-30-days.md` with real dates in it. It decides h
 
 - **Days 1 to 7.** It watches. It files what you tell it and asks one question a day. It proposes nothing, because anything it proposed this week would be built on the handful of answers you gave the wizard.
 - **Days 8 to 21.** It proposes. Queue items, drafts, a named next move. Nothing acts without a yes from you.
-- **Day 22 onward.** It acts inside the gates you already approved. The gate that matters does not move: nothing leaves your machine without you.
+- **Day 22 onward.** It acts inside the gates you already approved. The gate that matters does not move: the skills that write to people draft and stop, and the few that send or publish, like a backup push, act only when you ask. Until a hard send gate ships, that is a written rule that nothing enforces yet, so read a draft before you ask for it to go out.
 
 The morning loop reads that file and holds itself to the stage. Nothing runs on a timer and nothing changes behind your back.
 

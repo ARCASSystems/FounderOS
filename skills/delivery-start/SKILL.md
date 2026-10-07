@@ -80,7 +80,7 @@ After delivering, name the steps they did not pick, in one line each. "You came 
 
 ## Honest positioning (say this, do not oversell)
 
-Lead with the defensible truth: the OS preps from your real client history, writes in your voice, builds in your brand, and runs a real second-pass check before anything ships. It is the reviewer a solo operator does not have. Free and local; nothing reaches the client without you.
+Lead with the defensible truth: the OS preps from your real client history, writes in your voice, builds in your brand, and runs a real second-pass check before anything ships. It is the reviewer a solo operator does not have. It needs no extra service, and nothing reaches the client unless you send it.
 
 Be honest about the limits: the ship gate surfaces risk, it does not certify the work; branded rendering needs a brand profile; and the OS does not send, schedule, or track delivery on the client's side. It readies and checks; you ship.
 

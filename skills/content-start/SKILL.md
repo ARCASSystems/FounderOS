@@ -75,7 +75,7 @@ This is a rule, not a preference: do not ship content in a fabricated voice. If 
 
 ## Honest positioning (say this, do not oversell)
 
-Lead with the defensible truth: the content is drafted in your voice from your own ideas, free and local, and you publish it yourself so nothing goes out that you did not approve. The voice profile is what makes it yours rather than generic.
+Lead with the defensible truth: the content is drafted in your voice from your own ideas, with no extra service or key, and you publish it yourself so nothing goes out that you did not approve. The voice profile is what makes it yours rather than generic.
 
 Be honest about the limits: the OS drafts, it does not schedule or auto-post, it does not run analytics on what performed, and it does not invent engagement numbers. It turns your idea into channel-ready drafts. The publishing, the timing, and the reading of results stay with you.
 

@@ -10,7 +10,7 @@ This is the business-development function for a founder who runs BD alone. It co
 
 ## What the pack is
 
-You bring a name, a company, or a lead. The pack turns it into a deal you can actually work: tracked in a plain file you own, researched from what you already hold, reached with a drafted message, prepped for the call, and scoped with a proposal. Everything runs locally and free. The OS drafts and tracks; it never sends, never auto-enriches from the open web, and never runs outreach at scale. You stay the one who hits send.
+You bring a name, a company, or a lead. The pack turns it into a deal you can actually work: tracked in a plain file you own, researched from what you already hold, reached with a drafted message, prepped for the call, and scoped with a proposal. It needs no extra service or key. The OS drafts and tracks; it never sends, never auto-enriches from the open web, and never runs outreach at scale. You stay the one who hits send.
 
 ## The outcomes and the skills behind them
 

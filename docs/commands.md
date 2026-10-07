@@ -1,6 +1,6 @@
 # Founder OS Commands Reference
 
-The full reference for every slash command. The README's command table tells you the **outcome** in one line and the natural-language phrase that triggers each one. This file tells you everything else: arguments, what runs, what changes on disk, what appears in chat, and what to run next.
+The full reference for every slash command. The registry in `skills/index.md` names each command's **outcome** in one line and the natural-language phrase that triggers each one. This file tells you everything else: arguments, what runs, what changes on disk, what appears in chat, and what to run next.
 
 FounderOS routes on natural language. Each command below leads with the natural-language phrase the founder would actually say in chat. The slash command appears alongside as a power-user shortcut. If you forget what's available, say "show me what you can do" (or run `/founder-os:menu`) and the OS returns 5 to 7 capability suggestions tailored to your current state.
 
@@ -14,7 +14,7 @@ Each command has seven labels.
 - **When to run.** The signal or trigger that makes this the right next move.
 - **Follow-up.** What to run after.
 
-Path B users (manual git clone) drop the `/founder-os:` prefix. So `/founder-os:setup` becomes `/setup`. The plain bare commands (`/today`, `/next`, `/pre-meeting`, `/capture-meeting`) work the same on both paths.
+ZIP, git-clone and curl installs (Paths 0, B and E) drop the `/founder-os:` prefix. So `/founder-os:setup` becomes `/setup`. The plain bare commands (`/today`, `/next`, `/pre-meeting`, `/capture-meeting`) work the same on every path.
 
 If a command is not behaving as documented, say "audit the OS" (or run `/founder-os:audit`) to confirm the OS surface is intact, then [open an issue](https://github.com/ARCASSystems/FounderOS/issues).
 
@@ -541,4 +541,4 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - Commands live in `.claude/commands/<name>.md` with YAML frontmatter (`description`, `argument-hint`, `allowed-tools`).
 - Each command file should run a single SKILL.md end to end. Logic lives in the skill, not the command.
 - The command file's job is argument parsing and routing. The skill file's job is the actual procedure.
-- New commands must be added to this file under the right section, plus the README's slash commands table, plus `skills/index.md`.
+- New commands must be added to this file under the right section, plus `skills/index.md`.

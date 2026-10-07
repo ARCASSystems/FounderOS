@@ -10,7 +10,7 @@ description: >
   free Google AI Studio key) and a premium mouth (ElevenLabs) are opt-in upgrades, never the
   default. Honest disclaimer up front: in Chrome/Edge the browser sends your audio to its
   vendor to transcribe (no key, no cost, not fully local); faster-whisper makes it fully
-  local. Your brain - your files and answers - stays on your machine.
+  local. Your files stay on your disk, and anything the voice reads aloud went through the model first.
 why: "Voice is the most-asked extension and the easiest place to either silently bill the user or mishear them. Shipping it as a tiered skill - default that needs no key, upgrades that are opt-in and disclosed - holds the accessibility floor and keeps the honesty note load-bearing instead of buried."
 enhance: "Use Chrome or Edge for built-in speech input. Want speech that never leaves your machine? Add the faster-whisper upgrade in references/tiers.md. Want sub-second realtime conversation? That is Tier 1 - a free Google AI Studio key, with the cost-and-accuracy trade stated plainly before you commit."
 summary: "Talk to your OS and hear it back - default needs no key."

@@ -47,9 +47,9 @@ If the verify fails because the new install is not on the current session's PATH
 
 ### 3. Record who the history belongs to
 
-Git records a name and email on every version. Both stay on this machine - nothing is published anywhere.
+Git records a name and email on every version. Both are saved in this folder and go wherever you later back up your history.
 
-Use the founder's name from `core/identity.md`. Ask one question for the email: "What email should version history record? It stays local - your real one, or just `you@local` if you prefer." Then set both locally (never globally):
+Use the founder's name from `core/identity.md`. Ask one question for the email: "What email should version history record? It is saved on every version, so it travels with any backup you make later - your real one, or just `you@local` if you prefer." Then set both locally (never globally):
 
 ```
 git config user.name "<name>"       # run inside the OS folder after init

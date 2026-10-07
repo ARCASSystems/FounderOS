@@ -75,7 +75,7 @@ This is the "you sell to ops leaders but only 4% of your network holds an ops ti
 ## Privacy
 
 - Message **content** is never read - only counterparty, direction, count, and date.
-- Nothing leaves the machine. No API calls, no scrapers.
+- The script makes no API calls and uses no scrapers. The raw export stays on your machine. What your Claude session reads from `audit.json`, real names included, goes to Anthropic under your plan like anything else the session reads.
 - `audit.json` holds real names and should stay local - keep the output folder out of any repo.
 
 ## Honest limitations (state these)

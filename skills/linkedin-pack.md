@@ -9,7 +9,7 @@ A logical pack, not a folder. Claude Code discovers skills as top-level director
 
 ## What the pack is
 
-You bring one file - the LinkedIn data export LinkedIn already lets you download - and the pack turns it into whatever outcome you are actually chasing. The data is the same; the outcome is what you choose. Everything runs locally, on a free LinkedIn account and Python's standard library, within LinkedIn's terms. No scraper, no paid tool, no automated actions, no account-ban risk. Message content is never read.
+You bring one file - the LinkedIn data export LinkedIn already lets you download - and the pack turns it into whatever outcome you are actually chasing. The data is the same; the outcome is what you choose. The scripts run locally, on a free LinkedIn account and Python's standard library, within LinkedIn's terms. No scraper, no paid tool, no automated actions, no account-ban risk. Message content is never read.
 
 The local entrypoint is [run.py](linkedin-start/run.py). It accepts the ZIP or folder once,
 unwraps nested exports privately, drafts the targeting lens from available Founder OS

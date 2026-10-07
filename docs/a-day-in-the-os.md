@@ -123,6 +123,6 @@ The answer comes back with the decision he made in April, why he made it, what t
 
 ## The honest boundary
 
-The OS runs when you open a session, when a hook fires, and when you ask. It does not watch your inbox all day, it does not act while you sleep, and it will not send anything without your yes. That is the trade for having no server, no account, and no copy of your business on someone else's machine.
+The OS runs when you open a session, when a hook fires, and when you ask. It does not watch your inbox all day, it does not act while you sleep, and the skills that write to people draft and stop, while the few that send act only when you ask. That is the trade for having no server and no account. What a session reads still goes to Anthropic under your Claude plan, as in any Claude conversation, and ARCAS receives nothing.
 
 And the compounding in scenario 9 is not free: it needs six weeks of scenario 2. If you write nothing down, this is a folder of empty files with good intentions in the front matter.

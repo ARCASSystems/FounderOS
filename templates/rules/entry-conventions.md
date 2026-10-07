@@ -110,19 +110,19 @@ Override defaults by setting `Decay after:` explicitly on the entry. A blocker m
 Old entry (in `context/decisions.md`):
 
 ```
-### Pricing tier - DECIDED 2026-04-24
-- Decision: Three tiers at AED 5K, 15K, 75K.
-- Superseded by: decisions.md#pricing-tier-revised-2026-06-01
+### Weekly review day - DECIDED 2026-04-24
+- Decision: The weekly review runs on Friday afternoon.
+- Superseded by: decisions.md#weekly-review-day-revised-2026-06-01
 - Invalidated on: 2026-06-01
 ```
 
 New entry (in `context/decisions.md`, above the old one):
 
 ```
-### Pricing tier revised - DECIDED 2026-06-01
-- Decision: Two tiers at AED 7K and 25K. 75K removed.
-- Replaces: decisions.md#pricing-tier-decided-2026-04-24
-- Notes: Anchor tier had zero conversions in Q2.
+### Weekly review day revised - DECIDED 2026-06-01
+- Decision: The weekly review moves to Sunday evening.
+- Replaces: decisions.md#weekly-review-day-decided-2026-04-24
+- Notes: Friday reviews were skipped four weeks running.
 ```
 
 ### Decay: a flag with explicit window
@@ -182,7 +182,7 @@ Everything above describes what to write. This section is the exact shape a writ
 ```
 - Decay after: 14d
 - Invalidated on: 2026-06-01
-- Superseded by: decisions.md#pricing-tier-revised-2026-06-01
+- Superseded by: decisions.md#weekly-review-day-revised-2026-06-01
 ```
 
 **The field names, case-sensitive and complete:**

@@ -85,7 +85,7 @@ Every outreach move (a message drafted and sent, a call prepped, a proposal sent
 
 ## Honest positioning (say this, do not oversell)
 
-Lead with the defensible truth: the OS tracks the deal in a plain file you own, drafts every step in your voice, and reads your own context so you are not starting cold. It is free and local; nothing is sent without you.
+Lead with the defensible truth: the OS tracks the deal in a plain file you own, drafts every step in your voice, and reads your own context so you are not starting cold. It needs no extra service, and it drafts every message rather than sending it, so you send each one yourself.
 
 Be honest where a paid tool genuinely wins: enriching a contact from the open web, finding net-new strangers, sending sequences at scale, and live intent signals. The OS works the relationships you already have and the deals you already named, not a database of people you have never met.
 

@@ -12,7 +12,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 **New here? [Read the Founder OS Playbook first](https://arcassystems.com/playbook)** - a visual walkthrough with screenshots: the problem, the three parts, how to start, and what not to do. Opens framed in any browser, about 15 minutes. It lives on the web so it never drifts out of date; there is no copy shipped in this repo.
 
-**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.1/FounderOS-1.55.1.zip)** - unzip it, open the folder in Claude Code, and say "set up Founder OS". With the Claude desktop app that is the Code tab, **Local**, then **Select folder**, with no terminal (per Anthropic's docs, not yet tested by us). With the Claude Code terminal tool installed, double-clicking **Start Founder OS** does it for you. Or install via plugin marketplace, one-line curl, or git clone. See [Install](#install) below.
+**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.2/FounderOS-1.55.2.zip)** - unzip it, open the folder in Claude Code, and say "set up Founder OS". With the Claude desktop app that is the Code tab, **Local**, then **Select folder**, with no terminal (per Anthropic's docs, not yet tested by us). With the Claude Code terminal tool installed, double-clicking **Start Founder OS** does it for you. Or install via plugin marketplace, one-line curl, or git clone. See [Install](#install) below.
 
 ---
 
@@ -99,7 +99,7 @@ Several people inside one live session is not something this does today. The who
 - **Revenue loop enforcement.** Every outreach or content action must log same-session. Catches the gap between "I'll do X" and "I did X."
 - **Role as router.** COO, BD, CMO, Chief of Staff are behavioural modes, not personas. The right mode activates based on what you are actually doing.
 - **Plan A defines Plan B.** This product is a derivative of an actual founder's daily use. Features graduate from personal use into the product only after surviving contact with live P&L.
-- **Talk to it, from anywhere.** Built around dictation. Claude Code's built-in dictation is the primary input, and any voice-to-text tool you already use works just as well. Claude Code runs locally as a CLI and through the cloud app (claude.ai/code), so you can start and drive a full session from your phone too. A cloud session runs in a remote sandbox on a branch rather than on your local disk, so the local-first path stays your machine while the cloud path is there when you are away from it.
+- **Talk to it, from anywhere.** Built around dictation. Claude Code's built-in dictation is the primary input, and any voice-to-text tool you already use works just as well. From your phone, Claude Code's Remote Control drives a session running on your own computer, so your files stay there while it is on. Claude Code on the web (claude.ai/code) is a separate cloud option: it works on a GitHub copy of your OS, never on a folder that lives only on your computer.
 - **Decay-driven keep/kill.** Set `Decay after: 14d` on a flag and the SessionStart brief surfaces it for keep/kill review when it expires. The OS does not auto-kill, you decide.
 - **Invisible version control.** Full history and undo, no git command ever typed. Say "save my work", "what changed", or "undo to before this morning" and the OS wraps git for you. Local by default; nothing pushes anywhere unless you ask. Undo is fail-safe: it saves your current work first and can never lose it. Git itself is optional at install: before you turn it on, session snapshots cover you - every file the OS edits through its editing tools is snapshotted before the write and restorable per file up to 2 MB, a rolling net across the last 12 sessions (`/changes` lists those changes and one command restores any that were snapshotted; files over 2 MB stay listed without a restore, and a file a shell command writes directly is outside the net entirely until version history is on). Full history begins the moment you say yes: the OS installs and wires git itself, your data included, and from that save onward every version is permanent - nothing for you to type.
 
@@ -109,7 +109,7 @@ Several people inside one live session is not something this does today. The who
 
 Four layers, the same four the Founder OS Playbook draws on a napkin. Each does one job. Remove any one and the whole thing breaks.
 
-- **The Brain** - memory and judgment, all plain markdown you own. The six operating files (priorities, clients, decisions, today, the week) hold the state of the business right now. The brain layer (log, flags, patterns, parked decisions, knowledge) holds what happened, what is stuck, and what is worth reusing. A wiki layer adds `[[cross-references]]` between files plus a source archive (`raw/`) for articles and transcripts.
+- **The Brain** - memory and judgment, all plain markdown you own. The six operating files (identity, priorities, clients, decisions, today, the week) hold the state of the business right now. The brain layer (log, flags, patterns, parked decisions, knowledge) holds what happened, what is stuck, and what is worth reusing. A wiki layer adds `[[cross-references]]` between files plus a source archive (`raw/`) for articles and transcripts.
 - **The Skills** - the abilities the brain has: draft a follow-up, prep a meeting, write a proposal, run the weekly retro. They read and write across the Brain, so the output lands like you, not like a chat window.
 - **The Hands** - the tools the skills reach for: calendar, inbox, notes, transcriber, voice capture. Wired through optional MCPs; nothing hard-fails when one is missing.
 - **The Heartbeat** - the rhythm that keeps it current: a daily anchor at the start of the day, a weekly retro at the end of the week, and a SessionStart brief that surfaces stalls and stale cadence.
@@ -118,7 +118,7 @@ Four layers, the same four the Founder OS Playbook draws on a napkin. Each does 
 
 **It runs when you open it, plus hooks.** Some tools in this space monitor your work all day and act on their own. This one does not, and that is a real difference rather than a gap in the copy. It runs when you start a session, when a hook fires (session open, before a write, before compaction, on stop), and when you ask. What you trade for that is a system with no daemon, no server, no account, and nothing running against your files while you are asleep.
 
-A **SessionStart brief** runs on every Claude Code session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up. You do not need to think about it. The brief and the Stop hook run when Claude Code is open in your OS folder. That is tested in the terminal tool, and per Anthropic's docs the IDE extensions and the desktop app's Code tab read the same settings, which we have not yet tested. Do not count on them in Cowork, claude.ai chat, or Claude Code on the web. Details under [Substrate details](#substrate-details) below if curious. Surface-by-surface compatibility table in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+A **SessionStart brief** runs on every Claude Code session open and surfaces stalls, stale cadence, and items past their decay date in one screen. Background plumbing the wizard sets up. You do not need to think about it. The brief and the Stop hook run when Claude Code is open in your OS folder. That is tested in the terminal tool, and per Anthropic's docs the IDE extensions and the desktop app's Code tab read the same settings, which we have not yet tested. Do not count on them in Cowork or claude.ai chat. Claude Code on the web runs a repo's hooks only on its cloud copy of a GitHub repo, never in your folder. Details under [Substrate details](#substrate-details) below if curious. Surface-by-surface compatibility table in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 **The legal layer (as-needed, not daily).** A safety layer for hires, fires, NDAs, VAT, license renewals, and walking into a lawyer's office prepared. UAE founders get a full reference set out of the box. Founders elsewhere scaffold their jurisdiction and load their own sources. The skill never invents law and surfaces overdue compliance deadlines from `context/compliance.md` on every session. Details under [Legal layer](#legal-layer) below.
 
@@ -140,7 +140,7 @@ One Claude subscription. Everything else is free.
 
 - **Founder OS** (this repo) - free, MIT licence
 - **Claude Code** (the interface) - comes with a paid Claude plan, in the Claude desktop app or as a terminal tool, and does not run on the free plan.
-- **Claude subscription** - any paid Claude plan with enough context (100K+ tokens). Most plans are $20-100/month.
+- **Claude subscription** - any paid Claude plan: Pro, Max, Team or Enterprise. Current prices are on Anthropic's pricing page.
 
 Founder OS is built for Claude Code: the setup wizard, the slash commands, and the SessionStart and Stop hooks all run there. A paid Claude plan is the only real cost - Claude Code does not run on the free plan. The files themselves are plain markdown and travel with you, so you can read them in any AI you paste them into, but the wizard, commands, and hooks run in Claude Code. You are not locked in.
 
@@ -188,15 +188,15 @@ A fuller list, generated from the skills actually installed on your machine, is 
 
 ## Install
 
-Five install paths. The one that needs no Git and no terminal comes first. Full step-by-step for each in [docs/install.md](docs/install.md).
+Four install paths, plus Cowork as a companion once one of them is in place. The one that needs no Git and no terminal comes first. Full step-by-step for each in [docs/install.md](docs/install.md).
 
 **Not comfortable in a terminal?** Start with the ZIP download below - three steps and one sentence typed - or the plugin install after it. Neither needs a terminal.
 
 ### Download ZIP (no Git or terminal, own it in 10 minutes)
 
-1. **[Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.1/FounderOS-1.55.1.zip)**
+1. **[Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.2/FounderOS-1.55.2.zip)**
 2. Right-click, **Extract All** (Windows) or double-click it (Mac). Inside is a folder called **Founder OS**. Put it wherever you keep your work.
-3. Open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`). In the Claude desktop app: **Code** tab, **Local**, **Select folder**, pick the folder, with no terminal (per Anthropic's docs, not yet tested by us). If you have the Claude Code terminal tool, double-click **Start Founder OS** in the folder instead (the `.bat` file on Windows, the `.command` file on a Mac), and it opens Claude Code right there with the wizard talking. The desktop app does not add that terminal tool, so with the app alone the start file explains the desktop route and opens the download page rather than failing. First run only: Windows may show a note about a downloaded script - let it run (the file is plain text, right-click and Edit to read it). On a Mac, right-click the file and choose Open once.
+3. Open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`). In the Claude desktop app: **Code** tab, **Local**, **Select folder**, pick the folder, with no terminal (per Anthropic's docs, not yet tested by us). If you have the Claude Code terminal tool, double-click **Start Founder OS** in the folder instead (the `.bat` file on Windows, the `.command` file on a Mac), and it opens Claude Code right there with the wizard talking. The desktop app does not add that terminal tool, so with the app alone the start file explains the desktop route and opens the download page rather than failing. First run only: Windows may show a note about a downloaded script - let it run (the file is plain text, right-click and Edit to read it). On a Mac, the first double-click may be blocked: then open System Settings, then Privacy & Security, click Open Anyway, and confirm with Open. Those are Apple's current steps for blocked downloads, and we have not yet run the start file on a real Mac.
 
 That is the whole install. No git, no curl, no terminal command, no account beyond the Claude plan you already have. Updates work the same way: say "update Founder OS" and the OS re-downloads the ZIP itself, refreshes its own engine files, and never touches your data.
 
@@ -223,7 +223,7 @@ Then say "set up Founder OS" (or run `/founder-os:setup`). If setup is not recog
 curl -fsSL https://raw.githubusercontent.com/ARCASSystems/FounderOS/main/install.sh | bash
 ```
 
-Clones FounderOS to `~/founder-os` (hook scripts and `settings.json` come along in the clone) and sets up in place, so your data, hooks, and commands live in one folder you own. Then prints the natural-language next step. Requires git, Python 3.11+, and bash (on Windows, install git-bash first). Re-running the same command on an existing install offers an update instead.
+Clones FounderOS to `~/founder-os` (hook scripts and `settings.json` come along in the clone) and sets up in place, so your data, hooks, and commands live in one folder you own. Then prints the natural-language next step. Requires git, Python 3.11+, and bash (on Windows, install git-bash first). To update later, open the folder in Claude Code and say "update Founder OS".
 
 **When to choose:** You are comfortable in a terminal on macOS or Linux (or git-bash on Windows) and want one command.
 
@@ -247,7 +247,7 @@ Cowork is merging into the main Claude app (Pro and Max first), and from 6 Octob
 
 ## Setup ladder (about 90 minutes end to end - stop after step 2 and come back any time)
 
-1. **Install** - pick an [install path](#install) above (5 min). If your install uses git (curl or clone paths, or after "own my history"), setup wires the privacy guard for you; `./scripts/install-git-hooks.sh` re-wires it by hand if you ever need to. Out of the box it already blocks committed secrets (API keys, tokens, bot tokens, PEM private keys), em/en dashes, and AI-attribution trailers - no config needed. To also block private names, open `scripts/private-name-patterns.txt` and add the names that must never enter your files (`\bClientName\b` - a client under NDA, a person you keep off the record); the name check stays off until that file has a pattern, while the secret and voice checks run regardless. Do not add your own name: once you own your history, your identity file is tracked by design, and your own name as a pattern would block every save that touches it. The file is gitignored, so any names in it never leave your machine. On a ZIP install this step waits until you turn on version history - there is nothing to wire before then.
+1. **Install** - pick an [install path](#install) above (5 min). If your install uses git (curl or clone paths, or after "own my history"), setup wires the privacy guard for you; `./scripts/install-git-hooks.sh` re-wires it by hand if you ever need to. Out of the box it already blocks committed secrets (API keys, tokens, bot tokens, PEM private keys), em/en dashes, and AI-attribution trailers - no config needed. To also block private names, open `scripts/private-name-patterns.txt` and add the names that must never enter your files (`\bClientName\b` - a client under NDA, a person you keep off the record); the name check stays off until that file has a pattern, while the secret and voice checks run regardless. Do not add your own name: once you own your history, your identity file is tracked by design, and your own name as a pattern would block every save that touches it. The file is gitignored, so the names in it never enter your history or any push. On a ZIP install this step waits until you turn on version history - there is nothing to wire before then.
 2. **Say "set up Founder OS"** (or run `/founder-os:setup`) - the wizard builds your operating layer from your answers (15 min). It reads which kind of operator you are (founder, career-mover, builder, student) so the OS leads with what your situation needs, and seeds your brain with a starter flag, pattern, parked decision, and log entry so your first session is not a blank screen.
 3. **Say "set up my voice profile"** (or run `/founder-os:voice-interview`) - so every writing skill sounds like you, not Claude (10 min)
 4. **Say "set up my brand profile"** (or run `/founder-os:brand-interview`) - so every deliverable looks like you (10 min). Three interviews exist and do different jobs: voice-interview = how YOU write, brand-interview = how your documents LOOK, brand-voice-interview = how a BRAND you run writes (only if you run one)
@@ -256,7 +256,7 @@ After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-scr
 
 For the short answer to "what can this actually do", [docs/what-this-can-do.md](docs/what-this-can-do.md) lists every capability in plain language. It is generated from the skills on disk rather than maintained by hand, and on installs with version history the privacy guard refuses a skill change that leaves it stale, so it is never a wish list. Rebuild it any time with `python scripts/skills_sync.py --capabilities`.
 
-> **ZIP and git-clone users (Paths B and C):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/today`, etc. The plugin namespace only activates on Path A. See [docs/install.md](docs/install.md) for the exact commands per path.
+> **ZIP, git-clone and curl installs (Paths 0, B and E in docs/install.md):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/today`, etc. The plugin namespace only activates on Path A. See [docs/install.md](docs/install.md) for the exact commands per path.
 
 ---
 
@@ -268,7 +268,7 @@ Grouped by when you reach for them, not by category. Each row in [`docs/skills.m
 
 The skills are organised into **role packs**, each a function a solo founder covers alone and each opened by one front-door skill that routes you to the rest: LinkedIn (`linkedin-start`), Pipeline (`pipeline-start`), Content (`content-start`), Delivery (`delivery-start`), Money (`unit-economics`), and Decisions (`decisions-start`). You arrive for one job and the pack invites you into the others, never forces you. A pack is a naming convention plus a manifest (`skills/<pack>-pack.md`), not a folder.
 
-One to call out is the **LinkedIn pack**: say "help me with my LinkedIn", pick an outcome (leads, a better job, a louder brand, or a healthier network), and the OS aims your own data export at it - a ranked outreach worklist, a deep network audit, dormant-contact revival, and an algorithm-aware content direction. All local, free-plan, within LinkedIn's terms - no scraper, no automated actions, message content never read.
+One to call out is the **LinkedIn pack**: say "help me with my LinkedIn", pick an outcome (leads, a better job, a louder brand, or a healthier network), and the OS aims your own data export at it - a ranked outreach worklist, a deep network audit, dormant-contact revival, and an algorithm-aware content direction. The scoring runs on your machine, on a free LinkedIn account, within LinkedIn's terms - no scraper, no automated actions, message content never read.
 
 ### Slash commands (47)
 
@@ -396,7 +396,7 @@ Have an idea but no business yet? That counts. Say **"I have an idea"** and desc
 
 ## Status
 
-Version 1.55.1. Public release. 97 skills, 47 commands, 1063 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.55.2. Public release. 97 skills, 47 commands, 1063 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
 **The dependency floor, as of this release.** One Claude plan, no API key, nothing to pip install - with two named exceptions, both optional and both failing closed with the exact command when their package is absent: `scripts/scrape.py` (the fetch helper behind web research) asks for `httpx selectolax tenacity` and falls back to the built-in fetcher, and `scripts/pitch_deck.py` asks for `python-pptx` to render a deck to `.pptx`, where the markdown spec it renders from is the deliverable either way. The optional local voice tier asks for `faster-whisper` and Piper, and is off until you turn it on. Every other shipped script is standard library only. Paragraphs below this line are release history: each states what was true at that version, not what is true now.
 

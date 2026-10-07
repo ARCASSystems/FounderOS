@@ -16,8 +16,8 @@ A realtime model and a reasoning model are good at different things. Tier 1 uses
 - **The back-brain** is the no-key reasoning CLI you already run the OS in (the same one Tier 0
   detected: `claude -p`, or `codex` / `gemini` if that is your CLI). The front reaches for it
   through the `query_brain` tool whenever a real fact about your OS is needed. The back-brain reads
-  your local markdown files and answers. Only the live conversation streams to the cloud; your
-  brain stays on your machine.
+  your local markdown files and answers. Your files stay on your disk, but every sentence the
+  voice speaks, answers read from your files included, streams to the cloud first.
 
 This split is why a long answer never freezes the voice, and why business facts are read from your
 files instead of guessed. It is the public, persona-free form of the same architecture the private
@@ -28,7 +28,8 @@ build proved.
 The split above is a real privacy gain, and it is smaller than it sounds. Be precise:
 
 - **Your files never leave.** No upload, no sync, no index in the cloud. The back-brain reads local
-  markdown on your own machine.
+  markdown on your own machine. What it reads goes to Anthropic under your plan, like any
+  Claude session.
 - **Anything the front speaks has left.** `query_brain` returns its answer to the realtime front so
   the front can voice it. That is a `send_tool_response` back into the cloud session. So the slice of
   your brain you hear read aloud was sent to the model to be spoken.

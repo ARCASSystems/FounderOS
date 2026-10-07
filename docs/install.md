@@ -1,6 +1,6 @@
 # Install paths
 
-Five ways to install FounderOS. The ZIP download (Path 0) needs no Git and no terminal and comes first; pick whichever matches how you work. None of them lock you in - if you outgrow one path, you can move to another without losing your data.
+Four ways to install FounderOS, plus Cowork as a companion once one of them is in place. The ZIP download (Path 0) needs no Git and no terminal and comes first; pick whichever matches how you work. None of them lock you in - if you outgrow one path, you can move to another without losing your data.
 
 **Not comfortable in a terminal?** Use Path 0 (ZIP download) or Path A (Claude Code plugin). Both run without a single terminal command.
 
@@ -18,7 +18,7 @@ Three steps and one sentence typed. The gentlest path there is.
 
 **Steps:**
 
-1. [Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.1/FounderOS-1.55.1.zip).
+1. [Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.2/FounderOS-1.55.2.zip).
 2. Right-click the file and choose **Extract All** (Windows) or double-click it (Mac). Windows puts a folder inside a folder - open the inner one, called **Founder OS**, the one that contains `CLAUDE.md`. Move it wherever you keep your work. It is already named, so there is nothing to rename.
 3. Open the folder in Claude Code and say **"set up Founder OS"**. Two ways in:
    - **No terminal - the Claude desktop app.** Download it from [claude.com/download](https://claude.com/download), sign in, open the **Code** tab, choose **Local**, click **Select folder**, and pick the Founder OS folder. The desktop app includes Claude Code, so nothing else is installed. This route follows Anthropic's docs, and we have not yet watched a fresh install run it.
@@ -27,7 +27,7 @@ Three steps and one sentence typed. The gentlest path there is.
 First-run notes, so nothing surprises you:
 
 - **Windows** may show a security note about a downloaded script. Choose to run it - the file is plain text; right-click it and choose Edit to read everything it does before running, if you like.
-- **Mac**: right-click the file and choose **Open** the first time. That is how macOS treats any downloaded script, not an error in the file.
+- **Mac**: the first double-click may be blocked, because macOS blocks downloads it cannot verify. If it is, open System Settings, then **Privacy & Security**, scroll down, click **Open Anyway**, and confirm with **Open**. Those are Apple's current steps for blocked downloads. We have not yet run the start file on a real Mac.
 - **If the Claude Code terminal tool is not installed**, the start file says so, explains the desktop-app route, and opens the Claude download page - nothing breaks. The desktop app does not add the terminal tool, so if you only have the app, open the folder from its Code tab instead of double-clicking.
 - **Prefer no scripts?** The spoken way works identically: open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
 - **The folder icon** appears on Windows the first time you double-click **Start Founder OS**. Windows only reads a folder's icon setting once the folder is marked as customised, and extracting a ZIP does not mark it, so the launcher does it. On a Mac, run `bash scripts/set_folder_icon.sh` from the folder once if you want the same thing (it ships with the ZIP and the clone, which are the paths where there is a folder to brand); it needs Xcode Command Line Tools and says so plainly if they are missing. Either way it is cosmetic. Nothing about the OS depends on it.
@@ -107,14 +107,14 @@ The installer:
 2. Clones FounderOS to `~/founder-os/` (override with `--target <path>`). This is one folder you own - your data, the hooks, and the commands all live together. It is a plain git repo: back it up, move it, fork it. Nothing phones home.
 3. Prints a one-screen confirmation with the next step (`cd` into `~/founder-os`, open Claude Code, say "set up Founder OS"). Hooks register through the `.claude/settings.json` inside that folder - see "How hooks fire on Path E" below.
 
-If FounderOS is already installed, the installer never overwrites it. Run from a terminal (`bash install.sh`), it asks whether to update. Piped straight from curl, as the command above does, nothing can read your answer, so it leaves the install untouched and prints how to update on purpose: re-run with `FOUNDER_OS_UPDATE=1`. (Installs from before v1.37 that still live at `~/.claude/plugins/founder-os` are detected and kept in place, so you are never left with two copies.)
+If FounderOS is already installed, the installer never overwrites it. Run from a terminal (`bash install.sh`), it asks whether to update. Piped straight from curl, as the command above does, nothing can read your answer, so it leaves the install untouched and prints how to update on purpose: re-run with `FOUNDER_OS_UPDATE=1`. Either way that update is a plain `git pull`, which stops once the OS has saved a version of your work, so the reliable route is to open the folder and say "update Founder OS". (Installs from before v1.37 that still live at `~/.claude/plugins/founder-os` are detected and kept in place, so you are never left with two copies.)
 
 **How hooks fire on Path E.** Claude Code discovers hooks through a `.claude/settings.json` file in the working directory. The curl install lands one inside `~/founder-os/`, so the SessionStart brief and Stop revenue-check fire when you open Claude Code IN your OS folder. If you open Claude Code in a different project folder, those hooks do not fire there. Adding the plugin (Path A) does not change that - the plugin carries the slash commands, not the hooks. Hooks are read from the folder you open, on every path, by design: they all read your OS files.
 
 **Pros**
 - One command, no decisions.
 - Works whether or not you have the Claude Code plugin marketplace.
-- Re-runnable as an update path.
+- Updates through the same "update Founder OS" as every path.
 
 **Cons**
 - Requires bash. On Windows, install git-bash first.
@@ -226,10 +226,10 @@ Say "update Founder OS" whenever you like. No git needed: a ZIP install updates 
 
 All paths converge on the same six files. Whichever path you picked, the next steps are the same. You can run the slash command or ask Claude in plain English - both work.
 
-1. **Start the wizard.** Say "set up Founder OS" (or run `/founder-os:setup` on Path A, `/setup` on Path 0 and Path B). Path D: skip until you have set up locally.
+1. **Start the wizard.** Say "set up Founder OS" (or run `/founder-os:setup` on Path A, `/setup` on Paths 0, B and E). Path D: skip until you have set up locally.
    If your install uses git (Paths B and E, or Path 0 after "own my history"), the setup wizard wires the privacy guard for you as part of setup. If you ever need to re-wire it by hand later (say the folder moved machines), `./scripts/install-git-hooks.sh` does it. On a fresh ZIP install there is no git yet, so this waits until you turn version history on.
-2. **Add your voice.** Say "set up my voice profile" (or run `/founder-os:voice-interview` on Path A, `/voice-interview` on Path B). Captures how you write so every writing skill sounds like you.
-3. **Add your brand.** Say "set up my brand profile" (or run `/founder-os:brand-interview` on Path A, `/brand-interview` on Path B). Captures colors, fonts, logo so every branded deliverable looks like you.
+2. **Add your voice.** Say "set up my voice profile" (or run `/founder-os:voice-interview` on Path A, `/voice-interview` on Paths 0, B and E). Captures how you write so every writing skill sounds like you.
+3. **Add your brand.** Say "set up my brand profile" (or run `/founder-os:brand-interview` on Path A, `/brand-interview` on Paths 0, B and E). Captures colors, fonts, logo so every branded deliverable looks like you.
 4. **See your day.** Ask "what's on for today?" (or run `/today`). Ask "what should I focus on next?" (or run `/next`).
 5. Use the OS for a week on real work before tweaking templates.
 

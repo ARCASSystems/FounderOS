@@ -10,7 +10,7 @@ This is the marketing function for a founder who is also their own content team.
 
 ## What the pack is
 
-You bring one idea: a lesson, a story, an opinion, a customer message. The pack turns it into the format you actually need: a single post, the same idea across every channel, a sequenced campaign, or a reply to something incoming. Everything runs locally and free. The OS drafts in your voice; it never publishes, never schedules, and never invents engagement numbers. Publishing stays your hand on the button.
+You bring one idea: a lesson, a story, an opinion, a customer message. The pack turns it into the format you actually need: a single post, the same idea across every channel, a sequenced campaign, or a reply to something incoming. It needs no extra service or key. The OS drafts in your voice; it never publishes, never schedules, and never invents engagement numbers. Publishing stays your hand on the button.
 
 ## The outcomes and the skills behind them
 
