@@ -283,6 +283,32 @@ def working_preferences(root: Path) -> list[str]:
 
 H3_PATTERN_HEADER = re.compile(r"^###\s+(.+?)\s*$")
 PATTERN_FIELD = re.compile(r"^(First observed|Last seen|Impact):\s*(.+?)\s*$")
+EXAMPLE_SECTION = re.compile(r"^##\s+Example\b", re.IGNORECASE)
+EXAMPLE_TITLE = re.compile(r"\(example entry\b", re.IGNORECASE)
+
+
+def example_line_numbers(lines: list[str]) -> set[int]:
+    """Lines that belong to a template's seeded worked example.
+
+    The flags and patterns templates each ship one dated example under an
+    `## Example` heading, closed by a `---` line, and setup labels each seed
+    "(example entry - ...)". In the 9 Oct live runs the seeded flag "Outreach
+    has not started this week" reached the snapshot as an open flag, and the
+    next-move proposal cited it as the founder's own state. A demo is not
+    evidence, so the snapshot leaves it out. The first brief still surfaces it
+    as the demo it was meant to be.
+    """
+    inside = False
+    out: set[int] = set()
+    for idx, line in enumerate(lines):
+        stripped = line.strip()
+        if EXAMPLE_SECTION.match(stripped):
+            inside = True
+        elif inside and (stripped == "---" or stripped.startswith("<!--")):
+            inside = False
+        if inside:
+            out.add(idx)
+    return out
 
 
 def active_patterns(root: Path, limit: int = 3) -> list[str]:
@@ -304,6 +330,7 @@ def active_patterns(root: Path, limit: int = 3) -> list[str]:
         return []
     out: list[str] = []
     lines = text.splitlines()
+    examples = example_line_numbers(lines)
     for idx, line in enumerate(lines):
         m = H3_PATTERN_HEADER.match(line)
         if not m:
@@ -311,6 +338,8 @@ def active_patterns(root: Path, limit: int = 3) -> list[str]:
         name = m.group(1).strip()
         if name.startswith("[") and name.endswith("]"):
             continue  # template placeholder, not a learned pattern
+        if idx in examples or EXAMPLE_TITLE.search(name):
+            continue  # the seeded demo, not something learned about the operator
         fields = {}
         for follow in lines[idx + 1: idx + 15]:
             if H3_PATTERN_HEADER.match(follow):
@@ -339,12 +368,15 @@ def open_flags(root: Path, limit: int = 3) -> list[str]:
         return ["[unavailable]"]
 
     lines = text.splitlines()
+    examples = example_line_numbers(lines)
     out: list[str] = []
     for idx, line in enumerate(lines):
         match = H2_HEADER.match(line)
         if not match:
             continue
         header = match.group(1).strip()
+        if idx in examples or EXAMPLE_TITLE.search(header):
+            continue  # the seeded demo flag, not the founder's state
         # Look ahead for OPEN status before the next H2.
         is_open = False
         for follow in lines[idx + 1 : idx + 25]:
