@@ -283,31 +283,50 @@ def working_preferences(root: Path) -> list[str]:
 
 H3_PATTERN_HEADER = re.compile(r"^###\s+(.+?)\s*$")
 PATTERN_FIELD = re.compile(r"^(First observed|Last seen|Impact):\s*(.+?)\s*$")
-EXAMPLE_SECTION = re.compile(r"^##\s+Example\b", re.IGNORECASE)
-EXAMPLE_TITLE = re.compile(r"\(example entry\b", re.IGNORECASE)
+EXAMPLE_SECTION = re.compile(r"^##\s+Example\s*(?:\(|$)", re.IGNORECASE)
+EXAMPLE_TITLE = re.compile(r"[(\[]\s*example\b", re.IGNORECASE)
+EXAMPLE_SEED_DATE = "2024-01-01"
+ENTRY_HEADER = re.compile(r"^#{2,3}\s+\S")
 
 
 def example_line_numbers(lines: list[str]) -> set[int]:
-    """Lines that belong to a template's seeded worked example.
+    """Header lines of a template's seeded worked example.
 
-    The flags and patterns templates each ship one dated example under an
-    `## Example` heading, closed by a `---` line, and setup labels each seed
-    "(example entry - ...)". In the 9 Oct live runs the seeded flag "Outreach
-    has not started this week" reached the snapshot as an open flag, and the
-    next-move proposal cited it as the founder's own state. A demo is not
-    evidence, so the snapshot leaves it out. The first brief still surfaces it
-    as the demo it was meant to be.
+    The flags and patterns templates each ship one example dated 2024-01-01
+    under an `## Example (...)` heading, and setup re-dates each seed and labels
+    it "(example entry - ...)". In the 9 Oct live runs the seeded flag
+    "Outreach has not started this week" reached the snapshot as an open flag,
+    and the next-move proposal cited it as the founder's own state. A demo is
+    not evidence, so the snapshot leaves it out. The first brief still surfaces
+    it as the demo it was meant to be.
+
+    Narrow on purpose, so a real entry is never hidden: an entry counts as the
+    seed only when its title carries the example label, or when it sits in the
+    Example section and still carries the template's 2024-01-01 date. A seed
+    edited in place into a real entry (new date, no label) shows again.
     """
-    inside = False
     out: set[int] = set()
+    inside = False
     for idx, line in enumerate(lines):
         stripped = line.strip()
         if EXAMPLE_SECTION.match(stripped):
             inside = True
-        elif inside and (stripped == "---" or stripped.startswith("<!--")):
+            continue
+        if inside and (stripped == "---" or stripped.startswith("<!--")):
             inside = False
-        if inside:
+        if not ENTRY_HEADER.match(stripped):
+            continue
+        if EXAMPLE_TITLE.search(stripped):
             out.add(idx)
+            continue
+        if inside:
+            entry = [stripped]
+            for follow in lines[idx + 1: idx + 10]:
+                if ENTRY_HEADER.match(follow.strip()):
+                    break
+                entry.append(follow)
+            if any(EXAMPLE_SEED_DATE in part for part in entry):
+                out.add(idx)
     return out
 
 
@@ -338,7 +357,7 @@ def active_patterns(root: Path, limit: int = 3) -> list[str]:
         name = m.group(1).strip()
         if name.startswith("[") and name.endswith("]"):
             continue  # template placeholder, not a learned pattern
-        if idx in examples or EXAMPLE_TITLE.search(name):
+        if idx in examples:
             continue  # the seeded demo, not something learned about the operator
         fields = {}
         for follow in lines[idx + 1: idx + 15]:
@@ -375,7 +394,7 @@ def open_flags(root: Path, limit: int = 3) -> list[str]:
         if not match:
             continue
         header = match.group(1).strip()
-        if idx in examples or EXAMPLE_TITLE.search(header):
+        if idx in examples:
             continue  # the seeded demo flag, not the founder's state
         # Look ahead for OPEN status before the next H2.
         is_open = False
@@ -425,33 +444,53 @@ def must_do(root: Path, limit: int = 3) -> list[str]:
 # scripts/user-prompt-capture.py; tests/test_founder_fit_fixes.py pins the two
 # copies together) ---
 CARD_MAX_CHARS = 64 * 1024
-CARD_FIELD_RX = re.compile(r"^([A-Za-z][A-Za-z ,()/-]{0,40}?)\s*:\s*(.*)$")
-# A decision counts only when it starts with a decision word. Anything else -
-# "(to be filled after the test)", "TBD", "none yet", the template's own
-# "keep / change / stop" - leaves the test open, so the card keeps coming back.
-CARD_DECIDED = {"keep", "change", "stop", "park", "pause", "continue", "pivot", "kill", "drop",
-                "extend", "greenlight", "iterate", "go"}
+CARD_FIELD_RX = re.compile(r"^([A-Za-z][A-Za-z0-9 ,()/-]{0,40}?)\s*:\s*(.*)$")
+# A decision is keep, change or stop, or a word that means one of them, in any
+# tense, at the start of the line. An extension ("extend a week", "keep
+# testing", "continue the test") is not a decision: the test is still running.
+# Anything else - "(to be filled after the test)", "TBD", "none yet", the
+# template's own "keep / change / stop" - leaves the test open, so the card
+# keeps coming back.
+CARD_DECIDED = re.compile(
+    r"^(?:(?:i|we)(?:'ll| will| have|'ve)?\s+|let'?s\s+|decision\s*[:-]?\s*)?"
+    r"(?:keep|kept|keeping|change[ds]?|changing|stop(?:s|ped|ping)?|park(?:s|ed|ing)?|paus(?:e|es|ed|ing)"
+    r"|continue[ds]?|pivot(?:s|ed|ing)?|kill(?:s|ed|ing)?|drop(?:s|ped|ping)?|greenlight|iterate)\b")
+CARD_STILL_RUNNING = re.compile(
+    r"^(?:(?:i|we)(?:'ll| will)?\s+)?(?:extend\w*|(?:keep|keeping|continue|continuing)\s+"
+    r"(?:testing|the test|this test|it running|waiting|trying|asking|running|collecting)"
+    r"|(?:one more|another) (?:week|day|month)|more time\b|waiting\b)")
+CARD_EMPTY = {"none", "tbd", "n/a", "na", "pending", "none open", "(none open)", "not yet", "nothing"}
+CARD_KEY_ALIAS = {"target": "target, set before the test"}
 
 
 def parse_progress_card(text: str) -> dict | None:
     """Read the one card at the top of context/progress-card.md.
 
     Bounded and forgiving on purpose. Founders edit the card by hand, so labels
-    may change case, sit indented, carry a bullet or bold, and the decision may
-    say "pending". Only the first record counts: reading stops at
-    `## Closed tests`, at a second `# Progress card` heading, or at a field seen
-    twice, so a blank template can never pair with an old record further down.
-    Returns None when the card has no filled-in test.
+    may change case, sit indented, carry a bullet, a number, a checkbox, bold or
+    a note in brackets, and the decision may say "pending". Only the first
+    record counts: reading stops at `## Closed tests`, at a second
+    `# Progress card` heading, or at a second Test or Decision line, so a blank
+    template can never pair with an old record further down. Frontmatter at the
+    top is skipped. Returns None when the card has no filled-in test.
     """
     fields: dict[str, str] = {}
-    for line in text[:CARD_MAX_CHARS].splitlines():
+    lines = text[:CARD_MAX_CHARS].lstrip("﻿").splitlines()
+    if lines and lines[0].strip() == "---":
+        for end in range(1, min(len(lines), 60)):
+            if lines[end].strip() == "---":
+                lines = lines[end + 1:]
+                break
+    for line in lines:
         clean = line.strip()
         if clean.startswith("|"):
             cells = [c.strip().replace("**", "") for c in clean.strip("|").split("|")]
             if len(cells) < 2 or not cells[0] or set(cells[0]) <= set("-: "):
                 continue
             clean = f"{cells[0]}: {cells[1]}"
-        clean = clean.lstrip("-*> \t").replace("**", "").replace("__", "").strip()
+        clean = clean.lstrip("-*+> \t").replace("**", "").replace("__", "").strip()
+        clean = re.sub(r"^(?:\d+[.)]\s+|\[[ xX]?\]\s*)", "", clean)
+        clean = re.sub(r"^_+|_+(?=\s*:)|(?<=:)_+", "", clean).strip()
         low = clean.lower()
         if low.startswith("#"):
             if low.lstrip("#").strip().startswith("closed tests"):
@@ -462,27 +501,31 @@ def parse_progress_card(text: str) -> dict | None:
         match = CARD_FIELD_RX.match(clean)
         if not match:
             continue
-        key = match.group(1).strip().lower()
+        key = re.sub(r"\s*\([^)]*\)\s*$", "", match.group(1).strip().lower())
+        key = CARD_KEY_ALIAS.get(key, key)
         if key in fields:
-            if key == "test" or "test" in fields:
+            if key in ("test", "decision"):
                 break
             continue
         fields[key] = match.group(2).strip()
     test = fields.get("test", "")
-    if not test or test.startswith("<"):
+    if not test or test.startswith("<") or test.lower() in CARD_EMPTY or not re.search(r"[A-Za-z]", test):
         return None
     decision = fields.get("decision", "").strip()
-    words = re.findall(r"[a-z]+", decision.lower())
-    template_left = bool(re.match(r"\W*keep\s*/\s*change", decision.lower()))
-    decision_open = not words or words[0] not in CARD_DECIDED or template_left
+    low = decision.lower().replace("’", "'").strip(" \t*_\"'`")
+    template = low.startswith("<") or {"keep", "change", "stop"} <= set(re.findall(r"[a-z]+", low))
+    decided = bool(CARD_DECIDED.match(low)) and not CARD_STILL_RUNNING.match(low) and not template
 
     def value(key: str) -> str:
         val = fields.get(key, "")
-        return "" if val.startswith("<") else val[:120]
+        if val.startswith("<") or re.fullmatch(r"[Yy]{4}-[Mm]{2}-[Dd]{2}", val):
+            return ""
+        return val[:120]
 
     return {
         "test": test[:200],
-        "decision_open": decision_open,
+        "decision_open": not decided,
+        "decision": value("decision") if decided else "",
         "alias": value("venture alias"),
         "target": value("target, set before the test"),
         "deadline": value("deadline"),
@@ -520,29 +563,60 @@ def open_test(root: Path) -> list[str]:
     return ["- " + " | ".join(parts)]
 
 
+CLOSED_HEADING = re.compile(r"^(?:#+\s*|\*\*\s*|__\s*)?(?:closed|old|past|earlier)\s+tests?\b", re.IGNORECASE)
+CLOSED_ITEM = re.compile(r"^(?:[-*+]|\d+[.)])\s+(.*\S)")
+ISO_DATE = re.compile(r"\b(\d{4}-\d{2}-\d{2})\b")
+CLOSED_NOTE = ("- Start the next move from this decision. Do not propose a test this line already ran "
+               "with the same buyer, unless the founder asks to repeat it.")
+
+
 def last_closed_test(root: Path) -> list[str]:
-    """The newest line under `## Closed tests`, for when no test is open.
+    """The newest closed test, for when no test is open.
 
     Round F (9 Oct 2026): after a disconfirmed decision the card held no open
     test, the next session never opened the card, and it sent the founder back
     to the customer the closed test had just ruled out. The snapshot is read
-    every run, so the newest closed line rides here.
+    every run, so the newest closed test rides here.
+
+    Newest means the latest date on the line, not the first line: a card copied
+    from a chat app often keeps its closed tests oldest first. A card whose
+    Decision is filled in but whose test was not yet moved down is the newest
+    close of all, so it wins.
     """
     try:
         with open(root / "context" / "progress-card.md", encoding="utf-8", errors="replace") as fh:
             text = fh.read(CARD_MAX_CHARS)
     except OSError:
         return []
+    card = parse_progress_card(text)
+    if card and not card["decision_open"]:
+        parts = [f"{card['alias']}: {card['test']}" if card["alias"] else card["test"]]
+        if card["result"]:
+            parts.append(f"result: {card['result']}")
+        if card["status"]:
+            parts.append(f"status: {card['status']}")
+        parts.append(f"decision: {card['decision']}")
+        return ["- " + " | ".join(parts), CLOSED_NOTE]
     in_closed = False
-    for line in text.splitlines():
+    best: tuple[str, int, str] | None = None
+    for order, line in enumerate(text.splitlines()):
         clean = line.strip()
-        if clean.startswith("#"):
-            in_closed = clean.lstrip("#").strip().lower().startswith("closed tests")
+        if CLOSED_HEADING.match(clean):
+            in_closed = True
             continue
-        if in_closed and clean.startswith("- "):
-            return [clean[:400], "- Start the next move from this decision. Do not propose a test this line "
-                                 "already ran with the same buyer, unless the founder asks to repeat it."]
-    return []
+        if clean.startswith("#") or clean == "---":
+            in_closed = False
+            continue
+        item = CLOSED_ITEM.match(clean)
+        if not (in_closed and item):
+            continue
+        dates = ISO_DATE.findall(item.group(1))
+        key = (max(dates) if dates else "", -order, item.group(1))
+        if best is None or key[:2] > best[:2]:
+            best = key
+    if best is None:
+        return []
+    return ["- " + best[2][:400], CLOSED_NOTE]
 
 
 def recent_decisions(root: Path, limit: int = 3) -> list[str]:

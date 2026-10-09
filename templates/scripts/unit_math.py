@@ -50,7 +50,7 @@ def as_rate(percent: float) -> float:
 def batch(batch_cost: float, units: int, waste: int | None = None, pack_size: int = 1,
           packaging: float | None = None, hours: float | None = None,
           hourly: float | None = None, fees: float | None = None,
-          price: float | None = None) -> dict:
+          price: float | None = None, fee_percent: float | None = None) -> dict:
     """Cost a batch-made product per sellable unit and per box or order.
 
     The cash view counts only money that leaves the business. The economic
@@ -110,10 +110,11 @@ def batch(batch_cost: float, units: int, waste: int | None = None, pack_size: in
                      f"carry over into the next batch, use the carry-over cost. If they "
                      f"are thrown away or eaten, use the wasted cost.")
 
-    if fees is None:
+    if fees is None and fee_percent is None:
         notes.append("Per-order fees (delivery, platform, payment) are unknown, so any "
                      "contribution below is an upper bound, not the real figure.")
     result["fees_per_box"] = fees
+    result["fee_percent"] = fee_percent
 
     if price is not None:
         fee = fees or 0.0
@@ -126,7 +127,7 @@ def batch(batch_cost: float, units: int, waste: int | None = None, pack_size: in
                 cost = view[f"cost_per_box_{basis}"]
                 if cost is None:
                     continue
-                c = price - cost - fee
+                c = price - cost - fee - price * as_rate(fee_percent or 0.0)
                 contribution[f"{name}_{basis}"] = {
                     "contribution_per_box": c,
                     "margin_percent": c / price * 100 if price else None,
@@ -137,21 +138,43 @@ def batch(batch_cost: float, units: int, waste: int | None = None, pack_size: in
     return result
 
 
-def price_for_margin(cost: float, margin: float, step: float = 1.0) -> dict:
-    """The price that reaches a target margin, rounded UP so the margin holds."""
+def price_for_margin(cost: float, margin: float, step: float = 1.0,
+                     fee_percent: float | None = None) -> dict:
+    """The price that reaches a target margin, rounded UP so the margin holds.
+
+    A fee taken as a percent of the price (a delivery app's commission, a card
+    fee) comes off the price before the margin, so it is part of the sum:
+    price = cost / (1 - margin - fee). Without it, the margin printed here is
+    the margin before that fee.
+    """
     if cost <= 0:
         return {"error": "cost per unit must be above zero to price for a margin"}
     if not 0 <= margin < 100:
         return {"error": "margin is a percent from 0 up to, but not including, 100"}
-    rate = as_rate(margin)
-    exact = cost / (1 - rate)
-    rounded = math.ceil(round(exact / step, 9)) * step if step > 0 else exact
-    achieved = (rounded - cost) / rounded * 100 if rounded else None
-    return {"cost": cost, "target_margin_percent": rate * 100, "exact_price": exact,
-            "rounded_price": rounded, "margin_at_rounded_price_percent": achieved,
-            "notes": ["Rounded up, so the margin is at least the target. This is the price "
-                      "the costs need, not the price the market will pay: that needs "
-                      "evidence from buyers."]}
+    fee = fee_percent or 0.0
+    if not 0 <= fee < 100 or margin + fee >= 100:
+        return {"error": "the margin and the percent fee together must stay under 100"}
+    if step <= 0:
+        return {"error": "the rounding step must be above zero"}
+    rate, fee_rate = as_rate(margin), as_rate(fee)
+    exact = cost / (1 - rate - fee_rate)
+    rounded = math.ceil(round(exact / step, 9)) * step
+    achieved = (rounded * (1 - fee_rate) - cost) / rounded * 100
+    notes = ["Rounded up, so the margin is at least the target. This is the price the costs need, "
+             "not the price the market will pay: that needs evidence from buyers."]
+    if fee_percent is None:
+        notes.append("Fees taken as a percent of the price (a delivery app, card payments) are not in "
+                     "this margin. If you pay one, give it with --fee-percent.")
+    else:
+        notes.append(f"The margin is after the {fee:g}% fee on the price.")
+    if 0 < margin < 1:
+        notes.append(f"The margin is read as {margin:g} percent. If you meant {margin * 100:g} percent, "
+                     f"give {margin * 100:g}.")
+    notes.append("If you are registered for VAT, add it on top of this price: the margin is on the "
+                 "price before VAT.")
+    return {"cost": cost, "target_margin_percent": rate * 100, "fee_percent": fee_percent,
+            "exact_price": exact, "rounded_price": rounded, "margin_at_rounded_price_percent": achieved,
+            "notes": notes}
 
 
 def breakeven(fixed: float, contribution: float) -> dict:
@@ -226,53 +249,78 @@ def payback(cac_value: float, contribution: float, lifetime: float | None = None
     return out
 
 
+RUNWAY_PROJECTION_CAP = 1200  # months; far enough for any decline to reach a cash-out
+
+
 def runway(cash: float, fixed: float, contribution: float, growth: float | None = None,
-           months: int = 24) -> dict:
+           months: int | None = None) -> dict:
     """Month by month: does contribution cover fixed costs before the cash runs out?
 
     Contribution changes by `growth` percent each month (negative for a decline)
-    and fixed costs stay flat. Default alive means the cash never runs out within
-    the planning horizon AND contribution covers fixed costs at its end. A
-    venture that covers its costs today but is shrinking towards a cash-out is
-    not default alive.
+    and fixed costs stay flat. Default alive means the cash never runs out
+    within the planning horizon AND contribution covers fixed costs at its end
+    AND contribution is not shrinking. A venture that covers its costs today but
+    is shrinking towards a cash-out is not default alive: a decline is projected
+    past the horizon until the cash runs out, and that month is reported.
     """
     notes: list[str] = []
+    if months is None:
+        notes.append("No horizon was given, so 24 months is used.")
+        months = 24
+    if months < 1:
+        return {"error": "the horizon must be at least 1 month"}
     if growth is None:
         notes.append("Growth was not given, so contribution is held flat.")
         growth = 0.0
+    if growth <= -100:
+        return {"error": "monthly growth must be above -100 percent"}
     rate = as_rate(growth)
     balance = cash
     current = contribution
     cash_out_month = None
     trail = []
-    for month in range(1, months + 1):
+    limit = RUNWAY_PROJECTION_CAP if rate < 0 else months
+    for month in range(1, limit + 1):
         balance += current - fixed
-        trail.append({"month": month, "contribution": current, "cash": balance})
+        if month <= months:
+            trail.append({"month": month, "contribution": current, "cash": balance})
         if balance < 0:
             cash_out_month = month
             break
         current *= (1 + rate)
-    alive = cash_out_month is None and trail[-1]["contribution"] >= fixed
+    end_row = trail[-1]
+    covers_at_end = end_row["contribution"] >= fixed
+    alive = cash_out_month is None and covers_at_end and rate >= 0
     covered_month = None
     if alive:
-        covered_month = trail[-1]["month"]
+        covered_month = end_row["month"]
         for row in reversed(trail):
             if row["contribution"] < fixed:
                 break
             covered_month = row["month"]
     if alive:
+        verdict = "alive"
         notes.append("Default alive at these inputs: the cash lasts the horizon and contribution "
                      "covers fixed costs at its end.")
-    elif cash_out_month is not None:
+    elif cash_out_month is not None and cash_out_month <= months:
+        verdict = "dead"
         notes.append(f"Default dead at these inputs: cash runs out in month {cash_out_month}.")
+    elif cash_out_month is not None:
+        verdict = "dead"
+        notes.append(f"Default dead at these inputs: contribution is shrinking, so the cash runs out "
+                     f"in month {cash_out_month}, after the {months}-month horizon.")
+    elif rate < 0:
+        verdict = "undecided"
+        notes.append("Undecided: contribution is shrinking, but the cash outlasts the projection.")
     else:
+        verdict = "undecided"
         notes.append(f"Undecided within {months} months: the cash lasts, but contribution does not "
                      f"cover fixed costs by the end.")
     notes.append("Fixed costs are held flat. If a cost will rise, add it by hand. These are the inputs "
                  "you gave: try the growth you have actually seen, not the one you hope for.")
     return {"cash": cash, "monthly_fixed": fixed, "monthly_contribution": contribution,
             "monthly_growth_percent": growth, "horizon_months": months,
-            "default_alive": alive, "cash_runs_out_month": cash_out_month,
+            "default_alive": alive, "verdict": verdict, "cash_runs_out_month": cash_out_month,
             "contribution_covers_fixed_month": covered_month, "months": trail,
             "notes": notes}
 
@@ -303,13 +351,16 @@ def render(command: str, result: dict, currency: str) -> str:
                 lines.append(f"{label} per box, leftovers wasted: {c}{money(wasted)}")
         if result.get("fees_per_box") is not None:
             lines.append(f"Fees per box: {c}{money(result['fees_per_box'])}")
+        if result.get("fee_percent") is not None:
+            lines.append(f"Fees as a percent of the price: {result['fee_percent']:g}%")
         for key, val in result.get("contribution", {}).items():
             margin = val["margin_percent"]
             lines.append(f"Contribution per box at {c}{money(result['price'])} "
                          f"({key.replace('_', ' ')}): {c}{money(val['contribution_per_box'])}"
                          + (f", {margin:.1f}% margin" if margin is not None else ""))
     elif command == "price":
-        lines.append(f"Exact price for {result['target_margin_percent']:.1f}% margin on "
+        fee_text = f" after a {result['fee_percent']:g}% fee" if result.get("fee_percent") is not None else ""
+        lines.append(f"Exact price for {result['target_margin_percent']:.1f}% margin{fee_text} on "
                      f"{c}{money(result['cost'])}: {c}{money(result['exact_price'])}")
         achieved = result["margin_at_rounded_price_percent"]
         lines.append(f"Rounded up: {c}{money(result['rounded_price'])}"
@@ -328,7 +379,7 @@ def render(command: str, result: dict, currency: str) -> str:
             if result["ltv_to_cac"] is not None:
                 lines.append(f"LTV:CAC: {result['ltv_to_cac']:.1f} to 1")
     elif command == "runway":
-        lines.append(f"Default alive: {'yes' if result['default_alive'] else 'no'}")
+        lines.append("Default alive: " + {"alive": "yes", "dead": "no"}.get(result["verdict"], "undecided"))
         if result["cash_runs_out_month"] is not None:
             lines.append(f"Cash runs out in month {result['cash_runs_out_month']}")
         if result["contribution_covers_fixed_month"] is not None:
@@ -336,6 +387,33 @@ def render(command: str, result: dict, currency: str) -> str:
                          f"{result['contribution_covers_fixed_month']}")
     lines.extend(f"Note: {n}" for n in result.get("notes", []))
     return "\n".join(lines)
+
+
+# Inputs that must be zero or more. Contribution, cash and growth may be
+# negative: a loss-making unit, an overdraft and a decline are all real.
+NON_NEGATIVE = ("batch_cost", "waste", "packaging", "hours", "hourly", "fees", "price", "variable",
+                "fixed", "sales", "marketing", "customers", "cac")
+POSITIVE = ("units", "pack_size", "step", "lifetime", "months")
+
+
+def invalid_input(args: argparse.Namespace) -> str | None:
+    """The first input that cannot be a real figure, said plainly, or None."""
+    for name, value in vars(args).items():
+        if isinstance(value, float) and not math.isfinite(value):
+            return f"--{name.replace('_', '-')} must be a real number, not {value}"
+    for name in NON_NEGATIVE:
+        value = getattr(args, name, None)
+        if value is not None and value < 0:
+            return f"--{name.replace('_', '-')} cannot be negative"
+    for name in POSITIVE:
+        value = getattr(args, name, None)
+        if value is not None and value <= 0:
+            flag = "round" if name == "step" else name.replace("_", "-")
+            return f"--{flag} must be above zero"
+    fee = getattr(args, "fee_percent", None)
+    if fee is not None and not 0 <= fee < 100:
+        return "--fee-percent is a percent from 0 up to, but not including, 100"
+    return None
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -354,11 +432,13 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--hourly", type=float, help="what an hour of your time is worth")
     b.add_argument("--fees", type=float, help="delivery, platform and payment fees per box")
     b.add_argument("--price", type=float, help="price per box")
+    b.add_argument("--fee-percent", type=float, help="fees taken as a percent of the price, 30 for 30 percent")
 
     p = sub.add_parser("price", help="price for a target margin, rounded up")
     p.add_argument("--cost", type=float, required=True)
     p.add_argument("--margin", type=float, required=True, help="target margin in percent, 40 for 40 percent")
     p.add_argument("--round", dest="step", type=float, default=1.0, help="round up to this step")
+    p.add_argument("--fee-percent", type=float, help="fees taken as a percent of the price, 30 for 30 percent")
 
     e = sub.add_parser("breakeven", help="units to cover fixed costs")
     e.add_argument("--fixed", type=float, required=True)
@@ -383,14 +463,19 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--contribution", type=float, required=True, help="monthly contribution now")
     r.add_argument("--growth", type=float, help="monthly growth of contribution in percent, 10 for 10 percent, "
                                                  "-5 for a 5 percent decline")
-    r.add_argument("--months", type=int, default=24, help="planning horizon")
+    r.add_argument("--months", type=int, help="planning horizon in months (24 if not given, and the "
+                                              "output says so)")
 
     args = parser.parse_args(argv)
+    problem = invalid_input(args)
+    if problem:
+        print(f"Cannot calculate: {problem}.")
+        return 2
     if args.command == "batch":
         result = batch(args.batch_cost, args.units, args.waste, args.pack_size, args.packaging,
-                       args.hours, args.hourly, args.fees, args.price)
+                       args.hours, args.hourly, args.fees, args.price, args.fee_percent)
     elif args.command == "price":
-        result = price_for_margin(args.cost, args.margin, args.step)
+        result = price_for_margin(args.cost, args.margin, args.step, args.fee_percent)
     elif args.command == "breakeven":
         if args.contribution is not None:
             contribution = args.contribution

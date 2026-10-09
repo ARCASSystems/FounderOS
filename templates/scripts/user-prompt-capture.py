@@ -350,33 +350,53 @@ RESULT_TALK_RX = re.compile(
 # scripts/user-prompt-capture.py; tests/test_founder_fit_fixes.py pins the two
 # copies together) ---
 CARD_MAX_CHARS = 64 * 1024
-CARD_FIELD_RX = re.compile(r"^([A-Za-z][A-Za-z ,()/-]{0,40}?)\s*:\s*(.*)$")
-# A decision counts only when it starts with a decision word. Anything else -
-# "(to be filled after the test)", "TBD", "none yet", the template's own
-# "keep / change / stop" - leaves the test open, so the card keeps coming back.
-CARD_DECIDED = {"keep", "change", "stop", "park", "pause", "continue", "pivot", "kill", "drop",
-                "extend", "greenlight", "iterate", "go"}
+CARD_FIELD_RX = re.compile(r"^([A-Za-z][A-Za-z0-9 ,()/-]{0,40}?)\s*:\s*(.*)$")
+# A decision is keep, change or stop, or a word that means one of them, in any
+# tense, at the start of the line. An extension ("extend a week", "keep
+# testing", "continue the test") is not a decision: the test is still running.
+# Anything else - "(to be filled after the test)", "TBD", "none yet", the
+# template's own "keep / change / stop" - leaves the test open, so the card
+# keeps coming back.
+CARD_DECIDED = re.compile(
+    r"^(?:(?:i|we)(?:'ll| will| have|'ve)?\s+|let'?s\s+|decision\s*[:-]?\s*)?"
+    r"(?:keep|kept|keeping|change[ds]?|changing|stop(?:s|ped|ping)?|park(?:s|ed|ing)?|paus(?:e|es|ed|ing)"
+    r"|continue[ds]?|pivot(?:s|ed|ing)?|kill(?:s|ed|ing)?|drop(?:s|ped|ping)?|greenlight|iterate)\b")
+CARD_STILL_RUNNING = re.compile(
+    r"^(?:(?:i|we)(?:'ll| will)?\s+)?(?:extend\w*|(?:keep|keeping|continue|continuing)\s+"
+    r"(?:testing|the test|this test|it running|waiting|trying|asking|running|collecting)"
+    r"|(?:one more|another) (?:week|day|month)|more time\b|waiting\b)")
+CARD_EMPTY = {"none", "tbd", "n/a", "na", "pending", "none open", "(none open)", "not yet", "nothing"}
+CARD_KEY_ALIAS = {"target": "target, set before the test"}
 
 
 def parse_progress_card(text: str) -> dict | None:
     """Read the one card at the top of context/progress-card.md.
 
     Bounded and forgiving on purpose. Founders edit the card by hand, so labels
-    may change case, sit indented, carry a bullet or bold, and the decision may
-    say "pending". Only the first record counts: reading stops at
-    `## Closed tests`, at a second `# Progress card` heading, or at a field seen
-    twice, so a blank template can never pair with an old record further down.
-    Returns None when the card has no filled-in test.
+    may change case, sit indented, carry a bullet, a number, a checkbox, bold or
+    a note in brackets, and the decision may say "pending". Only the first
+    record counts: reading stops at `## Closed tests`, at a second
+    `# Progress card` heading, or at a second Test or Decision line, so a blank
+    template can never pair with an old record further down. Frontmatter at the
+    top is skipped. Returns None when the card has no filled-in test.
     """
     fields: dict[str, str] = {}
-    for line in text[:CARD_MAX_CHARS].splitlines():
+    lines = text[:CARD_MAX_CHARS].lstrip("﻿").splitlines()
+    if lines and lines[0].strip() == "---":
+        for end in range(1, min(len(lines), 60)):
+            if lines[end].strip() == "---":
+                lines = lines[end + 1:]
+                break
+    for line in lines:
         clean = line.strip()
         if clean.startswith("|"):
             cells = [c.strip().replace("**", "") for c in clean.strip("|").split("|")]
             if len(cells) < 2 or not cells[0] or set(cells[0]) <= set("-: "):
                 continue
             clean = f"{cells[0]}: {cells[1]}"
-        clean = clean.lstrip("-*> \t").replace("**", "").replace("__", "").strip()
+        clean = clean.lstrip("-*+> \t").replace("**", "").replace("__", "").strip()
+        clean = re.sub(r"^(?:\d+[.)]\s+|\[[ xX]?\]\s*)", "", clean)
+        clean = re.sub(r"^_+|_+(?=\s*:)|(?<=:)_+", "", clean).strip()
         low = clean.lower()
         if low.startswith("#"):
             if low.lstrip("#").strip().startswith("closed tests"):
@@ -387,27 +407,31 @@ def parse_progress_card(text: str) -> dict | None:
         match = CARD_FIELD_RX.match(clean)
         if not match:
             continue
-        key = match.group(1).strip().lower()
+        key = re.sub(r"\s*\([^)]*\)\s*$", "", match.group(1).strip().lower())
+        key = CARD_KEY_ALIAS.get(key, key)
         if key in fields:
-            if key == "test" or "test" in fields:
+            if key in ("test", "decision"):
                 break
             continue
         fields[key] = match.group(2).strip()
     test = fields.get("test", "")
-    if not test or test.startswith("<"):
+    if not test or test.startswith("<") or test.lower() in CARD_EMPTY or not re.search(r"[A-Za-z]", test):
         return None
     decision = fields.get("decision", "").strip()
-    words = re.findall(r"[a-z]+", decision.lower())
-    template_left = bool(re.match(r"\W*keep\s*/\s*change", decision.lower()))
-    decision_open = not words or words[0] not in CARD_DECIDED or template_left
+    low = decision.lower().replace("’", "'").strip(" \t*_\"'`")
+    template = low.startswith("<") or {"keep", "change", "stop"} <= set(re.findall(r"[a-z]+", low))
+    decided = bool(CARD_DECIDED.match(low)) and not CARD_STILL_RUNNING.match(low) and not template
 
     def value(key: str) -> str:
         val = fields.get(key, "")
-        return "" if val.startswith("<") else val[:120]
+        if val.startswith("<") or re.fullmatch(r"[Yy]{4}-[Mm]{2}-[Dd]{2}", val):
+            return ""
+        return val[:120]
 
     return {
         "test": test[:200],
-        "decision_open": decision_open,
+        "decision_open": not decided,
+        "decision": value("decision") if decided else "",
         "alias": value("venture alias"),
         "target": value("target, set before the test"),
         "deadline": value("deadline"),
@@ -434,7 +458,7 @@ def read_progress_card(repo: Path) -> dict | None:
 NEXT_MOVE_RX = re.compile(
     r"\b(?:what (?:should|do|can) i (?:do|focus on|work on) (?:next|now|this week)"
     r"|what'?s my next (?:move|step)|my next move|where do i (?:start|push)"
-    r"|i have an idea|is (?:this|it) a good idea|help me validate)\b",
+    r"|i have an idea|is (?:this|it) a good idea|help me validate|what now|now what)\b",
     re.IGNORECASE,
 )
 NEXT_MOVE_NUDGE = (
@@ -462,25 +486,98 @@ def card_nudge(card: dict) -> str:
 # I'll try a different kind of customer." and the model held the write back to
 # ask who the new customer was, or asked whether to record it. The next session
 # read the old test as untested and sent the founder to re-run it. The skill
-# text alone had held in round C and failed here, so a short reply that opens
-# with a decision word, while a card is open, gets a reminder in that turn.
+# text alone had held in round C and failed here, so a reply that opens with a
+# decision word gets a reminder in that turn.
+#
+# Gated, because the review before Codex round 3 showed the bare words fire on
+# everyday chat ("continue", "Change it to bullet points") while a card stays
+# open for days. The reminder fires only when the model's last message asked
+# for the decision. With no readable transcript it falls back to the card
+# itself: a result or a status beyond untested means a decision is due.
 DECISION_REPLY_RX = re.compile(
-    r"^\W*(?:(?:i(?:'ll| will)?|let'?s|we(?:'ll| will)?)\s+)?"
-    r"(?:keep|change|stop|pivot|kill|drop|pause|park|extend|continue)\b"
-    r"(?=\s*(?:$|[.,!:;-]|(?:going|it|this|here|testing|the test|this test|for|to)\b))",
+    r"^\W*(?:(?:ok(?:ay)?|yes|yeah|yep|alright|right|sure|so|well|decision|my decision is|my call is"
+    r"|i think|i guess|i'?ll|i will|i want to|i'd like to|i'd|we|we'?ll|we will|we should|let'?s|let us)\W+){0,4}"
+    r"(?:keep|kept|keeping|change[ds]?|changing|stop(?:s|ped|ping)?|pivot(?:s|ed|ing)?|kill(?:s|ed|ing)?"
+    r"|drop(?:s|ped|ping)?|paus(?:e|es|ed|ing)|park(?:s|ed|ing)?|extend(?:s|ed|ing)?|continue[ds]?|continuing)\b",
     re.IGNORECASE,
 )
-DECISION_REPLY_MAX = 240
+DECISION_REPLY_MAX = 600
+DECISION_ASKED_RX = re.compile(
+    r"\bkeep\b[^?\n]{0,120}\b(?:change|pivot)\b[^?\n]{0,120}\b(?:stop|kill|re-?test)\b"
+    r"|\bkill\b[^?\n]{0,60}\bpivot\b"
+    r"|\byour (?:decision|call)\b|\bdecision\b[^\n]{0,60}\?",
+    re.IGNORECASE,
+)
+TRANSCRIPT_TAIL_BYTES = 256 * 1024
+
+
+def last_assistant_text(transcript_path: str | None) -> str | None:
+    """The text of the model's last message, read from the session transcript.
+
+    None when there is no transcript or it cannot be read, so the caller can
+    tell "no transcript" apart from "the last message said nothing".
+    """
+    if not transcript_path:
+        return None
+    try:
+        with open(transcript_path, "rb") as fh:
+            fh.seek(0, 2)
+            size = fh.tell()
+            fh.seek(max(0, size - TRANSCRIPT_TAIL_BYTES))
+            tail = fh.read().decode("utf-8", "replace")
+    except (OSError, ValueError):
+        return None
+    for line in reversed(tail.splitlines()):
+        try:
+            event = json.loads(line)
+        except (json.JSONDecodeError, ValueError):
+            continue
+        if not isinstance(event, dict) or event.get("type") != "assistant":
+            continue
+        content = (event.get("message") or {}).get("content")
+        if isinstance(content, str):
+            return content
+        if isinstance(content, list):
+            texts = [b.get("text", "") for b in content if isinstance(b, dict) and b.get("type") == "text"]
+            if texts:
+                return "\n".join(texts)
+    return ""
+
+
+def decision_is_due(card: dict, transcript_path: str | None) -> bool:
+    asked = last_assistant_text(transcript_path)
+    if asked is not None:
+        return bool(DECISION_ASKED_RX.search(asked))
+    return bool(card["result"]) or card["status"].lower() in ("attempted", "supported", "disconfirmed")
+
+
+def native_copy_note(repo: Path) -> str:
+    """A warning when Claude Code's own copy of the skill is older than its source.
+
+    An install updated from 1.55.2 runs the old update command, so the native
+    copy in .claude/skills can keep the old text, with no card and the old money
+    advice, while these nudges send the founder to it.
+    """
+    try:
+        source = (repo / "skills" / "founder-next-move" / "SKILL.md").read_bytes()
+        native = (repo / ".claude" / "skills" / "founder-next-move" / "SKILL.md").read_bytes()
+    except OSError:
+        return ""
+    if source == native:
+        return ""
+    return (" The copy in .claude/skills/founder-next-move is older than skills/founder-next-move/SKILL.md: "
+            "follow skills/founder-next-move/SKILL.md, and tell the founder once that "
+            "`python scripts/skills_sync.py --apply` refreshes it.")
 
 
 def decision_nudge(card: dict) -> str:
     venture = card["alias"] or "the venture on the card"
     return (
-        f"[progress-card] This reads like the founder's decision on the open test for {venture}. "
-        "Their decision is their yes to record it. If the founder-next-move skill has not run in "
-        "this conversation, run it now: it holds the card's rules. If they are closing the test "
-        "(keep, change or stop), write it to context/progress-card.md in this reply, before any "
-        "question, as one line under ## Closed tests in exactly this shape: "
+        f"[progress-card] If this answers your question about the decision on the open test for {venture} "
+        "(keep, change or stop), their answer is their yes to record it. If the founder-next-move skill "
+        "has not run in this conversation, run it now: it holds the card's rules. If they are closing the "
+        "test, write it to context/progress-card.md in this reply, before any question, as the first line "
+        "under ## Closed tests (newest first), in exactly this shape: "
         "- YYYY-MM-DD | Test: ... | Target: ... | Result: ... | Status: ... | Decision: <keep, "
         "change or stop>, \"<their words>\". Then take its Test result due line out of Must Do. "
         "Do not wait to hear the next customer or test. Change no target and no other card line, "
@@ -796,30 +893,38 @@ def find_repo_root() -> Path | None:
     return root
 
 
-def read_prompt_from_stdin() -> str | None:
-    """Claude Code passes the hook a JSON envelope on stdin. We extract
-    the `prompt` field. If anything is malformed, return None."""
+def read_envelope_from_stdin() -> tuple[str | None, str | None]:
+    """Claude Code passes the hook a JSON envelope on stdin. Return its
+    `prompt` and `transcript_path` fields. If anything is malformed, the
+    prompt is None."""
     try:
         raw = sys.stdin.read()
     except OSError:
-        return None
+        return None, None
     if not raw:
-        return None
+        return None, None
     # The envelope is JSON. Older versions may pass plain text - tolerate both.
     raw = raw.strip()
     if raw.startswith("{"):
         try:
             envelope = json.loads(raw)
         except json.JSONDecodeError:
-            return None
+            return None, None
         if not isinstance(envelope, dict):
-            return None
+            return None, None
         prompt = envelope.get("prompt")
+        transcript = envelope.get("transcript_path")
+        transcript = transcript if isinstance(transcript, str) else None
         if isinstance(prompt, str):
-            return prompt
-        return None
+            return prompt, transcript
+        return None, None
     # Fallback: treat raw stdin as the prompt itself.
-    return raw
+    return raw, None
+
+
+def read_prompt_from_stdin() -> str | None:
+    """The prompt alone, for callers that do not need the transcript path."""
+    return read_envelope_from_stdin()[0]
 
 
 def main() -> int:
@@ -827,7 +932,7 @@ def main() -> int:
     if repo is None:
         return 0
 
-    prompt = read_prompt_from_stdin()
+    prompt, transcript_path = read_envelope_from_stdin()
     if not prompt:
         return 0
 
@@ -853,18 +958,19 @@ def main() -> int:
         print(BIAS_NUDGE)
 
     card_named = False
-    if len(prompt) <= DECISION_REPLY_MAX and DECISION_REPLY_RX.search(prompt):
+    reply = prompt.replace("\u2019", "'")
+    if len(reply) <= DECISION_REPLY_MAX and DECISION_REPLY_RX.search(reply):
         card = read_progress_card(repo)
-        if card and card["decision_open"]:
-            print(decision_nudge(card))
+        if card and card["decision_open"] and decision_is_due(card, transcript_path):
+            print(decision_nudge(card) + native_copy_note(repo))
             card_named = True
     if not card_named and RESULT_TALK_RX.search(prompt):
         card = read_progress_card(repo)
         if card and card["decision_open"]:
-            print(card_nudge(card))
+            print(card_nudge(card) + native_copy_note(repo))
             card_named = True
     if not card_named and NEXT_MOVE_RX.search(prompt):
-        print(NEXT_MOVE_NUDGE)
+        print(NEXT_MOVE_NUDGE + native_copy_note(repo))
 
     return 0
 
