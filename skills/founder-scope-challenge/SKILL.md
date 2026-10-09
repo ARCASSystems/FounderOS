@@ -48,7 +48,7 @@ Be specific and concrete. Generic pushback is worthless. Tie every point to the 
 
 **Expand** - name the gap, then the bigger move:
 - What would have to be true for this plan to produce a paying customer? If the plan does not reach that, say so.
-- What is the founder avoiding because it is uncomfortable (a direct ask, a price, a real conversation with a buyer)?
+- What is the founder avoiding because it is uncomfortable (a direct ask, a price, a real conversation with a buyer)? A price, an order or a deposit is only the move once they know they may take money for this activity where they sell. Before that, the uncomfortable move is the conversation and finding out the permission.
 - What is the version of this plan that a funded competitor would run instead?
 
 **Hold** - defend the plan against the founder's own drift:

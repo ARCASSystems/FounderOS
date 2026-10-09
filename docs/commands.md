@@ -246,7 +246,7 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **Or say.** "what should I focus on next?"
 - **Outcome.** One recommended next action. When your identity carries a snapshot block (Founder Snapshot, or the operator's Role Snapshot), the command routes to the founder-next-move propose engine, which names the single highest-leverage move with a three-option close. Otherwise it runs the generic ranking across priorities, deals, and cadence. Not a list either way. One action with a one-line reason.
 - **Args.** None.
-- **Writes.** Read-only.
+- **Writes.** Read-only, except that when it routes to founder-next-move, the engine may save the progress card (`context/progress-card.md`) and its Must Do line, only on your yes.
 - **Prereqs.** `/founder-os:setup` complete.
 - **When to run.** Whenever you cannot decide what to do next, or after a long break.
 - **Follow-up.** Run it. Or push back if the recommendation is wrong, and the model adjusts.

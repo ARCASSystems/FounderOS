@@ -12,7 +12,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 **New here? [Read the Founder OS Playbook first](https://arcassystems.com/playbook)** - a visual walkthrough with screenshots: the problem, the three parts, how to start, and what not to do. Opens framed in any browser, about 15 minutes. It lives on the web so it never drifts out of date; there is no copy shipped in this repo.
 
-**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.2/FounderOS-1.55.2.zip)** - unzip it, open the folder in Claude Code, and say "set up Founder OS". With the Claude desktop app that is the Code tab, **Local**, then **Select folder**, with no terminal (per Anthropic's docs, not yet tested by us). With the Claude Code terminal tool installed, double-clicking **Start Founder OS** does it for you. Or install via plugin marketplace, one-line curl, or git clone. See [Install](#install) below.
+**[Download Founder OS](https://github.com/ARCASSystems/FounderOS/releases/download/v1.56.0/FounderOS-1.56.0.zip)** - unzip it, open the folder in Claude Code, and say "set up Founder OS". With the Claude desktop app that is the Code tab, **Local**, then **Select folder**, with no terminal (per Anthropic's docs, not yet tested by us). With the Claude Code terminal tool installed, double-clicking **Start Founder OS** does it for you. Or install via plugin marketplace, one-line curl, or git clone. See [Install](#install) below.
 
 ---
 
@@ -44,7 +44,7 @@ You run the business, run a P&L inside one, or run a role inside one. Owner, age
 
 - **The founder.** The North Star is the next paying customer. The pipeline, the cadence, and the next-move caller all point at it.
 - **The employee a workstream lands on.** You tell the wizard who you answer to and what is yours to own. The next-move caller aims at the work you own, and the account manager drafts the status update to whoever is waiting on it.
-- **The career-mover, the builder, the student.** Same brain, same capture, same cadence, led by what your situation needs. The next-move engine speaks founder and operator today; for the rest it says so honestly instead of pretending.
+- **The career-mover, the builder, the student.** Same brain, same capture, same cadence, led by what your situation needs. The next-move engine speaks founder and operator today, and a student with an idea gets a first test from one line; for the rest it says so honestly instead of pretending.
 
 You are sharp but your day is chopped into thirty-minute pieces. You have tried productivity templates that promised the world and quietly stopped getting opened by week three. This is not a template. It is an operating layer: it listens, routes, forgets nothing, and pushes back when you are about to ship something half-baked.
 
@@ -196,7 +196,7 @@ Four install paths, plus Cowork as a companion once one of them is in place. The
 
 ### Download ZIP (no Git or terminal, own it in 10 minutes)
 
-1. **[Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.2/FounderOS-1.55.2.zip)**
+1. **[Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.56.0/FounderOS-1.56.0.zip)**
 2. Right-click, **Extract All** (Windows) or double-click it (Mac). Inside is a folder called **Founder OS**. Put it wherever you keep your work.
 3. Open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`). In the Claude desktop app: **Code** tab, **Local**, **Select folder**, pick the folder, with no terminal (per Anthropic's docs, not yet tested by us). If you have the Claude Code terminal tool, double-click **Start Founder OS** in the folder instead (the `.bat` file on Windows, the `.command` file on a Mac), and it opens Claude Code right there with the wizard talking. The desktop app does not add that terminal tool, so with the app alone the start file explains the desktop route and opens the download page rather than failing. First run only: Windows may show a note about a downloaded script - let it run (the file is plain text, right-click and Edit to read it). On a Mac, the first double-click may be blocked: then open System Settings, then Privacy & Security, click Open Anyway, and confirm with Open. Those are Apple's current steps for blocked downloads, and we have not yet run the start file on a real Mac.
 
@@ -398,7 +398,7 @@ Have an idea but no business yet? That counts. Say **"I have an idea"** and desc
 
 ## Status
 
-Version 1.55.2. Public release. 97 skills, 47 commands, 1165 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.56.0. Public release. 97 skills, 47 commands, 1177 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
 **The dependency floor, as of this release.** One Claude plan, no API key, nothing to pip install - with two named exceptions, both optional and both failing closed with the exact command when their package is absent: `scripts/scrape.py` (the fetch helper behind web research) asks for `httpx selectolax tenacity` and falls back to the built-in fetcher, and `scripts/pitch_deck.py` asks for `python-pptx` to render a deck to `.pptx`, where the markdown spec it renders from is the deliverable either way. The optional local voice tier asks for `faster-whisper` and Piper, and is off until you turn it on. Every other shipped script is standard library only. Paragraphs below this line are release history: each states what was true at that version, not what is true now.
 

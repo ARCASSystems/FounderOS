@@ -308,7 +308,7 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 ### brain-snapshot
 
 - **Say.** "refresh the brain snapshot" or "rebuild context".
-- **Outcome.** A small deterministic markdown payload at `brain/.snapshot.md`: open flags (top 3), this week's must-do, recent decisions, voice and brand fields, staleness state.
+- **Outcome.** A small deterministic markdown payload at `brain/.snapshot.md`: open flags (top 3), this week's must-do, the progress card's open test (or, when none is open, its newest closed test), recent decisions, voice and brand fields, staleness state. The seeded example flag and pattern are left out, because a demo is not the founder's state.
 - **Reads.** `core/voice-profile.yml`, `core/brand-profile.yml`, `brain/flags.md`, `cadence/weekly-commitments.md`, `cadence/daily-anchors.md`, `context/decisions.md`.
 - **Writes.** `brain/.snapshot.md` (gitignored, per-user).
 - **Voice rules.** No.
@@ -777,7 +777,7 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 - **Say.** "what should I do next", "what's my next move", or "propose my next move".
 - **Outcome.** The single highest-leverage move - toward your next paying customer on the founder path, toward the work you own in front of whoever waits on it on the operator path - with a three-option close (one big, two small) so you always leave with a step you can start today.
 - **Reads.** `brain/.snapshot.md` (whichever snapshot block your identity carries - Founder Snapshot or Role Snapshot, plus the active working preferences, which gate the shape of the proposal), `core/identity.md`, `core/profile.md`, `brain/log.md`, `context/clients.md`, `context/priorities.md`, `cadence/`, `brain/flags.md`, `context/progress-card.md` (the open test, if any).
-- **Writes.** Only on a clear yes, and only two things: the progress card (`context/progress-card.md` - one open test for one venture, the target set before it, the result and your decision, with finished tests kept under `## Closed tests`) and one line in this week's Must Do so the next session sees the deadline. After a save it refreshes `brain/.snapshot.md`, which shows the open test even when Must Do is full. Otherwise it refreshes the snapshot when stale and appends one run line to `brain/agent-runs.jsonl`.
+- **Writes.** Only on a clear yes that names them, and only two things (your own keep, change or stop on the open test is the yes to record it): the progress card (`context/progress-card.md` - one open test for one venture, the target set before it, the result and your decision, with finished tests kept under `## Closed tests`) and one line in this week's Must Do so the next session sees the deadline. After a save it refreshes `brain/.snapshot.md`, which shows the open test even when Must Do is full. Otherwise it refreshes the snapshot when stale and appends one run line to `brain/agent-runs.jsonl`.
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete with a snapshot block: the Founder Snapshot for the founder and team_of_one roles, the Role Snapshot for the operator role. A thin snapshot still proposes a capture move.
 - **When to run.** Any morning, or any time you are unsure what to do next. Also surfaced as a nudge in the SessionStart brief once the brain is functional, and through `/next` whenever a snapshot exists.

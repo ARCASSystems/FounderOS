@@ -18,7 +18,7 @@ Three steps and one sentence typed. The gentlest path there is.
 
 **Steps:**
 
-1. [Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.55.2/FounderOS-1.55.2.zip).
+1. [Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.56.0/FounderOS-1.56.0.zip).
 2. Right-click the file and choose **Extract All** (Windows) or double-click it (Mac). Windows puts a folder inside a folder - open the inner one, called **Founder OS**, the one that contains `CLAUDE.md`. Move it wherever you keep your work. It is already named, so there is nothing to rename.
 3. Open the folder in Claude Code and say **"set up Founder OS"**. Two ways in:
    - **No terminal - the Claude desktop app.** Download it from [claude.com/download](https://claude.com/download), sign in, open the **Code** tab, choose **Local**, click **Select folder**, and pick the Founder OS folder. The desktop app includes Claude Code, so nothing else is installed. This route follows Anthropic's docs, and we have not yet watched a fresh install run it.

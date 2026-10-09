@@ -62,7 +62,7 @@ Do not hardcode "Gmail" in instructions to the user. Mirror their actual platfor
 
 **Write short.** Most emails should be 3-8 sentences. If it's longer than a screen, it should probably be a meeting or a doc.
 
-**No money ask before permission.** A draft that asks a buyer for money (a price, a deposit, a pre-order, an order, a payment link) needs the founder to know they may take money for this activity where they sell. If their files and this conversation do not show it (a licence or permit that covers the activity, or a business already licensed to sell it), ask once before drafting the money ask, and draft the interest ask meanwhile (a reply, a call, a spot on a waitlist). Earlier sales to friends are not that permission. This repeats the founder safety rule in `CLAUDE.md` for surfaces where that file is not loaded.
+**No money ask before permission.** A draft that asks a buyer for money (a price, a deposit, a pre-order, an order, a payment link, an agreement to pay later, or holding a date, a slot, an appointment or a box for them, with or without a price) needs the founder to know they may take money for this activity where they sell. If their files and this conversation do not show it (a licence or permit that covers the activity, or a business already licensed to sell it), ask once before drafting the money ask, and draft the interest ask meanwhile (a reply, a call to talk about the problem, their details to hear when it is ready). Earlier sales to friends are not that permission. This repeats the founder safety rule in `CLAUDE.md` for surfaces where that file is not loaded.
 
 **Sign off simply.** Use the founder's first name from `core/identity.md`. For first-contact or formal situations, use a full block:
 

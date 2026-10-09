@@ -244,7 +244,7 @@ The doctrine behind the chart is `rules/digital-employees.md`. The part worth re
 
 Setup also writes `cadence/first-30-days.md` with real dates in it. It decides how much the OS does for you, and when that changes.
 
-- **Days 1 to 7.** It watches. It files what you tell it and asks one question a day. It proposes nothing, because anything it proposed this week would be built on the handful of answers you gave the wizard.
+- **Days 1 to 7.** It watches. It files what you tell it and asks one question a day. It proposes nothing on its own, because anything it proposed this week would be built on the handful of answers you gave the wizard. Ask it what to do next, or bring it an idea, and it answers with one move it can save as your progress card on your yes.
 - **Days 8 to 21.** It proposes. Queue items, drafts, a named next move. Nothing acts without a yes from you.
 - **Day 22 onward.** It acts inside the gates you already approved. The gate that matters does not move: the skills that write to people draft and stop, and the few that send or publish, like a backup push, act only when you ask. Until a hard send gate ships, that is a written rule that nothing enforces yet, so read a draft before you ask for it to go out.
 

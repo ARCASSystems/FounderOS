@@ -1,6 +1,6 @@
 # UAE Industry-Specific Regulations
 
-**Last verified: 2026-04-25** (header refresh only - per-industry deep audit not run at this refresh). Industry-specific regulations (KHDA, DHA, TDRA, ESMA, etc.) update on their own cadences. Always web search the relevant authority portal before quoting industry-specific fees, permit requirements, or processing timelines.
+**Last verified: 2026-04-25** (header refresh only - per-industry deep audit not run at this refresh). Industry-specific regulations (KHDA, DHA, TDRA, MoIAT, etc.) update on their own cadences. Always web search the relevant authority portal before quoting industry-specific fees, permit requirements, or processing timelines.
 
 ## Table of Contents
 1. [Cross-Industry Requirements](#cross-industry-requirements)
@@ -152,7 +152,7 @@ PCI DSS compliance for card payments. Cash on delivery common in UAE. Payment ga
 
 ## Food & Beverage
 
-**Key regulators:** Dubai Municipality (Food Safety), ADAFSA (Abu Dhabi), ESMA (federal standards), DHA (health cards).
+**Key regulators:** Dubai Municipality (Food Safety), ADAFSA (Abu Dhabi), MoIAT (federal standards; it took over ESMA's role in July 2020), DHA (health cards).
 Web search: dm.gov.ae, esma.gov.ae
 
 ### Restaurant / Café Requirements
@@ -162,12 +162,12 @@ Trade license + food permit (Municipality) + premises inspection + food handler 
 Same food safety as restaurants. No dine-in but kitchen must meet standards.
 
 ### Food Trading / Import
-Import permit from Municipality, product registration for new products, ESMA conformity, halal certification for meat.
+Import permit from Municipality, product registration for new products, MoIAT conformity (the old ESMA marks), halal certification for meat.
 
 ### Key Compliance
 - **HACCP** increasingly required for larger operations
 - Regular unannounced inspections
-- **Labelling (ESMA):** product name, ingredients, allergens, nutrition, dates, origin, storage, net weight, barcode, halal marking, Arabic + English
+- **Labelling (MoIAT standards, formerly ESMA):** product name, ingredients, allergens, nutrition, dates, origin, storage, net weight, barcode, halal marking, Arabic + English
 - **Halal:** All meat must be halal-certified. Strict enforcement.
 - **Alcohol:** Requires liquor license. Only certain venue types qualify. 21+ age verification.
 

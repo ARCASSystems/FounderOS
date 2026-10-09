@@ -8,7 +8,7 @@ You get one test to run this week, and a progress card that remembers it for you
 
 ## Step 1 - copy this box into a new chat
 
-Fill in the two lines in brackets. Then copy the whole box, card included, into an AI chat app. No AI? Read it with a mentor and fill in the card on paper.
+Copy the whole box, card included, into an AI chat app. Then, in the chat, replace the two [write it here] parts with your idea and your city, and send it. Leave the parts in < > for the AI to fill in. No AI? Read it with a mentor and fill in the card on paper.
 
 ```
 Help me test a business idea. Use only what I tell you. Do not invent customers, prices, dates or facts.
@@ -21,7 +21,7 @@ Rules for every answer:
 - Name who I want to pay me (a kind of person or business, not a name), and the one thing that has to be true that I have the least proof of.
 - Give me ONE test for this week, with a phone and no money. Prefer asking people about a problem they already have over pitching my idea.
 - Before I run it, help me write the target: "Supported if ... Disconfirmed if ...", with a number. The number must measure the thing that has to be true, and it counts what people do, not what they say they would do: a yes to "would you buy it?" counts as nothing. Five conversations is a start, not proof.
-- No money until I know I may take it. Do not suggest a price, a deposit, a pre-order, an order at a price, a paid pilot or a sale unless I have told you I am allowed to sell this where I sell. An agreement to pay later (a deposit promised, a slot held against payment) is an order too, and so is asking someone to hold a date, a slot or a box for themselves. A booked call to talk about the problem is not. Giving out food or anything regulated for free can need a permit too. If I do not know, the test uses conversations or a free sign-up list, and finding out what permission I need goes in my next action.
+- No money until I know I may take it. Do not suggest a price, a deposit, a pre-order, an order at a price, a paid pilot or a sale unless I have told you I am allowed to sell this where I sell. An agreement to pay later (a deposit promised, a slot held against payment) is an order too, and so is asking someone to hold a date, a slot, an appointment or a box for themselves. A booked call to talk about the problem is not. Giving out food or anything regulated for free can need a permit too. If I do not know, the test uses conversations or a free sign-up list, and finding out what permission I need goes in my next action.
 - Grants, prizes and family money are funding, not customers.
 - Call people Person A, Person B. Do not ask for names, phone numbers or private details.
 - Do not state dates, laws, authorities, fees or group names you have not checked. Tell me what to check instead.
@@ -49,7 +49,7 @@ Funding (not customers): <grants, prizes, family money, if any>
 
 ## Step 2 - keep the card
 
-Copy the filled card into your phone's notes, a document or paper. The chat may forget you. The card will not.
+Copy the filled card into your phone's notes, a document or paper, because the chat may not keep it.
 
 ## Step 3 - run the test, then come back
 
@@ -58,7 +58,7 @@ Run the test before the deadline. Write what happened on the Result line, in wor
 ```
 Here is my progress card with the result filled in. The rules again, so you have them:
 - Do not invent facts, customers, prices, dates, laws or fees. Tell me what to check instead.
-- No price, deposit, pre-order, order at a price, paid pilot or sale unless the card says I may sell this. An agreement to pay later (a deposit promised, a slot held against payment) is an order too, and so is asking someone to hold a date, a slot or a box for themselves. A booked call to talk about the problem is not. Free samples of food or anything regulated can need a permit too. If the Money line says not known yet, finding out what permission I need goes in my next action.
+- No price, deposit, pre-order, order at a price, paid pilot or sale unless the card says I may sell this. An agreement to pay later (a deposit promised, a slot held against payment) is an order too, and so is asking someone to hold a date, a slot, an appointment or a box for themselves. A booked call to talk about the problem is not. Free samples of food or anything regulated can need a permit too. If the Money line says not known yet, finding out what permission I need goes in my next action.
 - Tests use a phone and no money. The target counts what people do and measures the thing that has to be true.
 - People stay as Person A, Person B. One test at a time.
 - Kinds of evidence: problem (people already live with it), intent (they give time, a referral or their details, which binds no one), paid sale (a stranger pays, once I may sell), repeat sale. "I would use this" and a yes to "would you buy it?" count as nothing.
@@ -66,17 +66,17 @@ Here is my progress card with the result filled in. The rules again, so you have
 Do only this, then stop:
 1. Compare my result with the target I wrote before the test. Do not change the target.
 2. Tell me the status: supported, disconfirmed, or attempted (attempted means the result is still unclear).
-3. Ask me for my decision: keep, change or stop. Then stop and wait for my answer. Do not suggest the next test yet.
+3. Ask me for my decision: keep (the same buyer and idea, and the next test), change (a different buyer, offer or test) or stop (end or park this idea). Then stop and wait for my answer. Do not suggest the next test yet.
 
 After I answer:
-4. If I keep the same test running longer, do not close it. Write my partial result on Result, set Status to attempted, keep the target, leave Decision empty, and change the deadline only to a date I give you. Give me the card back to copy, then stop.
-5. Otherwise, write my decision in my words. Move this test, its target, result, status and decision into one line under "## Closed tests" at the end of the card. Keep every older line there.
-6. Then give me the next uncertainty, one test for this week with a target set before it, and the full updated card to copy, with Result and Decision empty again.
+4. If I run the same test for longer, that is not a decision, so do not close it. Write my partial result on Result, set Status to attempted, keep the target, and leave Decision empty. Change the deadline only to a date or a length of time I give you, counted from the old deadline. Give me the card back to copy, then stop.
+5. Otherwise, write my decision in my words. Write this test as the first line under "## Closed tests" at the end of the card, newest first, in this shape: - date | Test: ... | Target: ... | Result: ... | Status: ... | Decision: ... Keep every older line below it.
+6. Then give me the next uncertainty, one test for this week with a target set before it, and the full updated card to copy, with Result and Decision empty and Status back to untested.
 
 [paste your card here]
 ```
 
-A disconfirmed result is good news. It saves you weeks of building the wrong thing.
+A disconfirmed result is good news, because it shows what not to build before you spend weeks on it.
 
 ---
 
@@ -90,14 +90,17 @@ A disconfirmed result is good news. It saves you weeks of building the wrong thi
 
 ## What the card words mean
 
+- **Venture alias:** a short nickname for the idea, so no real names go on the card.
 - **Uncertainty:** the one thing that has to be true that you have the least proof of.
 - **Evidence class:** the kind of proof the test can give (listed in the Step 3 box).
-- **Status:** untested (not run yet), attempted (run, still unclear), disconfirmed, supported.
+- **Status:** untested (not run yet), attempted (run, still unclear), disconfirmed (the result met the "disconfirmed if" line, so the idea as tested is not true), supported (it met the "supported if" line).
+- **Evidence class words:** problem (people already live with the problem), intent (they give time, a referral or their contact details, but promise nothing), paid sale (a stranger pays, once you may sell), repeat sale (they pay again).
+- **Decision:** keep, change or stop, and why, in your own words.
 - **Stage:** how far along you are. Most people start at pre-idea or idea-validation. mrr-scale means steady monthly revenue.
 
 ## Before you paste anything
 
-What you type into an AI chat goes to the company that runs it. Free plans usually keep chats for a time, and some use them to improve their models unless you change a setting. Turning that setting off does not mean nothing is kept: chats can still be stored for a while and checked for safety. Each app explains its own settings: [ChatGPT](https://help.openai.com/en/articles/7730893-data-controls-in-chatgpt), [Gemini](https://support.google.com/gemini/answer/13594961), [Claude](https://privacy.claude.com/en/articles/10023580-is-my-data-used-for-model-training).
+What you type into an AI chat goes to the company that runs it. Free plans usually keep chats for a time, and some use them to improve their models unless you change a setting. Turning that setting off does not mean nothing is kept: chats can still be stored for a while and checked for safety, and each app explains its own settings: [ChatGPT](https://help.openai.com/en/articles/7730893-data-controls-in-chatgpt), [Gemini](https://support.google.com/gemini/answer/13594961), [Claude](https://privacy.claude.com/en/articles/10023580-is-my-data-used-for-model-training).
 
 So paste the card, not your life story:
 
@@ -116,8 +119,8 @@ Claude requires users to be 18 or over, or older where local law says so. Other 
 Fill in the card with a mentor, a teacher or a friend:
 
 1. Write the venture in one line, and who you want to pay you.
-2. Ask: what has to be true for this to work, that we have the least proof of? That is the Uncertainty line.
-3. Ask: what could we find out this week, with a phone and no money? That is the Test line.
+2. Ask what has to be true for this to work that we have the least proof of, and write it on the Uncertainty line.
+3. Ask what we could find out this week with a phone and no money, and write it on the Test line.
 4. Write the target with a number before anyone runs the test.
 5. Meet again after the deadline. Fill in the Result, decide keep, change or stop, and move the finished test under Closed tests.
 

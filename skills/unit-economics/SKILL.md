@@ -74,7 +74,7 @@ The accounting-level math above is safe for any business - cash in, cash out, ru
 - **Break-even units:** fixed costs / contribution per unit, rounded up. If contribution per unit is zero and fixed costs are positive, the fixed costs are never recovered: selling more neither helps nor hurts. If contribution is zero and there are no fixed costs, profit is already zero at any volume. If contribution is negative, every extra sale makes the loss bigger. Say which case it is.
 
 ### Default alive (pre-profit ventures)
-A separate test, not a unit metric. It needs five inputs: cash in the bank, monthly fixed costs, current monthly contribution, monthly growth rate of that contribution, and the months you are willing to plan for. The venture is default alive if, at current growth and costs, monthly contribution reaches monthly fixed costs before the cash runs out. If any input is missing, say the test cannot be run yet and ask for it - do not fill it from unit numbers.
+A separate test, not a unit metric. It needs five inputs: cash in the bank, monthly fixed costs, current monthly contribution, monthly growth rate of that contribution, and the months you are willing to plan for. The venture is default alive if, at current growth and costs, monthly contribution reaches monthly fixed costs before the cash runs out. A contribution that is shrinking is never default alive, even if it covers costs today: the calculator follows the decline to the month the cash runs out. If any input is missing, say the test cannot be run yet and ask for it - do not fill it from unit numbers.
 
 ### Service Business Specific
 - **Utilization rate:** billable hours / available hours
@@ -87,16 +87,17 @@ When Python is available, run the numbers through `scripts/unit_math.py` instead
 
     python scripts/unit_math.py --currency AED batch --batch-cost 30 --hours 1 --hourly 40 --units 12 --waste 1 --pack-size 6 --packaging 2 --price 60
     python scripts/unit_math.py price --cost 44 --margin 40
+    python scripts/unit_math.py price --cost 44 --margin 40 --fee-percent 30
     python scripts/unit_math.py breakeven --fixed 1200 --price 60 --variable 44
     python scripts/unit_math.py cac --marketing 300 --customers 4
     python scripts/unit_math.py payback --cac 75 --contribution 20 --lifetime 6
-    python scripts/unit_math.py runway --cash 5000 --fixed 1000 --contribution 400 --growth 10
+    python scripts/unit_math.py runway --cash 5000 --fixed 1000 --contribution 400 --growth 10 --months 24
 
-It never fills in a number you did not give it, and it says what a missing one leaves unknown. Without Python, do the same steps by hand and show every one.
+When an input is missing it says so in a note, with the value it used (0 for a missing spend, waste or packaging, flat growth, a 24-month horizon), and it says what that leaves unknown. Nothing is filled in silently, so pass every input you have. It refuses an input that cannot be a real figure, such as a negative cost. Without Python, do the same steps by hand and show every one.
 
 ## Pricing advice stays conditional
 
-The costs give the lowest price that holds a margin. They do not give the price buyers will pay. Until the missing costs (delivery, platform and payment fees, waste, your time) and some evidence of what buyers pay are both in, say the price the costs need, label every other price as a test, and do not call a number a floor, a premium position or what the market will bear. Never say an unknown cost "fits in the buffer": an unknown is unknown. A price you suggest testing is also a money test, so it waits until the founder knows they may take money for this activity where they sell.
+The costs give the lowest price that holds a margin. They do not give the price buyers will pay. Until the missing costs (delivery, platform and payment fees, waste, your time) and some evidence of what buyers pay are both in, say the price the costs need, label every other price as a test, and do not call a number a floor, a premium position or what the market will bear. Never say an unknown cost "fits in the buffer": an unknown is unknown. A fee taken as a percent of the price, such as a delivery app's commission, goes into the price with `--fee-percent`, and VAT goes on top if they are registered for it. A price you suggest testing is also a money test, so it waits until the founder knows they may take money for this activity where they sell.
 
 ## Output Format
 

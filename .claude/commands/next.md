@@ -104,11 +104,11 @@ If the recommendation came from Rule 1 (needs-input blocker), the SECOND-BEST li
 
 ### Step 5. Stop
 
-Do not invoke other skills. Do not write to any file. /next is read-only - the founder's job is to act, your job is to recommend. The founder can run `/today` for the broader picture, or run a specific skill for execution.
+Do not invoke other skills. Do not write to any file. /next is read-only - the founder's job is to act, your job is to recommend. The one exception is the route in Step 0: when this hands over to `founder-next-move`, that engine may offer to save the progress card, and it writes the card and its one Must Do line only on the founder's yes. The founder can run `/today` for the broader picture, or run a specific skill for execution.
 
 ## Rules
 
-- Read-only. Do not modify any file.
+- Read-only. Do not modify any file, except the progress card and its Must Do line when the Step 0 route to `founder-next-move` offers them and the founder says yes.
 - One recommendation. Not three. Not a menu. /next exists because the founder has too many options - your job is to compress them.
 - Reasoning is required. Every recommendation must cite WHY (the rule that fired).
 - No em dashes or en dashes. Hyphens with spaces.

@@ -95,7 +95,7 @@ employees:
     dispatch: manual, on demand ("what should I do next")
     run_record_source: brain/agent-runs.jsonl, the lines whose seat is next-move-caller (written by the run itself via scripts/agent_runs.py)
     may_write: brain/.snapshot.md (a derived cache refresh) and brain/agent-runs.jsonl (its own run record). Only on your yes, context/progress-card.md and one line under Must Do in cadence/weekly-commitments.md - no other operating file
-    never: contact anyone, quote a price, commit you to a date, invent a stage your files do not show, propose a money test before you know you may take money for it, write the card without a clear yes, or touch core/identity.md or any file not named in may_write
+    never: contact anyone, commit you to a date, invent a stage your files do not show, quote a price or propose a money test before you know you may take money for it, write the card without a clear yes (your own keep, change or stop on the open test is the yes to record it), or touch core/identity.md or any file not named in may_write
     tools: Read, Write, Edit, Bash(python scripts/brain-snapshot.py:*), Bash(python scripts/agent_runs.py:*)
     kpi: you never end a session without one named next step
     version: 1.1

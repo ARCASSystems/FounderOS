@@ -219,6 +219,8 @@ If context is thin, ask:
 
 If the founder hasn't specified pricing, propose one number based on the work involved and ask them to confirm before producing the final document. Never quietly invent prices.
 
+**No money ask before permission.** A proposal with a price asks the buyer for money. If the founder's files and this conversation do not show they may sell this service where the buyer is (a licence or permit that covers it), ask once before putting a price in, and write the proposal without one meanwhile. Earlier sales to friends are not that permission. This repeats the founder safety rule in `CLAUDE.md` for surfaces where that file is not loaded.
+
 ## Self-check before delivery
 
 1. Does the SITUATION section sound like the prospect could read it and say "yes, that's us"?

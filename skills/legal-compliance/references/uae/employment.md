@@ -40,7 +40,7 @@ Re-verify monthly via web search.
 ## Employment Contracts
 
 ### All Fixed-Term Post-February 2022
-New law eliminated "unlimited contract" concept. All contracts are fixed-term (limited) and renewable. There is no maximum length: Federal Decree-Law No. 14 of 2022 (October 2022) removed the original 3-year cap, so the parties agree the term. Existing unlimited contracts had to be converted by 31 December 2023 (Ministerial Resolution No. 27 of 2023 extended the original 1 February 2023 deadline). Auto-renewal: if both parties continue after expiry without a new contract, renewed on same terms.
+New law eliminated "unlimited contract" concept. All contracts are fixed-term (limited) and renewable. There is no maximum length: Federal Decree-Law No. 14 of 2022 (issued 15 September 2022) removed the original 3-year cap, so the parties agree the term. Existing unlimited contracts had to be converted by 31 December 2023 (Ministerial Resolution No. 27 of 2023 extended the original 1 February 2023 deadline). Auto-renewal: if both parties continue after expiry without a new contract, renewed on same terms.
 
 *Corrected 8 Oct 2026 against mohre.gov.ae (the deadline extension) and DLA Piper and Pinsent Masons summaries of FDL 14/2022. The earlier text said "maximum 3 years" and "February 2024". The rest of this file keeps its own Last verified date.*
 

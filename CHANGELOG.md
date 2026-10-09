@@ -2,6 +2,18 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
+## v1.56.0 - release date set when it ships
+
+A founder's test now lives on one card that comes back next session. The pack is `updates/1.56.0-the-progress-card.md`.
+
+- **The progress card.** `founder-next-move` offers to save a test, with its target set before the test, as `context/progress-card.md` and one Must Do line, on a yes that names both. The next session starts from the open test, or from the newest closed test when none is open. A decision is recorded the moment it is given.
+- **Six founder safety rules in `CLAUDE.md`.** Adults only, no money before permission (an order, an agreement to pay later or a held date, slot, appointment or box counts), no unchecked outside facts, an open test comes first, skills first, and a yes covers only what was named.
+- **Setup asks if you are 18 or over first.**
+- **`scripts/unit_math.py`** does the unit-economics arithmetic, including a percent fee and a default alive test that follows a shrinking business to its cash-out.
+- **`docs/one-line-idea.md`**, the same method on a phone or on paper.
+- **The drafting skills carry the money rule,** and the snapshot leaves out the seeded example flag and pattern.
+- **UAE pack corrections,** each checked at its source.
+
 ## v1.55.2 - 2026-10-07
 
 The rest of the front-door truth pass, with no new feature. A full read of the shipped 1.55.1 tree found more claims of the same kind. The pack is `updates/1.55.2-the-rest-of-the-front-door.md`.
