@@ -477,12 +477,15 @@ def decision_nudge(card: dict) -> str:
     venture = card["alias"] or "the venture on the card"
     return (
         f"[progress-card] This reads like the founder's decision on the open test for {venture}. "
-        "Their decision is their yes to record it. If they are closing the test (keep, change or "
-        "stop), write it to context/progress-card.md in this reply, before any question: the "
-        "result, their decision in their own words, and the test as one line under ## Closed "
-        "tests, then take its Test result due line out of Must Do. Do not wait to hear the next "
-        "customer or test. If they are extending the same test, write the partial result, set "
-        "Status to attempted, keep the target and leave Decision empty."
+        "Their decision is their yes to record it. If the founder-next-move skill has not run in "
+        "this conversation, run it now: it holds the card's rules. If they are closing the test "
+        "(keep, change or stop), write it to context/progress-card.md in this reply, before any "
+        "question, as one line under ## Closed tests in exactly this shape: "
+        "- YYYY-MM-DD | Test: ... | Target: ... | Result: ... | Status: ... | Decision: <keep, "
+        "change or stop>, \"<their words>\". Then take its Test result due line out of Must Do. "
+        "Do not wait to hear the next customer or test. Change no target and no other card line, "
+        "and write the next test only after its own yes. If they are extending the same test, "
+        "write the partial result, set Status to attempted, keep the target and leave Decision empty."
     )
 
 
