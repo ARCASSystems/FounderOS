@@ -458,6 +458,34 @@ def card_nudge(card: dict) -> str:
     )
 
 
+# Round D (9 Oct 2026): in all three disconfirmed runs the founder said "Change.
+# I'll try a different kind of customer." and the model held the write back to
+# ask who the new customer was, or asked whether to record it. The next session
+# read the old test as untested and sent the founder to re-run it. The skill
+# text alone had held in round C and failed here, so a short reply that opens
+# with a decision word, while a card is open, gets a reminder in that turn.
+DECISION_REPLY_RX = re.compile(
+    r"^\W*(?:(?:i(?:'ll| will)?|let'?s|we(?:'ll| will)?)\s+)?"
+    r"(?:keep|change|stop|pivot|kill|drop|pause|park|extend|continue)\b"
+    r"(?=\s*(?:$|[.,!:;-]|(?:going|it|this|here|testing|the test|this test|for|to)\b))",
+    re.IGNORECASE,
+)
+DECISION_REPLY_MAX = 240
+
+
+def decision_nudge(card: dict) -> str:
+    venture = card["alias"] or "the venture on the card"
+    return (
+        f"[progress-card] This reads like the founder's decision on the open test for {venture}. "
+        "Their decision is their yes to record it. If they are closing the test (keep, change or "
+        "stop), write it to context/progress-card.md in this reply, before any question: the "
+        "result, their decision in their own words, and the test as one line under ## Closed "
+        "tests, then take its Test result due line out of Must Do. Do not wait to hear the next "
+        "customer or test. If they are extending the same test, write the partial result, set "
+        "Status to attempted, keep the target and leave Decision empty."
+    )
+
+
 def has_open_card(repo: Path) -> bool:
     """True when context/progress-card.md holds a filled test with no decision yet."""
     card = read_progress_card(repo)
@@ -822,7 +850,12 @@ def main() -> int:
         print(BIAS_NUDGE)
 
     card_named = False
-    if RESULT_TALK_RX.search(prompt):
+    if len(prompt) <= DECISION_REPLY_MAX and DECISION_REPLY_RX.search(prompt):
+        card = read_progress_card(repo)
+        if card and card["decision_open"]:
+            print(decision_nudge(card))
+            card_named = True
+    if not card_named and RESULT_TALK_RX.search(prompt):
         card = read_progress_card(repo)
         if card and card["decision_open"]:
             print(card_nudge(card))
