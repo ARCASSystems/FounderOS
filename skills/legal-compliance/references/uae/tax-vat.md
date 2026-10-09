@@ -132,9 +132,11 @@ Taxed at 9%. If total non-qualifying income exceeds de minimis (lower of AED 5M 
 
 ## Economic Substance
 
-Cabinet Decision 57/2020. Applies to UAE entities (mainland + free zone) conducting "relevant activities": banking, insurance, investment fund management, lease-finance, headquarters, shipping, holding, IP, distribution and service centre.
+**Discontinued for financial years ending after 31 December 2022.** Cabinet Decision No. 98 of 2024 (published in the Official Gazette 16 September 2024) limits the Economic Substance Regulations (Cabinet Decision 57/2020) to financial years from 1 January 2019 to 31 December 2022. No ESR notification or report is due for later years, and fines imposed for those later years were cancelled, with any paid fines refunded.
 
-Must demonstrate adequate substance: qualified employees, operating expenditure, physical assets, decision-making in UAE. Annual reporting. **Penalties:** AED 50,000 (first year), AED 400,000 (subsequent), potential info exchange with foreign tax authorities, potential strike-off.
+The regulations still matter only for the 2019 to 2022 years: a business with an open ESR question for those years should take it to a registered tax agent.
+
+*Corrected 8 Oct 2026 against Clyde & Co, BDO and Baker McKenzie summaries of Cabinet Decision 98/2024. The earlier text described ESR as a live annual obligation with penalties. The rest of this file keeps its own Last verified date.*
 
 ## Transfer Pricing
 
@@ -187,5 +189,5 @@ All UAE tax filings go through **EmaraTax** (emaratax.gov.ae). UAEPass login is 
 ## Escalation
 
 🟢 **Green:** VAT registration requirements, basic corporate tax obligations, rate questions, filing deadlines, record-keeping, straightforward QFZP conditions.
-🟡 **Amber:** QFZP eligibility assessment, transfer pricing documentation, tax group formation, voluntary disclosures, economic substance reporting, TRC applications, cross-border income.
+🟡 **Amber:** QFZP eligibility assessment, transfer pricing documentation, tax group formation, voluntary disclosures, economic substance questions for 2019 to 2022 only, TRC applications, cross-border income.
 🔴 **Red:** FTA tax audits, penalty disputes, significant voluntary disclosures, complex group restructuring for tax efficiency, cross-border tax planning, Pillar Two compliance, FTA investigations.

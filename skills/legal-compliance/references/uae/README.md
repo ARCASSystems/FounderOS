@@ -38,6 +38,26 @@ Each domain file has a `## Last Verified:` header. Each source in `sources.yml` 
 
 To refresh: `/founder-os:legal-update`. Walks you through which sources are stale, prompts you to web-search them, updates the dates and any material changes.
 
+### Freshness at a glance (as of 9 Oct 2026)
+
+| File | Last verified | State on 9 Oct 2026 |
+|---|---|---|
+| `company-formation.md` | 2026-04-25 (header refresh only) | Past the 90-day rule. One ESR line corrected 8 Oct |
+| `contracts-commercial.md` | 2026-04-25 | Past the 90-day rule. The abolished DIFC-LCIA option corrected 9 Oct |
+| `data-protection.md` | 2026-04-25 | Past the 90-day rule. One DIFC fine line corrected 8 Oct and made exact 9 Oct |
+| `dispute-resolution.md` | 2026-04-25 | Past the 90-day rule. DIFC-LCIA and ADCCAC rows corrected 9 Oct |
+| `employment.md` | 2026-04-25 | Past the 90-day rule. Contract-length and conversion-deadline lines corrected 8 Oct, the grace-period step 9 Oct |
+| `industry-specific.md` | 2026-04-25 (header refresh only) | Past the 90-day rule |
+| `ip-trademarks.md` | 2026-04-25 (header refresh only) | Past the 90-day rule |
+| `quick-reference.md` | 2026-05-14 | Past the 90-day rule. One contract-length line corrected 8 Oct, the grace-period lines 9 Oct |
+| `tax-vat.md` | 2026-05-14 | Past the 90-day rule. ESR section corrected 8 Oct |
+| `visas-immigration.md` | 2026-04-25 | Past the 90-day rule. One visa line clarified 8 Oct. Grace-period and absence lines corrected 9 Oct |
+| `templates/employment-templates.md`, `templates/contract-templates.md` | not dated | The blanket grace-period line and the DIFC-LCIA and ADCCAC options corrected 9 Oct |
+
+Every file is past its 90-day rule, so every answer from this pack carries the freshness warning until a full refresh runs. A corrected line is not a full re-verification of its file.
+
+**Not covered:** any other country, India included. Outside the UAE the skill declines until a jurisdiction is set up with its own sources. A founder who sells from or into another country should take the legal question to a qualified adviser there.
+
 ## Disclaimer
 
 This reference set is general guidance based on publicly available UAE law as of the dates noted. For decisions with significant financial or legal consequences, confirm with a qualified UAE lawyer or registered tax agent. The skill flags 🟢/🟡/🔴 escalation level on every response - 🟡 means "the rule is clear but specific circumstances could change the outcome" and 🔴 means "professional counsel required, do not act on this skill alone".

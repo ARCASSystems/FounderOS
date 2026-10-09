@@ -40,7 +40,9 @@ Re-verify monthly via web search.
 ## Employment Contracts
 
 ### All Fixed-Term Post-February 2022
-New law eliminated "unlimited contract" concept. All contracts are fixed-term (limited), maximum 3 years, renewable. Existing unlimited contracts should have been converted by February 2024. Auto-renewal: if both parties continue after expiry without a new contract, renewed on same terms.
+New law eliminated "unlimited contract" concept. All contracts are fixed-term (limited) and renewable. There is no maximum length: Federal Decree-Law No. 14 of 2022 (October 2022) removed the original 3-year cap, so the parties agree the term. Existing unlimited contracts had to be converted by 31 December 2023 (Ministerial Resolution No. 27 of 2023 extended the original 1 February 2023 deadline). Auto-renewal: if both parties continue after expiry without a new contract, renewed on same terms.
+
+*Corrected 8 Oct 2026 against mohre.gov.ae (the deadline extension) and DLA Piper and Pinsent Masons summaries of FDL 14/2022. The earlier text said "maximum 3 years" and "February 2024". The rest of this file keeps its own Last verified date.*
 
 ### Required Contents (Article 8)
 Every contract must include: employer/employee details, job title and description, start date and duration, probation period (if any, max 6 months), remuneration breakdown (basic + allowances), working hours, rest days, leave entitlements, notice period, termination conditions, place of work.
@@ -153,7 +155,7 @@ Termination for reasons unrelated to work = arbitrary. Court may award up to 3 m
 4. Calculate final settlement: outstanding salary + unused annual leave (basic salary) + gratuity + repatriation ticket + contractual entitlements
 5. Pay within 14 days of last working day
 6. Cancel visa through MOHRE/GDRFA within 30 days
-7. Employee gets 30-day grace period after cancellation
+7. Employee gets a grace period after cancellation. Its length depends on their residence category, so check it with ICP or GDRFA before you tell them a date
 
 ## Emiratisation and Nafis
 

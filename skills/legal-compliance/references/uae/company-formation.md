@@ -120,7 +120,7 @@ No statutory minimum for most LLCs. Some regulated activities may require specif
 After formation, every company must maintain:
 - **License renewal** - annual; lapse triggers penalties and visa complications
 - **UBO register** - update within 15 days of any change
-- **Economic substance reporting** - if conducting relevant activities (see tax-vat reference)
+- **Economic substance reporting** - discontinued for financial years ending after 31 December 2022 (Cabinet Decision 98/2024, see tax-vat reference). Only the 2019 to 2022 years can still raise a question
 - **Financial audit** - required by some entity types and most free zones
 - **Emiratisation quotas** - if mainland, 50+ employees (see employment-mohre reference)
 - **VAT and corporate tax filings** - (see tax-vat reference)

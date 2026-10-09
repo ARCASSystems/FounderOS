@@ -65,10 +65,10 @@ Every UAE commercial contract should address these 12 items:
 | **DIFC Courts** | English. Common law judges. Efficient. Conduit jurisdiction. | Both parties must agree or one DIFC-registered. Higher fees. | Higher but faster |
 | **ADGM Courts** | English. Common law. Growing. | Smaller caseload, less precedent. | Moderate |
 | **DIAC** | Dubai-seated. Confidential. Party-selected arbitrators. NY Convention. | Expensive. Slower for small claims. | Based on claim value |
-| **DIFC-LCIA** | London-quality arbitration. Strong enforcement. | Most expensive. | Premium |
+| **DIFC-LCIA** | Abolished by Dubai Decree No. 34 of 2021. Its cases moved to DIAC, whose rules apply to new requests from 21 March 2022. Do not name it in a new agreement. | - | - |
 
 ### Recommendation for Most Service Agreements Under AED 500K
-Governing law: UAE Federal. Dispute resolution: mandatory negotiation (30 days) → UAE Courts or DIAC. For international or >AED 500K: consider DIFC/ADGM law + DIAC or DIFC-LCIA arbitration.
+Governing law: UAE Federal. Dispute resolution: mandatory negotiation (30 days) → UAE Courts or DIAC. For international or >AED 500K: consider DIFC/ADGM law + DIAC or arbitrateAD arbitration (checked 9 Oct 2026).
 
 ## Payment and Penalties
 

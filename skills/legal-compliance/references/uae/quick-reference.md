@@ -40,7 +40,7 @@ Most-asked questions, answered directly. The skill checks here first before load
 
 ## Employment Contracts
 
-- **All fixed-term post-Feb 2022.** No unlimited contracts. Maximum 3 years, renewable.
+- **All fixed-term post-Feb 2022.** No unlimited contracts. No maximum length since Federal Decree-Law 14/2022 removed the 3-year cap, renewable (corrected 8 Oct 2026, see employment.md).
 - **Notice periods:** Minimum 30 days, maximum 90 days (per contract). Probation: 14 days.
 - **Probation:** Maximum 6 months, cannot be extended or repeated with same employer.
 - **Working hours:** 8/day or 48/week. Ramadan reduced by 2 hours/day.
@@ -65,10 +65,10 @@ Most-asked questions, answered directly. The skill checks here first before load
 
 ## Visa Grace Periods
 
-- **Standard:** 30 days after cancellation
-- **Skill Level 1/2 holders, Golden Visa, Green Visa, dependents:** up to 6 months
+- **After a residence permit is cancelled or expires:** the length is set by residence category, up to 6 months for some (Golden and Green holders and their families among them). There is no single standard length to quote: check the category with ICP or GDRFA (corrected 9 Oct 2026)
+- **Golden and Green holders:** also not bound by the usual six-month absence limit while the residence is valid. That is an absence rule, not a grace period
 - **Visit visa:** 10-day grace removed; AED 50/day fines on overstay
-- Grace clock starts on visa **expiry**, not cancellation date
+- The period runs from cancellation or from expiry. Where a visa expired before it was cancelled, confirm which date counts
 
 ## Personal Income Tax
 

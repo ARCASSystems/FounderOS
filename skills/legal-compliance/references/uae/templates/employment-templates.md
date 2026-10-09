@@ -256,7 +256,7 @@ Your final settlement will be calculated and paid within 14 days of your last wo
 
 ### Visa Cancellation
 
-Your employment visa will be cancelled following your last working day. You will have a **30-day grace period** after visa cancellation to either:
+Your employment visa will be cancelled following your last working day. After cancellation you will have a grace period of **[number of days - confirm the period for your residence category with ICP or GDRFA before sending this letter]** to either:
 - Secure new employment and transfer your visa
 - Exit the UAE
 - Change your visa status

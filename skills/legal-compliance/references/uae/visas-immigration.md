@@ -3,12 +3,12 @@
 **Last verified: 2026-04-25** against icp.gov.ae, gdrfa.gov.ae, u.ae/golden-visa.
 
 **Material changes since March 2026 baseline:**
-- **Grace period after cancellation:** standard 30 days; **up to 6 months** for Skill Level 1/2 holders, Golden Visa, Green Visa, AND their dependents.
+- **Grace period after a residence permit is cancelled or expires:** the length depends on the residence category and reaches **up to 6 months** for some, for example Golden and Green residence holders and their families (u.ae residence-visa guidance). There is no single standard length to quote: check the current period for the exact category with ICP or GDRFA before giving anyone a date. (Corrected 9 Oct 2026: this line had given a blanket 30 days.)
 - **Visit visa grace period removed:** previous 10-day grace eliminated; **AED 50/day fines** on overstay + deportation/re-entry-ban risk.
-- **Unsponsored 5-year visa:** new **US$4,000 minimum bank-balance** requirement.
+- **Unsponsored 5-year visa:** new **US$4,000 minimum bank-balance** requirement, held over the six months before the application. This is the 5-year multiple-entry tourist (visit) visa, not a residence or Golden Visa route (clarified 8 Oct 2026 after a July 2026 review found the figure being read as a Golden Visa threshold - verify the current amount before relying on it).
 - **Golden Visa eligibility expanded:** creatives and charity donors now qualify.
 - **Four new visit-visa sub-categories:** AI experts, cruise-line crew, entertainers, luxury yacht crew.
-- Grace-period clock starts on visa **expiry date**, not cancellation date - if visa expires May 1 and cancelled May 10, grace begins May 1.
+- The grace period runs after the permit is cancelled or after it expires. Where a visa expired before it was cancelled, confirm with ICP or GDRFA which date it counts from, because an overstay fine depends on it. (Corrected 9 Oct 2026: this line had stated one expiry-date rule for every case.)
 
 Re-verify monthly via ICP. Visa rules shift quarterly.
 
@@ -67,7 +67,7 @@ Re-verify monthly via ICP. Visa rules shift quarterly.
 **Outstanding Students:** Secondary GPA 95%+, or university GPA 3.75/4.0+, from UAE-accredited institutions.
 
 ### Benefits
-10-year renewable. Self-sponsored (not tied to employer). Can sponsor family + domestic helpers. 6-month grace period outside UAE. Work for any employer or self-employ.
+10-year renewable. Self-sponsored (not tied to employer). Can sponsor family + domestic helpers. Not bound by the usual six-month absence limit: the visa stays valid while the holder is outside the UAE for longer (u.ae). This is an absence rule, not a grace period. Work for any employer or self-employ.
 
 ### Process
 Apply through ICP smart services or GDRFA portal → submit documents → approval + entry permit → medical, biometrics, visa stamping.
@@ -78,7 +78,7 @@ Apply through ICP smart services or GDRFA portal → submit documents → approv
 **Freelancers:** Valid freelancer permit + minimum annual income + bachelor's/specialized diploma.
 **Investors:** Partner/shareholder + minimum capital (web search for current).
 
-**Benefits:** Self-sponsored, can sponsor family, not tied to single employer, 6-month grace period outside UAE.
+**Benefits:** Self-sponsored, can sponsor family, not tied to single employer. Not bound by the usual six-month absence limit while the residence is valid (u.ae). Separately, the grace period after it is cancelled or expires can reach six months for this category: check the current rule with ICP.
 
 ## Investor and Freelancer Visas
 
@@ -121,7 +121,7 @@ Web search specific free zone for current packages and costs.
 
 **New:** Entry permit → Enter UAE → Medical → Biometrics → Visa stamped → Active
 **Renewal:** Apply before expiry → Medical (if required) → New visa → Active
-**Cancellation:** Initiate → Visa cancelled → **30-day grace period** → Must exit, transfer, or change status
+**Cancellation:** Initiate → Visa cancelled → **grace period, its length set by the residence category (up to 6 months for some, check with ICP or GDRFA)** → Must exit, transfer, or change status
 **Status change:** Tourist/visit → Employment/residence: possible without leaving UAE (not all types allow in-country change)
 **Overstay:** Daily fines. Prolonged overstay → potential visa ban + deportation. Address promptly.
 **Visa ban:** Can result from absconding, overstay, criminal conviction, employer complaint. Duration varies. Some can be lifted through MOHRE/ICP. **RED escalation - always recommend professional help.**

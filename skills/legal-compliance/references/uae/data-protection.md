@@ -3,7 +3,7 @@
 **Last verified: 2026-04-25** against data.gov.ae, difc.ae, and DLA Piper / Clyde & Co interpretation context.
 
 **Material changes since March 2026 baseline:**
-- **DIFC Data Protection Amendment Law No. 1 of 2025** effective **15 July 2025**. Expanded individual rights, cross-border processing requirements, regulatory scope. **Maximum DIFC fines raised to USD 50,000 per violation.**
+- **DIFC Data Protection Amendment Law No. 1 of 2025** effective **15 July 2025**. Expanded individual rights, cross-border processing requirements, regulatory scope. **The amendment set maxima of USD 25,000 for the annual-assessment breach and USD 50,000 for the specified impact-assessment and authority-disclosure breaches, and the Commissioner keeps a separate power to impose a proportionate general fine.** (Corrected 9 Oct 2026 against Baker McKenzie and DLA Piper summaries: an earlier line said every fine is capped at USD 50,000 per violation. Verify against difc.ae before relying on a figure.)
 - **Federal PDPL executive regulations STILL pending** as of Q1 2025 verification. Federal-level penalty schedule still not specified. UAE Data Office continues to issue guidance via announcements.
 - Compliance expectation: align with PDPL principles proactively; do not wait for executive regulations to act.
 

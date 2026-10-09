@@ -81,8 +81,8 @@
 | Centre | Based In | Typical Use |
 |---|---|---|
 | **DIAC** | Dubai | Dubai-seated commercial disputes |
-| **DIFC-LCIA** | DIFC | High-value, international |
-| **ADCCAC** | Abu Dhabi | Abu Dhabi-seated |
+| DIFC-LCIA | - | Abolished by Dubai Decree No. 34 of 2021. New cases go to DIAC. Do not name it in a new clause |
+| **arbitrateAD** (Abu Dhabi International Arbitration Centre) | Abu Dhabi | Abu Dhabi-seated. Replaced ADCCAC for cases registered from 1 February 2024 |
 | **ICC** | Paris (UAE-seated) | International |
 
 **Law:** Federal Law No. 6/2018 (based on UNCITRAL Model Law).

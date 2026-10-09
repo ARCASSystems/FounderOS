@@ -142,7 +142,9 @@ Represented by: [Name], [Title]
 (a) **Negotiation:** The Parties shall attempt to resolve the dispute through good faith negotiation within [30] days;
 (b) **[Choose one: Courts / Arbitration]:**
 - **Courts:** If negotiation fails, the dispute shall be submitted to the competent courts of [Dubai / Abu Dhabi / DIFC / ADGM];
-- **Arbitration:** If negotiation fails, the dispute shall be referred to and finally resolved by arbitration administered by [DIAC / DIFC-LCIA / ADCCAC] under its applicable rules. The seat of arbitration shall be [Dubai / Abu Dhabi]. The language of arbitration shall be English. The number of arbitrators shall be [one/three].
+- **Arbitration:** If negotiation fails, the dispute shall be referred to and finally resolved by arbitration administered by [the Dubai International Arbitration Centre (DIAC) / the Abu Dhabi International Arbitration Centre (arbitrateAD) / another institution your lawyer confirms] under its rules in force when the arbitration starts. The seat of arbitration shall be [Dubai / Abu Dhabi]. The language of arbitration shall be English. The number of arbitrators shall be [one/three].
+
+*Drafting note, remove before signing: do not name DIFC-LCIA in a new agreement. Dubai Decree No. 34 of 2021 abolished it, and new cases go to DIAC under its rules in force from 21 March 2022. ADCCAC was replaced by arbitrateAD, whose rules apply to cases registered from 1 February 2024. Checked 9 Oct 2026 against DLA Piper and Mayer Brown summaries.*
 
 ---
 
