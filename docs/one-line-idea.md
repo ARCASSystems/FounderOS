@@ -21,7 +21,7 @@ Rules for every answer:
 - Name who I want to pay me (a kind of person or business, not a name), and the one thing that has to be true that I have the least proof of.
 - Give me ONE test for this week, with a phone and no money. Prefer asking people about a problem they already have over pitching my idea.
 - Before I run it, help me write the target: "Supported if ... Disconfirmed if ...", with a number. The number must measure the thing that has to be true, and it counts what people do, not what they say they would do: a yes to "would you buy it?" counts as nothing. Five conversations is a start, not proof.
-- No money until I know I may take it. Do not suggest a price, a deposit, a pre-order, an order at a price, a paid pilot or a sale unless I have told you I am allowed to sell this where I sell. Giving out food or anything regulated for free can need a permit too. If I do not know, the test uses conversations or a free sign-up list, and finding out what permission I need goes in my next action.
+- No money until I know I may take it. Do not suggest a price, a deposit, a pre-order, an order at a price, a paid pilot or a sale unless I have told you I am allowed to sell this where I sell. An agreement to pay later (a deposit promised, a slot held against payment) is an order too. A booked call with no money promised is not. Giving out food or anything regulated for free can need a permit too. If I do not know, the test uses conversations or a free sign-up list, and finding out what permission I need goes in my next action.
 - Grants, prizes and family money are funding, not customers.
 - Call people Person A, Person B. Do not ask for names, phone numbers or private details.
 - Do not state dates, laws, authorities, fees or group names you have not checked. Tell me what to check instead.
@@ -58,7 +58,7 @@ Run the test before the deadline. Write what happened on the Result line, in wor
 ```
 Here is my progress card with the result filled in. The rules again, so you have them:
 - Do not invent facts, customers, prices, dates, laws or fees. Tell me what to check instead.
-- No price, deposit, pre-order, order at a price, paid pilot or sale unless the card says I may sell this. Free samples of food or anything regulated can need a permit too. If the Money line says not known yet, finding out what permission I need goes in my next action.
+- No price, deposit, pre-order, order at a price, paid pilot or sale unless the card says I may sell this. An agreement to pay later (a deposit promised, a slot held against payment) is an order too. A booked call with no money promised is not. Free samples of food or anything regulated can need a permit too. If the Money line says not known yet, finding out what permission I need goes in my next action.
 - Tests use a phone and no money. The target counts what people do and measures the thing that has to be true.
 - People stay as Person A, Person B. One test at a time.
 - Kinds of evidence: problem (people already live with it), intent (they give time, a referral or their details, which binds no one), paid sale (a stranger pays, once I may sell), repeat sale. "I would use this" and a yes to "would you buy it?" count as nothing.
@@ -69,8 +69,9 @@ Do only this, then stop:
 3. Ask me for my decision: keep, change or stop. Then stop and wait for my answer. Do not suggest the next test yet.
 
 After I answer:
-4. Write my decision in my words. Move this test, its target, result, status and decision into one line under "## Closed tests" at the end of the card. Keep every older line there.
-5. Then give me the next uncertainty, one test for this week with a target set before it, and the full updated card to copy, with Result and Decision empty again.
+4. If I keep the same test running longer, do not close it. Write my partial result on Result, set Status to attempted, keep the target, leave Decision empty, and change the deadline only to a date I give you. Give me the card back to copy, then stop.
+5. Otherwise, write my decision in my words. Move this test, its target, result, status and decision into one line under "## Closed tests" at the end of the card. Keep every older line there.
+6. Then give me the next uncertainty, one test for this week with a target set before it, and the full updated card to copy, with Result and Decision empty again.
 
 [paste your card here]
 ```
