@@ -488,6 +488,31 @@ def open_test(root: Path) -> list[str]:
     return ["- " + " | ".join(parts)]
 
 
+def last_closed_test(root: Path) -> list[str]:
+    """The newest line under `## Closed tests`, for when no test is open.
+
+    Round F (9 Oct 2026): after a disconfirmed decision the card held no open
+    test, the next session never opened the card, and it sent the founder back
+    to the customer the closed test had just ruled out. The snapshot is read
+    every run, so the newest closed line rides here.
+    """
+    try:
+        with open(root / "context" / "progress-card.md", encoding="utf-8", errors="replace") as fh:
+            text = fh.read(CARD_MAX_CHARS)
+    except OSError:
+        return []
+    in_closed = False
+    for line in text.splitlines():
+        clean = line.strip()
+        if clean.startswith("#"):
+            in_closed = clean.lstrip("#").strip().lower().startswith("closed tests")
+            continue
+        if in_closed and clean.startswith("- "):
+            return [clean[:400], "- Start the next move from this decision. Do not propose a test this line "
+                                 "already ran with the same buyer, unless the founder asks to repeat it."]
+    return []
+
+
 def recent_decisions(root: Path, limit: int = 3) -> list[str]:
     path = root / "context" / "decisions.md"
     if not path.exists():
@@ -631,6 +656,12 @@ def build_snapshot(root: Path, today: date) -> str:
         out.append("## Open test (context/progress-card.md)")
         out.extend(test)
         out.append("")
+    else:
+        closed = last_closed_test(root)
+        if closed:
+            out.append("## Last closed test (context/progress-card.md)")
+            out.extend(closed)
+            out.append("")
 
     decisions = recent_decisions(root)
     out.append("## Recent decisions (last 3)")

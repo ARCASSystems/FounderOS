@@ -52,7 +52,7 @@ Then read, in this order, skipping what is missing:
 3. `brain/log.md` - the last 5 to 10 entries. This is how you re-infer the stage (below).
 4. `context/clients.md` - active deals, pipeline, last-touched dates.
 5. `context/priorities.md`, `cadence/weekly-commitments.md`, `brain/flags.md`, `brain/needs-input.md` - grounding for what is already in flight.
-6. `context/progress-card.md` - the open test, if there is one. Read it before you pick a move: an open test past its deadline with no result makes recording that result the move (see The progress card).
+6. `context/progress-card.md` - the open test, if there is one. Read it before you pick a move: an open test past its deadline with no result makes recording that result the move (see The progress card). Read it every run, even when the snapshot shows no open test. The newest line under `## Closed tests` is where the founder stopped: start from its decision, and never propose a test it already ran with the same buyer unless they ask to repeat it.
 
 ---
 
