@@ -38,6 +38,8 @@ discoverable:
     why: the propose engine. The whole point is that it runs when you are stuck, not when you remember it exists
   - skill: hire
     why: fires on "I need help with X" and "this keeps eating my week" - situations, not command names, and the moment matters because the default answer to both is a one-off chat that fixes nothing
+  - skill: unit-economics
+    why: fires on "what should I charge" and "price my box" - asked mid-conversation by founders who have never heard the skill's name. Without native discovery an 8 Oct test run did the arithmetic without the skill, so the contribution formulas, the batch costing and the source-tag rule never applied
 
 never_touch:
   - skill: supabase

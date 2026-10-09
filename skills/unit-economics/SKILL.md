@@ -10,7 +10,7 @@ mcp_requirements: []
 
 # Unit Economics Calculator
 
-Runs on: reasoning - reads your files and reasons; any capable agent can run this.
+Runs on: local-exec when Python is present - the arithmetic runs through `scripts/unit_math.py`. On a surface without Python I reason and show every step, so any capable agent can still run this.
 
 You help the founder run business math quickly and clearly. Show the numbers, explain what they mean, and flag what matters.
 
@@ -40,6 +40,7 @@ Read `business_model` from `stack.json` before framing anything. The Core Metric
 
 - **`service`** - lead with: utilization rate, effective hourly / day rate, delivery margin per engagement, capacity (how many engagements the team can hold before quality slips). Pricing conversations anchor on value and scope, not hours, but the floor is always cost-to-deliver.
 - **`ecommerce`** - lead with: average order value (AOV), contribution margin per order (after product cost, shipping, packaging, payment fees, returns), blended CAC, inventory turns, and cash tied up in stock. A "profitable" product with two turns a year can still starve the business of cash - say so when the numbers show it.
+  - **Made in batches (food, baking, small-batch products):** cost the batch, not the item. Cost per sellable unit = batch cost / units left after waste. Cost per box = that x units per box + packaging, then add per-order delivery, platform and payment fees. Whole boxes matter: units left over after the last full box either carry into the next batch or are wasted, and the cost per box is very different in the two cases, so show both. The founder's own time is an economic cost (hours x what an hour of their time is worth): show it as its own line and say it is not cash unless they pay themselves. Capacity per week (one oven, the hours they have) caps revenue before demand does, so show it.
 - **`saas_software`** - lead with: MRR, net and gross churn, CAC payback in months, LTV:CAC, and burn vs. months of runway. Growth claims mean nothing next to churn - check churn first.
 - **`marketplace`** - lead with: GMV, take rate, net revenue (GMV x take rate), liquidity (fill rate / time-to-match), and CAC split by side. Name which side is the constraint before any spend recommendation.
 - **`content_creator`** - lead with: audience reach per channel, revenue per thousand (RPM) or per sponsorship, conversion to owned audience (email), and income concentration (one platform or sponsor over half of revenue is a flag, not a win).
@@ -59,20 +60,43 @@ The accounting-level math above is safe for any business - cash in, cash out, ru
 - **Output per worker:** revenue generated per team member
 
 ### Customer Economics
-- **CAC:** total sales + marketing spend / new customers acquired
-- **LTV:** average revenue per customer x average customer lifespan
-- **LTV:CAC ratio:** LTV / CAC (healthy is 3:1 or better)
-- **Payback period:** CAC / monthly revenue per customer (in months)
+- **CAC:** (sales spend + marketing spend in a period) / new customers won in the same period. No customers won means CAC is undefined, not zero.
+- **Contribution per customer per month:** revenue per customer per month - the variable cost to serve them (product or delivery cost, payment fees, support)
+- **LTV (contribution):** contribution per customer per month x average customer lifetime in months. This is the LTV to compare with CAC.
+- **LTV (revenue):** revenue per customer x lifetime. If you show it, label it as revenue, and do not compare it with CAC - it hides the cost of serving the customer.
+- **LTV:CAC ratio:** contribution LTV / CAC (3:1 or better is a common rule of thumb)
+- **CAC payback:** CAC / monthly contribution per customer (in months). If CAC is positive and monthly contribution is zero or negative, CAC is never paid back - say that instead of printing a number. If CAC is zero there is nothing to pay back, which is a different case: say so separately, and say how the customers were won.
 
 ### Profitability
 - **Gross margin:** (revenue - direct costs) / revenue x 100
 - **Net margin:** (revenue - all costs) / revenue x 100
-- **Break-even:** fixed costs / (price - variable cost per unit)
+- **Contribution per unit:** price - variable cost per unit
+- **Break-even units:** fixed costs / contribution per unit, rounded up. If contribution per unit is zero and fixed costs are positive, the fixed costs are never recovered: selling more neither helps nor hurts. If contribution is zero and there are no fixed costs, profit is already zero at any volume. If contribution is negative, every extra sale makes the loss bigger. Say which case it is.
+
+### Default alive (pre-profit ventures)
+A separate test, not a unit metric. It needs five inputs: cash in the bank, monthly fixed costs, current monthly contribution, monthly growth rate of that contribution, and the months you are willing to plan for. The venture is default alive if, at current growth and costs, monthly contribution reaches monthly fixed costs before the cash runs out. If any input is missing, say the test cannot be run yet and ask for it - do not fill it from unit numbers.
 
 ### Service Business Specific
 - **Utilization rate:** billable hours / available hours
 - **Effective hourly rate:** project revenue / hours spent
 - **Delivery margin:** (engagement price - cost to deliver) / engagement price
+
+## Do the arithmetic with the calculator
+
+When Python is available, run the numbers through `scripts/unit_math.py` instead of working them out in prose, and quote its output. A model doing arithmetic in a sentence is how a per-box cost ends up off by a few dirhams, and how a price for a 40 percent margin gets rounded down to one that gives 39.7 percent.
+
+    python scripts/unit_math.py --currency AED batch --batch-cost 30 --hours 1 --hourly 40 --units 12 --waste 1 --pack-size 6 --packaging 2 --price 60
+    python scripts/unit_math.py price --cost 44 --margin 40
+    python scripts/unit_math.py breakeven --fixed 1200 --price 60 --variable 44
+    python scripts/unit_math.py cac --marketing 300 --customers 4
+    python scripts/unit_math.py payback --cac 75 --contribution 20 --lifetime 6
+    python scripts/unit_math.py runway --cash 5000 --fixed 1000 --contribution 400 --growth 10
+
+It never fills in a number you did not give it, and it says what a missing one leaves unknown. Without Python, do the same steps by hand and show every one.
+
+## Pricing advice stays conditional
+
+The costs give the lowest price that holds a margin. They do not give the price buyers will pay. Until the missing costs (delivery, platform and payment fees, waste, your time) and some evidence of what buyers pay are both in, say the price the costs need, label every other price as a test, and do not call a number a floor, a premium position or what the market will bear. Never say an unknown cost "fits in the buffer": an unknown is unknown. A price you suggest testing is also a money test, so it waits until the founder knows they may take money for this activity where they sell.
 
 ## Output Format
 
@@ -121,7 +145,9 @@ Second pass before the model leaves your machine:
 ## Rules
 
 - Always show your work
-- USD by default unless the user specifies another currency
+- Use the founder's own currency. If none is given, ask once
+- One currency and one period per calculation. If inputs mix currencies (AED and USD) or periods (monthly and yearly), convert explicitly with the rate or factor shown, or ask
+- A missing input is labelled unknown, never filled in
 - Round to reasonable precision. "$48K" not "$47,832.17"
 - Flag assumptions explicitly
 - If the user doesn't give enough numbers, ask. Don't guess.
