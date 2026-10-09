@@ -156,7 +156,9 @@ You need three things:
 - **A paid Claude plan** - Pro, Max, Team or Enterprise. Claude Code does not run on the free plan.
 - **Python 3.11+** - for the runtime scripts. Check with `python --version`, then `python3 --version`, then `py -3 --version` - the first one that answers is the one your machine uses. (Bare `python3` is unreliable on Windows.)
 
-That is it. No git. No database. No server. No Notion account required.
+That is it. No git. No database. No server. No Notion account required. You also need to be 18 or over, because Claude's terms say so, and setup asks before anything else.
+
+**No paid plan yet, or only a phone?** Start from one line in an AI chat app, or on paper: [docs/one-line-idea.md](docs/one-line-idea.md). It gives you the method and a progress card without the automation, and the card carries over if you install later. Only an earlier draft has been tried, with Claude. This version, ChatGPT and Gemini have not been tested yet.
 
 Git is deliberately not on the list. The OS runs without it: every session's file changes are snapshotted with a one-command restore - a rolling net that keeps the last 12 sessions, not a permanent timeline. Full version history begins when you say "own my history" - the OS installs git and wires it up itself, and from then on every save is a permanent point in time. You say yes once and never type a git command.
 
@@ -396,7 +398,7 @@ Have an idea but no business yet? That counts. Say **"I have an idea"** and desc
 
 ## Status
 
-Version 1.55.2. Public release. 97 skills, 47 commands, 1063 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.55.2. Public release. 97 skills, 47 commands, 1131 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
 **The dependency floor, as of this release.** One Claude plan, no API key, nothing to pip install - with two named exceptions, both optional and both failing closed with the exact command when their package is absent: `scripts/scrape.py` (the fetch helper behind web research) asks for `httpx selectolax tenacity` and falls back to the built-in fetcher, and `scripts/pitch_deck.py` asks for `python-pptx` to render a deck to `.pptx`, where the markdown spec it renders from is the deliverable either way. The optional local voice tier asks for `faster-whisper` and Piper, and is off until you turn it on. Every other shipped script is standard library only. Paragraphs below this line are release history: each states what was true at that version, not what is true now.
 

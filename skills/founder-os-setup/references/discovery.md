@@ -1,10 +1,24 @@
 # Setup - Phase 0.0 and Phase 0: Frame and Discovery
 
-Load this when you start the wizard. It covers the Python preflight, the framing contract, and the full discovery interview. Ask ONE question at a time and wait for the answer. Return to the router (`SKILL.md`) for the phase order.
+Load this when you start the wizard. It covers the adults-only question, the Python preflight, the framing contract, and the full discovery interview. Ask ONE question at a time and wait for the answer. Return to the router (`SKILL.md`) for the phase order.
 
 ---
 
-## Phase 0.P: Python preflight (run before anything else)
+## Phase 0.A: Adults only (the first question, before the Python check)
+
+Before anything else, the Python check included, ask one plain question and wait for the answer:
+
+> "One question before we start: are you 18 or over? Founder OS runs on Claude, and Claude's terms need you to be 18 or over, or older where your country's law says so."
+
+- **A clear yes to this question** ("yes", "I'm over 18", an adult age): continue to Phase 0.P. Do not write the answer or an age anywhere.
+- **Under 18, or they say so:** stop kindly and do not run anything else. Say: "The setup needs you to be 18 or over, because Claude's terms say so. The method still works without any AI tool: `docs/one-line-idea.md` has a paper version you can use with a teacher or mentor."
+- **Anything else** (no answer, "why?", unsure, or a general "let's go" that does not answer the question): say the reason in one line and ask again. A positive answer to something else is not a yes to this question. Do not start the Python check or the interview until it has a clear yes.
+
+Never ask for a date of birth. This is the product's own floor, and it is not an organisation's eligibility check: a programme, school or employer that gives people access to Founder OS checks eligibility itself, before it invites anyone.
+
+---
+
+## Phase 0.P: Python preflight (runs right after Phase 0.A)
 
 Founder OS needs Python 3.11+ for its runtime scripts, and the wizard is about to ask 15 to 20 minutes of questions. Check for Python FIRST, so a missing prerequisite surfaces before the founder invests that time, not after.
 
@@ -22,7 +36,7 @@ Three spellings because machines differ: bare `python3` is unreliable on Windows
 
 ---
 
-## Phase 0.0: Frame what you're getting (always run first)
+## Phase 0.0: Frame what you're getting (always run, right after 0.A and 0.P)
 
 Open with this in one short turn before any discovery questions. Without it, users who arrived via "help me set up my second brain" leave the wizard with a mental model the product does not deliver.
 
@@ -38,6 +52,7 @@ Routing:
 
 - If the user says "yes" / "go" / "continue" / any positive signal: proceed to Phase 0.1.
 - If the user asks a question first: answer it briefly, then ask the framing question again. Do not start Phase 0.1 until you have a clean yes.
+- If the user says at any point that they are under 18, stop as Phase 0.A says, even after a yes there.
 - If the user says they wanted team-shared or always-on: name the gap honestly. "That's not what Founder OS ships today. The personal version installs in 15 minutes. Want that, or stop here?" Respect a stop.
 
 Do not skip this phase. Users who arrived via "set up Founder OS" benefit from the reset too - "Founder OS" is ambiguous to a first-time reader and the rest of the wizard assumes a clean expectation contract.
@@ -122,7 +137,7 @@ This is the part the OS proposes from. A few fields make the brain "functional e
 
 - **`founder` and `team_of_one` roles:** the Founder Snapshot below - venture, customer, stage, blocker.
 - **`operator` role:** the Role Snapshot - skip the founder questions entirely and run the operator flow at the end of this step: scope, who they answer to, what is theirs to own, what is not theirs to decide, blocker. An employee running part of a job is the operator of that part, and the OS proposes for the part they run.
-- **Skip the whole step** when the provisional variant read in 0.2.2 is `student` or `career-mover` - these are working-journey fields and do not fit those situations. Role and variant are different axes: role (founder / operator / team_of_one) is the identity-layer field from 0.2.1, variant (founder / career-mover / builder / student / team-internal) is the profile-layer read from 0.2.2. Do not mix the two vocabularies. Log the skip and move on.
+- **Skip the whole step** only for a learning-only reader: the provisional variant read in 0.2.2 is `student` or `career-mover`, the role is not `operator`, AND they have described no venture and no idea they want to build - these are working-journey fields and do not fit that situation. An `operator` always gets the Role Snapshot, whatever the variant. Phase 1.1.5 backfills the snapshot if a venture or idea appears later. A student who describes an idea or a venture is a founder for this step: run the Founder Snapshot. The variant changes what the OS leads with, never whether the founder engine can run. Role and variant are different axes: role (founder / operator / team_of_one) is the identity-layer field from 0.2.1, variant (founder / career-mover / builder / student / team-internal) is the profile-layer read from 0.2.2. Do not mix the two vocabularies. Log the skip and move on.
 
 **The founder flow (`founder` / `team_of_one`).** Two of the four are usually already answered. Do NOT re-ask. Reuse and confirm:
 
@@ -166,7 +181,7 @@ These five write to `core/identity.md` under `## Role Snapshot` in Phase 1.1. Th
 
 Role (0.2.1) says who the operator is; stage (0.2.6) says where they are. This captures HOW the business makes money, because the money math differs by model: a service founder lives on utilization and day rate, an ecommerce founder on contribution margin and inventory turns, a SaaS founder on MRR and churn. One deterministic answer here makes every later number conversation start in the right frame.
 
-**Run for the `founder`, `team_of_one`, and `operator` roles.** Skip when the provisional variant read in 0.2.2 is `student` or `career-mover` (no business to model; record `null`) - those two are variants, not roles.
+**Run for the `founder`, `team_of_one`, and `operator` roles.** Skip when the provisional variant read in 0.2.2 is `student` or `career-mover` and no venture or idea was described (no business to model; record `null`) - those two are variants, not roles. A student with an idea gets this step, the same as in 0.2.6.
 
 Usually you already know. Infer it from 0.1/0.2.5 first ("you sell brand projects to SMEs - that is a service business, right?") and confirm in one line instead of asking cold. Ask fresh only when the answers so far do not settle it:
 

@@ -213,6 +213,7 @@ If yes, generate one variant. Limit to 2 variants total - more than that is deci
 
 - One question at a time during gathering.
 - Never invent facts the operator did not supply.
+- No money ask before permission. The Soft sell and Reactivation postures surface interest only (no price, deposit, pre-order, order or payment link) unless the founder's files or this conversation show they may take money for this activity where they sell (a licence or permit that covers it). If they do not, ask once. Earlier sales to friends are not that permission.
 - Voice rules apply to every draft, regardless of channel.
 - If the incoming message asks something the brand legally cannot answer (medical advice, financial guarantees, etc.), surface that to the operator BEFORE drafting and offer a compliant alternative.
 - If the customer attached a photo or screenshot the operator describes, acknowledge it specifically in the reply where it would land naturally.

@@ -115,7 +115,7 @@ The last thing you give the founder is not the file. It is the short list of wha
 |---|---|---|
 | The thing you could not evidence | The question it loses you | The smallest real step |
 
-Be specific. "No paying customer yet" with "one paid pilot at any price" beats a page of caveats.
+Be specific. "No paying customer yet" with "one paid pilot at any price, once you know you may take money for it where you sell" beats a page of caveats.
 
 ## What this does not do
 

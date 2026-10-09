@@ -35,13 +35,13 @@ For the `operator` role, the `## Role Snapshot`, same shape:
 >
 > That is enough for the OS to start proposing real moves. It gets sharper every time you use it."
 
-If any field is `[NOT SET]`, say so honestly and offer the one-line fix: "Your biggest blocker is still blank - tell me in one line any time and I will add it." Do not paper over a blank with a guess. If Phase 0.2.6 was skipped entirely (`student` / `career-mover` variants - no snapshot block exists), skip this point.
+If any field is `[NOT SET]`, say so honestly and offer the one-line fix: "Your biggest blocker is still blank - tell me in one line any time and I will add it." Do not paper over a blank with a guess. If no snapshot block exists (a learning-only student or a career-mover, with no venture or idea described), skip this point.
 
 **1.5 Run the first real proposal, in the flow.** Do not hand them an artifact to open somewhere else - the value is in the flow they are already in. Run the `founder-next-move` skill now: it reads the snapshot you just wrote and names the single highest-leverage move - toward a paying customer on the founder path, toward the work they own on the operator path - closing with one big and two small steps. This is their first taste of the actual product - their own brain producing a decision, thirty seconds after it was born. Then say one line about how it compounds, because compounding IS the product:
 
 > "That move came from a handful of lines your brain holds right now. Every session adds to it - what you did, what stalled, what you decided - and the moves get sharper because they are read from your real state, not guessed. Six months from now this same question reads a brain that knows your whole working world."
 
-If the snapshot is too thin for a real move (no customer set on the founder path, nobody named to answer to on the operator path), the skill already handles that by asking for the missing field - that ask is the move. If Phase 0.2.6 was skipped entirely (`student` / `career-mover` variants), skip this point.
+If the snapshot is too thin for a real move (no customer set on the founder path, nobody named to answer to on the operator path), the skill already handles that by asking for the missing field - that ask is the move. If the proposal names a test, the skill offers to save it as the progress card - let that offer stand, because the card is how the next session picks up the result. If no snapshot block exists (a learning-only student or a career-mover), skip this point.
 
 **2. Show the six files they now own.** Name them with a one-line, plain-English purpose each. These are the files a founder actually opens, not the engine files:
 

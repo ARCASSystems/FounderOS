@@ -34,7 +34,7 @@ This file is the router. Each phase's full procedure lives in a `references/` fi
 - Keep CLAUDE.md files LEAN. Global under 80 lines. Company under 60. Project under 40. Bootloader under 120.
 - Track everything skipped or deferred in a BACKLOG at the end of the setup.
 - After each phase, show a quick status: what's done, what's next.
-- If the user says "skip" or "later", log it and move on. Don't push back.
+- If the user says "skip" or "later", log it and move on. Don't push back. The one exception is the adults-only question in Phase 0.A: it needs a clear yes before anything else, even when the user skips, says "just set it up", or dumps everything at once.
 
 ## Handling Real Human Input
 
@@ -60,7 +60,7 @@ Run the phases in order. When you reach a phase, read its reference file for the
 
 | Phase | What it does | Load |
 |-------|--------------|------|
-| 0.0 + 0 | Python preflight (three probes, stop before the interview if missing), frame the second-brain contract, then run discovery: identity, role, variant read, positioning, the snapshot (Founder or Role - the fields the OS proposes from), workstreams, priorities, tool stack, work style, privacy, observation opt-in. | `references/discovery.md` |
+| 0.0 + 0 | The adults-only question (a clear yes before anything else), Python preflight (three probes, stop before the interview if missing), frame the second-brain contract, then run discovery: identity, role, variant read, positioning, the snapshot (Founder or Role - the fields the OS proposes from), workstreams, priorities, tool stack, work style, privacy, observation opt-in. | `references/discovery.md` |
 | 1 | Draft `core/identity.md` + `core/profile.md`, write the global `~/.claude/CLAUDE.md`, seed the auto-memory layer, optionally tidy global settings. | `references/identity-and-global.md` |
 | 2 | Create the full folder structure (the file tree), copy hooks + scripts byte-for-byte, run every placeholder substitution, seed brain content, init git + wire the privacy guard, set the first weekly sprint. Includes the adopt path: setting up inside an existing notes folder without touching a single existing file. | `references/root-structure.md` |
 | 3 | Company folders + business-context file + company `.mcp.json`. | `references/projects.md` |

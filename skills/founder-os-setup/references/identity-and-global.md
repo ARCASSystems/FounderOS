@@ -60,6 +60,13 @@ Show the draft. Get approval. Don't write yet.
 
 Finalise the variant you read provisionally in Phase 0.2.2, now that you also have their priorities (0.4), tool stack (0.5), and work style (0.7). Re-check against the `profile-router` skill's signal table. If the fuller picture changes the read, say so in one line and confirm.
 
+**Backfill the snapshot when the read changes.** Settle the role (0.2.1) and the variant (the profile-router read) separately: they are different axes. If Phase 0.2.6 was skipped for a learning-only reader, and the confirmed variant is now `founder` or `builder`, or the person has described a venture or an idea since, run the snapshot branch that matches the role now, before you write `core/identity.md`:
+
+- `founder` or `team_of_one`: the Founder Snapshot questions from 0.2.6, then the business model from 0.2.7.
+- `operator`: the Role Snapshot questions from 0.2.6. An operator exploring a side venture keeps the Role Snapshot. Each install carries exactly one snapshot block, and the role picks it.
+
+Reuse what they already said and ask only what is missing. Then show the revised `core/identity.md` draft and get a yes again, because the backfill changes a draft they already approved. Nothing later backfills a skipped snapshot, and without it the next-move engine does not run for them. A learning-only reader with no venture and no idea keeps no snapshot.
+
 Draft `core/profile.md` from `templates/profile.md`, filled from the `profile-router` variant map:
 
 - `variant` - the confirmed variant (founder / career-mover / builder / student / team-internal)
