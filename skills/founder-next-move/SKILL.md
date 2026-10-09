@@ -1,10 +1,10 @@
 ---
 name: founder-next-move
 description: >
-  Propose the single highest-leverage next move. For a founder it aims at their next paying customer; for an operator running a role inside a company it aims at the outcome they own for whoever is waiting on it. Trigger on "what should I do next", "what's my next move", "where do I push", "I don't know what to do next", "give me one thing to do", or any moment the operator wants the OS to decide the next step instead of listing options. Also fires on the raw idea pitch: "I have an idea", "is this a good idea", "help me validate my idea", or a first-time founder describing an everyday problem and a solution they want to build. Reads the brain (the Founder or Role Snapshot, the log, the pipeline), works out where they actually are, picks the one move with the most leverage, and closes with three things they can do today (one big, two small). Free-tier; writes nothing to your operating files.
+  Propose the single highest-leverage next move. For a founder it aims at their next paying customer; for an operator running a role inside a company it aims at the outcome they own for whoever is waiting on it. Trigger on "what should I do next", "what's my next move", "where do I push", "I don't know what to do next", "give me one thing to do", or any moment the operator wants the OS to decide the next step instead of listing options. Also fires on the raw idea pitch: "I have an idea", "is this a good idea", "help me validate my idea", or a first-time founder describing an everyday problem and a solution they want to build. Reads the brain (the Founder or Role Snapshot, the log, the pipeline), works out where they actually are, picks the one move with the most leverage, and closes with three things they can do today (one big, two small). Free-tier. On your yes it saves one progress card (the test, the number that decides it, the result) so the next session starts from what happened.
 why: "A person drowning in options does not need a list, they need one move. This reads where they actually are and names the single thing with the most leverage - toward a paying customer for a founder, toward the outcome they own for an operator - with a step small enough to start today."
 enhance: "Keep brain/log.md current - the stage read and the move both sharpen when the log shows what the founder did this week."
-allowed-tools: ["Read", "Bash(python scripts/brain-snapshot.py:*)", "Bash(python scripts/agent_runs.py:*)"]
+allowed-tools: ["Read", "Write", "Edit", "Bash(python scripts/brain-snapshot.py:*)", "Bash(python scripts/agent_runs.py:*)"]
 mcp_requirements: []
 ---
 
@@ -25,10 +25,11 @@ The North Star depends on who is operating, and the identity role decides it:
 
 The message that triggers this skill is often the pitch itself: a first-time founder - sometimes a student - describing an everyday problem and a solution, the way they would to any chatbot. Treat that message as brain material, not as a request for a lecture:
 
-- **Parse the pitch the way the setup wizard parses a ramble.** The problem they describe is the customer clue, the solution is the venture, and their own words are the stage evidence - almost always `pre-idea` or `idea-validation`. Offer to capture it in one line ("logging this as your venture - say no to keep it out"), then run the engine as normal.
+- **Parse the pitch the way the setup wizard parses a ramble.** The problem they describe is the customer clue, the solution is the venture, and their own words are the stage evidence - almost always `pre-idea` or `idea-validation`. Run the engine on what they said. Nothing is saved at this point: the progress card below is where it gets kept, and only on their yes.
 - **Do not return a startup course, a business plan, a SWOT, or a feature list.** The stage table below already says what an idea needs next: real people with the problem, talked to this week, before anything gets built. That is the move.
 - **Say it in their vocabulary.** "Talk to five people who wear glasses in humid weather and ask what they do about the fog" beats "conduct customer discovery interviews". The move must be something they could start today with a phone and no money.
 - **A thin or missing snapshot is already handled** by Step 1: the capture move IS the move. Never a blank screen, never an invented plan, and never a refusal that sends a first-timer back to a generic chatbot.
+- **Leave them with a card, not just a move.** Once the move names a test, offer to save it as the progress card (below). One line in, one card out, and the next session starts from the result.
 
 ---
 
@@ -51,6 +52,7 @@ Then read, in this order, skipping what is missing:
 3. `brain/log.md` - the last 5 to 10 entries. This is how you re-infer the stage (below).
 4. `context/clients.md` - active deals, pipeline, last-touched dates.
 5. `context/priorities.md`, `cadence/weekly-commitments.md`, `brain/flags.md`, `brain/needs-input.md` - grounding for what is already in flight.
+6. `context/progress-card.md` - the open test, if there is one. Read it before you pick a move: an open test past its deadline with no result makes recording that result the move (see The progress card).
 
 ---
 
@@ -78,11 +80,11 @@ Six stages, each with the move that has the most leverage toward a paying custom
 
 | Stage | What it looks like in the brain | The leverage move |
 |---|---|---|
-| `pre-idea` | venture vague, no named customer | Name one real customer and go talk to five of them this week. No building. |
-| `idea-validation` | customer named, no proof anyone will pay | Get one real signal of money: a deposit, a pre-sale, a signed letter of intent, or five problem interviews. Still no building. |
-| `building` | making the product, no buyer lined up | Cut scope to the smallest thing one customer would pay for, and line up one pilot buyer in parallel. Building without a buyer in sight is the trap here. |
-| `first-customer` | product exists, zero paying customers | Direct outbound to named prospects, or go where the customer physically is. This is the money stage - the North Star bites hardest here. |
-| `revenue` | one or a few paying customers | Do it again with a lookalike. Tighten the offer, ask for a referral and a testimonial, find the second and third customer. |
+| `pre-idea` | venture vague, no named customer | Name one kind of customer and talk to a handful of them this week about the problem, not the idea. Five is a good start, not proof. No building. |
+| `idea-validation` | customer named, no proof anyone will pay | Get the strongest evidence they are allowed to get. Interest that costs the buyer something other than money (a waitlist with their details, a letter of intent, a booked follow-up) is open to anyone. A deposit or pre-sale only once they know they may take money for it where they sell (see Before a test takes money). Still no building. |
+| `building` | making the product, no buyer lined up | Cut scope to the smallest thing one customer would pay for, and line up one pilot buyer in parallel (a paid pilot waits for permission, see Before a test takes money). Building without a buyer in sight is the trap here. |
+| `first-customer` | product exists, zero paying customers | Direct outbound to named prospects, or go where the customer physically is. This is the money stage - the North Star bites hardest here. Settle the right to sell before any paid sale. |
+| `revenue` | one or a few paying customers | Do it again with a lookalike. Tighten the offer, ask for a referral and a testimonial, find the second and third customer. If their right to sell is not on file (sales to friends are not permission), settle it before the next sale. |
 | `mrr-scale` | repeatable revenue, founder is the bottleneck | The constraint is now founder-dependency on the revenue engine. Route to `bottleneck-diagnostic`, but keep the move anchored to winning more customers, not internal polish. |
 
 Pick the stage from evidence. If the evidence is mixed, say so and pick the lower stage - it is safer to propose the earlier move than to assume progress that has not happened.
@@ -101,13 +103,86 @@ On the operator path the same logic reads sideways instead of outward: the highe
 
 ---
 
+## Before a test takes money
+
+A deposit, a pre-order, a paid pilot and any sale take money, and earlier sales to friends do not settle the question. Propose one only when the founder knows they are allowed to take money for this activity where they sell. In most countries, the UAE included, that means a trade licence or a permit that covers the activity.
+
+- **Known and allowed:** put how they know on the card (their licence, their permit), then the money test can run.
+- **Not known:** do not propose the money test. Use problem or intent evidence this week, and make finding out the route part of the next action. The `legal-compliance` skill can outline the routes for a jurisdiction it has loaded, and a qualified adviser confirms them. This is a safety rule, not legal advice.
+- **Taking an order is a money test.** "Want me to put you down for a box at AED 60?" takes an order, even with no payment yet, so it waits for permission like a deposit does. Asking "would you pay AED 60?" is not evidence either: a yes to a price nobody has to pay is a guess. Before permission, price evidence comes from what buyers already do: what they pay now for the nearest thing, where, and how often. That needs no permission.
+- **A payment route is not a permission.** A platform, a marketplace or someone else invoicing for them settles how the money moves, not whether they may sell this.
+- **A free test can still need a permit.** Giving out food, cosmetics, health products or anything regulated can need a permit even when no money changes hands. A test that puts the product in a stranger's hands waits for the same check. Until then, test with conversations, a waitlist, or showing the product without handing it over.
+- **Grants, competition prizes and family money are funding, not customers.** They go on the card under funding and never count as a first customer.
+
+---
+
+## The progress card
+
+A move is half the job. The other half is the next session knowing what the founder tried and what happened. The card carries that: one file, owned by the founder, small enough to paste into any AI chat or copy onto paper. The free one-line-idea route (`docs/one-line-idea.md`) uses the same card, so a founder can start on a phone and move to the full OS without starting again.
+
+**When to offer it:** after any founder-path proposal that names a test. Ask once, as a plain question: "Want me to save this as your progress card, so the next session starts from the result? (yes / no)". Only a clear yes is a yes. Silence, "maybe" or a change of subject means not now. Write nothing without a yes. On the operator path, skip the card.
+
+**Each write gets its own yes.** A yes to the card covers exactly two writes: `context/progress-card.md` and one line under Must Do in `cadence/weekly-commitments.md`. It never covers `core/identity.md`, a lead, a priority, a log entry or any other file. If you also want to update one of those, ask for it separately, name the file, and wait for its own answer.
+
+**The card** lives at `context/progress-card.md`, in exactly this shape. It holds one open test for one venture. Write only the lines inside the code block, without the code fence:
+
+```
+# Progress card
+Updated: YYYY-MM-DD
+Venture alias: <a short name for the venture, no personal names>
+Venture: <one line, in the founder's words>
+Buyer: <the kind of person or business you want to pay you, not a named person>
+Stage: <pre-idea / idea-validation / building / first-customer / revenue / mrr-scale>
+Uncertainty: <the one thing that has to be true and has the least evidence>
+Test: <the cheapest test this week, with a phone and no money where possible>
+Evidence class: <problem / intent / paid sale / repeat sale>
+Target, set before the test: <supported if ... / disconfirmed if ...>
+Deadline: YYYY-MM-DD
+Country: <where you sell>
+Money: <none in this test / allowed to sell here, because ... / not known yet>
+Result: <filled in after the test>
+Status: <untested / attempted / disconfirmed / supported>
+Decision: <keep / change / stop, and why>
+Next action: <one step, with a date>
+Funding (not customers): <grants, prizes, family money, if any>
+```
+
+Rules for the card:
+
+- **The target is written before the test and is not moved after the result.** If the founder wants a different target, close the old test with its result (see Old tests are kept), and the new target starts a new test.
+- **The target measures the uncertainty.** The number that decides must answer the Uncertainty line above it. If the uncertainty is "strangers will book me", count bookings or booked calls from strangers, not people who say they use Instagram. A target that measures something easier is not a test of the uncertainty.
+- **Evidence classes stay apart.** Problem: people show the problem in what they already do or pay for. Intent: they commit something other than money (time, a referral, their details on a waitlist, a letter of intent), and it binds no one. Paid sale: a stranger pays, taken once the founder knows they may sell. Repeat sale: they pay again. Funding is none of these. "I would use this" is not evidence of anything, and neither is a yes to "would you buy this?" or "would you order a box?": that is a guess about the future, not an act. A target counts acts, such as people who describe the problem from their own week, who give their name for a waitlist with a date, or who book a call.
+- **Status words.** untested: not run yet. attempted: run, and the result is still unclear. disconfirmed: the result met the disconfirmed line. supported: it met the supported line.
+- **Five is a starting number, not proof.** Set the number that decides from the question being asked, before the results come in.
+- **People on the card are aliases** (Person A, the cafe owner near campus). Names, phone numbers and chats stay in the founder's own notes. Keep family details, health or wellbeing notes, passwords and customer contact exports off the card, because the card is the thing they paste into AI tools.
+- **One open test at a time.** A second test waits until the first has a result and a decision.
+- **One venture per card.** The card is for the venture the founder is working on now. If they talk about a different venture, ask before you treat it as the card's venture: "Your card is for <alias>. Is this the same venture, or are you switching?" A switch closes the open test first (its result and decision, or "parked until <date>") and starts the new venture's card only on their yes. Never carry one venture's test, target or money status over to another.
+- **Old tests are kept.** When a test has a decision, or its target changes, move it to one line under `## Closed tests` at the bottom of the same file, newest first, before the next test goes into the card. The card only ever holds the open test. A closed line looks like this:
+  `- 2026-10-15 | Test: five parent conversations | Target: supported if 3 of 5 name a frustration | Result: 4 of 5 | Status: supported | Decision: keep, their words`
+- **Text tagged private stays out of the files.** Before writing the card or the must-do line, leave out everything between `<private>` and `</private>` (any capital letters), tags included. If a `<private>` tag is never closed, leave out everything after it. If everything they said is tagged, write nothing and say "skipped - content was tagged private." Be plain about the limit: this keeps the text out of the saved files. It cannot unsend what is already in this chat, which the AI provider received when they typed it.
+
+**The way back to the next session.** When the card is saved, add one line under `## Must Do` in `cadence/weekly-commitments.md`: `Test result due <deadline>: <test> (context/progress-card.md)`. Replace an unfilled template placeholder if there is one. If Must Do already holds three real items, ask which one the test replaces. If they keep all three, leave the line out and say plainly that Must Do will not show the deadline. The card still comes back: the snapshot carries the open test from the card itself, and the session nudge names it when a message reads like a result. Not every phrasing does, so the open-test rule in `CLAUDE.md` covers the rest.
+
+**After any write to the card or Must Do,** run `python scripts/brain-snapshot.py --write` so the snapshot shows the change now, not at the next refresh. A snapshot written before the save would otherwise read as fresh and still miss the card.
+
+**When the card has an open test:**
+
+- Past the deadline with no result: the move is recording the result. Ask for it in one line.
+- Result given: compare it with the target set before the test and set Status. Then ask the founder for the decision (keep, change or stop) in one line and stop there. Do not propose the next test in the same answer. The decision is theirs: do not fill the Decision line yourself, not even as a suggestion to approve.
+- Decision given: record it first, before asking anything else. Write the result and their decision in their words, move the closed test under `## Closed tests`, and take its `Test result due` line out of Must Do, even if the next test still needs an answer from them. Then name the next uncertainty and its test with a target set before it, and ask for a yes before writing the new test into the card, its `Updated:` date and the must-do line.
+- Disconfirmed is a good result. It saves weeks of building the wrong thing. Say so.
+
+---
+
 ## Step 4 - the human-support layer
 
 Two conditions add to the output. Apply them only when they fit.
 
-**UAE ground truth (only when the founder's location or market is the UAE / Dubai).** Put one or two concrete, territory-level specifics into the move: how the trade actually moves, the gatekeepers, the physical markets (for example the Al Awir fruit and vegetable market, the Sharjah markets), who you have to get past to reach the buyer. Send them to the ground, not just to the inbox. Do not invent specifics you are unsure of - name the market and the move, and tell them to verify the access detail on the ground.
+**UAE ground truth (only when the founder's location or market is the UAE / Dubai).** Put one or two concrete, territory-level specifics into the move: how the trade actually moves, the gatekeepers, the physical markets (a wholesale produce market, a weekend market: check the name and how to get in on the ground), who you have to get past to reach the buyer. Send them to the ground, not just to the inbox. Do not invent specifics you are unsure of - name the market and the move, and tell them to verify the access detail on the ground. If the move takes money or hands over a product, the permission question in Before a test takes money comes first. To point them somewhere, read the matching file in `skills/legal-compliance/references/uae/` (for food, `industry-specific.md`) and quote who it names with that file's last-verified date, and tell them to confirm it is current. If the pack does not cover it, name only the question ("which licence or permit covers selling food from home in your emirate"), never a licence, authority or fee from memory.
 
-**The jobs off-ramp (only when they signal they are rethinking the whole venture - or, on the operator path, the role itself - or a stage has stalled for a long stretch with no movement).** Name it plainly and without judgement: not every venture is the right one to push, and changing track is a valid move, not a failure. Point them at the careers route. Do not surface this on a normal proposal - it is for the founder who is actually questioning the path.
+**The jobs off-ramp (only when they signal they are rethinking the whole venture - or, on the operator path, the role itself - or a stage has stalled for a long stretch with no movement).** Name it plainly and without judgement: not every venture is the right one to push, and changing track is a valid move, not a failure. Offer the choices they can make and let them pick: pause until a date they choose, a smaller test, a different venture, or a job for now. Record only the choice they make, never a judgment about them. A stall can come from exams, money, care duties or a hard month, so do not read it as low commitment. Do not surface this on a normal proposal - it is for the founder who is actually questioning the path.
+
+**When it is more than a business problem.** If they say or show they are in crisis or unsafe, stop proposing. Follow the support rule in `founder-coaching`: this needs a person, not a move.
 
 ---
 
@@ -138,8 +213,13 @@ DO ONE OF THESE - YOU LEAVE WITH A STEP IN YOUR HAND
 2. <LOW: a 15 to 30 minute step toward it>
 3. <LOW: the smallest possible step, something you can do from your phone right now>
 
+[Founder path, when the move names a test]
+THE CARD
+Uncertainty: <one line> | Test: <one line> | Evidence class: <one> | Target, set before the test: <the act it counts, with a number> | Deadline: <date>
+Save this as your progress card, so next time starts from the result? (yes / no)
+
 [Rethinking the whole thing? - include only when the founder signals a track change or a long stall]
-<the jobs off-ramp line, plainly stated, pointing at the careers route>
+<the jobs off-ramp line, plainly stated: pause until a date, a smaller test, a different venture, or a job for now - their pick>
 ```
 
 The three-option close is the rule, not a suggestion: one high, two low. The founder must always leave with at least one step small enough that there is no excuse not to start.
@@ -148,7 +228,7 @@ The three-option close is the rule, not a suggestion: one high, two low. The fou
 
 ## After proposing
 
-This skill recommends; the founder acts. It writes nothing to the founder's operating files - the only side effect is refreshing `brain/.snapshot.md` when it is stale or missing. If the founder then does the move, that gets logged through the normal brain-log flow, not by this skill.
+This skill recommends; the founder acts. It writes to the founder's operating files only on their yes: the progress card (`context/progress-card.md`) and its one must-do line. Otherwise the only side effect is refreshing `brain/.snapshot.md` when it is stale or missing. If the founder then does the move, that gets logged through the normal brain-log flow, not by this skill.
 
 If the founder asks "is this the right move" or pushes back on the plan, that is a different job - route to `founder-scope-challenge` to stress-test the plan, or `decision-framework` for a structured choice.
 
@@ -162,6 +242,9 @@ If the founder asks "is this the right move" or pushes back on the plan, that is
 - A thin brain gets a capture move, not an invented plan. Do not fabricate a customer, a stage, a manager, or a blocker.
 - The North Star is a paying customer for a founder, and the work you own in front of whoever waits on it for an operator. Internal polish is almost never the move on either path.
 - Free-tier only. Reads files and reasons. No API key, no paid tool.
+- No money test until the founder knows they may take money for it where they sell. Grants and prizes are funding, never a first customer.
+- No unchecked outside-world facts. A date (a festival, an event, a deadline), a law, an authority, a fee, or the name of a group, market or event comes only from the founder's files, a reference pack, or a source checked in this session. Otherwise say what to check: "check this year's date", "find which authority licenses this in your emirate". A move built on a wrong date or the wrong regulator sends the founder the wrong way with confidence.
+- The card is written only on a yes. Its target is set before the test and is not moved after the result.
 - No em dashes, no en dashes, no banned words.
 - The gate is identity, not variant: a `## Founder Snapshot` block with the `founder` or `team_of_one` role, or a `## Role Snapshot` block with the `operator` role, in `core/identity.md`. The profile variant never gates this engine. When neither shape is present, point to `/next`.
 
@@ -173,4 +256,4 @@ If `roles/employees.yaml` carries the `next-move-caller` row, close with one lin
 
     python scripts/agent_runs.py record --seat next-move-caller --trigger "asked for the next move"         --read "brain/.snapshot.md,core/identity.md,brain/log.md" --produced "" --outcome ok
 
-Use `--outcome refused` (with `--could-not "<why>"`) when the brain was too thin to propose and you asked for the missing field instead, and `--outcome failed --could-not "<why>"` when it broke - the script requires the reason for both, so a failure with no reason is never a silent no-record. A refusal is not a failure and the log distinguishes them. Skip this silently if the script or the registry is absent, and never mention it in your reply - it is bookkeeping, not output.
+When the founder said yes to the card, pass `--produced "context/progress-card.md,cadence/weekly-commitments.md"` instead of the empty value. Use `--outcome refused` (with `--could-not "<why>"`) when the brain was too thin to propose and you asked for the missing field instead, and `--outcome failed --could-not "<why>"` when it broke - the script requires the reason for both, so a failure with no reason is never a silent no-record. A refusal is not a failure and the log distinguishes them. Skip this silently if the script or the registry is absent, and never mention it in your reply - it is bookkeeping, not output.

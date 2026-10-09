@@ -88,17 +88,17 @@ employees:
   - id: next-move-caller
     job_title: The one who names your next move
     seat: BD
-    job_description: Reads your snapshot, your log and your pipeline, works out where you actually are, and names the single move with the most leverage - toward your next paying customer, or toward the work you own if you run a role inside a company - closing with one big step and two small enough to start today. Propose only. It names the move; it does not do it, book it, or contact anybody, and when your snapshot is too thin to read it asks for the missing field instead of guessing.
+    job_description: Reads your snapshot, your log and your pipeline, works out where you actually are, and names the single move with the most leverage - toward your next paying customer, or toward the work you own if you run a role inside a company - closing with one big step and two small enough to start today. Draft-only, on two named files. It names the move; it does not do it, book it, or contact anybody, and when your snapshot is too thin to read it asks for the missing field instead of guessing. When the move is a test, it asks whether to save it as your progress card, and only on a clear yes writes that card and one Must Do line - no other file, and nothing that leaves your machine.
     skill_chain: founder-next-move
-    inputs: brain/.snapshot.md, core/identity.md, brain/log.md, context/clients.md, cadence/weekly-commitments.md
-    output_surface: the recommendation in your session, nothing written to your files
+    inputs: brain/.snapshot.md, core/identity.md, brain/log.md, context/clients.md, cadence/weekly-commitments.md, context/progress-card.md
+    output_surface: the recommendation in your session. On your yes, the progress card and one Must Do line, so the next session starts from the result
     dispatch: manual, on demand ("what should I do next")
     run_record_source: brain/agent-runs.jsonl, the lines whose seat is next-move-caller (written by the run itself via scripts/agent_runs.py)
-    may_write: brain/.snapshot.md (a derived cache refresh) and brain/agent-runs.jsonl (its own run record) - never an operating file
-    never: contact anyone, quote a price, commit you to a date, invent a stage your files do not show
-    tools: Read, Bash(python scripts/brain-snapshot.py:*), Bash(python scripts/agent_runs.py:*)
+    may_write: brain/.snapshot.md (a derived cache refresh) and brain/agent-runs.jsonl (its own run record). Only on your yes, context/progress-card.md and one line under Must Do in cadence/weekly-commitments.md - no other operating file
+    never: contact anyone, quote a price, commit you to a date, invent a stage your files do not show, propose a money test before you know you may take money for it, write the card without a clear yes, or touch core/identity.md or any file not named in may_write
+    tools: Read, Write, Edit, Bash(python scripts/brain-snapshot.py:*), Bash(python scripts/agent_runs.py:*)
     kpi: you never end a session without one named next step
-    version: 1.0
+    version: 1.1
     last_review: null
     status: gated
 

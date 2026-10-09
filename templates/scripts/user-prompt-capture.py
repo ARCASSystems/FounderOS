@@ -319,10 +319,149 @@ DECISION_PATTERNS = [
 DECISION_RX = re.compile("|".join(DECISION_PATTERNS), re.IGNORECASE)
 
 BIAS_NUDGE = (
-    "[bias-check] Decision/opinion ask - before you answer, run rules/biases.md: "
+    "[bias-check] Decision/opinion ask - if a skill fits the ask (founder-next-move "
+    "for what to do next, unit-economics for pricing and numbers), run it first: this "
+    "check adds to its answer, it does not replace it. Then apply rules/biases.md: "
     "counter-case, confidence level, what evidence is absent, and the do-nothing "
     "option. Flag if you are agreeing mainly because it is the user's existing plan."
 )
+
+# The progress card's way back (founder-fit fixes, 8 and 9 Oct 2026). A
+# scripted-founder run showed that "I ran the test, what now?" did not trigger
+# founder-next-move, so the model never read the open card and pushed a paid
+# pre-order the card had ruled out. This nudge does not depend on the skill
+# firing: when a card holds a test with no decision yet and the prompt reports a
+# result, it names the card and its venture. The pattern wants a result, not the
+# word "test", so "run the unit test" or "I ran out of flour" stay quiet.
+RESULT_TALK_RX = re.compile(
+    r"\b(?:ran|did|done|finished|tried|completed)\b[^.?!\n]{0,40}?"
+    r"(?<!unit )(?<!unit-)\b(?:tests?|experiments?|interviews?|conversations?|calls?|surveys?|chats?)\b"
+    r"|\b(?:talked|spoke|asked|met|messaged|called|interviewed|texted|surveyed|visited|showed)\b"
+    r"|\btested\b"
+    r"|\b(?:test|experiment)\s+(?:result|results|is done|went|worked|failed)\b"
+    r"|\b(?:my|the|here are (?:my|the))\s+results?\b|\bresults?\s+(?:are|is)\s+(?:in|back)\b"
+    r"|\b(?:heard back|signed up|replied|responded|booked)\b"
+    r"|\b(?:what now|now what|what next|what'?s next|do next|next move|next step)\b"
+    r"|\b\d+\s+(?:of|out of)\s+\d+\b",
+    re.IGNORECASE,
+)
+
+# --- progress card parser (identical in scripts/brain-snapshot.py and
+# scripts/user-prompt-capture.py; tests/test_founder_fit_fixes.py pins the two
+# copies together) ---
+CARD_MAX_CHARS = 64 * 1024
+CARD_FIELD_RX = re.compile(r"^([A-Za-z][A-Za-z ,()/-]{0,40}?)\s*:\s*(.*)$")
+# A decision counts only when it starts with a decision word. Anything else -
+# "(to be filled after the test)", "TBD", "none yet", the template's own
+# "keep / change / stop" - leaves the test open, so the card keeps coming back.
+CARD_DECIDED = {"keep", "change", "stop", "park", "pause", "continue", "pivot", "kill", "drop",
+                "extend", "greenlight", "iterate", "go"}
+
+
+def parse_progress_card(text: str) -> dict | None:
+    """Read the one card at the top of context/progress-card.md.
+
+    Bounded and forgiving on purpose. Founders edit the card by hand, so labels
+    may change case, sit indented, carry a bullet or bold, and the decision may
+    say "pending". Only the first record counts: reading stops at
+    `## Closed tests`, at a second `# Progress card` heading, or at a field seen
+    twice, so a blank template can never pair with an old record further down.
+    Returns None when the card has no filled-in test.
+    """
+    fields: dict[str, str] = {}
+    for line in text[:CARD_MAX_CHARS].splitlines():
+        clean = line.strip()
+        if clean.startswith("|"):
+            cells = [c.strip().replace("**", "") for c in clean.strip("|").split("|")]
+            if len(cells) < 2 or not cells[0] or set(cells[0]) <= set("-: "):
+                continue
+            clean = f"{cells[0]}: {cells[1]}"
+        clean = clean.lstrip("-*> \t").replace("**", "").replace("__", "").strip()
+        low = clean.lower()
+        if low.startswith("#"):
+            if low.lstrip("#").strip().startswith("closed tests"):
+                break
+            if "test" in fields and low.lstrip("#").strip().startswith("progress card"):
+                break
+            continue
+        match = CARD_FIELD_RX.match(clean)
+        if not match:
+            continue
+        key = match.group(1).strip().lower()
+        if key in fields:
+            if key == "test" or "test" in fields:
+                break
+            continue
+        fields[key] = match.group(2).strip()
+    test = fields.get("test", "")
+    if not test or test.startswith("<"):
+        return None
+    decision = fields.get("decision", "").strip()
+    words = re.findall(r"[a-z]+", decision.lower())
+    template_left = bool(re.match(r"\W*keep\s*/\s*change", decision.lower()))
+    decision_open = not words or words[0] not in CARD_DECIDED or template_left
+
+    def value(key: str) -> str:
+        val = fields.get(key, "")
+        return "" if val.startswith("<") else val[:120]
+
+    return {
+        "test": test[:200],
+        "decision_open": decision_open,
+        "alias": value("venture alias"),
+        "target": value("target, set before the test"),
+        "deadline": value("deadline"),
+        "status": value("status"),
+        "result": value("result"),
+    }
+
+
+def read_progress_card(repo: Path) -> dict | None:
+    """Parse context/progress-card.md, quietly None when it is missing or unreadable."""
+    try:
+        with open(repo / "context" / "progress-card.md", encoding="utf-8", errors="replace") as fh:
+            return parse_progress_card(fh.read(CARD_MAX_CHARS))
+    except OSError:
+        return None
+# --- end progress card parser ---
+
+
+# A next-move ask routes to the skill (9 Oct 2026). In a round-4 run, "What's my
+# next move?" from a founder never fired founder-next-move: the model answered
+# from general knowledge, offered no card, named a regulator from memory, and
+# later saved a paid-booking test while the permit was unknown. The skill holds
+# those rules, so the ask is routed to it, whether or not a card exists yet.
+NEXT_MOVE_RX = re.compile(
+    r"\b(?:what (?:should|do|can) i (?:do|focus on|work on) (?:next|now|this week)"
+    r"|what'?s my next (?:move|step)|my next move|where do i (?:start|push)"
+    r"|i have an idea|is (?:this|it) a good idea|help me validate)\b",
+    re.IGNORECASE,
+)
+NEXT_MOVE_NUDGE = (
+    "[next-move] This asks what to do next. Run the founder-next-move skill before you "
+    "answer: it proposes one move from the founder's files, offers to save a test as the "
+    "progress card on a clear yes, and holds any money test until the founder may take money for it."
+)
+
+
+def card_nudge(card: dict) -> str:
+    venture = card["alias"] or "the venture on the card"
+    due = f", due {card['deadline']}" if card["deadline"] else ""
+    return (
+        f"[progress-card] An open test for {venture}{due} is on context/progress-card.md. "
+        "If the founder is talking about that venture, run the founder-next-move skill "
+        "before you answer: it reads the card, compares any result with the target "
+        "written before the test without moving it, asks the founder for the decision "
+        "and waits, and keeps the closed test when the next one is saved. If they mean "
+        "a different venture, ask before applying this card. No money test, and no "
+        "order at a price, until they know they may take money for it."
+    )
+
+
+def has_open_card(repo: Path) -> bool:
+    """True when context/progress-card.md holds a filled test with no decision yet."""
+    card = read_progress_card(repo)
+    return bool(card and card["decision_open"])
 
 
 # ---------------------------------------------------------------------------
@@ -477,7 +616,9 @@ def eager_capture_rant(repo: Path, prompt: str) -> Path | None:
 
     # Private-tag filter. Strip <private>...</private> blocks. If the entire
     # input was wrapped, do not write at all.
-    cleaned = PRIVATE_BLOCK.sub("", prompt).strip()
+    cleaned = PRIVATE_BLOCK.sub("", prompt)
+    # An unclosed <private> hides everything after it, matching the card rule.
+    cleaned = re.sub(r"<private>.*\Z", "", cleaned, flags=re.IGNORECASE | re.DOTALL).strip()
     if not cleaned:
         return None
 
@@ -679,6 +820,15 @@ def main() -> int:
     # when the prompt is asking for a decision or opinion (rules/biases.md).
     if is_decision_prompt(prompt):
         print(BIAS_NUDGE)
+
+    card_named = False
+    if RESULT_TALK_RX.search(prompt):
+        card = read_progress_card(repo)
+        if card and card["decision_open"]:
+            print(card_nudge(card))
+            card_named = True
+    if not card_named and NEXT_MOVE_RX.search(prompt):
+        print(NEXT_MOVE_NUDGE)
 
     return 0
 

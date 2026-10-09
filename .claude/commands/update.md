@@ -297,6 +297,8 @@ Copy every staged file over its live path, preserving relative paths - EXCEPT th
 
 If ANY copy fails mid-activation, do not continue and do not hand the founder a mixed install: run the rollback procedure from Step 3 immediately (this update's own backup and manifests make it exact), then reply `Update failed while activating <path>. Rolled back - your install is back to v<LOCAL_VERSION>.` Stop.
 
+**8d. Refresh the native skill copies.** Run `python scripts/skills_sync.py --apply`. Claude Code finds skills on its own through the generated copies in `.claude/skills/`, and those are not part of the release files, so without this step a skill the release changed keeps running its old text. If the script fails, say so in one line and carry on: the update itself is complete, and the founder can run it later.
+
 ### Step 8.5. Propose migrations for the protected live files
 
 The founder may have edited these three; the incoming release may have improved them. Reconcile by proposal, not replacement. For each pair:

@@ -389,6 +389,105 @@ def must_do(root: Path, limit: int = 3) -> list[str]:
     return items
 
 
+# --- progress card parser (identical in scripts/brain-snapshot.py and
+# scripts/user-prompt-capture.py; tests/test_founder_fit_fixes.py pins the two
+# copies together) ---
+CARD_MAX_CHARS = 64 * 1024
+CARD_FIELD_RX = re.compile(r"^([A-Za-z][A-Za-z ,()/-]{0,40}?)\s*:\s*(.*)$")
+# A decision counts only when it starts with a decision word. Anything else -
+# "(to be filled after the test)", "TBD", "none yet", the template's own
+# "keep / change / stop" - leaves the test open, so the card keeps coming back.
+CARD_DECIDED = {"keep", "change", "stop", "park", "pause", "continue", "pivot", "kill", "drop",
+                "extend", "greenlight", "iterate", "go"}
+
+
+def parse_progress_card(text: str) -> dict | None:
+    """Read the one card at the top of context/progress-card.md.
+
+    Bounded and forgiving on purpose. Founders edit the card by hand, so labels
+    may change case, sit indented, carry a bullet or bold, and the decision may
+    say "pending". Only the first record counts: reading stops at
+    `## Closed tests`, at a second `# Progress card` heading, or at a field seen
+    twice, so a blank template can never pair with an old record further down.
+    Returns None when the card has no filled-in test.
+    """
+    fields: dict[str, str] = {}
+    for line in text[:CARD_MAX_CHARS].splitlines():
+        clean = line.strip()
+        if clean.startswith("|"):
+            cells = [c.strip().replace("**", "") for c in clean.strip("|").split("|")]
+            if len(cells) < 2 or not cells[0] or set(cells[0]) <= set("-: "):
+                continue
+            clean = f"{cells[0]}: {cells[1]}"
+        clean = clean.lstrip("-*> \t").replace("**", "").replace("__", "").strip()
+        low = clean.lower()
+        if low.startswith("#"):
+            if low.lstrip("#").strip().startswith("closed tests"):
+                break
+            if "test" in fields and low.lstrip("#").strip().startswith("progress card"):
+                break
+            continue
+        match = CARD_FIELD_RX.match(clean)
+        if not match:
+            continue
+        key = match.group(1).strip().lower()
+        if key in fields:
+            if key == "test" or "test" in fields:
+                break
+            continue
+        fields[key] = match.group(2).strip()
+    test = fields.get("test", "")
+    if not test or test.startswith("<"):
+        return None
+    decision = fields.get("decision", "").strip()
+    words = re.findall(r"[a-z]+", decision.lower())
+    template_left = bool(re.match(r"\W*keep\s*/\s*change", decision.lower()))
+    decision_open = not words or words[0] not in CARD_DECIDED or template_left
+
+    def value(key: str) -> str:
+        val = fields.get(key, "")
+        return "" if val.startswith("<") else val[:120]
+
+    return {
+        "test": test[:200],
+        "decision_open": decision_open,
+        "alias": value("venture alias"),
+        "target": value("target, set before the test"),
+        "deadline": value("deadline"),
+        "status": value("status"),
+        "result": value("result"),
+    }
+
+
+def read_progress_card(repo: Path) -> dict | None:
+    """Parse context/progress-card.md, quietly None when it is missing or unreadable."""
+    try:
+        with open(repo / "context" / "progress-card.md", encoding="utf-8", errors="replace") as fh:
+            return parse_progress_card(fh.read(CARD_MAX_CHARS))
+    except OSError:
+        return None
+# --- end progress card parser ---
+
+
+def open_test(root: Path) -> list[str]:
+    """The open test on the progress card, read from the card itself.
+
+    It does not depend on the Must Do line, so a full Must Do or a deleted line
+    cannot hide a test that is still waiting for its result or decision.
+    """
+    card = read_progress_card(root)
+    if not card or not card["decision_open"]:
+        return []
+    parts = [f"{card['alias']}: {card['test']}" if card["alias"] else card["test"]]
+    if card["target"]:
+        parts.append(f"target set before the test: {card['target']}")
+    if card["deadline"]:
+        parts.append(f"deadline {card['deadline']}")
+    parts.append(f"result: {card['result']}" if card["result"] else "result: not in yet")
+    parts.append("decision: not yet - the founder makes it")
+    return ["- " + " | ".join(parts)]
+
+
 def recent_decisions(root: Path, limit: int = 3) -> list[str]:
     path = root / "context" / "decisions.md"
     if not path.exists():
@@ -526,6 +625,12 @@ def build_snapshot(root: Path, today: date) -> str:
     else:
         out.extend(f"- {item}" for item in must)
     out.append("")
+
+    test = open_test(root)
+    if test:
+        out.append("## Open test (context/progress-card.md)")
+        out.extend(test)
+        out.append("")
 
     decisions = recent_decisions(root)
     out.append("## Recent decisions (last 3)")
