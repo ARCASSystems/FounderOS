@@ -3,7 +3,7 @@ name: connect
 description: >
   Connect a tool to Founder OS by asking in plain English. Trigger on "connect Telegram", "connect my calendar", "connect my email", "set up notifications", "hook up <tool>", "wire up <tool>", or any request to link an external tool. Routes by connector type: env-key tools (Telegram, ElevenLabs) get their key stored in the gitignored .env and a real reachability check; account-level MCP tools (calendar, email) are guided to the Claude Code MCP setup because the OS cannot hold their tokens; manual-link tools store a reference URL. A secret never lands in a tracked file - the writer refuses any target that is not gitignored, and the pre-commit guard blocks token-shaped strings as a backstop. A skipped connector leaves a visible marker the SessionStart brief surfaces.
 why: "Connecting a tool is the first thing a new user wants and the easiest place to either leak a secret or quietly fail. Natural-language connect with mechanical secret enforcement and a reachability check that cannot lie makes setup honest from the first minute."
-enhance: "Connect only what you actually use. Each env-key connector stores its key in .env, which is gitignored - your tokens never enter the repo or the assistant's transcript when you paste them on stdin."
+enhance: "Connect only what you actually use. Each env-key connector stores its key in .env, which is gitignored, so the key never enters the repo. Type the key into .env yourself, in Notepad or TextEdit, and it never enters the chat either. A key pasted into the chat does - cancel that key and make a new one."
 allowed-tools: ["Bash", "Read", "Write", "Edit"]
 mcp_requirements: []
 ---
@@ -33,9 +33,15 @@ Run `python scripts/connect.py registry` to see the live registry. Connectors fa
 
 2. **env-key class (e.g. Telegram):**
    - Give the setup steps from the registry (for Telegram: open @BotFather, `/newbot`, copy the token, then message the new bot once so it has a chat to reply to).
-   - Store the token WITHOUT putting it in your own message or a command argument. Have the user paste it on stdin:
-     `python scripts/connect.py set-secret TELEGRAM_BOT_TOKEN` then the pasted value on stdin. The writer refuses any target that is not on the allowlist (`.env`, `.mcp.local.json`) and not proven ignored, so the token cannot land in a tracked file. Where the install has version history, git supplies the proof; on a ZIP install with no git, the shipped `.gitignore` is read directly. Connectors work on both - a missing git is never a reason to refuse.
-   - Run the reachability check: `python scripts/connect.py telegram-test`. It resolves the chat id via getUpdates if needed, sends a live test message, and reports the Bot API result.
+   - **The founder puts the token in the file themselves. It never goes through the chat.** Claude Code's tool cannot read anything typed into a terminal prompt, so a "paste it on stdin" step ends with the token pasted into the chat instead. Do this:
+     1. Make the file and prove it is ignored, with a placeholder value that is not a secret:
+        `python scripts/connect.py set-secret TELEGRAM_BOT_TOKEN paste-your-token-here`
+        The writer refuses any target that is not on the allowlist (`.env`, `.mcp.local.json`) and not proven ignored, so the line cannot land in a tracked file. Where the install has version history, git supplies the proof. On a ZIP install with no git, the shipped `.gitignore` is read directly. Connectors work on both - a missing git is never a reason to refuse. If it refuses, stop and show the founder the refusal. Do not ask for the token.
+     2. Open the file for them: `notepad .env` on Windows, `open -e .env` on a Mac. If it does not open, tell them where it is: the file named `.env` in their Founder OS folder (on a Mac, Command, Shift and the full stop show hidden files in Finder).
+     3. Tell them, in these plain words: "In the file that just opened, find the line that starts with TELEGRAM_BOT_TOKEN=. Replace paste-your-token-here with your token, keep everything before the = sign, save the file, close it, and type done here. Please do not paste the token into this chat."
+     4. Wait for "done". Do not read `.env` back and do not print its contents. The reachability check below proves the token without showing it.
+   - **If the founder pastes the token into the chat anyway:** do not repeat it, do not write it anywhere yourself, and say once, kindly: "That token is now in this chat. To be safe, cancel it in @BotFather with /revoke, make a new one, and put the new one in the .env file." Then continue with the steps above using the new token.
+   - Run the reachability check: `python scripts/connect.py telegram-test`. It resolves the chat id via getUpdates if needed, sends a live test message, and reports the Bot API result. If Telegram rejects the token, the usual cause is that the placeholder is still there or the line lost its `TELEGRAM_BOT_TOKEN=` start: ask the founder to open `.env` again and check that line, without reading it out.
    - **The API accepting the message does NOT prove the user saw it.** Ask the user directly: "did the test message arrive in Telegram?" Only mark connected after a yes.
    - Record status: `python scripts/connect.py status set telegram "connected (token in .env)"`.
 
@@ -70,5 +76,5 @@ env-key connectors need a local runtime (they run `scripts/connect.py` and write
 
 - A secret goes ONLY to `.env` or `.mcp.local.json` (both gitignored). Never to `stack.json`, a company or project `.mcp.json`, or any tracked file. The writer enforces this; do not work around it.
 - Never report "connected" off an API 200 the user cannot confirm. Ask "did it arrive?" for anything the API cannot prove was delivered.
-- Never echo a token back to the user or into a file you write.
+- Never echo a token back to the user or into a file you write. Never ask for a token in the chat. The founder types it into `.env` themselves. A token only stays out of the transcript when they follow that path.
 - No em dashes or en dashes in anything you write. Hyphens only.

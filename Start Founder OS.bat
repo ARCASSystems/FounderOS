@@ -13,6 +13,18 @@ setlocal
 cd /d "%~dp0"
 title Founder OS
 
+rem -- Opened from inside the ZIP? Explorer lets you double-click a file in a
+rem -- ZIP without extracting it, and then runs a lone copy from a temporary
+rem -- folder with nothing next to it. Claude Code would open in that empty
+rem -- folder and setup would have nothing to work with, so say so and stop.
+if not exist "CLAUDE.md" (
+  echo.
+  echo Extract the ZIP first: right-click it, choose Extract All, then open the Founder OS folder and double-click Start Founder OS again.
+  echo.
+  pause
+  exit /b 1
+)
+
 rem -- Brand the folder. Windows draws the icon named in desktop.ini only
 rem -- when the folder carries the read-only marker bit, and extracting a
 rem -- ZIP does not set it. Cosmetic only: both lines fail silently, and
@@ -22,7 +34,14 @@ if exist "desktop.ini" if exist "assets\arcas.ico" (
   attrib +r "%~dp0." >nul 2>nul
 )
 
-rem -- Is Claude Code installed?
+rem -- Is Claude Code installed? A double-click starts with the PATH Windows
+rem -- had at sign-in, so a fresh install of Claude Code is often not on it
+rem -- yet. Look in the two places its installers put it before saying it is
+rem -- missing: the native installer (.local\bin) and npm (AppData\npm).
+where claude >nul 2>nul
+if errorlevel 1 if exist "%USERPROFILE%\.local\bin\claude.exe" set "PATH=%USERPROFILE%\.local\bin;%PATH%"
+where claude >nul 2>nul
+if errorlevel 1 if exist "%APPDATA%\npm\claude.cmd" set "PATH=%APPDATA%\npm;%PATH%"
 where claude >nul 2>nul
 if errorlevel 1 goto no_claude
 
@@ -98,6 +117,8 @@ echo.
 echo Prefer the terminal? Install Claude Code from
 echo   https://code.claude.com/docs/en/quickstart
 echo then double-click this file again.
+echo.
+echo Stuck? See docs/troubleshooting.md in this folder.
 echo.
 start "" "https://claude.com/download"
 pause

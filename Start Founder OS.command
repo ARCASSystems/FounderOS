@@ -42,6 +42,8 @@ if ! command -v claude >/dev/null 2>&1; then
   echo "  https://code.claude.com/docs/en/quickstart"
   echo "then double-click this file again."
   echo ""
+  echo "Stuck? See docs/troubleshooting.md in this folder."
+  echo ""
   open "https://claude.com/download" 2>/dev/null || true
   read -r -p "Press Enter to close this window..."
   exit 1
@@ -49,17 +51,35 @@ fi
 
 # Early heads-up only: Python 3.11+ check. The setup wizard runs the real
 # preflight; this just saves you a surprise twenty minutes in.
+#
+# On a Mac without Apple's developer tools, /usr/bin/python3 is not Python. It
+# is a stand-in that opens Apple's "install the command line developer tools"
+# window the moment anything runs it. Probing it here would throw that window
+# at the founder for a check that is only a heads-up, so on a Mac the /usr/bin
+# copies are tried only when xcode-select reports the tools are installed.
+mac_no_dev_tools=""
+if [ "$(uname -s)" = "Darwin" ] && ! xcode-select -p >/dev/null 2>&1; then
+  mac_no_dev_tools="1"
+fi
 py_ok=""
 for py in python3 python; do
-  if command -v "$py" >/dev/null 2>&1 \
-    && "$py" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)' >/dev/null 2>&1; then
+  py_path="$(command -v "$py" 2>/dev/null)" || continue
+  case "$py_path" in
+    /usr/bin/*) [ -z "$mac_no_dev_tools" ] || continue ;;
+  esac
+  if "$py_path" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)' >/dev/null 2>&1; then
     py_ok="1"
     break
   fi
 done
 if [ -z "$py_ok" ]; then
   echo "One heads-up: Python 3.11 or newer was not found on this machine."
-  echo "Founder OS scripts need it. Free download: https://www.python.org/downloads/"
+  echo "Founder OS scripts need it. Install it from python.org (free):"
+  echo "  https://www.python.org/downloads/"
+  if [ -n "$mac_no_dev_tools" ]; then
+    echo "Use the python.org installer. If macOS offers to install developer tools"
+    echo "instead, you can say no - Founder OS does not need them."
+  fi
   echo "You can continue now - the setup wizard will remind you before it starts."
   echo ""
 fi

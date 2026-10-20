@@ -26,9 +26,17 @@ Telegram Saved Messages, a WhatsApp chat with yourself, any notes app. Voice-not
 
 Channel 2 has a prerequisite the one-line version skips: your phone can only drop files into the OS folder if that folder lives somewhere your phone can reach. A default install (`~/founder-os`) is not synced anywhere. Fixing that takes about five minutes, once:
 
-**1. Put the OS folder inside your cloud folder.** Close Claude Code, then move the whole OS folder into the place that already syncs - `OneDrive/Documents/` on most Windows machines, iCloud Drive or Dropbox on a Mac. Reopen it in Claude Code from the new location. Everything keeps working: the OS is plain files and every script finds its own folder, wherever it sits.
+**1. Put the OS folder inside your cloud folder.** Close Claude Code, then move the whole OS folder into the place that already syncs - `OneDrive/Documents/` on most Windows machines, iCloud Drive or Dropbox on a Mac. Reopen it in Claude Code from the new location. The OS keeps working: it is plain files and every script finds its own folder, wherever it sits. Read the five things below first, because a synced folder changes who holds a copy.
 
 - One machine at a time is the honest rule. Cloud sync has no merge - if two machines edit the same file in the same window, the sync tool keeps a "conflicted copy" rather than losing data, but cleaning those up is on you. If you have turned version history on, the same applies to the history folder; prefer finishing on one machine before opening the other.
+
+**Know these five things before you move the folder into a synced place:**
+
+1. Everything in the folder goes to the sync provider, including the keys in `.env`. If you keep keys there (a Telegram bot, a voice tier), they now live with that provider too.
+2. Sync conflicts can damage version history. The history lives in a hidden `.git` folder, and a sync tool that copies it while two machines write can leave it broken. Finish on one machine before you open the other.
+3. iCloud Drive can move files off your computer to save space, and keep only a placeholder. Keep the Founder OS folder downloaded (on recent macOS versions, right-click it in Finder and choose Keep Downloaded) so the OS can always read its own files.
+4. Claude Code's memory folder for this project is tied to the folder's old path. After you move the folder, open it in Claude Code and say "verify the OS".
+5. Move the folder only while Claude Code is closed, and reopen it from the new place.
 
 **2. iPhone: a two-action Shortcut.** Open Shortcuts, create a new shortcut: **Dictate Text**, then **Save File** into your cloud folder at `founder-os/capture/inbox/` (iCloud Drive and Dropbox both appear in Save File; OneDrive is patchier in Shortcuts - if that is your cloud, the OneDrive app's own upload works as the fallback). Name it "Brain dump", add it to your home screen. From then on: tap, talk, done.
 

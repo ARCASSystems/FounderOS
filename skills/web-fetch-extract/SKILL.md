@@ -2,7 +2,7 @@
 name: web-fetch-extract
 description: >
   Generic web-data primitive. Fetches a URL via scripts/scrape.py and extracts structured data inline using the model's own reasoning over the fetched HTML. Use when any other skill or task needs data from a public web page - bios, leadership teams, prices, OpenGraph tags, page titles, recent posts, or "what does this page say about X". Triggered by natural-language page fetch asks and by other skills as a sub-step. Falls back to the WebFetch tool if scrape.py is missing or fails.
-why: "Pulls a page into context and extracts the answer without an LLM API call - extraction is the model's reasoning over the fetched text, so it works on a free plan and never sends the page to a paid endpoint."
+why: "Pulls a page into context and extracts the answer without an LLM API call - extraction is the model's reasoning over the fetched text, so it needs no API key and never sends the page to a paid endpoint."
 enhance: "Pick the lightest extract mode for the goal (meta, og, links, text) instead of dumping full HTML - it keeps the payload small and the extraction sharp, and only escalate to render mode when a first attempt comes back near-empty."
 summary: "Fetch a public web page and extract structured data from it inline."
 allowed-tools: ["Bash", "Read", "WebFetch"]
@@ -13,7 +13,7 @@ mcp_requirements: []
 
 Runs on: local-exec - runs a local script; on a cloud surface I read the results, I do not run it.
 
-Generic skill for pulling a URL into context and extracting whatever the calling skill or user asked for. No LLM API call - extraction is the model's reasoning over the fetched HTML or text. Works on a free plan.
+Generic skill for pulling a URL into context and extracting whatever the calling skill or user asked for. No LLM API call - extraction is the model's reasoning over the fetched HTML or text. No API key needed.
 
 ## Dependencies
 

@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# pre-push - refuse to publish an installed Founder OS to a remote nobody has
+# confirmed is private.
+#
+# Why this exists: an installed OS tracks the founder's identity, clients,
+# leads and notes. One `git push` to a public repository publishes all of it,
+# and that cannot be taken back - forks, caches and scrapers keep what a later
+# delete removes. The pre-commit remote check only knows the public FounderOS
+# repo by its address, so a push to any OTHER public repo went straight through.
+#
+# The rule: when core/identity.md is part of what this push can publish (an
+# installed OS, not the product repo a developer works on), the push goes
+# through only to the remote named in `git config founderos.privateRemote`.
+# The backup skill sets that after `gh repo view --json isPrivate` returns
+# true, and never otherwise. A person can set it by hand once they have
+# checked the repository is private themselves.
+#
+# Git passes the remote name as $1 (the URL itself when pushing to a bare
+# URL) and the URL as $2. stdin carries one line per ref being pushed:
+#   <local ref> <local sha> <remote ref> <remote sha>
+#
+# Never prints anything on an allowed push. No Python needed.
+
+remote_name="${1:-}"
+remote_url="${2:-}"
+
+# Personal data is in play when identity is tracked now, or when any commit
+# being pushed carries it in its history (untracking a file does not take it
+# out of the commits that already hold it).
+has_identity=""
+if git ls-files --error-unmatch -- core/identity.md >/dev/null 2>&1; then
+  has_identity="1"
+fi
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ -n "$local_sha" ] || continue
+  case "$local_sha" in
+    *[!0]*) ;;
+    *) continue ;;   # all zeros: a branch delete, which publishes nothing
+  esac
+  if [ -z "$has_identity" ] \
+     && [ -n "$(git rev-list -n 1 "$local_sha" -- core/identity.md 2>/dev/null)" ]; then
+    has_identity="1"
+  fi
+done
+
+[ -n "$has_identity" ] || exit 0
+
+confirmed="$(git config --get founderos.privateRemote 2>/dev/null || true)"
+if [ -n "$confirmed" ] && [ "$remote_name" = "$confirmed" ]; then
+  exit 0
+fi
+
+cat >&2 <<EOF
+
+Push refused: this folder is your Founder OS, and the remote "$remote_name"
+has not been confirmed private.
+
+What is at risk: your identity, clients, leads and notes are in this
+history. A push to a repository anyone can see publishes all of it, and a
+public push cannot be taken back.
+
+How to check the repository is private:
+  - On GitHub, open the repository page. A private one shows the word
+    Private next to its name. Or run:
+      gh repo view OWNER/REPO --json isPrivate
+    and look for "isPrivate": true.
+  - On any other site, check the repository's visibility setting.
+
+If it is private, confirm it once, then push again:
+  git config founderos.privateRemote $remote_name
+
+If it is public, do not push. Make it private first, or say
+"back this up" and the OS sets up a private one for you.
+
+Remote address: $remote_url
+EOF
+exit 1

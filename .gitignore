@@ -28,6 +28,38 @@ drafts/
 exports/
 reports/
 
+# More personal files setup creates, which the list above missed. Each one was
+# checked untracked in the product before it was added here. The leading slash
+# anchors a pattern to this folder: an unanchored `network/`, `capture/` or
+# `MEMORY.md` would ALSO hide templates/network/, templates/capture/ and
+# templates/memory/MEMORY.md, which ship, so a new template file there would be
+# silently left out of the next release.
+/context/leads.md
+/context/names.md
+/context/progress-card.md
+/context/entities/
+/network/
+/companies/
+/brands/
+/capture/
+/core/profile.md
+/core/voice-profile.yml
+/core/brand-profile.yml
+/core/avatar.md
+/core/working-preferences.md
+/brain/observations/
+/brain/index.md
+/brain/needs-attention.md
+/brain/relations.yaml
+/brain/agent-runs.jsonl
+/cadence/
+/roles/
+/system/
+/MEMORY.md
+# Project MCP config: it can hold a connector token. Unanchored on purpose, so
+# a token in any folder's copy is covered too.
+.mcp.json
+
 # Stack bindings (user fills these in during setup - not shareable as-is)
 # Committed as template with placeholders. User's filled version is private.
 

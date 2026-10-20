@@ -22,7 +22,10 @@ For rants specifically, the script also performs an EAGER capture: it
 writes the rant text immediately to `brain/rants/<YYYY-MM-DD>.md` so the
 text is safe on disk even if the user walks away before answering the
 routing question. This is the v1.23 fix that closes the "rant captured
-then forgotten" silent loss.
+then forgotten" silent loss. It runs only once setup has written
+core/identity.md (before that, nothing is written and no rant note is
+shown), and FOUNDER_OS_RANT_CAPTURE=0 turns the write off entirely; the note
+then falls back to suggesting /rant, which asks before writing.
 
 For all other shapes the script is SUGGEST-ONLY. It never writes outside
 of `brain/rants/` (so it cannot accidentally corrupt clients.md, log.md,
@@ -733,6 +736,23 @@ def is_decision_prompt(prompt: str) -> bool:
 # Eager rant capture. The only write path in this script.
 # ---------------------------------------------------------------------------
 
+RANT_CAPTURE_ENV = "FOUNDER_OS_RANT_CAPTURE"
+
+
+def rant_capture_allowed(repo: Path) -> bool:
+    """Whether a rant may be written to disk word for word.
+
+    Two refusals. Before setup (no core/identity.md) the long first-person
+    prompts are the setup interview itself, or someone trying the OS out, and
+    nobody has agreed to anything being kept yet. And FOUNDER_OS_RANT_CAPTURE=0
+    turns the write off for good: a founder who would rather nothing they type
+    is saved verbatim gets that with one setting, and the hook falls back to
+    suggesting /rant, which asks first."""
+    if os.environ.get(RANT_CAPTURE_ENV, "").strip() == "0":
+        return False
+    return (repo / "core" / "identity.md").is_file()
+
+
 def eager_capture_rant(repo: Path, prompt: str) -> Path | None:
     """Write the rant to brain/rants/<date>.md immediately. Returns the path
     written, or None if anything went wrong (silently)."""
@@ -945,7 +965,12 @@ def main() -> int:
 
     capture_path: Path | None = None
     if shape == "rant":
-        capture_path = eager_capture_rant(repo, prompt)
+        if not (repo / "core" / "identity.md").is_file():
+            # Before setup there is no brain to file a rant into, and the long
+            # answers ARE the setup interview. No write and no /rant nudge.
+            shape = None
+        elif rant_capture_allowed(repo):
+            capture_path = eager_capture_rant(repo, prompt)
 
     if shape is not None:
         note = render_note(shape, capture_path, repo)

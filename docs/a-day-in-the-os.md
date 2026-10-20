@@ -67,7 +67,7 @@ She says: **"Draft the monthly update for Halden."**
 The OS reads her voice profile (built once, from an interview it ran with her), reads what actually happened on that account from her own log, and drafts in her register with the real detail in it.
 
 **What she actually gets:** a draft that sounds like her and references things that actually happened, because both came out of her own files. She still edits it. Every founder does.
-*Skills: `client-update`, the voice profile, `anti-ai-writing`*
+*Skills: `client-update`, the voice profile, `your-voice`*
 
 ---
 

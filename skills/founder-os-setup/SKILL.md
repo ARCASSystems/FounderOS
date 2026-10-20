@@ -13,7 +13,22 @@ mcp_requirements: []
 
 Runs on: local-writes - creates or edits files in your OS folder; needs an agent with write access.
 
-## Surface check - do this first, before Phase 0.0
+## Already set up? Check this before anything else
+
+This skill also fires on everyday questions like "what do I do" and "how does this work". On an install that is already set up, those are questions, not a request to start over. Read the install's state first, in this order (the same order `/setup` uses):
+
+1. **`state/setup-progress.json` exists and holds a record:** setup was interrupted. Go to **Resuming** at the bottom of this file. Do not re-run anything.
+2. **`state/setup-complete.json` exists, or `core/identity.md` exists with neither marker:** Founder OS is already set up here. Do NOT re-run setup and do not touch a file. Say in one line: "Founder OS is already set up in this folder." Then answer what they asked, or offer the menu ("say 'show me what you can do'"). Add one line: "If you really want to start over, say 'reset Founder OS'." Stop there.
+3. **Neither marker and no `core/identity.md`:** a fresh install. Carry on with the surface check below.
+
+Two signals skip step 2: the founder said "reset" (or the word reset came in with the request), or `/setup` passed a confirmed re-run. Then back up before anything is written or deleted:
+
+- Copy `core/`, `context/`, `cadence/`, `brain/`, `rules/` and `CLAUDE.md` into `state/setup-backup-<YYYYMMDD-HHMM>/`, using the local time. Use whichever Python spelling answers (`python`, `python3`, `py -3`), for example:
+  `python -c "import shutil,time,pathlib as p; d=p.Path('state')/('setup-backup-'+time.strftime('%Y%m%d-%H%M')); d.mkdir(parents=True,exist_ok=True); [shutil.copytree(n,d/n) for n in ('core','context','cadence','brain','rules') if p.Path(n).is_dir()]; p.Path('CLAUDE.md').is_file() and shutil.copy2('CLAUDE.md',d/'CLAUDE.md'); print(d)"`
+- Check the backup landed: list the folder and confirm `core/identity.md` is inside it. If it is not there, stop and say the backup failed. Never start a reset without a backup you have seen.
+- Tell the founder in one plain sentence where it is: "I saved a copy of your current files in state/setup-backup-<stamp>/ before starting over." Then continue with the surface check.
+
+## Surface check - before Phase 0.0
 
 Setup writes real files. Before you frame anything, confirm the surface you are on can write to the operator's OS folder:
 
@@ -52,7 +67,7 @@ People don't answer questions like a form. They ramble, go on tangents, answer t
 
 Setup writes from `templates/`, which ships at the install root (resolved by install method: Plugin folder, git-clone repo root, or curl install root). Read each template before you generate the personalized version. The full path-resolution rule and the complete template file list live at the top of `references/identity-and-global.md` - read it before Phase 1.
 
-If the user passed "reset": scan for an existing Founder OS folder, confirm they want to reconfigure, then re-run discovery.
+If the user passed "reset": make the backup described at the top of this file first, then scan for an existing Founder OS folder, confirm they want to reconfigure, then re-run discovery.
 
 ## Phase map - load the reference when you reach the phase
 
@@ -61,7 +76,7 @@ Run the phases in order. When you reach a phase, read its reference file for the
 | Phase | What it does | Load |
 |-------|--------------|------|
 | 0.0 + 0 | The adults-only question (a clear yes before anything else), Python preflight (three probes, stop before the interview if missing), frame the second-brain contract, then run discovery: identity, role, variant read, positioning, the snapshot (Founder or Role - the fields the OS proposes from), workstreams, priorities, tool stack, work style, privacy, observation opt-in. | `references/discovery.md` |
-| 1 | Draft `core/identity.md` + `core/profile.md`, write the global `~/.claude/CLAUDE.md`, seed the auto-memory layer, optionally tidy global settings. | `references/identity-and-global.md` |
+| 1 | Draft `core/identity.md` + `core/profile.md`, add a marked Founder OS block to the global `~/.claude/CLAUDE.md` (backed up first, applies to every Claude Code project, so say so), seed the auto-memory layer, optionally tidy global settings. | `references/identity-and-global.md` |
 | 2 | Create the full folder structure (the file tree), copy hooks + scripts byte-for-byte, run every placeholder substitution, seed brain content, init git + wire the privacy guard, set the first weekly sprint. Includes the adopt path: setting up inside an existing notes folder without touching a single existing file. | `references/root-structure.md` |
 | 3 | Company folders + business-context file + company `.mcp.json`. | `references/projects.md` |
 | 4 | Build the top priority as the reference project, with a live test. | `references/projects.md` |

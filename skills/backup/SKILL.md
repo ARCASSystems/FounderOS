@@ -34,8 +34,11 @@ Offer these, with the honest trade-off, and let the founder choose. Do not force
 Do NOT re-implement gh auth or repo creation here. Use the `github-ops` skill (read `skills/github-ops/SKILL.md`).
 1. Check `gh auth status`. If not authenticated, give the founder the exact step (`gh auth login`) and stop until done. Do not pretend it is connected.
 2. Create a PRIVATE repo they own: `gh repo create <name> --private --source . --remote origin` (confirm the name with them first).
-3. Push: `git push -u origin <current-branch>`. Only on the founder's explicit yes. Never force push.
-4. Confirm the push landed (`gh repo view --web` or report the repo URL). Do not claim it pushed until `git push` returned success.
+3. Prove it is private before anything is pushed: `gh repo view <owner>/<name> --json isPrivate --jq .isPrivate`. Only when that prints exactly `true`, record the confirmation: `git config founderos.privateRemote origin`. The push guard (`.githooks/pre-push`) refuses every push of the founder's data to any remote not named there, so without this line the push in step 4 is refused - by design.
+   - If it prints anything else (`false`, an error, nothing), do NOT set it and do NOT push. Say plainly: "That repository is public, or I could not confirm it is private, so I have not pushed anything. Your data stays on this machine." Offer to make it private (`gh repo edit <owner>/<name> --visibility private --accept-visibility-change-consequences`, on their yes), then run the check again from the top of this step.
+   - Never set `founderos.privateRemote` by any other route: not from the repo name, not from the founder saying it is private, not to quiet a refused push. The value means "GitHub said this is private", and it is worth only as much as that.
+4. Push: `git push -u origin <current-branch>`. Only on the founder's explicit yes. Never force push. If the push guard refuses it, read its message to the founder and go back to step 3; never set the value just to get past it.
+5. Confirm the push landed (`gh repo view --web` or report the repo URL). Do not claim it pushed until `git push` returned success.
 
 ### OneDrive / Dropbox / iCloud
 If the OS folder is already inside the synced folder, it is already backing up; confirm the path and say so. If not, give the founder the move: copy the whole OS folder (including the hidden `.git` folder, which holds the version history) into their synced folder, then open it from there. Offer to do the copy if they give a destination path.
@@ -60,5 +63,6 @@ This verb runs local commands (git, gh, file copy). On a surface that cannot run
 - Never force a GitHub account or any single destination.
 - The GitHub path reuses `github-ops`. Do not duplicate gh logic here.
 - Never force push. Never push without an explicit yes.
+- Set `founderos.privateRemote` only after `gh repo view --json isPrivate` returned `true` for that exact repository. Never to get past the push guard.
 - Never claim a backup happened until the command returned success.
 - No em dashes or en dashes. Hyphens only.

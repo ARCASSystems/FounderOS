@@ -4,13 +4,15 @@ The OS is files. Skills read those files. The more files you fill, the more skil
 
 This page maps the cascade. You don't need to do all of it on day one - but knowing the order means you stop wondering why a writing skill sounds generic.
 
-> **ZIP, git-clone and curl installs (Paths 0, B and E):** drop the `/founder-os:` prefix. Commands are bare names: `/setup`, `/voice-interview`, `/brand-interview`, `/status`, `/wiki-build`, `/lint`, `/today`. The plugin namespace only activates on a plugin install (Path A). The commands below show the plugin form. Remove the prefix on any other path. See [docs/install.md](install.md) for the exact mapping.
+> **On a ZIP or clone install, commands have no `founder-os:` prefix. `/founder-os:setup` is `/setup`. Or just say what you want.** The same goes for a curl install. The commands below show the plugin form (Path A): remove the prefix on any other path, so `/voice-interview`, `/brand-interview`, `/wiki-build`, `/lint`, `/today`. One exception: on those installs `/status` opens Claude Code's own account screen, so for the OS readiness check say "check my OS readiness". See [install.md](install.md) for the exact mapping.
+>
+> **Something not working?** [troubleshooting.md](troubleshooting.md) lists what you might see and what to do.
 
 ---
 
 ## Why a folder, and not just a good chat
 
-Worth answering before you spend 35 minutes, because if the answer is thin you should close this page.
+Worth answering before you spend the first 35 to 40 minutes, because if the answer is thin you should close this page.
 
 You already get good answers out of Claude. Four things here do not come from prompting better.
 
@@ -26,11 +28,11 @@ The trade is simple. A good chat session is a good hour. This compounds across a
 
 ---
 
-## The 35-minute first run
+## The first run: about 35 to 40 minutes
 
-Three steps. Each step activates the skills underneath it.
+Three steps make up the first run: the setup interview (about 15 to 20 minutes), then the voice interview and the brand interview (about 10 minutes each). Steps 4 and 5 below are for any time after. Each step activates the skills underneath it.
 
-### Step 1 - Setup wizard (15 min)
+### Step 1 - Setup wizard (about 15 to 20 minutes)
 
 ```
 /founder-os:setup
@@ -82,11 +84,13 @@ After this step, branded outputs render in your visual identity:
 
 ### Step 4 - Audit anytime
 
+Say "check my OS readiness". On a plugin install the command is:
+
 ```
 /founder-os:status
 ```
 
-Read-only. Returns a 0-100% readiness score across Core, Voice and Brand, Cadence, Business Context, Brain Layer. Names the next 3 high-impact moves.
+On a ZIP, clone or curl install, ask in words: `/status` there opens Claude Code's own screen instead. Read-only. Returns a 0-100% readiness score across Core, Voice and Brand, Cadence, Business Context, Brain Layer. Names the next 3 high-impact moves.
 
 Run this whenever you want to see where the OS is and what to fill next.
 
@@ -283,8 +287,10 @@ Say "run my weekly review" in Claude Code. The `weekly-review` skill triggers fr
 
 **Claude doesn't know what's important this week** -> priorities or weekly commitments are stale. Refresh `cadence/weekly-commitments.md` or run a weekly-review.
 
-**The OS feels off-track in general** -> run `/founder-os:status`. The score and the next-3-moves block tell you exactly what's missing.
+**The OS feels off-track in general** -> say "check my OS readiness" (`/founder-os:status` on a plugin install). The score and the next-3-moves block tell you exactly what's missing.
 
-**You want to remove the OS** -> `/founder-os:uninstall`. Default mode preserves your data. Pass `--purge` to wipe everything.
+**You want to remove the OS** -> `/founder-os:uninstall` (`/uninstall` on a ZIP or clone install). Default mode preserves your data. Pass `--purge` to wipe the folder's contents. Either way, two things setup wrote outside the folder stay until you remove them by hand: the Founder OS block in `~/.claude/CLAUDE.md` and Claude Code's memory folder for this project. Details in [install.md](install.md#what-setup-writes-outside-your-folder).
+
+**Something broke during install or setup** -> [troubleshooting.md](troubleshooting.md).
 
 If any of the above doesn't work cleanly, email `solutions@arcassystems.com` with what you tried and the error you hit.

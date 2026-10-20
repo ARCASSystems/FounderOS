@@ -51,7 +51,11 @@ else
     echo "core.hooksPath already set to .githooks - skipping"
 fi
 
-for hook in "$REPO_ROOT/.githooks/pre-commit" "$REPO_ROOT/.githooks/commit-msg"; do
+# Git skips a hook that is not executable, silently, on Mac and Linux. A file
+# that arrives as mode 644 (a ZIP extract, a copy by hand, a tool that drops
+# the bit) leaves the secret scan, the name guard and the push guard installed
+# and dead. chmod every one, every run.
+for hook in "$REPO_ROOT/.githooks/pre-commit" "$REPO_ROOT/.githooks/commit-msg" "$REPO_ROOT/.githooks/pre-push"; do
     if [ ! -f "$hook" ]; then
         echo "Error: $hook is missing. Cannot install git hooks." >&2
         exit 1
@@ -63,6 +67,8 @@ for hook in "$REPO_ROOT/.githooks/pre-commit" "$REPO_ROOT/.githooks/commit-msg";
         }
     fi
 done
+echo "Push guard active: when your OS data is tracked, a push goes only to the"
+echo "remote you confirmed private (git config founderos.privateRemote <remote-name>)."
 
 if [ -n "$ACTION_PATTERNS" ]; then
     cp "$PATTERNS_SRC" "$PATTERNS_DST"

@@ -595,6 +595,34 @@ async def serve_socket(ws):
             return
 
 
+# ---- who may talk to this machine's servers -----------------------------------------------------
+# Both servers listen on 127.0.0.1, which keeps other machines out but not other web pages: any
+# site open in the founder's browser can open ws://127.0.0.1:<ws_port> (websockets are not
+# covered by the browser's cross-site rules) and drive the bridge - query_brain runs the brain
+# CLI, save_to_brain appends to brain/log.md. So the page server checks Host and Origin, and the
+# websocket accepts only this machine's own voice page as its Origin.
+def allowed_origins(http_port: int) -> list:
+    """The two spellings of this machine's own voice page, as a browser sends them."""
+    return [f"http://127.0.0.1:{http_port}", f"http://localhost:{http_port}"]
+
+
+def request_allowed(host, origin, port: int) -> bool:
+    """Host must name this server exactly (blocks DNS rebinding); a present Origin must be the
+    page this server serves. No Origin at all (curl, a local script) is allowed: anything able
+    to send it already runs on the machine."""
+    if (host or "").strip().lower() not in {f"127.0.0.1:{port}", f"localhost:{port}"}:
+        return False
+    if origin is not None and origin.strip().lower() not in allowed_origins(port):
+        return False
+    return True
+
+
+def ws_origins(http_port: int) -> list:
+    """The websocket's allow-list: the voice page, plus None for a client that sends no Origin.
+    Every browser sends one on a websocket handshake, so None never lets a web page in."""
+    return allowed_origins(http_port) + [None]
+
+
 # ---- tiny page server (serves live.html) on a daemon thread ------------------------------------
 class PageHandler(BaseHTTPRequestHandler):
     def _send(self, code, body, ctype):
@@ -606,6 +634,11 @@ class PageHandler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def do_GET(self):
+        port = self.server.server_address[1]
+        if not request_allowed(self.headers.get("Host"), self.headers.get("Origin"), port):
+            self._send(403, b'{"error":"refused: this server only answers its own page"}',
+                       "application/json")
+            return
         if self.path in ("/", "/live", "/live.html"):
             if PAGE.exists():
                 self._send(200, PAGE.read_bytes(), "text/html; charset=utf-8")
@@ -658,7 +691,8 @@ async def main():
     print(f"  keys:  {len(keys)} found" + (" - add one: connect gemini" if not keys else ""), flush=True)
     print(f"  open:  http://127.0.0.1:{http_port}/live", flush=True)
     print("  Stop:  Ctrl+C", flush=True)
-    async with websockets.serve(serve_socket, "127.0.0.1", ws_port, max_size=None):
+    async with websockets.serve(serve_socket, "127.0.0.1", ws_port, max_size=None,
+                                origins=ws_origins(http_port)):
         await asyncio.Future()
 
 

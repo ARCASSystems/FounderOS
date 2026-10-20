@@ -11,7 +11,23 @@ What it produces, into `dist/`:
 
   FounderOS-<version>.zip          the release asset
   FounderOS-<version>.zip.sha256   the checksum line for the release notes
+  FounderOS.zip                    the same bytes under a name that never changes
+  FounderOS.zip.sha256             its checksum line
   FounderOS-<version>.dmg          macOS only, and only when hdiutil is there
+
+Why the unversioned copy: GitHub serves
+`releases/latest/download/FounderOS.zip` from whichever release is newest,
+but only when that release carries an asset with exactly that name. Uploaded
+with every release, it is a download link that never has to be edited, so a
+version bump can no longer leave the front door pointing at a 404.
+
+Line endings: the archive carries what git holds, which is LF for every text
+file. Two files must reach the founder as CRLF - `Start Founder OS.bat` (cmd
+misparses labels in an LF batch file) and `desktop.ini` (Explorer reads it
+inconsistently otherwise) - and `.gitattributes` says so with eol=crlf. A
+checkout applies that; an archive built from blobs did not, so the shipped
+.bat was LF. Every path whose `git check-attr eol` is crlf is now converted on
+the way into the zip.
 
 What goes in: every file git tracks, read from git's own object store rather
 than from the working copy. Anything gitignored is excluded by construction
@@ -161,6 +177,36 @@ def read_blobs(rels: list[str]) -> dict[str, bytes]:
     return result
 
 
+def crlf_paths(rels: list[str]) -> set[str]:
+    """The tracked paths .gitattributes marks eol=crlf, asked of git itself so
+    the rule has one home. One process, NUL-separated, so a space in a name
+    (Start Founder OS.bat) cannot split a record."""
+    if not rels:
+        return set()
+    r = subprocess.run(
+        ["git", "check-attr", "-z", "--stdin", "eol"],
+        cwd=str(REPO), input=("\0".join(rels) + "\0").encode("utf-8"),
+        capture_output=True,
+    )
+    if r.returncode != 0:
+        # Failing open here ships an LF .bat, the exact defect this exists to
+        # stop, so a broken attribute lookup stops the build instead.
+        raise SystemExit("git check-attr failed, so line endings cannot be set: "
+                         + r.stderr.decode("utf-8", "replace").strip()[:200])
+    fields = r.stdout.decode("utf-8", "replace").split("\0")
+    out: set[str] = set()
+    for i in range(0, len(fields) - 2, 3):
+        path, _attr, value = fields[i], fields[i + 1], fields[i + 2]
+        if value == "crlf":
+            out.add(path)
+    return out
+
+
+def to_crlf(data: bytes) -> bytes:
+    """LF to CRLF without doubling a CR that is already there."""
+    return data.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")
+
+
 def dirty_paths() -> list[str]:
     """Tracked files that differ from HEAD. An untracked file is not a problem:
     it cannot reach the archive, because the archive is built from the index."""
@@ -244,8 +290,11 @@ def build_zip(version: str, out_dir: Path, allow_dirty: bool = False) -> Path:
         z.writestr(root, b"")
 
         blobs = read_blobs([rel for rel, _ in entries])
+        crlf = crlf_paths([rel for rel, _ in entries])
         for rel, mode in entries:
             data = blobs[rel]
+            if rel in crlf:
+                data = to_crlf(data)
             info = zipfile.ZipInfo(f"{FOLDER_NAME}/{rel}", date_time=stamp)
             info.create_system = 3
             unix_mode = 0o755 if mode == 0o100755 else 0o644
@@ -266,6 +315,35 @@ def write_checksum(zip_path: Path) -> Path:
     return sidecar
 
 
+def write_stable_copy(zip_path: Path) -> tuple[Path, Path]:
+    """dist/FounderOS.zip: the same bytes as the versioned asset, under the one
+    name `releases/latest/download/FounderOS.zip` resolves to. Its own
+    checksum line names the file it sits next to."""
+    stable = zip_path.with_name(f"{ASSET_STEM}.zip")
+    if stable.exists():
+        stable.unlink()
+    shutil.copyfile(zip_path, stable)
+    return stable, write_checksum(stable)
+
+
+def _shown(p: Path) -> str:
+    try:
+        return p.relative_to(REPO).as_posix()
+    except ValueError:
+        return str(p)
+
+
+def upload_lines(version: str, groups: list[list[Path]]) -> list[str]:
+    """One `gh release upload` line per asset and its checksum. Printed, never
+    run: publishing is the maintainer's decision, made with eyes open."""
+    return [
+        f"gh release upload v{version} "
+        + " ".join(f'"{_shown(p)}"' for p in group)
+        + " --clobber"
+        for group in groups if group
+    ]
+
+
 def build_dmg(version: str, out_dir: Path) -> Path | None:
     """Build the Mac disk image. Returns None, with a reason, when it cannot."""
     if sys.platform != "darwin":
@@ -282,10 +360,12 @@ def build_dmg(version: str, out_dir: Path) -> Path | None:
 
     entries = tracked_files()
     blobs = read_blobs([rel for rel, _ in entries])
+    crlf = crlf_paths([rel for rel, _ in entries])
     for rel, mode in entries:
         target = staging / rel
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes(blobs[rel])            # committed bytes, as above
+        data = blobs[rel]                         # committed bytes, as above
+        target.write_bytes(to_crlf(data) if rel in crlf else data)
         if mode == 0o100755:
             target.chmod(0o755)
 
@@ -329,27 +409,38 @@ def main() -> int:
     print(f"Building Founder OS {version}")
     zip_path = build_zip(version, out_dir, allow_dirty=args.allow_dirty)
     sidecar = write_checksum(zip_path)
+    stable, stable_sidecar = write_stable_copy(zip_path)
 
     with zipfile.ZipFile(zip_path) as z:
         names = z.namelist()
     size_mb = zip_path.stat().st_size / (1024 * 1024)
     print(f"  zip: {zip_path.name}  {len(names)} entries, {size_mb:.1f} MB")
     print(f"  sha256: {sidecar.read_text(encoding='utf-8').split()[0]}")
+    print(f"  stable copy: {stable.name} (same bytes; the latest/download link)")
     print(f"  extracts to: {FOLDER_NAME}/")
     print("  contents: the committed bytes at HEAD, not the working copy")
     if args.allow_dirty and dirty_paths():
         print("  WARNING: --allow-dirty was passed and the tree is dirty. The "
               "archive still holds HEAD, so it does NOT contain your uncommitted work.")
 
+    dmg = None
     if not args.skip_dmg:
         dmg = build_dmg(version, out_dir)
         if dmg is not None:
             print(f"  dmg: {dmg.name}  {dmg.stat().st_size / (1024 * 1024):.1f} MB")
 
     print()
-    print("Upload to the release tagged v" + version + ". The README download")
-    print("link must point at that asset - scripts/check_download_links.py")
-    print("fails the suite if it does not.")
+    print("Release checklist:")
+    print("  1. Upload to the release tagged v" + version + " (the versioned asset,")
+    print("     then the stable copy every release must also carry):")
+    for line in upload_lines(version, [[zip_path, sidecar], [stable, stable_sidecar],
+                                       [dmg] if dmg is not None else []]):
+        print("       " + line)
+    print("  2. Prove GitHub serves them - the text check alone said 'Current' for")
+    print("     v1.56.0 while its asset was a 404:")
+    print("       python scripts/check_download_links.py --require-published")
+    print("  The README download link must point at that asset;")
+    print("  scripts/check_download_links.py fails the suite if it does not.")
     return 0
 
 

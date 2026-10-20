@@ -2,9 +2,11 @@
 
 Four ways to install FounderOS, plus Cowork as a companion once one of them is in place. The ZIP download (Path 0) needs no Git and no terminal and comes first; pick whichever matches how you work. None of them lock you in - if you outgrow one path, you can move to another without losing your data.
 
+**Stuck?** Start with [troubleshooting.md](troubleshooting.md). It lists what you might see (Python not found, a blocked Start file, an unknown command, a setup that stopped halfway) and what to do about each.
+
 **Not comfortable in a terminal?** Use Path 0 (ZIP download) or Path A (Claude Code plugin). Both run without a single terminal command.
 
-If you get stuck, email `solutions@arcassystems.com` with the path you tried and the error you hit.
+If you are still stuck, email `solutions@arcassystems.com` with the path you tried and the error you hit.
 
 ---
 
@@ -12,9 +14,9 @@ If you get stuck, email `solutions@arcassystems.com` with the path you tried and
 
 Three steps and one sentence typed. The gentlest path there is.
 
-**Best for:** Anyone who wants to own the system in ten minutes with nothing new installed. Anyone who does not have git and does not want to think about it.
+**Best for:** Anyone who wants to own the system with nothing new installed beyond Python. Anyone who does not have git and does not want to think about it.
 
-**Requirements:** Claude Code with a paid Claude plan (Pro, Max, Team or Enterprise - it does not run on the free plan), and Python 3.11+ (the setup wizard checks for it before asking anything and tells you plainly if it is missing).
+**Requirements:** Claude Code with a paid Claude plan (Pro, Max, Team or Enterprise - it does not run on the free plan), and Python 3.11+. The setup wizard asks one question first (are you 18 or over), then checks Python before the interview starts, and tells you plainly if it is missing. After you install Python, close Claude Code completely and open the folder again: an app that was already open cannot see a program installed after it started.
 
 **Steps:**
 
@@ -26,7 +28,8 @@ Three steps and one sentence typed. The gentlest path there is.
 
 First-run notes, so nothing surprises you:
 
-- **Windows** may show a security note about a downloaded script. Choose to run it - the file is plain text; right-click it and choose Edit to read everything it does before running, if you like.
+- **Windows** may show "Windows protected your PC" for a downloaded script. Click **More info**, then **Run anyway**. The file is plain text: right-click it and choose Edit to read everything it does before running, if you like. If Windows says Smart App Control blocked it, there is no Run anyway button: use the desktop-app route above instead.
+- **Run it from the extracted folder, not from inside the ZIP.** Windows can show a ZIP like a folder, but a file opened from inside it runs from a temporary copy and nothing saves. The Start file stops and says so if you try.
 - **Mac**: the first double-click may be blocked, because macOS blocks downloads it cannot verify. If it is, open System Settings, then **Privacy & Security**, scroll down, click **Open Anyway**, and confirm with **Open**. Those are Apple's current steps for blocked downloads. We have not yet run the start file on a real Mac.
 - **If the Claude Code terminal tool is not installed**, the start file says so, explains the desktop-app route, and opens the Claude download page - nothing breaks. The desktop app does not add the terminal tool, so if you only have the app, open the folder from its Code tab instead of double-clicking.
 - **Prefer no scripts?** The spoken way works identically: open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`).
@@ -36,7 +39,7 @@ Commands use bare names on this path (`/setup`, `/today`), same as the git-clone
 
 **Already have notes?** If you keep an Obsidian vault or a folder of markdown, setup can move the OS in next to your notes instead of starting a fresh folder - your existing files are never touched, and the wizard asks before anything that would collide. Say "set up Founder OS inside my vault". Full picture, including what your old notes can and cannot do afterwards, in [adopt-existing-notes.md](adopt-existing-notes.md).
 
-**Updates:** say "update Founder OS" (or run `/update`). The OS re-downloads the ZIP itself, refreshes only its own engine files (skills, commands, scripts, docs), and never touches your data. You approve before anything is applied.
+**Updates:** open your Founder OS folder and say "update Founder OS" (or run `/update`). The OS re-downloads the ZIP itself, refreshes only its own engine files (skills, commands, scripts, docs), and never touches your data. You approve before anything is applied. Do not download a new ZIP and extract it over your folder: that replaces your personal CLAUDE.md, rules and settings. More in [Updating, and what stays yours](#updating-and-what-stays-yours).
 
 **Version history on this path:** off at first, by design - there is no git on the machine yet. You are still covered: the OS snapshots every file it touches, every session, and `/changes` shows exactly what changed with a one-command restore per file. When you want full history ("undo to before this morning", a complete timeline), say **"own my history"** - with your yes, the OS installs git itself, turns the folder into a repository, and wires the privacy guard. You never type a git command. This is the recommended steady state: once git is on, updates flow through it instead of ZIP re-downloads, and git maintains itself - the ZIP was the door, not the destination.
 
@@ -80,6 +83,8 @@ If `/founder-os:setup` is not recognised after install, run `/reload-plugins` (o
 **Verifying it worked:** Open `/plugin` and check the Installed tab. You should see `founder-os` listed. Then `/founder-os:setup` should appear in the slash command palette. If the command is missing, run `/reload-plugins` first.
 
 **How hooks fire on Path A.** The plugin registers the slash commands. It does not register hooks - the setup wizard does, by writing a `.claude/settings.json` into the OS folder it builds for you. So the session brief, the revenue check, and the auto-save fire when you open Claude Code in your OS folder, and nowhere else. That is deliberate rather than a gap: every one of them reads your OS files, and firing them inside an unrelated project would be noise at best.
+
+**What each update refreshes on Path A.** Updating the plugin from `/plugin` refreshes the skills and commands. It does not reach into your OS folder, where setup copied the scripts and hooks the session brief and saves run on. To refresh those too, open your OS folder in Claude Code and say "update Founder OS". Do both when a new version comes out.
 
 **Where your files live.** The plugin is the engine - it installs under `~/.claude/plugins/` where Claude Code manages it, updates from `/plugin` (manual unless you turn auto-update on), and you never have to open it. When you run setup, it builds your actual OS in a folder you own (default `~/founder-os/`): priorities, decisions, brain log, the lot. That folder is plain markdown and yours to keep, back up, or fork. If you ever remove the plugin, your OS folder stays exactly where it is. Engine and data are separate on purpose: the engine is swappable, your files are not.
 
@@ -147,7 +152,7 @@ cd "$HOME\founder-os"
 
 Open Claude Code in that folder, then say "set up Founder OS" (or run `/setup`).
 
-> **Note:** Commands in the manual clone path use bare names (`/setup`, `/status`, `/today`, etc.) because the plugin namespace is not active. The plugin install path (Path A) uses the `/founder-os:` prefix. The commands are identical underneath.
+> **Note:** Commands in the manual clone path use bare names (`/setup`, `/today`, `/verify`, etc.) because the plugin namespace is not active. The plugin install path (Path A) uses the `/founder-os:` prefix. The commands are identical underneath. One exception: typing `/status` here opens Claude Code's own account and version screen, so for the OS readiness check say "check my OS readiness" instead.
 
 **Pros**
 - Works regardless of plugin marketplace state.
@@ -214,11 +219,38 @@ You can switch paths anytime. The OS is your files - they are the same regardles
 
 ## Updating, and what stays yours
 
-Say "update Founder OS" whenever you like. No git needed: a ZIP install updates over a plain download, and every other path uses the same command. The update draws a hard line between the OS's machinery and your data:
+To update, open your Founder OS folder and say "update Founder OS". No git needed: a ZIP install updates over a plain download, and every other path uses the same command.
+
+**Never extract a new ZIP over your folder.** Do not download a new ZIP and extract it over your folder: that replaces your personal CLAUDE.md, rules and settings. If you extract a new ZIP into a NEW folder instead, setup starts fresh there, and your old data stays in the old folder. Nothing is lost, but nothing moves across either: open the old folder and say "update Founder OS" there.
+
+The update draws a hard line between the OS's machinery and your data:
 
 - **The OS's, replaced freely by an update:** `skills/`, `scripts/`, `templates/`, `docs/`, `updates/`, the commands, and the reference docs at the root.
 - **Yours, never written by an update:** `core/`, `context/`, `cadence/`, `brain/`, `capture/`, `network/`, `brands/`, `clients/`, `companies/`, `roles/` (your employee registry and its review record), `system/` (this install's quarantine record), any company or project folders setup created at the root, plus `stack.json`, `os-config.yaml`, and `MEMORY.md` with its `memory/` directory. Your identity, your log, your pipeline, and your decisions survive every update by design.
 - **In between, proposed never imposed:** `CLAUDE.md`, `rules/`, and `.claude/settings.json`. An update shows you each change as a diff and you say yes or no per file. Declining leaves your version in place.
+
+---
+
+## What setup writes outside your folder
+
+Almost everything setup makes lives in your Founder OS folder. Two things do not, and you should know where they are:
+
+- **A Founder OS block in `~/.claude/CLAUDE.md`** (Windows: `%USERPROFILE%\.claude\CLAUDE.md`). This is your personal Claude Code instructions file, and Claude Code reads it in **every** project you open, not only this folder. Setup shows you the draft and asks first. If the file already exists, setup saves a backup copy next to it (`CLAUDE.md.backup-<date-time>`) and adds its part at the end, between two marker lines, `FOUNDER OS START` and `FOUNDER OS END`. Everything else in the file stays as it was. To remove it, delete the lines between the markers, markers included.
+- **Claude Code's memory folder for this project**, `~/.claude/projects/<slug>/memory/` (Windows: `%USERPROFILE%\.claude\projects\<slug>\memory\`). Setup puts a `MEMORY.md` there, after showing you the path, so the corrections you give Claude carry over between sessions. Claude Code names the `<slug>` after your folder's full path, so if you move the folder, this memory stays behind under the old name. After a move, open the folder and say "verify the OS".
+
+Deleting your Founder OS folder does not delete either of these. Uninstall tells you what it leaves outside the folder. Remove the block and the memory folder by hand if you want them gone.
+
+---
+
+## Using Codex or Gemini CLI
+
+Founder OS is plain markdown, so other agents can read it. Here is exactly what works:
+
+- **The setup wizard, the slash commands, the hooks and the session brief run in Claude Code.** That is where Founder OS is built and tested.
+- **In Codex or Gemini CLI** you can read the files, and you can follow `skills/founder-os-setup/SKILL.md` by hand, one question at a time. You do it without the hooks, the commands or the session brief. We have not tested that path.
+- `AGENTS.md` (Codex) and `GEMINI.md` (Gemini CLI) tell those agents the same thing, and carry the founder safety rules with them.
+
+If you have a paid Claude plan, run setup in Claude Code. You can open the same folder in another agent afterwards to read and draft.
 
 ---
 
@@ -239,7 +271,7 @@ If anything breaks in the first 24 hours, email `solutions@arcassystems.com` wit
 
 ## Known platform notes
 
-**Windows users.** Every hook event runs through one cross-platform Python dispatcher (`scripts/hooks/dispatch.py`), wired by `.claude/settings.json`. There is no shell to be missing - no bash, no PowerShell, no git-bash required. Python 3.11+ (already a prerequisite of the OS) is the only thing the hooks need. Out of the box each hook command tries the three interpreter spellings in order (`python`, `python3`, `py -3`), so the hooks fire even before setup on a machine where bare `python` is not on PATH; setup then writes the one interpreter it discovered into the hook commands for you.
+**Windows users.** Every hook event runs through one cross-platform Python dispatcher (`scripts/hooks/dispatch.py`), wired by `.claude/settings.json`. There is no shell to be missing - no bash, no PowerShell, no git-bash required. Python 3.11+ (already a prerequisite of the OS) is the only thing the hooks need. Claude Code itself does not require Git for Windows either: Anthropic's setup page lists it as optional on native Windows, and without it Claude Code runs commands through PowerShell (checked 20 Oct 2026). Version history is the one Founder OS feature that needs git, and the OS installs it for you when you say "own my history". Founder OS also ships a setting (`PYTHONUTF8=1` in `.claude/settings.json`) so its scripts read and write Arabic and other non-Latin text correctly on Windows. Out of the box each hook command tries the three interpreter spellings in order (`python`, `python3`, `py -3`), so the hooks fire even before setup on a machine where bare `python` is not on PATH. Setup then writes the one interpreter it discovered into the hook commands for you.
 
 **Git-less installs (Path 0).** Every hook degrades quietly when git is absent: the session brief still runs, the auto-save hook stays silent instead of erroring, and the per-session change snapshots do not need git at all. Nothing errors, nothing nags. Version history activates when you say "own my history".
 

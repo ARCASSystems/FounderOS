@@ -1,6 +1,6 @@
 > **Status: in development for v0.3.** This Notion no-code path needs a public Notion template to work. The template has not been published yet, so Step 1 below cannot be completed today.
 >
-> **Use the Claude Code path instead.** It works end-to-end. From the repo root: clone the repo, run `/founder-os:setup`. 15 to 20 minutes the first time. See the README at the repo root.
+> **Use the Claude Code path instead.** It works end-to-end. Download the ZIP from the README at the repo root, unzip it, open the Founder OS folder in Claude Code, and say "set up Founder OS". About 15 to 20 minutes the first time. The README and `docs/install.md` cover the other install paths.
 >
 > The rest of this file is the design spec for the Notion path. When the template ships, this banner gets removed and Step 1 gets a one-click duplicate link.
 

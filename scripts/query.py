@@ -996,7 +996,20 @@ def run_full_mode(ids_arg: str, root: Path) -> int:
 # ---------- main ----------
 
 
+def _force_utf8_streams() -> None:
+    """Print UTF-8 whatever the console's codepage. A Windows pipe is cp1252 by
+    default, and one Arabic name or arrow in a matched line raised
+    UnicodeEncodeError mid-answer, so a founder whose notes are not plain
+    English got a traceback instead of a result."""
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
+
 def main() -> int:
+    _force_utf8_streams()
     parser = argparse.ArgumentParser(description="Query Founder OS markdown graph")
     parser.add_argument("question", nargs="*", help="Question to query (index mode)")
     parser.add_argument("--root", default=".", help="Founder OS root")

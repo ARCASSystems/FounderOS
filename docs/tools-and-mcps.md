@@ -1,10 +1,47 @@
 # Tools, MCPs, and surfaces
 
+## Connect a tool
+
+**Say what you want, in words:** "connect my calendar", "connect my email", "connect Notion", "connect Telegram". The OS tells you which kind of connection the tool needs and walks you through it.
+
+**Where most connections are made.** Calendar, email, Drive, Notion and Slack are connected in Claude itself, not inside Founder OS. You connect a tool once and every Claude Code session signed in with the same account can use it. Two ways:
+
+- **In Claude's settings (easiest).** On claude.ai, open the Connectors page in your settings, [claude.ai/customize/connectors](https://claude.ai/customize/connectors), and add the tool. Per Anthropic's Claude Code docs, a connector you add there is available in Claude Code when you sign in to Claude Code with that same Claude account. On a Team or Enterprise plan, only an admin can add one.
+- **In Claude Code.** `claude mcp add` adds a tool's server to Claude Code directly. Anthropic's guide has the exact steps: [Connect Claude Code to tools via MCP](https://code.claude.com/docs/en/mcp).
+
+For the clicks, follow Anthropic's pages above. They change more often than this one, and we do not copy steps here that we cannot check.
+
+**What each common connector can read.** A connector sees what its access screen says it sees. Read that screen at connect time the way you would read who gets a key to your office.
+
+| Connector | What it can read, in plain words | Skills that use it |
+|---|---|---|
+| Gmail | Your email: messages and threads, so a reply can be drafted in context | `email-drafter`, `meeting-prep` |
+| Google Calendar | Your events: times, titles, attendees | `meeting-prep`, `/today` |
+| Google Drive | The files in your Drive that the connector is allowed to open | None of the shipped skills ask for it by name. Claude can use it when you ask. |
+| Notion | The Notion pages and databases you give it access to | `knowledge-capture` |
+| Slack | The messages and channels your Slack account can see | None of the shipped skills ask for it by name. Claude can use it when you ask. |
+
+**How to turn one off.** Any of these works:
+
+- In Claude Code, type `/mcp`, pick the tool, and switch it off for this project.
+- On claude.ai, open the Connectors page ([claude.ai/customize/connectors](https://claude.ai/customize/connectors)) and disconnect it.
+- At the tool itself (Google, Notion, Slack), remove Claude from the list of apps that can reach your account. That cuts access everywhere at once.
+
+**What it costs.** Connectors cost nothing extra. They need the same paid Claude plan that Claude Code needs.
+
+**Tools the OS stores a key for.** A few tools, like a Telegram bot, use a key instead of a sign-in. For those, the OS asks you to open the `.env` file in your Founder OS folder, paste the key there yourself, and save. The key never goes into a tracked file, and if you follow that path it never goes into the chat either. Do not paste a key into the chat. If you already did, cancel that key at the tool and make a new one.
+
+Before you connect anything new, `rules/security-baseline.md` has the five questions worth asking.
+
+---
+
+## How this page is organised
+
 Founder OS does not assume your stack. The OS is a set of files and skills. Each skill declares which Model Context Protocol (MCP) servers it can use, and degrades gracefully when those MCPs are not available.
 
-You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run most of the 97 skills end-to-end. The four skills that produce noticeably better output with the relevant MCP connected are `email-drafter`, `meeting-prep`, `knowledge-capture`, and `session-handoff`. They still function without one, but with reduced context.
+You connect only the MCPs you actually need. A founder with zero MCPs can still complete setup and run most of the 97 skills end-to-end. The three skills that produce noticeably better output with the relevant MCP connected are `email-drafter`, `meeting-prep`, and `knowledge-capture`. They still function without one, but with reduced context.
 
-This doc covers three things: which MCPs activate which skills, which editors and surfaces (Obsidian, Claude Cowork, claude-mem) pair well with the OS, and what works under each surface.
+The rest of this doc covers three things: which MCPs activate which skills, which editors and surfaces (Obsidian, Claude Cowork, claude-mem) pair well with the OS, and what works under each surface.
 
 ---
 
@@ -20,10 +57,10 @@ Anthropic's guide to both: [Connect Claude Code to tools via MCP](https://code.c
 
 | Capability | Recommended MCP | Alternatives | Skills that use it | Required for launch? |
 |---|---|---|---|---|
-| Email | Gmail MCP | Outlook MCP, manual paste | email-drafter, capture-meeting | No - works without |
+| Email | Gmail MCP | Outlook MCP, manual paste | email-drafter, meeting-prep | No - works without |
 | Calendar | Google Calendar MCP | Outlook MCP, manual paste | meeting-prep, /today | No - degrades to "no calendar event" line |
-| Knowledge base | Notion MCP | Local markdown, Obsidian | knowledge-capture, session-handoff | No - skills work locally without it |
-| Sales / CRM | Apollo MCP | HubSpot MCP, manual entry | proposal-writer (pricing context only) | No |
+| Knowledge base | Notion MCP | Local markdown, Obsidian | knowledge-capture | No - skills work locally without it |
+| Sales / CRM | Apollo MCP | HubSpot MCP, manual entry | None of the shipped skills read it yet | No |
 | Design and decks | Canva MCP, Gamma MCP | None - skill produces text spec | pitch-deck (uses no MCP. Its markdown spec pastes into Canva or Gamma, or renders to `.pptx` with `python-pptx`) | No |
 | Code repos | GitHub MCP | None - if no GitHub, skip | (future build-related skills) | No |
 | Database | Supabase MCP | None | (advanced users only) | No |
@@ -71,7 +108,7 @@ If you install Founder OS and add no MCPs, all of these skills work end-to-end o
 - wiki-build
 - query
 
-Four skills in particular (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) function without MCPs but produce noticeably better output with the relevant integration connected.
+Three skills in particular (`email-drafter`, `meeting-prep`, `knowledge-capture`) function without MCPs but produce noticeably better output with the relevant integration connected.
 
 ---
 
@@ -79,7 +116,6 @@ Four skills in particular (`email-drafter`, `meeting-prep`, `knowledge-capture`,
 
 ### Gmail MCP
 - `email-drafter` can read your inbox to draft replies in context.
-- `capture-meeting` can route follow-up emails directly to a draft.
 
 ### Google Calendar MCP
 - `/today` shows the next scheduled event.
@@ -90,11 +126,10 @@ Four skills in particular (`email-drafter`, `meeting-prep`, `knowledge-capture`,
 
 ### Notion MCP
 - `knowledge-capture` can write captured insights directly into a Notion database.
-- `session-handoff` can post a session summary to a Notion page.
 - Useful if you already live in Notion. Skip if you don't.
 
 ### Apollo MCP
-- `proposal-writer` can pull prospect company data when writing a proposal.
+- No shipped skill reads Apollo today. Claude can still use it when you ask directly, if you connect it.
 - Useful only if you do enough cold outreach to justify Apollo's pricing.
 
 ### Supabase MCP

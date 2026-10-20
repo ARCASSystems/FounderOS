@@ -79,7 +79,7 @@ python scan.py <export.zip OR export-folder> <output-folder> --icp <their-icp.ya
 - `--brand "<label>"` is optional; it puts a neutral label in the HTML header (the user's own name or company). The page ships with a plain neutral palette they can rebrand.
 - `--as-of YYYY-MM-DD` is an internal determinism input. `linkedin-start/run.py` supplies today. Tests pass a fixed date.
 
-The script is Python standard-library only - no `pip install`, nothing to set up, works on a free plan. If `python` is not found, try `python3`.
+The script is Python standard-library only - no `pip install`, nothing to set up, no API key needed. If `python` is not found, try `python3`.
 
 ### Freshness
 

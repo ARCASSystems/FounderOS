@@ -38,7 +38,8 @@ Design rules this script must honour (they are why the feature exists):
   machine that has both shells. --record dedupes a same-second duplicate and
   --manifest skips a just-rendered manifest, so dual-shell machines do not
   double-count.
-- ASCII-only stdout (hook output must survive any Windows codepage).
+- Output survives any Windows codepage: both streams are reconfigured to UTF-8
+  with replacement at entry, because a file name can hold any character.
 """
 
 from __future__ import annotations
@@ -528,45 +529,76 @@ def _confirm_delete(relpath: str, assume_yes: bool) -> bool:
         return False
 
 
-def cmd_restore(relpath: str, session_arg: str | None, assume_yes: bool) -> int:
+def _say(text: str) -> None:
+    """Print a report line without letting the printing decide the outcome.
+
+    The restore used to print its success inside the same try as the copy, so
+    on a cp1252 console a file name the codepage could not encode raised AFTER
+    the copy landed, and the except branch then printed "Restore failed" over a
+    restore that had worked. A report is not the operation."""
     try:
-        if session_arg:
-            sid = short_sid(session_arg)
-        else:
-            lf = latest_log()
-            sid = lf.stem if lf else None
-        if not sid:
-            print("No session to restore from.")
-            return 1
-        snap = SNAP_DIR / sid / relpath
-        if snap.is_file():
-            target = ROOT / relpath
+        print(text)
+    except Exception:
+        try:
+            print(text.encode("ascii", "replace").decode("ascii"))
+        except Exception:
+            pass
+
+
+def cmd_restore(relpath: str, session_arg: str | None, assume_yes: bool) -> int:
+    if session_arg:
+        sid = short_sid(session_arg)
+    else:
+        lf = latest_log()
+        sid = lf.stem if lf else None
+    if not sid:
+        _say("No session to restore from.")
+        return 1
+    snap = SNAP_DIR / sid / relpath
+    target = ROOT / relpath
+    if snap.is_file():
+        try:
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(snap, target)
-            print(f"Restored {relpath} from session {sid} snapshot.")
+        except Exception as exc:
+            _say(f"Restore failed: {exc}")
+            return 1
+        _say(f"Restored {relpath} from session {sid} snapshot.")
+        return 0
+    # No snapshot. If the file was CREATED this session, undo means deleting
+    # it - there was no earlier version to put back.
+    if _was_created_this_session(sid, relpath):
+        if not target.exists():
+            _say(f"{relpath} was created this session but is already gone - nothing to undo.")
             return 0
-        # No snapshot. If the file was CREATED this session, undo means deleting
-        # it - there was no earlier version to put back.
-        if _was_created_this_session(sid, relpath):
-            target = ROOT / relpath
-            if not target.exists():
-                print(f"{relpath} was created this session but is already gone - nothing to undo.")
-                return 0
-            if not _confirm_delete(relpath, assume_yes):
-                print("Left in place. Re-run with --yes to delete it without prompting.")
-                return 1
+        if not _confirm_delete(relpath, assume_yes):
+            _say("Left in place. Re-run with --yes to delete it without prompting.")
+            return 1
+        try:
             target.unlink()
-            print(f"Deleted {relpath} (created this session; there was no earlier version).")
-            return 0
-        print(f"No snapshot for {relpath} in session {sid}. It was over 2 MB, "
-              "shell-written, or is outside the OS folder - no pre-edit copy exists.")
-        return 1
-    except Exception as exc:
-        print(f"Restore failed: {exc}")
-        return 1
+        except Exception as exc:
+            _say(f"Could not delete {relpath}: {exc}")
+            return 1
+        _say(f"Deleted {relpath} (created this session; there was no earlier version).")
+        return 0
+    _say(f"No snapshot for {relpath} in session {sid}. It was over 2 MB, "
+         "shell-written, or is outside the OS folder - no pre-edit copy exists.")
+    return 1
+
+
+def _force_utf8_streams() -> None:
+    """Print UTF-8 whatever the console's codepage. Outside Claude Code (and
+    inside it, without PYTHONUTF8) a Windows pipe is cp1252, and one file name
+    in Arabic or with an arrow crashed --print and broke the --restore report."""
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
 
 
 def main() -> int:
+    _force_utf8_streams()
     ap = argparse.ArgumentParser(description="Session changes tracker")
     ap.add_argument("--record", action="store_true", help="PreToolUse: snapshot + log a change")
     ap.add_argument("--manifest", action="store_true", help="Stop: render the session manifest")

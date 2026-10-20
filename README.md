@@ -1,5 +1,11 @@
 # Founder OS
 
+> **You need:** a paid Claude plan (Pro, Max, Team or Enterprise), Python 3.11 or newer, and to be 18 or over.
+>
+> **Do this:** [download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.56.0/FounderOS-1.56.0.zip), unzip it, open the **Founder OS** folder in Claude Code, and say **"set up Founder OS"**.
+>
+> **Stuck?** [docs/troubleshooting.md](docs/troubleshooting.md) lists what you might see and what to do.
+
 ![Doc and Install Parity](https://github.com/ARCASSystems/FounderOS/actions/workflows/doc-parity.yml/badge.svg) ![guardian](https://github.com/ARCASSystems/FounderOS/actions/workflows/guardian.yml/badge.svg) ![LinkedIn Pack Acceptance](https://github.com/ARCASSystems/FounderOS/actions/workflows/linkedin-pack.yml/badge.svg)
 
 Get an operating system with your first team already on it: five named digital employees with written job descriptions, a brain that keeps everything you tell it and invents nothing, and your working life - clients, pipeline, decisions, the week - modelled in files you own. Six files run your company, or the part of one you run. Claude works from them every session.
@@ -10,7 +16,7 @@ Owned by you. Runs locally in Claude Code. Talk to it.
 
 ---
 
-**New here? [Read the Founder OS Playbook first](https://arcassystems.com/playbook)** - a visual walkthrough with screenshots: the problem, the three parts, how to start, and what not to do. Opens framed in any browser, about 15 minutes. It lives on the web so it never drifts out of date; there is no copy shipped in this repo.
+**New here? [Read the Founder OS page](https://arcassystems.com/founder-os)** on the ARCAS website. It explains what Founder OS is, its four parts, how setup goes, what the first week looks like, and the common questions.
 
 **[Download Founder OS](https://github.com/ARCASSystems/FounderOS/releases/download/v1.56.0/FounderOS-1.56.0.zip)** - unzip it, open the folder in Claude Code, and say "set up Founder OS". With the Claude desktop app that is the Code tab, **Local**, then **Select folder**, with no terminal (per Anthropic's docs, not yet tested by us). With the Claude Code terminal tool installed, double-clicking **Start Founder OS** does it for you. Or install via plugin marketplace, one-line curl, or git clone. See [Install](#install) below.
 
@@ -154,7 +160,7 @@ You need three things:
 
 - **Claude Code** - included with a paid Claude plan, not free. The no-terminal way is the Claude desktop app from [claude.com/download](https://claude.com/download): open its **Code** tab, choose **Local**, and click **Select folder**. That route follows Anthropic's docs, and we have not yet watched a fresh install run it. Prefer a terminal? Install the command-line tool from [Anthropic's quickstart](https://code.claude.com/docs/en/quickstart).
 - **A paid Claude plan** - Pro, Max, Team or Enterprise. Claude Code does not run on the free plan.
-- **Python 3.11+** - for the runtime scripts. Check with `python --version`, then `python3 --version`, then `py -3 --version` - the first one that answers is the one your machine uses. (Bare `python3` is unreliable on Windows.)
+- **Python 3.11+** - for the runtime scripts. Setup checks this for you and tells you plainly if it is missing, so there is nothing to type. If you want to check yourself in a terminal: `python --version`, then `python3 --version`, then `py -3 --version` - the first one that answers is the one your machine uses. (Bare `python3` is unreliable on Windows.) After you install Python, close Claude Code completely and open the folder again, because an app that was already open cannot see it.
 
 That is it. No git. No database. No server. No Notion account required. You also need to be 18 or over, because Claude's terms say so, and setup asks before anything else.
 
@@ -190,17 +196,21 @@ A fuller list, generated from the skills actually installed on your machine, is 
 
 ## Install
 
+**Stuck at any step?** [docs/troubleshooting.md](docs/troubleshooting.md) lists what you might see (Python not found, a blocked Start file, an unknown command, a setup that stopped halfway) and what to do.
+
 Four install paths, plus Cowork as a companion once one of them is in place. The one that needs no Git and no terminal comes first. Full step-by-step for each in [docs/install.md](docs/install.md).
 
 **Not comfortable in a terminal?** Start with the ZIP download below - three steps and one sentence typed - or the plugin install after it. Neither needs a terminal.
 
-### Download ZIP (no Git or terminal, own it in 10 minutes)
+### Download ZIP (no Git or terminal)
 
 1. **[Download the ZIP](https://github.com/ARCASSystems/FounderOS/releases/download/v1.56.0/FounderOS-1.56.0.zip)**
 2. Right-click, **Extract All** (Windows) or double-click it (Mac). Inside is a folder called **Founder OS**. Put it wherever you keep your work.
-3. Open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`). In the Claude desktop app: **Code** tab, **Local**, **Select folder**, pick the folder, with no terminal (per Anthropic's docs, not yet tested by us). If you have the Claude Code terminal tool, double-click **Start Founder OS** in the folder instead (the `.bat` file on Windows, the `.command` file on a Mac), and it opens Claude Code right there with the wizard talking. The desktop app does not add that terminal tool, so with the app alone the start file explains the desktop route and opens the download page rather than failing. First run only: Windows may show a note about a downloaded script - let it run (the file is plain text, right-click and Edit to read it). On a Mac, the first double-click may be blocked: then open System Settings, then Privacy & Security, click Open Anyway, and confirm with Open. Those are Apple's current steps for blocked downloads, and we have not yet run the start file on a real Mac.
+3. Open the folder in Claude Code and say **"set up Founder OS"** (or run `/setup`). In the Claude desktop app: **Code** tab, **Local**, **Select folder**, pick the folder, with no terminal (per Anthropic's docs, not yet tested by us). If you have the Claude Code terminal tool, double-click **Start Founder OS** in the folder instead (the `.bat` file on Windows, the `.command` file on a Mac), and it opens Claude Code right there with the wizard talking. The desktop app does not add that terminal tool, so with the app alone the start file explains the desktop route and opens the download page rather than failing. First run only: Windows may show "Windows protected your PC" - click **More info**, then **Run anyway** (the file is plain text, right-click and Edit to read it). If Windows says Smart App Control blocked it, use the desktop app route above instead. On a Mac, the first double-click may be blocked: then open System Settings, then Privacy & Security, click Open Anyway, and confirm with Open. Those are Apple's current steps for blocked downloads, and we have not yet run the start file on a real Mac.
 
-That is the whole install. No git, no curl, no terminal command, no account beyond the Claude plan you already have. Updates work the same way: say "update Founder OS" and the OS re-downloads the ZIP itself, refreshes its own engine files, and never touches your data.
+That is the whole install. No git, no curl, no terminal command, no account beyond the Claude plan you already have.
+
+**To update, open your Founder OS folder and say "update Founder OS".** The OS re-downloads the ZIP itself, refreshes its own engine files, and never touches your data. Do not download a new ZIP and extract it over your folder: that replaces your personal CLAUDE.md, rules and settings. If you already extracted a new ZIP into a new folder, setup starts fresh there and your data stays in the old folder: open the old folder and update it instead.
 
 **Already have notes?** If you keep an Obsidian vault or a folder of markdown, setup can move the OS in next to your notes instead of starting a separate folder - your existing files are never touched. Say "set up Founder OS inside my vault". Details in [docs/adopt-existing-notes.md](docs/adopt-existing-notes.md).
 
@@ -247,14 +257,14 @@ Cowork is merging into the main Claude app (Pro and Max first), and from 6 Octob
 
 ---
 
-## Setup ladder (about 90 minutes end to end - stop after step 2 and come back any time)
+## Setup ladder (the four steps add up to about 45 minutes - stop after step 2 and come back any time)
 
 1. **Install** - pick an [install path](#install) above (5 min). If your install uses git (curl or clone paths, or after "own my history"), setup wires the privacy guard for you; `./scripts/install-git-hooks.sh` re-wires it by hand if you ever need to. Out of the box it already blocks committed secrets (API keys, tokens, bot tokens, PEM private keys), em/en dashes, and AI-attribution trailers - no config needed. To also block private names, open `scripts/private-name-patterns.txt` and add the names that must never enter your files (`\bClientName\b` - a client under NDA, a person you keep off the record); the name check stays off until that file has a pattern, while the secret and voice checks run regardless. Do not add your own name: once you own your history, your identity file is tracked by design, and your own name as a pattern would block every save that touches it. The file is gitignored, so the names in it never enter your history or any push. On a ZIP install this step waits until you turn on version history - there is nothing to wire before then.
-2. **Say "set up Founder OS"** (or run `/founder-os:setup`) - the wizard builds your operating layer from your answers (15 min). It reads which kind of operator you are (founder, career-mover, builder, student) so the OS leads with what your situation needs, and seeds your brain with a starter flag, pattern, parked decision, and log entry so your first session is not a blank screen.
+2. **Say "set up Founder OS"** (or run `/setup`, or `/founder-os:setup` on a plugin install) - the wizard builds your operating layer from your answers (about 15 to 20 minutes). It reads which kind of operator you are (founder, career-mover, builder, student) so the OS leads with what your situation needs, and seeds your brain with a starter flag, pattern, parked decision, and log entry so your first session is not a blank screen.
 3. **Say "set up my voice profile"** (or run `/founder-os:voice-interview`) - so every writing skill sounds like you, not Claude (10 min)
 4. **Say "set up my brand profile"** (or run `/founder-os:brand-interview`) - so every deliverable looks like you (10 min). Three interviews exist and do different jobs: voice-interview = how YOU write, brand-interview = how your documents LOOK, brand-voice-interview = how a BRAND you run writes (only if you run one)
 
-After that, `/founder-os:status` audits the OS anytime, `/today` gives a one-screen view of today, and `/next` recommends one action. Full first-day path in [docs/first-day.md](docs/first-day.md). Full per-command reference in [docs/commands.md](docs/commands.md). Full per-skill reference (outcome, reads, writes, voice rules, prereqs, follow-ups) in [docs/skills.md](docs/skills.md).
+After that, say "check my OS readiness" to audit the OS any time, "what's on for today?" for a one-screen view of today, and "what should I do next?" for one recommended action. (On a plugin install the commands are `/founder-os:status`, `/founder-os:today` and `/founder-os:next`. On a ZIP, clone or curl install they are `/today` and `/next`, and the readiness check is best asked for in words, because Claude Code's own `/status` screen takes that name.) Full first-day path in [docs/first-day.md](docs/first-day.md). Full per-command reference in [docs/commands.md](docs/commands.md). Full per-skill reference (outcome, reads, writes, voice rules, prereqs, follow-ups) in [docs/skills.md](docs/skills.md).
 
 For the short answer to "what can this actually do", [docs/what-this-can-do.md](docs/what-this-can-do.md) lists every capability in plain language. It is generated from the skills on disk rather than maintained by hand, and on installs with version history the privacy guard refuses a skill change that leaves it stale, so it is never a wish list. Rebuild it any time with `python scripts/skills_sync.py --capabilities`.
 
@@ -324,7 +334,7 @@ The skill is opt-in - the rest of Founder OS works without it. You activate it b
 
 ## Tools and MCPs
 
-Founder OS does not assume your stack. Most of the 97 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`, `session-handoff`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. Full catalog in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
+Founder OS does not assume your stack. Most of the 97 skills work end-to-end with zero MCPs. A few (`email-drafter`, `meeting-prep`, `knowledge-capture`) produce better output with the relevant integration connected. Without a calendar MCP, `/today` shows `no scheduled event next 24h`. Without an email MCP, you paste the thread by hand. Without a Notion MCP, captures stay in `brain/log.md` as markdown. Nothing hard-fails on a missing MCP. To connect one, say "connect my calendar" (or the tool you use). How to connect, what each connector can read, and how to turn one off are in [docs/tools-and-mcps.md](docs/tools-and-mcps.md).
 
 ---
 
@@ -344,11 +354,11 @@ You want a tool you install and forget. Founder OS earns its keep the other way 
 
 Not a workflow engine. Not a webhook server. Not a cloud tool that stores your data on someone else's servers.
 
-Your Notion. Your Claude. Your files on your disk if you want them there. If you want to delete it, run `/founder-os:uninstall` or just delete the folder. Nothing to unsubscribe from.
+Your Notion. Your Claude. Your files on your disk if you want them there. If you want to delete it, run `/founder-os:uninstall` (`/uninstall` on a ZIP or clone install), or delete the folder. Setup also wrote two things outside the folder, and deleting the folder leaves them: a Founder OS block in `~/.claude/CLAUDE.md` (between the `FOUNDER OS START` and `FOUNDER OS END` marker lines, loaded in every Claude Code project), and Claude Code's memory folder for this project, `~/.claude/projects/<slug>/memory/`. Delete the block and that folder by hand if you want them gone. Nothing to unsubscribe from.
 
 ## Why local-first is the security story
 
-2026's defining AI-agent security incident (135,000+ exposed instances, plaintext key files, a poisoned skills marketplace) needed three doors: a server listening on a port, a stored API key, a third-party skill registry. Founder OS has none of the three - nothing listens, your subscription sign-in replaces key files, and every skill ships in this repo as markdown you can read before it runs. Your brain stays on your disk; deleting the OS is deleting a folder. The full record with sources, plus the honest limits: [docs/why-local-first.md](docs/why-local-first.md). And the whole picture on one page - every surface that can send anything off your machine, where secrets live, the guard chain already running, and the five questions to ask before any yes - is [rules/security-baseline.md](rules/security-baseline.md).
+2026's defining AI-agent security incident (135,000+ exposed instances, plaintext key files, a poisoned skills marketplace) needed three doors: a server listening on a port, a stored API key, a third-party skill registry. Founder OS has none of the three in its default text mode - nothing listens (the optional voice add-on listens on your own machine only), your subscription sign-in replaces key files, and every skill ships in this repo as markdown you can read before it runs. Your brain stays on your disk. Deleting the OS is deleting a folder, plus the two small things setup wrote outside it (see [What it is not](#what-it-is-not)). The full record with sources, plus the honest limits: [docs/why-local-first.md](docs/why-local-first.md). And the whole picture on one page - every surface that can send anything off your machine, where secrets live, the guard chain already running, and the five questions to ask before any yes - is [rules/security-baseline.md](rules/security-baseline.md).
 
 If you need crons, webhooks, offline triggers, or anything that fires while you sleep, that is a different tool (n8n, Make, whatever you use). Founder OS holds the thinking layer. You stay in charge of the rest.
 
@@ -381,9 +391,9 @@ Safe fallback prompt for Cloud Claude:
 
 ```text
 Use this repo as the Founder OS system layer. Read README.md and CLAUDE.md first.
-If the founder context files are missing, stop and tell me to run /founder-os:setup
-or use the Notion quickstart. Do not invent identity, clients, priorities, decisions,
-revenue, or commitments.
+If the founder context files are missing, stop and tell me to open the folder in
+Claude Code and say "set up Founder OS". Do not invent identity, clients, priorities,
+decisions, revenue, or commitments.
 ```
 
 ---
@@ -398,9 +408,12 @@ Have an idea but no business yet? That counts. Say **"I have an idea"** and desc
 
 ## Status
 
-Version 1.56.0. Public release. 97 skills, 47 commands, 1177 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
+Version 1.56.0. Public release. 97 skills, 47 commands, 1253 tests. Every push to main runs three CI gates (doc and install parity, the privacy guardian, the LinkedIn pack acceptance suite) and a weekly integrity audit runs on top. The maintainer's full test suite runs upstream before anything lands here; it is not shipped in this repo, so the badge row above is the claim you can verify.
 
-**The dependency floor, as of this release.** One Claude plan, no API key, nothing to pip install - with two named exceptions, both optional and both failing closed with the exact command when their package is absent: `scripts/scrape.py` (the fetch helper behind web research) asks for `httpx selectolax tenacity` and falls back to the built-in fetcher, and `scripts/pitch_deck.py` asks for `python-pptx` to render a deck to `.pptx`, where the markdown spec it renders from is the deliverable either way. The optional local voice tier asks for `faster-whisper` and Piper, and is off until you turn it on. Every other shipped script is standard library only. Paragraphs below this line are release history: each states what was true at that version, not what is true now.
+**The dependency floor, as of this release.** One Claude plan, no API key, nothing to pip install - with two named exceptions, both optional and both failing closed with the exact command when their package is absent: `scripts/scrape.py` (the fetch helper behind web research) asks for `httpx selectolax tenacity` and falls back to the built-in fetcher, and `scripts/pitch_deck.py` asks for `python-pptx` to render a deck to `.pptx`, where the markdown spec it renders from is the deliverable either way. The optional local voice tier asks for `faster-whisper` and Piper, and is off until you turn it on. Every other shipped script is standard library only.
+
+<details>
+<summary>Release history (click to open). Each entry states what was true at that version, not what is true now.</summary>
 
 v1.48.0 is the arrival release, and the thought process behind it is one sentence: we watched how people actually arrive, and the OS assumed someone they are not. It assumed a founder with a business, a terminal, and no history. Real arrivals are a student with an idea and a phone, an operator who wants a team of assistants for her own creative process, a founder with years of notes in Obsidian, someone coming back after five weeks away. Each got a door. Download-extract-double-click: `Start Founder OS` files for Windows and Mac open Claude Code in the folder and start the wizard talking - the standing front door, honest in-file about what they cannot do. "I have an idea" now reaches the propose engine, which answers with the five real people to talk to this week, never a business plan or a course. "Turn my process into assistants" builds a team the way a real operator specced it: one job per assistant, the human keeps the taste decisions, effectiveness before efficiency, seats earned then registered. Setup adopts an existing vault without touching a single file, and says honestly what old notes can and cannot do. `AGENTS.md` now tells any connected agent - an SEO engine, an outreach drafter - how to join the team under a charter instead of freelancing in your files. The brief welcomes a returner back with counts and one offer instead of a wall of flags. And people research in meeting prep carries sources inline or says "unverified - confirm on the call", with a same-name check before anything is attributed to the human across the table.
 
@@ -428,7 +441,11 @@ v1.37.0 does two things. It installs the OS into one folder you own (default `~/
 
 v1.36.1 is a patch: it clears a red CI gate, stops the CMO role shipping an unfilled token, captures your timezone at setup, steers non-technical founders to the no-terminal install, and corrects the provider claim to match what actually runs (Claude Code).
 
-v1.36 adds the output bias self-check. The OS now runs a check on its own reasoning before it gives an opinion of consequence, attaching a counter-case, a confidence level, what evidence is absent, and the do-nothing option, so advice is named-and-countered instead of confidently biased. It ships as `rules/biases.md`, a `/founder-os:devil` command to run it on demand, a boot rule plus a plain-language explanation of why the OS pushes back, and a one-line decision-prompt nudge in the capture hook. Full release history in [CHANGELOG.md](CHANGELOG.md).
+v1.36 adds the output bias self-check. The OS now runs a check on its own reasoning before it gives an opinion of consequence, attaching a counter-case, a confidence level, what evidence is absent, and the do-nothing option, so advice is named-and-countered instead of confidently biased. It ships as `rules/biases.md`, a `/founder-os:devil` command to run it on demand, a boot rule plus a plain-language explanation of why the OS pushes back, and a one-line decision-prompt nudge in the capture hook.
+
+</details>
+
+Full release history in [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

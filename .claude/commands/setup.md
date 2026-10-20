@@ -30,7 +30,7 @@ Argument: `$ARGUMENTS` - optional. Pass `--reset` (or `reset`) to force a re-run
 
    Wait for the reply.
    - If the reply is a clear `no` (or anything that is not a clear `yes`), reply: `Setup dismissed. Existing files left untouched.` and stop.
-   - If the reply is a clear `yes`, delete `state/setup-complete.json` before proceeding to step 3. From the moment a re-run is confirmed the install is mid-setup again, and a completion marker left behind would outrank the progress markers the re-run is about to write.
+   - If the reply is a clear `yes`, delete `state/setup-complete.json` before proceeding to step 3, and treat the re-run as a `reset` from here on. From the moment a re-run is confirmed the install is mid-setup again, and a completion marker left behind would outrank the progress markers the re-run is about to write. Passing the reset signal is what makes the skill copy the founder's current files to `state/setup-backup-<YYYYMMDD-HHMM>/` before it writes anything, and stops its own already-set-up check from turning the founder away a second time.
 
 3. Reached on a fresh install, an interrupted-setup resume, a confirmed re-run, or when `$ARGUMENTS` contains `reset`:
 
@@ -44,7 +44,7 @@ Argument: `$ARGUMENTS` - optional. Pass `--reset` (or `reset`) to force a re-run
 
    Read the skill from wherever it resolved and execute it end to end. The skill owns the wizard flow: Discovery, Identity, Founder OS root, company folders, first project, remaining projects, validation. Follow its phases IN ORDER. Do not shortcut.
 
-   If `$ARGUMENTS` contains `reset`, pass that signal into the skill so it knows to scan for and reconcile existing files rather than assume a clean slate. If step 1 found an interrupted setup, pass the resume signal instead: the skill reads `state/setup-progress.json` and continues from the recorded phase without re-asking anything already answered.
+   If `$ARGUMENTS` contains `reset`, or step 2 confirmed a re-run, pass the reset signal into the skill so it backs up the current files first, then scans for and reconciles existing files rather than assuming a clean slate. If step 1 found an interrupted setup, pass the resume signal instead: the skill reads `state/setup-progress.json` and continues from the recorded phase without re-asking anything already answered.
 
 ## Rules
 

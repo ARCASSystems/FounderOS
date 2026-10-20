@@ -25,7 +25,10 @@ Design rules (they are why this file exists):
   still exits 0. A hook that crashes the session is worse than a hook that
   quietly failed - but a hook that fails SILENTLY is worst of all, so failures
   are made visible, not swallowed.
-- ASCII-only stdout. Hook output must survive any Windows codepage.
+- Output must survive any Windows codepage. The dispatcher's own text is ASCII,
+  and both streams are reconfigured to UTF-8 with replacement, because a log
+  line it echoes back (the revenue check samples brain/log.md) can hold any
+  character the founder typed.
 - Delegates to the existing Python helpers where they already own the work
   (session_changes.py, session_start_brief.py, user-prompt-capture.py,
   caveman_git.py, memory-diff.py); the shell-only logic (revenue check,
@@ -66,12 +69,36 @@ ROOT = repo_root()
 QUARANTINE = ROOT / "system" / "quarantine.md"
 
 
-def quarantine(source: str, trigger: str, err: str, context: str) -> None:
+def _already_quarantined_today(source: str, head: str) -> bool:
+    """True when today's quarantine already holds an entry for this source and
+    error. A helper that crashes on every tool call would otherwise write one
+    entry per Write or Edit and bury the record it exists to keep readable."""
+    try:
+        if not QUARANTINE.is_file():
+            return False
+        with QUARANTINE.open("rb") as fh:
+            fh.seek(0, 2)
+            size = fh.tell()
+            fh.seek(max(0, size - 16384))
+            tail = fh.read().decode("utf-8", errors="replace")
+        today = datetime.now().strftime("%Y-%m-%d")
+        return any(
+            ln.startswith(f"## {today}") and ln.endswith(f" - {source} - {head}")
+            for ln in tail.splitlines()
+        )
+    except Exception:
+        return False
+
+
+def quarantine(source: str, trigger: str, err: str, context: str,
+               dedupe: bool = False) -> None:
     """Make a handler failure visible instead of swallowing it. Never raises."""
     try:
         QUARANTINE.parent.mkdir(parents=True, exist_ok=True)
         ts = datetime.now().strftime("%Y-%m-%d %H:%M")
         head = str(err).splitlines()[0] if str(err).strip() else "unknown error"
+        if dedupe and _already_quarantined_today(source, head):
+            return
         entry = (
             f"\n## {ts} - {source} - {head}\n\n"
             f"**Source:** {source}\n"
@@ -114,32 +141,85 @@ def child_env() -> dict:
     return env
 
 
-def run_helper(script_rel: str, args: list[str], stdin_bytes: bytes) -> None:
+def _error_report(returncode: int, stderr: bytes, lines: int = 12, limit: int = 1500) -> str:
+    """A quarantine-ready error: the helper's last error line and exit code as
+    the heading, then the tail of what it printed to stderr, indented so no
+    line of it can be read as a quarantine field."""
+    text = (stderr or b"").decode("utf-8", errors="replace").strip()
+    if not text:
+        return f"exit code {returncode} (the helper printed no error)"
+    tail_lines = text.splitlines()[-lines:]
+    last = tail_lines[-1].strip()[:200]
+    tail = "\n".join(tail_lines)[-limit:]
+    body = "\n".join("    " + ln for ln in tail.splitlines())
+    return f"{last} (exit code {returncode})\n\n{body}\n"
+
+
+def run_helper(script_rel: str, args: list[str], stdin_bytes: bytes,
+               announce: str | None = None) -> bool:
     """Run a bundled Python helper, feeding it the hook stdin, letting its
     stdout flow straight through to Claude Code. Missing helper = quiet skip
-    (matches the old shell hooks, which tested for the file first)."""
+    (matches the old shell hooks, which tested for the file first).
+
+    The helper's exit code is checked. Before, a helper that crashed exited
+    through here as a success, so a broken session brief simply vanished with
+    no trace anywhere. Now a non-zero exit writes a quarantine entry carrying
+    the tail of the helper's stderr, and `announce`, when given, is printed so
+    the session itself says something went wrong. The session is still never
+    blocked: the dispatcher exits 0 either way. Returns True on a clean run."""
     script = ROOT / script_rel
     if not script.is_file():
-        return
+        return True
+    source = f"scripts/hooks/dispatch.py -> {script_rel}"
     try:
         # Flush our own buffered prints first so the child's inherited stdout
         # cannot jump ahead of output this dispatcher already produced. Without
         # this, a Stop revenue warning (buffered) would print AFTER the change
         # manifest summary (written straight to the fd by the child).
         sys.stdout.flush()
-        subprocess.run(
+        proc = subprocess.run(
             [sys.executable, str(script), *args],
             input=stdin_bytes,
+            stderr=subprocess.PIPE,
             env=child_env(),
             cwd=str(ROOT),
         )
     except Exception as exc:
         quarantine(
-            f"scripts/hooks/dispatch.py -> {script_rel}",
+            source,
             "delegated helper",
             f"{exc}",
             "Dispatcher could not run the helper; the session was not blocked.",
+            dedupe=True,
         )
+        if announce:
+            print(announce)
+        return False
+
+    err = proc.stderr or b""
+    if err:
+        # Hand the helper's stderr on unchanged. It used to be inherited, and
+        # Claude Code keeps it in its hook log; capturing it must not hide it.
+        try:
+            sys.stderr.flush()
+            sys.stderr.buffer.write(err)
+            sys.stderr.flush()
+        except Exception:
+            pass
+    if proc.returncode != 0:
+        quarantine(
+            source,
+            "delegated helper exited non-zero",
+            _error_report(proc.returncode, err),
+            "The helper failed; the dispatcher continued and exited 0, so the "
+            "session was not blocked. Whatever this helper produces (the brief, "
+            "the change record, the capture note) is missing for this event.",
+            dedupe=True,
+        )
+        if announce:
+            print(announce)
+        return False
+    return True
 
 
 def git(root: Path, *args: str) -> str:
@@ -168,7 +248,13 @@ def h_session_start(stdin_bytes: bytes) -> None:
     today = date.today().isoformat()
     # --full renders the whole brief; without it the helper falls back to the
     # legacy @@SECTION payload for a retained pre-dispatcher shell hook.
-    run_helper(".claude/hooks/session_start_brief.py", [str(ROOT), today, "--full"], b"")
+    run_helper(
+        ".claude/hooks/session_start_brief.py", [str(ROOT), today, "--full"], b"",
+        announce=(
+            "The session brief could not be built this time. The error is saved in "
+            "system/quarantine.md - say \"what broke\" and I will read it."
+        ),
+    )
     liveness()
 
 
@@ -263,6 +349,23 @@ def _clean(s: str, limit: int) -> str:
     return s[:limit]
 
 
+# A command or written snippet that may carry a credential. The observation log
+# lives under brain/, which an install that owns its history tracks, so the
+# first 80 characters of `connect.py set-secret X <value>` or a curl with an
+# Authorization header would otherwise land in version history - and in any
+# backup of it. Over-matching ("tokenize") only hides a harmless line.
+SECRET_HINT_RE = re.compile(
+    r"set-secret|token|key=|password|passwd|authorization|bearer\s"
+    r"|\b[A-Za-z0-9_]*(?:_KEY|_TOKEN|_SECRET)\s*[=:]",
+    re.IGNORECASE,
+)
+REDACTED = "[hidden - may contain a secret]"
+
+
+def _redact(s: str) -> str:
+    return REDACTED if s and SECRET_HINT_RE.search(s) else s
+
+
 def h_post_tool_use(stdin_bytes: bytes) -> None:
     if os.environ.get("FOUNDER_OS_OBSERVATIONS") != "1":
         return
@@ -282,9 +385,14 @@ def h_post_tool_use(stdin_bytes: bytes) -> None:
         intent = f"read {file_path}"
     elif tool in ("Edit", "Write"):
         snippet = g("new_string") or g("content")
-        intent = f"edit {file_path} - {_clean(snippet, 80)}"
+        intent = f"edit {file_path} - {_redact(_clean(snippet, 80))}"
     elif tool == "Bash":
-        intent = f"bash - {_clean(g('command'), 80)}"
+        # Test the whole command, not only the 80 characters kept: a hint
+        # anywhere means the line may carry a credential (a URL with a key in
+        # it before the header that names it), and hiding a harmless line
+        # costs one log entry.
+        command = g("command")
+        intent = f"bash - {REDACTED if SECRET_HINT_RE.search(command) else _clean(command, 80)}"
     elif tool == "Grep":
         intent = f"grep {g('pattern')} in {g('path')}"
     elif tool == "Glob":
@@ -510,10 +618,21 @@ def snapshot_refresh() -> None:
     script = ROOT / "scripts" / "brain-snapshot.py"
     if not script.exists():
         return
-    subprocess.run(
-        [sys.executable, str(script), "--write"],
-        cwd=str(ROOT), capture_output=True, timeout=30,
-    )
+    source = "scripts/hooks/dispatch.py -> scripts/brain-snapshot.py"
+    context = ("The snapshot was not refreshed this session, so skills that read "
+               "brain/.snapshot.md see the previous one. The stop was not blocked.")
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(script), "--write"],
+            cwd=str(ROOT), capture_output=True, timeout=30, env=child_env(),
+        )
+    except subprocess.TimeoutExpired:
+        quarantine(source, "Stop snapshot refresh", "timed out after 30 seconds",
+                   context, dedupe=True)
+        return
+    if proc.returncode != 0:
+        quarantine(source, "Stop snapshot refresh",
+                   _error_report(proc.returncode, proc.stderr), context, dedupe=True)
 
 
 def h_stop(stdin_bytes: bytes) -> None:
@@ -559,12 +678,18 @@ def main() -> int:
     handler = EVENTS.get(event)
     if handler is None:
         return 0
-    # Line-buffer our stdout so native prints and delegated-child output stay in
-    # true chronological order (the Stop sequence prints from both).
-    try:
-        sys.stdout.reconfigure(line_buffering=True)
-    except Exception:
-        pass
+    # UTF-8 with replacement on both streams, and line-buffered stdout so native
+    # prints and delegated-child output stay in true chronological order (the
+    # Stop sequence prints from both). Inside Claude Code on Windows stdout is a
+    # cp1252 pipe unless PYTHONUTF8 is set, and one Arabic name or arrow in a
+    # log line then raised UnicodeEncodeError in the revenue check - which
+    # wrote a quarantine entry every session instead of the check.
+    for stream, line_buffered in ((sys.stdout, True), (sys.stderr, False)):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace",
+                               line_buffering=line_buffered)
+        except Exception:
+            pass
     stdin_bytes = read_stdin_bytes()
     if event == "Stop":
         # h_stop wraps each sub-handler itself for per-step isolation.

@@ -11,6 +11,7 @@
 # clone checks them out CRLF and the guard dies on 'bash\r' instead of running.
 .githooks/pre-commit  text eol=lf
 .githooks/commit-msg  text eol=lf
+.githooks/pre-push    text eol=lf
 
 # Markdown and JSON normalize on checkin, native on checkout.
 *.md         text

@@ -14,7 +14,7 @@ Each command has seven labels.
 - **When to run.** The signal or trigger that makes this the right next move.
 - **Follow-up.** What to run after.
 
-ZIP, git-clone and curl installs (Paths 0, B and E) drop the `/founder-os:` prefix. So `/founder-os:setup` becomes `/setup`. The plain bare commands (`/today`, `/next`, `/pre-meeting`, `/capture-meeting`) work the same on every path.
+**On a ZIP or clone install, commands have no `founder-os:` prefix. `/founder-os:setup` is `/setup`. Or just say what you want.** The same goes for a curl install. The plain bare commands (`/today`, `/next`, `/pre-meeting`, `/capture-meeting`) work the same on every path. One exception: on a ZIP, clone or curl install, `/status` opens Claude Code's own account screen, so for the OS readiness check say "check my OS readiness".
 
 If a command is not behaving as documented, say "audit the OS" (or run `/founder-os:audit`) to confirm the OS surface is intact, then [open an issue](https://github.com/ARCASSystems/FounderOS/issues).
 
@@ -25,9 +25,9 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 ### `/founder-os:setup`
 
 - **Or say.** "set up Founder OS"
-- **Outcome.** A guided interview of about 15 to 20 prompts across six phases ends with your full operating layer on disk. Final summary lists every file written.
+- **Outcome.** A guided interview of about 15 to 20 prompts across six phases, about 15 to 20 minutes, ends with your full operating layer on disk. Final summary lists every file written.
 - **Args.** None.
-- **Writes.** `core/identity.md`, `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `context/companies.md`, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `brain/log.md`, `brain/flags.md`, plus the auto-memory `MEMORY.md` index.
+- **Writes.** `core/identity.md`, `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `context/companies.md`, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `brain/log.md`, `brain/flags.md`. Outside your folder, each shown to you first: the auto-memory `MEMORY.md` index in `~/.claude/projects/<slug>/memory/`, and a marked Founder OS block in `~/.claude/CLAUDE.md`, which Claude Code loads in every project (an existing file is backed up first). See [install.md](install.md#what-setup-writes-outside-your-folder).
 - **Prereqs.** Founder OS plugin or repo present. Nothing else.
 - **When to run.** First session, or when you want to re-do setup with fresh answers.
 - **Follow-up.** `/founder-os:voice-interview`, then `/founder-os:brand-interview`. Together these complete Day 1.
@@ -40,7 +40,7 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 - **Writes.** `core/voice-profile.yml`.
 - **Prereqs.** `/founder-os:setup` complete (so `core/` exists).
 - **When to run.** Right after setup, or when your voice has shifted and the writing skills no longer sound like you.
-- **Follow-up.** `/founder-os:brand-interview`. Then test with `/linkedin-post` on a small idea and confirm the output sounds like you.
+- **Follow-up.** `/founder-os:brand-interview`. Then test it: say "write a LinkedIn post about <a small idea>" and confirm the output sounds like you.
 
 ### `/founder-os:brand-interview`
 
@@ -105,7 +105,7 @@ If a command is not behaving as documented, say "audit the OS" (or run `/founder
 
 ### `/founder-os:status`
 
-- **Or say.** "check my OS readiness"
+- **Or say.** "check my OS readiness". On a ZIP, clone or curl install, say it in words: `/status` there opens Claude Code's own account screen.
 - **Outcome.** A weighted readiness score and the next 3 high-impact moves to run. Score breaks down across six buckets: Core, Voice and Brand, Cadence, Business Context, Brain Layer, and Queue.
 - **Args.** None.
 - **Writes.** Read-only.

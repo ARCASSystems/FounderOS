@@ -31,8 +31,9 @@ Probe in this order and stop at the first one that answers with version 3.11 or 
 Three spellings because machines differ: bare `python3` is unreliable on Windows (it often triggers the Microsoft Store stub instead of a real interpreter), and `py` exists only on Windows. Remember WHICH spelling answered and use that same spelling for every script the wizard runs later.
 
 - **One of the three answers with 3.11+:** say nothing about it (a passing preflight is invisible) and continue to Phase 0.0.
-- **One answers but below 3.11:** say plainly: "Your machine has Python [found version], and Founder OS needs 3.11 or newer. Install the current version from python.org/downloads (about two minutes), then say 'set up Founder OS' again. Everything else is ready." Then stop the wizard.
-- **All three miss:** say plainly: "One thing to install before we start: Python, the free engine the Founder OS scripts run on. Download it at python.org/downloads (pick 3.11 or newer; on Windows tick 'Add python.exe to PATH' in the installer), then say 'set up Founder OS' again and we start from here." Then stop the wizard. Do NOT run the interview first - twenty minutes of answers against an engine that cannot run is the wrong order.
+- **One answers but below 3.11:** say plainly: "Your machine has Python [found version], and Founder OS needs 3.11 or newer. Install the current version from python.org/downloads (about two minutes). Then close Claude Code completely and open this folder again, because an app that is already open cannot see a program installed after it started. On Windows, if a Claude icon stays next to the clock, right-click it and choose Quit. Then say 'set up Founder OS' again. Everything else is ready. Stuck? The troubleshooting page that ships with Founder OS, docs/troubleshooting.md, covers the common snags." Then stop the wizard.
+- **All three miss:** say plainly: "One thing to install before we start: Python, the free engine the Founder OS scripts run on. Download it at python.org/downloads and pick 3.11 or newer. On Windows, tick 'Add python.exe to PATH' in the installer. Then close Claude Code completely and open this folder again, because an app that is already open cannot see a program installed after it started. On Windows, if a Claude icon stays next to the clock, right-click it and choose Quit. Then say 'set up Founder OS' again and we start from here. Stuck? The troubleshooting page that ships with Founder OS, docs/troubleshooting.md, covers the common snags." Then stop the wizard. Do NOT run the interview first - twenty minutes of answers against an engine that cannot run is the wrong order.
+- **The founder says they installed Python but the probes still miss:** the open app is almost always still holding the old program list. Repeat the close-and-reopen step in one line before anything else, then point to `docs/troubleshooting.md` (the Microsoft Store line and the Mac developer-tools pop-up are both there).
 
 ---
 
@@ -53,7 +54,7 @@ Routing:
 - If the user says "yes" / "go" / "continue" / any positive signal: proceed to Phase 0.1.
 - If the user asks a question first: answer it briefly, then ask the framing question again. Do not start Phase 0.1 until you have a clean yes.
 - If the user says at any point that they are under 18, stop as Phase 0.A says, even after a yes there.
-- If the user says they wanted team-shared or always-on: name the gap honestly. "That's not what Founder OS ships today. The personal version installs in 15 minutes. Want that, or stop here?" Respect a stop.
+- If the user says they wanted team-shared or always-on: name the gap honestly. "That's not what Founder OS ships today. The personal version takes about 15 to 20 minutes to set up. Want that, or stop here?" Respect a stop.
 
 Do not skip this phase. Users who arrived via "set up Founder OS" benefit from the reset too - "Founder OS" is ambiguous to a first-time reader and the rest of the wizard assumes a clean expectation contract.
 

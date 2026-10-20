@@ -451,6 +451,25 @@ def synthesize(text):
     return (proc.stdout, True, "")
 
 
+def request_allowed(host, origin, port):
+    """True only for a request this machine's own voice page could have sent.
+
+    The server listens on 127.0.0.1, but that does not keep web pages out: any
+    site open in the founder's browser can POST to http://127.0.0.1:<port>,
+    and with DNS rebinding a hostile domain can even read the answers. Without
+    this check that site could append to brain/log.md (/save) or run the brain
+    CLI with its own text (/brain). So the Host header must name this server
+    exactly, and an Origin header, when the browser sends one, must be this
+    server's own page. A request with no Origin (curl, a local script) is
+    allowed: anything that can run it already runs on the machine."""
+    allowed = {"127.0.0.1:" + str(port), "localhost:" + str(port)}
+    if (host or "").strip().lower() not in allowed:
+        return False
+    if origin is not None and origin.strip().lower() not in {"http://" + h for h in allowed}:
+        return False
+    return True
+
+
 class Handler(BaseHTTPRequestHandler):
     # quiet the default per-request stderr spam
     def log_message(self, *args):
@@ -463,6 +482,26 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
+
+    def _refused(self):
+        """Answer 403 to anything request_allowed rejects. Called first in
+        every handler, before a body is read or anything runs."""
+        port = self.server.server_address[1]
+        if request_allowed(self.headers.get("Host"), self.headers.get("Origin"), port):
+            return False
+        # Read (and discard) a small body first. Closing a socket with unread
+        # bytes in it makes Windows reset the connection, so the caller would
+        # see an abort instead of the 403 that says why. A large body is not
+        # read at all: nothing about a refused request is worth 25 MB.
+        try:
+            length = int(self.headers.get("Content-Length", 0) or 0)
+        except (TypeError, ValueError):
+            length = 0
+        if 0 < length <= 65536:
+            self.rfile.read(length)
+        self._send_json({"ok": False, "error": "refused: this server only answers "
+                         "its own page at http://127.0.0.1:" + str(port) + "/"}, 403)
+        return True
 
     def _read_body(self):
         try:
@@ -478,6 +517,8 @@ class Handler(BaseHTTPRequestHandler):
             return {}
 
     def do_GET(self):
+        if self._refused():
+            return
         if self.path in ("/", "/index.html"):
             page = HERE / "index.html"
             if not page.exists():
@@ -524,6 +565,8 @@ class Handler(BaseHTTPRequestHandler):
         return self.rfile.read(length)
 
     def do_POST(self):
+        if self._refused():
+            return
         if self.path == "/transcribe":
             raw = self._read_raw()
             if not raw:

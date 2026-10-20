@@ -15,7 +15,7 @@ Templates location by install method:
 
 If the exact path is uncertain, run a Glob for `**/templates/identity.md` and use the parent directory. The templates folder always contains: `identity.md`, `profile.md`, `avatar.md`, `bootloader-claude-md.md`, `global-claude-md.md`, `company-claude-md.md`, `project-claude-md.md`, `business-context.template.md`, `prospect-context.template.md`, `culture.md`, `workflow-map.md`, `operator.gitignore`, `voice-profile.yml.template`, `brand-profile.yml.template`, `brand-voice.yml.template`, `brand-positioning.yml.template`, `brand-visual.yml.template`, and the subfolders `brain/`, `cadence/`, `capture/`, `context/`, `roles/`, `rules/`, `scripts/`, `network/`, `memory/`, `raw/`, `system/`. Use that file list to verify you found the right folder before reading.
 
-If the user passed "reset": scan for an existing Founder OS folder, confirm they want to reconfigure, then re-run discovery.
+If the user passed "reset": make sure the backup in `SKILL.md` ("Already set up? Check this before anything else") has run and been seen, then scan for an existing Founder OS folder, confirm they want to reconfigure, then re-run discovery.
 
 ---
 
@@ -82,15 +82,32 @@ This file is the "meet the human" layer. Every reasoning and writing skill reads
 Show the draft. Get approval. Don't write yet - it lands with the rest of `core/` in Phase 2.2.
 
 ### 1.2 Global CLAUDE.md
-Create or update `~/.claude/CLAUDE.md`. Read `templates/global-claude-md.md` for structure. Keep under 80 lines.
+This file lives OUTSIDE the Founder OS folder, at `~/.claude/CLAUDE.md` (Windows: `%USERPROFILE%\.claude\CLAUDE.md`), and Claude Code loads it in every project the founder opens, not only this one. A founder who uses Claude Code for other work will see it there too. Treat it with that weight.
 
-This file should:
+Read `templates/global-claude-md.md` for structure. Keep the Founder OS part under 80 lines.
+
+The Founder OS part should:
 - Name the founder and list their businesses
 - Set behavioral rules (direct communication, no filler, lead with answers)
 - Set context isolation rules (each project loads only its own context)
 - Include their communication preferences from 0.7
 
-Show the draft. Get approval. Write it.
+Steps, in order:
+
+1. **Back up an existing file first.** If `~/.claude/CLAUDE.md` exists, copy it to `~/.claude/CLAUDE.md.backup-{timestamp}` where timestamp is `YYYYMMDD-HHMMSS`, the same way step 1.4 backs up `settings.json`. Confirm the backup exists on disk before going on. If the copy did not land, stop this step, say so, and log it to the backlog.
+2. **Write a marked block, never the whole file.** The Founder OS part goes between two marker lines, exactly these:
+
+   ```
+   <!-- FOUNDER OS START - written by Founder OS setup. Edit or delete this block freely. -->
+   (the Founder OS part)
+   <!-- FOUNDER OS END -->
+   ```
+
+   - The file does not exist: create it holding only the block.
+   - The file exists without the markers: leave every existing line exactly as it is and add the block at the end.
+   - The markers are already there (a re-run): replace only what sits between them.
+3. **Show the draft and the target path. Get approval.** If the founder says no, skip this step and log it to the backlog. Nothing else in setup depends on this file.
+4. **Write it, then tell the founder in one plain sentence** what happened, for example: "I added a short Founder OS section to `~/.claude/CLAUDE.md`, your personal Claude Code instructions file. It applies to all your Claude Code projects, not only this folder, and it sits between two marker lines so you can find it or delete it later." If step 1 made a backup, add where it is.
 
 ### 1.3 Auto-memory layer (cross-session behavioral memory)
 

@@ -13,6 +13,9 @@
 .env
 .env.*
 *.key
+# Project MCP config. A connector's token can sit in it, and a token in
+# history travels with every backup you make.
+.mcp.json
 
 # Private-name guard patterns. Your names power the pre-commit guard but never
 # enter history, so they never reach a remote even if you ever push.

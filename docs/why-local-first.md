@@ -16,7 +16,7 @@ Read the failure modes closely. Every one of them required at least one of three
 
 Not because it is better-audited. Because the attack surface is not there.
 
-- **No server.** Nothing listens. The OS runs only when you open a session and stops when you close it. There is no port to scan, no exposed instance to find, no process running while you sleep. (This is also why the OS never claims background behavior - the honesty and the security are the same design decision.)
+- **No server.** Nothing listens in the default text mode (the optional voice add-on listens on your own machine only, at 127.0.0.1). The OS runs only when you open a session and stops when you close it. There is no port to scan, no exposed instance to find, no process running while you sleep. (This is also why the OS never claims background behavior - the honesty and the security are the same design decision.)
 - **No API key file.** The OS runs on your Claude subscription through Claude Code's own sign-in. There is no `.env` with a model key, because there is no model key. The one guard that handles names (`scripts/private-name-patterns.txt`) is gitignored and contains no secrets. Optional extras that DO need a key (a realtime voice tier, a Telegram connector) store it gitignored-only, ask first, and are never defaults.
 - **No marketplace supply chain.** Every skill ships in this repo as readable markdown. You can open any of them and read exactly what it does before it ever runs - there is no registry, no auto-installed third-party skill, no code you did not choose. The privacy pre-commit guard blocks secrets, private names, and AI-attribution from ever leaving in a commit.
 - **Your data lives on your laptop.** The brain is plain markdown files on your disk. Reading them into a session sends them to the model under your subscription's terms, the same as any Claude conversation - but no product server, no telemetry, no sync service ever sees them. Deleting the OS is deleting a folder.
@@ -28,6 +28,7 @@ Same file-based brain the agent frameworks promise. None of the three doors the 
 Local-first is a smaller attack surface, not a force field.
 
 - **Your laptop is the perimeter.** Disk encryption, OS updates, and screen locks matter more than anything in this repo.
+- **A synced folder moves the perimeter.** If you keep the OS folder in OneDrive, iCloud Drive or Dropbox, your files, and the keys in `.env`, are copied to that provider. The caveats are in [capture-anywhere.md](capture-anywhere.md#setting-up-the-synced-folder-step-by-step).
 - **MCP connectors are your choice.** Each tool you connect (calendar, email, notes) extends what a session can reach. The OS's written rules treat every write path behind a connector as gated, but until a hard send gate ships nothing enforces that, so connect only what you use, and read `rules/approval-gates.md` for what the rules let run and what they say to ask about first.
 - **A cloud session is a different posture.** Claude Code on the web runs in a remote sandbox, on a branch of a GitHub copy of your OS, so everything the repo tracks is cloned there. It is opt-in per use, and the local path stays the default. To drive your own computer from your phone instead, Claude Code's Remote Control keeps the session and your files on your machine.
 

@@ -87,9 +87,9 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 ### founder-os-setup
 
 - **Say.** "set up Founder OS", "run the setup wizard", or "install Founder OS".
-- **Outcome.** A 6 to 7 question interview ends with your full operating layer on disk.
+- **Outcome.** A guided interview of about 15 to 20 minutes ends with your full operating layer on disk.
 - **Reads.** `templates/` for the file scaffolds. Also reads `~/.claude/CLAUDE.md`, `~/.claude/settings.json`, and any existing project CLAUDE.md during the audit phase.
-- **Writes.** `core/identity.md`, `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `context/companies.md`, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `brain/log.md`, `brain/flags.md`, `MEMORY.md`.
+- **Writes.** `core/identity.md`, `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `context/companies.md`, `cadence/daily-anchors.md`, `cadence/weekly-commitments.md`, `brain/log.md`, `brain/flags.md`. Outside your folder, each shown to you first: `MEMORY.md` in `~/.claude/projects/<slug>/memory/`, and a marked Founder OS block in `~/.claude/CLAUDE.md`, which Claude Code loads in every project (an existing file is backed up first). See [install.md](install.md#what-setup-writes-outside-your-folder). On an install that is already set up it changes nothing unless you ask for a reset, and a reset copies your current files to `state/setup-backup-<date-time>/` first.
 - **Voice rules.** No.
 - **Prereqs.** Founder OS plugin or repo present.
 - **When to run.** First session. Or when you want to redo setup with fresh answers.

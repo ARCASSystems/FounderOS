@@ -39,4 +39,6 @@ The one place the OS uses a non-Claude model is the **optional realtime voice ti
 
 ## Other agents (Codex, Gemini CLI, Cursor)
 
-The OS is plain markdown, so other agents can read it. `AGENTS.md` (Codex, Cursor, Windsurf) and `GEMINI.md` (Gemini CLI) are thin bridges that point those agents at `CLAUDE.md`. They can read your OS, reason over it, and draft - but the setup wizard, slash commands, and hooks are Claude Code features and will not run there. Treat non-Claude agents as a reading-and-drafting layer, not a replacement for running the OS in Claude Code.
+The OS is plain markdown, so other agents can read it. `AGENTS.md` (Codex, Cursor, Windsurf) and `GEMINI.md` (Gemini CLI) are thin bridges that point those agents at `CLAUDE.md` and carry the founder safety rules with them. They can read your OS, reason over it, and draft.
+
+The setup wizard, the slash commands, the hooks and the session brief run in Claude Code. In Codex or Gemini CLI you can still follow `skills/founder-os-setup/SKILL.md` by hand, one question at a time, but without the hooks, the commands or the session brief, and we have not tested that path. Treat non-Claude agents as a reading-and-drafting layer, not a replacement for running the OS in Claude Code. Details in [install.md](install.md#using-codex-or-gemini-cli).
