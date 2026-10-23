@@ -22,7 +22,16 @@ Also fire it, without being asked, when the founder says work has gone missing a
 python scripts/where.py --days 14
 ```
 
-If they named what they are looking for, pass it - the scan surfaces folders whose file names match, first: `python scripts/where.py --days 14 vendor list`. A name miss is reported honestly (file names are not content), so a miss never means the work is gone.
+If they named what they are looking for, pass it - the scan surfaces folders whose file names match, first. Pass their words through the quoted block below, never as bare words or inside quotes on the command line, so an apostrophe, `;`, backticks or `$(...)` in what they typed is read as plain text. Every line starts at the left edge:
+
+```bash
+python scripts/where.py --days 14 "$(cat <<'FOUNDER_OS_W_END'
+<their words, exactly as written, on this one line>
+FOUNDER_OS_W_END
+)"
+```
+
+If their words have a line that reads exactly `FOUNDER_OS_W_END`, do not run it. Ask them to say it another way. A name miss is reported honestly (file names are not content), so a miss never means the work is gone.
 
 Widen with `--days 60` or `--all` if the first pass finds nothing they recognise. Use `--json` if you need to reason over the result rather than read it.
 
@@ -64,7 +73,16 @@ Close with the smallest useful action:
 
 > Want me to open that folder?
 
-On a yes, open it with `python scripts/open_folder.py "<folder from the scan>"` - never by interpolating the path into `explorer` / `open` / `xdg-open` yourself. The script passes the folder as one argument with no shell in between, and it refuses anything outside the OS folder, so a folder name a founder typed can never become shell syntax. If the script is missing or fails, give the full path on its own line so it can be pasted into Explorer or Finder, and say that is what it is for.
+On a yes, open it with `python scripts/open_folder.py`, passing the folder from the scan through a quoted block - never inside quotes on the command line, and never by interpolating the path into `explorer` / `open` / `xdg-open` yourself. A folder name can hold an apostrophe, a backtick or `$(...)` (a folder unpacked from a download can be named anything), and the quoted block keeps all of it plain text:
+
+```bash
+python scripts/open_folder.py "$(cat <<'FOUNDER_OS_F_END'
+<folder from the scan>
+FOUNDER_OS_F_END
+)"
+```
+
+The script then opens the folder with no shell in between, and it refuses anything outside the OS folder, so a folder name can never become shell syntax. If the folder name has a line that reads exactly `FOUNDER_OS_F_END`, do not run it. If that happens, or the script is missing or fails, give the full path on its own line so it can be pasted into Explorer or Finder, and say that is what it is for.
 
 ## What this skill never does
 

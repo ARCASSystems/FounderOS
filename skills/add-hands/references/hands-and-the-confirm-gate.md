@@ -12,10 +12,14 @@ in `voice/hands-config.json` so you can see and change it.
 
 These cannot lose work or reach outside your machine, so the OS does them without asking:
 
-- **open** - open a file, a folder, an app, or a link with your operating system's opener.
+- **open a folder or a web link** - with your operating system's opener.
   `python voice/hands.py open .` opens the OS folder; `open https://example.com` opens a link.
+  Opening these shows you something and runs nothing.
 - **note** - append a dated line to `brain/log.md`. You can delete the line to undo it.
-  `python voice/hands.py note "called the supplier, waiting on a quote"`.
+  The note goes through a quoted block (the shape is in `skills/add-hands/SKILL.md` step 2),
+  never inside quotes on the command line. Before it writes, `hands.py` hides what looks like a
+  password or key, with the OS's own filter in `scripts/_common.py`. If that file is missing,
+  the note is not written.
 
 Asking for a yes on these would only get in your way, so it does not.
 
@@ -23,10 +27,16 @@ Asking for a yes on these would only get in your way, so it does not.
 
 These can change something you cannot simply undo, so the OS shows you the action and waits:
 
+- **open a file or an app** - your opener runs whatever it is handed, so a `.bat`, `.exe` or
+  script runs the moment it opens. `python voice/hands.py open report.pdf` prints what it will
+  open and refuses; add `--yes` to open it. This is on by default, and it asks every time.
 - **run** - run a local command. It is **OFF by default**. Turn it on by setting
   `handlers.run.enabled` to `true` in `voice/hands-config.json`. Even then:
-  - `python voice/hands.py run "git status"` prints the exact command and refuses.
-  - `python voice/hands.py run "git status" --yes` runs it. The `--yes` is your confirmation.
+  - `python voice/hands.py run` with the command in a quoted block (step 3 of
+    `skills/add-hands/SKILL.md`) prints the exact command and refuses. Never put the command
+    inside quotes on the command line: the shell would run any `$(...)` or backticks in it
+    before the gate shows it.
+  - The same block with `run --yes` runs it. The `--yes` is your confirmation.
 
   The OS never supplies the `--yes` for you. That is the gate: an irreversible action needs an
   explicit, informed yes, and the command is shown before you give it.

@@ -65,16 +65,32 @@ Full detail, the upgrade commands, and the cost-and-accuracy trade for each are 
 
 ## Already have voice set up?
 
-`voice/` is your folder, gitignored, copied there once from this skill's
-`runtime/` templates. An update refreshes the templates and leaves your copy
-alone, because that folder holds your `config.json` and your brain command.
+`voice/` is your folder, gitignored, copied there once from the skill
+templates. An update refreshes the templates and leaves your copy alone,
+because that folder also holds your settings files.
 
-So after an update that changed the runtime, copy the two files across:
-`skills/add-voice/runtime/server.py` and `runtime/index.html` over
-`voice/server.py` and `voice/index.html`. Leave `config.json` where it is.
-Saying "update my voice runtime" does exactly that. Re-running
-`python skills/add-voice/setup.py` also works, but it rewrites `config.json`,
-so prefer the copy.
+So after an update that changed the runtime, saying "update my voice runtime"
+runs:
+
+```
+python skills/add-voice/refresh_runtime.py
+```
+
+It copies the newer version of every runtime file you already have in
+`voice/`: the Tier-0 server and page (`server.py`, `index.html`), the realtime
+server and page (`live_server.py`, `live.html`), the mouth (`say.py`) and the
+hands (`hands.py`). A file you never installed is not added. Your settings
+files (`config.json`, `realtime-config.json`, `mouth-config.json`,
+`hands-config.json`) are never touched. Before it replaces a file, it keeps the
+old copy beside it as `<name>.<date>.bak` (for example `server.py.2026-10-23.bak`),
+because it cannot tell an older version from one changed by hand. It prints each
+file it copied, each old copy it kept, and each one that was already current. Read that list back to the founder, then tell
+them to restart any voice server that is running (close its window and start
+it again), because a running server keeps the old code until then.
+
+Re-running `python skills/add-voice/setup.py` or `setup_realtime.py` also
+refreshes the files they own and keeps your existing settings, but
+`setup_realtime.py` also re-runs a package install, so prefer the refresh.
 
 How to tell: if the page has no **Local ears** toggle, your copy predates v1.55.
 
@@ -116,7 +132,7 @@ Trigger: **"add voice --realtime"**, "add realtime voice", "I want a real conver
 It is NOT zero-cost or zero-install, and you say so BEFORE installing:
 
 1. **Disclaimer first (load-bearing).** A FREE Google AI Studio key has a free daily quota on Flash models; heavy realtime use can move you onto paid per-token rates. Audio streams to Google to run the model. Your files never leave your machine, but anything the front SPEAKS was sent to Google first - including the answer the back-brain read out of your files. The file stays home; the sentence does not. State this before they commit, not after. `setup_realtime.py` prints it at the top; you say it in conversation too. Full trade in [references/voice-model-disclaimer.md](references/voice-model-disclaimer.md).
-2. **Get and store your own free key (the OS ships none).** The user creates their own free key at https://aistudio.google.com/apikey, in their own Google account. Setup wires everything else so they only drop the key in. Store it via the connect flow so it lands only in the gitignored `.env`: say "connect gemini" or run `python scripts/connect.py set-secret GEMINI_API_KEY` (pasted on stdin, never an argument). A second key (`GEMINI_API_KEY2`) is optional headroom the front rotates to on quota. Never ship, hardcode, or provide a key.
+2. **Get and store your own free key (the OS ships none).** The user creates their own free key at https://aistudio.google.com/apikey, in their own Google account. Setup wires everything else so they only drop the key in. To store it, say "connect gemini". The connect skill adds a line to the gitignored `.env` and opens the file, and the founder types the key in there themselves. Never ask for the key in the chat and never put it in a command: a key in either has left the machine and should be cancelled and replaced. A second key (`GEMINI_API_KEY2`) is optional headroom the front rotates to on quota; it goes in the same way: the connect skill adds its own `GEMINI_API_KEY2` line to `.env` (`python scripts/connect.py add-key GEMINI_API_KEY2`), and the founder types the second key into that line themselves, never into the chat. Never ship, hardcode, or provide a key.
 3. **Run the installer.** `python skills/add-voice/setup_realtime.py` installs two packages (google-genai, websockets - a real install), copies the realtime page and bridge into the gitignored `voice/`, writes `voice/realtime-config.json`, and inherits the Tier-0 brain command. Pick a voice with `--voice <name>` (Aoede default; Puck, Charon, Kore, Fenrir, Leda also work). `python voice/live_server.py --models` lists the Live models your key exposes if the default is unavailable.
 4. **Start it and prove it.** `python voice/live_server.py` serves `http://127.0.0.1:8756/live`. Tap the orb, allow the mic, talk. Say "thinking" out loud to take the floor and it waits. Every turn records to `voice/live-log.md` (local-only). A clean proof is a spoken turn answered in the model's own voice, plus a business-fact question that visibly calls the brain. Do not claim realtime works until that has happened on the user's machine with their own key.
 

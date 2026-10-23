@@ -144,9 +144,10 @@ To add the second free key for headroom:
 
 1. Create another free key at https://aistudio.google.com/apikey. It can be a second key in the
    same Google account, or a key in a second Google account for a separate daily quota.
-2. Store it the same gitignored-only way as the first, under the second name:
-   `python scripts/connect.py set-secret GEMINI_API_KEY2` and paste the key when prompted (it reads
-   from stdin so the key never lands in your shell history or the command line).
+2. Store it the same way as the first: say "connect gemini" and ask for the second key. It adds a
+   `GEMINI_API_KEY2=` line to the gitignored `.env` (the command behind it is
+   `python scripts/connect.py add-key GEMINI_API_KEY2`) and opens the file, and you type the key in
+   there yourself and save. The key never goes through the chat or a command.
 3. That is all. The front reads both keys at the next start and rotates to the second on quota;
    there is nothing else to configure. The keys live only in the gitignored `.env` and are never
    committed.

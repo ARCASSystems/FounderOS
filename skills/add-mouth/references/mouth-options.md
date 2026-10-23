@@ -34,11 +34,12 @@ voice that still respects privacy.
 [ElevenLabs](https://elevenlabs.io) gives broadcast-quality voices. Use it for something you
 publish, not for everyday read-backs. It is a deliberate spend.
 
-1. Store your key in the gitignored `.env`: say "connect elevenlabs" or run
-   `python scripts/connect.py set-secret ELEVENLABS_API_KEY` (pasted on stdin, never as an
-   argument). The key never lands in a tracked file.
-2. Optionally set a voice id in `voice/mouth-config.json` as `"voice": "<elevenlabs-voice-id>"`.
-3. Re-run: `python skills/add-mouth/setup.py --engine elevenlabs`.
+1. Say "connect elevenlabs". It adds an `ELEVENLABS_API_KEY=` line to the gitignored `.env` and
+   opens the file, and you type your key in there yourself and save. The key never goes through
+   the chat, a command or a tracked file.
+2. Re-run: `python skills/add-mouth/setup.py --engine elevenlabs`. Add `--voice <elevenlabs-voice-id>`
+   to pick a voice, or set `"voice"` in `voice/mouth-config.json` afterwards. Re-running setup on
+   the same engine keeps that voice and any `"model"` you pinned.
 
 The mouth asks for `eleven_multilingual_v2` (checked against the live model list on 2026-08-05).
 ElevenLabs retires model ids over time and a retired id fails the request outright, so if you see an
@@ -58,13 +59,20 @@ any skill, without holding a conversation.
 
 ## How a skill speaks its output
 
-Any skill's text output can be piped to the mouth:
+Any skill's text output can be piped to the mouth. Pipe it in as a quoted block, never
+inside quotes on the command line: an email or a page read aloud can hold backticks or
+`$(...)`, and inside double quotes those run as commands. Every line starts at the left edge:
 
+```bash
+PYTHONUTF8=1 python voice/say.py <<'FOUNDER_OS_SAY_END'
+a line you want read aloud, or many lines
+FOUNDER_OS_SAY_END
 ```
-python voice/say.py "a line you want read aloud"
-echo "longer text from another command" | python voice/say.py
-python voice/say.py --out today.wav "render today's brief to a file"
-```
+
+To render a file, put `--out today.wav` after `say.py` on the first line (a file name of
+letters, digits, dots, dashes and underscores). Text another command prints can be piped
+straight in: `<that command> | PYTHONUTF8=1 python voice/say.py`. If the text has a line that
+reads exactly `FOUNDER_OS_SAY_END`, do not run it.
 
 The mouth speaks what it is given. It does not generate content, and it does not send the
 audio anywhere - sending or posting is an action, and actions live behind the `add-hands`

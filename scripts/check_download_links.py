@@ -128,16 +128,13 @@ def fix() -> int:
 
 def urls_to_verify(root: Path | None = None) -> list[str]:
     """The download URLs a release must actually serve: the versioned asset
-    for VERSION always, plus the stable latest link when any doc uses it."""
+    for VERSION, and the stable latest link. Every release uploads the stable
+    copy (build_release.py's checklist), and forgetting it used to fail
+    nothing because no doc in this repo links it. The website and anyone
+    with an old link do, so it is checked whether a doc here uses it or not."""
     root = root or REPO
     v = (root / "VERSION").read_text(encoding="utf-8").strip().lstrip("v")
-    urls = [asset_url(v)]
-    for rel in DOC_FILES:
-        path = root / rel
-        if path.is_file() and STABLE_RE.search(path.read_text(encoding="utf-8")):
-            urls.append(STABLE_URL)
-            break
-    return urls
+    return [asset_url(v), STABLE_URL]
 
 
 def _status(url: str, method: str, extra: dict | None = None, timeout: float = 20) -> int:

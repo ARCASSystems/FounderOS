@@ -90,9 +90,9 @@ reads your files. Wired by `setup_realtime.py`. Architecture: [realtime-architec
 
 1. Read the disclaimer below first - this tier can cost money past the free daily quota.
 2. Get a free key at https://aistudio.google.com/apikey.
-3. Store it with the connect skill so it lands only in the gitignored `.env`: say "connect gemini"
-   or `python scripts/connect.py set-secret GEMINI_API_KEY` - never paste a key into a tracked file
-   or a command argument (stdin only). A second key (`GEMINI_API_KEY2`) is optional quota headroom.
+3. Say "connect gemini". It adds a `GEMINI_API_KEY=` line to the gitignored `.env` and opens the
+   file, and you type the key in there yourself and save. Never paste a key into the chat, a command
+   or a tracked file. A second key (`GEMINI_API_KEY2`) is optional quota headroom, added the same way.
 4. Install and wire: `python skills/add-voice/setup_realtime.py` (installs google-genai +
    websockets, copies the realtime runtime into `voice/`, writes `voice/realtime-config.json`).
 5. Run it: `python voice/live_server.py`, open `http://127.0.0.1:8756/live`. Pick a voice with

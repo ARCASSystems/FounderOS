@@ -31,16 +31,29 @@ A GitHub MCP server, if present in the session, may expose only `authenticate` a
 
 ## Capabilities
 
+A title or body holds someone's words, and an issue body often holds code in backticks. Inside double quotes on the command line those backticks and any `$(...)` run as commands. So never put real text in quotes after `--title` or `--body`. Pass the title through a quoted block and the body on stdin with `--body-file -`, every line at the left edge with no spaces in front:
+
+```bash
+gh issue create --title "$(cat <<'FOUNDER_OS_TITLE_END'
+<the title>
+FOUNDER_OS_TITLE_END
+)" --body-file - <<'FOUNDER_OS_BODY_END'
+<the body, as many lines as it needs>
+FOUNDER_OS_BODY_END
+```
+
+`gh issue comment <number>` and `gh pr create` take the same `--body-file -` block (and `gh pr create` the same `--title` block). If the text has a line that reads exactly `FOUNDER_OS_TITLE_END` or `FOUNDER_OS_BODY_END`, do not run it.
+
 ### Issues
-- Create issues: `gh issue create --title "..." --body "..."`
+- Create issues: `gh issue create` with the quoted blocks above
 - List and filter open issues: `gh issue list --state open`
-- Comment on issues: `gh issue comment <number> --body "..."`
+- Comment on issues: `gh issue comment <number> --body-file -` with the body block above
 - Close or label issues: `gh issue close <number>`, `gh issue edit <number> --add-label "..."`
 
 ### Pull requests
 - List open PRs: `gh pr list --state open`
 - Review PR diffs and comments: `gh pr view <number> --comments`, `gh pr diff <number>`
-- Create PRs (only when explicitly asked): `gh pr create --title "..." --body "..."`
+- Create PRs (only when explicitly asked): `gh pr create` with the quoted blocks above
 - Check PR CI status: `gh pr checks <number>`
 
 ### Actions and CI

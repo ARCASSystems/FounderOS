@@ -91,7 +91,7 @@ Convention and thresholds: `rules/entity-folders.md`. Nothing due means say noth
 The weekly retro is where the digital-employee record gets read, or it never gets read at all. Run `python scripts/employee_verdict.py render` and read `brain/employees.md`:
 
 - Any row showing REVIEW DUE: tell the operator plainly and point at `/founder-os:employee-review <id>`. Do not run the review inside the retro.
-- Any seat that ran this week with no verdict recorded: ask for the one-line verdict now ("ok, needs work, or failed - and why"). One line per seat, never a form.
+- Any seat that ran this week with no verdict recorded: ask for the one-line verdict now ("ok, needs work, or failed - and why"), and say it goes into the verdict record (`brain/employee-verdicts.jsonl`), so the answer is the yes for that file. Record it the way the morning loop does, with their line in a quoted block (`skills/morning-loop/SKILL.md` Step 3). One line per seat, never a form.
 - Nothing ran and nothing is due: say nothing. A quiet chart is not a finding.
 
 ## Step 4: Plan Next Week
@@ -126,8 +126,9 @@ WAITING ON
 Before writing the new sprint, read `cadence/queue.md` if it exists.
 
 1. **DONE rolloff.** For every entry in the DONE section with a date older than 7 days,
-   append a one-line summary to `brain/log.md` (use the `#acted` channel), then remove
-   that entry from `cadence/queue.md`. Keep entries from the last 7 days in DONE.
+   note it for removal. Step 5 appends its one-line summary to `brain/log.md` (use the
+   `#acted` channel) and removes it from `cadence/queue.md`, on the yes. Keep entries from
+   the last 7 days in DONE.
 
 2. **Stuck ACTIVE items.** For every entry in the ACTIVE section with a date older than
    14 days, surface it inline:
@@ -139,6 +140,15 @@ Before writing the new sprint, read `cadence/queue.md` if it exists.
 If `cadence/queue.md` does not exist, skip this step silently.
 
 ## Step 5: Update Files
+
+Before writing, name every file this roll will change and wait for one yes. A yes to
+"roll the sprint" covers only what you named. Name `cadence/weekly-commitments.md` (the
+retro and the new sprint), `context/priorities.md` (the This Week section), and only where
+the steps above found something: `brain/flags.md` (the flags resolved, named),
+`cadence/queue.md` (the DONE entries rolled off and the items moved), and each
+`context/entities/<name>/profile.md` an identity review re-stamps or corrects. Ask:
+`Write these? (yes / no / pick which)`. Write only what the yes covers. The `brain/log.md`
+entries are automatic.
 
 1. Write the retro into `cadence/weekly-commitments.md` (above the new sprint)
 2. Update `context/priorities.md` This Week section

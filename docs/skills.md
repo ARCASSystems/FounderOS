@@ -33,7 +33,7 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 - **Writes.** One saved version, locally. Nothing leaves your machine.
 - **Voice rules.** No.
 - **Prereqs.** Founder OS set up. `scripts/caveman_git.py` present.
-- **When to run.** Any time you want a restore point, and often. The auto-save hook also saves at session end once your name guard is active.
+- **When to run.** Any time you want a restore point, and often. The auto-save hook also saves at session end once the save checks are on (version history turned on, with its hooks wired). An empty names file does not stop it.
 - **Follow-up.** `history` to see versions, `restore` to undo. Say "save my work".
 
 ### history
@@ -732,7 +732,7 @@ Under the hood these four verbs run git for you. The rule they live by: git may 
 
 - **Say.** "what would an investor say", "diligence read", "am I ready to raise", or "what will they ask me".
 - **Outcome.** Five scored dimensions (market, differentiation, team, business model, readiness), a SWOT, the critical challenges, a disclosed-gaps section, and the questions a diligence analyst would ask. Anything your files do not ground becomes a question to you, never an invented answer.
-- **Reads.** `core/identity.md`, `core/founder-snapshot.md`, `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `context/leads.md`, `brain/log.md`, `brain/flags.md`, `cadence/weekly-commitments.md`, `companies/`.
+- **Reads.** `core/identity.md` (with its Founder Snapshot section), `context/priorities.md`, `context/decisions.md`, `context/clients.md`, `context/leads.md`, `brain/log.md`, `brain/flags.md`, `cadence/weekly-commitments.md`, `companies/`.
 - **Writes.** Read-only unless you ask for the read to be saved.
 - **Voice rules.** No.
 - **Prereqs.** `founder-os-setup` complete and `check-identity-ready.py` passing. The more of your real state is written down, the more of the read is scored rather than left open.

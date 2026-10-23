@@ -40,7 +40,7 @@ Row shape:
   }
 
 The run_id is what ties a verdict to a specific run: grade one with
-`python scripts/employee_verdict.py record ... --ref run:<run_id>`, and the
+`python scripts/employee_verdict.py verdict ... --ref run:<run_id>`, and the
 summary's unwatched count then reflects which runs a verdict actually names
 instead of subtracting per-seat totals (runs recorded before run_id existed
 count as unwatched until a verdict names them).
@@ -53,7 +53,8 @@ Invariants: single writer for the run log (nothing else appends to it),
 append-only, standard library only, no network, no API key. No personal data by
 rule - a run line holds seat ids, file paths, and one plain sentence, never an
 email address, a phone number, or a money amount. `record` refuses input that
-looks like one of those rather than storing it.
+looks like one of those rather than storing it, and hides anything that looks
+like a password or key (the same filter rant capture uses).
 
 Usage:
   python scripts/agent_runs.py record --seat daily-assistant \\
@@ -75,6 +76,11 @@ import json
 import re
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+# The shared password and key filter rant capture uses. brain/agent-runs.jsonl is
+# tracked and backed up, and a --could-not line is where a pasted error lands.
+from _common import redact_secrets  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REGISTRY = REPO_ROOT / "roles" / "employees.yaml"
@@ -215,14 +221,20 @@ def cmd_record(args) -> int:
         raise SystemExit(f"agent_runs: --could-not is required when the outcome is "
                          f"'{args.outcome}'. A refusal or a failure with no reason teaches "
                          f"nothing at review time.")
+    # A password or key is hidden, not refused: the run still happened and its
+    # line is still worth having, just without the secret in it.
+    typed = (trigger, could_not, args.produced or "", args.read or "")
+    trigger, could_not, produced, read = (redact_secrets(t) for t in typed)
     for label, text in (("--trigger", trigger), ("--could-not", could_not),
-                        ("--produced", args.produced or ""), ("--read", args.read or "")):
+                        ("--produced", produced), ("--read", read)):
         _reject_personal(label, text)
     if "\n" in trigger or "\n" in could_not:
         raise SystemExit("agent_runs: --trigger and --could-not are one line each.")
-    rec = append_run(args.seat, trigger, _split_list(args.read), _split_list(args.produced),
+    rec = append_run(args.seat, trigger, _split_list(read), _split_list(produced),
                      args.outcome, could_not or None, Path(args.file))
     print(f"recorded: {rec['seat']} {rec['outcome']} ({rec['ts']})")
+    if (trigger, could_not, produced, read) != typed:
+        print("agent_runs: hid what looked like a password or key before writing the run line.")
     return 0
 
 
@@ -333,7 +345,7 @@ def cmd_summary(args) -> int:
             aside = (f" ({r['unmatched_verdicts']} verdict(s) name no run)"
                      if r["unmatched_verdicts"] else "")
             print(f"{'':18} no verdict names {r['unwatched']} of them - "
-                  f"grade one with employee_verdict.py record --ref run:<id>{aside}")
+                  f"grade one with employee_verdict.py verdict --ref run:<id>{aside}")
     return 0
 
 

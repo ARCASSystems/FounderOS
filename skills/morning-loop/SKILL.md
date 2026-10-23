@@ -61,7 +61,7 @@ Priority order. Never two questions about the same thing.
 4. A commitment that has gone quiet: keep it, kill it, or move the date.
 5. A provisional fact whose confirm-or-cut unblocks something real. One at a time, never two in one batch.
 6. A flag past its decay date: keep, kill, or refresh.
-6b. **A proposed working preference: promote it, or drop it.** One at a time, and only when a slot is free. Show the row in their own words with the evidence line, and ask plainly: "You said this. Want me to work that way from now on?" On a yes it moves to the Active table and starts gating output today. On a no it is deleted, not parked - a rejected preference kept "for later" comes back every morning. This is the one question that changes how the OS treats them, so it is never batched with another and never asked twice about the same row.
+6b. **A proposed working preference: promote it, or drop it.** One at a time, and only when a slot is free. Show the row in their own words with the evidence line, and ask plainly: "You said this. Want me to work that way from now on? It goes in your working preferences (`core/working-preferences.md`)." On a yes it moves to the Active table and starts gating output today. On a no it is deleted, not parked - a rejected preference kept "for later" comes back every morning. This is the one question that changes how the OS treats them, so it is never batched with another and never asked twice about the same row.
 7. **A gap between designed intent and enacted practice.** You described how something should work, and the log shows it running differently. Ask about the gap; do not pick a side and do not quietly update the file to whichever version is newer. Three lines, no more:
 
    ```
@@ -74,22 +74,40 @@ Priority order. Never two questions about the same thing.
 8. One pattern observation, only if a slot is still free.
 9. **A knowledge note nobody has routed: which seat should be reading it, if any?** The lowest-priority class here and the last to take a slot - it tidies the OS rather than moving business state, so everything above outranks it. Fires only on files in `brain/knowledge/` with **no** `seats:` field at all; a note already routed, or one carrying `seats: none`, is never raised again. **One per run, maximum**, and only when a slot is still free after the real asks - the same rule as 6b. Stage 1 never asks this one: proposing is stage 2 and up. Name the note in plain words and at most one seat: "That note on what buyers actually pay for - should the one who names your next move be reading it?" If no seat obviously fits, do not ask; leave the field absent and spend the slot elsewhere.
 
-Each question: two or three narrow options **plus your recommendation first**. Plain language, no ids and no system jargon. "Skip" is always free and costs nothing.
+Each question: two or three narrow options **plus your recommendation first**. Plain language, no ids and no system jargon. Name every file the answer will change, in plain words plus its path: "your flag list (`brain/flags.md`)". A file path is not jargon here: it is what makes the answer a yes for that file and no other. A confirmed fact also names the file it goes into, and an ask from `/dream` names the file it says a yes would write. "Skip" is always free and costs nothing.
 
 **If nothing qualifies, say "Nothing needs you this morning" and stop.** Never invent a question to fill the batch. A quiet morning is a real result and the loop has to be able to report one, or you will stop trusting the mornings when it does speak.
 
 ## Step 3 - write every answer back, and silence its source
 
-An answer that does not land in a file is a conversation, not a loop. For each answer:
+An answer that does not land in a file is a conversation, not a loop. Each question you asked in Step 2 named the file its answer changes, so the answer is the yes for that file and no other (the rule "a yes covers only what you named"). If a question did not name its file, name it now and ask before writing. For each answer:
 
 - **A queue decision** - update the item in `cadence/queue.md`: move it, or close it with your one-line why on the DONE line.
-- **A verdict on a recurring job** - `python scripts/employee_verdict.py verdict --employee <id> --verdict <v> --why "<your line>"`
-- **A provisional fact** - `python scripts/unconfirmed_facts.py confirm --id <id> --value "<value>" --note "<who or what confirmed it>"` or `cut --id <id> --note "<why>"`. On a confirm, also write the value into the file the row names. That write is the point of the whole ledger.
-- **An answered ask** - mark it answered in place in the file that raised it (`brain/needs-attention.md` or `brain/needs-input.md`) with the date and your one line. Never delete it: the answered row is the record of what you decided. An ask closed in the wrong file is still open in the right one, and it comes back tomorrow.
+- **A verdict on a recurring job** - `python scripts/employee_verdict.py verdict --employee <id> --verdict <v>`, with your line passed as `--why` through the quoted block below.
+- **A provisional fact** - `python scripts/unconfirmed_facts.py confirm --id <id>`, with the value and the note (who or what confirmed it) passed as `--value` and `--note` through the quoted blocks below, or `cut --id <id>` with the same `--note` block for why. On a confirm, also write the value into the file the row names. That write is the point of the whole ledger.
+- **An answered ask** - mark it answered in place in the file that raised it (`brain/needs-attention.md` or `brain/needs-input.md`) with the date and your one line. Never delete it: the answered row is the record of what you decided. An ask closed in the wrong file is still open in the right one, and it comes back tomorrow. If the ask named a file a yes would write (a new row in `context/clients.md`, a preference in `core/working-preferences.md`), the question named it too, so a yes writes that file as well.
 - **A commitment call** - update `cadence/weekly-commitments.md`. A kill gets its reason on the same line.
 - **A flag call** - update `brain/flags.md`: extend the decay date with a reason, or close it with one.
 - **A knowledge-routing call** - edit the note's frontmatter in `brain/knowledge/<file>.md`. A yes writes `seats: <id>` and then `python scripts/agents_sync.py apply`, so the seat's read-list actually changes today instead of at some later sync. A no writes `seats: none`. Never leave it pending: the field's state IS the record that the question is closed, and it is the only thing that stops the same note being raised tomorrow.
 - **A preference call** - edit `core/working-preferences.md`: move the row from Proposed to Active with today's date, or delete the row. Never leave it sitting in Proposed with a note; the row's presence IS the open question.
+
+**Your words never go inside quotes on the command line.** A why line, a value or a note is your own words, and inside double quotes `$` and backticks still run, so "lost $5k" would be saved as "lost k". Pass each one through its own quoted block, every line at the left edge with no spaces in front. An `<id>` or `<v>` is letters, digits, dots, dashes and underscores only:
+
+```bash
+python scripts/employee_verdict.py verdict --employee <id> --verdict <v> --why "$(cat <<'FOUNDER_OS_WHY_END'
+<your line, exactly as you said it>
+FOUNDER_OS_WHY_END
+)"
+python scripts/unconfirmed_facts.py confirm --id <id> --value "$(cat <<'FOUNDER_OS_VALUE_END'
+<the confirmed value>
+FOUNDER_OS_VALUE_END
+)" --note "$(cat <<'FOUNDER_OS_NOTE_END'
+<who or what confirmed it>
+FOUNDER_OS_NOTE_END
+)"
+```
+
+If any of your words has a line that reads exactly `FOUNDER_OS_WHY_END`, `FOUNDER_OS_VALUE_END` or `FOUNDER_OS_NOTE_END`, ask for it said another way before running anything.
 
 **Then close the thing that asked.** This is the half that gets skipped and it is the half that matters. An answer that closes a flag has to close it in `brain/flags.md`, not only in the conversation. If a cached or rendered view still shows the item, refresh it or say plainly that it is stale. An answered question that leaves its source open comes back tomorrow wearing the same clothes, and by the third morning you have learned to ignore the loop.
 

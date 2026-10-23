@@ -90,7 +90,7 @@ needs to see stakeholder taxonomy keys.
 
 ### 5. Route to the outcome
 
-- **Leads** -> use the auto-drafted sales lens and deliver `lead-worklist.md`, including ranked contacts, reason, next action, and a draft opener. The same run surfaces pending **inbound invitations** in `inbound-invites.csv`.
+- **Leads** -> use the auto-drafted sales lens and deliver `lead-worklist.md`, including ranked contacts, reason, next action, and a draft opener. The opener is never a pitch, and a follow-up that asks a lead for money (a price, a deposit, an order, or a date or slot held for them) waits until the founder knows they may take money for this activity where they sell (the founder safety rule in `CLAUDE.md`). The same run surfaces pending **inbound invitations** in `inbound-invites.csv`.
 - **A better job** (first-class, not a footnote) -> `linkedin-network-scan` with `icp.career.example.yaml`. Auto-select the career ICP; do not make the user discover it. This lane finds recruiters, hiring managers, and target-company leaders who can refer or hire them.
 - **A louder brand** -> `linkedin-power-audit` first (it reads the network composition and writes `audit.json`), then `linkedin-brand-direction` (it turns that plus their goal plus the algorithm reference into a defined content direction).
 - **A healthier network** -> `linkedin-power-audit` and surface its network-gap read (over and under-representation of the roles your goal needs).

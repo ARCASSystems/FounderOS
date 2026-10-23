@@ -39,6 +39,7 @@ Argument: `$ARGUMENTS` - optional. One of: `check`, `rollback`, or empty.
 **System Layer (safe to update):**
 - `.claude/` (commands, hooks, agents - but NOT `settings.json`, see Protected live files)
 - `.claude-plugin/` (plugin.json, marketplace.json)
+- `.githooks/` (the save checks and the push guard - `pre-commit`, `commit-msg`, `pre-push`)
 - `skills/` (shared skill definitions)
 - `scripts/` (all Python helpers shipped by the OS - the full `templates/scripts/` set)
 - `templates/` (structural templates - incoming bootloader and rules changes land here)
@@ -50,7 +51,19 @@ Argument: `$ARGUMENTS` - optional. One of: `check`, `rollback`, or empty.
 - `README.md`
 - `CHANGELOG.md` (release history - the Step 10 digest reads it)
 - `VERSION`
-- `state/` (the OS's own scratch: update backups and manifests, session-change snapshots - never founder content)
+- `Start Founder OS.bat`, `Start Founder OS.command` (the double-click start files)
+- `install.sh`, `uninstall.sh`
+- `assets/` (the folder icon files)
+- `.gitattributes` (line-ending rules that keep the hooks and start files runnable)
+- `LICENSE`, `SECURITY.md`, `CONTRIBUTING.md`, `llms.txt`
+- `state/` (the OS's own scratch: update backups and manifests, session-change snapshots. Its backups are copies of founder files, so the update only adds to it and never overwrites what is there)
+
+Shipped, but deliberately NOT on this list:
+- `.gitignore` - after "own my history" it is the founder's own file (it decides which of their files are tracked). Never overwrite it. When a release changes it, the pack names the line to add by hand.
+- `desktop.ini` - Windows marks it hidden and system, and copying over a file marked that way fails, which would abort Step 8c. Its content does not change between releases.
+- `.github/` - the maintainers' own checks, which run only on the public product repo.
+
+`uninstall.sh` and `/founder-os:uninstall` remove this same list (they keep `state/`, which holds copies of the founder's files). A path added here joins their remove-list in the same commit.
 
 **Protected live files (update PROPOSES, never overwrites):**
 - `CLAUDE.md` (root bootloader - personalized at setup with the founder's name and role, and often hand-edited since)
@@ -92,7 +105,7 @@ Say it once, in their words, the first time you report anything:
 I cannot tell which version this install is on, because the file that records it is missing. I can put that right by refreshing to the current release. Your own files are not part of that.
 ```
 
-Scope note for whoever extends this: this path covers a missing marker, and it covers engine files that are present but out of date. It does NOT restore engine files that were deleted, because nothing here knows the full list of what should be on disk. That is `scripts/repair_install.py` driven by the install manifest, and it is the piece that completes this route.
+Scope note for whoever extends this: this path covers a missing marker, and it covers engine files that are present but out of date. It does NOT restore engine files that were deleted, because nothing here knows the full list of what should be on disk. That needs a repair script driven by an install manifest, which does not exist yet. It is the piece that would complete this route.
 
 ### Step 2. Fetch remote version
 
@@ -176,8 +189,9 @@ Current:  v<LOCAL_VERSION>
 Incoming: v<REMOTE_VERSION>
 
 This will update System Layer files only:
-- .claude/ (except settings.json), .claude-plugin/, skills/, scripts/, templates/, notion-package/, docs/
-- AGENTS.md, GEMINI.md, README.md, CHANGELOG.md, VERSION
+- .claude/ (except settings.json), .claude-plugin/, .githooks/, skills/, scripts/, templates/, notion-package/, updates/, docs/, assets/
+- AGENTS.md, GEMINI.md, README.md, CHANGELOG.md, VERSION, LICENSE, SECURITY.md, CONTRIBUTING.md, llms.txt
+- Start Founder OS.bat, Start Founder OS.command, install.sh, uninstall.sh, .gitattributes
 
 Files you may have edited get a proposal, never an overwrite:
 - CLAUDE.md, rules/, .claude/settings.json (you see the diff, you say yes per file)
@@ -244,7 +258,7 @@ ZIP mode:
 This download tracks main on purpose, while the download button on the front page hands out the latest tagged release. They are not the same file and that is deliberate: `REMOTE_VERSION` above comes from main's `VERSION`, so pulling a release asset here would abort every update made between releases, which is exactly when fixes ship. The first download is the released build; updates carry whatever has landed since.
 
 1. Download `https://github.com/ARCASSystems/FounderOS/archive/refs/heads/main.zip` to a temp file. Use `curl -sL -o <tmp>/founderos-main.zip <url>` where curl exists, or PowerShell `Invoke-WebRequest -Uri <url> -OutFile <tmp>\founderos-main.zip` on Windows.
-2. Extract it in the temp location: `tar -xf founderos-main.zip` works on modern Windows, macOS, and Linux; PowerShell `Expand-Archive` is the fallback. The archive extracts to a `FounderOS-main/` folder.
+2. Extract it in the temp location with `tar -xf founderos-main.zip`. That works where tar is bsdtar, as on Windows and macOS, and keeps the run permission on the start file and scripts. GNU tar (Git Bash, Linux) refuses a zip: then use `python -m zipfile -e founderos-main.zip .`, which drops file modes, so afterwards run `chmod +x "FounderOS-main/Start Founder OS.command" FounderOS-main/*.sh FounderOS-main/.githooks/*`. PowerShell `Expand-Archive` is the last fallback on Windows. The archive extracts to a `FounderOS-main/` folder.
 3. Copy each path in the staging set from `FounderOS-main/<path>` into `state/.update-staging/<ts>/<path>`, preserving relative paths. Do NOT stage any path outside the staging set - the archive also contains User Layer seeds (`stack.json`, `brain/`, sample content) and those must never reach the founder's live data.
 4. Delete the temp download and extraction. The staging dir stays until Step 10.
 
@@ -267,18 +281,25 @@ arrive with every release. The copy already sitting in `voice/` does not, so a
 founder who set voice up before this release keeps running the old page against
 the old server until they say so.
 
-If `voice/` exists on this install AND `skills/add-voice/runtime/server.py`
-changed in this release, say this in the Step 10 summary, in these words:
+If `voice/` exists on this install AND any runtime template changed in this
+release (`skills/add-voice/runtime/`, `skills/add-voice/realtime/`,
+`skills/add-mouth/runtime/`, `skills/add-hands/runtime/`), say this in the
+Step 10 summary, in these words:
 
     Your voice runtime is one version behind. Say "update my voice runtime" and
-    I will copy the new page and server into voice/ and leave your config.json
-    alone. Nothing else about your install is affected.
+    I will copy the new files into voice/ and leave your settings alone.
+    Nothing else about your install is affected.
 
-On a yes: copy `skills/add-voice/runtime/server.py` and
-`skills/add-voice/runtime/index.html` over `voice/server.py` and
-`voice/index.html`. Never touch `voice/config.json`, `voice/runtime-log.jsonl`,
-or any `live-*` file. Re-running `python skills/add-voice/setup.py` also works
-and is the by-hand path, but it REWRITES `config.json`, so offer the copy first.
+On a yes: run `python skills/add-voice/refresh_runtime.py`. It copies the newer
+version of every runtime file already in `voice/` (the Tier-0 server and page,
+the realtime server and page, the mouth and the hands), adds nothing that was
+never installed, never touches a settings file (`config.json`,
+`realtime-config.json`, `mouth-config.json`, `hands-config.json`) or a log,
+keeps the old copy of each file it replaces beside the new one as
+`<name>.<date>.bak` (so a hand edit is never lost), and prints what it copied and
+kept. Read that list back. Re-running a setup script is the
+by-hand path; the setups now keep the settings already in a config file, but
+offer the refresh first.
 
 **8b. Verify the staging.** All four checks pass or the update aborts with the install untouched:
 
@@ -299,6 +320,8 @@ If ANY copy fails mid-activation, do not continue and do not hand the founder a 
 
 **8d. Refresh the native skill copies.** Run `python scripts/skills_sync.py --apply`. Claude Code finds skills on its own through the generated copies in `.claude/skills/`, and those are not part of the release files, so without this step a skill the release changed keeps running its old text. If the script fails, say so in one line and carry on: the update itself is complete, and the founder can run it later.
 
+**8e. Re-wire the git hooks when version history is on.** Only when `.git/` exists AND `git config core.hooksPath` prints `.githooks`: run `bash scripts/install-git-hooks.sh`. It sets the run permission on every file in `.githooks/` (a copy can drop it, and Mac and Linux then skip the hook without a word) and prints `Push guard active` when the push guard is in place. Report that line, or the error it prints, in one line. On a ZIP install with no history, skip this step and say nothing. On Mac and Linux, also run `chmod +x "Start Founder OS.command" install.sh uninstall.sh` so the start file still opens on a double-click.
+
 ### Step 8.5. Propose migrations for the protected live files
 
 The founder may have edited these three; the incoming release may have improved them. Reconcile by proposal, not replacement. For each pair:
@@ -316,6 +339,8 @@ Procedure per pair:
 - A rules file that exists in the incoming release but not live is safe to add on yes (nothing founder-authored is at risk); say what it is first.
 
 Do NOT attempt to merge hook entries inside `settings.json` mechanically in this step - show the settings diff and let the founder decide. The v1.42 release is the case worth naming to them: it replaces the old per-event `.sh`/`.ps1` hook pairs with one `scripts/hooks/dispatch.py <Event>` command per event. Skipping is safe - the shell hooks retained from the prior install keep running (the shipped `session_start_brief.py` stays backward-compatible with them), and accepting switches every event to the single cross-platform Python dispatcher. Either way nothing breaks; the dispatcher is the cleaner steady state.
+
+The v1.56.0 case is smaller: the incoming file adds only an `env` block with `PYTHONUTF8=1` above the hooks, so Windows hooks stop crashing on non-Latin text. Propose that block alone. Every hook entry stays exactly as the founder has it, whatever they answer.
 
 ### Step 8.7. Walk the update packs
 

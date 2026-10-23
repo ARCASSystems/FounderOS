@@ -35,7 +35,7 @@ if ! command -v claude >/dev/null 2>&1; then
   echo ""
   echo "No terminal needed - use the Claude desktop app (opening the download page now):"
   echo "  1. Install it and sign in with your Claude account"
-  echo "  2. Open the Code tab, choose Local, click Select folder, pick this folder"
+  echo "  2. Open the Code tab, click the folder control under the prompt box, pick this folder"
   echo "  3. Type: set up Founder OS"
   echo ""
   echo "Prefer the terminal? Install Claude Code from"

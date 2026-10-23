@@ -29,8 +29,9 @@ read from os-config.yaml when it exists. With no os-config those two checks SKIP
 rather than inventing a default, because a wrong brand assumption is worse than
 an honest gap.
 
-Invariants: read-only, standard library only, ASCII-safe output, no network, no
-API key. Exit 0 = no failures, 2 = at least one failure, 1 = no such file.
+Invariants: read-only, standard library only, ASCII-safe messages (a file name
+prints as it is, in UTF-8), no network, no API key. Exit 0 = no failures, 2 = at
+least one failure, 1 = no such file.
 
 Usage:
   python scripts/deliverable_gate.py all path/to/deliverable.html
@@ -45,6 +46,7 @@ import datetime as _dt
 import re
 import sys
 import zipfile
+import zlib
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -144,10 +146,101 @@ def _read_text(path: Path) -> str | None:
             return None
     if ext == ".pdf":
         try:
-            return path.read_bytes().decode("latin-1", errors="replace")
+            return _pdf_text(path.read_bytes())
         except OSError:
             return None
     return None
+
+
+_PDF_STREAM = re.compile(rb"stream\r?\n(.*?)\r?\nendstream", re.S)
+# A string a page draws: a literal (...) or a hex <...> string.
+_PDF_STR = rb"\((?:\\.|[^\\()])*\)|<[0-9A-Fa-f\s]*>"
+_PDF_SHOW = re.compile(rb"(" + _PDF_STR + rb")\s*(?:Tj|'|\")"
+                       rb"|\[((?:" + _PDF_STR + rb"|[^\]\\(<])*)\]\s*TJ", re.S)
+_PDF_PIECE = re.compile(rb"(" + _PDF_STR + rb")|([-+]?(?:\d+\.?\d*|\.\d+))", re.S)
+_PDF_ESC = re.compile(rb"\\(\r\n|[0-7]{1,3}|.)", re.S)
+_PDF_ESC_CHARS = {b"n": b"\n", b"r": b"\r", b"t": b"\t", b"b": b"\b", b"f": b"\f"}
+# Inside a TJ array a number moves the next letter, in thousandths of an em. A
+# kern between two letters of one word is rarely more than about 150; a word
+# gap is 250 or more (TeX writes its spaces this way, with no space character).
+# So under 200 the pieces join into one word, and 200 or more is a space.
+_PDF_WORD_GAP = 200
+
+
+def _pdf_literal(s: bytes) -> str:
+    def unescape(m: re.Match) -> bytes:
+        e = m.group(1)
+        if e in (b"\r\n", b"\n", b"\r"):
+            return b""  # a backslash at a line end continues the string
+        if e[:1] in b"01234567":
+            return bytes([int(e, 8) & 0xFF])
+        return _PDF_ESC_CHARS.get(e, e)
+    return _PDF_ESC.sub(unescape, s[1:-1]).decode("latin-1")
+
+
+def _pdf_shown(chunk: bytes) -> str | None:
+    """The text one stream draws, or None when any of it is in hex strings.
+    A hex string holds glyph numbers from an embedded font (Word, Chrome and
+    LibreOffice all write them), and without the font's own map those numbers
+    are not letters, so a placeholder in one cannot be seen."""
+    shown: list[str] = []
+    for op in _PDF_SHOW.finditer(chunk):
+        if op.group(1) is not None:
+            if op.group(1).startswith(b"<"):
+                return None
+            shown.append(_pdf_literal(op.group(1)))
+            continue
+        word = ""
+        for piece in _PDF_PIECE.finditer(op.group(2)):
+            if piece.group(1) is not None:
+                if piece.group(1).startswith(b"<"):
+                    return None
+                word += _pdf_literal(piece.group(1))
+            elif abs(float(piece.group(2))) >= _PDF_WORD_GAP:
+                word += " "
+        shown.append(word)
+    return " ".join(shown)
+
+
+def _pdf_text(data: bytes) -> str | None:
+    """The text a PDF shows, or None when it cannot be read honestly.
+
+    The old reader decoded the raw bytes as latin-1. Almost every real PDF
+    compresses its pages, so a placeholder or an attribution line on a page
+    was never seen and the gate said PASS (release review S-14). This inflates
+    each compressed stream and reads the strings the page draws (Tj, TJ). When
+    any page draws its text in hex strings, or in an embedded font's own codes
+    that read as control characters, it returns None and the gate reports the
+    check as not run, never as passed: one unreadable page is enough to hide
+    a [FILL]. The file's metadata (the Producer and Creator lines) is kept in
+    the text, since an attribution line often lives there."""
+    shown: list[str] = []
+    for m in _PDF_STREAM.finditer(data):
+        body = m.group(1)
+        try:
+            body = zlib.decompress(body)
+        except zlib.error:
+            pass
+        page = _pdf_shown(body)
+        if page is None:
+            return None
+        if page.strip():
+            if sum(c.isprintable() or c.isspace() for c in page) < 0.9 * len(page):
+                return None
+            shown.append(page)
+    text = " ".join(shown)
+    if sum(c.isalpha() for c in text) < 20:
+        return None
+    outside = _PDF_STREAM.sub(b" ", data).decode("latin-1", errors="replace")
+    return text + "\n" + outside
+
+
+def _unread(path: Path) -> str:
+    """The SKIP detail for a file whose text could not be read."""
+    if path.suffix.lower() == ".pdf":
+        return (f"could not read the text in {path.name} (its letters are stored as font "
+                f"codes this check cannot turn back into words) - the reading pass judges")
+    return f"could not read the text in {path.name} (unscannable format) - the reading pass judges"
 
 
 # ---------------------------------------------------------------- template --
@@ -205,7 +298,7 @@ def check_template(path: Path, cfg: dict) -> list[Check]:
 def check_placeholders(path: Path) -> list[Check]:
     text = _read_text(path)
     if text is None:
-        return [Check("placeholders", "scan", "SKIP", "unscannable format - the reading pass judges")]
+        return [Check("placeholders", "scan", "SKIP", _unread(path))]
     hits: list[str] = []
     for label, rx in _PLACEHOLDER_RES:
         found = rx.findall(text)
@@ -242,9 +335,12 @@ def check_date(path: Path, asof: _dt.date) -> list[Check]:
     prep stamp. Future dates (a payment schedule, a milestone) are legitimate
     content and must not fail this, so the rule is ANY date near asof, never the
     newest date in the file."""
-    text = _read_text(path) or ""
-    dates = _found_dates(path.name) + _found_dates(text)
+    text = _read_text(path)
+    dates = _found_dates(path.name) + _found_dates(text or "")
     if not dates:
+        if text is None:
+            # The content was never read, so "no date in the content" would be a guess.
+            return [Check("date", "within-48h", "SKIP", _unread(path))]
         return [Check("date", "within-48h", "FAIL", "no date found in filename or content")]
     nearest = min(dates, key=lambda d: abs((asof - d).days))
     delta = abs((asof - nearest).days)
@@ -262,7 +358,7 @@ def check_attribution(path: Path, cfg: dict) -> list[Check]:
     out: list[Check] = []
     text = _read_text(path)
     if text is None:
-        out.append(Check("attribution", "strings", "SKIP", "unscannable format"))
+        out.append(Check("attribution", "strings", "SKIP", _unread(path)))
     else:
         hits = sorted({rx.pattern for rx in _ATTRIBUTION_RES if rx.search(text)})
         if hits:
@@ -414,6 +510,13 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--root", default=None, help="OS root override (for tests)")
     p.add_argument("--asof", default=None, help="YYYY-MM-DD (default today) for the 48h date check")
     args = p.parse_args(argv)
+    # File names are printed as they are. On a Windows pipe (cp1252) an Arabic
+    # name raised UnicodeEncodeError before the gate could report anything.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
 
     path = Path(args.path)
     if not path.exists():
@@ -432,7 +535,11 @@ def main(argv: list[str] | None = None) -> int:
         print(c.line())
     fails = sum(1 for c in checks if c.status == "FAIL")
     skips = sum(1 for c in checks if c.status == "SKIP")
-    print(f"deliverable-gate: {'FAIL' if fails else 'PASS'} "
+    # Nothing failed is not the same as something passed: when every check was
+    # left to the reading pass (a PDF it could not read), PASS would be a guess.
+    passed = any(c.status == "PASS" for c in checks)
+    verdict = "FAIL" if fails else "PASS" if passed else "NOT CHECKED"
+    print(f"deliverable-gate: {verdict} "
           f"({len(checks)} checks, {fails} fail, {skips} left to the reading pass)")
     return 2 if fails else 0
 

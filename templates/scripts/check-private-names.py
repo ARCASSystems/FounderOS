@@ -27,15 +27,22 @@ Check-sets:
                   repo whose house voice bans them. (The private OS scanner
                   exempts diff bodies because those carry captured transcripts;
                   a public product repo does not, so we scan them.) Escape
-                  hatch: ALLOW_EMDASH=1.
+                  hatch: ALLOW_EMDASH=1. Product repo only: in an installed OS
+                  (core/identity.md tracked) --staged and --message skip it, so
+                  a founder who pastes a client email can still save. The same
+                  goes for the line-ending and entry-form checks, which are the
+                  product's own house rules, not rules for a founder's data.
     attribution   Co-Authored-By: Claude / Generated with Claude Code trailers.
                   Checked on every line, every mode. Line-start anchored so rule
                   documentation and regex literals do not self-trigger. NOT
                   bypassed by ALLOW_EMDASH.
     secret        Token-shaped strings (Telegram bot token, sk-/sk-ant- keys,
-                  Slack/GitHub/AWS/Google/Stripe tokens, PEM private-key headers)
-                  and API-KEY / TOKEN / SECRET / PASSWORD style assignments set to
-                  a high-entropy value. Always on, not gated on the patterns file,
+                  Slack/GitHub/AWS/Google/Stripe tokens, PEM private-key headers),
+                  a password inside a URL, Bearer and API-key headers, JWTs, a
+                  token in a query string (sig=, token=, key=), and API-KEY /
+                  TOKEN / SECRET / PASSWORD style assignments set to a
+                  high-entropy value. The shapes live in _common.py, shared with
+                  the redactor. Always on, not gated on the patterns file,
                   NOT bypassed by ALLOW_EMDASH. The matched value is never echoed.
                   This is the out-of-the-box half of the guard: even with an empty
                   patterns file a stray secret in a tracked file is blocked.
@@ -160,73 +167,18 @@ def is_base64_blob(line: str) -> bool:
 
 # --- Secret detection (always on; not gated on the patterns file, not bypassable
 # by ALLOW_EMDASH). A secret in a tracked file is the failure the privacy work
-# exists to prevent, so the check ships active out of the box. Patterns are
-# written so this scanner's own regex source cannot self-trigger (no literal here
-# forms a complete secret of its own shape).
-SECRET_SHAPE_PATTERNS = [
-    # Telegram BotFather token: <8-10 digits>:<35+ url-safe chars>.
-    ("telegram-bot-token", re.compile(r"\b\d{8,10}:[A-Za-z0-9_-]{35,}")),
-    # Anthropic / OpenAI keys. The ant-/proj- markers are rare literals, so a
-    # hyphenated body is safe; plain sk- needs 40 contiguous alnum so hyphenated
-    # slugs (sk-related-thing) cannot false-trip.
-    ("anthropic-key", re.compile(r"\bsk-ant-[A-Za-z0-9_-]{20,}")),
-    ("openai-proj-key", re.compile(r"\bsk-proj-[A-Za-z0-9_-]{20,}")),
-    ("openai-key", re.compile(r"\bsk-[A-Za-z0-9]{40,}\b")),
-    # Slack tokens (xoxb-, xoxp-, xoxa-, xoxr-, xoxs-).
-    ("slack-token", re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{10,}\b")),
-    # GitHub tokens.
-    ("github-token", re.compile(r"\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36,}\b")),
-    ("github-pat", re.compile(r"\bgithub_pat_[A-Za-z0-9_]{40,}\b")),
-    # AWS access key id.
-    ("aws-access-key", re.compile(r"\bAKIA[0-9A-Z]{16}\b")),
-    # Google API key.
-    ("google-api-key", re.compile(r"\bAIza[0-9A-Za-z_-]{35}\b")),
-    # Stripe live / test keys.
-    ("stripe-key", re.compile(r"\b[rs]k_(?:live|test)_[A-Za-z0-9]{16,}\b")),
-    # PEM private key header.
-    ("private-key-block", re.compile(r"-----BEGIN (?:RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----")),
-]
-
-# Secret-NAMED assignment: an API-KEY / TOKEN / SECRET / PASSWORD style name set
-# to a long, high-entropy value. The value is validated (not a placeholder, mixed
-# letters and digits) so docs and example lines do not false-trip.
-_SECRET_NAME = re.compile(
-    r"(?i)\b[a-z0-9_]*(?:api[_-]?key|secret[_-]?key|access[_-]?key|access[_-]?token"
-    r"|auth[_-]?token|bot[_-]?token|api[_-]?token|client[_-]?secret|private[_-]?key"
-    r"|secret|passwd|password)\b\s*[:=]\s*"
+# exists to prevent, so the check ships active out of the box. The shapes live in
+# _common.py because the observation log and the rant capture hide the same
+# shapes before they write: one list, so the three readers cannot drift apart.
+# It includes credentials inside a URL, Bearer and API-key headers, JWTs and
+# tokens in a query string, each flagged only when the value looks real.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _common import (  # noqa: E402
+    CONTEXT_SECRET_PATTERNS,
+    SECRET_SHAPE_PATTERNS,
+    _looks_like_real_secret,
+    find_secret,
 )
-_SECRET_VALUE = re.compile(r"['\"]?([^\s'\"#,;]{16,})")
-_PLACEHOLDER = re.compile(
-    r"(?i)(your|example|placeholder|change[_-]?me|xxx|<[^>]*>|\.\.\.|todo|redact"
-    r"|fill|here|none|null|true|false|enabled|disabled|sample|dummy"
-    r"|\$\{|\$\(|%[a-z_]+%)"
-)
-
-
-def _looks_like_real_secret(value: str) -> bool:
-    """A captured assignment value is a likely real secret only when it mixes
-    letters and digits (high entropy) and is not an obvious placeholder. The 16+
-    length floor is already enforced by the value regex. Requiring both letters
-    and digits keeps prose, paths, and bare URLs from false-tripping."""
-    if _PLACEHOLDER.search(value):
-        return False
-    has_alpha = any(c.isalpha() for c in value)
-    has_digit = any(c.isdigit() for c in value)
-    return has_alpha and has_digit
-
-
-def find_secret(line: str) -> str | None:
-    """Return a short kind-label if the line carries a likely secret, else None."""
-    for kind, pat in SECRET_SHAPE_PATTERNS:
-        if pat.search(line):
-            return kind
-    m = _SECRET_NAME.search(line)
-    if m:
-        tail = line[m.end():]
-        v = _SECRET_VALUE.match(tail)
-        if v and _looks_like_real_secret(v.group(1)):
-            return "named-secret-assignment"
-    return None
 
 
 def scan_text(
@@ -237,13 +189,18 @@ def scan_text(
     check_dashes: bool = True,
     check_secrets: bool = True,
     check_attribution: bool = True,
+    places: list[str] | None = None,
 ) -> list[str]:
     """Scan text line by line for all four check-sets. Returns rendered offending
-    lines tagged with the kind. Secret values are never echoed back."""
+    lines tagged with the kind. Secret values are never echoed back. `places`,
+    when given, names each line's file and line number (see
+    _added_lines_with_places); without it a line is named by its position."""
     offending: list[str] = []
     for line_num, raw in enumerate(text.splitlines(), 1):
         if is_base64_blob(raw):
             continue
+        where = (places[line_num - 1] if places and line_num <= len(places)
+                 else f"line {line_num}")
         # The secret check runs FIRST, and when it fires the raw line is never
         # shown by ANY finding on that line - a private-name or dash finding
         # that echoed the line would print the very secret the secret finding
@@ -253,18 +210,18 @@ def scan_text(
                 else raw.rstrip())
         for pat in patterns:
             if pat.search(raw):
-                offending.append(f"  [private-name] line {line_num}: {line}")
+                offending.append(f"  [private-name] {where}: {line}")
                 break
         if check_dashes and not allow_emdash and (EM_DASH in raw or EN_DASH in raw):
-            offending.append(f"  [emdash] line {line_num}: {line}")
+            offending.append(f"  [emdash] {where}: {line}")
         if check_attribution:
             for ap in ATTRIBUTION_PATTERNS:
                 if ap.search(raw):
-                    offending.append(f"  [attribution] line {line_num}: {line}")
+                    offending.append(f"  [attribution] {where}: {line}")
                     break
         if secret_kind:
             offending.append(
-                f"  [secret:{secret_kind}] line {line_num}: possible secret detected (value hidden)"
+                f"  [secret:{secret_kind}] {where}: possible secret detected (value hidden)"
             )
     return offending
 
@@ -292,6 +249,34 @@ def _added_lines(diff: str) -> str:
         for line in diff.splitlines()
         if line.startswith("+") and not line.startswith("+++")
     )
+
+
+_HUNK_RE = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,\d+)? @@")
+
+
+def _added_lines_with_places(diff: str) -> tuple[str, list[str]]:
+    """The added lines of a diff, and for each one its file and its line number
+    in the new version. A refusal that said "line 210" counted across the whole
+    staged diff and named no file, so a founder could not find the line."""
+    lines: list[str] = []
+    places: list[str] = []
+    path, new_no = "?", 0
+    for raw in diff.splitlines():
+        if raw.startswith("+++ "):
+            target = raw[4:]
+            path = target[2:] if target.startswith("b/") else target
+            continue
+        if raw.startswith("@@"):
+            m = _HUNK_RE.match(raw)
+            new_no = int(m.group(1)) if m else 0
+            continue
+        if raw.startswith("+"):
+            lines.append(raw[1:])
+            places.append(f"{path} line {new_no}")
+            new_no += 1
+        elif raw.startswith(" "):
+            new_no += 1
+    return "\n".join(lines), places
 
 
 def resolve_patterns_file() -> Path:
@@ -328,20 +313,32 @@ def _commit_diff(sha: str) -> str:
     return _git_text(["git", "show", "--format=", sha], timeout=15)
 
 
-def _commits_in_range(rng: str) -> list[str]:
+def _resolves(ref: str) -> bool:
+    return bool(_git_text(["git", "rev-parse", "--verify", "-q", f"{ref}^{{commit}}"], timeout=10).strip())
+
+
+def _commits_in_range(rng: str) -> list[str] | None:
     """Resolve a range to commit SHAs. Accepts BASE..HEAD, a single ref, or a
-    GitHub all-zeros BASE (new branch push), scanned as just the tip."""
+    GitHub all-zeros BASE (new branch push), scanned as just the tip.
+
+    Returns None when an end of the range does not resolve (a typo, a base a
+    force push removed, a shallow clone). That used to come back as an empty
+    list, which scanned nothing and passed: a green check over zero commits."""
     if ".." in rng:
         base, _, head = rng.partition("..")
         base = base.rstrip(".")
         head = head or "HEAD"
         if base and set(base) <= {"0"}:
-            sha = _rev_parse(head)
-            return [sha] if sha else []
+            sha = _rev_parse(head) if _resolves(head) else ""
+            return [sha] if sha else None
+        if not (_resolves(base) and _resolves(head)):
+            return None
         out = _git_text(["git", "log", "--format=%H", f"{base}..{head}"])
         return out.strip().splitlines() if out else []
+    if not _resolves(rng):
+        return None
     sha = _rev_parse(rng)
-    return [sha] if sha else []
+    return [sha] if sha else None
 
 
 def _report(header: str, offending: list[str]) -> None:
@@ -349,10 +346,19 @@ def _report(header: str, offending: list[str]) -> None:
     for line in offending:
         print(line, file=sys.stderr)
     print("", file=sys.stderr)
-    print(
-        "Escape hatch: ALLOW_EMDASH=1 bypasses em/en dash (not private-name, attribution, secret, or remote-safety).",
-        file=sys.stderr,
-    )
+    if any("[secret:" in line for line in offending):
+        print(
+            "A line above looks like a password or key. Take it out of that file (a key "
+            "belongs in .env, which is never saved), then save again.",
+            file=sys.stderr,
+        )
+    # The dash override is offered only when a dash is what refused the save.
+    # Printed under a secret or a name, it pointed at a switch that changes nothing.
+    if any("[emdash]" in line for line in offending):
+        print(
+            "Escape hatch: ALLOW_EMDASH=1 bypasses em/en dash (not private-name, attribution, secret, or remote-safety).",
+            file=sys.stderr,
+        )
 
 
 # Matches a push destination at the public FounderOS repo, https or ssh form.
@@ -360,12 +366,26 @@ _PUBLIC_REPO_URL = re.compile(
     r"github\.com[:/]ARCASSystems/FounderOS(?:\.git)?/?$", re.IGNORECASE)
 
 
+def is_founder_install() -> bool:
+    """True when this repo is a founder's installed OS, not the product repo.
+
+    The signal is the one remote-safety has always used: the founder's identity
+    file is in the index. The product repo never tracks it (its developer
+    .gitignore keeps founder data out), and an install that owns its history
+    always does. The house rules of the product (no em or en dashes, line-ending
+    and entry-form discipline) gate the product repo only. Applied to a
+    founder's data they refused ordinary saves: a pasted client email with an
+    em dash stopped "save my work", and the only way past was an environment
+    variable no founder can set."""
+    return bool(_git_text(["git", "ls-files", "--", "core/identity.md"], timeout=10).strip())
+
+
 def check_remote_safety() -> list[str]:
     """Return violations when personal data is tracked and a remote can still
     push to the public repo. See the remote-safety check-set in the module
     docstring. Any git error (not a repo, no remotes, no config matches) is a
     silent pass - this backstop must never break an ordinary commit."""
-    if not _git_text(["git", "ls-files", "--", "core/identity.md"], timeout=10).strip():
+    if not is_founder_install():
         return []
     config = _git_text(["git", "config", "--get-regexp", r"^remote\."], timeout=10)
     if not config:
@@ -599,13 +619,19 @@ def entry_defects(diff: str) -> list[str]:
 
 
 def run_staged(patterns: list[re.Pattern[str]], allow_emdash: bool) -> int:
+    founder = is_founder_install()
     offending = check_remote_safety()
     diff = get_staged_diff()
-    offending += scan_text(_added_lines(diff), patterns, allow_emdash=allow_emdash)
-    if os.environ.get("ALLOW_EOL", "0") != "1":
+    # Private names, secrets and AI attribution are checked everywhere. The
+    # dash, line-ending and entry-form rules are the product repo's house
+    # rules, so a founder's own data is never refused for them.
+    added, places = _added_lines_with_places(diff)
+    offending += scan_text(added, patterns, allow_emdash=allow_emdash,
+                           check_dashes=not founder, places=places)
+    if not founder and os.environ.get("ALLOW_EOL", "0") != "1":
         offending += [f"{d}  (deliberate normalization commit: ALLOW_EOL=1)"
                       for d in eol_defects()]
-    if os.environ.get("ALLOW_ENTRY", "0") != "1":
+    if not founder and os.environ.get("ALLOW_ENTRY", "0") != "1":
         offending += [f"{d}  (override: ALLOW_ENTRY=1)"
                       for d in entry_defects(diff)]
     if offending:
@@ -620,7 +646,8 @@ def run_message(path: str, patterns: list[re.Pattern[str]], allow_emdash: bool) 
     except OSError as exc:
         print(f"Could not read commit message at {path}: {exc}", file=sys.stderr)
         return 1
-    offending = scan_text(text, patterns, allow_emdash=allow_emdash)
+    offending = scan_text(text, patterns, allow_emdash=allow_emdash,
+                          check_dashes=not is_founder_install())
     if offending:
         _report("BLOCKED: guard violations in commit message:", offending)
         return 1
@@ -629,23 +656,29 @@ def run_message(path: str, patterns: list[re.Pattern[str]], allow_emdash: bool) 
 
 def run_range(rng: str, patterns: list[re.Pattern[str]], allow_emdash: bool) -> int:
     shas = _commits_in_range(rng)
+    if shas is None:
+        print(f"BLOCKED: could not resolve the range {rng!r}, so nothing was scanned. "
+              "Check both ends exist in this clone (a force push or a shallow fetch "
+              "can remove the base).", file=sys.stderr)
+        return 1
     if not shas:
         return 0
     total = 0
+    dashes = False
     for sha in shas:
         offending = scan_text(_commit_message(sha), patterns, allow_emdash=allow_emdash)
-        offending += scan_text(_added_lines(_commit_diff(sha)), patterns, allow_emdash=allow_emdash)
+        added, places = _added_lines_with_places(_commit_diff(sha))
+        offending += scan_text(added, patterns, allow_emdash=allow_emdash, places=places)
         if offending:
             print(f"BLOCKED: guard violations in commit {sha[:8]}:", file=sys.stderr)
             for line in offending:
                 print(line, file=sys.stderr)
             total += len(offending)
+            dashes = dashes or any("[emdash]" in line for line in offending)
     if total:
         print("", file=sys.stderr)
-        print(
-            f"guard: {total} violation(s). Escape hatch (em/en dash only): ALLOW_EMDASH=1.",
-            file=sys.stderr,
-        )
+        hatch = " Escape hatch (em/en dash only): ALLOW_EMDASH=1." if dashes else ""
+        print(f"guard: {total} violation(s).{hatch}", file=sys.stderr)
         return 1
     return 0
 
@@ -709,11 +742,14 @@ def main() -> int:
 
     patterns_file = resolve_patterns_file()
     patterns = load_patterns(patterns_file)
-    if not patterns and patterns_file.exists():
+    if not patterns and patterns_file.exists() and not is_founder_install():
+        # Maintainer note only. In an installed OS an empty file is the
+        # recommended default, so it says nothing on every save, and it never
+        # asks anyone to type their own name in: a founder's name in that file
+        # blocks every save of their own identity.
         print(
-            f"WARNING: private-name guard is installed ({patterns_file}) but defines no "
-            "patterns. Name check INACTIVE (secret, em-dash, and attribution checks still "
-            "enforced). Add names to activate the name check too.",
+            f"Note: {patterns_file.name} holds no patterns, so the name check is off. "
+            "The secret and attribution checks still run.",
             file=sys.stderr,
         )
 

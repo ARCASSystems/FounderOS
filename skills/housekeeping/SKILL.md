@@ -41,7 +41,7 @@ Route **AUTO** = reversible, on the approval-gate Auto list, fix mode may run it
 | 5 | Wiki graph stale | any wiki-layer `.md` modified after `brain/relations.yaml` | `/founder-os:wiki-build` | AUTO |
 | 6 | Broken wikilinks + orphans | the lint skill's checks (run read-only) | triage each: fix the typo, create the real node, or drop the link | JUDGMENT (never blind-fix a link) |
 | 7 | Decay-due flags | entries past `Decay after:` in `brain/flags.md` | keep or kill each | JUDGMENT |
-| 8 | Memory gaps | `python scripts/memory-diff.py` (a `clients/<slug>/` folder with no auto-memory entry) | add the memory entry, or run `/founder-os:memory-pass` if entries exist but may be stale | JUDGMENT |
+| 8 | Memory gaps | `python scripts/memory-diff.py` (a `clients/<slug>/` folder with no auto-memory entry) | add the memory entry, or say "run a memory pass" (the `memory-pass` skill) if entries exist but may be stale | JUDGMENT |
 | 9 | Quarantine ACTIVE | `Status: ACTIVE` entries in `system/quarantine.md` | resolve the failure or mark RESOLVED / WONTFIX | JUDGMENT |
 | 10 | Snapshot stale | `brain/.snapshot.md` missing or older than 3 days (the propose engine and other output skills read it warm) | `python scripts/brain-snapshot.py --write` | AUTO |
 | 11 | Skill description bloat | `python scripts/skill_health.py` (over 900 chars warn, over 1024 fail) | trim toward 600 chars | JUDGMENT |

@@ -105,18 +105,56 @@ def key_present(root):
         line = line.strip()
         if line.startswith("GEMINI_API_KEY") and "=" in line:
             val = line.split("=", 1)[1].strip().strip('"').strip("'")
-            if val and not val.lower().startswith("your"):
+            # "paste-your-..." is the line the connect skill writes for the
+            # founder to fill in. It is a placeholder, not a key.
+            if val and not val.lower().startswith(("your", "paste-your")):
                 return True
     return False
+
+
+DEFAULTS = {"model": DEFAULT_MODEL, "voice": DEFAULT_VOICE, "http_port": 8756, "ws_port": 8757}
+
+
+def merge_config(existing, chosen, brain_cmd):
+    """Build realtime-config.json without throwing away what the founder set.
+
+    `chosen` holds only the settings named on this command line. Order of
+    precedence: a setting named now, then the value already in the file, then
+    the default. Any other key the founder added to the file is kept. The brain
+    command is re-detected every run on purpose, the same as Tier 0: re-running
+    setup is the repair for a brain command that points at a CLI that is gone.
+    Returns (config, kept) where kept names the settings carried over."""
+    existing = existing if isinstance(existing, dict) else {}
+    config = dict(existing)
+    kept = []
+    for key, default in DEFAULTS.items():
+        if chosen.get(key) is not None:
+            config[key] = chosen[key]
+        elif existing.get(key) not in (None, ""):
+            config[key] = existing[key]
+            if existing[key] != default:
+                kept.append(key)
+        else:
+            config[key] = default
+    config["tier"] = 1
+    config.setdefault("key_names", ["GEMINI_API_KEY", "GEMINI_API_KEY2"])
+    config.setdefault("proactive_context", False)
+    config.setdefault("created", datetime.now(timezone.utc).isoformat())
+    config["brain_cmd"] = brain_cmd
+    config["note"] = ("Tier 1 - Gemini Live realtime front + your no-key CLI as the back-brain. "
+                      "See skills/add-voice/references/realtime-architecture.md.")
+    return config, kept
 
 
 def main():
     ap = argparse.ArgumentParser(description="Wire the Tier-1 realtime voice capability.")
     ap.add_argument("--no-install", action="store_true", help="skip pip install (deps already present)")
-    ap.add_argument("--model", default=DEFAULT_MODEL)
-    ap.add_argument("--voice", default=DEFAULT_VOICE)
-    ap.add_argument("--http-port", type=int, default=8756)
-    ap.add_argument("--ws-port", type=int, default=8757)
+    # No defaults here: None means "not named on this run", which keeps the
+    # value already in voice/realtime-config.json (see merge_config).
+    ap.add_argument("--model", default=None, help="default " + DEFAULT_MODEL)
+    ap.add_argument("--voice", default=None, help="default " + DEFAULT_VOICE)
+    ap.add_argument("--http-port", type=int, default=None, help="default 8756")
+    ap.add_argument("--ws-port", type=int, default=None, help="default 8757")
     ap.add_argument("--start", action="store_true", help="start the realtime server after wiring")
     args = ap.parse_args()
 
@@ -156,39 +194,38 @@ def main():
     print("OK   Copied the realtime page and bridge into " + str(voice_dir))
 
     brain_cmd, brain_note = detect_brain(root)
-    config = {
-        "tier": 1,
-        "model": args.model,
-        "voice": args.voice,
-        "http_port": args.http_port,
-        "ws_port": args.ws_port,
-        "key_names": ["GEMINI_API_KEY", "GEMINI_API_KEY2"],
-        "brain_cmd": brain_cmd,
-        "proactive_context": False,
-        "created": datetime.now(timezone.utc).isoformat(),
-        "note": "Tier 1 - Gemini Live realtime front + your no-key CLI as the back-brain. "
-                "See skills/add-voice/references/realtime-architecture.md.",
-    }
-    (voice_dir / "realtime-config.json").write_text(
-        json.dumps(config, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
-    print("OK   Wrote voice/realtime-config.json (model " + args.model + ", voice " + args.voice + ").")
+    config_path = voice_dir / "realtime-config.json"
+    existing = {}
+    if config_path.exists():
+        try:
+            existing = json.loads(config_path.read_text(encoding="utf-8"))
+        except (ValueError, OSError):
+            existing = {}
+    chosen = {"model": args.model, "voice": args.voice,
+              "http_port": args.http_port, "ws_port": args.ws_port}
+    config, kept = merge_config(existing, chosen, brain_cmd)
+    config_path.write_text(json.dumps(config, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
+    print("OK   Wrote voice/realtime-config.json (model " + str(config["model"]) +
+          ", voice " + str(config["voice"]) + ").")
+    if kept:
+        print("     Kept your existing settings: " + ", ".join(sorted(kept)))
     print("     Back-brain command: " + " ".join(brain_cmd) + "  (" + brain_note + ")")
 
-    # Key check - guide, never store a key here (the connect flow owns that, stdin-only).
+    # Key check - guide, never store a key here. The founder types it into .env.
     if key_present(root):
         print("OK   A Google AI Studio key is present in .env.")
     else:
         print("WARN No Google AI Studio key found in .env. The OS ships no key - you add your own FREE one,")
         print("     and everything else is already wired so you only drop it in:")
         print("       1. Get your own free key: https://aistudio.google.com/apikey")
-        print("       2. Say 'connect gemini', or run:")
-        print("          python scripts/connect.py set-secret GEMINI_API_KEY   (paste the key on stdin)")
+        print("       2. Say 'connect gemini'. It adds a line to your .env file and opens it,")
+        print("          and you type the key in there yourself. Never paste it into the chat.")
         print("       It is your key in your own Google account; it lands only in the gitignored .env.")
 
     print("")
     print("Done. To use it:")
     print("  1. Start the realtime server:  python voice/live_server.py")
-    print("  2. It serves http://127.0.0.1:" + str(args.http_port) + "/live - open it.")
+    print("  2. It serves http://127.0.0.1:" + str(config["http_port"]) + "/live - open it.")
     print("  3. Tap the orb, allow the mic, and talk. Say 'thinking' to take the floor; it waits.")
     print("  4. Every turn is recorded locally to voice/live-log.md (gitignored).")
     print("  Token + latency report for a session:  python voice/live_server.py --summary")

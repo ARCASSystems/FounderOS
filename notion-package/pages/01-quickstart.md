@@ -13,7 +13,7 @@ Planned target: five minutes if you already have Notion and a paid Claude plan. 
 You'll need:
 
 1. A Notion account (free plan works)
-2. A Claude Pro or Max subscription (the Claude Project feature is on Pro and Max)
+2. A Claude account. Projects are on every plan, Free included, with a limit on how many a Free account can have
 3. A voice-to-text tool you like (Wispr Flow is what this was built around, but any will do)
 
 No developer tools. No API keys. No terminal.
@@ -95,7 +95,7 @@ That's the loop. You speak. Claude routes. You approve. Your operating system up
 - **Notion doesn't connect.** Check that you signed into the right workspace. The one where you duplicated the template.
 - **Claude doesn't see your databases.** In the Project, confirm the Notion integration shows the workspace name. If not, disconnect and reconnect.
 - **Claude writes to the wrong place.** Tell it. "That decision should have gone to Priorities, not Decisions." It'll update the routing map.
-- **You're on the free Claude plan.** Projects require Pro or Max. The Claude app with Notion MCP works on free but routing quality drops fast. Upgrade if you're using this daily.
+- **You're on the free Claude plan.** Projects work on Free, with a cap on how many you can have. Usage limits are lower, so a daily routing habit can run out of messages. Upgrade if you're using this daily.
 
 ---
 

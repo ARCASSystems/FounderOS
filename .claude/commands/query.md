@@ -13,19 +13,24 @@ Run the query skill at `skills/query/SKILL.md` end to end.
 1. If `$ARGUMENTS` is empty, reply `What should I query? Re-run as /founder-os:query <question>.` and stop.
 2. If `core/identity.md` does not exist, reply `Founder OS not set up here. Say "set up Founder OS" first.` and stop.
 3. If `skills/query/SKILL.md` is missing, reply `Query skill not found at skills/query/SKILL.md. Restarting Claude Code fixes this most of the time, because it reloads what is installed. If it happens again after a restart, say "update Founder OS".` and stop.
-4. If `scripts/query.py` exists, invoke it via the **Bash** tool using the `env` form below so user input is never interpolated into a shell command line. The user's `$ARGUMENTS` may contain `;`, `|`, backticks, or `$(...)` and the shell would execute them if pasted verbatim.
+4. If `scripts/query.py` exists, invoke it via the **Bash** tool using the quoted-block form below so user input is never read as shell code. The user's `$ARGUMENTS` may contain an apostrophe, `;`, `|`, backticks, or `$(...)`. Inside single quotes an apostrophe ends the string and whatever follows runs, so never put the question inside quotes on the command line.
 
-   **Plain question (no `--` flags in `$ARGUMENTS`):** pass the question as one argument via an env var. Substitute the placeholder `__QUESTION__` literally with the user's argument string (do not escape, do not quote - the env var carries it intact):
+   **Plain question (no `--` flags in `$ARGUMENTS`):** put the question on its own line between the two marker lines, exactly as the user wrote it, with nothing escaped. The quoted marker (`'FOUNDER_OS_Q_END'`) makes bash read every character in between as plain text. Run it exactly as shown, every line starting at the left edge with no spaces in front, or bash will not see the end marker:
 
-   ```bash
-   FOUNDER_OS_Q='__QUESTION__' python scripts/query.py "$FOUNDER_OS_Q"
-   ```
+```bash
+python scripts/query.py "$(cat <<'FOUNDER_OS_Q_END'
+__QUESTION__
+FOUNDER_OS_Q_END
+)"
+```
 
-   **Argument string contains flags (`--mode`, `--ids`, `--anchor`, `--root`):** parse the user's argument string into individual tokens yourself (split on whitespace), then call `python scripts/query.py` with each token as a separate Bash tool argument. Do not concatenate them into a single command-line string. Reject any token whose first character is not in `[A-Za-z0-9_/.-]` or that contains `;`, `|`, `&`, backticks, `$(`, or `>` - reply `Refusing to forward potentially unsafe argument token: <token>` and stop.
+   If the question itself contains a line that reads exactly `FOUNDER_OS_Q_END`, reply `Refusing to forward that question as written. Rephrase it without the line FOUNDER_OS_Q_END.` and stop.
+
+   **Argument string contains flags (`--mode`, `--ids`, `--anchor`, `--root`, `--from`, `--to`):** split the user's argument string on whitespace. Each flag, and the value right after it, must match this pattern in full, every character and not only the first: `^[A-Za-z0-9_./,:=-]+$`. Bash reads each of those characters as plain text, so a checked token cannot run anything. If a flag or its value has any other character (an apostrophe, `<`, `(`, `$`, `{`, `~`, `*`, `?`, `;`, `|`, `&`, `>` or a backtick), reply `Refusing to forward potentially unsafe argument token: <token>` and stop. Write the checked tokens after `python scripts/query.py`, separated by single spaces, for example `python scripts/query.py --mode timeline --anchor log-2026-05-07-001`. Anything left over that is not a flag or its value is the question: pass it through the quoted block above, after the flags, never as bare words.
 
    If neither form fits, stop and reply: `Could not parse arguments safely. Re-run as /founder-os:query "<your question>" or with explicit flags.`
 
-The underlying script also accepts `--root <path>` for direct CLI use, for example `python scripts/query.py --root /path/to/archive "outreach stalled"`.
+The underlying script also accepts `--root <path>` for direct CLI use. The flag and its path go before the quoted block, and the path follows the same pattern.
 
 5. Print stdout verbatim. If the script exits non-zero, print stderr and stop.
 6. If the script is missing, follow the manual procedure in the skill file.

@@ -76,7 +76,12 @@ def read_env_key(root, name):
         for line in env.read_text(encoding="utf-8").splitlines():
             line = line.strip()
             if line.startswith(name + "="):
-                return line.split("=", 1)[1].strip().strip('"').strip("'") or None
+                value = line.split("=", 1)[1].strip().strip('"').strip("'")
+                # The connect skill writes "paste-your-key-here" for the founder
+                # to replace. Until they do, there is no key.
+                if not value or value.lower().startswith(("paste-your", "your")):
+                    return None
+                return value
     except OSError:
         return None
     return None
@@ -119,8 +124,8 @@ def main():
         print("     per references/mouth-options.md, then re-run with --engine piper.")
         engine = "os"
     if engine == "elevenlabs" and not eleven_key:
-        print("\nNOTE No ElevenLabs key in .env. Wiring the OS-native default instead. Run")
-        print("     'connect elevenlabs' (or python scripts/connect.py set-secret ELEVENLABS_API_KEY)")
+        print("\nNOTE No ElevenLabs key in .env. Wiring the OS-native default instead. Say")
+        print("     'connect elevenlabs' (you type the key into .env yourself, never into the chat),")
         print("     then re-run with --engine elevenlabs. ElevenLabs is paid and not local.")
         engine = "os"
     if engine == "elevenlabs":
@@ -142,17 +147,34 @@ def main():
     shutil.copy2(say_src, voice_dir / "say.py")
     print("OK   Copied the say helper into " + str(voice_dir / "say.py"))
 
+    # Re-running setup must not throw away what the founder set by hand: a
+    # pinned ElevenLabs "model" is always kept, and the voice is kept when
+    # this run names none and the engine is the same one it was chosen for.
+    existing = {}
+    config_path = voice_dir / "mouth-config.json"
+    if config_path.exists():
+        try:
+            existing = json.loads(config_path.read_text(encoding="utf-8"))
+        except (ValueError, OSError):
+            existing = {}
+    if not isinstance(existing, dict):
+        existing = {}
+    voice = args.voice
+    if voice is None and existing.get("engine") == engine:
+        voice = existing.get("voice")
     config = {
         "engine": engine,
-        "voice": args.voice,
+        "voice": voice,
         "local": local,
         "os_native_label": native_label,
-        "created": datetime.now(timezone.utc).isoformat(),
+        "created": existing.get("created") or datetime.now(timezone.utc).isoformat(),
         "note": "Mouth config. engine=os uses your machine's built-in voice (free, local). "
                 "piper is free and local; elevenlabs is paid and sends text to ElevenLabs. "
                 "See skills/add-mouth/references/mouth-options.md.",
     }
-    (voice_dir / "mouth-config.json").write_text(
+    if existing.get("model"):
+        config["model"] = existing["model"]
+    config_path.write_text(
         json.dumps(config, indent=2, ensure_ascii=True) + "\n", encoding="utf-8"
     )
     locality = "local" if local else "NOT local (text goes to ElevenLabs)"

@@ -10,10 +10,13 @@
 #
 # The rule: when core/identity.md is part of what this push can publish (an
 # installed OS, not the product repo a developer works on), the push goes
-# through only to the remote named in `git config founderos.privateRemote`.
-# The backup skill sets that after `gh repo view --json isPrivate` returns
-# true, and never otherwise. A person can set it by hand once they have
-# checked the repository is private themselves.
+# through only to the remote named in `git config founderos.privateRemote`,
+# at the address in `git config founderos.privateRemoteUrl`. Both must match:
+# a name alone can be re-pointed at a public repository with `git remote
+# set-url`, and the confirmation would follow it there. The backup skill sets
+# both after `gh repo view --json isPrivate` returns true, and never
+# otherwise. A person can set them by hand once they have checked the
+# repository is private themselves.
 #
 # Git passes the remote name as $1 (the URL itself when pushing to a bare
 # URL) and the URL as $2. stdin carries one line per ref being pushed:
@@ -31,29 +34,78 @@ has_identity=""
 if git ls-files --error-unmatch -- core/identity.md >/dev/null 2>&1; then
   has_identity="1"
 fi
+publishes=""
 while read -r local_ref local_sha remote_ref remote_sha; do
   [ -n "$local_sha" ] || continue
   case "$local_sha" in
     *[!0]*) ;;
     *) continue ;;   # all zeros: a branch delete, which publishes nothing
   esac
+  publishes="1"
   if [ -z "$has_identity" ] \
      && [ -n "$(git rev-list -n 1 "$local_sha" -- core/identity.md 2>/dev/null)" ]; then
     has_identity="1"
   fi
 done
 
+# Every ref in this push is a delete: nothing of the founder's leaves the
+# machine, so let it through. That is how a branch pushed somewhere public
+# before this guard existed gets taken down again.
+[ -n "$publishes" ] || exit 0
+
 [ -n "$has_identity" ] || exit 0
 
 confirmed="$(git config --get founderos.privateRemote 2>/dev/null || true)"
-if [ -n "$confirmed" ] && [ "$remote_name" = "$confirmed" ]; then
+confirmed_url="$(git config --get founderos.privateRemoteUrl 2>/dev/null || true)"
+if [ -n "$confirmed" ] && [ "$remote_name" = "$confirmed" ] \
+   && [ -n "$confirmed_url" ] && [ "$remote_url" = "$confirmed_url" ]; then
   exit 0
+fi
+
+# A push straight to an address, with no remote name. Git then passes the
+# address as both $1 and $2. Telling the founder to confirm the address as
+# the remote NAME would replace the confirmation of their real remote (say
+# origin), and their next ordinary push would be refused. So: name it first.
+if [ "$remote_name" = "$remote_url" ]; then
+  cat >&2 <<EOF
+
+Push refused: this folder is your Founder OS, and this push goes straight to
+an address with no remote name, which has not been confirmed private.
+
+What is at risk: your identity, clients, leads and notes are in this
+history. A push to a repository anyone can see publishes all of it, and a
+public push cannot be taken back.
+
+EOF
+  if [ -n "$confirmed" ]; then
+    cat >&2 <<EOF
+You already confirmed the remote "$confirmed" as private. If this address
+is that repository, run the same push again with the name $confirmed in
+place of the address.
+If it is a different repository, do not push here. Say "back this up" and
+the OS sets up a private one for you.
+EOF
+  else
+    cat >&2 <<EOF
+If you have checked the repository is private (on GitHub the page shows the
+word Private next to its name), add it as a named remote first, confirm
+that name and address once, then run the same push again with the name
+backup in place of the address:
+  git remote add backup "$remote_url"
+  git config founderos.privateRemote backup
+  git config founderos.privateRemoteUrl "$remote_url"
+If it is public, do not push. Say "back this up" and the OS sets up a
+private one for you.
+EOF
+  fi
+  printf '\nRemote address: %s\n' "$remote_url" >&2
+  exit 1
 fi
 
 cat >&2 <<EOF
 
 Push refused: this folder is your Founder OS, and the remote "$remote_name"
-has not been confirmed private.
+at the address below has not been confirmed private.
 
 What is at risk: your identity, clients, leads and notes are in this
 history. A push to a repository anyone can see publishes all of it, and a
@@ -68,6 +120,9 @@ How to check the repository is private:
 
 If it is private, confirm it once, then push again:
   git config founderos.privateRemote $remote_name
+  git config founderos.privateRemoteUrl "$remote_url"
+The confirmation holds for that name at that address only. If the
+address changes, the guard asks again.
 
 If it is public, do not push. Make it private first, or say
 "back this up" and the OS sets up a private one for you.

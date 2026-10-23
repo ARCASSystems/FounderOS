@@ -37,7 +37,7 @@ The operator captured thoughts somewhere else - a voice-note app, an email to se
 2. **Name pass (transcription errors are the rule, not the exception).** Dictation mangles proper nouns. Before filing:
    - Read `context/names.md` (the names glossary). For any name in the capture that closely matches a glossary entry or a listed mishearing, substitute the canonical spelling. Substitute ONLY on a glossary match.
    - A proper noun that matches nothing stays as heard, marked `(sp?)` - for example `Jansi (sp?)`. Collect all `(sp?)` names and ask the operator about them in ONE batch question at the end of the sweep, not one by one.
-   - When the operator corrects a name, apply it AND append the wrong-to-right pair to the glossary's mishearings list, so the same mistake never survives twice.
+   - The batch question names the file the corrections go to: "I will add your corrections to your names list (`context/names.md`) so they stick." When the operator corrects a name, apply it AND append the wrong-to-right pair to the glossary's mishearings list, so the same mistake never survives twice. If they say not to keep a correction, apply it to this capture only.
    - Never "fix" a name, number, price, or date you are unsure of. An unsure span stays as heard with the marker. A confident wrong substitution is how fabricated facts enter a brain; the marker is how they stay out.
 
 3. **Move, don't copy.** A swept inbox file moves to `capture/inbox/.processed/` (create if missing) so the inbox reads empty when it IS empty. Nothing is deleted.

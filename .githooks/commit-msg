@@ -5,6 +5,12 @@ set -e
 # Microsoft Store ships stub python/python3 executables that exist but cannot
 # run, and machines with only the py launcher have no python3 at all.
 GUARD="$(git rev-parse --show-toplevel)/scripts/check-private-names.py"
+# No guard script (after an uninstall, or a partial update): the commit goes
+# through, because that is not the founder's fault, but never without a word.
+if [ ! -f "$GUARD" ]; then
+  echo "Founder OS: scripts/check-private-names.py is missing, so this commit message was not checked. Fix: run the update again or reinstall Founder OS (if you uninstalled it on purpose: git config --unset core.hooksPath)." >&2
+  exit 0
+fi
 if python --version >/dev/null 2>&1; then
   exec python "$GUARD" --message "$1"
 elif python3 --version >/dev/null 2>&1; then

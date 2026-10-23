@@ -1,7 +1,7 @@
 ---
 name: connect
 description: >
-  Connect a tool to Founder OS by asking in plain English. Trigger on "connect Telegram", "connect my calendar", "connect my email", "set up notifications", "hook up <tool>", "wire up <tool>", or any request to link an external tool. Routes by connector type: env-key tools (Telegram, ElevenLabs) get their key stored in the gitignored .env and a real reachability check; account-level MCP tools (calendar, email) are guided to the Claude Code MCP setup because the OS cannot hold their tokens; manual-link tools store a reference URL. A secret never lands in a tracked file - the writer refuses any target that is not gitignored, and the pre-commit guard blocks token-shaped strings as a backstop. A skipped connector leaves a visible marker the SessionStart brief surfaces.
+  Connect a tool to Founder OS by asking in plain English. Trigger on "connect Telegram", "connect my calendar", "connect my email", "set up notifications", "hook up <tool>", "wire up <tool>", or any request to link an external tool. Also trigger on "connect gemini" and "connect elevenlabs", which the voice and mouth skills send here. Routes by connector type: env-key tools (Telegram, ElevenLabs, Gemini) get their key stored in the gitignored .env and a real reachability check; account-level MCP tools (calendar, email) are guided to the Claude Code MCP setup because the OS cannot hold their tokens; manual-link tools store a reference URL. A secret never lands in a tracked file - the writer refuses any target that is not gitignored, and the pre-commit guard blocks token-shaped strings as a backstop. A skipped connector leaves a visible marker the SessionStart brief surfaces.
 why: "Connecting a tool is the first thing a new user wants and the easiest place to either leak a secret or quietly fail. Natural-language connect with mechanical secret enforcement and a reachability check that cannot lie makes setup honest from the first minute."
 enhance: "Connect only what you actually use. Each env-key connector stores its key in .env, which is gitignored, so the key never enters the repo. Type the key into .env yourself, in Notepad or TextEdit, and it never enters the chat either. A key pasted into the chat does - cancel that key and make a new one."
 allowed-tools: ["Bash", "Read", "Write", "Edit"]
@@ -23,7 +23,7 @@ Link an external tool to Founder OS by asking for it. The skill routes by how th
 
 Run `python scripts/connect.py registry` to see the live registry. Connectors fall into three classes:
 
-- **env-key** (`telegram`, `elevenlabs`): the OS can walk the steps and store the key locally. The key goes ONLY to the gitignored `.env`.
+- **env-key** (`telegram`, `elevenlabs`, `gemini`): the OS can walk the steps and store the key locally. The key goes ONLY to the gitignored `.env`.
 - **guide-only** (`calendar`, `email`): account-level MCP tools. The OS does NOT control these, cannot run their OAuth, and cannot store their tokens. It hands you the Claude Code MCP-add steps and records the status. OAuth scopes are owned by the MCP / account layer - the OS does not pretend to set them.
 - **manual-link** (`docs` and similar): store a reference URL you paste. Honest that it is a bookmark, not a live integration.
 
@@ -31,19 +31,25 @@ Run `python scripts/connect.py registry` to see the live registry. Connectors fa
 
 1. Identify the tool the user named and its class (`python scripts/connect.py registry`). If the tool is not in the registry, say so and offer the closest class (env-key, guide-only, or manual-link).
 
-2. **env-key class (e.g. Telegram):**
-   - Give the setup steps from the registry (for Telegram: open @BotFather, `/newbot`, copy the token, then message the new bot once so it has a chat to reply to).
-   - **The founder puts the token in the file themselves. It never goes through the chat.** Claude Code's tool cannot read anything typed into a terminal prompt, so a "paste it on stdin" step ends with the token pasted into the chat instead. Do this:
-     1. Make the file and prove it is ignored, with a placeholder value that is not a secret:
-        `python scripts/connect.py set-secret TELEGRAM_BOT_TOKEN paste-your-token-here`
-        The writer refuses any target that is not on the allowlist (`.env`, `.mcp.local.json`) and not proven ignored, so the line cannot land in a tracked file. Where the install has version history, git supplies the proof. On a ZIP install with no git, the shipped `.gitignore` is read directly. Connectors work on both - a missing git is never a reason to refuse. If it refuses, stop and show the founder the refusal. Do not ask for the token.
+2. **env-key class (Telegram, ElevenLabs, Gemini):** one procedure for every key. Only the names change:
+
+   | Say | The line in `.env` | Where the key comes from | The check after "done" |
+   |---|---|---|---|
+   | connect telegram | `TELEGRAM_BOT_TOKEN` | @BotFather in Telegram: `/newbot`, copy the token, then message the new bot once so it has a chat to reply to | `python scripts/connect.py telegram-test`, then ask "did the test message arrive in Telegram?" |
+   | connect elevenlabs | `ELEVENLABS_API_KEY` | ElevenLabs profile settings, API keys | `python skills/add-mouth/setup.py --engine elevenlabs`, then speak the line "testing my new voice" with the quoted block in `skills/add-mouth/SKILL.md` step 3 (never inside quotes on the command line), then ask "did you hear it?" |
+   | connect gemini | `GEMINI_API_KEY` (a second free key, `GEMINI_API_KEY2`, is optional headroom) | https://aistudio.google.com/apikey, in their own Google account, free | if the realtime voice is installed, `python voice/live_server.py --models` (a free call that lists the models the key opens); otherwise the key is checked the first time they start it |
+
+   **The founder types the key into the file themselves. It never goes through the chat or a command.** Claude Code's tool cannot read anything typed into a terminal prompt, so a "paste it on stdin" step ends with the key pasted into the chat instead. Do this:
+     1. Add the line, with a placeholder that is not a secret: `python scripts/connect.py add-key <tool>` (for the optional second Gemini key: `add-key GEMINI_API_KEY2`). It adds `KEY=paste-your-key-here` only when the line is missing. A line already there is left exactly as it is, so running "connect" again never undoes a working key. Read its output:
+        - "Added the line" or "still holds the placeholder": go on to step 2.
+        - "already filled in": ask once, "You already have a key saved for this. Keep it, or put in a new one?" Keep: skip to the check. New one: go on to step 2, and in step 3 say "replace the old key" instead of "replace paste-your-key-here".
+        - "REFUSED": stop and show the founder the refusal. Do not ask for the key. The writer refuses any target that is not on the allowlist (`.env`, `.mcp.local.json`) and not proven ignored, so the line cannot land in a tracked file. Where the install has version history, git supplies the proof. On a ZIP install with no git, the shipped `.gitignore` is read directly. Connectors work on both - a missing git is never a reason to refuse.
      2. Open the file for them: `notepad .env` on Windows, `open -e .env` on a Mac. If it does not open, tell them where it is: the file named `.env` in their Founder OS folder (on a Mac, Command, Shift and the full stop show hidden files in Finder).
-     3. Tell them, in these plain words: "In the file that just opened, find the line that starts with TELEGRAM_BOT_TOKEN=. Replace paste-your-token-here with your token, keep everything before the = sign, save the file, close it, and type done here. Please do not paste the token into this chat."
-     4. Wait for "done". Do not read `.env` back and do not print its contents. The reachability check below proves the token without showing it.
-   - **If the founder pastes the token into the chat anyway:** do not repeat it, do not write it anywhere yourself, and say once, kindly: "That token is now in this chat. To be safe, cancel it in @BotFather with /revoke, make a new one, and put the new one in the .env file." Then continue with the steps above using the new token.
-   - Run the reachability check: `python scripts/connect.py telegram-test`. It resolves the chat id via getUpdates if needed, sends a live test message, and reports the Bot API result. If Telegram rejects the token, the usual cause is that the placeholder is still there or the line lost its `TELEGRAM_BOT_TOKEN=` start: ask the founder to open `.env` again and check that line, without reading it out.
-   - **The API accepting the message does NOT prove the user saw it.** Ask the user directly: "did the test message arrive in Telegram?" Only mark connected after a yes.
-   - Record status: `python scripts/connect.py status set telegram "connected (token in .env)"`.
+     3. Tell them, in these plain words, with the line name from the table: "In the file that just opened, find the line that starts with GEMINI_API_KEY=. Replace paste-your-key-here with your key, keep everything before the = sign, save the file, close it, and type done here. Please do not paste the key into this chat."
+     4. Wait for "done". Do not read `.env` back and do not print its contents. Run `python scripts/connect.py key-status <tool>`. It says "filled in", "still the placeholder" or "missing" and never shows the key. If it is not filled in, ask them to open `.env` again and check that line, without reading it out.
+     5. Run the check from the table. **An API accepting a call does NOT prove the founder saw or heard it.** For Telegram and ElevenLabs, ask the question in the table and only mark connected after a yes. If Telegram rejects the token, the usual cause is that the placeholder is still there or the line lost its `TELEGRAM_BOT_TOKEN=` start.
+   - **If the founder pastes a key into the chat anyway:** do not repeat it, do not write it anywhere yourself, and say once, kindly: "That key is now in this chat. To be safe, cancel it (the revoke step below), make a new one, and put the new one in the .env file." Then continue with the steps above using the new key.
+   - Record status: `python scripts/connect.py status set <tool> "connected (key in .env)"`.
 
 3. **guide-only class (e.g. calendar, email):**
    - This is reasoning only - no local write of a secret. Give the exact Claude Code MCP-add steps (see `docs/tools-and-mcps.md`). State plainly that the OS cannot store the credential or set the OAuth scopes; that lives at the account level.
@@ -66,7 +72,7 @@ If a connected tool later throws a 401, route to `reconnect-prompt`, not back he
 
 ## Revoke
 
-Every connector documents its revoke path in the registry. Telegram: `/revoke` in @BotFather. ElevenLabs: delete the key in the dashboard. MCP tools: remove the MCP in Claude Code settings or revoke at the provider's security page. Surface the revoke line whenever you connect a tool.
+Every connector documents its revoke path in the registry. Telegram: `/revoke` in @BotFather. ElevenLabs: delete the key in the dashboard. Gemini: delete or regenerate the key in Google AI Studio (aistudio.google.com/apikey). MCP tools: remove the MCP in Claude Code settings or revoke at the provider's security page. Surface the revoke line whenever you connect a tool.
 
 ## Runtime honesty
 

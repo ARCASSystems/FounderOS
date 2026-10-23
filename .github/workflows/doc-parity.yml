@@ -21,6 +21,9 @@ jobs:
   parity:
     name: Skill/command count + install completeness
     runs-on: ubuntu-latest
+    # Runs only in the product repository. A founder's own private backup of their OS
+    # carries this file too, and must never run the maintainer's checks on their notes.
+    if: github.repository == 'ARCASSystems/FounderOS'
     steps:
       - uses: actions/checkout@v4
 
@@ -41,3 +44,9 @@ jobs:
 
       - name: Hooks-parity guard (one Python dispatcher entry per event, no retired shell pairs)
         run: python3 .github/scripts/check_hooks_parity.py
+
+      - name: Release asset is served (the README download link and the stable latest link)
+        # On main only: the release and its assets are published BEFORE main moves, so a
+        # README pointing at an unpublished ZIP fails here instead of handing founders a 404.
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: python3 scripts/check_download_links.py --require-published

@@ -70,7 +70,7 @@ Both are optional. If the keys are absent from the ICP file, behaviour is unchan
 ## Step 3 - run the scan
 
 ```
-python scan.py <export.zip OR export-folder> <output-folder> --icp <their-icp.yaml>
+python skills/linkedin-network-scan/scan.py <export.zip OR export-folder> <output-folder> --icp <their-icp.yaml>
 ```
 
 - `<export.zip>` can be the ZIP itself or an unzipped folder. The script reads `Connections.csv`, `messages.csv` (metadata only), and `Invitations.csv` from inside it.

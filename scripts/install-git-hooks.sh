@@ -68,12 +68,12 @@ for hook in "$REPO_ROOT/.githooks/pre-commit" "$REPO_ROOT/.githooks/commit-msg" 
     fi
 done
 echo "Push guard active: when your OS data is tracked, a push goes only to the"
-echo "remote you confirmed private (git config founderos.privateRemote <remote-name>)."
+echo "remote you confirmed private, by name and address (founderos.privateRemote"
+echo "and founderos.privateRemoteUrl)."
 
 if [ -n "$ACTION_PATTERNS" ]; then
     cp "$PATTERNS_SRC" "$PATTERNS_DST"
-    echo "Created $PATTERNS_DST from template."
-    echo "Edit it to add your private-name patterns before committing sensitive work."
+    echo "Created $PATTERNS_DST from template. It starts empty, which is fine."
 else
     echo "scripts/private-name-patterns.txt already exists - skipping"
 fi
@@ -84,8 +84,11 @@ ACTIVE_PATTERNS=$(grep -cvE '^[[:space:]]*(#|$)' "$PATTERNS_DST" 2>/dev/null || 
 ACTIVE_PATTERNS=${ACTIVE_PATTERNS:-0}
 if [ "$ACTIVE_PATTERNS" -eq 0 ]; then
     echo ""
-    echo "  !! WARNING: $PATTERNS_DST defines 0 patterns - the privacy guard is INACTIVE."
-    echo "  !! Add at least your own name (e.g.  \\bYourName\\b ) before committing."
+    echo "Name check: off. The secret and attribution checks run anyway."
+    echo "To block names that must never enter your files (a client under NDA,"
+    echo "someone you keep off the record), add them to $PATTERNS_DST."
+    echo "Do not add your own name: your identity file is tracked once you own"
+    echo "your history, and your own name would block every save that touches it."
 else
     echo "Privacy guard active: $ACTIVE_PATTERNS pattern(s) loaded."
 fi

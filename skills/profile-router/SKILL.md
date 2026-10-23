@@ -71,7 +71,7 @@ Lead surfaces now include role-pack front doors where they fit the variant. A pa
 
 1. Read `core/profile.md`. If `variant` is already set and the operator did not ask to re-detect, return the current routing and stop.
 2. Read `core/identity.md` and any discovery answers in context. Match against the signal table.
-3. State the pick in one line and the lead it implies, then ask for a yes or an adjustment. One line, not a form. Example: "You sound like someone moving between roles, so I will lead with your positioning and a record of your wins. That right?"
+3. State the pick in one line and the lead it implies, then ask for a yes or an adjustment. One line, not a form. Example: "You sound like someone moving between roles, so I will lead with your positioning and a record of your wins. That right? I will save it in your profile (`core/profile.md`)." For team-internal, the same question also names the note it adds to `core/setup-backlog.md`.
 4. On a yes or an adjustment, write the variant, `detected on` (today), `confidence`, `signals`, `lead surfaces`, `frame`, and `technical comfort` into `core/profile.md`.
 5. Tell the operator they can change it any time, and that nothing is locked - the variant only changes what the OS opens with.
 

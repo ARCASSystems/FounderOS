@@ -13,7 +13,7 @@ Run the founder-review skill at `skills/founder-review/SKILL.md` end to end.
 1. Read `skills/founder-review/SKILL.md`.
 2. If `$ARGUMENTS` names a month (`YYYY-MM`), score that month. Otherwise score the month just ended.
 3. If a review for that month is already recorded in `brain/log.md`, say so and stop unless the founder explicitly asks for a re-run.
-4. Run step 1 (scorecard), then step 2 (at most five questions), then step 3 (commitments into `cadence/queue.md`).
+4. Run step 1 (scorecard), then step 2 (at most five questions), then step 3 (commitments into `cadence/queue.md`, named in the question and written only on a yes).
 5. Close with the `brain/log.md` entry.
 
 ## Rules

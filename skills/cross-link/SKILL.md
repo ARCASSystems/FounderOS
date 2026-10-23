@@ -62,7 +62,7 @@ If the target file passed to the command does not exist, stop and say so.
 
 1. Run `python scripts/cross-link.py <file>` (no `--apply`). This produces the proposal report and unified diff.
 2. Show the operator the report. Do not edit the file.
-3. If the operator approves, run `python scripts/cross-link.py <file> --apply`.
+3. Ask, naming the file the apply changes: "Add these links to `<file>`?" If the operator says yes, run `python scripts/cross-link.py <file> --apply`. The `brain/relations.yaml` refresh and the log line below are automatic.
 4. After apply, run `python scripts/wiki-build.py` to refresh `brain/relations.yaml`.
 5. Append a single line to `brain/log.md`: `cross-link: <file> +N edges`. Skip the log line if zero edges were applied.
 

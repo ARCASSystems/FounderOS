@@ -58,6 +58,17 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+# The shared secret redactor. A rant is written word for word into brain/rants/,
+# which an install that owns its history tracks and backs up, and a founder
+# venting about a broken deploy pastes the connection string with it. When the
+# redactor cannot load, nothing is written verbatim (the note falls back to
+# suggesting /rant, which asks first).
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+try:
+    from _common import redact_secrets  # noqa: E402
+except Exception:
+    redact_secrets = None
+
 
 # ---------------------------------------------------------------------------
 # Detection patterns. Conservative on purpose - false-positives are worse
@@ -750,6 +761,8 @@ def rant_capture_allowed(repo: Path) -> bool:
     suggesting /rant, which asks first."""
     if os.environ.get(RANT_CAPTURE_ENV, "").strip() == "0":
         return False
+    if redact_secrets is None:
+        return False
     return (repo / "core" / "identity.md").is_file()
 
 
@@ -767,8 +780,11 @@ def eager_capture_rant(repo: Path, prompt: str) -> Path | None:
     cleaned = PRIVATE_BLOCK.sub("", prompt)
     # An unclosed <private> hides everything after it, matching the card rule.
     cleaned = re.sub(r"<private>.*\Z", "", cleaned, flags=re.IGNORECASE | re.DOTALL).strip()
-    if not cleaned:
+    if not cleaned or redact_secrets is None:
         return None
+    # Passwords, keys and tokens never reach the file: each one is replaced by
+    # a short marker, the rest of the rant is kept as typed.
+    cleaned = redact_secrets(cleaned)
 
     now = datetime.now(timezone.utc).astimezone()
     today = now.strftime("%Y-%m-%d")

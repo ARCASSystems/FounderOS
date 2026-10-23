@@ -101,7 +101,7 @@ python scripts/pitch_deck.py decks/<slug>-deck.md --check
 python scripts/pitch_deck.py decks/<slug>-deck.md
 ```
 
-`--check` parses and counts without writing. The second writes `decks/<slug>-deck.pptx`.
+`--check` parses and counts without writing. The second writes `decks/<slug>-deck.pptx`. If that file already exists, the script leaves it alone, because the founder may have edited it. Ask before replacing it: `--force` replaces it, `--out decks/<slug>-deck-v2.pptx` keeps both.
 
 **This needs `pip install python-pptx`**, and it is one of only two shipped scripts that asks for anything beyond Python itself. If the package is missing the script exits with the exact command and says so. When that happens, do not treat it as a failure: the spec is the deliverable and it opens in any editor, pastes into Canva, Gamma, Pitch or Google Slides, and carries the speaker notes with it. Say that in one line and hand over the markdown.
 

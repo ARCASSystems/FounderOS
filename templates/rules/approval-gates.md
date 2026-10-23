@@ -15,10 +15,13 @@ No prompt, no narration. Reversible by edit or git revert. Frequency: many per s
 | Read any file in the repo | Always allowed |
 | Append to `brain/log.md` (any tag) | Log is append-only by design |
 | Append to `brain/patterns.md`, `brain/flags.md`, `brain/decisions-parked.md`, `brain/needs-input.md` | These files are the brain layer's append targets |
+| On a stale day, bump the `## Today:` header of `cadence/daily-anchors.md` to today and move the previous one-line anchor under "Previous Anchor". Only those two lines. The weekly file is never rolled without a yes | Bookkeeping the stale-context rule needs before any advice. Without it the rule asked for a yes on every first session of the day |
 | Update `context/clients.md` rows for known clients | Capture-meeting flows already enforce this |
 | Run `/founder-os:wiki-build` and update `brain/relations.yaml` between sentinel markers | Auto-extracted; idempotent; hand-curated `relations:` section is preserved |
 | Move entries from `brain/log.md` into `brain/archive/<YYYY-MM>.md` per archive protocol | Documented in `brain/index.md` |
 | Append to `system/quarantine.md` with `Status: ACTIVE` | Quarantine convention |
+| Set `processed: true` on a rant entry in `brain/rants/` that `/dream` has read. Only that flag: the rant text is never changed | Bookkeeping. Without the mark the next `/dream` processes the same rant twice |
+| Append a new row to the **Proposed** table of `core/working-preferences.md` from `/dream`. Never the Active table, never an edit to an existing row | A Proposed row gates nothing. It waits until you say yes to it in the morning loop |
 | Output from any SessionStart hook | Read-only surfacing |
 | Cache writes (`.claude/`, `node_modules/`, `__pycache__/`, etc.) | Tooling state |
 
@@ -68,7 +71,7 @@ Every file in the OS belongs to one of three provenance classes, and the class d
 
 - **Authored - you write it, the OS asks first.** `core/identity.md`, `core/profile.md`, `core/voice-profile.yml`, `core/brand-profile.yml`, `rules/` (including this file). These files ARE you: who you are, how you sound, how you want the OS to behave. The OS never edits them without an explicit yes (the Confirm rows above). When the OS learns something that contradicts an authored file, it surfaces the contradiction - it does not fix the file.
 - **Accumulated - the OS writes it as work happens.** `brain/log.md`, `brain/flags.md`, `brain/patterns.md`, `brain/decisions-parked.md`, `context/clients.md` rows, MEMORY.md facts. This is what the OS has observed and captured. It is the OS's write zone (the Auto rows above), and it is where memory can drift - which is why `memory-pass` audits it against the live files, and why every accumulated claim should be checkable against a dated source.
-- **Dated working notes - written once, then aged.** `brain/rants/`, `brain/handoffs/`, `brain/.snapshot.md`, archives. Point-in-time artifacts. Never edited after the fact; they age out via decay and the archive protocol instead.
+- **Dated working notes - written once, then aged.** `brain/rants/`, `brain/handoffs/`, `brain/.snapshot.md`, archives. Point-in-time artifacts. Never edited after the fact, apart from the `processed: true` mark `/dream` sets on a rant it has read (the Auto row above); they age out via decay and the archive protocol instead.
 
 The asymmetry is the point: you can rewrite anything the OS accumulated, any time, and the OS treats your version as truth. The OS can only propose changes to what you authored. Memory that cannot tell these apart ends up letting an agent quietly rewrite who you are.
 

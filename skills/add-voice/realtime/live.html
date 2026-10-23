@@ -17,6 +17,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- live_server.py writes its real bridge port ("ws_port" in voice/realtime-config.json) here. -->
+<meta name="fos-ws-port" content="8757">
 <title>Founder OS - realtime voice</title>
 <style>
   *{box-sizing:border-box}
@@ -71,7 +73,8 @@ const $ = id => document.getElementById(id);
 const stage=$("stage"), heardEl=$("heard"), answerEl=$("answer"), errEl=$("err"),
       fallback=$("fallback"), statusEl=$("status");
 
-const WS_URL = "ws://127.0.0.1:8757";
+const WS_PORT = Number((document.querySelector('meta[name="fos-ws-port"]') || {}).content) || 8757;
+const WS_URL = "ws://127.0.0.1:" + WS_PORT;
 const MIC_RATE = 16000, PLAY_RATE = 24000;
 let state="idle";              // idle | listening | speaking
 let ws=null, streaming=false;

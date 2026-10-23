@@ -62,11 +62,15 @@ Read its output back honestly: which engine it wired, and which upgrades are ava
 
 ### 3. Speak something and prove it
 
+Pipe the text in as a quoted block, never inside quotes on the command line. Text read aloud is often someone else's (an email, a page, a transcript), and inside double quotes its backticks and `$(...)` would run as commands. Between the two marker lines bash reads every character as plain text. Every line starts at the left edge with no spaces in front:
+
+```bash
+PYTHONUTF8=1 python voice/say.py <<'FOUNDER_OS_SAY_END'
+Your three priorities today are ...
+FOUNDER_OS_SAY_END
 ```
-python voice/say.py "Your three priorities today are ..."
-echo "read this back to me" | python voice/say.py
-python voice/say.py --out brief.wav "render this to a file instead of speaking"
-```
+
+To render a file instead of speaking, put `--out brief.wav` after `say.py` on the first line and keep the rest. Keep the file name to letters, digits, dots, dashes and underscores. Text another command prints can be piped straight in: `<that command> | PYTHONUTF8=1 python voice/say.py`. `PYTHONUTF8=1` makes Python read the piped text as UTF-8 on Windows, so a curly quote or Arabic does not break it. If the text has a line that reads exactly `FOUNDER_OS_SAY_END`, do not run it. Say that one line has to go first.
 
 The OS-native and Piper mouths write a `.wav` file (an `.aiff` on macOS); only the ElevenLabs mouth writes `.mp3`. Use the extension the chosen engine produces. A clean proof is: a line you pass comes back as speech through your machine, and `--out` writes a playable audio file. Do not say "the mouth works" until that has happened on the user's machine.
 

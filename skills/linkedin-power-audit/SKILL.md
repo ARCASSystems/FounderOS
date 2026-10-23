@@ -35,7 +35,7 @@ The script detects which one it reads and prints a banner. Run on the Complete e
 ## Step 2 - run the audit
 
 ```
-python power_audit.py <unzipped-export-folder> <output-folder> [--goal-buckets a,b]
+python skills/linkedin-power-audit/power_audit.py <unzipped-export-folder> <output-folder> [--goal-buckets a,b]
 ```
 
 - `<unzipped-export-folder>` is the folder with `Profile.csv` and `Connections.csv` in it (the script descends one level automatically if it is nested in a single subfolder, and resolves member-id-suffixed activity files like `Shares_<id>.csv`).

@@ -73,7 +73,7 @@ Follow the skill you route to for the actual run. This skill hands off; it does 
 
 ### 5. Deliver the path, not a file dump
 
-When the routed skill finishes, frame the result as the path from a cold name to a closed deal: here is who they are, here is the next move, here is the message or brief ready to use. Update the prospect record so the next session opens already knowing where the deal stands.
+When the routed skill finishes, frame the result as the path from a cold name to a closed deal: here is who they are, here is the next move, here is the message or brief ready to use. Offer to update the prospect record, naming the file, and write it on a yes, so the next session opens already knowing where the deal stands.
 
 ### 6. Offer more than they asked
 
@@ -81,7 +81,7 @@ After delivering, name the moves they did not pick, in one line each. "You came 
 
 ### 7. Keep the loop honest
 
-Every outreach move (a message drafted and sent, a call prepped, a proposal sent) belongs in the prospect record and in `brain/log.md` in the same session. That is how the deal stays trackable instead of drifting. If the user tells you an outreach happened off-system, capture it before moving on.
+Every outreach move (a message drafted and sent, a call prepped, a proposal sent) belongs in the prospect record and in `brain/log.md` in the same session. That is how the deal stays trackable instead of drifting. The log entry is automatic. The prospect record is not: name its file (`companies/prospects/<slug>.md`) and the line you will add, and write it on a yes. If the user tells you an outreach happened off-system, capture it the same way before moving on.
 
 ## Honest positioning (say this, do not oversell)
 

@@ -213,9 +213,9 @@ Show this exact block (filled with captured values):
 > - Existing visual proof: <deck, website, logo folder, style guide, or "none">
 > - Footer text: <value>
 >
-> Looks right? (yes / change X)
+> Looks right? I will save it to `<core/brand-profile.yml, or brands/<slug>/visual.yml for a named brand>`. (yes / change X)
 
-If yes, write `core/brand-profile.yml` from the captured values.
+Name the one file the File output rule below picks. If yes, write that file from the captured values, and no other.
 
 If they want to change something, edit and re-confirm.
 

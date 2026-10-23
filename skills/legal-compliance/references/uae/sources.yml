@@ -212,11 +212,11 @@ sources:
     covers: [industry-specific, food-safety, e-commerce, real-estate]
     last_checked_on: 2026-04-25
 
-  esma:
-    name: Emirates Authority for Standardization and Metrology (ESMA)
-    url: https://esma.gov.ae
+  moiat:
+    name: Ministry of Industry and Advanced Technology (MoIAT), standards and conformity (took over ESMA's role in July 2020)
+    url: https://moiat.gov.ae
     covers: [industry-specific, food-safety, product-standards]
-    last_checked_on: 2026-04-25
+    last_checked_on: 2026-10-22
 
   wipo:
     name: World Intellectual Property Organization (WIPO)

@@ -17,8 +17,9 @@ Nothing here is a fact until it is confirmed. That is the whole point.
 
 Invariants: single writer for the ledger file (nothing else appends to it),
 standard library only, no network, no API key, and no personal data by rule - a
-name or a short claim, never an email, a phone number, or a money amount. `add`
-refuses input that looks like one of those rather than storing it.
+name or a short claim, never an email, a phone number, or a money amount. Every
+command that stores text (`add`, `confirm --value`, any `--note`) refuses input
+that looks like one of those rather than storing it.
 
 Row shape:
   {
@@ -81,7 +82,17 @@ _MONEY_RE = re.compile(
     r"\b[A-Z]{3}\s?\d{2,}"                                # currency code, then the number
     r"|(?<!\d)(?!(?:19|20)\d\d\b)\d[\d,.]*\s?[A-Z]{3}\b"  # the number, then the code
     r"|(?<!\d)\d[\d,.]*\s?[km]\b"                         # shorthand: 500k, 2m
-    r"|[$£€¥]\s*\d")                                      # a currency symbol
+    r"|[$£€¥₹﷼]\s*\d")                          # a currency symbol
+# Currency written as a word or a lowercase code: "25,000 dirhams", "aed 5000",
+# "Rs 40,000", "3 lakh rupees". The uppercase-code test above missed all of these.
+_CURRENCY_WORDS = (r"(?:dirhams?|dhs?|aed|usd|eur|gbp|inr|sar|pkr|qar|kwd|omr|bhd|egp"
+                   r"|riyals?|rials?|dinars?|dollars?|bucks|euros?|pounds?|rupees?|rs\.?"
+                   r"|lakhs?|crores?|pesos?|yen|yuan|francs?|liras?)")
+_MONEY_WORD_RE = re.compile(
+    r"(?<![\w.])\d[\d,.]*\s*(?:k|m|mn|bn|thousand|million|billion)?\s*"
+    + _CURRENCY_WORDS + r"(?!\w)"
+    r"|(?<!\w)" + _CURRENCY_WORDS + r"\s*\d",
+    re.IGNORECASE)
 
 
 def _today(override: str | None = None) -> _dt.date:
@@ -152,9 +163,23 @@ def _pii_reason(text: str) -> str | None:
         return "looks like an email address"
     if _PHONE_RE.search(_DATE_RE.sub(" ", t)):
         return "looks like a phone number (a long run of digits)"
-    if _MONEY_RE.search(t):
+    if _MONEY_RE.search(t) or _MONEY_WORD_RE.search(t):
         return "looks like a money amount (a number next to a currency)"
     return None
+
+
+def _refuse_pii(cmd: str, fields: list[tuple[str, str | None]]) -> bool:
+    """Run the refusal on every free-text field a command stores. Returns True
+    (and says why) when one must be refused. The ledger promises it never holds
+    an email, a phone number or a money amount, so the check cannot stop at
+    --fact: a confirmed --value or a --note is stored the same way."""
+    for field, val in fields:
+        reason = _pii_reason(val or "")
+        if reason:
+            print(f"unconfirmed_facts {cmd}: {field} {reason}. This ledger holds names and "
+                  f"claims, never personal data or money. Rephrase around it.", file=sys.stderr)
+            return True
+    return False
 
 
 # ----- render -----
@@ -215,12 +240,10 @@ def do_render(rows: list[dict] | None = None) -> None:
 # ----- commands -----
 
 def cmd_add(args) -> int:
-    for field, val in (("--fact", args.fact), ("--context", args.context or "")):
-        reason = _pii_reason(val)
-        if reason:
-            print(f"unconfirmed_facts add: {field} {reason} - this ledger holds names and "
-                  f"claims, never personal data or money. Rephrase around it.", file=sys.stderr)
-            return 1
+    if _refuse_pii("add", [("--fact", args.fact), ("--context", args.context),
+                           ("--entity", args.entity), ("--dedup-key", args.dedup_key),
+                           ("--owning-file", args.owning_file)]):
+        return 1
 
     rows = read_rows()
     if args.dedup_key:
@@ -252,6 +275,9 @@ def cmd_add(args) -> int:
 
 
 def _resolve(args, status: str, value: str | None) -> int:
+    if _refuse_pii(status if status == "cut" else "confirm",
+                   [("--value", value), ("--note", getattr(args, "note", None))]):
+        return 1
     rows = read_rows()
     hit = next((r for r in rows if r.get("id") == args.id), None)
     if hit is None:
@@ -344,6 +370,13 @@ def main(argv: list[str] | None = None) -> int:
     prn.set_defaults(func=cmd_render)
 
     args = p.parse_args(argv)
+    # The row is written before it is echoed; a name the console cannot show
+    # must not turn a stored row into a reported failure.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(errors="replace")
+        except (AttributeError, ValueError):
+            pass
     return args.func(args)
 
 

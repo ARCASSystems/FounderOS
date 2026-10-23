@@ -92,4 +92,4 @@ If any check fails, fix before declaring done.
 - Drafts: `core/drafts/<document-type>-<YYYY-MM-DD>-<slug>.<ext>`
 - Final outputs: `core/outputs/<document-type>-<YYYY-MM-DD>-<slug>.<ext>`
 
-If those folders don't exist, create them. Both are gitignored by default.
+If those folders don't exist, create them. Once version history is on, both are kept in it like your other files; move anything you do not want in your history somewhere outside the OS folder.

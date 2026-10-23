@@ -3,8 +3,9 @@ name: add-hands
 description: >
   Give your Founder OS hands - let it DO things, not just answer. Trigger on "add hands",
   "let it do things", "give it hands", "let it take actions", or "set up actions". The
-  default ships only SAFE, reversible, local actions (open a file, folder, app, or link;
-  save a note to your log) that run with no confirmation. Anything irreversible or
+  default ships only SAFE, reversible, local actions (open a folder or a web link; save a
+  note to your log) that run with no confirmation. Opening a file or an app asks first,
+  because opening one can run a program. Anything irreversible or
   outward-facing - running a command, and later sending or posting - passes a confirm gate
   and is OFF until you turn it on. Computer control (driving your screen) is NOT shipped; it
   is named as a later capability, gated when it lands. This is the swappable "hands" from the
@@ -27,8 +28,8 @@ The OS ships complete as a brain that reads and answers. This adds hands: the ab
 
 Every action is one of three classes, and the class decides what happens:
 
-- **Auto (safe, reversible, local):** runs with no confirmation. Open a file, a folder, an app, or a link. Save a note to your log (an append you can delete). These cannot lose work or reach outside your machine, so stopping for a yes would only annoy you.
-- **Confirm (irreversible or outward-facing):** stops for an explicit yes every time, and shows you exactly what it will do first. Running a command is the shipped example. It is OFF by default - you turn it on deliberately in `voice/hands-config.json`.
+- **Auto (safe, reversible, local):** runs with no confirmation. Open a folder or a web link. Save a note to your log (an append you can delete). These cannot lose work or reach outside your machine, so stopping for a yes would only annoy you.
+- **Confirm (irreversible or outward-facing):** stops for an explicit yes every time, and shows you exactly what it will do first. Opening a file or an app is in this class, because your opener runs whatever it is handed: a `.bat`, `.exe` or script runs the moment it opens. Running a command is the other shipped example. It is OFF by default - you turn it on deliberately in `voice/hands-config.json`.
 - **Blocked / not built:** sending, posting, and computer control. They are named honestly as not yet built. When they are added, they arrive in the Confirm class, behind this same gate. The OS says plainly it cannot do them yet rather than pretending or stalling.
 
 This mirrors the OS's existing approval-gates rule for irreversible actions. Hands do not invent a new safety model; they apply the one the OS already has to real actions.
@@ -59,25 +60,41 @@ Read its output back honestly: which actions are on, and that running commands i
 ```
 python voice/hands.py open .                          # open the OS folder in your file manager
 python voice/hands.py open https://example.com        # open a link in your browser
-python voice/hands.py note "called the supplier, waiting on a quote"   # append to brain/log.md
+python voice/hands.py open report.pdf                 # a file: prints what it will open, refuses
+python voice/hands.py open report.pdf --yes           # opens it - the founder's yes, never yours
 ```
+
+A note is someone's words, and a link or a file name can come from outside text (an email, a page). Pass any of them through a quoted block, never inside quotes on the command line, where `$(...)` and backticks would run before `hands.py` ever sees them. Every line starts at the left edge with no spaces in front. To append to `brain/log.md`:
+
+```bash
+python voice/hands.py note "$(cat <<'FOUNDER_OS_HANDS_END'
+called the supplier, waiting on a quote
+FOUNDER_OS_HANDS_END
+)"
+```
+
+Swap `note` for `open` to pass a link or a file name the same way. If the text has a line that reads exactly `FOUNDER_OS_HANDS_END`, do not run it.
+
+Only add `--yes` to a file or app after the founder has seen what it will open and said yes.
 
 A clean proof is: `open` brings up the folder or link, and `note` lands a dated line in `brain/log.md`. Both are reversible. Do not say "hands work" until that has happened on the user's machine.
 
 ### 3. (Optional) turn on the gated command runner
 
-Only if the user asks. Set `handlers.run.enabled` to `true` in `voice/hands-config.json`. Then:
+Only if the user asks. Set `handlers.run.enabled` to `true` in `voice/hands-config.json`. Then pass the command through the same quoted block, never inside quotes on the command line. Inside double quotes, the shell you call `hands.py` from would run any `$(...)` or backticks in the command before the gate ever shows it, so the preview would stop being a gate:
 
-```
-python voice/hands.py run "git status"          # prints what it will run, then refuses without --yes
-python voice/hands.py run "git status" --yes    # runs it - the explicit yes is the gate
+```bash
+python voice/hands.py run "$(cat <<'FOUNDER_OS_HANDS_END'
+git status
+FOUNDER_OS_HANDS_END
+)"
 ```
 
-Without `--yes`, the dispatcher shows the exact command and stops. The `--yes` is the confirmation; the OS never supplies it on its own. This is the gate working on a genuinely irreversible action. The command runs through your shell, exactly as shown, so pipes and operators (`|`, `&&`, `;`) work - which is also why you confirm only commands you understand.
+That prints what it will run, then refuses. After the founder's yes, run the same block with `run --yes` on the first line. Without `--yes`, the dispatcher shows the exact command and stops. The `--yes` is the confirmation; the OS never supplies it on its own. This is the gate working on a genuinely irreversible action. The command runs through your shell, exactly as shown, so pipes and operators (`|`, `&&`, `;`) work - which is also why you confirm only commands you understand.
 
 ## What it does and does not do
 
-- **Does:** open files, folders, apps, and links; append a note to your log; optionally run a command you have enabled and confirmed; refuse, with a plain message, any action that is off or not built; keep every confirm-class action behind an explicit yes that shows the action first.
+- **Does:** open folders and web links; open files and apps after an explicit yes; append a note to your log; optionally run a command you have enabled and confirmed; refuse, with a plain message, any action that is off or not built; keep every confirm-class action behind an explicit yes that shows the action first.
 - **Honors the `<private>` exclusion tag.** A note can carry a `<private>...</private>` block you do not want saved; the dispatcher strips every such block before it writes to `brain/log.md`, and if the whole note is tagged private it writes nothing and says so. Same filter the brain-log, dream, and rant surfaces use.
 
 <!-- private-tag: not applicable to open/run: those take no free-text user content; the note action above honors the <private> filter in code (see runtime/hands.py strip_private). -->

@@ -28,6 +28,8 @@ The argument passed is the person or meeting name: `$ARGUMENTS`.
    No vague answers. "Stay in touch" and "see where it goes" are not artifacts or asks.
    ```
 
+   If the ask is money (a paid engagement, an order, a deposit, a booked date or slot held for them), check the founder may take money for this activity where they sell. If their files and this conversation do not show it, say so in one line and suggest an interest ask for this meeting instead (a problem conversation, an intro, their details to hear when it is ready). This repeats the rule in `CLAUDE.md`.
+
 3. Wait for the reply. Parse the two answers.
 
 4. If either answer is missing, empty, or falls into the vague-answer list ("stay in touch", "see where it goes", "build rapport", "catch up", "keep warm", "get to know them"), refuse. Reply:

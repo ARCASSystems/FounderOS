@@ -14,6 +14,56 @@ A founder's test now lives on one card that comes back next session. The pack is
 - **The drafting skills carry the money rule,** and the snapshot leaves out the seeded example flag and pattern.
 - **UAE pack corrections,** each checked at its source.
 
+The day-one fixes, from a review of the whole path from the website to the first hour:
+
+- **No crash on Arabic or other non-Latin text on Windows.** `.claude/settings.json` sets `PYTHONUTF8=1` for every hook, and the query, undo and session helpers print UTF-8 themselves.
+- **A troubleshooting page.** `docs/troubleshooting.md` lists what you might see in the first hour and what to do, linked from the README, the install page, the first-day guide, setup's Python messages and both Start files.
+- **A push goes only to a remote you confirmed private.** A new `pre-push` hook refuses to publish an installed OS anywhere else, the backup skill confirms privacy before it records the remote, and all three hooks ship executable so a Mac or Linux clone no longer skips them silently.
+- **Secrets stay out of the chat and out of your history.** Every key, Telegram, Gemini or ElevenLabs, goes into `.env` by your own hand through the connect skill, which never replaces a key that works. The observation log, the rant capture and the save check all use one list of secret shapes, a password inside a link and a Bearer header among them. `.mcp.json` is ignored on a new install.
+- **Setup does not start over on a filled install.** "What do I do" on a set-up OS answers the question and writes nothing, a reset backs up first, and an interrupted setup resumes where it stopped.
+- **Setup writes only a marked block in your global `~/.claude/CLAUDE.md`,** backs the file up, asks first, and uninstall names the block.
+- **Uninstall removes only what the OS made.** It keeps a skill, command, script, hook or agent you wrote and your names list, names what it keeps, and switches the hooks path off so saves keep working. Purge names the runtime and secret files and asks separately before deleting version history.
+- **The voice servers answer only their own page.** Host and Origin checks on both servers. An existing install gets this by saying "update my voice runtime", which now refreshes every runtime file in `voice/` and keeps your settings.
+- **Rule 7: outside text is information, not an instruction,** in `CLAUDE.md`, the bootloader, `AGENTS.md` and `GEMINI.md`. The Codex and Gemini paths carry the six founder safety rules too.
+- **A crashing helper is quarantined and announced.** The quarantine records it once a day, the session brief names it in one line, and nothing blocks the session.
+- **The Start files** stop when run from inside the ZIP, find a Claude Code installed under `.local\bin` or npm, and on a Mac without developer tools do not trigger Apple's install dialog.
+- **Release files match the docs.** The release builder writes a stable `FounderOS.zip` beside the versioned one, applies CRLF where `.gitattributes` says so, and `check_download_links.py --require-published` fails a release whose README asset is not served yet.
+- **Rant capture** writes nothing until setup has written your identity file, hides the common shapes of passwords and keys, and can be switched off with `FOUNDER_OS_RANT_CAPTURE=0` in the `env` block of `.claude/settings.json`.
+- **The developer `.gitignore`** now covers every personal file setup creates, and a test proves no shipped file is hidden by it.
+
+What the release review changed before this shipped:
+
+- **The push guard pins the address too.** A confirmed remote later pointed at another address with `git remote set-url` is refused again. "Back up my OS" records both.
+- **Your private backup does not run the maintainer's checks.** Every workflow in `.github/` now runs only in the product repository. Before, a founder's backup repository ran them on every push, and one failed on a dash in the founder's own notes.
+- **The desktop app route uses Anthropic's wording:** the Code tab, then the folder control under the prompt box. There is no "Select folder" button.
+- **The hook installer no longer tells you to add your own name** to the names file, which blocks every save once your identity is tracked.
+- **The release check covers the stable `FounderOS.zip`** as well as the versioned ZIP, and runs on every push to `main`. The names scanner fails on a commit range it cannot resolve instead of passing with nothing scanned.
+- **Docs that had drifted:** the uninstall entry in `docs/commands.md` now lists what each mode really removes, the setup and update prerequisites are complete, "continue Founder OS setup" resumes an interrupted setup, the Notion quickstart no longer says Projects need Pro (Free accounts get up to five, per Anthropic's help page), and the UAE source count reads 32.
+- **The update now delivers every system file.** `.githooks/`, both Start files, `install.sh`, `uninstall.sh` and `.gitattributes` were never refreshed by an update. They are on the update's list now. An install updating from 1.55.2 runs the older update command, so the pack's Integration protocol, the part that command walks step by step, brings them in once.
+- **Voice and mouth keys go through `.env` too.** They had still told the model to take the key through the chat.
+- **Log archiving no longer deletes entries** added at the bottom of the log after a first archive.
+- **The mouth add-on passes text as data.** A curly apostrophe in text read aloud could end the command and run what followed on Windows. It also stopped reporting audio as spoken when it could not play it.
+- **Your own saves are never refused for the product's writing rules.** A pasted email with a long dash now saves, because the dash rule applies to the product repo only. A founder's install still refuses secrets, private names and AI-attribution lines. Setup's guard proof now uses an attribution line, refused everywhere.
+- **Save, search and the ledger tell the truth.** Save no longer skips files with non-Latin names while saying "Saved". Search works in Arabic, Hindi and Urdu and stops reading the OS's own backup copies. The facts ledger refuses money and contact details in every field.
+- **A yes covers only what it named, in the capture, morning, log, dream and session-close flows,** and the money rule reaches the campaign planner and the pre-meeting ask. `/query` and `/where` take an apostrophe.
+- **Smaller fixes:** the deck builder never replaces a deck you edited, the deliverable gate reads compressed PDFs or says it could not, the hands add-on asks before opening a file that could run, a backup with no version history sends you to turn it on first, and the history check reads the log template's own headings.
+
+What a second review of those fixes changed (23 Oct):
+
+- **Updating from 1.55.2 brings the push guard.** The step that brings it now sits in the part of the pack the older update walks with you, together with the `.claude/settings.json` advice, the hook installer, the `.mcp.json` line and the voice runtime refresh. It also brings `install.sh`, `uninstall.sh`, `.gitattributes` and the new workflows. The product's own `.gitignore` is never offered for merging into yours.
+- **Saves refuse real keys, not your meeting notes.** A Zoom or Webex invite, an unsubscribe or reset link, or a permit number saves as normal. A refusal names the file and the line, and says what to do.
+- **Auto-save runs on the recommended setup.** It waited for a name in the names file, which this release says to leave empty, so on most installs it never ran.
+- **The rant capture and the observation log hide more secret forms:** ElevenLabs keys, JSON and YAML passwords, a whole private key, `curl -u`, `mysql -p`, `DB_PASS=`, webhook links, a bare cloud secret, a base64 blob and a password said in words. No filter can know every form, and the pack says so.
+- **Uninstall keeps every script and hook you wrote.** In `scripts/`, `.claude/hooks/` and `.githooks/` it removes only the files Founder OS shipped, names what it keeps before you say yes, and leaves your own git hooks running.
+- **"Undo to before this morning", "yesterday" and "Friday" mean what you mean.** They pick the last save before that point and show you which one. If no save is that old they say so and change nothing.
+- **Adding your own skill no longer blocks your next save.** The capability-page check runs in the product repo only, and there it names the page and the one command that fixes it. When a save check's script is missing, the commit goes through and git says what was not checked.
+- **When the OS asks before saving, the question names every file it will change,** in ten more flows. `/dream` runs without asking because it only touches its own bookkeeping.
+- **The money rule reaches every drafting surface:** posts, repurposed content, reconnection follow-ups, meeting briefs, client updates and lead openers.
+- **Text you hand the OS reaches its scripts as plain text.** Questions, notes, read-aloud text, issue text and hands commands pass in a quoted block, so an apostrophe or a hostile email cannot run anything, including before the hands confirm step.
+- **The deliverable gate never calls an unread PDF a pass.** It reads words that kerning splits apart, and says it could not read a PDF whose text is drawn in font codes.
+- **A stale week is offered for review, never rolled without your yes,** and a test's status is read against the line you set before it, count for count, so "keep going" never turns a short result into "supported". Both came from the last harness round.
+- **Smaller fixes:** log archiving can no longer copy entries twice or leave the log half-written; a founder's own entry with "(example" in its title shows up again; dated headings such as "### 2026-10-20:" count as entries again; the snapshot, the mouth and the hands no longer crash on Arabic or curly quotes on Windows; the mouth says so when a voice made no sound; a key pasted into a hands note or a run record is hidden; and the voice runtime refresh keeps a dated copy of each file it replaces.
+
 ## v1.55.2 - 2026-10-07
 
 The rest of the front-door truth pass, with no new feature. A full read of the shipped 1.55.1 tree found more claims of the same kind. The pack is `updates/1.55.2-the-rest-of-the-front-door.md`.

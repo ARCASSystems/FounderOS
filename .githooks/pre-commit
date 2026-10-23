@@ -20,11 +20,22 @@ fi
 # completed install.
 [ -n "$PY" ] || exit 0
 
+# No guard script: the commit goes through, the same rule. After an uninstall
+# the scripts are gone while git can still point here, and a partial update can
+# bring this hook without the script. Neither is the founder's fault, so
+# neither may stop a commit with a raw "can't open file". It is never silent
+# either: a check that stops running without a word looks like one that passed.
+GUARD="$ROOT/scripts/check-private-names.py"
+if [ ! -f "$GUARD" ]; then
+  echo "Founder OS: scripts/check-private-names.py is missing, so this commit was not checked for names or secrets. Fix: run the update again or reinstall Founder OS (if you uninstalled it on purpose: git config --unset core.hooksPath)." >&2
+  exit 0
+fi
+
 # Gate 1 - content. `--staged` runs every check that reads the index: private
 # names, secrets, em/en dashes, AI attribution, remote safety, line endings, and
 # the entry form in the brain channels. One script and one exit code, so the hook
 # cannot fall out of step with CI, which shares the scanner through --range.
-$PY "$ROOT/scripts/check-private-names.py" --staged || exit 1
+$PY "$GUARD" --staged || exit 1
 
 # Gate 2 - the capability page. It answers "what can this actually do" and is
 # generated from the skills on disk, so a commit that adds or removes a skill
@@ -35,15 +46,24 @@ $PY "$ROOT/scripts/check-private-names.py" --staged || exit 1
 # something it can. This refuses and names the one command; it never writes
 # during a commit, because a hook that edits your tree mid-commit is a surprise.
 #
-# Both conditions are required, and the second one is not paranoia: an install
-# can take the new hook without taking the new script (a partial update, or a
-# by-hand copy of one file). Without the -f test that founder gets every skill
-# commit blocked by a raw "can't open file" from Python, which breaks the rule
-# the whole hook is built on - never break `git commit` for something that is
-# not the founder's fault.
-if [ -f "$ROOT/scripts/skills_sync.py" ] \
+# It runs in the product repo only. The page ships with the product and is the
+# maintainers' to keep; in a founder's install, adding their own skill made it
+# stale, and every first save after an update was refused with a message that
+# blamed a private name or a secret. The signal is the one the guard uses
+# (is_founder_install in check-private-names.py): an install that owns its
+# history has core/identity.md in the index, and the product repo never does.
+#
+# A missing skills_sync.py is reported and let through, never a raw "can't
+# open file" from Python: an install can take the new hook without the new
+# script (a partial update, or a by-hand copy of one file).
+if [ -z "$(git -C "$ROOT" ls-files -- core/identity.md)" ] \
    && git diff --cached --name-only --diff-filter=ACMDR | grep -Eq '^skills/[^/]+/SKILL\.md$'; then
-  $PY "$ROOT/scripts/skills_sync.py" --capabilities --check || exit 1
+  if [ ! -f "$ROOT/scripts/skills_sync.py" ]; then
+    echo "Founder OS: scripts/skills_sync.py is missing, so the capability page (docs/what-this-can-do.md) was not checked. Restore that script to turn the check back on." >&2
+  elif ! $PY "$ROOT/scripts/skills_sync.py" --capabilities --check; then
+    echo "Commit stopped by the capability page check, not the privacy guard: docs/what-this-can-do.md no longer matches the skills on disk. Fix: python scripts/skills_sync.py --capabilities, then git add docs/what-this-can-do.md and commit again." >&2
+    exit 1
+  fi
 fi
 
 exit 0

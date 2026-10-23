@@ -191,35 +191,22 @@ fi
 
 step "Installing FounderOS to $TARGET"
 
-if [[ -d "$TARGET/.git" ]]; then
-  # Existing install - offer update
+if [[ -d "$TARGET/.git" || -f "$TARGET/VERSION" || -d "$TARGET/core" ]]; then
+  # Existing install: never update it from here. A plain `git pull` stops the
+  # moment the founder has saved a version of their own work ("own my
+  # history" also renames the remote it would pull from), and it would skip
+  # what the update command protects: the founder's own files and their
+  # edits to CLAUDE.md, rules/ and settings. The update command handles all of
+  # that, so this only points at it.
   local_version="(unknown)"
   if [[ -f "$TARGET/VERSION" ]]; then
     local_version=$(cat "$TARGET/VERSION")
   fi
-  info "FounderOS is already installed at $TARGET (version: $local_version)."
-  if [[ -t 0 ]]; then
-    printf '  Update to the latest version? [y/N] '
-    read -r answer
-  else
-    # Non-interactive (curl | bash). An update the founder did not confirm is
-    # a consent failure, so the default is to leave the install untouched.
-    if [[ -n "${FOUNDER_OS_UPDATE:-}" ]]; then
-      answer="y"
-    else
-      answer="n"
-      echo "Existing install found - left untouched. To update non-interactively, re-run with FOUNDER_OS_UPDATE=1."
-    fi
-  fi
-  answer=$(printf '%s' "$answer" | tr '[:upper:]' '[:lower:]')
-  if [[ "$answer" == "y" || "$answer" == "yes" ]]; then
-    step "Updating FounderOS"
-    git -C "$TARGET" pull --ff-only
-    ok "Updated to $(cat "$TARGET/VERSION" 2>/dev/null || echo "latest")"
-  else
-    info "No changes made. Your install is at $TARGET."
-    exit 0
-  fi
+  info "Founder OS is already installed at $TARGET (version: $local_version)."
+  info "Nothing was changed. To update it, open that folder in Claude Code and say:"
+  info "  update Founder OS"
+  info "Your own files stay as they are, and you see every change before it lands."
+  exit 0
 else
   # Fresh install
   step "Cloning FounderOS"

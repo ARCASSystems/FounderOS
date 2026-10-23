@@ -128,6 +128,7 @@ REVISED TIMELINE
 - Specific dates, not "soon" or "in the coming weeks"
 - No padding. If a section has nothing, skip it.
 - Apply the operator's voice profile if available. If not, default to plain, direct sentences.
+- **No money ask before permission.** An update that asks the client for money for new work (a price, a deposit, an order, an agreement to pay later, or a date or slot held for them) needs the founder to know they may take money for this activity where they sell. If their files and this conversation do not show it (a licence or permit that covers the activity), ask once before drafting that ask, and draft an interest ask meanwhile (a call to talk about it). Earlier sales to friends are not that permission. This repeats the founder safety rule in `CLAUDE.md`.
 
 ## Self-check before sending
 

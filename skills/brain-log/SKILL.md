@@ -28,14 +28,14 @@ The thought is worth recording but doesn't connect to anything specific right no
 The thought connects to an existing file or topic.
 - Append to `brain/log.md` with timestamp and a stamped ID
 - Tag: `#xref:[target-file]`
-- Insert a dated note into the referenced file
+- Insert a dated note into the referenced file, after naming that file and the note and getting a yes. The log entry itself is automatic; the note in another file is not.
 - Examples: "This changes my priorities" -> xref to priorities.md. "This affects the deal with X" -> xref to clients.md
 
 ### Mode C: Log and Act
 The thought requires immediate action.
 - Append to `brain/log.md` with timestamp and a stamped ID
 - Tag: `#acted`
-- Take the action (update a file, create a task, move a priority)
+- Take the action (update a file, create a task, move a priority), after naming the file and the change and getting a yes. A yes to logging is not a yes to the action.
 - Note what was done in the log entry
 
 **Default:** Infer the mode from context. The founder can override: "just log it" (Mode A), "tie this to priorities" (Mode B), "act on this now" (Mode C).

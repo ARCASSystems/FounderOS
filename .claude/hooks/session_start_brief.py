@@ -242,7 +242,7 @@ TIPS: list[tuple[str, str]] = [
 # Literal copy of scripts/_common.py ENTRY_DATE_HEADING_PATTERN (hooks do
 # not import from scripts/). test_entry_heading_parity keeps them identical.
 # Shared by the tip rotation and the returner-gap read below.
-entry_re = re.compile(r"^#{2,3}\s+\[?(\d{4}-\d{2}-\d{2})\]?(?:\s|$)")
+entry_re = re.compile(r"^#{2,3}\s+\[?(\d{4}-\d{2}-\d{2})\]?(?=[\s:,;.)]|$|T\d)")
 
 
 def section_tip(repo: Path, today: date) -> list[str]:
@@ -263,7 +263,10 @@ def section_tip(repo: Path, today: date) -> list[str]:
     earliest = min(entry_dates)
     if (today - earliest).days < 30:
         return []
-    date_re = re.compile(r"^#{2,3}\s+(\d{4}-\d{2}-\d{2})")
+    # The shared heading regex, so the template's `### [YYYY-MM-DD]` form is a
+    # dated entry here too. The old local pattern skipped the bracket form, so
+    # a skill used under it never counted as used and its tip never rested.
+    date_re = entry_re
     last_used: dict[str, date] = {}
     cur: date | None = None
     for ln in text.splitlines():
@@ -830,6 +833,15 @@ def render_full_brief(repo: Path, today: date, want_observations: bool) -> None:
 
 
 def main() -> int:
+    # The brief prints founder text (names, log lines) in any script. A console
+    # or PYTHONIOENCODING set to cp1252 used to raise on the first Arabic name
+    # and lose the whole brief; now a character the console cannot show prints
+    # as "?" and the rest of the brief arrives.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(errors="replace")
+        except (AttributeError, ValueError):
+            pass
     if len(sys.argv) < 3:
         return 0
     repo = Path(sys.argv[1])

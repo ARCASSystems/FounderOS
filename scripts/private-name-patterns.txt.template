@@ -1,24 +1,26 @@
 # Private-name patterns - one regex per line. Lines starting with # are comments.
 #
-# The pre-commit and commit-msg hooks scan your staged diffs and commit messages
-# against these patterns and BLOCK the commit on any match. This stops a private
-# name, client, email, or phone number from leaking into a public push.
+# What this file is for: names that must never enter your files. A client under
+# NDA, or someone you keep off the record. The save checks (the pre-commit and
+# commit-msg hooks) scan what you save and refuse the save if one of these names
+# is in it.
 #
-# This file (scripts/private-name-patterns.txt) is gitignored - your names never
-# enter your history or any push. Only this .template is tracked in the repo.
+# Empty is fine, and it is how this file starts. While it is empty the name
+# check is off. The secret and attribution checks run anyway, with or
+# without anything in this file.
 #
-# IMPORTANT: until you add at least one pattern below, the guard is INACTIVE and
-# every commit prints a one-line warning. Add your names to turn it on.
+# Never add your own name. Your identity file is tracked once you own your
+# history, and your own name as a pattern would block every save that touches it.
+#
+# This file (scripts/private-name-patterns.txt) is gitignored, so the names in it
+# never enter your history or any push. Only the .template copy ships.
 #
 # FORMAT - one Python regex per line:
-#   \bSam\b               a single name, word-boundary matched (recommended)
-#   \bSam\s+Rivera\b      a full name (use \s+ between words)
-#   \byour\.email@example\.com\b
+#   \bClientUnderNDA\b             a single name, word-boundary matched
+#   \bA\s+Person\s+Off\s+Record\b  a full name (use \s+ between words)
+#   \bname\.at\.client\.com\b      an address
 #
-# CURATION TIP: block distinctive names alone, but block common first names only
-# as full-name combos. A lone \bSam\b or \bLee\b will block legitimate commits.
+# TIP: block a distinctive name on its own, but a common first name only as a
+# full name. A lone \bSam\b or \bLee\b will refuse ordinary saves.
 #
-# Uncomment and edit these, then add your own:
-# \bYourFirstName\b
-# \bYourPartnerName\b
-# \byour-client-name\b
+# To turn the name check on, add lines below this one without the leading #.

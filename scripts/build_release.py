@@ -236,10 +236,13 @@ def refuse_excluded(paths: list[str]) -> None:
 def read_version(explicit: str | None) -> str:
     if explicit:
         return explicit.strip().lstrip("v")
-    version_file = REPO / "VERSION"
-    if not version_file.is_file():
-        raise SystemExit("No VERSION file and no --version given.")
-    return version_file.read_text(encoding="utf-8").strip().lstrip("v")
+    # The committed VERSION, the same bytes the ZIP carries, so the asset's name
+    # can never disagree with the VERSION file inside it (release review T-13).
+    try:
+        committed = blob_bytes("VERSION")
+    except (Exception, SystemExit):
+        raise SystemExit("No committed VERSION file and no --version given.")
+    return committed.decode("utf-8").strip().lstrip("v")
 
 
 def build_zip(version: str, out_dir: Path, allow_dirty: bool = False) -> Path:

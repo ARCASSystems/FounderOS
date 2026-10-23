@@ -25,7 +25,7 @@ Record the founder's current work as a new version. Wraps git so they never see 
 1. Run `python scripts/caveman_git.py save`. To pass a short plain-language note the founder gave ("save my pricing rework"), use `python scripts/caveman_git.py save --message "<note>"`. Do not invent a note; the script writes an honest default if you pass none.
 2. Read the script output and relay it in plain language:
    - On success it prints `Saved.` and the list of files that changed. Tell the founder what was saved in one line.
-   - On a block it prints `Could not save.` and the guard reason. Explain in plain words what tripped the guard (a private name, an em or en dash, an AI-attribution line, or a secret in a file), and that nothing was saved. Do not bypass the guard. Do not retry with a flag that skips it.
+   - On a block it prints `Could not save.` and the guard reason. Explain in plain words what tripped the guard (a private name, an AI-attribution line, or what looks like a password or key), name the file and line the guard printed, and say that nothing was saved. Do not bypass the guard. Do not retry with a flag that skips it.
 3. Never run `git add -A`, `git add .`, or `git push`. The script stages by path and commits locally; that is the whole job.
 
 ## Runtime honesty

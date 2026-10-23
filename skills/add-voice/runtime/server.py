@@ -151,6 +151,30 @@ def brain_available():
     return shutil.which(cmd[0]) is not None
 
 
+# cmd.exe acts on these inside a .cmd or .bat file's arguments, quoted or not, and stops an
+# argument at a line break.
+_CMD_WORDS = {"%": " percent ", "&": " and "}
+_CMD_SPECIAL = re.compile(r'["%^&|<>!\r\n]')
+
+
+def brain_argv(cmd, prompt):
+    """The argv for one brain call, or None when the command is not on PATH.
+
+    shutil.which finds npm's Windows shims (claude.cmd), but subprocess cannot start a bare
+    name that only resolves to a .cmd, so it is the resolved path that runs. A .cmd or .bat
+    runs through cmd.exe, which would cut the prompt at its first line break and act on
+    " % ^ & | < > in it, so for those the prompt becomes one line without those characters."""
+    import os
+    import shutil
+
+    resolved = shutil.which(cmd[0])
+    if not resolved:
+        return None
+    if os.name == "nt" and Path(resolved).suffix.lower() in (".cmd", ".bat"):
+        prompt = " ".join(_CMD_SPECIAL.sub(lambda m: _CMD_WORDS.get(m.group(0), " "), prompt).split())
+    return [resolved] + list(cmd[1:]) + [prompt]
+
+
 def ask_brain(text):
     """Run one brain turn through the no-key reasoning CLI. Returns (answer, ok)."""
     cmd = list(CONFIG.get("brain_cmd") or ["claude", "-p"])
@@ -159,7 +183,9 @@ def ask_brain(text):
     if ctx:
         prompt += "\n\nWho the user is (for context, do not read aloud):\n" + ctx
     prompt += "\n\nThe user just said: " + text + "\n\nYour spoken reply:"
-    argv = cmd + [prompt]
+    argv = brain_argv(cmd, prompt)
+    if argv is None:
+        argv = cmd + [prompt]  # not on PATH: the FileNotFoundError below says so plainly
     try:
         proc = subprocess.run(
             argv,
@@ -428,7 +454,13 @@ def synthesize(text):
     status = local_tts_status()
     if not status["available"]:
         return (b"", False, status["reason"])
-    argv = [CONFIG.get("piper_cmd") or "piper",
+    import shutil
+
+    piper = CONFIG.get("piper_cmd") or "piper"
+    # The resolved path, for the same reason as brain_argv: a name that only resolves to a
+    # .cmd or .bat is found by which() but cannot be started by subprocess. The text goes on
+    # stdin, so it never meets cmd.exe's argument rules.
+    argv = [shutil.which(piper) or piper,
             "--model", CONFIG.get("piper_voice"),
             "--output_file", "-"]
     try:

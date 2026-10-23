@@ -167,6 +167,6 @@ If any check fails, rewrite. Do not ship.
 
 `core/voice-profile.yml` is meant to evolve. After every 5 to 10 pieces of generated content, ask the user:
 
-> Is this still sounding like you? Anything you'd change in the profile?
+> Is this still sounding like you? Anything you'd change in your voice profile (`core/voice-profile.yml`)?
 
-If they say yes, run a 2-minute mini-interview and update the profile. The voice gets sharper over time.
+If they say yes, run a 2-minute mini-interview, show the lines that would change in `core/voice-profile.yml`, and write them on a yes to that change. The voice gets sharper over time.

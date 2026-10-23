@@ -87,15 +87,45 @@ def stem(token: str) -> str:
     return token
 
 
+def _combining_marks_class() -> str:
+    """A regex class of every combining mark in the Basic Multilingual Plane.
+
+    Python's \\w covers letters and digits in every script but not combining
+    marks, and Hindi and Urdu words are full of them: the vowel signs of
+    "हिंदी" are marks, so \\w alone splits the word into single letters."""
+    import unicodedata
+
+    ranges: list[tuple[int, int]] = []
+    for cp in range(0x300, 0x10000):
+        if unicodedata.category(chr(cp)) in ("Mn", "Mc", "Me"):
+            if ranges and ranges[-1][1] == cp - 1:
+                ranges[-1] = (ranges[-1][0], cp)
+            else:
+                ranges.append((cp, cp))
+    return "".join(
+        f"\\u{a:04x}" if a == b else f"\\u{a:04x}-\\u{b:04x}" for a, b in ranges)
+
+
+_MARKS = _combining_marks_class()
+# A token is a letter or digit in ANY script (never _ or - first), then letters,
+# digits, marks, _ or -. The old [a-zA-Z0-9] class made Arabic, Hindi and Urdu
+# unsearchable: "No searchable tokens in the question".
+TOKEN_RE = re.compile(rf"[^\W_](?:[\w\-]|[{_MARKS}])+")
+# Arabic short-vowel marks and the tatweel are optional in writing, so a name
+# typed without them must match the same name written with them.
+_ARABIC_OPTIONAL = re.compile("[ً-ٰٟـ]")
+
+
 def tokenize(text: str) -> list[str]:
     """Lowercase, strip stop words, light-stem the rest.
 
     Stop-word filter and stemming run on both the question and the file
     bodies so they stay symmetrical: a stemmed question token must match
-    a stemmed file token. Stdlib-only.
+    a stemmed file token. Unicode-aware: a word in any script is a token.
+    Stdlib-only.
     """
-    raw = [t.lower() for t in re.findall(r"[a-zA-Z0-9][a-zA-Z0-9_-]+", text)]
-    return [stem(t) for t in raw if t not in STOP_WORDS]
+    raw = [_ARABIC_OPTIONAL.sub("", t.lower()) for t in TOKEN_RE.findall(text)]
+    return [stem(t) for t in raw if len(t) >= 2 and t not in STOP_WORDS]
 
 
 def is_rant_query(question: str) -> bool:
@@ -174,7 +204,7 @@ def glossary_suggestions(question: str, groups: list[set[str]]) -> list[str]:
     import difflib
 
     all_names = sorted({n for g in groups for n in g if n and " " not in n})
-    words = [w.lower() for w in re.findall(r"[a-zA-Z][a-zA-Z'-]{2,}", question)]
+    words = [w.lower() for w in re.findall(rf"[^\W\d_](?:[\w'\-]|[{_MARKS}]){{2,}}", question)]
     out: list[str] = []
     for w in words:
         if any(w in g for g in groups):

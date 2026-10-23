@@ -74,9 +74,9 @@ EVERYTHING ELSE: park it. It can wait until this is done.
 
 ## Step 4: Clear the Deck
 
-If the founder agrees, help them park everything else:
-- Update `cadence/daily-anchors.md` with today's anchor
-- Move non-urgent items to Should Do or Could Do
+If the founder agrees, help them park everything else. Agreeing with the one thing is not a yes to any write, so first name the files and what changes in each, then write only what their yes covers:
+- `cadence/daily-anchors.md`: today's anchor
+- `cadence/weekly-commitments.md`: the non-urgent items moved to Should Do or Could Do, each named
 - If they have meetings or commitments today, name the time blocks available for deep work
 
 ## Rules

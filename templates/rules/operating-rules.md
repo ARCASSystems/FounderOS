@@ -97,9 +97,9 @@ At the end of a session (or when ending is natural):
 
 1. Nothing to save by hand: files persist the moment they are written, and the next session reads them as they are. With version history on, also record the session as one saved version.
 2. Update `brain/log.md` with a session summary entry (#context or #acted)
-3. If a task was left mid-way, update `cadence/daily-anchors.md` with the carry-forward
-4. If a decision was made, update `context/decisions.md`
-5. If a new commitment was made, add it to `context/priorities.md`
+3. If a task was left mid-way, name `cadence/daily-anchors.md` and the carry-forward line, and write it on a yes
+4. If a decision was made, name `context/decisions.md` and the entry, and write it on a yes
+5. If a new commitment was made, name `context/priorities.md` and the line, and add it on a yes
 
 ---
 

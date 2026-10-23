@@ -137,6 +137,9 @@ def parse_stdin(raw: bytes) -> dict:
 def child_env() -> dict:
     env = dict(os.environ)
     env["PYTHONUTF8"] = "1"  # survive Windows codepages in delegated helpers
+    # PYTHONIOENCODING beats PYTHONUTF8 for the standard streams, so a machine
+    # that sets it to cp1252 lost the whole session brief to one Arabic name.
+    env["PYTHONIOENCODING"] = "utf-8"
     env.setdefault("CLAUDE_PROJECT_DIR", str(ROOT))
     return env
 
@@ -353,17 +356,60 @@ def _clean(s: str, limit: int) -> str:
 # lives under brain/, which an install that owns its history tracks, so the
 # first 80 characters of `connect.py set-secret X <value>` or a curl with an
 # Authorization header would otherwise land in version history - and in any
-# backup of it. Over-matching ("tokenize") only hides a harmless line.
+# backup of it. Two nets, and a hit on either hides the whole line:
+# - this keyword list, which names the act of handling a secret;
+# - the shared secret shapes in scripts/_common.py (the same list the
+#   pre-commit scan and the rant capture use): a password inside a URL, a
+#   token in a query string, a Bearer or x-api-key header, provider keys.
+# A write to a .env file, or a command that names one, is always hidden.
+# Over-matching ("tokenize") only hides a harmless line.
 SECRET_HINT_RE = re.compile(
     r"set-secret|token|key=|password|passwd|authorization|bearer\s"
-    r"|\b[A-Za-z0-9_]*(?:_KEY|_TOKEN|_SECRET)\s*[=:]",
+    r"|api[-_]?key|secret|credential|SetEnvironmentVariable|with-pat\b"
+    r"|\b[A-Za-z0-9_]*(?:_KEY|_TOKEN|_SECRET|_PAT|_PASS|_PWD)\s*[=:]"
+    # Credentials that carry no keyword: a password flag, a login tool, a user
+    # and password before an @, a PowerShell env write, a decoded blob.
+    r"|\s-p\S|--password|sshpass|\blogin\b.*\s-p\b|\s-u\s+\S+:|\$env:\w+\s*="
+    r"|[\w.-]:[^\s@/:]+@[\w-]+\.|hooks\.slack\.com|base64",
     re.IGNORECASE,
 )
 REDACTED = "[hidden - may contain a secret]"
 
+_SECRET_HELPERS: tuple | None = None
+
+
+def _secret_helpers() -> tuple:
+    """(has_secret, is_env_path, names_env_file) from scripts/_common.py, loaded
+    on first use so the other events never pay for it. When it cannot load (a
+    partial scripts/ folder), every check answers yes: hide more, never less."""
+    global _SECRET_HELPERS
+    if _SECRET_HELPERS is None:
+        try:
+            scripts_dir = str(Path(__file__).resolve().parents[1])
+            if scripts_dir not in sys.path:
+                sys.path.insert(0, scripts_dir)
+            from _common import has_secret, is_env_path, names_env_file
+            _SECRET_HELPERS = (has_secret, is_env_path, names_env_file)
+        except Exception:
+            def _yes(_s: str) -> bool:
+                return True
+            _SECRET_HELPERS = (_yes, _yes, _yes)
+    return _SECRET_HELPERS
+
+
+def is_env_path(path: str) -> bool:
+    return _secret_helpers()[1](path)
+
+
+def _may_hold_secret(s: str) -> bool:
+    if not s:
+        return False
+    has_secret, _is_env, names_env_file = _secret_helpers()
+    return bool(SECRET_HINT_RE.search(s) or has_secret(s) or names_env_file(s))
+
 
 def _redact(s: str) -> str:
-    return REDACTED if s and SECRET_HINT_RE.search(s) else s
+    return REDACTED if _may_hold_secret(s) else s
 
 
 def h_post_tool_use(stdin_bytes: bytes) -> None:
@@ -384,17 +430,21 @@ def h_post_tool_use(stdin_bytes: bytes) -> None:
     if tool == "Read":
         intent = f"read {file_path}"
     elif tool in ("Edit", "Write"):
+        # Test the whole snippet, not only the 80 characters kept. A .env file
+        # holds nothing but secrets, so a write to one is never shown at all.
         snippet = g("new_string") or g("content")
-        intent = f"edit {file_path} - {_redact(_clean(snippet, 80))}"
+        shown = REDACTED if (is_env_path(file_path) or _may_hold_secret(snippet)) \
+            else _clean(snippet, 80)
+        intent = f"edit {file_path} - {shown}"
     elif tool == "Bash":
         # Test the whole command, not only the 80 characters kept: a hint
         # anywhere means the line may carry a credential (a URL with a key in
         # it before the header that names it), and hiding a harmless line
         # costs one log entry.
         command = g("command")
-        intent = f"bash - {REDACTED if SECRET_HINT_RE.search(command) else _clean(command, 80)}"
+        intent = f"bash - {REDACTED if _may_hold_secret(command) else _clean(command, 80)}"
     elif tool == "Grep":
-        intent = f"grep {g('pattern')} in {g('path')}"
+        intent = f"grep {_redact(g('pattern'))} in {g('path')}"
     elif tool == "Glob":
         intent = f"glob {g('pattern')}"
     elif tool == "":
@@ -545,18 +595,15 @@ def changes_manifest(stdin_bytes: bytes) -> None:
 
 
 def _guard_active() -> bool:
-    hooks_path = git(ROOT, "config", "core.hooksPath").strip()
-    patterns = ROOT / "scripts" / "private-name-patterns.txt"
-    if hooks_path != ".githooks" or not patterns.is_file():
+    """True when the save checks run on every commit: the hooks path points at
+    .githooks and both checking hooks are there. The names file is not part of
+    the test. The secret and attribution checks run with it empty, and empty is
+    the recommended default, so requiring a name kept auto-save off for every
+    install that followed that advice."""
+    if git(ROOT, "config", "core.hooksPath").strip() != ".githooks":
         return False
-    try:
-        with patterns.open("r", encoding="utf-8", errors="replace") as fh:
-            for line in fh:
-                if re.match(r"^\s*[^#\s]", line):
-                    return True
-    except Exception:
-        return False
-    return False
+    hooks = ROOT / ".githooks"
+    return (hooks / "pre-commit").is_file() and (hooks / "commit-msg").is_file()
 
 
 def autosave() -> None:
@@ -592,14 +639,12 @@ def autosave() -> None:
     else:
         print("")
         print("=== AUTO-SAVE PAUSED ===")
-        print("You have unsaved changes this session, but auto-save is paused because the")
-        print("privacy name guard is not active yet (no patterns in")
-        print("scripts/private-name-patterns.txt). The OS will not auto-commit content that")
-        print("has not been name-scanned.")
+        print("You have changes from this session that are not saved yet. Auto-save")
+        print("waits until the save checks are on, so nothing with a password or key in")
+        print("it is saved without being checked first. They are not on in this folder.")
         print("")
-        print('Say "save my work" to save manually now, or add your name to')
-        print("scripts/private-name-patterns.txt (then run scripts/install-git-hooks.sh) to")
-        print("turn on auto-save.")
+        print("To turn them on, ask Claude to run: bash scripts/install-git-hooks.sh")
+        print('Or say "save my work" and these changes are saved now, by hand.')
         print("=== END AUTO-SAVE ===")
         print("")
 

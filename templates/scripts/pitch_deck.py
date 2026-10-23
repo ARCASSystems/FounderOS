@@ -275,6 +275,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", default=None, help="output .pptx (default: beside the spec)")
     ap.add_argument("--check", action="store_true", help="parse only, write nothing")
     ap.add_argument("--root", default=None, help="OS root override (for tests)")
+    ap.add_argument("--force", action="store_true",
+                    help="replace an existing .pptx (it may hold edits made after the last render)")
     args = ap.parse_args(argv)
 
     spec_path = Path(args.spec)
@@ -302,11 +304,20 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     out = Path(args.out) if args.out else spec_path.with_suffix(".pptx")
+    # A deck the founder opened and edited is theirs. Rendering over it threw
+    # their edits away with no word (release review S-10), and the closing
+    # line below used to send them straight back to do it again.
+    if out.exists() and not args.force:
+        print(f"pitch_deck: {out} already exists and may hold edits made after it was "
+              "rendered, so it was left as it is. Render to a new file with "
+              "--out <new-name>.pptx, or replace it with --force.", file=sys.stderr)
+        return 1
     written = render(spec, out, brand)
     print(f"pitch_deck: wrote {written} ({len(spec.slides)} slides)")
     if not brand.get("document_author"):
         print("  author metadata left empty - set brand.document_author in "
-              "os-config.yaml and re-run to stamp it")
+              "os-config.yaml, then render to a new file (--out) or replace this "
+              "one with --force once you have kept any edits")
     return 0
 
 

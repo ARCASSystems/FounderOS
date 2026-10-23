@@ -31,7 +31,7 @@ Argument: `$ARGUMENTS` (the person or meeting name).
 4.5. **Name pass (mandatory on transcript input).** Dictation and meeting recorders mangle proper nouns. Before extracting meaning, read `context/names.md` (the names glossary) if it exists and check every person, company, and product name in the input:
    - A name matching a glossary entry or a listed mishearing: use the canonical spelling.
    - A name matching nothing: keep it as heard, marked `(sp?)`, and ask about all unknowns in one batch before writing to any file. Never guess a fuller identity for an unmatched name, and never overwrite an existing person's record on a near-match - a heard name that is close to two known people is a question, not a pick.
-   - Append every correction the founder makes to the glossary's mishearings column.
+   - Keep a list of every correction the founder makes. It goes into the glossary's mishearings column in step 6, and only if the yes in 5.5 covered `context/names.md`. Do not write it yet.
    Numbers, prices, and dates you are unsure of stay as captured, marked - never silently "fixed".
 
 5. Parse the input for:
@@ -44,7 +44,9 @@ Argument: `$ARGUMENTS` (the person or meeting name).
 
 **Private-tag filter (mandatory before any write).** Before persisting anything to a file, scan the source text for `<private>...</private>` blocks (case-insensitive). Remove every matched block (including the tags) from the text before writing. If the entire input is wrapped in `<private>`, write nothing and report "skipped - content was tagged private."
 
-6. Produce four updates:
+5.5. **Name the writes, then wait for one yes.** A yes to "add <name> to your clients" or to "capture this" covers only what it named. Before writing anything, show the founder in one short message exactly which files this capture will change, from what step 5 found: `brain/log.md` (the meeting entry), `context/clients.md` (the <name> row, created or updated), and only if step 5 found any, `context/decisions.md` (N commitments as Pending) and `brain/flags.md` (one pattern line, named), and only if the founder corrected a name in step 4.5, `context/names.md` (the N corrections, named). Ask: `Write these? (yes / no / pick which)`. Write only what the yes covers. If they pick, write only the picked files. No yes, no write.
+
+6. Produce up to five updates, each only if the yes in 5.5 covered it:
 
    **a. Append to `brain/log.md`** (at the top, below the header - newest on top). Format:
 
@@ -71,6 +73,8 @@ Argument: `$ARGUMENTS` (the person or meeting name).
 
    **d. Flags.** If the founder said something defensive, avoidant, or a pattern that matches anything in `brain/patterns.md`, add one line to `brain/flags.md` with the pattern name.
 
+   **e. Name corrections.** Append each correction from step 4.5 to the mishearings column of `context/names.md`.
+
 7. After all writes succeed, report in under 120 words:
 
    ```
@@ -79,6 +83,7 @@ Argument: `$ARGUMENTS` (the person or meeting name).
    - context/clients.md: <row created|row updated|no change>
    - context/decisions.md: <N commitments logged as Pending, or "none to log">
    - brain/flags.md: <flag added: "<name>" | no flag>
+   - context/names.md: <N corrections added | no change>
    Next step: <the one-line next step identified above>
    ```
 

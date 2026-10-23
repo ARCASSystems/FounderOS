@@ -153,7 +153,7 @@ PCI DSS compliance for card payments. Cash on delivery common in UAE. Payment ga
 ## Food & Beverage
 
 **Key regulators:** Dubai Municipality (Food Safety), ADAFSA (Abu Dhabi), MoIAT (federal standards; it took over ESMA's role in July 2020), DHA (health cards).
-Web search: dm.gov.ae, esma.gov.ae
+Web search: dm.gov.ae, moiat.gov.ae
 
 ### Restaurant / Café Requirements
 Trade license + food permit (Municipality) + premises inspection + food handler health cards (all food-handling staff) + Civil Defence clearance + environmental health approval.

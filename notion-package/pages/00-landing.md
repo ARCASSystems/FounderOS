@@ -53,9 +53,9 @@ If you need crons, webhooks, offline triggers, or anything that fires while you'
 
 ## Three ways to run it
 
-1. **Claude Project + Notion MCP.** The clean path. Duplicate the Notion page, create a Claude Project, paste one system prompt, connect Notion. Five minutes. See the quickstart.
+1. **Claude Project + Notion MCP.** In development: the public Notion template is not published yet, so this path cannot be completed today. Use the Claude Code path in the README instead.
 
-2. **Claude app with Notion MCP.** If you live in the Claude desktop or mobile app, point its Notion connector at the same workspace. Same logic, slightly less polished routing UI.
+2. **Claude app with Notion MCP.** If you live in the Claude desktop or mobile app, point its Notion connector at the same workspace. Same logic, slightly less polished routing UI. It needs the same Notion template as option 1, so it waits for that template too.
 
 3. **Claude Code terminal (power users).** For the founders who want local markdown, git history, and full control over every file. Public repo at github.com/ARCASSystems/FounderOS.
 
@@ -63,7 +63,7 @@ If you need crons, webhooks, offline triggers, or anything that fires while you'
 
 ## Start here
 
-Open the quickstart. It takes five minutes if you already have Notion and Claude. Ten if you're new to one of them.
+Open the quickstart for where this path stands. Until its template is published, the Claude Code path in the README is the one that works end to end.
 
 If you want the honest limits first (what this can't do yet), read page 05 before you start.
 

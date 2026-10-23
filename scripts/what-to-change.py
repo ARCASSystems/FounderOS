@@ -34,6 +34,12 @@ import sys
 from datetime import date
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+# The same seeded-example filter the snapshot uses. Without it the template's
+# demo flag ("2024-01-01 - Outreach has not started this week") came back as
+# the founder's only change candidate, with its decay already passed.
+from _common import example_line_numbers  # noqa: E402
+
 DEFAULT_WITHIN_DAYS = 30
 DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})")
 HEADING_RE = re.compile(r"^(#{2,4})\s+(.*\S)\s*$")
@@ -62,21 +68,29 @@ def _read(path: Path) -> str | None:
         return None
 
 
-def _iter_entries(text: str) -> list[tuple[str, list[str]]]:
-    """Split a markdown file into (heading, body-lines) entries on ##-#### heads."""
+def _iter_entries(text: str, skip_examples: bool = False) -> list[tuple[str, list[str]]]:
+    """Split a markdown file into (heading, body-lines) entries on ##-#### heads.
+
+    skip_examples drops the template's seeded worked example (see
+    _common.example_line_numbers) for readers that present entries as the
+    founder's own state."""
+    lines = text.splitlines()
+    examples = example_line_numbers(lines) if skip_examples else set()
     entries: list[tuple[str, list[str]]] = []
     heading: str | None = None
+    skipping = False
     body: list[str] = []
-    for line in text.splitlines():
+    for idx, line in enumerate(lines):
         m = HEADING_RE.match(line)
         if m:
-            if heading is not None:
+            if heading is not None and not skipping:
                 entries.append((heading, body))
             heading = m.group(2).strip()
+            skipping = idx in examples
             body = []
         elif heading is not None:
             body.append(line)
-    if heading is not None:
+    if heading is not None and not skipping:
         entries.append((heading, body))
     return entries
 
@@ -117,7 +131,7 @@ def gather_flags(repo: Path, today: date, within: int, parked: set[str]) -> list
     if not text:
         return []
     out: list[dict] = []
-    for heading, body in _iter_entries(text):
+    for heading, body in _iter_entries(text, skip_examples=True):
         if slugify(heading) in {"lifecycle", "severity-ladder", "decay-convention", "two-flag-types", "flags"}:
             continue
         status_m = None
@@ -167,7 +181,7 @@ def gather_log(repo: Path, today: date, within: int) -> list[dict]:
         return []
     out: list[dict] = []
     seen: set[str] = set()
-    for heading, body in _iter_entries(text):
+    for heading, body in _iter_entries(text, skip_examples=True):
         m = DATE_RE.search(heading)
         if not m:
             continue

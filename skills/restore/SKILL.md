@@ -31,7 +31,7 @@ Never work around these. Never run `git reset --hard`, `git checkout` that disca
 
 ## Procedure
 
-1. **Find the target.** If the founder named a clear point ("yesterday", "last Friday"), use it. If they are vague, run the history verb (`python scripts/caveman_git.py history`), show two or three concrete days, and ask which one. Do not guess a target the founder did not confirm.
+1. **Find the target.** If the founder named a clear point ("yesterday", "last Friday"), use it. If they are vague, run the history verb (`python scripts/caveman_git.py history`), show two or three concrete days, and ask which one. Do not guess a target the founder did not confirm. The target goes inside double quotes on the command line, where `$`, backticks and `"` still act, so it may hold only letters, digits, spaces, dashes and colons ("yesterday", "last Friday", "2026-10-20"). Anything else, ask for the day instead.
 
 2. **Phase 1, safety save (this also previews the undo).** Run:
 
@@ -39,7 +39,8 @@ Never work around these. Never run `git reset --hard`, `git checkout` that disca
 
    - The script prints `Resolved target: <sha>`. Keep that exact SHA. You MUST pass it to phase 2, because the safety save moves the current version and a relative reference like "yesterday" would then point somewhere else.
    - If the output starts with `UNDO ABORTED`, the safety save was blocked by the guard. Relay the reason in plain words, tell the founder nothing was changed and nothing was lost, and STOP. Do not run phase 2. Do not bypass the guard.
-   - Otherwise the script lists the files an undo would change. Show that list to the founder.
+   - If the script says it could not find a saved version from before that point, nothing was changed. Show the founder the history (`python scripts/caveman_git.py history`) and ask which day. Never retry with a phrase of your own.
+   - Otherwise the script prints how it read the phrase (`Read '<phrase>' as: ...`), which version that is (`That version: ...`), and the files an undo would change. Show all three to the founder, so they can see the day matches what they meant.
 
 3. **Confirm.** Ask the founder to confirm they want to undo to that version, given the files that will change. If they say no, stop. The safety save already made is harmless and stays as a normal version.
 

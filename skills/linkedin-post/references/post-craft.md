@@ -45,7 +45,7 @@ Every post follows one of these patterns:
 2. The story (what happened, specific details)
 3. The turn (what the founder learned, what changed)
 4. The takeaway (actionable, specific)
-5. Close (question, CTA, or statement that sits with the reader)
+5. Close (question, CTA, or statement that sits with the reader. A CTA that takes money waits for permission: see Closing the Post)
 
 ### Pattern 2: Framework Drop
 1. Hook (the problem this solves)
@@ -105,6 +105,8 @@ End with one of:
 - A P.S. that circles back to the hook with a real story (Pattern 5)
 
 Never end with "What do you think?" or "Drop your thoughts below!" Those are generic engagement bait.
+
+**No money ask before permission.** A close or CTA that asks a buyer for money (a price, a deposit, a pre-order, an order, a payment link, an agreement to pay later, or holding a date, a slot, an appointment or a box for them, with or without a price) needs the founder to know they may take money for this activity where they sell. If their files and this conversation do not show it (a licence or permit that covers the activity, or a business already licensed to sell it), ask once before writing that close, and use an interest close meanwhile (a reply, a call to talk about the problem, their details to hear when it is ready). Earlier sales to friends are not that permission. This repeats the founder safety rule in `CLAUDE.md` for surfaces where that file is not loaded.
 
 ## Brain Dump to Post Workflow
 

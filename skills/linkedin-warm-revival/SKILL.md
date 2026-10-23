@@ -54,6 +54,8 @@ For each contact, write ONE short, personal reopener line. Ground it in what is 
 
 No mass-blast template. No invented shared history. If you do not have a real hook, say "no strong hook - a simple 'good to reconnect' is honest here" rather than fabricating one.
 
+**No money ask before permission.** A reopener is never a pitch. A follow-up the user asks for later that asks the contact for money (a price, a deposit, a pre-order, an order, a payment link, an agreement to pay later, or holding a date, a slot, an appointment or a box for them, with or without a price) needs the founder to know they may take money for this activity where they sell. If their files and this conversation do not show it (a licence or permit that covers the activity, or a business already licensed to sell it), ask once before drafting the money ask, and draft an interest ask meanwhile (a reply, a call to talk about the problem, their details to hear when it is ready). Earlier sales to friends are not that permission. This repeats the founder safety rule in `CLAUDE.md` for surfaces where that file is not loaded.
+
 ## Step 4 - hand it back
 
 Give the user the ranked list: name, title/company, how the relationship stands (warmth, last touch, prior replies), and the reopener. Remind them outreach is manual and theirs to send - nothing is sent from here.

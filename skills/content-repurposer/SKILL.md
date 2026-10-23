@@ -92,6 +92,7 @@ If operator voice is loaded (no brand), include all channels by default but lean
 3. **Match the energy.** LinkedIn = thought leadership. Instagram = personal. YouTube = teaching. Email = intimate.
 4. **Don't repeat yourself across channels.** Find a different angle for each.
 5. **Apply the founder's voice to every output.** Run anti-AI self-check on public content.
+6. **No money ask before permission.** A close, CTA or website line that asks a buyer for money (a price, a deposit, a pre-order, an order, a payment link, an agreement to pay later, or holding a date, a slot, an appointment or a box for them, with or without a price) needs the founder to know they may take money for this activity where they sell. This holds even when the source piece already carried that ask. If their files and this conversation do not show it (a licence or permit that covers the activity, or a business already licensed to sell it), ask once before keeping that ask, and use an interest close meanwhile (a reply, a call to talk about the problem, their details to hear when it is ready). Earlier sales to friends are not that permission. This repeats the founder safety rule in `CLAUDE.md` for surfaces where that file is not loaded.
 
 ## Output Format
 

@@ -45,12 +45,12 @@ Before making ANY recommendation about what to do today or this week, compare th
 - Daily stale = current date is past `## Today:`
 - Weekly stale = current date is more than 6 days past the `## Week of` date
 
-If stale, refresh the cadence files FIRST, scaled to which file is stale:
+If stale, deal with it FIRST, scaled to which file is stale:
 
-- **Daily stale (cheap, sub-minute):** bump the `## Today:` header to the current date and roll the previous one-line anchor into "Previous Anchor." That is all a stale daily requires. Do NOT trigger the full weekly retro for a stale daily - that all-or-nothing tax is exactly what makes the rule easy to skip.
-- **Weekly stale:** run the weekly-review flow (say "run my weekly review") - roll the current week into "Previous Week Retro" and force a keep/kill/escalate decision on every open stall flag. The keep/kill/escalate pass is gated to the weekly retro, not the daily bump.
+- **Daily stale (cheap, sub-minute):** bump the `## Today:` header to the current date and roll the previous one-line anchor into "Previous Anchor." That is all a stale daily requires, and it is on the automatic list in `rules/approval-gates.md`, so it needs no yes. Do NOT trigger the full weekly retro for a stale daily - that all-or-nothing tax is exactly what makes the rule easy to skip.
+- **Weekly stale:** do not roll the weekly file yourself. Say in one line that the week is stale and offer the weekly review ("say 'run my weekly review'"). That flow rolls the current week into "Previous Week Retro", forces a keep/kill/escalate decision on every open stall flag, and names the files it will change before it writes. The keep/kill/escalate pass is gated to the weekly retro, not the daily bump.
 
-Only then proceed with the requested work.
+Then proceed with the requested work. If the week is still stale, say the advice reads last week's file.
 
 This is non-negotiable. A stale cadence file silently lies about current priorities, and acting on it is the most common way a solo operator's OS drifts out of sync with reality. The SessionStart brief surfaces staleness; this rule is what makes you act on it before advising, not just report it.
 
@@ -90,6 +90,8 @@ Treat any of these phrasings as "run the setup wizard" when `core/identity.md` i
 When any of those arrives AND `core/identity.md` is absent, route to the `founder-os-setup` skill. Do not improvise an answer, do not produce generic advice, do not stall on clarifying questions - the wizard handles all of that. The wizard asks the adults-only question first (Phase 0.A), then opens with Phase 0.0, which reframes what Founder OS actually delivers (personal second brain, not team-shared, not always-on) before any discovery question - so the user's expectations and the product's reality match from the first turn.
 
 When `core/identity.md` already exists, the same phrasings mean something different (e.g. "what do I do" is a triage question, not a setup ask). Route them as normal OS queries instead.
+
+One exception: when `state/setup-progress.json` exists, setup was interrupted part way, often after `core/identity.md` was written. Then "continue Founder OS setup", "resume setup", "set up Founder OS" and the phrasings above all route to the `founder-os-setup` skill, which picks up where it stopped.
 
 ---
 
@@ -244,7 +246,7 @@ A UserPromptSubmit hook - the cross-platform dispatcher `scripts/hooks/dispatch.
 
 **Shape 1 - Rant.** Long unstructured dump (~200+ words), first-person, no clear question. The hook EAGERLY writes the rant to `brain/rants/<YYYY-MM-DD>.md` with `processed: false` so the text is safe on disk. Your job: acknowledge in one short line that the rant was captured, then offer routing: `Want to act on it now? Say decision, draft, plan, or log - or ignore and /dream will pick it up later.` Do not summarise the rant content. Do not interview.
 
-**Shape 2 - Named person + meeting verb.** "I had a call with Ahmed", "I spoke to Sara today", "got a reply from Maya". Propose capturing to `context/clients.md` (or `context/leads.md` if the user has split the pipeline) BEFORE continuing your normal response. One line: `Want me to add <name> to your clients/leads? Yes/no/skip.` Wait for the answer. On yes, invoke `/capture-meeting <name>` or write a single row directly. Never write without explicit yes.
+**Shape 2 - Named person + meeting verb.** "I had a call with Ahmed", "I spoke to Sara today", "got a reply from Maya". Propose capturing to `context/clients.md` (or `context/leads.md` if the user has split the pipeline) BEFORE continuing your normal response. One line: `Want me to add <name> to your clients/leads? Yes/no/skip.` Wait for the answer. On yes, write that single row, or invoke `/capture-meeting <name>`, which names every other file it would write and asks again before writing them. Never write without explicit yes, and a yes to the row is not a yes to the log, decisions or flags.
 
 **Shape 3 - Status update.** "I finished the proposal", "I sent the email", "I shipped the feature", "I signed the contract". Propose logging to `brain/log.md` BEFORE continuing. One line: `Want me to log that to brain/log.md? Yes/no/skip.` Wait. On yes, invoke `brain-log`. Never write without yes.
 

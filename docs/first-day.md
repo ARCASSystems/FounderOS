@@ -90,7 +90,7 @@ Say "check my OS readiness". On a plugin install the command is:
 /founder-os:status
 ```
 
-On a ZIP, clone or curl install, ask in words: `/status` there opens Claude Code's own screen instead. Read-only. Returns a 0-100% readiness score across Core, Voice and Brand, Cadence, Business Context, Brain Layer. Names the next 3 high-impact moves.
+On a ZIP, clone or curl install, ask in words: `/status` there opens Claude Code's own screen instead. Read-only. Returns a 0-100% readiness score across Core, Voice and Brand, Cadence, Business Context, Brain Layer, and Queue. Names the next 3 high-impact moves.
 
 Run this whenever you want to see where the OS is and what to fill next.
 

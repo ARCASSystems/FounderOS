@@ -22,13 +22,26 @@ its own:
 Standard library only. No pip install, no external service beyond the Telegram
 Bot API the user opted into. Never echoes a secret value.
 
+A real key never travels through a command or the chat. The founder types it
+into .env with their own text editor: add-key makes the line with a
+placeholder, and key-status proves it was filled in without showing it.
+
 Subcommands:
     registry                 Print the connector registry (type + auth class).
-    set-secret KEY [VALUE]   Write KEY=VALUE to .env. VALUE may be passed on
-                             stdin instead of argv (preferred: keeps it out of
-                             shell history and the assistant transcript).
+    add-key NAME             Add a placeholder line (KEY=paste-your-key-here) to
+                             .env for each key the connector NAME needs (or for
+                             the single KEY named, e.g. GEMINI_API_KEY2). A key
+                             already in the file is left exactly as it is, so
+                             running this again never undoes a working key.
                              --target <file> overrides .env; must stay on the
                              gitignored allowlist.
+    key-status NAME          Say whether each key of NAME is filled in, still the
+                             placeholder, or missing. Never prints a value.
+                             Exits 0 only when every required key is filled in.
+    set-secret KEY VALUE     Write KEY=VALUE to .env. For values that are not
+                             secrets (a chat id) and for scripts. Never use it
+                             for a real key: that is add-key plus the founder's
+                             own editor.
     telegram-test            Read TELEGRAM_BOT_TOKEN (+ optional
                              TELEGRAM_CHAT_ID) from .env, resolve the chat id via
                              getUpdates if absent, send one test message.
@@ -41,6 +54,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.error
@@ -55,24 +69,36 @@ REPO = Path(__file__).resolve().parent.parent
 # closed instead of leaking.
 SECRET_TARGET_ALLOWLIST = {".env", ".mcp.local.json"}
 
+# The value add-key writes. It is not a secret, so it may pass through a
+# command and the chat. "paste-your-token-here" is the placeholder the 1.56.0
+# connect skill wrote for Telegram, still read as a placeholder so an install
+# that ran it is not told a key is filled in when it is not.
+PLACEHOLDER = "paste-your-key-here"
+PLACEHOLDERS = {PLACEHOLDER, "paste-your-token-here"}
+
 # The connector registry, by auth class. This is the single source the skill
 # routes off. No secret lives here - only how each connector authenticates.
 REGISTRY: dict[str, dict[str, str]] = {
     # env-key: the OS can walk the steps and store the key locally in .env.
+    # env_keys: the lines add-key writes and key-status checks. Telegram's chat
+    # id is not a secret and telegram-test finds it by itself.
     "telegram": {
         "class": "env-key",
+        "env_keys": "TELEGRAM_BOT_TOKEN",
         "secret_keys": "TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID",
         "setup": "Open @BotFather in Telegram, send /newbot, copy the token, then message your new bot once so it has a chat to reply to.",
         "revoke": "Send /revoke to @BotFather, or /deletebot to remove it.",
     },
     "elevenlabs": {
         "class": "env-key",
+        "env_keys": "ELEVENLABS_API_KEY",
         "secret_keys": "ELEVENLABS_API_KEY",
         "setup": "Create an API key in your ElevenLabs profile settings.",
         "revoke": "Delete the key in the ElevenLabs dashboard.",
     },
     "gemini": {
         "class": "env-key",
+        "env_keys": "GEMINI_API_KEY",
         "secret_keys": "GEMINI_API_KEY (add GEMINI_API_KEY2 for free-tier headroom)",
         "setup": "Tier-1 realtime voice (add-voice --realtime) uses this. Create a FREE key at https://aistudio.google.com/apikey. A free key carries a free daily quota on Flash models; heavy realtime use can move you onto paid per-token rates. Read skills/add-voice/references/voice-model-disclaimer.md before you commit. A second key (GEMINI_API_KEY2) is optional headroom the realtime front rotates to if the first hits its quota.",
         "revoke": "Delete or regenerate the key in Google AI Studio (aistudio.google.com/apikey).",
@@ -231,7 +257,7 @@ def _write_env_key(path: Path, key: str, value: str) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def cmd_set_secret(args: list[str]) -> int:
+def _split_target(args: list[str]) -> tuple[str, list[str]]:
     target_name = ".env"
     rest: list[str] = []
     i = 0
@@ -242,16 +268,12 @@ def cmd_set_secret(args: list[str]) -> int:
             continue
         rest.append(args[i])
         i += 1
+    return target_name, rest
 
-    if not rest:
-        print("set-secret needs a KEY (VALUE optional, may come on stdin).", file=sys.stderr)
-        return 1
-    key = rest[0]
-    value = rest[1] if len(rest) > 1 else sys.stdin.read().strip()
-    if not value:
-        print("No secret value provided (pass as the second arg or on stdin).", file=sys.stderr)
-        return 1
 
+def _secret_target(target_name: str) -> tuple[Path | None, str]:
+    """Prove a file may hold a secret. Returns (path, confirmation line), or
+    (None, "") after printing the refusal. Every writer goes through this."""
     name = Path(target_name).name
 
     # A target is a bare filename in the OS root, never a path. Reject anything
@@ -265,7 +287,7 @@ def cmd_set_secret(args: list[str]) -> int:
             f"Founder OS folder. Allowed: {sorted(SECRET_TARGET_ALLOWLIST)}.",
             file=sys.stderr,
         )
-        return 2
+        return None, ""
 
     if name not in SECRET_TARGET_ALLOWLIST:
         print(
@@ -273,7 +295,7 @@ def cmd_set_secret(args: list[str]) -> int:
             f"Allowed: {sorted(SECRET_TARGET_ALLOWLIST)}. Secrets go only to gitignored local files.",
             file=sys.stderr,
         )
-        return 2
+        return None, ""
 
     # Belt and braces: Path().name splits on the running platform's separators,
     # so a Windows-shaped path handed to a POSIX interpreter survives the check
@@ -286,7 +308,7 @@ def cmd_set_secret(args: list[str]) -> int:
             "A secret is only ever written inside it.",
             file=sys.stderr,
         )
-        return 2
+        return None, ""
 
     if _git_repo_present():
         proven = _is_git_ignored(target)
@@ -308,17 +330,124 @@ def cmd_set_secret(args: list[str]) -> int:
 
     if not proven:
         print(refusal, file=sys.stderr)
-        return 2
+        return None, ""
 
     shared = _refuse_if_shared(target)
     if shared:
         print(shared, file=sys.stderr)
+        return None, ""
+
+    return target, confirmation
+
+
+# How to get a key in without the chat. Every message that tells the founder
+# what to do next points here, never at a command argument.
+NO_KEY_IN_CHAT = (
+    "A key is never typed into the chat or a command. Say 'connect <tool>' "
+    "(for example 'connect gemini') and Founder OS adds a line to your .env "
+    "file for you to fill in yourself, in Notepad or TextEdit."
+)
+
+
+def cmd_set_secret(args: list[str]) -> int:
+    target_name, rest = _split_target(args)
+    if len(rest) < 2 or not rest[1].strip():
+        print(f"set-secret needs a KEY and a VALUE. {NO_KEY_IN_CHAT}", file=sys.stderr)
+        return 1
+    key, value = rest[0], rest[1].strip()
+
+    target, confirmation = _secret_target(target_name)
+    if target is None:
         return 2
+
+    # A placeholder never replaces a value already in the file. Running the
+    # 1.56.0 connect steps a second time wrote the placeholder over a working
+    # token; this keeps that from ever happening again, whoever calls it.
+    if value in PLACEHOLDERS and key in _parse_env(target):
+        print(f"{key} is already in {target.name}. Left it as it is.")
+        return 0
 
     _create_user_only(target)
     _write_env_key(target, key, value)
-    print(f"Stored {key} in {name} (value hidden). {confirmation}")
+    print(f"Stored {key} in {target.name} (value hidden). {confirmation}")
     return 0
+
+
+def _is_placeholder(value: str) -> bool:
+    v = value.strip().strip('"').strip("'")
+    return v in PLACEHOLDERS or v.lower().startswith("your")
+
+
+def _keys_for(name: str) -> tuple[list[str], str] | None:
+    """The .env lines a connector needs, or the one KEY named. None when the
+    name is neither an env-key connector nor a key name."""
+    info = REGISTRY.get(name.lower())
+    if info is not None:
+        if info["class"] != "env-key":
+            return None
+        return [k.strip() for k in info.get("env_keys", "").split(",") if k.strip()], name.lower()
+    if re.fullmatch(r"[A-Z][A-Z0-9_]*", name):
+        return [name], name
+    return None
+
+
+def _env_key_names() -> str:
+    return ", ".join(n for n, i in REGISTRY.items() if i["class"] == "env-key")
+
+
+def cmd_add_key(args: list[str]) -> int:
+    target_name, rest = _split_target(args)
+    if len(rest) != 1:
+        print(f"add-key needs one name: a tool ({_env_key_names()}) or a key name like GEMINI_API_KEY2.",
+              file=sys.stderr)
+        return 1
+    found = _keys_for(rest[0])
+    if found is None:
+        print(f"{rest[0]} is not a tool that keeps a key in .env. Tools that do: {_env_key_names()}.",
+              file=sys.stderr)
+        return 1
+    keys, _ = found
+
+    target, confirmation = _secret_target(target_name)
+    if target is None:
+        return 2
+
+    present = _parse_env(target)
+    for key in keys:
+        if key not in present:
+            _create_user_only(target)
+            _write_env_key(target, key, PLACEHOLDER)
+            print(f"Added the line {key}={PLACEHOLDER} to {target.name}. {confirmation}")
+        elif _is_placeholder(present[key]):
+            print(f"{key} is in {target.name} but still holds the placeholder. Left it for you to fill in.")
+        else:
+            print(f"{key} is already filled in, in {target.name}. Left it as it is (value hidden).")
+    return 0
+
+
+def cmd_key_status(args: list[str]) -> int:
+    target_name, rest = _split_target(args)
+    found = _keys_for(rest[0]) if len(rest) == 1 else None
+    if found is None:
+        print(f"key-status needs one tool ({_env_key_names()}) or a key name.", file=sys.stderr)
+        return 1
+    keys, _ = found
+    name = Path(target_name).name
+    if name not in SECRET_TARGET_ALLOWLIST or name != target_name:
+        print(f"REFUSED: key-status reads only {sorted(SECRET_TARGET_ALLOWLIST)}.", file=sys.stderr)
+        return 2
+    present = _parse_env(REPO / name)
+    all_filled = True
+    for key in keys:
+        if key not in present or not present[key].strip():
+            print(f"{key}: missing from {name}. Say 'connect <tool>' to add the line.")
+            all_filled = False
+        elif _is_placeholder(present[key]):
+            print(f"{key}: still the placeholder. Open {name}, replace {PLACEHOLDER} with your key, save.")
+            all_filled = False
+        else:
+            print(f"{key}: filled in (value hidden).")
+    return 0 if all_filled else 1
 
 
 # --- Telegram reachability -----------------------------------------------------
@@ -342,8 +471,15 @@ def cmd_telegram_test() -> int:
     token = env.get("TELEGRAM_BOT_TOKEN", "").strip()
     if not token:
         print(
-            "No TELEGRAM_BOT_TOKEN in .env. Run set-secret TELEGRAM_BOT_TOKEN first "
-            "(get the token from @BotFather).",
+            "No TELEGRAM_BOT_TOKEN in .env. Say 'connect telegram' to add the line, then type "
+            "the token from @BotFather into .env yourself.",
+            file=sys.stderr,
+        )
+        return 1
+    if _is_placeholder(token):
+        print(
+            "The TELEGRAM_BOT_TOKEN line in .env still holds the placeholder. Open .env, replace "
+            f"{PLACEHOLDER} with the token from @BotFather, save, and run the test again.",
             file=sys.stderr,
         )
         return 1
@@ -376,6 +512,24 @@ def cmd_telegram_test() -> int:
             "sendMessage",
             {"chat_id": chat_id, "text": "Founder OS connector test. If you can read this, Telegram is wired."},
         )
+    except urllib.error.HTTPError as exc:
+        # HTTPError is a URLError, so it must be caught first. Telegram answers
+        # a wrong token with 401 (404 when the token is not even token-shaped)
+        # and says why in a JSON body. That is a token problem, not a network one.
+        try:
+            detail = json.loads(exc.read().decode("utf-8", "replace")).get("description", "")
+        except Exception:  # noqa: BLE001 - the body is a bonus, the code is enough
+            detail = ""
+        detail = detail or str(exc.reason or "")
+        if exc.code in (401, 404):
+            print(
+                f"Telegram did not accept the token ({exc.code}: {detail}). Open .env and check the "
+                "TELEGRAM_BOT_TOKEN line holds the whole token from @BotFather and nothing else.",
+                file=sys.stderr,
+            )
+        else:
+            print(f"Telegram answered with an error ({exc.code}: {detail}).", file=sys.stderr)
+        return 1
     except urllib.error.URLError as exc:
         print(f"Network error reaching the Telegram API: {exc}. Check your connection and retry.", file=sys.stderr)
         return 1
@@ -457,6 +611,10 @@ def main() -> int:
         return cmd_registry()
     if cmd == "set-secret":
         return cmd_set_secret(rest)
+    if cmd == "add-key":
+        return cmd_add_key(rest)
+    if cmd == "key-status":
+        return cmd_key_status(rest)
     if cmd == "telegram-test":
         return cmd_telegram_test()
     if cmd == "status":

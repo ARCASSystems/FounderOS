@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Brain log history gate.
 
-Exit 0 = `brain/log.md` has at least one `### YYYY-MM-DD` dated entry.
+Exit 0 = `brain/log.md` has at least one dated entry (`### [YYYY-MM-DD]`,
+`### YYYY-MM-DD` or `### YYYY-MM-DD HH:MM`, the shared _common heading).
 Exit 1 = fresh install, no history yet. One-line reason printed to stdout.
 
 Pure stdlib. brain-pass and similar skills call this before searching the log
@@ -11,11 +12,15 @@ so a first-time user does not trigger a "no content found" search loop.
 from __future__ import annotations
 
 import argparse
-import re
+import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _common import ENTRY_DATE_HEADING  # noqa: E402
 
-DATED_HEADING = re.compile(r"^###\s+\d{4}-\d{2}-\d{2}")
+# The shared heading regex. The old local one required `### YYYY-MM-DD` and so
+# read the log template's own `### [YYYY-MM-DD]` form as "no dated entries".
+DATED_HEADING = ENTRY_DATE_HEADING
 
 
 def check(root: Path) -> tuple[int, str]:

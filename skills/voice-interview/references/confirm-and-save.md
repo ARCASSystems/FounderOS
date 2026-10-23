@@ -27,9 +27,9 @@ Show this exact block (filled with the captured values):
 > - Anti-example pairs: <count> pairs captured
 > - Samples: <count> pieces captured
 >
-> Looks right? (yes / change X)
+> Looks right? I will save it to your voice profile (`core/voice-profile.yml`). (yes / change X)
 
-If yes, write `core/voice-profile.yml` from the captured values.
+If yes, write `core/voice-profile.yml` from the captured values, and no other file.
 
 If they want to change something, edit the value and re-confirm.
 

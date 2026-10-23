@@ -12,8 +12,11 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from datetime import date, datetime
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 VOICE_FIELDS = ["rhythm", "opening_style", "closing_style", "contractions", "reading_level"]
 DAILY_HEADER = re.compile(r"^##\s+Today:\s*(\d{4}-\d{2}-\d{2})\s*$")
@@ -283,51 +286,14 @@ def working_preferences(root: Path) -> list[str]:
 
 H3_PATTERN_HEADER = re.compile(r"^###\s+(.+?)\s*$")
 PATTERN_FIELD = re.compile(r"^(First observed|Last seen|Impact):\s*(.+?)\s*$")
-EXAMPLE_SECTION = re.compile(r"^##\s+Example\s*(?:\(|$)", re.IGNORECASE)
-EXAMPLE_TITLE = re.compile(r"[(\[]\s*example\b", re.IGNORECASE)
-EXAMPLE_SEED_DATE = "2024-01-01"
-ENTRY_HEADER = re.compile(r"^#{2,3}\s+\S")
-
-
-def example_line_numbers(lines: list[str]) -> set[int]:
-    """Header lines of a template's seeded worked example.
-
-    The flags and patterns templates each ship one example dated 2024-01-01
-    under an `## Example (...)` heading, and setup re-dates each seed and labels
-    it "(example entry - ...)". In the 9 Oct live runs the seeded flag
-    "Outreach has not started this week" reached the snapshot as an open flag,
-    and the next-move proposal cited it as the founder's own state. A demo is
-    not evidence, so the snapshot leaves it out. The first brief still surfaces
-    it as the demo it was meant to be.
-
-    Narrow on purpose, so a real entry is never hidden: an entry counts as the
-    seed only when its title carries the example label, or when it sits in the
-    Example section and still carries the template's 2024-01-01 date. A seed
-    edited in place into a real entry (new date, no label) shows again.
-    """
-    out: set[int] = set()
-    inside = False
-    for idx, line in enumerate(lines):
-        stripped = line.strip()
-        if EXAMPLE_SECTION.match(stripped):
-            inside = True
-            continue
-        if inside and (stripped == "---" or stripped.startswith("<!--")):
-            inside = False
-        if not ENTRY_HEADER.match(stripped):
-            continue
-        if EXAMPLE_TITLE.search(stripped):
-            out.add(idx)
-            continue
-        if inside:
-            entry = [stripped]
-            for follow in lines[idx + 1: idx + 10]:
-                if ENTRY_HEADER.match(follow.strip()):
-                    break
-                entry.append(follow)
-            if any(EXAMPLE_SEED_DATE in part for part in entry):
-                out.add(idx)
-    return out
+# The seeded-example filter is shared with what-to-change.py, which used to
+# present the template's demo flag as the founder's own change candidate.
+from _common import (  # noqa: E402
+    EXAMPLE_SECTION,
+    EXAMPLE_SEED_DATE,
+    EXAMPLE_TITLE,
+    example_line_numbers,
+)
 
 
 def active_patterns(root: Path, limit: int = 3) -> list[str]:
@@ -784,6 +750,14 @@ def main() -> int:
     parser.add_argument("--write", action="store_true", help="Write to brain/.snapshot.md instead of stdout")
     parser.add_argument("--today", default=None, help="Override today's date (YYYY-MM-DD). Test-only.")
     args = parser.parse_args()
+    # Print UTF-8 whatever the console's codepage. A Windows pipe is cp1252 unless
+    # PYTHONUTF8 is set, and one Arabic name in the log raised UnicodeEncodeError,
+    # so the snapshot came back empty instead of with the founder's state.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
 
     root = Path(args.root).resolve()
     today = date.today()

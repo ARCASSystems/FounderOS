@@ -30,7 +30,7 @@ Run `python scripts/check-identity-ready.py`. If it exits 1, surface the line ve
 
 Then read, in this order, whichever exist:
 
-1. `core/identity.md` and `core/founder-snapshot.md` - who is running this and what stage they say they are at.
+1. `core/identity.md`, including its `## Founder Snapshot` section - who is running this and what stage they say they are at.
 2. `context/priorities.md`, `context/decisions.md` - what they are actually doing and what they have already ruled out.
 3. `context/clients.md`, `context/leads.md` - real revenue and real pipeline, which is the difference between a story and a business.
 4. `brain/log.md`, `brain/flags.md` - what has actually happened, and what is already known to be broken.

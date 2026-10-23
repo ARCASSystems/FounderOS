@@ -93,5 +93,6 @@ the top and the OS will read that and stop holding itself back. The ramp exists 
 someone who has not decided how much they trust this yet. The day you already trust it,
 say so and it is over.
 
-One thing worth not changing: the stage 3 line about nothing leaving your machine. That
-is not part of the ramp. That is the floor, and it holds on day 400 the same as day 1.
+One thing worth not changing: the stage 3 line that the skills which write to people
+draft and stop, and act only when you ask. That is not part of the ramp. That is the
+floor, and it holds on day 400 the same as day 1.

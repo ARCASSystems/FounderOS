@@ -77,7 +77,8 @@ def main():
     config = {
         "handlers": {
             "open": {"class": "auto", "enabled": True,
-                     "note": "open a file, folder, app, or link - reversible, local"},
+                     "note": "open a folder or web link freely; a file or app asks for --yes first, "
+                             "because opening one can run a program"},
             "note": {"class": "auto", "enabled": True,
                      "note": "append a line to brain/log.md - reversible"},
             "run": {"class": "confirm", "enabled": bool(args.enable_run),
@@ -97,7 +98,8 @@ def main():
         json.dumps(config, indent=2, ensure_ascii=True) + "\n", encoding="utf-8"
     )
     print("OK   Wrote voice/hands-config.json.")
-    print("     Auto (no confirm):  open, note")
+    print("     Auto (no confirm):  open a folder or web link, note")
+    print("     Confirm (asks first): open a file or app (always on, asks every time)")
     print("     Confirm (asks first): run  -> " + ("ENABLED (still asks every time)" if args.enable_run else "OFF (turn on in hands-config.json when you want it)"))
     print("     Not built: send, post, computer-use (the dispatcher refuses these honestly)")
 

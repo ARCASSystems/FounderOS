@@ -29,15 +29,18 @@ The script has three modes for progressive disclosure. Start with `index`, drill
 
 Returns ~10 candidate nodes with ID, path, first heading, decay flag if present, and a 1-line context. Target ~50 tokens per hit. Hard cap 10 hits. Use this on the first call when you do not yet know which entries you need.
 
-```bash
-python scripts/query.py "<the user's question, verbatim>"
-```
-
-Or explicit:
+Pass the question through the quoted block below, never inside quotes on the command line. Inside double quotes `$(...)` and backticks still run, and inside single quotes an apostrophe ends the string. Put the question on its own line between the two marker lines, exactly as the user wrote it, with nothing escaped. Every line starts at the left edge with no spaces in front, or bash will not see the end marker:
 
 ```bash
-python scripts/query.py --mode index "<question>"
+python scripts/query.py "$(cat <<'FOUNDER_OS_Q_END'
+<the user's question, verbatim>
+FOUNDER_OS_Q_END
+)"
 ```
+
+If the question has a line that reads exactly `FOUNDER_OS_Q_END`, do not run it. Ask the user to rephrase it without that line.
+
+For explicit index mode, write `--mode index` before the quoted block, on the first line: `python scripts/query.py --mode index "$(cat <<'FOUNDER_OS_Q_END'`. The other lines stay as above. Flags and their values follow the token rule in `.claude/commands/query.md`: letters, digits and `_ . / , : = -` only.
 
 ### 2. timeline
 
@@ -64,10 +67,13 @@ For each ID the script searches every markdown file in scope and matches the ID 
 
 ## Operating against a non-default root
 
-The script accepts `--root <path>` to point at another Founder OS-style folder, such as a vendored archive or a fixture corpus. Use it when the current shell is outside the folder you want to query.
+The script accepts `--root <path>` to point at another Founder OS-style folder, such as a vendored archive or a fixture corpus. Use it when the current shell is outside the folder you want to query. The flag and its path go before the quoted block:
 
 ```bash
-python scripts/query.py --root /path/to/archive "outreach stalled"
+python scripts/query.py --root /path/to/archive "$(cat <<'FOUNDER_OS_Q_END'
+outreach stalled
+FOUNDER_OS_Q_END
+)"
 ```
 
 ## Progressive Flow

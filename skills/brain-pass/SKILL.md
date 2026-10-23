@@ -24,7 +24,7 @@ The user asks a question. You pick the relevant files, scan them, and return a s
 ## When NOT to use
 
 - A specific entry ID is already known. Use `python scripts/query.py --mode full --ids <id>` instead.
-- A simple keyword match is enough. Use `python scripts/query.py "<keyword>"` instead.
+- A simple keyword match is enough. Use `scripts/query.py` with the keyword in the quoted block below instead.
 - The question is purely about the current state ("what is on today"). Use `/today` or `brain/.snapshot.md` instead.
 
 ## Instructions
@@ -35,11 +35,14 @@ You are doing a brain pass.
 
    If exit code is 1, read the output line and surface it to the user verbatim. Do not preflight or scan. Stop. (Fresh install - there are no dated entries yet to reason across.)
 
-1. **Preflight through query.** Before picking files manually, run:
+1. **Preflight through query.** Before picking files manually, run the query with the question in a quoted block, never inside quotes on the command line, so an apostrophe, backticks or `$(...)` in it stay plain text. Every line starts at the left edge with no spaces in front. If the question has a line that reads exactly `FOUNDER_OS_Q_END`, ask for it without that line:
 
-   ```bash
-   python scripts/query.py "<the question you were asked>"
-   ```
+```bash
+python scripts/query.py "$(cat <<'FOUNDER_OS_Q_END'
+<the question you were asked>
+FOUNDER_OS_Q_END
+)"
+```
 
    The query script returns a ranked candidate list with stable IDs. Use that list to drive Step 2. Two cases:
 
@@ -101,7 +104,10 @@ When the environment variable `FOUNDER_OS_OBSERVATIONS=1` is set, after producin
 
 ```bash
 python scripts/brain-pass-log.py \
-  --question "<the question you were asked>" \
+  --question "$(cat <<'FOUNDER_OS_Q_END'
+<the question you were asked>
+FOUNDER_OS_Q_END
+)" \
   --confidence "<high|medium|low>" \
   --ids-cited "<comma-separated stable IDs from your Evidence section, or empty>" \
   --files-read <integer count of files you opened during the pass> \

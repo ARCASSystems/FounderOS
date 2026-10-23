@@ -168,3 +168,5 @@ Ask:
 > 2. **CTAs available** - what can the audience actually do? (Book a call, WhatsApp, DM, click a link to <where>, walk in to <location>, reply to email, etc.) List all available actions.
 
 Capture as `timeline` and `available_ctas`. The available CTAs constrain what every piece can ask for.
+
+**No money ask before permission.** A CTA or a success metric that takes money (a sale, a booking at a price, a deposit, a pre-order, an order, a payment link, an agreement to pay later, or holding a date, a slot, an appointment or a box for a buyer, with or without a price) needs the founder to know they may take money for this activity where they sell. If their files and this conversation do not show it (a licence or permit that covers the activity, or a business already licensed to sell it), ask once before you keep that CTA or metric. Until then, use interest CTAs and metrics (replies, a call to talk about the problem, details to hear when it is ready). Earlier sales to friends are not that permission. This repeats the rule in `CLAUDE.md` so it holds when that file has not been updated.

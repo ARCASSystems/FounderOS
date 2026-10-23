@@ -39,6 +39,7 @@ import asyncio
 import json
 import os
 import queue
+import re
 import shutil
 import subprocess
 import sys
@@ -172,15 +173,36 @@ def system_instruction() -> str:
 
 
 # ---- the back-brain: the no-key reasoning CLI, reading the local markdown OS --------------------
+# cmd.exe acts on these inside a .cmd or .bat file's arguments, quoted or not, and stops an
+# argument at a line break.
+_CMD_WORDS = {"%": " percent ", "&": " and "}
+_CMD_SPECIAL = re.compile(r'["%^&|<>!\r\n]')
+
+
+def brain_argv(cmd: list, prompt: str):
+    """The argv for one brain call, or None when the command is not on PATH.
+
+    shutil.which finds npm's Windows shims (claude.cmd), but subprocess cannot start a bare
+    name that only resolves to a .cmd, so it is the resolved path that runs. A .cmd or .bat
+    runs through cmd.exe, which would cut the prompt at its first line break and act on
+    " % ^ & | < > in it, so for those the prompt becomes one line without those characters."""
+    resolved = shutil.which(cmd[0])
+    if not resolved:
+        return None
+    if os.name == "nt" and Path(resolved).suffix.lower() in (".cmd", ".bat"):
+        prompt = " ".join(_CMD_SPECIAL.sub(lambda m: _CMD_WORDS.get(m.group(0), " "), prompt).split())
+    return [resolved] + list(cmd[1:]) + [prompt]
+
+
 def _run_brain(prompt: str) -> str:
     """Shell the configured no-key reasoning CLI with cwd at the repo root so it can read the OS
     files itself. Lean by design: we pass the directive + the question, not the whole repo. Returns
     a spoken-style answer or a short honest failure line. Never raises."""
     cmd = list(CONFIG.get("brain_cmd") or ["claude", "-p"])
-    if not shutil.which(cmd[0]):
+    argv = brain_argv(cmd, prompt)
+    if argv is None:
         return ("I can hear you, but the reasoning command that reads your files is not on this "
                 "machine's PATH, so I cannot answer business facts yet.")
-    argv = cmd + [prompt]
     try:
         proc = subprocess.run(
             argv, capture_output=True, text=True, timeout=BRAIN_TIMEOUT_S,
@@ -338,7 +360,8 @@ def load_keys() -> list:
     for name in names:
         val = env.get(name) or os.environ.get(name, "")
         val = val.strip()
-        if val and not val.lower().startswith("your") and val not in seen:
+        # "paste-your-key-here" is the line the connect skill writes for the founder to fill in.
+        if val and not val.lower().startswith(("your", "paste-your")) and val not in seen:
             found.append(val)
             seen.add(val)
     return found
@@ -572,8 +595,8 @@ async def serve_socket(ws):
     keys = load_keys()
     if not keys:
         await ws.send(json.dumps({"type": "error", "text":
-            "No Google AI Studio key found. Add a free one: say 'connect gemini', or run "
-            "python scripts/connect.py set-secret GEMINI_API_KEY"}))
+            "No Google AI Studio key found. Add a free one: say 'connect gemini' in Claude Code, "
+            "then type the key into your .env file yourself. Never paste it into a chat."}))
         return
     live_config = build_live_config()
     print(f"[live] browser connected ({len(keys)} key(s)); opening Gemini session...", flush=True)
@@ -624,6 +647,19 @@ def ws_origins(http_port: int) -> list:
 
 
 # ---- tiny page server (serves live.html) on a daemon thread ------------------------------------
+# The page reads the bridge port from this tag. A port written into the page's script went
+# stale the moment a founder changed "ws_port" in realtime-config.json: the server moved and
+# the page kept knocking on 8757.
+WS_PORT_META = re.compile(r'(<meta name="fos-ws-port" content=")[0-9]*(">)')
+
+
+def page_html() -> bytes:
+    """live.html, with the bridge port this server actually listens on."""
+    html = PAGE.read_text(encoding="utf-8")
+    port = str(int(CONFIG["ws_port"]))
+    return WS_PORT_META.sub(lambda m: m.group(1) + port + m.group(2), html, count=1).encode("utf-8")
+
+
 class PageHandler(BaseHTTPRequestHandler):
     def _send(self, code, body, ctype):
         data = body if isinstance(body, bytes) else body.encode("utf-8")
@@ -641,7 +677,7 @@ class PageHandler(BaseHTTPRequestHandler):
             return
         if self.path in ("/", "/live", "/live.html"):
             if PAGE.exists():
-                self._send(200, PAGE.read_bytes(), "text/html; charset=utf-8")
+                self._send(200, page_html(), "text/html; charset=utf-8")
             else:
                 self._send(500, b'{"error":"live.html missing next to live_server.py"}', "application/json")
         elif self.path == "/health":

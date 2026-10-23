@@ -55,7 +55,7 @@ Rules for the pass:
 
 ## Step 3 - commitments become queue items
 
-At most three. Each one goes into `cadence/queue.md` with a due date inside the month, titled with the exact prefix:
+At most three. Before writing, show the commitments as they will read and name the file: "I will add these to your task queue (`cadence/queue.md`). Add them?" Write only on a yes, and only the ones it covers. Each one goes into `cadence/queue.md` with a due date inside the month, titled with the exact prefix:
 
 ```
 Review commitment: <your words>

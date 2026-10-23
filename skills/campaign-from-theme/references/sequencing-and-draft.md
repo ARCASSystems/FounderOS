@@ -25,7 +25,7 @@ Sequencing principles (apply silently when laying out the order):
 - **Warm audiences can start at the offer** but need a piece that re-establishes context before the offer lands.
 - **Customer audiences can skip introduction** and lead with the new thing.
 - **Awareness campaigns end with a soft CTA, not a hard one** - if the audience just met the brand, asking for a sale is a fit fail.
-- **Conversion campaigns front-load the hardest CTA** and use later pieces for objection-handling.
+- **Conversion campaigns front-load the hardest CTA** and use later pieces for objection-handling. A CTA that takes money only appears once the founder has said they may take money for this activity (the permission rule in `gates.md` Phase 6). Until then the hardest CTA is an interest one.
 - **Retention campaigns lead with intimacy** (recognition, gratitude, insider language) and then offer.
 - **Advocacy campaigns make the customer the hero**, not the brand. Every piece celebrates a customer or gives them a reason to talk about the brand.
 - **Channel order matters** - cold audiences usually hit social before email, warm usually hit email before social, customers can hit either.

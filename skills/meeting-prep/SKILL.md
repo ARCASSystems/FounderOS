@@ -53,7 +53,7 @@ Read the structured Answer / Evidence / Confidence / Gaps block the pass returns
 - A first-interaction answer routes to the New Prospect Detection block below.
 - Cite the entry IDs from Evidence in the brief so the founder can open the source if needed.
 
-If `skills/brain-pass/SKILL.md` is missing (older install), fall back to `python scripts/query.py --mode timeline --anchor <subject-slug>` and then `python scripts/query.py "<subject>"` if no anchor matches. Do not block.
+If `skills/brain-pass/SKILL.md` is missing (older install), fall back to `python scripts/query.py --mode timeline --anchor <subject-slug>` and then, if no anchor matches, `python scripts/query.py` with the subject passed through the quoted block in `skills/query/SKILL.md`, never inside quotes on the command line (a name with an apostrophe breaks single quotes, and `$(...)` runs inside double quotes). Do not block.
 
 ## New Prospect Detection
 
@@ -117,6 +117,8 @@ Questions should follow this priority:
 4. **Relationship questions** - What builds trust and shows you've done your homework?
 
 Good questions are specific. Not "How's business?" but "You mentioned last time you were hiring for ops - did you fill that role?"
+
+**No money ask before permission.** If the goal is money from them (a paid engagement, a price, a deposit, a pre-order, an order, an agreement to pay later, or a date, a slot, an appointment or a box held for them, with or without a price), check the founder may take money for this activity where they sell. If their files and this conversation do not show it (a licence or permit that covers the activity, or a business already licensed to sell it), say so in one line and build the brief around an interest ask instead (a problem conversation, an intro, their details to hear when it is ready). Earlier sales to friends are not that permission. This repeats the founder safety rule in `CLAUDE.md` for surfaces where that file is not loaded.
 
 ## Post-Meeting Debrief
 
