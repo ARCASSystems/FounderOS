@@ -210,7 +210,9 @@ Options:
 Removes only the named system layer (the skills, commands, scripts and hooks
 that shipped, templates, docs, updates, plugin manifests, the start files,
 root reference files, and the skill and agent copies the OS generated in
-.claude/). Everything else in the folder is yours and is not touched: core/,
+.claude/). A skill that shipped goes whole, with anything you added inside
+it, such as a legal jurisdiction pack in skills/legal-compliance/references/.
+Everything else in the folder is yours and is not touched: core/,
 cadence/, context/, brain/, capture/, brands/, companies/, network/,
 clients/, roles/, system/, rules/, memory/, CLAUDE.md, MEMORY.md,
 stack.json, os-config.yaml, any company or project folders setup created,
@@ -456,6 +458,14 @@ if [[ ${#KEPT[@]} -gt 0 ]]; then
 fi
 if [[ "$HOOKS_PATH_SET" == true && "$GITHOOKS_KEPT" == true ]]; then
   echo "The git setting core.hooksPath stays on, so your own hooks in .githooks/ keep running."
+  echo ""
+fi
+# A shipped skill goes whole, and /legal-setup and /legal-add-source write the
+# founder's jurisdiction pack and sources inside one. Say so before the yes.
+if [[ -d "$TARGET/skills/legal-compliance/references" ]]; then
+  echo "A skill that shipped goes with anything you added inside it. A legal jurisdiction"
+  echo "pack or sources you added with /legal-setup or /legal-add-source live in"
+  echo "$TARGET/skills/legal-compliance/references/, so copy that folder out first to keep them."
   echo ""
 fi
 echo "Everything else in $TARGET is your data and will NOT be touched."

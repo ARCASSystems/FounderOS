@@ -48,6 +48,8 @@ System layer (will be removed):
 - .claude/skills/<the skill copies the OS generated> and .claude/agents/<the agent files the OS generated> (they point at scripts this removes, so left behind they break the next time Claude Code opens the folder; any skill or agent you added there yourself stays)
 - VERSION, AGENTS.md, GEMINI.md, AVATAR.md, README.md, CHANGELOG.md, LICENSE, SECURITY.md, CONTRIBUTING.md, llms.txt, .gitattributes, Start Founder OS.bat, Start Founder OS.command, install.sh, uninstall.sh
 
+<only when skills/legal-compliance/references/ exists:> A skill that shipped goes with anything you added inside it. A legal jurisdiction pack or sources you added with /legal-setup or /legal-add-source live in skills/legal-compliance/references/, so copy that folder out first to keep them.
+
 Yours, kept (did not ship with Founder OS):
 - <every folder in skills/, file in .claude/commands/, and file in scripts/, .claude/hooks/ and .githooks/ that is not on the shipped lists in step 4, by name; "none" if there are none>
 - scripts/private-name-patterns.txt (your list of names to keep out of your files), if present

@@ -225,7 +225,7 @@ To update, open your Founder OS folder and say "update Founder OS". No git neede
 
 The update draws a hard line between the OS's machinery and your data:
 
-- **The OS's, replaced freely by an update:** `skills/`, `scripts/`, `templates/`, `docs/`, `updates/`, the commands, and the reference docs at the root.
+- **The OS's, replaced freely by an update:** `skills/`, `scripts/`, `templates/`, `docs/`, `updates/`, the commands, and the reference docs at the root. That includes the UAE files in `skills/legal-compliance/references/uae/`, which `/legal-add-source` and `/legal-update` edit, so an edit there comes back from the update's backup. A jurisdiction folder of your own in `references/` is not shipped, so an update leaves it.
 - **Yours, never written by an update:** `core/`, `context/`, `cadence/`, `brain/`, `capture/`, `network/`, `brands/`, `clients/`, `companies/`, `roles/` (your employee registry and its review record), `system/` (this install's quarantine record), any company or project folders setup created at the root, plus `stack.json`, `os-config.yaml`, and `MEMORY.md` with its `memory/` directory. Your identity, your log, your pipeline, and your decisions survive every update by design.
 - **In between, proposed never imposed:** `CLAUDE.md`, `rules/`, and `.claude/settings.json`. An update shows you each change as a diff and you say yes or no per file. Declining leaves your version in place.
 
