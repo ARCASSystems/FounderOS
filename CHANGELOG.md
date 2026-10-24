@@ -2,7 +2,7 @@
 
 All notable releases. Format follows the user-value-first commit naming rule (`rules/commit-naming.md`).
 
-## v1.56.0 - release date set when it ships
+## v1.56.0 - 2026-10-24
 
 A founder's test now lives on one card that comes back next session. The pack is `updates/1.56.0-the-progress-card.md`.
 
