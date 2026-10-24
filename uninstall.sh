@@ -460,12 +460,13 @@ if [[ "$HOOKS_PATH_SET" == true && "$GITHOOKS_KEPT" == true ]]; then
   echo "The git setting core.hooksPath stays on, so your own hooks in .githooks/ keep running."
   echo ""
 fi
-# A shipped skill goes whole, and /legal-setup and /legal-add-source write the
-# founder's jurisdiction pack and sources inside one. Say so before the yes.
+# A shipped skill goes whole, and /legal-setup, /legal-add-source and
+# /legal-update write the founder's jurisdiction pack, sources and edits
+# inside one. Say so before the yes.
 if [[ -d "$TARGET/skills/legal-compliance/references" ]]; then
   echo "A skill that shipped goes with anything you added inside it. A legal jurisdiction"
-  echo "pack or sources you added with /legal-setup or /legal-add-source live in"
-  echo "$TARGET/skills/legal-compliance/references/, so copy that folder out first to keep them."
+  echo "pack, sources or edits you made with /legal-setup, /legal-add-source or /legal-update"
+  echo "live in $TARGET/skills/legal-compliance/references/, so copy that folder out first to keep them."
   echo ""
 fi
 echo "Everything else in $TARGET is your data and will NOT be touched."
